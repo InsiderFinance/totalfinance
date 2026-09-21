@@ -1,0 +1,21 @@
+node_modules
+dist
+*.tsbuildinfo
+coverage
+pnpm-lock.yaml
+CHANGELOG.md
+**/etc/*.api.md
+packages/*/README.md
+docs/api
+docs-site
+packages/ta/test/golden/*.json
+packages/math/test/fixtures/*.json
+tools/golden/*.py
+
+# Stage 7A slice 5: a generated artifact in the generator's exact form (tools/openapi-doc.test.ts diffs it byte for byte)
+packages/http/etc/openapi.json
+
+# Stage 4.7 slice 3: the generated field reference (tools/fields-doc.test.ts diffs it byte for byte)
+docs/reference/fields.md
+docs/reference/fields/
+/release/

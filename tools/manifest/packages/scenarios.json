@@ -1,0 +1,69 @@
+{
+  "package": "@totalfinance/scenarios",
+  "domain": "scenarios",
+  "tier": "facade",
+  "exports": {
+    "runScenarios": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_scenario_run"],
+      "shape": "report",
+      "note": "One named request over a ScenarioSet, MarketSnapshot, and builder-produced targets; returns the deeply frozen scenario-major analysis report."
+    },
+    "scenarioPortfolioBinding": {
+      "kind": "object",
+      "entrypoints": [".", "./portfolio"],
+      "role": "namespace",
+      "note": "Opaque durable-portfolio binding namespace; ledger-owned economics remain separate from caller-bound valuation behavior."
+    },
+    "scenarioPortfolioBinding.fullRevaluation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Bind one durable portfolio position identity to one Gate-C pricer without overriding ledger-owned quantity, multiplier, currency, account, or underlying."
+    },
+    "scenarioPortfolioBinding.taylor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Bind one durable portfolio position identity to an explicit current-value Taylor approximation and complete base-factor coordinates."
+    },
+    "scenarioTarget": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace",
+      "note": "Opaque target-builder namespace; behavior is bound privately and public replay descriptors remain inspectable."
+    },
+    "scenarioTarget.fullRevaluation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Bind one instrument to one Gate-C pricer with explicit quantity, multiplier, currency, and canonical replay descriptor."
+    },
+    "scenarioTarget.spot": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Convenience target for one directly observed spot asset with contractMultiplier fixed to one."
+    },
+    "scenarioTarget.taylor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Build an explicit Taylor approximation target from current per-unit value, raw sensitivities, and every meaningful base factor."
+    },
+    "scenarioTargetsFromPortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "artifact",
+      "note": "Pure adapter from a fully validated, detached FC7 PortfolioState plus opaque bindings to deterministic scenario targets."
+    },
+    "spotAssetPricer": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "First-party Gate-C adapter whose per-unit result equals its exact declared spot observation."
+    }
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "package": "@totalfinance/valuation",
+  "domain": "valuation",
+  "tier": "facade",
+  "exports": {
+    "adjustedPresentValue": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 APV: unlevered value + labeled side effects at their OWN rates, decomposition reported"
+    },
+    "afterTaxCostOfDebt": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "amortizationSchedule": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified (2026-08-19): unrounded reconciling schedule; rounding is the caller’s explicit policy"
+    },
+    "annuityPayment": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "capitalAssetPricingExpectedReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "comparableCompanyValuation": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 comparables: metric/period/basis/aggregation/outlier policy all recorded; exclusions named"
+    },
+    "costOfEquity": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "cumulativeLoanInterest": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "cumulativeLoanPrincipal": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "datedInternalRateOfReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC1 facade (2026-08-19): number|null that NEVER picks among multiple roots silently; .explain() reports every admissible root, bracket, iterations, ambiguity warning"
+    },
+    "datedNetPresentValue": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "decliningBalanceDepreciation": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "discountCashFlows": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified (2026-08-19): rows + presentValueTotal, per-flow factors disclosed inline"
+    },
+    "discountedCashFlow": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 direct DCF: FCFF→enterprise / FCFE→equity, never relabeled; closed assumptions/diagnostics"
+    },
+    "discountedCashFlowFromStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./forecasting"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_valuation_company"],
+      "shape": "report",
+      "note": "FC2 composition: projected FCFF/FCFE per basis into the direct DCF, reproducible by construction"
+    },
+    "discountedCashFlowScenarioAnalysis": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 scenarios: named explicit override sets, nothing invented"
+    },
+    "discountedCashFlowSensitivityTable": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 sensitivity: every cell IS a direct DCF call; base case retained"
+    },
+    "discountedPaybackPeriod": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "dividendDiscountValuation": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 dividend discount: explicit stage + terminal; empty stage IS the Gordon model"
+    },
+    "doubleDecliningBalanceDepreciation": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "effectiveAnnualRate": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "enterpriseToEquityValue": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "equivalentAnnualAnnuity": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "equivalentInterestRate": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "freeCashFlowToEquity": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "freeCashFlowToFirm": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "futureValue": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "internalRateOfReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC1 facade (2026-08-19): number|null that NEVER picks among multiple roots silently; .explain() reports every admissible root, bracket, iterations, ambiguity warning"
+    },
+    "leveragedBuyoutAnalysis": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 LBO: sources=uses law, closing debt schedule, exit bridge, MOIC + FC1-composed IRR"
+    },
+    "loanInterestPayment": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "loanNumberOfPeriods": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "loanPeriodicInterestRate": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "loanPrincipalPayment": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "modifiedInternalRateOfReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "netPresentValue": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "nominalAnnualRate": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "operatingForecast": {
+      "kind": "function",
+      "entrypoints": [".", "./forecasting"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 forecast: explicit per-period drivers echoed; nothing extrapolated or assumed zero"
+    },
+    "paybackPeriod": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "presentValue": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "probabilisticDiscountedCashFlow": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 Monte-Carlo DCF: declared marginals/dependence/seed; rejected draws counted, never clamped"
+    },
+    "profitabilityIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "projectFinancialStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./forecasting"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 three-statement projection: ties by construction, balancing item NAMED (cash)"
+    },
+    "requireCompoundingWhenPresent": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 shared when-present validator for the ONE InterestCompounding grammar (FC2 reuses it)"
+    },
+    "requireDayCountWhenPresent": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 shared when-present validator over core's ONE DayCount vocabulary"
+    },
+    "residualIncomeValuation": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 clean-surplus residual income: book rolls disclosed, terminal explicit"
+    },
+    "reverseDiscountedCashFlow": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 reverse DCF: explicit target discriminant, bounds and convergence reported"
+    },
+    "straightLineDepreciation": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "sumOfYearsDigitsDepreciation": {
+      "kind": "function",
+      "entrypoints": [".", "./cash-flows"],
+      "role": "helper",
+      "note": "FC1 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "terminalValue": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "helper",
+      "note": "FC2 ratified plain by the core capability spec (2026-08-19): the shape is the decision"
+    },
+    "weightedAverageCostOfCapital": {
+      "kind": "function",
+      "entrypoints": [".", "./corporate"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 analysis: normalized market-value weights reported; zero/negative base refused"
+    }
+  }
+}

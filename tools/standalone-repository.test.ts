@@ -1,0 +1,101 @@
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
+
+const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
+const read = (path: string) => readFileSync(resolve(ROOT, path), 'utf8');
+const historical = 'docs/evidence/release-dry-run-0.0.1-rehearsal.json';
+// Split deliberately so the removal gate cannot rewrite its own target in a future migration.
+const retiredBrand = new RegExp(['quant', 'kit'].join(''), 'i');
+const retiredFlag = new RegExp('\\b' + ['Q', 'K_'].join(''));
+
+describe('the standalone TotalFinance repository', () => {
+  it('is the Git root, without a parent application or nested library checkout', () => {
+    const top = execFileSync('git', ['rev-parse', '--show-toplevel'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+    expect(top).toBe(ROOT);
+    for (const path of ['packages', 'tools', 'site', 'docs', '.github/workflows'])
+      expect(existsSync(resolve(ROOT, path)), path).toBe(true);
+    for (const path of [
+      'src/pages',
+      'src/screens',
+      'functions',
+      'totalfinance/packages',
+      'next.config.js',
+    ])
+      expect(existsSync(resolve(ROOT, path)), path).toBe(false);
+  });
+
+  it('has one current brand across tracked and newly added source, docs, paths and artifacts', () => {
+    const files = execFileSync(
+      'git',
+      ['ls-files', '-z', '--cached', '--others', '--exclude-standard'],
+      {
+        cwd: ROOT,
+        encoding: 'utf8',
+      },
+    )
+      .split('\0')
+      .filter(Boolean);
+    expect(files.length).toBeGreaterThan(1500);
+    const violations = [...new Set(files)].filter((path) => {
+      if (path === historical) return false;
+      if (retiredBrand.test(path) || /(?:^|\/)\.env(?:\.|$)|\.(?:pem|key)$/.test(path)) return true;
+      const bytes = readFileSync(resolve(ROOT, path));
+      if (bytes.includes(0)) return false;
+      const source = bytes.toString('utf8');
+      return retiredBrand.test(source) || retiredFlag.test(source);
+    });
+    expect(violations).toEqual([]);
+  });
+
+  it('preserves the historical rehearsal as historical bytes, not renamed release evidence', () => {
+    expect(createHash('sha256').update(read(historical)).digest('hex')).toBe(
+      '490d1d15ad693fc9d10fc81948fc0214c49f389089d6a4441fddc719634a1187',
+    );
+    expect(read('docs/evidence/README.md')).toContain('not approval');
+  });
+
+  it('names every published package and repository link for TotalFinance', () => {
+    for (const directory of readdirSync(resolve(ROOT, 'packages'))) {
+      const pkg = JSON.parse(read(`packages/${directory}/package.json`));
+      expect(pkg.name).toBe(
+        directory === 'totalfinance' ? 'totalfinance' : `@totalfinance/${directory}`,
+      );
+      expect(pkg.repository.url).toBe('git+https://github.com/InsiderFinance/totalfinance.git');
+      expect(pkg.repository.directory).toBe(`packages/${directory}`);
+      expect(pkg.version).toMatch(/^\d+\.\d+\.\d+(?:-[\w.]+)?$/);
+    }
+    expect(JSON.parse(read('.changeset/config.json')).baseBranch).toBe('main');
+  });
+
+  it('runs CI from the root on main and PRs, with supported Nodes and a pinned regeneration runtime', () => {
+    const ci = read('.github/workflows/totalfinance-ci.yml');
+    expect(ci).toContain('branches: [main]');
+    expect(ci).toContain('pull_request:');
+    expect(ci).not.toContain('paths:');
+    expect(ci).not.toContain('working-directory:');
+    expect(ci).toContain("node: ['22.13.0', '24.x', '26.x']");
+    expect(ci).toContain('node-version-file: .nvmrc');
+    expect(read('.nvmrc').trim()).toMatch(/^22\.\d+\.\d+$/);
+    expect(ci).toContain('cache-dependency-path: pnpm-lock.yaml');
+    expect(ci).toContain('pnpm regen:check');
+  });
+
+  it('keeps npm publication disabled until separately enabled and approved', () => {
+    const release = read('.github/workflows/totalfinance-release.yml');
+    expect(release).toContain('workflow_dispatch:');
+    expect(release).toContain('vars.TOTALFINANCE_RELEASE_ENABLED');
+    expect(release).toContain('refs/heads/main');
+    expect(release).toContain('name: npm-publish');
+    expect(release).not.toContain('steps.where');
+    expect(release).not.toContain('working-directory:');
+    expect(release).toContain('package_json_file: package.json');
+    expect(release).toContain('pnpm release:publish --dir approved --tag preview');
+  });
+});

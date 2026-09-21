@@ -1,0 +1,396 @@
+{
+  "package": "@totalfinance/fundamentals",
+  "domain": "fundamentals",
+  "tier": "facade",
+  "exports": {
+    "accrualRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "altmanZScore": {
+      "kind": "function",
+      "entrypoints": [".", "./scores"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 score: three published variants with exact coefficients; the variant is explicit"
+    },
+    "analyzeFundamentals": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 one-call analysis: point-in-time snapshot + every supported ratio/score + the honest gaps ledger"
+    },
+    "assetTurnover": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "beneishMScore": {
+      "kind": "function",
+      "entrypoints": [".", "./scores"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 score: the original eight-variable 1999 model, no five-variable fallback"
+    },
+    "bookValuePerShare": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "cashConversionCycle": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "cashFlowToNetIncome": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "cashRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "cashReturnOnAssets": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "commonSizeFinancialStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 common-size: fractions over the stated bases (income/cash flow over revenue, balance over assets)"
+    },
+    "currentRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "daysInventoryOutstanding": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "daysPayablesOutstanding": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "daysSalesOutstanding": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "debtServiceCoverage": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "debtToAssets": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "debtToEquity": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "dividendYield": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "earningsPerShare": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "earningsYield": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "ebitdaMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "enterpriseValueToEbitda": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "enterpriseValueToRevenue": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "freeCashFlowPerShare": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "freeCashFlowYield": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "fundamentalGrowth": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 growth: period-over-period rows + CAGR over actual elapsed years, null-with-reason on sign traps"
+    },
+    "grossMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "interestCoverage": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "inventoryTurnover": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "isPeriodAvailableAt": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC0 point-in-time law: availableTimestampMs, never periodEndDate, controls eligibility"
+    },
+    "netDebtToEbitda": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "netProfitMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "operatingMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "payablesTurnover": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "perShareFundamentals": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 split-aware per-share normalization (absolute currency per share, factor echoed)"
+    },
+    "piotroskiFScore": {
+      "kind": "function",
+      "entrypoints": [".", "./scores"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 score: the nine paper signals, each reported; unevaluable signals null-with-reason"
+    },
+    "priceToBook": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "priceToEarnings": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "priceToSales": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "quickRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "receivablesTurnover": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "reconcileFinancialStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC2 accounting-identity diagnostics: every check evaluable-or-null, never a silent pass"
+    },
+    "requireBalanceSheet": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "helper",
+      "note": "FC2 vendor-adapter guard: Law 12 closed BalanceSheet validation"
+    },
+    "requireCashFlowStatement": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "helper",
+      "note": "FC2 vendor-adapter guard: Law 12 closed CashFlowStatement validation"
+    },
+    "requireFinancialStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "helper",
+      "note": "FC2 vendor-adapter guard: the three statements agree on one period identity"
+    },
+    "requireFundamentalPeriod": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC0 frozen-contract guard: Law 12 closed FundamentalPeriod validation (strict dates, literal domains, availability instant)"
+    },
+    "requireIncomeStatement": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "helper",
+      "note": "FC2 vendor-adapter guard: Law 12 closed IncomeStatement validation (sign conventions, magnitudes)"
+    },
+    "requireMarketObservation": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "role": "helper",
+      "note": "FC2 guard for the market side of a valuation multiple (absolute-currency units)"
+    },
+    "returnOnAssets": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "returnOnCapitalEmployed": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "returnOnEquity": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "returnOnInvestedCapital": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "revenuePerShare": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "FC2 ratio head: plain decimal-or-null with .explain (formula, bases, disclosures, null reason)"
+    },
+    "selectFundamentalSnapshot": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "artifact",
+      "note": "FC2 point-in-time selector: builds the availability-gated, restatement-resolved snapshot ARTIFACT of a series"
+    },
+    "statementsAvailableTimestampMs": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "helper",
+      "note": "FC2 point-in-time law: a set is visible only when every statement in it is (max availability)"
+    },
+    "trailingTwelveMonthStatements": {
+      "kind": "function",
+      "entrypoints": [".", "./statements"],
+      "role": "artifact",
+      "note": "FC2 TTM composition: builds a trailing-twelve-months FinancialStatements ARTIFACT (flows sum, balances point-in-time, chain verified)"
+    }
+  }
+}

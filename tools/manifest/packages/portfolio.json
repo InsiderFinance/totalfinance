@@ -1,0 +1,444 @@
+{
+  "package": "@totalfinance/portfolio",
+  "domain": "portfolio",
+  "tier": "facade",
+  "exports": {
+    "allocatePortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): target weights to executable quantities: resolves the policy's targets at an explicit asOf through the ONE expansion law, sizes against explicit prices (FC5 conversion for non-base instruments), rounds toward zero to lot sizes, skips dust below the minimum notional, honours a cash reserve and the cash target, estimates commission/spread/slippage, and reports every unresolved goal, rounding residual, and funding shortfall explicitly — nothing is scaled silently"
+    },
+    "applyJournalEvents": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "artifact",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 6 — the execution journal folded to per-order states with the transition table enforced; a late fill leaves the order unresolved, a duplicate delivery is recorded once"
+    },
+    "applyPortfolioEvents": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the direct pure reducer — portfolio truth is a fold over immutable economic events (agent-native Law 1). Classified ARTIFACT, not facade: it returns a deeply-frozen, schema-versioned state object (the artifact grammar), carries no assumptions/diagnostics by design (Law 2 — P&L and valuation are derived reports from portfolioSnapshot/portfolioTimeline), and a .explain twin would explain a state, not a number."
+    },
+    "AUTHORIZATION_GRANT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the grant artifact's kind"
+    },
+    "AUTHORIZATION_GRANT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the grant artifact's schema version"
+    },
+    "createAuthorizationGrant": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "artifact",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 5 — human authority bound to one plan, one preflight, the snapshots they were judged against, a mode, an account, a variance envelope, an expiry, and a closed key set; refuses a denied preflight, an unjudged plan, a stale expiry, and 'live'"
+    },
+    "createModelPortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "artifact",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the immutable strategic/tactical/glide-path target artifact with hierarchical sleeves — fully validated (closed keys, dated sets, sleeve tree, per-dimension weight sums), deeply frozen, content-addressed (sha256 over the canonical definition); a changed target is a new model. Classified ARTIFACT like createPortfolioLedger: it carries no assumptions/diagnostics because it is a user-supplied policy artifact, never advice"
+    },
+    "createPortfolioLedger": {
+      "kind": "function",
+      "entrypoints": [".", "./ledger"],
+      "role": "artifact",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the immutable reusable ledger artifact (.apply returns a NEW ledger, .toJSON the versioned events-not-state envelope)"
+    },
+    "decideFromChecks": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the decision a list of checks implies — allow only when every check passes, deny on any failure (or any unverifiable under 'deny'), otherwise require-approval with the scope named"
+    },
+    "duplicateBoundaryKey": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "helper",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the (sourceId, eventId) replay identity — identical redelivery is a no-op, a changed body is portfolio.duplicate_event_conflict"
+    },
+    "EXECUTION_JOURNAL_EVENT_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 11: the most events one journal read folds (100,000)"
+    },
+    "EXECUTION_JOURNAL_EVENT_TYPES": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 6's closed event type set"
+    },
+    "EXECUTION_PLAN_KIND": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the execution plan's envelope kind ('totalfinance.execution-plan')"
+    },
+    "EXECUTION_PLAN_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the execution plan's schema version (1)"
+    },
+    "GRANT_IDEMPOTENCY_KEY_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the most idempotency keys one grant carries (1,000)"
+    },
+    "isModelPortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "a predicate over an ARBITRARY value: it answers false for anything malformed or tampered and never teaches — the closed-key law lives on the doors that consume a model (resolveModelTargets, the policy validators)",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): model-artifact predicate routed through the complete validator incl. the content-hash check (never a shallow sniff)"
+    },
+    "isPortfolioLedgerSnapshot": {
+      "kind": "function",
+      "entrypoints": [".", "./ledger"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "a predicate over an ARBITRARY value: it answers false for anything malformed (decorated, foreign, or not an envelope) and never teaches — the closed-key law lives on readPortfolioLedgerSnapshot, the door a value must pass to be used",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): ledger-envelope predicate routed through the complete validator (never a shallow sniff)"
+    },
+    "journalOrderStates": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the folded journal's order states in id order"
+    },
+    "mergeTradePolicies": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the stricter of the policies given — the minimum of every bound, the intersection of every allow list, the stricter unverifiable handling; a hosted policy can never silently weaken a user's"
+    },
+    "MODEL_PORTFOLIO_KIND": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the model-portfolio artifact kind ('totalfinance.model-portfolio')"
+    },
+    "MODEL_PORTFOLIO_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the model-portfolio artifact schema version"
+    },
+    "MONITOR_ALERT_FAMILIES": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the alert families monitorPortfolio evaluates in this build (the deferred ones are named in diagnostics.unsupportedFamilies)"
+    },
+    "MONITOR_LIQUIDITY_PARTICIPATION_RATE": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the stated participation rate (0.1 of average daily volume) behind days-to-liquidate"
+    },
+    "monitorPortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): pure state transition over ONE explicit snapshot: evaluates allocation drift, concentration/leverage limits, drawdown, one-evaluation loss, cash reserve, margin pressure, liquidity, stale/missing marks, reconciliation differences, and unexplained/unusual P&L against the policy and the prior monitor state, returning typed alerts with evidence (threshold, direction, hysteresis, debounce, cooldown, severity, acknowledgment) and the next state — it never notifies; a family without a declared limit is skipped with the reason, never defaulted; a recorded input stream reproduces the same alerts"
+    },
+    "NORMALIZED_FILL_KEYS": {
+      "kind": "value",
+      "entrypoints": [".", "./events"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the closed key list of the normalized fill"
+    },
+    "normalizeTradePlan": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "artifact",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): a trade intent or a rebalance proposal's plan → the one executable ExecutionPlan — orders in the frozen execution grammar, a target weight sized to whole units at the mark, reference prices from the market snapshot, the FC7 trade rows, the source named, a content hash over the body; places nothing"
+    },
+    "PORTFOLIO_EVENT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./events"],
+      "role": "constant",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the economic-event envelope schema version"
+    },
+    "PORTFOLIO_LEDGER_KIND": {
+      "kind": "value",
+      "entrypoints": [".", "./ledger"],
+      "role": "constant",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the ledger artifact kind ('totalfinance.portfolio-ledger')"
+    },
+    "PORTFOLIO_LEDGER_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./ledger"],
+      "role": "constant",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the ledger envelope schema version"
+    },
+    "PORTFOLIO_MONITOR_STATE_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the monitor-state schema version carried between evaluations"
+    },
+    "PORTFOLIO_STATE_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the derived-state schema version"
+    },
+    "portfolioEventContentHash": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "helper",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): event body identity (canonical JSON SHA-256, provenance excluded) — the duplicate-boundary comparator"
+    },
+    "portfolioEventsFromFill": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the audited bridge — one NormalizedFill to one trade.fill plus one cost.charge per non-zero cost component, deterministic ids so a replayed fill folds once; every envelope passes the event validator"
+    },
+    "portfolioLedgerContentHash": {
+      "kind": "function",
+      "entrypoints": [".", "./ledger"],
+      "role": "helper",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): ledger identity over the canonical form — provenance excluded at both levels (Gate B Decision 3)"
+    },
+    "portfolioPerformanceInputs": {
+      "kind": "function",
+      "entrypoints": [".", "./performance"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the FC4 seam — emits @totalfinance/performance's literal PortfolioValuation/ExternalCashFlow series from ledger marks and flows (the ledger FEEDS TWR/MWR, never re-implements them)"
+    },
+    "portfolioPnl": {
+      "kind": "function",
+      "entrypoints": [".", "./performance"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_portfolio_explain_pnl"],
+      "shape": "report",
+      "note": "FC7 slice 2 (Stage 4.4, 2026-08-28): reconciled P&L decomposition between two valuation marks — the agent-native identity (ΔNAV − flows = realized + unrealized + income − costs − financing + FX + residual) held exactly by construction, per-currency ledger, and grouping by position/instrument/account/currency/underlying/assetClass/strategy/tag with an explicit unattributed row"
+    },
+    "portfolioSnapshot": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_portfolio_snapshot"],
+      "shape": "report",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): explicit market/as-of valuation: settled/unsettled cash, marks from a Gate B MarketSnapshot, FC5-arithmetic base conversion, NAV conservation identity (P&L is derived, Law 2)"
+    },
+    "portfolioTimeline": {
+      "kind": "function",
+      "entrypoints": [".", "./performance"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_portfolio_analyze"],
+      "shape": "report",
+      "note": "FC7 slice 2 (Stage 4.4, 2026-08-28): NAV, cash, external flows, exposure (and exposure by group), drawdown, and P&L components at explicit marks — the portfolioPnl kernel per step plus FC4 portfolioReturnIndex/underwater over the seam series; a gap withholds the index with a reason, never a forward-fill"
+    },
+    "PREFLIGHT_REPORT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the preflight report's envelope kind ('totalfinance.preflight-report')"
+    },
+    "PREFLIGHT_REPORT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the preflight report's schema version (1)"
+    },
+    "preflightTradePlan": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the plan against the ledger, the market, and the policy — the portfolio before and after (hypothetical fills folded through the ledger's own events), every check with its verdict, the declared-rate cost estimates, the monitor's alerts on the after-state, and one decision; an unverifiable check is never an allow"
+    },
+    "proposePortfolioRebalance": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_portfolio_rebalance_proposal"],
+      "shape": "report",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): a pure proposal, never an execution: values the book with portfolioSnapshot, resolves and expands the policy's targets, measures drift against bands, sizes trades through allocatePortfolio over the post-flow NAV (contributions buy underweights first; withdrawals raise from overweights or pro-rata as the policy declares), caps turnover and the cash floor (reported as capped goals), checks every hard limit on the POST-trade book (violations reported, never relaxed), previews lot relief under the state's own policy with parity to the reducer, and normalizes a content-addressed trade-plan artifact for preflight"
+    },
+    "readPortfolioLedgerSnapshot": {
+      "kind": "function",
+      "entrypoints": [".", "./ledger"],
+      "role": "helper",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): restore + migrate (registered chain only) + validate + re-fold a stored ledger envelope — readMarketSnapshot symmetry"
+    },
+    "reconcileExecution": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 8 — the journal joined to the ledger's fills under the execution source, the fills' quantities against the journal, the unresolved orders, and reconcilePortfolio composed verbatim for an external snapshot; reconciled only when every join agrees within the explicit tolerance"
+    },
+    "reconcilePortfolio": {
+      "kind": "function",
+      "entrypoints": [".", "./reconciliation"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC7 slice 3 (Stage 4.4, 2026-08-28): compares a derived state with a normalized external snapshot at an explicit instant — missing/extra positions, quantity and cost-basis differences, cash by currency with settled/unsettled classification, pending-settlement and corporate-action explanations, validated DRAFT correction envelopes never applied here, and an explicit reconciled verdict; tolerance is explicit"
+    },
+    "RECONCILIATION_REPORT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the reconciliation report's kind"
+    },
+    "RECONCILIATION_REPORT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the reconciliation report's schema version"
+    },
+    "referencePriceOf": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the spot price and currency an instrument has in a market snapshot, or null"
+    },
+    "requireAuthorizationGrant": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): a grant in the (functionName, label, value) order — closed, every binding typed, its hash re-verified"
+    },
+    "requireExecutionJournalEvent": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): a journal event in the (functionName, label, value) order — closed, its detail record closed"
+    },
+    "requireExecutionJournalState": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): a folded journal state in the (functionName, label, value) order"
+    },
+    "requireExecutionOrderState": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): a folded order state in the (functionName, label, value) order"
+    },
+    "requireExecutionPlan": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the execution-plan guard in the (functionName, label, value) order — the closed artifact whose content hash must match its body"
+    },
+    "requireGrantVariance": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the variance envelope in the (functionName, label, value) order"
+    },
+    "requireNormalizedFill": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the normalized-fill guard in the (functionName, label, value) order of the envelope guard"
+    },
+    "requirePortfolioEventEnvelope": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "helper",
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): closed per-variant envelope validator with teaching (Law 12 closed key sets per event type)"
+    },
+    "requirePreflightCostRates": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the declared cost rates in the (functionName, label, value) order — commission (bps and per order), spread, slippage; non-negative"
+    },
+    "requirePreflightInstrument": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): an instrument description in the (functionName, label, value) order — currency, multiplier, contract terms, asset class"
+    },
+    "requirePreflightReport": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): a preflight report in the (functionName, label, value) order — closed, its hash re-verified"
+    },
+    "requireTradeIntent": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the trade-intent guard in the (functionName, label, value) order — closed, a quantity or a target weight per line, rationale as metadata"
+    },
+    "requireTradeOrder": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): one executable order in the (functionName, label, value) order — the frozen execution grammar, the price fields its type needs"
+    },
+    "requireTradePolicy": {
+      "kind": "function",
+      "entrypoints": ["./trade"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the trade-policy guard in the (functionName, label, value) order — paper-only ('live' refuses naming AT8), FC7's limits verbatim, the order-level bounds and allow lists"
+    },
+    "resolveModelTargets": {
+      "kind": "function",
+      "entrypoints": [".", "./policy"],
+      "role": "helper",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): which targets a model makes effective at an explicit instant: the latest tactical set covering it, else the glide path (stepped, or linearly interpolated only when the model says so), else the strategic set; an instant before the strategic set is a typed refusal (a model has no goals there). Returns the resolved targets with their source — a plain value, not a report"
+    },
+    "TRADE_INTENT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the trade intent's envelope kind ('totalfinance.trade-intent')"
+    },
+    "TRADE_INTENT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the trade intent's schema version (1)"
+    },
+    "TRADE_PLAN_KIND": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the trade-plan artifact kind ('totalfinance.trade-plan') a rebalance proposal normalizes into for preflight"
+    },
+    "TRADE_PLAN_ORDER_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./trade"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): Decision 11: the most orders one plan may carry (1,000)"
+    },
+    "TRADE_PLAN_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./policy"],
+      "role": "constant",
+      "note": "FC7 slice 4 (Stage 4.4, 2026-08-29): the trade-plan artifact schema version"
+    },
+    "verifyAuthorizationGrant": {
+      "kind": "function",
+      "entrypoints": [".", "./trade"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 5 — every binding re-checked at execution (expiry, plan/portfolio/market hashes, market age, mode, account, key, variance); lists every failed reason, never trusted from an earlier call"
+    }
+  }
+}

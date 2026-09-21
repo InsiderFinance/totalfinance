@@ -1,0 +1,435 @@
+{
+  "package": "@totalfinance/workflows",
+  "domain": "workflows",
+  "tier": "facade",
+  "exports": {
+    "analysisOperations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the analysis-role operations beyond the compute defaults"
+    },
+    "applyJobPatch": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): apply a patch to a job record under the state machine; the merged record is re-validated whole (functionName, current, patch — signature-policy row)"
+    },
+    "artifactPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): journey pack — artifact.read / compare"
+    },
+    "backtestPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03) + Stage 4.6 slice 3 (2026-09-04): operation pack — the opt-in vectorized, options, and cross-sectional backtests (payload/runtime heavy — deliberately not a default) + Stage 7B.1 slice 5 (2026-09-05): totalfinance.backtest.environment_episode benches a maintained baseline over one trading-environment episode (declarative inputs only)"
+    },
+    "calendarPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — calendar sessions"
+    },
+    "cancelJob": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): cancel a job from ANY process through the shared store (moved from @totalfinance/cli)"
+    },
+    "capRows": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the row cap an operation body applies before compute (moved from @totalfinance/mcp; retained positional helper — signature-policy row)"
+    },
+    "createFileArtifactStore": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): file-backed artifact store over an ABSOLUTE directory (moved from @totalfinance/cli)"
+    },
+    "createFileAuthorizationStore": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): file-backed authorization store over an ABSOLUTE directory (<dir>/authorizations)"
+    },
+    "createFileExecutionJournalStore": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): file-backed execution-journal store over an ABSOLUTE directory (<dir>/journals), append-only canonical JSON"
+    },
+    "createFileJobStore": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): file-backed job store, re-read on every call (moved from @totalfinance/cli)"
+    },
+    "createLocalJobRunner": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the JobRunner contract bound to one registry, one store directory, one clock — what totalfinance-http and any host compose"
+    },
+    "createMemoryArtifactStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the pure in-memory artifact store — put idempotent by content, get returns a copy, list filters by kind"
+    },
+    "createMemoryAuthorizationStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the in-memory authorization store — put idempotent by the grant's content hash, get by hash or handle uri, list"
+    },
+    "createMemoryExecutionJournalStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the in-memory execution-journal store — append (a duplicate eventId is skipped once, one journal per append), read, list"
+    },
+    "createMemoryJobStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the pure in-memory job store — records copied on the way in and out, transitions under the state machine"
+    },
+    "createOperationRegistry": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the curated, effect-checked registry — effect-aware since Stage 7B.2 slice 4 (2026-09-06): a write operation registers like any other and execution is capability-gated by the runtime, lists/describes/requires/runs"
+    },
+    "cryptoPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — perpetual funding / futures basis"
+    },
+    "DEFAULT_CAPABILITIES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): Decision 9 — what a caller holds when it names nothing: portfolio:read, analytics:run, trade:propose"
+    },
+    "defaultOperations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the twenty-three default read-only operations, every domain pack flattened"
+    },
+    "defaultPacks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the ten domain packs in tool-list order"
+    },
+    "defineOperation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): define one protocol-neutral operation — id grammar, effect metadata with read-only defaults, one schema, a synchronous run; validated once, frozen"
+    },
+    "describeOperation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the transport-neutral description (JSON Schemas, effect metadata, derived annotations) CLI help, OpenAPI, and MCP tools render"
+    },
+    "EXECUTION_JOURNAL_STORE_CEILING": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): Decision 11 — a journal grows to at most 100,000 events in a store"
+    },
+    "extendObjectSchema": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): compose a library input schema with operation-only knobs without re-declaring it (moved from @totalfinance/mcp; retained positional helper — signature-policy row)"
+    },
+    "fixedIncomePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — bond analytics"
+    },
+    "HANDLE_KINDS": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A slice 3 (2026-09-03): the seven handle kinds (authorization and journal since Stage 7B.2 slice 4, 2026-09-06) with their uri namespaces and the envelope kind a stored value carries"
+    },
+    "handleUriOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): mint totalfinance://<namespace>/<id> for a kind (kind, id — signature-policy row)"
+    },
+    "JOB_STATES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A slice 3 (2026-09-03): the six job states (a frozen list)"
+    },
+    "journeyOperations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): every journey operation flattened"
+    },
+    "journeyPacks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): the four journey packs together (opt-in; Decision 9 counts them apart from the twenty-three defaults)"
+    },
+    "RESOURCE_HANDLE_SCHEMA": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Pre-publish interface repairs B2 (2026-09-19): the ResourceHandle JSON Schema every transport's envelope refers to"
+    },
+    "operationResultSchema": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Pre-publish interface repairs B2 (2026-09-19): the OperationResult envelope as JSON Schema, including the spilled-handle branch; the OpenAPI document and every MCP tool outputSchema are rendered from it"
+    },
+    "spilledResultSchema": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: the handle argument is a caller's JSON Schema embedded verbatim; only its being an object is validated",
+      "note": "Pre-publish interface repairs B2 (2026-09-19): the structured slot of a result spilled to an artifact handle"
+    },
+    "jsonSafe": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: jsonSafe walks ANY value (an operation's structured output) and replaces non-finite numbers — it has no key set to close",
+      "note": "Stage 7A (2026-09-03): non-finite numbers → null so a result and its JSON mirror agree (moved from @totalfinance/mcp)"
+    },
+    "KNOWN_CAPABILITIES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the six capability names this stage uses (a runtime may grant others)"
+    },
+    "MAX_ROWS": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A (2026-09-03): the row cap every series operation applies before compute (moved from @totalfinance/mcp)"
+    },
+    "missingCapabilities": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the required capabilities the caller does not hold, sorted — two validated lists, the runtime's gate"
+    },
+    "OPERATION_BUDGETS": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A (2026-09-03): the runtime's byte-budget law (a wire budget transports pass; the hard maximum never exceeded)"
+    },
+    "OPERATION_ID": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A (2026-09-03): the wire-id grammar every operation id satisfies — totalfinance.<domain>.<verb> in lower snake_case (a frozen RegExp — an object to the live-kind probe)"
+    },
+    "operationAnnotations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): transport hints derived from effect metadata — never authored per tool"
+    },
+    "optionsPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — option price / greeks / implied volatility"
+    },
+    "packsForProfile": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the packs a profile selects (moved from @totalfinance/cli)"
+    },
+    "parseHandleUri": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): parse a handle uri into its kind and id; a malformed uri is refused with the grammar"
+    },
+    "performancePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — performance analyze"
+    },
+    "portfolioPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): journey pack — portfolio.snapshot / explain_pnl / analyze (opt-in beside the ten domain packs)"
+    },
+    "REGISTRY_PROFILES": {
+      "kind": "value",
+      "entrypoints": ["./local"],
+      "role": "constant",
+      "note": "Stage 7A slice 5 (2026-09-03): the four registry profiles (moved from @totalfinance/cli — the local runtime lives here so both L6 transports compose it)"
+    },
+    "registryForProfile": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the registry for a profile, optionally narrowed (moved from @totalfinance/cli)"
+    },
+    "requireArtifactListFilter": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): validate a list filter ({ kind? }) — shared by every store (functionName, filter — signature-policy row)"
+    },
+    "requireArtifactPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): validate a put request and derive the handle it mints — shared by every store (functionName, input — signature-policy row)"
+    },
+    "requireAuthorizationPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the authorization store's put request — the grant re-verified, the caller's createdAt, the handle minted under totalfinance://authorizations/<hash>"
+    },
+    "requireCapabilities": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): a capability list in the (functionName, field, value) order — scope:action names, deduplicated and sorted"
+    },
+    "requireJobRecord": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the closed structural guard for a job record (functionName, field, value — signature-policy row)"
+    },
+    "requireJournalAppend": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): the journal store's append request — every event typed, one journal id"
+    },
+    "requireJournalId": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): a journal id — a non-empty string of [A-Za-z0-9:._-]"
+    },
+    "requireOperation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the closed-key structural guard every door applies to a caller-supplied operation (functionName, field, value — core's guard order; signature-policy row)"
+    },
+    "requireResourceHandle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the closed structural guard for a handle whose kind must agree with its uri (functionName, field, value — signature-policy row)"
+    },
+    "researchPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): journey pack — research.screen / rank / score / event_study"
+    },
+    "riskPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — value at risk / optimize"
+    },
+    "runOperation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the ONE runtime every transport calls — optional byte budget, strict parse, seed policy, deadline verdict, JSON-safe output, identity and usage; typed errors propagate"
+    },
+    "scenarioPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): journey pack — scenario.run"
+    },
+    "strategyPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — strategy analyze / list"
+    },
+    "structurePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — exposures / flow"
+    },
+    "submitJob": {
+      "kind": "function",
+      "entrypoints": ["./local"],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the worker-terminated job runner (moved from @totalfinance/cli)"
+    },
+    "technicalAnalysisPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — technical-analysis calculate / list / describe"
+    },
+    "toOperationError": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): map any thrown value to the one OperationError shape at a transport's edge (a QuantError keeps its code; anything else is operation.internal)"
+    },
+    "tradePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 4 (AT5, 2026-09-06): operation pack — the safe trade lifecycle: trade.preflight (no effect), trade.authorize (human; the grant into the authorization store), trade.submit and trade.cancel (paper external-order effects through the paper broker over the journal store), trade.reconcile, and portfolio.record_events (the portfolio-state write). Opt-in; every write is capability-gated by the runtime"
+    },
+    "valuationPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 4.7 slice 2 (FC9, 2026-09-04): the company-valuation journey pack — totalfinance.valuation.company (discountedCashFlowFromStatements with an optional sensitivity table), opt-in beside the other journey packs"
+    },
+    "volatilityPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): operation pack — expected move, probabilities, surface, metrics, event"
+    },
+    "WORKFLOWS_VERSION": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A (2026-09-03): the package version echoed under every result's `library.version` — a constant (browser-safe build declares no platform lib), pinned to package.json by a test"
+    }
+  }
+}

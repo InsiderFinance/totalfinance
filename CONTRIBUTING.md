@@ -1,0 +1,60 @@
+# Contributing to TotalFinance
+
+TotalFinance is built spec-first under a small set of executable laws, and every change lands through
+the same gates the maintainers use. This page is that process in one screen; the long form is
+[`docs/library-alignment-spec.md`](./docs/library-alignment-spec.md) and the work queue is
+[`docs/implementation-order.md`](./docs/implementation-order.md).
+
+## Before you write code
+
+1. **Find the row.** Work is queued in `docs/implementation-order.md`; a change that is not on the
+   queue starts as an issue that says which row it belongs to, or why it is a new one.
+2. **Spec first.** Anything larger than a bug fix begins as a decision-complete contract under
+   `docs/specs/` (outcome, non-goals, numbered decisions, ordered slices, an exit gate). The spec is
+   reviewed before the first line of implementation; roadmap bullets are never implemented directly.
+3. **Read the laws.** The public-API laws in the alignment spec are not style: a result carries its
+   `assumptions` and `diagnostics`; a refusal is a typed `QuantError` with a registered code; a
+   warning never licenses a non-finite number; every door re-validates what it is handed; nothing
+   computes from data the caller did not pass in; no verb is exported that refuses every input.
+
+## While you build
+
+- **Node 22.13+ and pnpm 10.** From this repository's root, `nvm use` (or select the version in
+  `.nvmrc`), `corepack enable`, `pnpm install --frozen-lockfile`, then `pnpm build`.
+  `.nvmrc` pins the canonical artifact-generation runtime; CI additionally tests the minimum
+  supported Node and newer versions. Open pull requests against `main`.
+- **Tests live beside the code** (`packages/<name>/test/`), goldens under `tools/golden/`. A new
+  export needs its tests, its manifest row (`tools/manifest/packages/<name>.json`, hand-classified
+  — never `manifest:update`, which wipes curation), a first-touch fixture when it takes more than one
+  positional argument, and a `@totalfinance/core` error code when it can refuse.
+- **Regenerate in order** after the source is final:
+  `signature:update → naming:update → contract:update → enforcement:update → validation:update →
+api:update → readme → llms → bundle:update → openapi:update → docs:update`. Check
+  `summary.defective` is `0` after `enforcement:update`; a generated file is never edited by hand.
+- **Format only what you changed** with `pnpm exec prettier --write <files>`; never the whole repo.
+- **A changeset for every user-visible change:** `pnpm exec changeset` (the group is fixed, so one
+  entry names every package that moves). The repository is in `preview` pre-mode; versions bump only
+  in the release commit.
+
+## The landing standard
+
+A change is ready when all of these hold, checked by exit code, never through a pipe:
+
+1. `pnpm run ci` exits 0 — format, lint, typecheck, build, coverage, and the API-report check.
+2. `pnpm api:check` exits 0 on its own.
+3. A second `pnpm test:coverage` is all green (the stochastic suites are seeded; a one-off flake is
+   documented in `docs/`, not waved through).
+4. Every controlling tracker the change touches says the same thing: the spec's slice record, the
+   implementation order, and the completeness tracker name one commit.
+
+## What we say no to
+
+Compute duplicated inside an artifact, a workflow, or a transport; a new transport that does not go
+through the operation registry; a benchmark quoted from a loaded machine; a gate weakened to pass
+(raise the bound only from a measurement, and say where the measurement came from); provider
+connectors, credentials, or network reads inside the library.
+
+## Reporting
+
+Bugs and questions: GitHub issues on the TotalFinance repository. Security: never an issue — see
+[`SECURITY.md`](./SECURITY.md). Conduct: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).

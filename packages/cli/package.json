@@ -1,0 +1,59 @@
+{
+  "name": "@totalfinance/cli",
+  "version": "0.0.1",
+  "description": "TotalFinance local operations: file-backed artifact and job stores and the worker-terminated job runner behind the `totalfinance` command line.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "cli",
+    "finance",
+    "quant",
+    "jobs",
+    "artifacts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/cli#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "totalfinance": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/workflows": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

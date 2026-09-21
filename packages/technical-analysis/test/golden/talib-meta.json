@@ -1,0 +1,1477 @@
+{
+  "Cycle Indicators": [
+    {
+      "name": "HT_DCPERIOD",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "HT_DCPHASE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "HT_PHASOR",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["inphase", "quadrature"]
+    },
+    {
+      "name": "HT_SINE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["sine", "leadsine"]
+    },
+    {
+      "name": "HT_TRENDMODE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["integer"]
+    }
+  ],
+  "Math Operators": [
+    {
+      "name": "ADD",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "DIV",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "MAX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MAXINDEX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "MIN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MININDEX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "MINMAX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["min", "max"]
+    },
+    {
+      "name": "MINMAXINDEX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["minidx", "maxidx"]
+    },
+    {
+      "name": "MULT",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "SUB",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "SUM",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    }
+  ],
+  "Math Transform": [
+    {
+      "name": "ACOS",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "ASIN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "ATAN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "CEIL",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "COS",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "COSH",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "EXP",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "FLOOR",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "LN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "LOG10",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "SIN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "SINH",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "SQRT",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "TAN",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "TANH",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    }
+  ],
+  "Momentum Indicators": [
+    {
+      "name": "ADX",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ADXR",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "APO",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "fastperiod": 12,
+        "slowperiod": 26,
+        "matype": 0
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "AROON",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["aroondown", "aroonup"]
+    },
+    {
+      "name": "AROONOSC",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "BOP",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "CCI",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "CMO",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "DX",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MACD",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "fastperiod": 12,
+        "slowperiod": 26,
+        "signalperiod": 9
+      },
+      "outputs": ["macd", "macdsignal", "macdhist"]
+    },
+    {
+      "name": "MACDEXT",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "fastperiod": 12,
+        "fastmatype": 0,
+        "slowperiod": 26,
+        "slowmatype": 0,
+        "signalperiod": 9,
+        "signalmatype": 0
+      },
+      "outputs": ["macd", "macdsignal", "macdhist"]
+    },
+    {
+      "name": "MACDFIX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "signalperiod": 9
+      },
+      "outputs": ["macd", "macdsignal", "macdhist"]
+    },
+    {
+      "name": "MFI",
+      "inputs": {
+        "prices": ["high", "low", "close", "volume"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MINUS_DI",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MINUS_DM",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MOM",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "PLUS_DI",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "PLUS_DM",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "PPO",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "fastperiod": 12,
+        "slowperiod": 26,
+        "matype": 0
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ROC",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ROCP",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ROCR",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ROCR100",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "RSI",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "STOCH",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "fastk_period": 5,
+        "slowk_period": 3,
+        "slowk_matype": 0,
+        "slowd_period": 3,
+        "slowd_matype": 0
+      },
+      "outputs": ["slowk", "slowd"]
+    },
+    {
+      "name": "STOCHF",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "fastk_period": 5,
+        "fastd_period": 3,
+        "fastd_matype": 0
+      },
+      "outputs": ["fastk", "fastd"]
+    },
+    {
+      "name": "STOCHRSI",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14,
+        "fastk_period": 5,
+        "fastd_period": 3,
+        "fastd_matype": 0
+      },
+      "outputs": ["fastk", "fastd"]
+    },
+    {
+      "name": "TRIX",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "ULTOSC",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod1": 7,
+        "timeperiod2": 14,
+        "timeperiod3": 28
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "WILLR",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    }
+  ],
+  "Overlap Studies": [
+    {
+      "name": "BBANDS",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 5,
+        "nbdevup": 2.0,
+        "nbdevdn": 2.0,
+        "matype": 0
+      },
+      "outputs": ["upperband", "middleband", "lowerband"]
+    },
+    {
+      "name": "DEMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "EMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "HT_TRENDLINE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "KAMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30,
+        "matype": 0
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MAMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "fastlimit": 0.5,
+        "slowlimit": 0.05
+      },
+      "outputs": ["mama", "fama"]
+    },
+    {
+      "name": "MAVP",
+      "inputs": {
+        "price": "close",
+        "periods": "periods"
+      },
+      "params": {
+        "minperiod": 2,
+        "maxperiod": 30,
+        "matype": 0
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MIDPOINT",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "MIDPRICE",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "SAR",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "acceleration": 0.02,
+        "maximum": 0.2
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "SAREXT",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {
+        "startvalue": 0.0,
+        "offsetonreverse": 0.0,
+        "accelerationinitlong": 0.02,
+        "accelerationlong": 0.02,
+        "accelerationmaxlong": 0.2,
+        "accelerationinitshort": 0.02,
+        "accelerationshort": 0.02,
+        "accelerationmaxshort": 0.2
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "SMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "T3",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 5,
+        "vfactor": 0.7
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "TEMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "TRIMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "WMA",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    }
+  ],
+  "Pattern Recognition": [
+    {
+      "name": "CDL2CROWS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3BLACKCROWS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3INSIDE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3LINESTRIKE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3OUTSIDE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3STARSINSOUTH",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDL3WHITESOLDIERS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLABANDONEDBABY",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.3
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLADVANCEBLOCK",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLBELTHOLD",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLBREAKAWAY",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLCLOSINGMARUBOZU",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLCONCEALBABYSWALL",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLCOUNTERATTACK",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLDARKCLOUDCOVER",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.5
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLDOJI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLDOJISTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLDRAGONFLYDOJI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLENGULFING",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLEVENINGDOJISTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.3
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLEVENINGSTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.3
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLGAPSIDESIDEWHITE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLGRAVESTONEDOJI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHAMMER",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHANGINGMAN",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHARAMI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHARAMICROSS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHIGHWAVE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHIKKAKE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHIKKAKEMOD",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLHOMINGPIGEON",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLIDENTICAL3CROWS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLINNECK",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLINVERTEDHAMMER",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLKICKING",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLKICKINGBYLENGTH",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLLADDERBOTTOM",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLLONGLEGGEDDOJI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLLONGLINE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLMARUBOZU",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLMATCHINGLOW",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLMATHOLD",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.5
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLMORNINGDOJISTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.3
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLMORNINGSTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {
+        "penetration": 0.3
+      },
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLONNECK",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLPIERCING",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLRICKSHAWMAN",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLRISEFALL3METHODS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSEPARATINGLINES",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSHOOTINGSTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSHORTLINE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSPINNINGTOP",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSTALLEDPATTERN",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLSTICKSANDWICH",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLTAKURI",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLTASUKIGAP",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLTHRUSTING",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLTRISTAR",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLUNIQUE3RIVER",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLUPSIDEGAP2CROWS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    },
+    {
+      "name": "CDLXSIDEGAP3METHODS",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["integer"]
+    }
+  ],
+  "Price Transform": [
+    {
+      "name": "AVGPRICE",
+      "inputs": {
+        "prices": ["open", "high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "MEDPRICE",
+      "inputs": {
+        "prices": ["high", "low"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "TYPPRICE",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "WCLPRICE",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    }
+  ],
+  "Statistic Functions": [
+    {
+      "name": "BETA",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {
+        "timeperiod": 5
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "CORREL",
+      "inputs": {
+        "price0": "high",
+        "price1": "low"
+      },
+      "params": {
+        "timeperiod": 30
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "LINEARREG",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "LINEARREG_ANGLE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "LINEARREG_INTERCEPT",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "LINEARREG_SLOPE",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "STDDEV",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 5,
+        "nbdev": 1.0
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "TSF",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "VAR",
+      "inputs": {
+        "price": "close"
+      },
+      "params": {
+        "timeperiod": 5,
+        "nbdev": 1.0
+      },
+      "outputs": ["real"]
+    }
+  ],
+  "Volatility Indicators": [
+    {
+      "name": "ATR",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "NATR",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {
+        "timeperiod": 14
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "TRANGE",
+      "inputs": {
+        "prices": ["high", "low", "close"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    }
+  ],
+  "Volume Indicators": [
+    {
+      "name": "AD",
+      "inputs": {
+        "prices": ["high", "low", "close", "volume"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    },
+    {
+      "name": "ADOSC",
+      "inputs": {
+        "prices": ["high", "low", "close", "volume"]
+      },
+      "params": {
+        "fastperiod": 3,
+        "slowperiod": 10
+      },
+      "outputs": ["real"]
+    },
+    {
+      "name": "OBV",
+      "inputs": {
+        "price": "close",
+        "prices": ["volume"]
+      },
+      "params": {},
+      "outputs": ["real"]
+    }
+  ]
+}

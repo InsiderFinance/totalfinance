@@ -1,0 +1,477 @@
+{
+  "package": "@totalfinance/strategy",
+  "domain": "strategy",
+  "tier": "facade",
+  "exports": {
+    "bearCallLadder": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bearCallSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bearPutLadder": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bearPutSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "buildStrategy": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "mcpTools": ["totalfinance_strategy_analyze"],
+      "note": "position factory"
+    },
+    "bullCallLadder": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bullCallSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bullPutLadder": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "bullPutSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "calendarCallSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "calendarPutSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "callBrokenWing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "callRatioBackspread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "callRatioSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "cashSecuredPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "classifyStrategy": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "classification report (E5): matches[] in manifest order + matching conventions inline"
+    },
+    "collar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "coveredCall": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "coveredShortStraddle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "coveredShortStrangle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "diagonalCallSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "diagonalPutSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "doubleDiagonal": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "expectedIntrinsic": {
+      "kind": "function",
+      "entrypoints": ["./probability"],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "explainPosition": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "explanation report (E5): structured posture/economics/prose + assumptions/diagnostics inline"
+    },
+    "guts": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "inverseCallBrokenWing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "inverseIronButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "inverseIronCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "inversePutBrokenWing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "ironButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "ironCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "jadeLizard": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "legs": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "legs.call": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "leg builder"
+    },
+    "legs.put": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "leg builder"
+    },
+    "legs.stock": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "leg builder"
+    },
+    "listStrategies": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "mcpTools": ["totalfinance_strategy_list"],
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "longCall": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longCallButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longCallCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longCombo": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longPutButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longPutCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "longSyntheticFuture": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "optimizeStrategy": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "payoffSvg": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "Position": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "artifact"
+    },
+    "protectivePut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "putBrokenWing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "putRatioBackspread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "putRatioSpread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "reverseJadeLizard": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "SCAN_OBJECTIVES": {
+      "kind": "value",
+      "entrypoints": [".", "./scanner"],
+      "role": "constant"
+    },
+    "scanStrategies": {
+      "kind": "function",
+      "entrypoints": [".", "./scanner"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "scan report (E5): ranked candidates[] + the applied conventions inline"
+    },
+    "shortCall": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortCallButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortCallCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortCombo": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortGuts": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortPutButterfly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortPutCondor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortStraddle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortStrangle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "shortSyntheticFuture": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "straddle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "strangle": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "strap": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "strategy": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "position factory"
+    },
+    "strategyFromChain": {
+      "kind": "function",
+      "entrypoints": [".", "./from-chain"],
+      "role": "artifact",
+      "note": "position factory"
+    },
+    "strategyOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "strategySignature": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "strip": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "syntheticPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "named strategy constructor"
+    },
+    "terminalCdf": {
+      "kind": "function",
+      "entrypoints": ["./probability"],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    },
+    "touchProbability": {
+      "kind": "function",
+      "entrypoints": ["./probability"],
+      "role": "helper",
+      "note": "catalog/scalar utility (probability facades live in @totalfinance/volatility)"
+    }
+  }
+}

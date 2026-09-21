@@ -1,0 +1,109 @@
+{
+  "package": "@totalfinance/foreign-exchange",
+  "domain": "foreign-exchange",
+  "tier": "facade",
+  "exports": {
+    "convertCurrency": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 conversion at an explicit connecting quote, orientation disclosed; round trip is the identity"
+    },
+    "coveredInterestParityForward": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 no-arbitrage forward: domestic = quote-currency rate, foreign = base-currency rate, compounding echoed"
+    },
+    "crossRate": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 cross rate through the ONE shared currency, every leg's orientation disclosed in the derivation"
+    },
+    "currencyExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./risk"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 per-currency exposure in a declared base; missing-pair positions excluded WITH reason, never guessed"
+    },
+    "foreignExchangeForwardPoints": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 (forward − spot) / pointSize with pointSize always explicit"
+    },
+    "foreignExchangeForwardValue": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 mark-to-market of an outstanding forward against an explicit quote-currency discount factor (matched-conventions law)"
+    },
+    "foreignExchangeSwapValue": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 swap = near leg + far leg, each valued by foreignExchangeForwardValue (composed, not copied)"
+    },
+    "HEDGED_PROFIT_AND_LOSS_DECOMPOSITION": {
+      "kind": "value",
+      "entrypoints": [".", "./risk"],
+      "role": "constant",
+      "note": "FC5: the exact decomposition prose, frozen so tests and docs can quote it"
+    },
+    "hedgeRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./risk"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 hedge notional / exposure; zero exposure yields null-with-reason, never Infinity"
+    },
+    "invertCurrencyPairQuote": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 quote inversion: base/quote swapped, price reciprocated; involutive at 1e-12"
+    },
+    "nonDeliverableForwardValue": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 cash-settled NDF at a caller-supplied fixing; v1 settles in the pair's quote currency only"
+    },
+    "pipValue": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 pip value in quote and base currency; pipSize always explicit, never guessed from symbol spelling"
+    },
+    "requireCurrencyCode": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "helper",
+      "note": "FC5 boundary guard: uppercase three-letter ISO-style code, lowercase answered with the exact fix"
+    },
+    "requireCurrencyPairQuote": {
+      "kind": "function",
+      "entrypoints": [".", "./spot"],
+      "role": "helper",
+      "note": "FC5 boundary guard: the closed CurrencyPairQuote contract (distinct codes, quotePerBase > 0); validates its own functionName/label first"
+    },
+    "spotForwardHedgedProfitAndLoss": {
+      "kind": "function",
+      "entrypoints": [".", "./risk"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC5 hedged P&L with the exact unhedged/hedged decomposition frozen as a quotable constant"
+    }
+  }
+}

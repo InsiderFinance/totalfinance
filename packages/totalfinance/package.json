@@ -1,0 +1,179 @@
+{
+  "name": "totalfinance",
+  "version": "0.0.1",
+  "description": "TotalFinance umbrella: one install, namespace re-exports of the whole browser-first quant toolkit (options, vol, TA, strategy, risk, structure, backtest, fixed-income, performance, calendars).",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "quant",
+    "finance",
+    "options",
+    "technical-analysis",
+    "trading",
+    "risk",
+    "backtesting",
+    "black-scholes",
+    "typescript",
+    "browser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/totalfinance"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/totalfinance#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./options": {
+      "types": "./dist/options.d.ts",
+      "import": "./dist/options.js",
+      "default": "./dist/options.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "default": "./dist/core.js"
+    },
+    "./math": {
+      "types": "./dist/math.d.ts",
+      "import": "./dist/math.js",
+      "default": "./dist/math.js"
+    },
+    "./crypto": {
+      "types": "./dist/crypto.d.ts",
+      "import": "./dist/crypto.js",
+      "default": "./dist/crypto.js"
+    },
+    "./valuation": {
+      "types": "./dist/valuation.d.ts",
+      "import": "./dist/valuation.js",
+      "default": "./dist/valuation.js"
+    },
+    "./research": {
+      "types": "./dist/research.d.ts",
+      "import": "./dist/research.js",
+      "default": "./dist/research.js"
+    },
+    "./foreign-exchange": {
+      "types": "./dist/foreign-exchange.d.ts",
+      "import": "./dist/foreign-exchange.js",
+      "default": "./dist/foreign-exchange.js"
+    },
+    "./commodities": {
+      "types": "./dist/commodities.d.ts",
+      "import": "./dist/commodities.js",
+      "default": "./dist/commodities.js"
+    },
+    "./portfolio": {
+      "types": "./dist/portfolio.d.ts",
+      "import": "./dist/portfolio.js",
+      "default": "./dist/portfolio.js"
+    },
+    "./scenarios": {
+      "types": "./dist/scenarios.d.ts",
+      "import": "./dist/scenarios.js",
+      "default": "./dist/scenarios.js"
+    },
+    "./fundamentals": {
+      "types": "./dist/fundamentals.d.ts",
+      "import": "./dist/fundamentals.js",
+      "default": "./dist/fundamentals.js"
+    },
+    "./calendars": {
+      "types": "./dist/calendars.d.ts",
+      "import": "./dist/calendars.js",
+      "default": "./dist/calendars.js"
+    },
+    "./performance": {
+      "types": "./dist/performance.d.ts",
+      "import": "./dist/performance.js",
+      "default": "./dist/performance.js"
+    },
+    "./risk": {
+      "types": "./dist/risk.d.ts",
+      "import": "./dist/risk.js",
+      "default": "./dist/risk.js"
+    },
+    "./backtest": {
+      "types": "./dist/backtest.d.ts",
+      "import": "./dist/backtest.js",
+      "default": "./dist/backtest.js"
+    },
+    "./volatility": {
+      "types": "./dist/volatility.d.ts",
+      "import": "./dist/volatility.js",
+      "default": "./dist/volatility.js"
+    },
+    "./structure": {
+      "types": "./dist/structure.d.ts",
+      "import": "./dist/structure.js",
+      "default": "./dist/structure.js"
+    },
+    "./technical-analysis": {
+      "types": "./dist/technical-analysis.d.ts",
+      "import": "./dist/technical-analysis.js",
+      "default": "./dist/technical-analysis.js"
+    },
+    "./strategy": {
+      "types": "./dist/strategy.d.ts",
+      "import": "./dist/strategy.js",
+      "default": "./dist/strategy.js"
+    },
+    "./fixed-income": {
+      "types": "./dist/fixed-income.d.ts",
+      "import": "./dist/fixed-income.js",
+      "default": "./dist/fixed-income.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/backtest": "workspace:*",
+    "@totalfinance/calendars": "workspace:*",
+    "@totalfinance/fundamentals": "workspace:*",
+    "@totalfinance/valuation": "workspace:*",
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/crypto": "workspace:*",
+    "@totalfinance/fixed-income": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/risk": "workspace:*",
+    "@totalfinance/strategy": "workspace:*",
+    "@totalfinance/structure": "workspace:*",
+    "@totalfinance/technical-analysis": "workspace:*",
+    "@totalfinance/volatility": "workspace:*",
+    "@totalfinance/research": "workspace:*",
+    "@totalfinance/foreign-exchange": "workspace:*",
+    "@totalfinance/commodities": "workspace:*",
+    "@totalfinance/portfolio": "workspace:*",
+    "@totalfinance/scenarios": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

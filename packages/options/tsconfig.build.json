@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "types": []
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.test.ts", "test/**/*"],
+  "references": [
+    { "path": "../core/tsconfig.build.json" },
+    { "path": "../math/tsconfig.build.json" }
+  ]
+}

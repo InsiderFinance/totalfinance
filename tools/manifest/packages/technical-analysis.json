@@ -1,0 +1,4379 @@
+{
+  "package": "@totalfinance/technical-analysis",
+  "domain": "technical-analysis",
+  "tier": "facade",
+  "exports": {
+    "aberration": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "accelerationBands": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "acos": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "add": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "adLine": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AdLineStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "adx": {
+      "kind": "function",
+      "entrypoints": [".", "./bars"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "adxr": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AdxrStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "AdxStream": {
+      "kind": "class",
+      "entrypoints": ["./bars"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "aggregators": {
+      "kind": "object",
+      "entrypoints": [".", "./chart-types"],
+      "role": "namespace"
+    },
+    "aggregators.dollar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.dollarImbalance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.dollarRun": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.imbalance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.range": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.run": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.tick": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.volume": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.volumeImbalance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "aggregators.volumeRun": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "ALIAS_TABLE": {
+      "kind": "value",
+      "entrypoints": [".", "./aliases"],
+      "role": "constant"
+    },
+    "aliasesOf": {
+      "kind": "function",
+      "entrypoints": [".", "./aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "alignToBars": {
+      "kind": "function",
+      "entrypoints": [".", "./resample"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "alma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AlmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "amat": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "anchoredVwap": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AnchoredVwapStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "apo": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ApoStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "archerObv": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "aroon": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "aroonOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AroonStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "asin": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "atan": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "atr": {
+      "kind": "function",
+      "entrypoints": [".", "./bars"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "atrBands": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AtrStream": {
+      "kind": "class",
+      "entrypoints": ["./bars"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "atrTrailingStop": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "averagePrice": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "awesomeOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "AwesomeStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "bar": {
+      "kind": "object",
+      "entrypoints": [".", "./transforms"],
+      "role": "namespace"
+    },
+    "bar.average": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.body": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.lowerShadow": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.median": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.open": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.range": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.trueRange": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.typical": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.upperShadow": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "bar.weighted": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "single-bar accessor"
+    },
+    "BarAggregator": {
+      "kind": "class",
+      "entrypoints": [".", "./chart-types"],
+      "role": "artifact"
+    },
+    "barsFromColumns": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "barSince": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "bb": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "bbands": {
+      "kind": "function",
+      "entrypoints": [".", "./bands"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "beta": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "BetaStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "between": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "bias": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "BiasStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "BinaryMathStream": {
+      "kind": "class",
+      "entrypoints": ["./math"],
+      "role": "artifact"
+    },
+    "bindIndicatorMetadata": {
+      "kind": "function",
+      "entrypoints": ["./framework"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "BollingerBandFieldStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "role": "artifact"
+    },
+    "bollingerBandWidth": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "bollingerPercentB": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "BollingerStream": {
+      "kind": "class",
+      "entrypoints": ["./bands"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "bookImbalance": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: an order book carries venue decoration; consumed levels are validated by requireOrderBook"
+    },
+    "bop": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "BopStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "brar": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "BrarStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "breakouts": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "CANDLE_SETTINGS": {
+      "kind": "object",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "namespace"
+    },
+    "candleAverage": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "candleColor": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a market-data bar legitimately carries decoration (timestamp, vendor fields); consumed fields run the finite ladder",
+      "note": "registry/discovery/meta"
+    },
+    "candleRange": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlestickNames": {
+      "kind": "value",
+      "entrypoints": [".", "./candlesticks"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "candlesticks": {
+      "kind": "object",
+      "entrypoints": [".", "./candlesticks"],
+      "role": "namespace"
+    },
+    "candlesticks.abandonedBaby": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.advanceBlock": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.beltHold": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.breakaway": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.closingMarubozu": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.concealBabySwallow": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.counterattack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.darkCloudCover": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.doji": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.dojiStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.dragonflyDoji": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.engulfing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.eveningDojiStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.eveningStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.gapSideSideWhite": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.gravestoneDoji": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.hammer": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.hangingMan": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.harami": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.haramiCross": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.highWave": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.hikkake": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.hikkakeMod": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.homingPigeon": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.identicalThreeCrows": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.inNeck": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.inside": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.invertedHammer": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.kicking": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.kickingByLength": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.ladderBottom": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.longLeggedDoji": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.longLine": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.marubozu": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.matchingLow": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.matHold": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.morningDojiStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.morningStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.onNeck": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.piercing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.rickshawMan": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.riseFallThreeMethods": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.separatingLines": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.shootingStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.shortLine": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.spinningTop": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.stalledPattern": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.stickSandwich": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.takuri": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.tasukiGap": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeBlackCrows": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeInside": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeLineStrike": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeOutside": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeStarsInSouth": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.threeWhiteSoldiers": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.thrusting": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.triStar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.twoCrows": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.uniqueThreeRiver": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.upsideGapTwoCrows": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "candlesticks.xSideGapThreeMethods": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CandleStream": {
+      "kind": "class",
+      "entrypoints": ["./candlesticks"],
+      "role": "artifact"
+    },
+    "CandleView": {
+      "kind": "class",
+      "entrypoints": [".", "./candlesticks"],
+      "role": "artifact"
+    },
+    "CandleZStream": {
+      "kind": "class",
+      "entrypoints": ["./candle-aliases"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "cci": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CciStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "CDL_ALIASES": {
+      "kind": "object",
+      "entrypoints": [".", "./candle-aliases"],
+      "role": "namespace"
+    },
+    "cdlClosingMarubozuTalib": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "cdlDoji": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-aliases"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "cdlDojiTalib": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "cdlInside": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-aliases"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "cdlMarubozuTalib": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "cdlPattern": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "cdlZ": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-aliases"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ceil": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "centerOfGravity": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CenterOfGravityStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "centralPivotRange": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "cfo": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "chaikinMoneyFlow": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "chaikinOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ChaikinOscStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "chaikinVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ChaikinVolatilityStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "chandeKrollStop": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "chandelierExit": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ChandelierStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "change": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "channel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "charts": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "charts.dollarBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.dollarImbalanceBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.dollarRunBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.imbalanceBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.kagi": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.lineBreak": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.pointAndFigure": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.rangeBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.renko": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.runBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.tickBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.volumeBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.volumeImbalanceBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "charts.volumeRunBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "checkSnapshotVersion": {
+      "kind": "function",
+      "entrypoints": [".", "./framework"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "choppinessIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "closes": {
+      "kind": "function",
+      "entrypoints": ["./framework"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "CmfStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "cmo": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CmoStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "collect": {
+      "kind": "function",
+      "entrypoints": ["./framework"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "stream plumbing"
+    },
+    "collectAsync": {
+      "kind": "function",
+      "entrypoints": [".", "./framework"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "stream plumbing"
+    },
+    "columnsFromBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "compatibilityMatrixMarkdown": {
+      "kind": "function",
+      "entrypoints": [".", "./aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "condition": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "connorsRsi": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ConnorsRsiStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "coppock": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CoppockStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "correl": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CorrelStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "cos": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "cosh": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "covariance": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "crossany": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "crossover": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "crossOver": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "CrossPairStream": {
+      "kind": "class",
+      "entrypoints": ["./math"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "crossSignals": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "crossUnder": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "cti": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CtiStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "cumulativeSum": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "cumulativeVolumeDelta": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "cvd": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "CvdAggregator": {
+      "kind": "class",
+      "entrypoints": [".", "./microstructure"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "CvdStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "decreasing": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "defineIndicator": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "dema": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DemaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "describeIndicator": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "mcpTools": ["totalfinance_technical_analysis_describe"],
+      "note": "registry/discovery/meta"
+    },
+    "detectCandles": {
+      "kind": "function",
+      "entrypoints": [".", "./candlesticks"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "difference": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "div": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "divergence": {
+      "kind": "function",
+      "entrypoints": [".", "./divergence"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "divergences": {
+      "kind": "function",
+      "entrypoints": [".", "./divergence"],
+      "role": "helper",
+      "note": "H13 ratified plain (2026-08-19): explicit event list kept"
+    },
+    "dmi": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DmiStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "dollarBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "dollarImbalanceBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "dollarRunBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "donchian": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DonchianStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "donchianTrend": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DonchianTrendStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "dpo": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DpoStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "drawdown": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DrawdownStream": {
+      "kind": "class",
+      "entrypoints": ["./features"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "dsp": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "DspStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "dx": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "easeOfMovement": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ebsw": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "EbswStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "efficiencyRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "EfficiencyRatioStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "efi": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "elderRay": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ElderRayStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "elderThermometer": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ema": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "EmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "emv": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "entropy": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "EomStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "equalHighs": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "equalLows": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "exp": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "exponentialDecay": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "fairValueGaps": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "falling": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "FeaturePipeline": {
+      "kind": "class",
+      "entrypoints": [".", "./pipeline"],
+      "role": "artifact"
+    },
+    "features": {
+      "kind": "function",
+      "entrypoints": [".", "./pipeline"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "FIB_EXTENSION_LEVELS": {
+      "kind": "value",
+      "entrypoints": [".", "./price-action"],
+      "role": "constant"
+    },
+    "FIB_RETRACEMENT_LEVELS": {
+      "kind": "value",
+      "entrypoints": [".", "./price-action"],
+      "role": "constant"
+    },
+    "fibExtension": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H14 ratified plain (2026-08-19): deterministic geometric FibLevel[]"
+    },
+    "fibRetracement": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H15 ratified plain (2026-08-19): FibLevel[] kept"
+    },
+    "FisherStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "fisherTransform": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "floor": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "footprintBars": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "forceIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ForceIndexStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "forecastOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "fractals": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "fractionalChange": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "frama": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "FramaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "fwma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "gannHighLowActivator": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "GannHiLoStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "gap": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "gapFill": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "gaps": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "GapStream": {
+      "kind": "class",
+      "entrypoints": ["./transforms"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "garmanKlass": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "getIndicator": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "mcpTools": ["totalfinance_technical_analysis_calculate"],
+      "note": "registry/discovery/meta"
+    },
+    "gt": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "gte": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "hasIndicator": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "heikinAshi": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms", "./chart-types"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HeikinAshiStream": {
+      "kind": "class",
+      "entrypoints": ["./transforms"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "highestBars": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HilbertCore": {
+      "kind": "class",
+      "entrypoints": [".", "./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "historicalVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HistoricalVolatilityStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "hl2": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "hlc3": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "hma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "holtWinterChannel": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "holtWinterMovingAverage": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "htDcPeriod": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "htDcPhase": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "htPhasor": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HtPhasorStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "HtScalarStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "role": "artifact"
+    },
+    "htSine": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HtSineStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "htTrendline": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "htTrendMode": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "HtTrendModeStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "HwmaStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "ichimoku": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "IchimokuStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "imbalanceBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "increasing": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "indicatorCategories": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "indicatorWarmup": {
+      "kind": "function",
+      "entrypoints": [".", "./warmup"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "indicatorWarmups": {
+      "kind": "function",
+      "entrypoints": [".", "./warmup"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "inertia": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "InertiaStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "InformationBarAggregator": {
+      "kind": "class",
+      "entrypoints": [".", "./chart-types"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "jma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "JmaStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "kagi": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "kama": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "KamaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "kdj": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "KdjStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "keltner": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "KeltnerStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "klinger": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "KlingerStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "kst": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "KstStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "kurtosis": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "kvo": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "lag": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "laguerreRsi": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "LaguerreRsiStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "linearDecay": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "lineAt": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "H16 ratified plain (2026-08-19): scalar artifact evaluation kept"
+    },
+    "lineBreak": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "LineBreakStream": {
+      "kind": "class",
+      "entrypoints": [".", "./chart-types"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "linreg": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "linregAngle": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "linregIntercept": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "LinregOscStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "role": "artifact"
+    },
+    "linregSlope": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "LinregStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "liquiditySweeps": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "listIndicators": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "mcpTools": ["totalfinance_technical_analysis_list"],
+      "note": "registry/discovery/meta"
+    },
+    "ln": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "log10": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "logReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./series"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "LogReturnsStream": {
+      "kind": "class",
+      "entrypoints": ["./series"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "longRun": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "lowerShadow": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "lowestBars": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "lt": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "lte": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "macd": {
+      "kind": "function",
+      "entrypoints": [".", "./macd", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "macdExt": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MacdExtStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "macdFix": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MacdStream": {
+      "kind": "class",
+      "entrypoints": ["./macd"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "makeIndicator": {
+      "kind": "function",
+      "entrypoints": ["./framework"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "mama": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MamaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "MapBarStream": {
+      "kind": "class",
+      "entrypoints": ["./transforms"],
+      "role": "artifact"
+    },
+    "marketFacilitationIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "marketStructure": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "massIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "mavp": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "mcginley": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "McGinleyStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "medianPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "mfi": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MfiStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "microprice": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: an order book carries venue decoration; consumed levels are validated by requireOrderBook"
+    },
+    "midpoint": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MidpointStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "midprice": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MidpriceStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "MinMaxIndexStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "MinMaxStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "minusDI": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "minusDM": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MomentStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "momentum": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MOVING_AVERAGE_NAMES": {
+      "kind": "value",
+      "entrypoints": ["./statistics"],
+      "role": "constant"
+    },
+    "MOVING_AVERAGE_TYPES": {
+      "kind": "value",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "role": "constant"
+    },
+    "movingAverage": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "movingAverageRibbon": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MovingAverageRibbonStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "msw": {
+      "kind": "function",
+      "entrypoints": [".", "./cycle"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "MswStream": {
+      "kind": "class",
+      "entrypoints": ["./cycle"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "mult": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "natr": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "NatrStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "normalize": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "not": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "nvi": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "obv": {
+      "kind": "function",
+      "entrypoints": [".", "./bars"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ObvStream": {
+      "kind": "class",
+      "entrypoints": ["./bars"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "ohlc4": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "openingRange": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "openingRangeBreakout": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H17 ratified plain (2026-08-19): warm-up NaNs documented and jsonSafe-encoded as null"
+    },
+    "orbRetest": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H18 ratified plain (2026-08-19): same aligned-series/warm-up contract as H17"
+    },
+    "orderBlocks": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "orderBookImbalance": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "pairs": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "PANDAS_CDL_ALIASES": {
+      "kind": "object",
+      "entrypoints": [".", "./candle-aliases"],
+      "role": "namespace"
+    },
+    "parkinson": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "pascalWma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "percentAtr": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "percentRank": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "pgo": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PgoStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "pivots": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "plusDI": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "plusDM": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "pMax": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "pointAndFigure": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "ppo": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PpoStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "previousSessionLevels": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H19 ratified (2026-08-19): first-session bars are STRUCTURAL null, never three NaNs; type is (PriorSessionLevel | null)[]"
+    },
+    "priceAction": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "priceAction.breakouts": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.channel": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.fibExtension": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H14 ratified plain (2026-08-19): deterministic geometric FibLevel[]"
+    },
+    "priceAction.fibRetracement": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H15 ratified plain (2026-08-19): FibLevel[] kept"
+    },
+    "priceAction.fractals": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.gapFill": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.gaps": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.lineAt": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "H16 ratified plain (2026-08-19): scalar artifact evaluation kept"
+    },
+    "priceAction.marketStructure": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.openingRange": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.openingRangeBreakout": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H17 ratified plain (2026-08-19): warm-up NaNs documented and jsonSafe-encoded as null"
+    },
+    "priceAction.orbRetest": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H18 ratified plain (2026-08-19): same aligned-series/warm-up contract as H17"
+    },
+    "priceAction.pivots": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.previousSessionLevels": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H19 ratified (2026-08-19): first-session bars are STRUCTURAL null, never three NaNs; type is (PriorSessionLevel | null)[]"
+    },
+    "priceAction.sessionRanges": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H20 ratified plain (2026-08-19): bars/sessionIds and length pairing validated"
+    },
+    "priceAction.supportResistance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.swings": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceAction.trendlines": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "priceDistance": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "priceVolume": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "priceVolumeRank": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "projectionOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ProjectionOscillatorStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "psar": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "psarExt": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PsarExtStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "PsarStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "psychologicalLine": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PsychologicalLineStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "pvi": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "pvo": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PvoStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "pvt": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "PvtStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "qqe": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "QqeStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "qstick": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rainbowMovingAverage": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RainbowMovingAverageStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "rangeBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "RangeVolatilityStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "role": "artifact"
+    },
+    "readSnapshot": {
+      "kind": "function",
+      "entrypoints": [".", "./framework"],
+      "role": "helper",
+      "note": "snapshot envelope boundary; the ONE door into a stored snapshot — validates the closed envelope, the schema version and the indicator identity, decodes the non-finite encoding and refuses a raw one anywhere in state, then returns a SnapshotState (type-only export: a caller names it, never constructs it) whose accessors check each field. Replaced `snapshotState`, which validated the envelope and then handed back the raw state for unchecked casting (3B.1)."
+    },
+    "realBody": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "realizedVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RealizedVolatilityStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "register": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "registryMarkdown": {
+      "kind": "function",
+      "entrypoints": [".", "./registry"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "relativeVigorIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "relativeVolatilityIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "relativeVolume": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RelativeVolumeStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "renko": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "RenkoStream": {
+      "kind": "class",
+      "entrypoints": [".", "./chart-types"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "resample": {
+      "kind": "function",
+      "entrypoints": [".", "./resample"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "rescale": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "resolveCandleName": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "resolveIndicator": {
+      "kind": "function",
+      "entrypoints": [".", "./aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "resolveIndicatorName": {
+      "kind": "function",
+      "entrypoints": [".", "./aliases"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "returns": {
+      "kind": "function",
+      "entrypoints": [".", "./series"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ReturnsStream": {
+      "kind": "class",
+      "entrypoints": ["./series"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "rising": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "rma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "roc": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rocp": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rocr": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rocr100": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RocStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "role": "artifact"
+    },
+    "rogersSatchell": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingAnchoredVwap": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RollingAnchoredVwapStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "rollingBeta": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingCorrelation": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMax": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMaxIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMean": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMeanAbsoluteDeviation": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMedian": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMin": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMinIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMinMax": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingMinMaxIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingQuantile": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingRank": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingRegression": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingSum": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rollingVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./series"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RollingVolatilityStream": {
+      "kind": "class",
+      "entrypoints": ["./series"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "rollingVwap": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RollingVwapStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "RollStream": {
+      "kind": "class",
+      "entrypoints": ["./statistics"],
+      "role": "artifact"
+    },
+    "rsi": {
+      "kind": "function",
+      "entrypoints": [".", "./rsi", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RsiStream": {
+      "kind": "class",
+      "entrypoints": ["./rsi"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "rSquared": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "rsx": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "RsxStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "RuleBuilder": {
+      "kind": "class",
+      "entrypoints": [".", "./signal"],
+      "role": "artifact"
+    },
+    "runBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "RvgiStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "RviStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "schaffTrendCycle": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SchaffTrendCycleStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./framework"],
+      "role": "constant"
+    },
+    "searchIndicators": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "sessionRanges": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "helper",
+      "note": "H20 ratified plain (2026-08-19): bars/sessionIds and length pairing validated"
+    },
+    "sessionVwap": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SessionVwapStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "shift": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "shortRun": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "signal": {
+      "kind": "function",
+      "entrypoints": [".", "./signal"],
+      "role": "helper",
+      "note": "signal DSL combinator"
+    },
+    "SignalBuilder": {
+      "kind": "class",
+      "entrypoints": [".", "./signal"],
+      "role": "artifact"
+    },
+    "SignalContext": {
+      "kind": "class",
+      "entrypoints": [".", "./signal"],
+      "role": "artifact"
+    },
+    "sin": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "sineWma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "sinh": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "skew": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "slope": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SlopeStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "sma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "smcSweep": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "smiErgodic": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SmiErgodicStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "snapshotOf": {
+      "kind": "function",
+      "entrypoints": [".", "./framework"],
+      "role": "helper",
+      "inputPolicies": {
+        "1": "open"
+      },
+      "note": "snapshot envelope boundary; arg 1 is the deliberately opaque `state` (OPAQUE_STATE_ENVELOPES), so it is open by contract"
+    },
+    "sqrt": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "squeeze": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SqueezeCore": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact",
+      "methodInputPolicies": {
+        "update": {
+          "0": "open"
+        }
+      },
+      "policyNote": "C05 open artifact: update() consumes high/low/close of a decorated market-data bar; consumed fields run the finite ladder"
+    },
+    "squeezePro": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SqueezeProStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "SqueezeStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "standardDeviation": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "standardError": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "stoch": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "stochastic": {
+      "kind": "function",
+      "entrypoints": [".", "./bars"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "StochasticStream": {
+      "kind": "class",
+      "entrypoints": ["./bars"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "stochFast": {
+      "kind": "function",
+      "entrypoints": [".", "./bars", "./statistics"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "stochRsi": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "StochRsiStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "streamAsync": {
+      "kind": "function",
+      "entrypoints": [".", "./framework"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "stream plumbing"
+    },
+    "sub": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "superSmoother": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SuperSmootherStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "supertrend": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "SupertrendStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "supportResistance": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "swings": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "swingTrailingStop": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "symmetricWma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "t3": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "T3Stream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "TALIB_CANDLE_NAMES": {
+      "kind": "value",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "constant"
+    },
+    "talibCandle": {
+      "kind": "function",
+      "entrypoints": [".", "./candle-talib"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "tan": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "tanh": {
+      "kind": "function",
+      "entrypoints": [".", "./math"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "tdSequential": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TdSequentialStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "tema": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TemaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "tickBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "tickVolumeProfile": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "tosStdevAll": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "tradeSign": {
+      "kind": "function",
+      "entrypoints": [".", "./microstructure"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "trendlines": {
+      "kind": "function",
+      "entrypoints": [".", "./price-action"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "trendSignals": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "trima": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TrimaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "trix": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "trixHistogram": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TrixHistogramStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "TrixStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "trueRange": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TrueRangeStream": {
+      "kind": "class",
+      "entrypoints": ["./transforms"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "tsf": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "tsi": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "TsiStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "ttmTrend": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "typicalPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ulcerIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ultimateOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "UltimateStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "UnaryMathStream": {
+      "kind": "class",
+      "entrypoints": ["./math"],
+      "role": "artifact"
+    },
+    "upperShadow": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "valueWhen": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "variance": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "verticalHorizontalFilter": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "vfi": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VfiStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "vidya": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VidyaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "volatilityStop": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "volumeBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "volumeImbalanceBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "VolumeIndexStream": {
+      "kind": "class",
+      "entrypoints": ["./volume"],
+      "role": "artifact"
+    },
+    "volumeOscillator": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "volumeProfile": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "volumeRunBars": {
+      "kind": "function",
+      "entrypoints": [".", "./chart-types"],
+      "role": "helper",
+      "note": "bar/series transform"
+    },
+    "volumeWeightedMacd": {
+      "kind": "function",
+      "entrypoints": [".", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VolumeWeightedMacdStream": {
+      "kind": "class",
+      "entrypoints": ["./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "vortex": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VortexStream": {
+      "kind": "class",
+      "entrypoints": ["./trend"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "vwap": {
+      "kind": "function",
+      "entrypoints": [".", "./bars"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "vwapBands": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VwapBandsStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "VwapStream": {
+      "kind": "class",
+      "entrypoints": ["./bars"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "vwma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "VwmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "warmupMarkdown": {
+      "kind": "function",
+      "entrypoints": [".", "./warmup"],
+      "role": "helper",
+      "note": "registry/discovery/meta"
+    },
+    "wcp": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "weightedClose": {
+      "kind": "function",
+      "entrypoints": [".", "./transforms"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "WeightedMovingAverageStream": {
+      "kind": "class",
+      "entrypoints": ["./overlap"],
+      "role": "artifact"
+    },
+    "williamsAd": {
+      "kind": "function",
+      "entrypoints": [".", "./volume"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "williamsR": {
+      "kind": "function",
+      "entrypoints": [".", "./oscillators", "./momentum"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "WilliamsRStream": {
+      "kind": "class",
+      "entrypoints": ["./oscillators", "./momentum"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "willr": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "winsorize": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "wma": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "WmaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "yangZhang": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "YangZhangStream": {
+      "kind": "class",
+      "entrypoints": ["./volatility"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "zigzag": {
+      "kind": "function",
+      "entrypoints": [".", "./trend"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Law 2 report: payload fields + assumptions + diagnostics inline (E5 conversion)"
+    },
+    "zlema": {
+      "kind": "function",
+      "entrypoints": [".", "./moving-averages", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "ZlemaStream": {
+      "kind": "class",
+      "entrypoints": ["./moving-averages", "./overlap"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "zlma": {
+      "kind": "function",
+      "entrypoints": [".", "./overlap"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    },
+    "zScore": {
+      "kind": "function",
+      "entrypoints": [".", "./features"],
+      "hasExplain": true,
+      "hasStream": true,
+      "role": "facade"
+    }
+  }
+}

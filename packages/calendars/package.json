@@ -1,0 +1,90 @@
+{
+  "name": "@totalfinance/calendars",
+  "version": "0.0.1",
+  "description": "TotalFinance exchange calendars: rules-based NYSE, CBOE, and 24/7 crypto sessions. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "trading",
+    "trading-calendar",
+    "market-holidays",
+    "nyse",
+    "cboe",
+    "crypto",
+    "options-expiration",
+    "calendars"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/calendars"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/calendars#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./nyse": {
+      "types": "./dist/nyse.d.ts",
+      "import": "./dist/nyse.js",
+      "default": "./dist/nyse.js"
+    },
+    "./cboe": {
+      "types": "./dist/cboe.d.ts",
+      "import": "./dist/cboe.js",
+      "default": "./dist/cboe.js"
+    },
+    "./crypto": {
+      "types": "./dist/crypto.d.ts",
+      "import": "./dist/crypto.js",
+      "default": "./dist/crypto.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "typesVersions": {
+    "*": {
+      "nyse": [
+        "./dist/nyse.d.ts"
+      ],
+      "cboe": [
+        "./dist/cboe.d.ts"
+      ],
+      "crypto": [
+        "./dist/crypto.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  }
+}

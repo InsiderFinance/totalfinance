@@ -1,0 +1,132 @@
+{
+  "name": "@totalfinance/fixed-income",
+  "version": "0.0.1",
+  "description": "TotalFinance fixed income: bonds (fixed/zero/FRN/amortizing/inflation) with full analytics, yield curves + bootstrapping, rates derivatives (FRA/swap/OIS/swaption/cap/floor), short-rate models (Vasicek/CIR/Hull-White), and credit (CDS, hazard/survival curves). Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "fixed-income",
+    "finance",
+    "quant",
+    "bonds",
+    "yield-curve",
+    "duration",
+    "swaps",
+    "swaption",
+    "cds",
+    "credit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/fixed-income"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/fixed-income#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./conventions": {
+      "types": "./dist/conventions.d.ts",
+      "import": "./dist/conventions.js",
+      "default": "./dist/conventions.js"
+    },
+    "./curves": {
+      "types": "./dist/curves.d.ts",
+      "import": "./dist/curves.js",
+      "default": "./dist/curves.js"
+    },
+    "./bonds": {
+      "types": "./dist/bonds.d.ts",
+      "import": "./dist/bonds.js",
+      "default": "./dist/bonds.js"
+    },
+    "./rates": {
+      "types": "./dist/rates.d.ts",
+      "import": "./dist/rates.js",
+      "default": "./dist/rates.js"
+    },
+    "./models": {
+      "types": "./dist/models.d.ts",
+      "import": "./dist/models.js",
+      "default": "./dist/models.js"
+    },
+    "./credit": {
+      "types": "./dist/credit.d.ts",
+      "import": "./dist/credit.js",
+      "default": "./dist/credit.js"
+    },
+    "./lattice": {
+      "types": "./dist/lattice.d.ts",
+      "import": "./dist/lattice.js",
+      "default": "./dist/lattice.js"
+    },
+    "./convertible": {
+      "types": "./dist/convertible.d.ts",
+      "import": "./dist/convertible.js",
+      "default": "./dist/convertible.js"
+    },
+    "./xva": {
+      "types": "./dist/xva.d.ts",
+      "import": "./dist/xva.js",
+      "default": "./dist/xva.js"
+    },
+    "./cross-currency": {
+      "types": "./dist/cross-currency.d.ts",
+      "import": "./dist/cross-currency.js",
+      "default": "./dist/cross-currency.js"
+    },
+    "./futures": {
+      "types": "./dist/futures.d.ts",
+      "import": "./dist/futures.js",
+      "default": "./dist/futures.js"
+    },
+    "./inflation": {
+      "types": "./dist/inflation.d.ts",
+      "import": "./dist/inflation.js",
+      "default": "./dist/inflation.js"
+    },
+    "./pricer": {
+      "types": "./dist/pricer.d.ts",
+      "import": "./dist/pricer.js",
+      "default": "./dist/pricer.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.ts",
+      "import": "./dist/artifacts.js",
+      "default": "./dist/artifacts.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

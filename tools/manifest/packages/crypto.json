@@ -1,0 +1,63 @@
+{
+  "package": "@totalfinance/crypto",
+  "domain": "crypto",
+  "tier": "facade",
+  "exports": {
+    "carryCurve": {
+      "kind": "function",
+      "entrypoints": [".", "./curve"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "fundingBasisSpread": {
+      "kind": "function",
+      "entrypoints": [".", "./carry"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "futuresBasis": {
+      "kind": "function",
+      "entrypoints": [".", "./carry"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_crypto_futures_basis"],
+      "shape": "envelope"
+    },
+    "inverseFuture": {
+      "kind": "function",
+      "entrypoints": [".", "./inverse"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "inverseHedge": {
+      "kind": "function",
+      "entrypoints": [".", "./inverse"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "liquidationPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./liquidation"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "optionsBasisSpread": {
+      "kind": "function",
+      "entrypoints": [".", "./carry"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "perpetualFunding": {
+      "kind": "function",
+      "entrypoints": [".", "./carry"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_crypto_perpetual_funding"],
+      "shape": "envelope"
+    },
+    "predictedFunding": {
+      "kind": "function",
+      "entrypoints": [".", "./carry"],
+      "role": "analysis",
+      "shape": "envelope"
+    }
+  }
+}

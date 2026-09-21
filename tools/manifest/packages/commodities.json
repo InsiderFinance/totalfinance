@@ -1,0 +1,104 @@
+{
+  "package": "@totalfinance/commodities",
+  "domain": "commodities",
+  "tier": "facade",
+  "exports": {
+    "calendarSpread": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 far-minus-near spread and the continuous annualized rate between two deliveries"
+    },
+    "commodityBasis": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 spot-minus-futures basis and basisFraction — two different quantities, both named"
+    },
+    "commodityCarry": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 implied annualized carry with the parity residual made visible when all three components are supplied"
+    },
+    "commodityForwardPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "helper",
+      "note": "FC6 ratified plain by the core capability spec (2026-08-19): the frozen cost-of-carry first touch — a bare-number primitive, the shape is the decision"
+    },
+    "commodityForwardValue": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 current value of an existing forward: ±(current − contract) × quantity × explicit discount factor"
+    },
+    "convertCommodityQuantity": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 explicit-factor unit conversion — the engine never invents conversion factors"
+    },
+    "curveSpreadAnalytics": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 per-adjacent-pair spread rows plus the front-to-back figures"
+    },
+    "futuresHedgeRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 contracts required — real-valued; rounding is the caller's execution decision, disclosed"
+    },
+    "impliedConvenienceYield": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 inverse of the cost-of-carry forward solved for the convenience yield"
+    },
+    "impliedStorageCost": {
+      "kind": "function",
+      "entrypoints": [".", "./forwards"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 inverse of the cost-of-carry forward solved for the proportional storage rate"
+    },
+    "rollReturnDecomposition": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 exact multiplicative decomposition: (1+total) = (1+spotMove) × (1+carryConvergence); roll leg stated separately"
+    },
+    "rollYield": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 long-roll yield with the sign law stated; spot-relative decomposition only when spot is observed"
+    },
+    "seasonalityProfile": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 per-calendar-month statistic over caller history; empty months null-with-reason, thin months warned"
+    },
+    "termStructureState": {
+      "kind": "function",
+      "entrypoints": [".", "./term-structure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC6 contango/backwardation/flat/indeterminate under a required explicit tolerance, mixes disclosed"
+    }
+  }
+}

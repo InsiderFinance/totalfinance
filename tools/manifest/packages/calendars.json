@@ -1,0 +1,290 @@
+{
+  "package": "@totalfinance/calendars",
+  "domain": "calendars",
+  "tier": "facade",
+  "exports": {
+    "CALENDAR_DATA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "CBOE": {
+      "kind": "object",
+      "entrypoints": [".", "./cboe"],
+      "role": "namespace"
+    },
+    "CBOE.addBusinessDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.businessDaysBetween": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.isBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.isHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.isHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.isTradingDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.name": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "CBOE.nextBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.previousBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.session": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "CBOE.timezone": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "CBOE.version": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "crypto24x7": {
+      "kind": "object",
+      "entrypoints": [".", "./crypto"],
+      "role": "namespace"
+    },
+    "crypto24x7.addBusinessDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.businessDaysBetween": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.isBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.isHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.isHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.isTradingDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.name": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "crypto24x7.nextBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.previousBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.session": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "crypto24x7.timezone": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "crypto24x7.version": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "expirations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "nextExpiry": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "NYSE": {
+      "kind": "object",
+      "entrypoints": [".", "./nyse"],
+      "role": "namespace"
+    },
+    "NYSE.addBusinessDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.businessDaysBetween": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.isBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.isHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.isHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.isTradingDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.name": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "NYSE.nextBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.previousBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "calendar instance method"
+    },
+    "NYSE.session": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "mcpTools": ["totalfinance_calendar_sessions"],
+      "note": "calendar instance method"
+    },
+    "NYSE.timezone": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "NYSE.version": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "requireCalendar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "1": "open"
+      }
+    },
+    "tradingDaysToExpiry": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "usMarketClosures": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "holiday rule data"
+    },
+    "usMarketHalfDayRules": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "holiday rule data"
+    },
+    "usMarketHolidayRules": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "holiday rule data"
+    },
+    "withTradingVocabulary": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    }
+  }
+}

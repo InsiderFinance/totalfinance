@@ -1,0 +1,187 @@
+{
+  "name": "@totalfinance/math",
+  "version": "0.0.1",
+  "description": "TotalFinance math: distributions, root solvers, optimizers, interpolation, linear algebra, integration, statistics, and Monte Carlo. Zero runtime dependencies, ESM, per-feature deep entrypoints.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "quant",
+    "finance",
+    "math",
+    "statistics",
+    "distributions",
+    "solvers",
+    "interpolation",
+    "monte-carlo",
+    "linear-algebra",
+    "random"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/math"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/math#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "normal": [
+        "./dist/normal.d.ts"
+      ],
+      "bivariate": [
+        "./dist/bivariate.d.ts"
+      ],
+      "statistics": [
+        "./dist/statistics.d.ts"
+      ],
+      "solvers": [
+        "./dist/solvers.d.ts"
+      ],
+      "optimize": [
+        "./dist/optimize.d.ts"
+      ],
+      "interpolation": [
+        "./dist/interpolation.d.ts"
+      ],
+      "linalg": [
+        "./dist/linalg.d.ts"
+      ],
+      "integration": [
+        "./dist/integration.d.ts"
+      ],
+      "random": [
+        "./dist/random.d.ts"
+      ],
+      "lowdiscrepancy": [
+        "./dist/lowdiscrepancy.d.ts"
+      ],
+      "montecarlo": [
+        "./dist/montecarlo.d.ts"
+      ],
+      "regression": [
+        "./dist/regression.d.ts"
+      ],
+      "timeseries": [
+        "./dist/timeseries.d.ts"
+      ],
+      "distributions": [
+        "./dist/distributions.d.ts"
+      ],
+      "filters": [
+        "./dist/filters.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./normal": {
+      "types": "./dist/normal.d.ts",
+      "import": "./dist/normal.js",
+      "default": "./dist/normal.js"
+    },
+    "./bivariate": {
+      "types": "./dist/bivariate.d.ts",
+      "import": "./dist/bivariate.js",
+      "default": "./dist/bivariate.js"
+    },
+    "./statistics": {
+      "types": "./dist/statistics.d.ts",
+      "import": "./dist/statistics.js",
+      "default": "./dist/statistics.js"
+    },
+    "./solvers": {
+      "types": "./dist/solvers.d.ts",
+      "import": "./dist/solvers.js",
+      "default": "./dist/solvers.js"
+    },
+    "./optimize": {
+      "types": "./dist/optimize.d.ts",
+      "import": "./dist/optimize.js",
+      "default": "./dist/optimize.js"
+    },
+    "./interpolation": {
+      "types": "./dist/interpolation.d.ts",
+      "import": "./dist/interpolation.js",
+      "default": "./dist/interpolation.js"
+    },
+    "./linalg": {
+      "types": "./dist/linalg.d.ts",
+      "import": "./dist/linalg.js",
+      "default": "./dist/linalg.js"
+    },
+    "./integration": {
+      "types": "./dist/integration.d.ts",
+      "import": "./dist/integration.js",
+      "default": "./dist/integration.js"
+    },
+    "./random": {
+      "types": "./dist/random.d.ts",
+      "import": "./dist/random.js",
+      "default": "./dist/random.js"
+    },
+    "./lowdiscrepancy": {
+      "types": "./dist/lowdiscrepancy.d.ts",
+      "import": "./dist/lowdiscrepancy.js",
+      "default": "./dist/lowdiscrepancy.js"
+    },
+    "./montecarlo": {
+      "types": "./dist/montecarlo.d.ts",
+      "import": "./dist/montecarlo.js",
+      "default": "./dist/montecarlo.js"
+    },
+    "./regression": {
+      "types": "./dist/regression.d.ts",
+      "import": "./dist/regression.js",
+      "default": "./dist/regression.js"
+    },
+    "./timeseries": {
+      "types": "./dist/timeseries.d.ts",
+      "import": "./dist/timeseries.js",
+      "default": "./dist/timeseries.js"
+    },
+    "./distributions": {
+      "types": "./dist/distributions.d.ts",
+      "import": "./dist/distributions.js",
+      "default": "./dist/distributions.js"
+    },
+    "./filters": {
+      "types": "./dist/filters.d.ts",
+      "import": "./dist/filters.js",
+      "default": "./dist/filters.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

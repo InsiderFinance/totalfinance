@@ -1,0 +1,129 @@
+{
+  "name": "@totalfinance/backtest",
+  "version": "0.0.1",
+  "description": "TotalFinance backtesting: a vectorized research engine and an event-driven execution simulator (broker, order types, margin/shorting, costs, corporate actions), walk-forward, tear sheets, and implementation-risk diagnostics. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "backtesting",
+    "finance",
+    "quant",
+    "trading",
+    "walk-forward",
+    "tearsheet",
+    "slippage",
+    "event-driven",
+    "vectorized",
+    "strategy",
+    "backtest",
+    "cross-sectional",
+    "portfolio-backtest",
+    "execution",
+    "fills"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/backtest"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/backtest#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./vectorized": {
+      "types": "./dist/vectorized.d.ts",
+      "import": "./dist/vectorized.js",
+      "default": "./dist/vectorized.js"
+    },
+    "./event-driven": {
+      "types": "./dist/event-driven.d.ts",
+      "import": "./dist/event-driven.js",
+      "default": "./dist/event-driven.js"
+    },
+    "./costs": {
+      "types": "./dist/costs.d.ts",
+      "import": "./dist/costs.js",
+      "default": "./dist/costs.js"
+    },
+    "./tearsheet": {
+      "types": "./dist/tearsheet.d.ts",
+      "import": "./dist/tearsheet.js",
+      "default": "./dist/tearsheet.js"
+    },
+    "./options": {
+      "types": "./dist/options/index.d.ts",
+      "import": "./dist/options/index.js",
+      "default": "./dist/options/index.js"
+    },
+    "./execution": {
+      "types": "./dist/execution/index.d.ts",
+      "import": "./dist/execution/index.js",
+      "default": "./dist/execution/index.js"
+    },
+    "./cross-sectional": {
+      "types": "./dist/cross-sectional/index.d.ts",
+      "import": "./dist/cross-sectional/index.js",
+      "default": "./dist/cross-sectional/index.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.ts",
+      "import": "./dist/artifacts.js",
+      "default": "./dist/artifacts.js"
+    },
+    "./portfolio": {
+      "types": "./dist/portfolio/index.d.ts",
+      "import": "./dist/portfolio/index.js",
+      "default": "./dist/portfolio/index.js"
+    },
+    "./environment": {
+      "types": "./dist/environment/index.d.ts",
+      "import": "./dist/environment/index.js",
+      "default": "./dist/environment/index.js"
+    },
+    "./paper": {
+      "types": "./dist/paper/index.d.ts",
+      "import": "./dist/paper/index.js",
+      "default": "./dist/paper/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/calendars": "workspace:*",
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/fixed-income": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/portfolio": "workspace:*",
+    "@totalfinance/research": "workspace:*",
+    "@totalfinance/risk": "workspace:*",
+    "@totalfinance/strategy": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

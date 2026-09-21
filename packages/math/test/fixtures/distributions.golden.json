@@ -1,0 +1,3750 @@
+{
+  "_meta": {
+    "source": "scipy 1.17.1 / numpy 2.2.6",
+    "generator": "tools/golden/generate_distributions.py",
+    "note": "Reference values for @totalfinance/math distributions (studentT, chiSquare, gamma, regularizedGammaP, regularizedBeta). CI reads this committed file; no Python required."
+  },
+  "cases": [
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        1.0
+      ],
+      "expected": 0.10241638234956672
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        1.0
+      ],
+      "expected": 0.03183098861837907
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        1.0
+      ],
+      "expected": 0.18716704181099886
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        1.0
+      ],
+      "expected": 0.09794150344116635
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        1.0
+      ],
+      "expected": 0.35241638234956674
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        1.0
+      ],
+      "expected": 0.2546479089470326
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        1.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        1.0
+      ],
+      "expected": 0.31830988618379075
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.6475836176504333
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.2546479089470326
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        1.0
+      ],
+      "expected": 0.8128329581890011
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        1.0
+      ],
+      "expected": 0.09794150344116635
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        1.0
+      ],
+      "expected": 0.8788810584091566
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        1.0
+      ],
+      "expected": 0.04390481188741942
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        1.0
+      ],
+      "expected": 0.9220208696226306
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        1.0
+      ],
+      "expected": 0.01872411095198769
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        1.0
+      ],
+      "expected": -31.82051595377396
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        1.0
+      ],
+      "expected": -6.313751514675044
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        1.0
+      ],
+      "expected": -1.0000000000000002
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        1.0
+      ],
+      "expected": 1.0000000000000002
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        1.0
+      ],
+      "expected": 6.313751514675037
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        1.0
+      ],
+      "expected": 31.820515953773935
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        1.0
+      ],
+      "expected": 318.30883898555015
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        2.0
+      ],
+      "expected": 0.04773298313335456
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        2.0
+      ],
+      "expected": 0.02741012223434214
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        2.0
+      ],
+      "expected": 0.13619656244550055
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        2.0
+      ],
+      "expected": 0.11413441178180371
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        2.0
+      ],
+      "expected": 0.33333333333333337
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        2.0
+      ],
+      "expected": 0.29629629629629634
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        2.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        2.0
+      ],
+      "expected": 0.3535533905932738
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        2.0
+      ],
+      "expected": 0.6666666666666666
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        2.0
+      ],
+      "expected": 0.29629629629629634
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        2.0
+      ],
+      "expected": 0.8638034375544994
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        2.0
+      ],
+      "expected": 0.11413441178180371
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        2.0
+      ],
+      "expected": 0.9351941398892446
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        2.0
+      ],
+      "expected": 0.04220064386804796
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        2.0
+      ],
+      "expected": 0.9714045207910317
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        2.0
+      ],
+      "expected": 0.0130945700219731
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        2.0
+      ],
+      "expected": -6.964556734283274
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        2.0
+      ],
+      "expected": -2.9199855803537256
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        2.0
+      ],
+      "expected": -0.8164965809277261
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        2.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        2.0
+      ],
+      "expected": 0.8164965809277261
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        2.0
+      ],
+      "expected": 2.9199855803537242
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        2.0
+      ],
+      "expected": 6.9645567342832715
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        2.0
+      ],
+      "expected": 22.327124770119866
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        3.0
+      ],
+      "expected": 0.02883444281121865
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        3.0
+      ],
+      "expected": 0.02297203730924134
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        3.0
+      ],
+      "expected": 0.11529193262241147
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        3.0
+      ],
+      "expected": 0.12001717451358736
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        3.0
+      ],
+      "expected": 0.3257239824240755
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        3.0
+      ],
+      "expected": 0.3131809110088286
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        3.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        3.0
+      ],
+      "expected": 0.36755259694786135
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 0.6742760175759245
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 0.3131809110088286
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        3.0
+      ],
+      "expected": 0.8847080673775886
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        3.0
+      ],
+      "expected": 0.12001717451358736
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        3.0
+      ],
+      "expected": 0.9561466764959672
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        3.0
+      ],
+      "expected": 0.0386614857271673
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        3.0
+      ],
+      "expected": 0.9859957719949269
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        3.0
+      ],
+      "expected": 0.009163361142744466
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        3.0
+      ],
+      "expected": -4.5407028585681335
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        3.0
+      ],
+      "expected": -2.353363434801824
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        3.0
+      ],
+      "expected": -0.7648923284043444
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        3.0
+      ],
+      "expected": 0.7648923284043444
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        3.0
+      ],
+      "expected": 2.3533634348018233
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        3.0
+      ],
+      "expected": 4.540702858568132
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        3.0
+      ],
+      "expected": 10.214531852407383
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        5.0
+      ],
+      "expected": 0.015049623948731288
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        5.0
+      ],
+      "expected": 0.01729257880022295
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        5.0
+      ],
+      "expected": 0.09695184012123659
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        5.0
+      ],
+      "expected": 0.12451734464635511
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        5.0
+      ],
+      "expected": 0.31914943582046457
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        5.0
+      ],
+      "expected": 0.32791853132274645
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        5.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        5.0
+      ],
+      "expected": 0.3796066898224944
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        5.0
+      ],
+      "expected": 0.6808505641795355
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        5.0
+      ],
+      "expected": 0.32791853132274645
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        5.0
+      ],
+      "expected": 0.9030481598787634
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        5.0
+      ],
+      "expected": 0.12451734464635511
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        5.0
+      ],
+      "expected": 0.9727549503288119
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        5.0
+      ],
+      "expected": 0.03332623888702283
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        5.0
+      ],
+      "expected": 0.9948382922595843
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        5.0
+      ],
+      "expected": 0.005123727051917912
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        5.0
+      ],
+      "expected": -3.364929998907218
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        5.0
+      ],
+      "expected": -2.015048373333024
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        5.0
+      ],
+      "expected": -0.7266868438004227
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        5.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        5.0
+      ],
+      "expected": 0.7266868438004227
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        5.0
+      ],
+      "expected": 2.015048373333023
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        5.0
+      ],
+      "expected": 3.364929998907217
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        5.0
+      ],
+      "expected": 5.893429531356008
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        10.0
+      ],
+      "expected": 0.006671827511284786
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        10.0
+      ],
+      "expected": 0.01140054946454253
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        10.0
+      ],
+      "expected": 0.08225366322272007
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        10.0
+      ],
+      "expected": 0.1274447942870917
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        10.0
+      ],
+      "expected": 0.3139468028714865
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        10.0
+      ],
+      "expected": 0.3396951363520778
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        10.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        10.0
+      ],
+      "expected": 0.38910838396603115
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        10.0
+      ],
+      "expected": 0.6860531971285135
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        10.0
+      ],
+      "expected": 0.3396951363520778
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        10.0
+      ],
+      "expected": 0.9177463367772799
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        10.0
+      ],
+      "expected": 0.1274447942870917
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        10.0
+      ],
+      "expected": 0.9842765778816955
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        10.0
+      ],
+      "expected": 0.02693872762824446
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        10.0
+      ],
+      "expected": 0.9987408336876317
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        10.0
+      ],
+      "expected": 0.002031033911041217
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        10.0
+      ],
+      "expected": -2.7637694581126957
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        10.0
+      ],
+      "expected": -1.8124611228116767
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        10.0
+      ],
+      "expected": -0.6998120613124317
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        10.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        10.0
+      ],
+      "expected": 0.6998120613124317
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        10.0
+      ],
+      "expected": 1.812461122811676
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        10.0
+      ],
+      "expected": 2.763769458112696
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        10.0
+      ],
+      "expected": 4.143700494046589
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        30.0
+      ],
+      "expected": 0.0026949820328259727
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        30.0
+      ],
+      "expected": 0.006779062746093082
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        30.0
+      ],
+      "expected": 0.072032964564323
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        30.0
+      ],
+      "expected": 0.1289616017396715
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        30.0
+      ],
+      "expected": 0.3103615024425636
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        30.0
+      ],
+      "expected": 0.34787857969720376
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        30.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        30.0
+      ],
+      "expected": 0.39563218489409685
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        30.0
+      ],
+      "expected": 0.6896384975574363
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        30.0
+      ],
+      "expected": 0.34787857969720376
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        30.0
+      ],
+      "expected": 0.927967035435677
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        30.0
+      ],
+      "expected": 0.1289616017396715
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        30.0
+      ],
+      "expected": 0.9909421754659666
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        30.0
+      ],
+      "expected": 0.02105701922062158
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        30.0
+      ],
+      "expected": 0.9998090771819581
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        30.0
+      ],
+      "expected": 0.0005247164401974069
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        30.0
+      ],
+      "expected": -2.4572615424005915
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        30.0
+      ],
+      "expected": -1.6972608865939576
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        30.0
+      ],
+      "expected": -0.6827556933212926
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        30.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        30.0
+      ],
+      "expected": 0.6827556933212926
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        30.0
+      ],
+      "expected": 1.6972608865939571
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        30.0
+      ],
+      "expected": 2.457261542400591
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        30.0
+      ],
+      "expected": 3.3851848668293045
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -3.0,
+        100.0
+      ],
+      "expected": 0.0017039576716647235
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -3.0,
+        100.0
+      ],
+      "expected": 0.005126089702320405
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -1.5,
+        100.0
+      ],
+      "expected": 0.06838252906234443
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -1.5,
+        100.0
+      ],
+      "expected": 0.12936799740683433
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        -0.5,
+        100.0
+      ],
+      "expected": 0.3090867829154433
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        -0.5,
+        100.0
+      ],
+      "expected": 0.35080283339234103
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.0,
+        100.0
+      ],
+      "expected": 0.5
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.0,
+        100.0
+      ],
+      "expected": 0.39794618693590594
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        0.5,
+        100.0
+      ],
+      "expected": 0.6909132170845567
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        0.5,
+        100.0
+      ],
+      "expected": 0.35080283339234103
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        1.5,
+        100.0
+      ],
+      "expected": 0.9316174709376556
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        1.5,
+        100.0
+      ],
+      "expected": 0.12936799740683433
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        2.5,
+        100.0
+      ],
+      "expected": 0.9929771054379614
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        2.5,
+        100.0
+      ],
+      "expected": 0.01863000374641339
+    },
+    {
+      "fn": "studentT.cdf",
+      "args": [
+        4.0,
+        100.0
+      ],
+      "expected": 0.9999392381778496
+    },
+    {
+      "fn": "studentT.pdf",
+      "args": [
+        4.0,
+        100.0
+      ],
+      "expected": 0.00022115455654063586
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.01,
+        100.0
+      ],
+      "expected": -2.3642173662384818
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.05,
+        100.0
+      ],
+      "expected": -1.6602343260853396
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.25,
+        100.0
+      ],
+      "expected": -0.6769510430114719
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.5,
+        100.0
+      ],
+      "expected": 0.0
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.75,
+        100.0
+      ],
+      "expected": 0.6769510430114719
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.95,
+        100.0
+      ],
+      "expected": 1.6602343260853392
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.99,
+        100.0
+      ],
+      "expected": 2.3642173662384818
+    },
+    {
+      "fn": "studentT.inverseCdf",
+      "args": [
+        0.999,
+        100.0
+      ],
+      "expected": 3.173739493738782
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        1.0
+      ],
+      "expected": 0.24817036595415076
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.5204998778130466
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        1.0
+      ],
+      "expected": 0.6826894921370859
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        1.0
+      ],
+      "expected": 0.8861537019933419
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        1.0
+      ],
+      "expected": 0.9746526813225318
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        1.0
+      ],
+      "expected": 0.9984345977419975
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        1.0
+      ],
+      "expected": 0.999992255783569
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        1.0
+      ],
+      "expected": 0.00015708785790970184
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        1.0
+      ],
+      "expected": 0.01579077409343122
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.454936423119572
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        1.0
+      ],
+      "expected": 2.705543454095418
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        1.0
+      ],
+      "expected": 6.634896601021215
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        2.0
+      ],
+      "expected": 0.04877057549928599
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        2.0
+      ],
+      "expected": 0.22119921692859512
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        2.0
+      ],
+      "expected": 0.3934693402873665
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        2.0
+      ],
+      "expected": 0.7134952031398099
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        2.0
+      ],
+      "expected": 0.9179150013761012
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        2.0
+      ],
+      "expected": 0.9932620530009145
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        2.0
+      ],
+      "expected": 0.9999546000702375
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        2.0
+      ],
+      "expected": 0.020100671707002873
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        2.0
+      ],
+      "expected": 0.21072103131565273
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        2.0
+      ],
+      "expected": 1.386294361119891
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        2.0
+      ],
+      "expected": 4.605170185988092
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        2.0
+      ],
+      "expected": 9.21034037197618
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        3.0
+      ],
+      "expected": 0.00816257626812352
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 0.08110858834532418
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        3.0
+      ],
+      "expected": 0.19874804309879915
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        3.0
+      ],
+      "expected": 0.5247089166569795
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        3.0
+      ],
+      "expected": 0.8282028557032668
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        3.0
+      ],
+      "expected": 0.9814338645369568
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        3.0
+      ],
+      "expected": 0.9998302575644472
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        3.0
+      ],
+      "expected": 0.11483180189911707
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        3.0
+      ],
+      "expected": 0.5843743741551835
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 2.3659738843753377
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        3.0
+      ],
+      "expected": 6.251388631170322
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        3.0
+      ],
+      "expected": 11.34486673014437
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        5.0
+      ],
+      "expected": 0.0001623166119226152
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        5.0
+      ],
+      "expected": 0.007876706767370404
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        5.0
+      ],
+      "expected": 0.03743422675270362
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        5.0
+      ],
+      "expected": 0.22350492887667728
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        5.0
+      ],
+      "expected": 0.5841198130044919
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        5.0
+      ],
+      "expected": 0.9247647538534879
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        5.0
+      ],
+      "expected": 0.9987502694369687
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        5.0
+      ],
+      "expected": 0.5542980767282772
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        5.0
+      ],
+      "expected": 1.6103079869623227
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        5.0
+      ],
+      "expected": 4.351460191095527
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        5.0
+      ],
+      "expected": 9.236356899781121
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        5.0
+      ],
+      "expected": 15.086272469388987
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        8.0
+      ],
+      "expected": 2.502139472997342e-07
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        8.0
+      ],
+      "expected": 0.00013336965051406237
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        8.0
+      ],
+      "expected": 0.001751622556290824
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        8.0
+      ],
+      "expected": 0.038269054289622316
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        8.0
+      ],
+      "expected": 0.2424238668669339
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        8.0
+      ],
+      "expected": 0.7349740847026385
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        8.0
+      ],
+      "expected": 0.9896639493240743
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        8.0
+      ],
+      "expected": 1.6464973726907703
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        8.0
+      ],
+      "expected": 3.4895391256498227
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        8.0
+      ],
+      "expected": 7.344121497701794
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        8.0
+      ],
+      "expected": 13.361566136511728
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        8.0
+      ],
+      "expected": 20.090235029663233
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        15.0
+      ],
+      "expected": 1.1910413849533104e-14
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        15.0
+      ],
+      "expected": 1.744640104219179e-09
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        15.0
+      ],
+      "expected": 2.535644310823258e-07
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        15.0
+      ],
+      "expected": 0.00012722538766348678
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        15.0
+      ],
+      "expected": 0.007873588655480983
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        15.0
+      ],
+      "expected": 0.18026008049639844
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        15.0
+      ],
+      "expected": 0.8280673106233991
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        15.0
+      ],
+      "expected": 5.229348884098959
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        15.0
+      ],
+      "expected": 8.546756241704546
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        15.0
+      ],
+      "expected": 14.338859510956645
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        15.0
+      ],
+      "expected": 22.30712958157869
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        15.0
+      ],
+      "expected": 30.577914166892484
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.1,
+        30.0
+      ],
+      "expected": 2.2268695366738641e-32
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        0.5,
+        30.0
+      ],
+      "expected": 5.634558720450966e-22
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        1.0,
+        30.0
+      ],
+      "expected": 1.4610500924439148e-17
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        2.5,
+        30.0
+      ],
+      "expected": 6.751969877696096e-12
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        5.0,
+        30.0
+      ],
+      "expected": 6.915313866992873e-08
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        10.0,
+        30.0
+      ],
+      "expected": 0.00022625367617675488
+    },
+    {
+      "fn": "chiSquare.cdf",
+      "args": [
+        20.0,
+        30.0
+      ],
+      "expected": 0.08345847293466285
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.01,
+        30.0
+      ],
+      "expected": 14.953456528455437
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.1,
+        30.0
+      ],
+      "expected": 20.599234614585345
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.5,
+        30.0
+      ],
+      "expected": 29.336031516661592
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.9,
+        30.0
+      ],
+      "expected": 40.256023738711804
+    },
+    {
+      "fn": "chiSquare.inverseCdf",
+      "args": [
+        0.99,
+        30.0
+      ],
+      "expected": 50.892181311517085
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        0.5,
+        0.5
+      ],
+      "expected": 0.6826894921370859
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.9544997361036416
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.9994679944948608
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.9999990366429914
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        0.5,
+        0.5
+      ],
+      "expected": 0.0009830350000048806
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "expected": 0.113734105779893
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        0.5,
+        0.5
+      ],
+      "expected": 0.9603647051735301
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        0.5,
+        1.0
+      ],
+      "expected": 0.5204998778130466
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "expected": 0.8427007929497151
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        0.5,
+        1.0
+      ],
+      "expected": 0.9856941215645704
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        0.5,
+        1.0
+      ],
+      "expected": 0.9994679944948608
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        0.5,
+        1.0
+      ],
+      "expected": 0.001966070000009761
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        0.5,
+        1.0
+      ],
+      "expected": 0.227468211559786
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        0.5,
+        1.0
+      ],
+      "expected": 1.9207294103470602
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        0.5,
+        2.0
+      ],
+      "expected": 0.3829249225480261
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        0.5,
+        2.0
+      ],
+      "expected": 0.6826894921370859
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        0.5,
+        2.0
+      ],
+      "expected": 0.9167354833364495
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        0.5,
+        2.0
+      ],
+      "expected": 0.9856941215645704
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        0.5,
+        2.0
+      ],
+      "expected": 0.003932140000019522
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        0.5,
+        2.0
+      ],
+      "expected": 0.454936423119572
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        0.5,
+        2.0
+      ],
+      "expected": 3.8414588206941205
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        1.0,
+        0.5
+      ],
+      "expected": 0.3934693402873665
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        1.0,
+        0.5
+      ],
+      "expected": 0.8646647167633873
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        1.0,
+        0.5
+      ],
+      "expected": 0.9975212478233336
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        1.0,
+        0.5
+      ],
+      "expected": 0.9999938557876467
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        1.0,
+        0.5
+      ],
+      "expected": 0.025646647193775265
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        1.0,
+        0.5
+      ],
+      "expected": 0.34657359027997275
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        1.0,
+        0.5
+      ],
+      "expected": 1.497866136776995
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        1.0,
+        1.0
+      ],
+      "expected": 0.22119921692859512
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "expected": 0.6321205588285577
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        1.0,
+        1.0
+      ],
+      "expected": 0.950212931632136
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        1.0,
+        1.0
+      ],
+      "expected": 0.9975212478233336
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        1.0,
+        1.0
+      ],
+      "expected": 0.05129329438755053
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        1.0,
+        1.0
+      ],
+      "expected": 0.6931471805599455
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        1.0,
+        1.0
+      ],
+      "expected": 2.99573227355399
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        1.0,
+        2.0
+      ],
+      "expected": 0.1175030974154046
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        1.0,
+        2.0
+      ],
+      "expected": 0.3934693402873665
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        1.0,
+        2.0
+      ],
+      "expected": 0.7768698398515702
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        1.0,
+        2.0
+      ],
+      "expected": 0.950212931632136
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        1.0,
+        2.0
+      ],
+      "expected": 0.10258658877510106
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        1.0,
+        2.0
+      ],
+      "expected": 1.386294361119891
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        1.0,
+        2.0
+      ],
+      "expected": 5.99146454710798
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        2.0,
+        0.5
+      ],
+      "expected": 0.09020401043104986
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        2.0,
+        0.5
+      ],
+      "expected": 0.5939941502901616
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        2.0,
+        0.5
+      ],
+      "expected": 0.9826487347633355
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        2.0,
+        0.5
+      ],
+      "expected": 0.9999201252394068
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        2.0,
+        0.5
+      ],
+      "expected": 0.17768075534933098
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        2.0,
+        0.5
+      ],
+      "expected": 0.8391734950083306
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        2.0,
+        0.5
+      ],
+      "expected": 2.3719322591952885
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        2.0,
+        1.0
+      ],
+      "expected": 0.026499021160743912
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        2.0,
+        1.0
+      ],
+      "expected": 0.2642411176571153
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        2.0,
+        1.0
+      ],
+      "expected": 0.8008517265285442
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        2.0,
+        1.0
+      ],
+      "expected": 0.9826487347633355
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        2.0,
+        1.0
+      ],
+      "expected": 0.35536151069866195
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        2.0,
+        1.0
+      ],
+      "expected": 1.6783469900166612
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        2.0,
+        1.0
+      ],
+      "expected": 4.743864518390577
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        2.0,
+        2.0
+      ],
+      "expected": 0.007190984592330175
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        2.0,
+        2.0
+      ],
+      "expected": 0.09020401043104986
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        2.0,
+        2.0
+      ],
+      "expected": 0.4421745996289252
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        2.0,
+        2.0
+      ],
+      "expected": 0.8008517265285442
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        2.0,
+        2.0
+      ],
+      "expected": 0.7107230213973239
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        2.0,
+        2.0
+      ],
+      "expected": 3.3566939800333224
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        2.0,
+        2.0
+      ],
+      "expected": 9.487729036781154
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        3.5,
+        0.5
+      ],
+      "expected": 0.0051714634834845175
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        3.5,
+        0.5
+      ],
+      "expected": 0.22022259152428406
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        3.5,
+        0.5
+      ],
+      "expected": 0.8994411314916412
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        3.5,
+        0.5
+      ],
+      "expected": 0.9988606488210525
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        3.5,
+        0.5
+      ],
+      "expected": 0.5418374773245143
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        3.5,
+        0.5
+      ],
+      "expected": 1.5864527988803792
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        3.5,
+        0.5
+      ],
+      "expected": 3.5167851123350418
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        3.5,
+        1.0
+      ],
+      "expected": 0.000553518609575035
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        3.5,
+        1.0
+      ],
+      "expected": 0.04015963126989843
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        3.5,
+        1.0
+      ],
+      "expected": 0.4602506496044427
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        3.5,
+        1.0
+      ],
+      "expected": 0.8994411314916412
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        3.5,
+        1.0
+      ],
+      "expected": 1.0836749546490285
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        3.5,
+        1.0
+      ],
+      "expected": 3.1729055977607583
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        3.5,
+        1.0
+      ],
+      "expected": 7.0335702246700835
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        3.5,
+        2.0
+      ],
+      "expected": 5.3879691850525265e-05
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        3.5,
+        2.0
+      ],
+      "expected": 0.0051714634834845175
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        3.5,
+        2.0
+      ],
+      "expected": 0.11499776835684938
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        3.5,
+        2.0
+      ],
+      "expected": 0.4602506496044427
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        3.5,
+        2.0
+      ],
+      "expected": 2.167349909298057
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        3.5,
+        2.0
+      ],
+      "expected": 6.345811195521517
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        3.5,
+        2.0
+      ],
+      "expected": 14.067140449340167
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        7.0,
+        0.5
+      ],
+      "expected": 1.0023796028842995e-06
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        7.0,
+        0.5
+      ],
+      "expected": 0.004533805526248865
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        7.0,
+        0.5
+      ],
+      "expected": 0.3936972175874086
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        7.0,
+        0.5
+      ],
+      "expected": 0.9541776931113488
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        7.0,
+        0.5
+      ],
+      "expected": 1.642657845947336
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        7.0,
+        0.5
+      ],
+      "expected": 3.334818537274885
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        7.0,
+        0.5
+      ],
+      "expected": 5.921197826210145
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        7.0,
+        1.0
+      ],
+      "expected": 9.734521814031626e-09
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        7.0,
+        1.0
+      ],
+      "expected": 8.32411492880231e-05
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        7.0,
+        1.0
+      ],
+      "expected": 0.033508535308841216
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        7.0,
+        1.0
+      ],
+      "expected": 0.3936972175874086
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        7.0,
+        1.0
+      ],
+      "expected": 3.285315691894672
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        7.0,
+        1.0
+      ],
+      "expected": 6.66963707454977
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        7.0,
+        1.0
+      ],
+      "expected": 11.84239565242029
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        0.25,
+        7.0,
+        2.0
+      ],
+      "expected": 8.481644942534626e-11
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        1.0,
+        7.0,
+        2.0
+      ],
+      "expected": 1.0023796028842995e-06
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        3.0,
+        7.0,
+        2.0
+      ],
+      "expected": 0.0009259919135246427
+    },
+    {
+      "fn": "gamma.cdf",
+      "args": [
+        6.0,
+        7.0,
+        2.0
+      ],
+      "expected": 0.033508535308841216
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.05,
+        7.0,
+        2.0
+      ],
+      "expected": 6.570631383789344
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.5,
+        7.0,
+        2.0
+      ],
+      "expected": 13.33927414909954
+    },
+    {
+      "fn": "gamma.inverseCdf",
+      "args": [
+        0.95,
+        7.0,
+        2.0
+      ],
+      "expected": 23.68479130484058
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        0.1
+      ],
+      "expected": 0.34527915398142317
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        0.5
+      ],
+      "expected": 0.6826894921370859
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        1.0
+      ],
+      "expected": 0.8427007929497151
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        3.0
+      ],
+      "expected": 0.9856941215645704
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        8.0
+      ],
+      "expected": 0.9999366575163338
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        0.5,
+        20.0
+      ],
+      "expected": 0.9999999997460371
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        0.1
+      ],
+      "expected": 0.09516258196404044
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        0.5
+      ],
+      "expected": 0.3934693402873665
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        1.0
+      ],
+      "expected": 0.6321205588285577
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        3.0
+      ],
+      "expected": 0.950212931632136
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        8.0
+      ],
+      "expected": 0.9996645373720975
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        1.0,
+        20.0
+      ],
+      "expected": 0.9999999979388464
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        0.1
+      ],
+      "expected": 0.0008861387888124423
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        0.5
+      ],
+      "expected": 0.03743422675270362
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        1.0
+      ],
+      "expected": 0.15085496391539038
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        3.0
+      ],
+      "expected": 0.6937810815867218
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        8.0
+      ],
+      "expected": 0.9931559260775795
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        2.5,
+        20.0
+      ],
+      "expected": 0.99999985066321
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        0.1
+      ],
+      "expected": 7.667801686189327e-08
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        0.5
+      ],
+      "expected": 0.00017211562995584072
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        1.0
+      ],
+      "expected": 0.003659846827343713
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        3.0
+      ],
+      "expected": 0.18473675547622787
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        8.0
+      ],
+      "expected": 0.9003675995129541
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        5.0,
+        20.0
+      ],
+      "expected": 0.9999830552560699
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        0.1
+      ],
+      "expected": 1.9036424006406375e-21
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        0.5
+      ],
+      "expected": 3.214697303345178e-13
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        1.0
+      ],
+      "expected": 8.316107426882326e-10
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        3.0
+      ],
+      "expected": 7.138662897420658e-05
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        8.0
+      ],
+      "expected": 0.11192400101851853
+    },
+    {
+      "fn": "regularizedGammaP",
+      "args": [
+        12.0,
+        20.0
+      ],
+      "expected": 0.9786131784127198
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        0.5,
+        0.1
+      ],
+      "expected": 0.20483276469913345
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        0.5,
+        0.3
+      ],
+      "expected": 0.36901011956554536
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "expected": 0.5000000000000001
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        0.5,
+        0.7
+      ],
+      "expected": 0.6309898804344546
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        0.5,
+        0.9
+      ],
+      "expected": 0.7951672353008665
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        1.5,
+        0.1
+      ],
+      "expected": 0.3958186964094077
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        1.5,
+        0.3
+      ],
+      "expected": 0.6607459491435457
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        1.5,
+        0.5
+      ],
+      "expected": 0.8183098861837911
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        1.5,
+        0.7
+      ],
+      "expected": 0.9227257100124544
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        1.5,
+        0.9
+      ],
+      "expected": 0.9861531670111411
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        3.0,
+        0.1
+      ],
+      "expected": 0.5545844446520294
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        3.0,
+        0.3
+      ],
+      "expected": 0.8400694725735486
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        3.0,
+        0.5
+      ],
+      "expected": 0.9501747372194231
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        3.0,
+        0.7
+      ],
+      "expected": 0.9903963064097122
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        0.5,
+        3.0,
+        0.9
+      ],
+      "expected": 0.9996750253207289
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        0.5,
+        0.1
+      ],
+      "expected": 0.051316701949486204
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        0.5,
+        0.3
+      ],
+      "expected": 0.16333997346592444
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.2928932188134525
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        0.5,
+        0.7
+      ],
+      "expected": 0.45227744249483387
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        0.5,
+        0.9
+      ],
+      "expected": 0.6837722339831621
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        1.5,
+        0.1
+      ],
+      "expected": 0.1461850317545376
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        1.5,
+        0.3
+      ],
+      "expected": 0.41433798142614703
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        1.5,
+        0.5
+      ],
+      "expected": 0.6464466094067263
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        1.5,
+        0.7
+      ],
+      "expected": 0.8356832327484501
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        1.5,
+        0.9
+      ],
+      "expected": 0.9683772233983162
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        3.0,
+        0.1
+      ],
+      "expected": 0.271
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        3.0,
+        0.3
+      ],
+      "expected": 0.6569999999999999
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        3.0,
+        0.5
+      ],
+      "expected": 0.875
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        3.0,
+        0.7
+      ],
+      "expected": 0.973
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        1.0,
+        3.0,
+        0.9
+      ],
+      "expected": 0.999
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        0.5,
+        0.1
+      ],
+      "expected": 0.0038825370469605107
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        0.5,
+        0.3
+      ],
+      "expected": 0.03784096948581308
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.11611652351681556
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        0.5,
+        0.7
+      ],
+      "expected": 0.2605745473680253
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        0.5,
+        0.9
+      ],
+      "expected": 0.5414697392755851
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        1.5,
+        0.1
+      ],
+      "expected": 0.01811278651771822
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        1.5,
+        0.3
+      ],
+      "expected": 0.15079007306791334
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        1.5,
+        0.5
+      ],
+      "expected": 0.38128156646177097
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        1.5,
+        0.7
+      ],
+      "expected": 0.6631506271343228
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        1.5,
+        0.9
+      ],
+      "expected": 0.9256864749860431
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        3.0,
+        0.1
+      ],
+      "expected": 0.05230000000000001
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        3.0,
+        0.3
+      ],
+      "expected": 0.34829999999999994
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        3.0,
+        0.5
+      ],
+      "expected": 0.6875
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        3.0,
+        0.7
+      ],
+      "expected": 0.9163
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        2.0,
+        3.0,
+        0.9
+      ],
+      "expected": 0.9963
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        0.5,
+        0.1
+      ],
+      "expected": 2.5705896992293723e-06
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        0.5,
+        0.3
+      ],
+      "expected": 0.0006913033857629757
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        0.5,
+        0.5
+      ],
+      "expected": 0.01011955973543372
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        0.5,
+        0.7
+      ],
+      "expected": 0.06526224616890812
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        0.5,
+        0.9
+      ],
+      "expected": 0.3166429150200122
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        1.5,
+        0.1
+      ],
+      "expected": 2.5917092737191237e-05
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        1.5,
+        0.3
+      ],
+      "expected": 0.005694595708501322
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        1.5,
+        0.5
+      ],
+      "expected": 0.06449910955812965
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        1.5,
+        0.7
+      ],
+      "expected": 0.29180564480614557
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        1.5,
+        0.9
+      ],
+      "expected": 0.7761721343162159
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        3.0,
+        0.1
+      ],
+      "expected": 0.00017650000000000003
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        3.0,
+        0.3
+      ],
+      "expected": 0.02879549999999999
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        3.0,
+        0.5
+      ],
+      "expected": 0.2265625
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        3.0,
+        0.7
+      ],
+      "expected": 0.6470695
+    },
+    {
+      "fn": "regularizedBeta",
+      "args": [
+        5.0,
+        3.0,
+        0.9
+      ],
+      "expected": 0.9743085
+    }
+  ]
+}

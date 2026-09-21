@@ -1,0 +1,72 @@
+{
+  "name": "@totalfinance/foreign-exchange",
+  "version": "0.0.1",
+  "description": "Foreign-exchange foundations: pairs, conversion, forwards, parity, and currency exposure",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "foreign-exchange",
+    "fx",
+    "currency",
+    "cross-rate",
+    "covered-interest-parity",
+    "forward",
+    "hedging"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/foreign-exchange"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/foreign-exchange#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./spot": {
+      "types": "./dist/spot.d.ts",
+      "import": "./dist/spot.js",
+      "default": "./dist/spot.js"
+    },
+    "./forwards": {
+      "types": "./dist/forwards.d.ts",
+      "import": "./dist/forwards.js",
+      "default": "./dist/forwards.js"
+    },
+    "./risk": {
+      "types": "./dist/exposure.d.ts",
+      "import": "./dist/exposure.js",
+      "default": "./dist/exposure.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/calendars": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

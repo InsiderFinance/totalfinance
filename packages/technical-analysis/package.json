@@ -1,0 +1,215 @@
+{
+  "name": "@totalfinance/technical-analysis",
+  "version": "0.0.1",
+  "description": "TotalFinance technical analysis: aligned indicators with serializable streaming state. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "technical-analysis",
+    "indicators",
+    "trading",
+    "finance",
+    "rsi",
+    "macd",
+    "candlestick",
+    "streaming",
+    "ta-lib",
+    "backtesting"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/technical-analysis"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/technical-analysis#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./rsi": {
+      "types": "./dist/rsi.d.ts",
+      "import": "./dist/rsi.js",
+      "default": "./dist/rsi.js"
+    },
+    "./moving-averages": {
+      "types": "./dist/moving-averages.d.ts",
+      "import": "./dist/moving-averages.js",
+      "default": "./dist/moving-averages.js"
+    },
+    "./macd": {
+      "types": "./dist/macd.d.ts",
+      "import": "./dist/macd.js",
+      "default": "./dist/macd.js"
+    },
+    "./bands": {
+      "types": "./dist/bands.d.ts",
+      "import": "./dist/bands.js",
+      "default": "./dist/bands.js"
+    },
+    "./pipeline": {
+      "types": "./dist/pipeline.d.ts",
+      "import": "./dist/pipeline.js",
+      "default": "./dist/pipeline.js"
+    },
+    "./bars": {
+      "types": "./dist/bars.d.ts",
+      "import": "./dist/bars.js",
+      "default": "./dist/bars.js"
+    },
+    "./transforms": {
+      "types": "./dist/transforms.d.ts",
+      "import": "./dist/transforms.js",
+      "default": "./dist/transforms.js"
+    },
+    "./resample": {
+      "types": "./dist/resample.d.ts",
+      "import": "./dist/resample.js",
+      "default": "./dist/resample.js"
+    },
+    "./divergence": {
+      "types": "./dist/divergence.d.ts",
+      "import": "./dist/divergence.js",
+      "default": "./dist/divergence.js"
+    },
+    "./oscillators": {
+      "types": "./dist/oscillators.d.ts",
+      "import": "./dist/oscillators.js",
+      "default": "./dist/oscillators.js"
+    },
+    "./momentum": {
+      "types": "./dist/momentum.d.ts",
+      "import": "./dist/momentum.js",
+      "default": "./dist/momentum.js"
+    },
+    "./overlap": {
+      "types": "./dist/overlap.d.ts",
+      "import": "./dist/overlap.js",
+      "default": "./dist/overlap.js"
+    },
+    "./features": {
+      "types": "./dist/features.d.ts",
+      "import": "./dist/features.js",
+      "default": "./dist/features.js"
+    },
+    "./aliases": {
+      "types": "./dist/aliases.d.ts",
+      "import": "./dist/aliases.js",
+      "default": "./dist/aliases.js"
+    },
+    "./warmup": {
+      "types": "./dist/warmup.d.ts",
+      "import": "./dist/warmup.js",
+      "default": "./dist/warmup.js"
+    },
+    "./math": {
+      "types": "./dist/math.d.ts",
+      "import": "./dist/math.js",
+      "default": "./dist/math.js"
+    },
+    "./trend": {
+      "types": "./dist/trend.d.ts",
+      "import": "./dist/trend.js",
+      "default": "./dist/trend.js"
+    },
+    "./volatility": {
+      "types": "./dist/volatility.d.ts",
+      "import": "./dist/volatility.js",
+      "default": "./dist/volatility.js"
+    },
+    "./volume": {
+      "types": "./dist/volume.d.ts",
+      "import": "./dist/volume.js",
+      "default": "./dist/volume.js"
+    },
+    "./microstructure": {
+      "types": "./dist/microstructure.d.ts",
+      "import": "./dist/microstructure.js",
+      "default": "./dist/microstructure.js"
+    },
+    "./candle-talib": {
+      "types": "./dist/candle-talib.d.ts",
+      "import": "./dist/candle-talib.js",
+      "default": "./dist/candle-talib.js"
+    },
+    "./candlesticks": {
+      "types": "./dist/candlesticks.d.ts",
+      "import": "./dist/candlesticks.js",
+      "default": "./dist/candlesticks.js"
+    },
+    "./candle-aliases": {
+      "types": "./dist/candle-aliases.d.ts",
+      "import": "./dist/candle-aliases.js",
+      "default": "./dist/candle-aliases.js"
+    },
+    "./cycle": {
+      "types": "./dist/cycle.d.ts",
+      "import": "./dist/cycle.js",
+      "default": "./dist/cycle.js"
+    },
+    "./statistics": {
+      "types": "./dist/statistics.d.ts",
+      "import": "./dist/statistics.js",
+      "default": "./dist/statistics.js"
+    },
+    "./chart-types": {
+      "types": "./dist/chart-types.d.ts",
+      "import": "./dist/chart-types.js",
+      "default": "./dist/chart-types.js"
+    },
+    "./price-action": {
+      "types": "./dist/price-action.d.ts",
+      "import": "./dist/price-action.js",
+      "default": "./dist/price-action.js"
+    },
+    "./signal": {
+      "types": "./dist/signal.d.ts",
+      "import": "./dist/signal.js",
+      "default": "./dist/signal.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js",
+      "default": "./dist/registry.js"
+    },
+    "./series": {
+      "types": "./dist/series.d.ts",
+      "import": "./dist/series.js",
+      "default": "./dist/series.js"
+    },
+    "./framework": {
+      "types": "./dist/framework.d.ts",
+      "import": "./dist/framework.js",
+      "default": "./dist/framework.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "package": "@totalfinance/cli",
+  "domain": "cli",
+  "tier": "integration",
+  "exports": {
+    "cancelJob": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): cancel a job from ANY process — the record moves to cancelled; the running runner terminates its worker on the next poll — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "CLI_COMMANDS": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A slice 4 (2026-09-03): the totalfinance command surface (a frozen list), checked against the CLI guide"
+    },
+    "CLI_EXIT_CODES": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A slice 4 (2026-09-03): the totalfinance exit-code contract (0 success · 2 usage · 3 input refused · 4 operation failed · 5 job cancelled · 70 internal), checked against the CLI guide"
+    },
+    "createFileArtifactStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): file-backed artifact store (one JSON per content hash + index), idempotent by content, shared by path across processes — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "createFileJobStore": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): file-backed job store (one JSON per record), re-read on every call so another process sees every transition — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "createLocalJobRunner": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): re-exported from @totalfinance/workflows/local (the runner binding totalfinance-http shares)"
+    },
+    "packsForProfile": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the packs a profile selects (full = every shipped pack) — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "REGISTRY_PROFILES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Stage 7A slice 3 (2026-09-03): the four registry profiles (default | options | research | full) — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "registryForProfile": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the registry for a profile, optionally narrowed to named packs — since slice 5 re-exported from @totalfinance/workflows/local"
+    },
+    "submitJob": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 3 (2026-09-03): the worker-terminated job runner — a job-class operation runs in a worker_threads Worker; cancel terminates it; other operations run inline — since slice 5 re-exported from @totalfinance/workflows/local"
+    }
+  }
+}

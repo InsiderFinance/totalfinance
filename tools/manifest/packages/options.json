@@ -1,0 +1,1258 @@
+{
+  "package": "@totalfinance/options",
+  "domain": "options",
+  "tier": "facade",
+  "exports": {
+    "americanExercise": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "contract/market builder"
+    },
+    "americanImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    "asian": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "asian.geometricPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "asian.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "autocallable": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "autocallable.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "bachelier": {
+      "kind": "object",
+      "entrypoints": [".", "./bachelier"],
+      "role": "namespace"
+    },
+    "bachelier.call": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelier.extendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelier.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelier.impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelier.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelier.put": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "bachelierExtendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["./bachelier"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "bachelierGreeks": {
+      "kind": "function",
+      "entrypoints": ["./bachelier"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "bachelierImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["./bachelier"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "bachelierPrice": {
+      "kind": "function",
+      "entrypoints": ["./bachelier"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "barrier": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "barrier.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "barrier.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "basket": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "basket.approximatePrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "basket.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "black76": {
+      "kind": "object",
+      "entrypoints": [".", "./black76"],
+      "role": "namespace"
+    },
+    "black76.call": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76.extendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76.impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76.put": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "black76ExtendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["./black76"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "black76Greeks": {
+      "kind": "function",
+      "entrypoints": ["./black76"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "black76ImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["./black76"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "black76Price": {
+      "kind": "function",
+      "entrypoints": ["./black76"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "black76PriceBounds": {
+      "kind": "function",
+      "entrypoints": ["./black76"],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs; every consumed field is REQUIRED and laddered",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholes": {
+      "kind": "object",
+      "entrypoints": [".", "./black-scholes"],
+      "role": "namespace"
+    },
+    "blackScholes.call": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "blackScholes.extendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "blackScholes.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_option_greeks"]
+    },
+    "blackScholes.impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "blackScholes.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_option_price"]
+    },
+    "blackScholes.put": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "blackScholesExtendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["./black-scholes"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesGreeks": {
+      "kind": "function",
+      "entrypoints": ["./black-scholes"],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["./black-scholes"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "BlackScholesImpliedVolatilityInputSchema": {
+      "kind": "object",
+      "entrypoints": [".", "./schema"],
+      "role": "schema"
+    },
+    "blackScholesImpliedVolatilityMany": {
+      "kind": "function",
+      "entrypoints": ["./batch"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "BlackScholesInputSchema": {
+      "kind": "object",
+      "entrypoints": [".", "./schema"],
+      "role": "schema"
+    },
+    "blackScholesPrice": {
+      "kind": "function",
+      "entrypoints": ["./black-scholes"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesPriceBounds": {
+      "kind": "function",
+      "entrypoints": ["./black-scholes"],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesPriceMany": {
+      "kind": "function",
+      "entrypoints": ["./batch"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesPriceManyInto": {
+      "kind": "function",
+      "entrypoints": ["./batch"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesShape": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "namespace"
+    },
+    "BlackScholesTypedInputSchema": {
+      "kind": "object",
+      "entrypoints": [".", "./schema"],
+      "role": "schema"
+    },
+    "boxSpreadRate": {
+      "kind": "function",
+      "entrypoints": [".", "./parity"],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "parity extractor returning the full Computed envelope (was misclassified facade)"
+    },
+    "callContract": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "checkBlackScholesNoArbitrage": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "admissibility report (E5): admissible + the tested band, violations as diagnostics warnings"
+    },
+    "cliquet": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "cliquet.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "cliquet.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "compareEngines": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "compo": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "compo.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "compo.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "compo.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "DEFAULT_OUTLIER_THRESHOLD": {
+      "kind": "value",
+      "entrypoints": [".", "./parity"],
+      "role": "constant"
+    },
+    "defineOptionPricingEngine": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "digital": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "digital.extendedGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "digital.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "digital.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "digital.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "dividendTermStructure": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "doubleTouch": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "doubleTouch.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "doubleTouch.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "doubleTouch.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "dupireLocalVolatility": {
+      "kind": "function",
+      "entrypoints": ["./local-volatility"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints) — constructs a LocalVolFn evaluator, identity twin of localVol.fromImplied; reclassified from analysis in E5 (species precedent: vol.surfaceLocalVol)"
+    },
+    "engines": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "engines.auto": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.baroneAdesiWhaley": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.binomial": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.bjerksundStensland": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.bjerksundStensland1993": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.bjerksundStensland2002": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.black76": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.blackScholes": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.blackScholesMerton": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.finiteDifference": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "engines.finiteDifference.crankNicolson": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.heston": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.localVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.monteCarlo": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.sabr": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "engines.trinomial": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "pricing-engine factory"
+    },
+    "equityLattice": {
+      "kind": "function",
+      "entrypoints": ["./lattice"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "european": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "forwardStart": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "forwardStart.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "forwardStart.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "gbm": {
+      "kind": "object",
+      "entrypoints": [".", "./monte-carlo"],
+      "role": "namespace"
+    },
+    "gbm.path": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "gbm.terminal": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "gbmPath": {
+      "kind": "function",
+      "entrypoints": ["./monte-carlo"],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "gbmTerminal": {
+      "kind": "function",
+      "entrypoints": ["./monte-carlo"],
+      "role": "kernel",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "compositional kernel: consumed by wider structurally-typed inputs (the IV solver hands priceBounds its own request), and every consumed field is REQUIRED and laddered — a typo cannot silently change meaning because the real field would be missing",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "heston": {
+      "kind": "object",
+      "entrypoints": [".", "./heston"],
+      "role": "namespace"
+    },
+    "heston.cosineExpansion": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "heston.impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "heston.monteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "heston.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "heston.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "hestonCosineExpansionPrice": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "hestonFirstOrderSteps": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "helper",
+      "note": "exported FD-step resolver shared with the disclosure path (D6)"
+    },
+    "hestonImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "hestonMonteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "hestonMonteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "hestonPrice": {
+      "kind": "function",
+      "entrypoints": ["./heston"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "impliedBorrow": {
+      "kind": "function",
+      "entrypoints": [".", "./parity"],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "parity extractor returning the full Computed envelope (was misclassified facade)"
+    },
+    "impliedDividendYield": {
+      "kind": "function",
+      "entrypoints": [".", "./parity"],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "parity extractor returning the full Computed envelope (was misclassified facade)"
+    },
+    "impliedForward": {
+      "kind": "function",
+      "entrypoints": [".", "./parity"],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "parity extractor returning the full Computed envelope (was misclassified facade)"
+    },
+    "impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_option_implied_volatility"],
+      "shape": "envelope"
+    },
+    "impliedVolatilityMany": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "batch report (E5): per-row envelopes on results[], batch assumptions/diagnostics inline"
+    },
+    "impliedVolatilityOption": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "chainGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "Solves every chain row's implied volatility and display-unit Greeks from its observed price with style routing; non-throwing per row (diagnostics.rows), skipped rows returned unchanged"
+    },
+    "inverseOption": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "inverseOption.barrier": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "inverseOption.digital": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "inverseOption.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "inverseOption.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "inverseOption.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "localVolatility": {
+      "kind": "object",
+      "entrypoints": [".", "./local-volatility"],
+      "role": "namespace"
+    },
+    "localVolatility.fromImplied": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "localVolatility.grid": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "localVolatility.monteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "localVolatility.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "localVolatilityGrid": {
+      "kind": "function",
+      "entrypoints": ["./local-volatility"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "localVolatilityMonteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["./local-volatility"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "localVolatilityMonteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["./local-volatility"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "lookback": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "lookback.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "lookback.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "market": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "monteCarloEuropean": {
+      "kind": "function",
+      "entrypoints": ["./monte-carlo"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["./monte-carlo"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "napoleon": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "napoleon.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "option": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "OPTION_CONTRACT_PRICER_NAME": {
+      "kind": "value",
+      "entrypoints": ["./pricer"],
+      "role": "constant",
+      "note": "Gate C extension contracts (2026-08-20)"
+    },
+    "option.call": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "option.compareEngines": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "option.european": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "option.impliedVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "option.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "option.put": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "option.usEquityCall": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "option.usEquityPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "option.usEquityOption": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder (from data: type or OCC symbol)"
+    },
+    "optionChainHealth": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Quote-only chain health and coverage, with opt-in Black-Scholes-Merton bounds and implied-volatility diagnostics; never silently filters observations or proxies unsupported contracts"
+    },
+    "optionContractPricer": {
+      "kind": "function",
+      "entrypoints": ["./pricer"],
+      "role": "artifact",
+      "note": "Gate C extension contracts (2026-08-20): the reference adapter — option.price through the Pricer protocol, zero pricing math, bit-exact parity proven; explicit-mode selection disclosed here, automatic at engines.auto()'s routing site"
+    },
+    "OptionContractSchema": {
+      "kind": "object",
+      "entrypoints": [".", "./schema"],
+      "role": "schema"
+    },
+    "optionType": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "namespace"
+    },
+    "ParityCode": {
+      "kind": "object",
+      "entrypoints": [".", "./parity"],
+      "role": "namespace"
+    },
+    "priceMany": {
+      "kind": "function",
+      "entrypoints": [".", "./batch"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "H06 ratified plain (2026-08-19): PriceResult[] kept, no batch envelope; a failing row now names its INDEX (same code and class as the scalar path, original as cause)"
+    },
+    "priceOption": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "putContract": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "quanto": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "quanto.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "rainbow": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "rainbow.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "reverseCliquet": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "reverseCliquet.floorlessValue": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "reverseCliquet.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "sabr": {
+      "kind": "object",
+      "entrypoints": [".", "./sabr"],
+      "role": "namespace"
+    },
+    "sabr.monteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "sabr.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "sabr.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "sabr.volatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "sabrMonteCarloEstimate": {
+      "kind": "function",
+      "entrypoints": ["./sabr"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "sabrMonteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["./sabr"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "sabrPrice": {
+      "kind": "function",
+      "entrypoints": ["./sabr"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "sabrVolatility": {
+      "kind": "function",
+      "entrypoints": ["./sabr"],
+      "role": "kernel",
+      "note": "expert model kernel (subpath entrypoints)"
+    },
+    "schemas": {
+      "kind": "object",
+      "entrypoints": [".", "./schema"],
+      "role": "namespace"
+    },
+    "selectQuotePrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "spread": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "spread.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "spread.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "touch": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "touch.greeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "touch.monteCarloPrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "determinism": "seeded",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "touch.price": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "usEquityCall": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "usEquityPut": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder"
+    },
+    "usEquityOption": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "contract/market builder (from data: type or OCC symbol)"
+    },
+    "validateOptionPricingEngine": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "explicit caller-fixtured pricing-engine conformance validator"
+    },
+    "vanillaIntrinsic": {
+      "kind": "function",
+      "entrypoints": [".", "./payoff"],
+      "role": "helper",
+      "note": "Gate A ratified plain by the platform roadmap (2026-08-19): the standalone gross vanilla intrinsic per unit — a bare-number primitive, the shape is the decision; the unchecked kernel twin is package-private"
+    },
+    "varianceSwap": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "varianceSwap.hestonFairVariance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "varianceSwap.value": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    },
+    "volatilitySwap": {
+      "kind": "object",
+      "entrypoints": [".", "./exotics"],
+      "role": "namespace"
+    },
+    "volatilitySwap.approximateFairVolatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel",
+      "note": "exotics/model member (namespace is the curated root surface)"
+    }
+  }
+}

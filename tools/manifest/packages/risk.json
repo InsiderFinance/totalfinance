@@ -1,0 +1,452 @@
+{
+  "package": "@totalfinance/risk",
+  "domain": "risk",
+  "tier": "facade",
+  "exports": {
+    "adjustPValues": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "helper"
+    },
+    "aggregateGreeks": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "analyzeBook": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "betaWeightedDelta": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "blackLitterman": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "bookVaR": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "brinsonAttribution": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "checkLeakage": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "concentration": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "conditionalValueAtRiskOptimize": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "costAwareKelly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "covariance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "the covariance on-ramp (D11): returns → covariance → optimizer"
+    },
+    "covarianceToCorrelation": {
+      "kind": "function",
+      "entrypoints": [".", "./factor"],
+      "role": "helper"
+    },
+    "deflatedSharpeRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "diversificationRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "helper",
+      "note": "H09 ratified plain (2026-08-19): degenerate zero-volatility book now throws input.degenerate instead of a plausible-but-false 1"
+    },
+    "drawdownAtRisk": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "efficientFrontier": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "FC7 slice 4 (2026-08-28): λ/target-return/points sweep over the existing mean-variance solver and constraint grammar; every point kept incl. infeasible ones"
+    },
+    "estimateExpectedReturns": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "FC7 slice 4 (2026-08-28): explicit-method expected returns (historical/EWMA/CAPM via valuation/supplied), annualization explicit, point-in-time screening"
+    },
+    "expectedShortfall": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "explainPnl": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "explainPortfolioPnl": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "explainPositionPnl": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4) — Preview P1 (2026-09-03): PnlMarket.legVolatilities attributes a per-leg volatility move (a fixed-IV leg re-marked at a current quote reports a live vega)"
+    },
+    "extremeValueTailRisk": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "factorAttribution": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "factorExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./factor"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "fitGeneralizedParetoTail": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "hrp": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "kelly": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "kellyBet": {
+      "kind": "function",
+      "entrypoints": [".", "./sizing"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "linkAttribution": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "liquidity": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "margin": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "marketImpact": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "maxSharpe": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "meanExcessPlot": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "meanReturns": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "journey-completing mu helper for maxSharpe/meanVariance"
+    },
+    "meanVariance": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_risk_optimize"],
+      "shape": "envelope"
+    },
+    "minVariance": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "nakedCallMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "nakedPutMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "optionsMargin": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio", "./sizing"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "parameterSweepDiagnostics": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "helper",
+      "inputPolicies": {
+        "1": "open"
+      }
+    },
+    "pca": {
+      "kind": "function",
+      "entrypoints": [".", "./factor"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "portfolioVaR": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "analysis",
+      "determinism": "seeded",
+      "shape": "report",
+      "note": "C hygiene: one door — method: 'parametric' | 'historical' | 'monteCarlo' (never defaulted); replaces the two method-named functions"
+    },
+    "portfolioVariance": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "helper",
+      "note": "H07 ratified plain (2026-08-19): covariance validated finite/symmetric/PSD-diagonal; a materially negative quadratic form throws linalg.not_positive_definite instead of clamping to 0"
+    },
+    "portfolioVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "helper",
+      "note": "H08 ratified plain (2026-08-19): delegates to the H07-corrected kernel and validates under its OWN name"
+    },
+    "probabilisticSharpeRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "probabilityOfBacktestOverfitting": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "purgedKFold": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "helper"
+    },
+    "researchProtocol": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "riskContributions": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "H10 report (closed 2026-08-19): portfolio volatility + rows; percent renamed fraction; zero-sigma rows are null with a degenerate-input warning, never fabricated zeros"
+    },
+    "riskParity": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "scenario": {
+      "kind": "function",
+      "entrypoints": [".", "./scenario"],
+      "role": "artifact",
+      "note": "scenario/shock builder (constructs a Scenario artifact, same species as shock.*) — reclassified from analysis in E5"
+    },
+    "scenarioGrid": {
+      "kind": "function",
+      "entrypoints": [".", "./scenario"],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "H12 report (closed 2026-08-19): resolved spot/vol axes beside the pnl cells — a serialized result is self-interpreting"
+    },
+    "sharpeStatistics": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "shock": {
+      "kind": "object",
+      "entrypoints": [".", "./scenario"],
+      "role": "namespace"
+    },
+    "shock.dividend": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shock.factor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shock.riskFreeRate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shock.spot": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shock.time": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shock.volatility": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "scenario/shock builder"
+    },
+    "shrunkKelly": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "spectralRisk": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "stressTest": {
+      "kind": "function",
+      "entrypoints": [".", "./scenario"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "H11 report (closed 2026-08-19): envelope with valuation summary; custom reprice requires an explicit current mark (Position.value or greeks.value), never a 0 base"
+    },
+    "survivorshipWarning": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "helper"
+    },
+    "taylorPnl": {
+      "kind": "function",
+      "entrypoints": [".", "./scenario"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "valueAtRisk": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_risk_value_at_risk"]
+    },
+    "valueAtRiskReport": {
+      "kind": "function",
+      "entrypoints": [".", "./value-at-risk"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "walkForwardSplits": {
+      "kind": "function",
+      "entrypoints": [".", "./research"],
+      "role": "helper"
+    }
+  }
+}

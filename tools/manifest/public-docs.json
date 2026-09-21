@@ -1,0 +1,1585 @@
+{
+  "version": 1,
+  "summary": {
+    "surfaces": 223,
+    "byClass": {
+      "current-runnable": 87,
+      "future-target": 43,
+      "generated": 82,
+      "formula-notation": 1,
+      "historical": 8,
+      "migration-evidence": 2
+    },
+    "executableFences": 4466,
+    "checkedUnderTruthfulness": 169,
+    "checkedUnderVocabulary": 43,
+    "shippedNamesWatched": 9460,
+    "documentedExceptions": 7,
+    "findings": 0
+  },
+  "surfaces": [
+    {
+      "path": "README.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 4
+    },
+    {
+      "path": "docs/README.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/adr/acceleration-phase-5.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/adr/schema-library.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/agent-native-portfolio-and-trading-platform.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 8
+    },
+    {
+      "path": "docs/bundle-size.md",
+      "class": "generated",
+      "owner": "tools/bundle-size-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/compatibility/talib-coverage.md",
+      "class": "generated",
+      "owner": "tools/ta-talib-coverage-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/compatibility/talib-differences.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/data-layer.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/evidence/README.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/formulas/options.md",
+      "class": "formula-notation",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/getting-started.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 5
+    },
+    {
+      "path": "docs/guides/assumptions.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/backtesting.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/guides/calculation-adoption.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/guides/cli.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/end-to-end.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 6
+    },
+    {
+      "path": "docs/guides/envelope.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/guides/errors.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/guides/http.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/guides/levels.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 6
+    },
+    {
+      "path": "docs/guides/mcp.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/guides/sector-performance.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/guides/strategies.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/guides/ta-compatibility.md",
+      "class": "generated",
+      "owner": "tools/ta-compatibility-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/ta-indicators.md",
+      "class": "generated",
+      "owner": "tools/ta-registry-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/ta-live-charts.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/guides/ta-snapshots.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 6
+    },
+    {
+      "path": "docs/guides/ta-warmup.md",
+      "class": "generated",
+      "owner": "tools/ta-warmup-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/trade-lifecycle.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/guides/trading-environment.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/implementation-order.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/library-alignment-spec.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/library-developer-experience-assessment.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/library-implementation-review.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/library-lovability-review.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/llms-full.txt",
+      "class": "generated",
+      "owner": "tools/llms-docs.ts",
+      "rule": "truthfulness",
+      "codeFences": 4212
+    },
+    {
+      "path": "docs/llms.txt",
+      "class": "generated",
+      "owner": "tools/llms-docs.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/mcp-acceleration-data-growth-strategy.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 7
+    },
+    {
+      "path": "docs/milestones/phase-0.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-1.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-2.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-3.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-4-completion.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-4.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-5.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/milestones/phase-6.md",
+      "class": "historical",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/platform-completeness-roadmap.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 14
+    },
+    {
+      "path": "docs/reference/fields.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/backtest.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/calendars.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/cli.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/commodities.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/core.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/crypto.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/fixed-income.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/foreign-exchange.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/fundamentals.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/http.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/math.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/mcp.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/options.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/performance.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/portfolio.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/research.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/risk.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/scenarios.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/strategy.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/structure.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/technical-analysis.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/valuation.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/volatility.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reference/fields/workflows.md",
+      "class": "generated",
+      "owner": "tools/fields-doc.ts",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/app-dogfooding-comparison.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/app-dogfooding-implementation.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/sector-performance-readiness.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/roadmap.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/runbooks/release-rollback.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/runbooks/release.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/american-exercise.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/attribution-linking.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/attribution.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/bond-future-ctd.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/bond-future-hedge.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/book-var.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/calibration-research-artifacts.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 9
+    },
+    {
+      "path": "docs/specs/carry-curve.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/cliquet.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/compo-option.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/cornish-fisher-var.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/cost-aware-kelly.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/cross-currency-basis.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/crypto-carry.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/digital-extended-greeks.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/digital-greeks.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/digital-touch.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/dividend-term-structure.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/dogfooding-library-value.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/double-touch.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/earnings-event-vol.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/essvi-surface-model.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/essvi-surface.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/estimate-covariance.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/evt-tail-risk.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/ewma-covariance.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/explain-position.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/fc7-first-slice.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/fc9-integration-and-core-freeze.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/finance-portfolio-backtesting-completeness.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 10
+    },
+    {
+      "path": "docs/specs/forward-start.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/full-greek-set.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/gate-b-artifact-spine.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/gate-c-extension-contracts.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/h10-h12-report-design-note.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/inflation.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/inverse-future.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/inverse-option.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/kelly-sizing.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/specs/ledoit-wolf-constant-correlation.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/ledoit-wolf-shrinkage.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/ledoit-wolf-single-index.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/local-operations-and-transports.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/specs/mcp-and-public-docs-experience.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/mean-excess-plot.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/min-variance-delta.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/multi-curve-ois.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/napoleon-reverse-cliquet.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/oas-analytics.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/options-backtest.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 5
+    },
+    {
+      "path": "docs/specs/payoff-svg.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/perp-liquidation.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/phase-3b-decision-ledger.md",
+      "class": "migration-evidence",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/phase-3b-public-naming-normalization.md",
+      "class": "migration-evidence",
+      "owner": "human",
+      "rule": "none",
+      "codeFences": 5
+    },
+    {
+      "path": "docs/specs/phase-3b-runtime-semantic-closeout.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/pnl-explain-higher-order.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/pnl-explain.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/portfolio-book.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/portfolio-scale-backtesting.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 8
+    },
+    {
+      "path": "docs/specs/pre-publish-interface-repairs.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/preview-integration-and-shipping.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/research-protocol.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/review-september-2026-repairs.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/risk-reversal-butterfly.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/sabr-bartlett-delta.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/sabr-bartlett-gamma.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/shared-scenario-runner.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 17
+    },
+    {
+      "path": "docs/specs/shrunk-kelly.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/signed-leg-constructors.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/ssvi-surface-model.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/ssvi-surface.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/ssvi-vega-weighting.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/standalone-totalfinance-migration.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/sticky-regime.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/strategy-optimizer.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/surface-pca-scenarios.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/surface-pca.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/swaption-cube-shift.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/swaption-cube.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/ta-discovery.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/tail-risk-index.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/touch-greeks.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/trade-lifecycle-and-paper-execution.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/trading-agent-environment.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 2
+    },
+    {
+      "path": "docs/specs/vanna-volga-5-density.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/vanna-volga-5.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/vanna-volga-approx.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/vanna-volga-density.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/vanna-volga.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/variance-index.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/vol-spot-beta.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "docs/specs/wave6-quant-moats.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 6
+    },
+    {
+      "path": "docs/specs/what-if-cube.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/stability.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/backtest/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/backtest/etc/backtest.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/calendars/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/calendars/etc/calendars.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/cli/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/cli/etc/cli.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/commodities/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/commodities/etc/commodities.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/core/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/core/etc/core.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/crypto/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/crypto/etc/crypto.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/fixed-income/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "packages/fixed-income/etc/fixed-income.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/foreign-exchange/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/foreign-exchange/etc/foreign-exchange.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/fundamentals/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/fundamentals/etc/fundamentals.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/http/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/http/etc/http.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/math/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/math/etc/math.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/mcp/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/mcp/etc/mcp.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/options/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/options/etc/options.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/performance/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/performance/etc/performance.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/portfolio/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/portfolio/etc/portfolio.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/research/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "packages/research/etc/research.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/risk/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/risk/etc/risk.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/scenarios/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/scenarios/etc/scenarios.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/strategy/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/strategy/etc/strategy.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/structure/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/structure/etc/structure.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/technical-analysis/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/technical-analysis/etc/technical-analysis.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/totalfinance/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/totalfinance/etc/totalfinance.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/valuation/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/valuation/etc/valuation.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/volatility/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
+      "path": "packages/volatility/etc/volatility.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "packages/workflows/README.md",
+      "class": "generated",
+      "owner": "tools/readme-gen.ts",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
+      "path": "packages/workflows/etc/workflows.api.md",
+      "class": "generated",
+      "owner": "tools/api-report",
+      "rule": "truthfulness",
+      "codeFences": 0
+    }
+  ],
+  "findings": [],
+  "unusedExceptions": []
+}

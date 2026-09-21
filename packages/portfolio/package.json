@@ -1,0 +1,89 @@
+{
+  "name": "@totalfinance/portfolio",
+  "version": "0.0.1",
+  "description": "Durable portfolio management: the immutable economic-event ledger, pure event reduction, lots and multi-currency cash, valuation snapshots, and flow-aware performance inputs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "portfolio",
+    "ledger",
+    "event-sourcing",
+    "tax-lots",
+    "cost-basis",
+    "pnl",
+    "performance"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/portfolio"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/portfolio#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./events": {
+      "types": "./dist/events.d.ts",
+      "import": "./dist/events.js",
+      "default": "./dist/events.js"
+    },
+    "./ledger": {
+      "types": "./dist/ledger.d.ts",
+      "import": "./dist/ledger.js",
+      "default": "./dist/ledger.js"
+    },
+    "./performance": {
+      "types": "./dist/performance.d.ts",
+      "import": "./dist/performance.js",
+      "default": "./dist/performance.js"
+    },
+    "./reconciliation": {
+      "types": "./dist/reconciliation.d.ts",
+      "import": "./dist/reconciliation.js",
+      "default": "./dist/reconciliation.js"
+    },
+    "./policy": {
+      "types": "./dist/policy.d.ts",
+      "import": "./dist/policy.js",
+      "default": "./dist/policy.js"
+    },
+    "./trade": {
+      "types": "./dist/trade/index.d.ts",
+      "import": "./dist/trade/index.js",
+      "default": "./dist/trade/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/performance": "workspace:*"
+  },
+  "devDependencies": {
+    "@totalfinance/foreign-exchange": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

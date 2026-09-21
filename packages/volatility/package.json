@@ -1,0 +1,285 @@
+{
+  "name": "@totalfinance/volatility",
+  "version": "0.0.1",
+  "description": "TotalFinance volatility: implied-vol surfaces, skew/smile metrics, IV rank/percentile, and event-volatility (expected move, probability ITM/touch). Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "volatility",
+    "options",
+    "quant",
+    "finance",
+    "implied-volatility",
+    "vol-surface",
+    "svi",
+    "sabr",
+    "skew",
+    "expected-move"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/volatility"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/volatility#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./surface": {
+      "types": "./dist/surface.d.ts",
+      "import": "./dist/surface.js",
+      "default": "./dist/surface.js"
+    },
+    "./svi": {
+      "types": "./dist/svi.d.ts",
+      "import": "./dist/svi.js",
+      "default": "./dist/svi.js"
+    },
+    "./sabr": {
+      "types": "./dist/sabr.d.ts",
+      "import": "./dist/sabr.js",
+      "default": "./dist/sabr.js"
+    },
+    "./arbitrage": {
+      "types": "./dist/arbitrage.d.ts",
+      "import": "./dist/arbitrage.js",
+      "default": "./dist/arbitrage.js"
+    },
+    "./skew": {
+      "types": "./dist/skew.d.ts",
+      "import": "./dist/skew.js",
+      "default": "./dist/skew.js"
+    },
+    "./event": {
+      "types": "./dist/event.d.ts",
+      "import": "./dist/event.js",
+      "default": "./dist/event.js"
+    },
+    "./term": {
+      "types": "./dist/term.d.ts",
+      "import": "./dist/term.js",
+      "default": "./dist/term.js"
+    },
+    "./analytics": {
+      "types": "./dist/analytics.d.ts",
+      "import": "./dist/analytics.js",
+      "default": "./dist/analytics.js"
+    },
+    "./metrics": {
+      "types": "./dist/metrics.d.ts",
+      "import": "./dist/metrics.js",
+      "default": "./dist/metrics.js"
+    },
+    "./local-volatility": {
+      "types": "./dist/local-volatility.d.ts",
+      "import": "./dist/local-volatility.js",
+      "default": "./dist/local-volatility.js"
+    },
+    "./heston-surface": {
+      "types": "./dist/heston-surface.d.ts",
+      "import": "./dist/heston-surface.js",
+      "default": "./dist/heston-surface.js"
+    },
+    "./forecast": {
+      "types": "./dist/forecast.d.ts",
+      "import": "./dist/forecast.js",
+      "default": "./dist/forecast.js"
+    },
+    "./earnings": {
+      "types": "./dist/earnings.d.ts",
+      "import": "./dist/earnings.js",
+      "default": "./dist/earnings.js"
+    },
+    "./essvi": {
+      "types": "./dist/essvi.d.ts",
+      "import": "./dist/essvi.js",
+      "default": "./dist/essvi.js"
+    },
+    "./estimate": {
+      "types": "./dist/estimate.d.ts",
+      "import": "./dist/estimate.js",
+      "default": "./dist/estimate.js"
+    },
+    "./min-variance-delta": {
+      "types": "./dist/min-variance-delta.d.ts",
+      "import": "./dist/min-variance-delta.js",
+      "default": "./dist/min-variance-delta.js"
+    },
+    "./risk-reversal": {
+      "types": "./dist/risk-reversal.d.ts",
+      "import": "./dist/risk-reversal.js",
+      "default": "./dist/risk-reversal.js"
+    },
+    "./sabr-delta": {
+      "types": "./dist/sabr-delta.d.ts",
+      "import": "./dist/sabr-delta.js",
+      "default": "./dist/sabr-delta.js"
+    },
+    "./ssvi": {
+      "types": "./dist/ssvi.d.ts",
+      "import": "./dist/ssvi.js",
+      "default": "./dist/ssvi.js"
+    },
+    "./sticky-regime": {
+      "types": "./dist/sticky-regime.d.ts",
+      "import": "./dist/sticky-regime.js",
+      "default": "./dist/sticky-regime.js"
+    },
+    "./surface-pca": {
+      "types": "./dist/surface-pca.d.ts",
+      "import": "./dist/surface-pca.js",
+      "default": "./dist/surface-pca.js"
+    },
+    "./swaption-cube": {
+      "types": "./dist/swaption-cube.d.ts",
+      "import": "./dist/swaption-cube.js",
+      "default": "./dist/swaption-cube.js"
+    },
+    "./tail-risk": {
+      "types": "./dist/tail-risk.d.ts",
+      "import": "./dist/tail-risk.js",
+      "default": "./dist/tail-risk.js"
+    },
+    "./vanna-volga": {
+      "types": "./dist/vanna-volga.d.ts",
+      "import": "./dist/vanna-volga.js",
+      "default": "./dist/vanna-volga.js"
+    },
+    "./variance-index": {
+      "types": "./dist/variance-index.d.ts",
+      "import": "./dist/variance-index.js",
+      "default": "./dist/variance-index.js"
+    },
+    "./volatility-spot-beta": {
+      "types": "./dist/volatility-spot-beta.d.ts",
+      "import": "./dist/volatility-spot-beta.js",
+      "default": "./dist/volatility-spot-beta.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.ts",
+      "import": "./dist/artifacts.js",
+      "default": "./dist/artifacts.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "typesVersions": {
+    "*": {
+      "surface": [
+        "./dist/surface.d.ts"
+      ],
+      "svi": [
+        "./dist/svi.d.ts"
+      ],
+      "sabr": [
+        "./dist/sabr.d.ts"
+      ],
+      "arbitrage": [
+        "./dist/arbitrage.d.ts"
+      ],
+      "skew": [
+        "./dist/skew.d.ts"
+      ],
+      "event": [
+        "./dist/event.d.ts"
+      ],
+      "term": [
+        "./dist/term.d.ts"
+      ],
+      "analytics": [
+        "./dist/analytics.d.ts"
+      ],
+      "metrics": [
+        "./dist/metrics.d.ts"
+      ],
+      "local-volatility": [
+        "./dist/local-volatility.d.ts"
+      ],
+      "heston-surface": [
+        "./dist/heston-surface.d.ts"
+      ],
+      "forecast": [
+        "./dist/forecast.d.ts"
+      ],
+      "earnings": [
+        "./dist/earnings.d.ts"
+      ],
+      "essvi": [
+        "./dist/essvi.d.ts"
+      ],
+      "estimate": [
+        "./dist/estimate.d.ts"
+      ],
+      "min-variance-delta": [
+        "./dist/min-variance-delta.d.ts"
+      ],
+      "risk-reversal": [
+        "./dist/risk-reversal.d.ts"
+      ],
+      "sabr-delta": [
+        "./dist/sabr-delta.d.ts"
+      ],
+      "ssvi": [
+        "./dist/ssvi.d.ts"
+      ],
+      "sticky-regime": [
+        "./dist/sticky-regime.d.ts"
+      ],
+      "surface-pca": [
+        "./dist/surface-pca.d.ts"
+      ],
+      "swaption-cube": [
+        "./dist/swaption-cube.d.ts"
+      ],
+      "tail-risk": [
+        "./dist/tail-risk.d.ts"
+      ],
+      "vanna-volga": [
+        "./dist/vanna-volga.d.ts"
+      ],
+      "variance-index": [
+        "./dist/variance-index.d.ts"
+      ],
+      "volatility-spot-beta": [
+        "./dist/volatility-spot-beta.d.ts"
+      ],
+      "artifacts": [
+        "./dist/artifacts.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  }
+}

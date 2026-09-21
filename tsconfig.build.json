@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "files": [],
+  "references": [
+    { "path": "./packages/core/tsconfig.build.json" },
+    { "path": "./packages/crypto/tsconfig.build.json" },
+    { "path": "./packages/calendars/tsconfig.build.json" },
+    { "path": "./packages/math/tsconfig.build.json" },
+    { "path": "./packages/performance/tsconfig.build.json" },
+    { "path": "./packages/portfolio/tsconfig.build.json" },
+    { "path": "./packages/risk/tsconfig.build.json" },
+    { "path": "./packages/scenarios/tsconfig.build.json" },
+    { "path": "./packages/backtest/tsconfig.build.json" },
+    { "path": "./packages/options/tsconfig.build.json" },
+    { "path": "./packages/volatility/tsconfig.build.json" },
+    { "path": "./packages/structure/tsconfig.build.json" },
+    { "path": "./packages/technical-analysis/tsconfig.build.json" },
+    { "path": "./packages/strategy/tsconfig.build.json" },
+    { "path": "./packages/fixed-income/tsconfig.build.json" },
+    { "path": "./packages/workflows/tsconfig.build.json" },
+    { "path": "./packages/cli/tsconfig.build.json" },
+    { "path": "./packages/http/tsconfig.build.json" },
+    { "path": "./packages/mcp/tsconfig.build.json" },
+    { "path": "./packages/totalfinance/tsconfig.build.json" }
+  ]
+}

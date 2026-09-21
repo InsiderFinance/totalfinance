@@ -1,0 +1,76 @@
+{
+  "name": "@totalfinance/mcp",
+  "version": "0.0.1",
+  "description": "TotalFinance MCP server: exposes the TotalFinance engine to AI agents via the Model Context Protocol. Read-only by default.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "mcp",
+    "model-context-protocol",
+    "finance",
+    "quant",
+    "options",
+    "ai-agents",
+    "claude",
+    "llm",
+    "technical-analysis"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/mcp#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "totalfinance-mcp": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@totalfinance/backtest": "workspace:*",
+    "@totalfinance/calendars": "workspace:*",
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/crypto": "workspace:*",
+    "@totalfinance/fixed-income": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/risk": "workspace:*",
+    "@totalfinance/strategy": "workspace:*",
+    "@totalfinance/structure": "workspace:*",
+    "@totalfinance/technical-analysis": "workspace:*",
+    "@totalfinance/volatility": "workspace:*",
+    "@totalfinance/workflows": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "name": "@totalfinance/risk",
+  "version": "0.0.1",
+  "description": "TotalFinance risk & portfolio: VaR/CVaR (parametric, historical, Monte Carlo), portfolio risk decomposition, stress & scenario testing, factor/PCA exposure, and portfolio optimization (min-variance, max-Sharpe, mean-variance, risk parity, HRP, Kelly). Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "risk",
+    "finance",
+    "quant",
+    "value-at-risk",
+    "var",
+    "cvar",
+    "portfolio-optimization",
+    "stress-testing",
+    "factor-model",
+    "kelly"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/risk"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/risk#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./value-at-risk": {
+      "types": "./dist/value-at-risk.d.ts",
+      "import": "./dist/value-at-risk.js",
+      "default": "./dist/value-at-risk.js"
+    },
+    "./scenario": {
+      "types": "./dist/scenario.d.ts",
+      "import": "./dist/scenario.js",
+      "default": "./dist/scenario.js"
+    },
+    "./factor": {
+      "types": "./dist/factor.d.ts",
+      "import": "./dist/factor.js",
+      "default": "./dist/factor.js"
+    },
+    "./optimize": {
+      "types": "./dist/optimize.d.ts",
+      "import": "./dist/optimize.js",
+      "default": "./dist/optimize.js"
+    },
+    "./research": {
+      "types": "./dist/research.d.ts",
+      "import": "./dist/research.js",
+      "default": "./dist/research.js"
+    },
+    "./portfolio": {
+      "types": "./dist/portfolio.d.ts",
+      "import": "./dist/portfolio.js",
+      "default": "./dist/portfolio.js"
+    },
+    "./sizing": {
+      "types": "./dist/sizing.d.ts",
+      "import": "./dist/sizing.js",
+      "default": "./dist/sizing.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/valuation": "workspace:*"
+  },
+  "devDependencies": {
+    "@totalfinance/strategy": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

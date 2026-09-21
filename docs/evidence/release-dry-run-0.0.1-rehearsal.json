@@ -1,0 +1,181 @@
+{
+  "version": "0.0.1",
+  "commit": "7292d43e47c1c3fd49232d6731af29a67a58fb58",
+  "packages": [
+    {
+      "package": "@quantkit/backtest",
+      "version": "0.0.1",
+      "tarball": "quantkit-backtest-0.0.1.tgz",
+      "sha256": "019f3efe84be5fb3367e7249aa5ac7a671c6eb2da82b4ea037d1cb1b9a111073",
+      "bytes": 659974
+    },
+    {
+      "package": "@quantkit/calendars",
+      "version": "0.0.1",
+      "tarball": "quantkit-calendars-0.0.1.tgz",
+      "sha256": "4f2d37501e446a74c5899ace13251309c0188ac8bfac3ca40af8c15c12ec0973",
+      "bytes": 23617
+    },
+    {
+      "package": "@quantkit/cli",
+      "version": "0.0.1",
+      "tarball": "quantkit-cli-0.0.1.tgz",
+      "sha256": "0931084dc4265db4def598f2b50f6f23180457d1269bdcd2d2b85a3ca55bde4d",
+      "bytes": 36219
+    },
+    {
+      "package": "@quantkit/commodities",
+      "version": "0.0.1",
+      "tarball": "quantkit-commodities-0.0.1.tgz",
+      "sha256": "91948f2e45465e7066c2facbdddefe4bd75f83949a50b9c6d65d112c2be08e2e",
+      "bytes": 41845
+    },
+    {
+      "package": "@quantkit/core",
+      "version": "0.0.1",
+      "tarball": "quantkit-core-0.0.1.tgz",
+      "sha256": "f25275214272e56a1e96de113d16720b36d3693219ae7320c52380ede39c9550",
+      "bytes": 360592
+    },
+    {
+      "package": "@quantkit/crypto",
+      "version": "0.0.1",
+      "tarball": "quantkit-crypto-0.0.1.tgz",
+      "sha256": "7e5ac7b05de70a6dc26370c2eee3ab33d9e073c4e631e98e7f731487f862064b",
+      "bytes": 38112
+    },
+    {
+      "package": "@quantkit/fixed-income",
+      "version": "0.0.1",
+      "tarball": "quantkit-fixed-income-0.0.1.tgz",
+      "sha256": "9b97bf9a9f294ec418977f4cbd8930a2fc3e74109a9814734c7b3aa4616d3732",
+      "bytes": 324509
+    },
+    {
+      "package": "@quantkit/foreign-exchange",
+      "version": "0.0.1",
+      "tarball": "quantkit-foreign-exchange-0.0.1.tgz",
+      "sha256": "d9b7d0cb80c569323a8185c7845af9d9399931a1625169439a9b7f92a96095ca",
+      "bytes": 43490
+    },
+    {
+      "package": "@quantkit/fundamentals",
+      "version": "0.0.1",
+      "tarball": "quantkit-fundamentals-0.0.1.tgz",
+      "sha256": "7b4da14aa53458f3969052ad6db84b83bf8c1871d48fa7a89663ffeb8838a1db",
+      "bytes": 91709
+    },
+    {
+      "package": "@quantkit/http",
+      "version": "0.0.1",
+      "tarball": "quantkit-http-0.0.1.tgz",
+      "sha256": "8f7111f1ba56306127424043cbabb05b64e564c5ac47c202b09a38b3f0a4d957",
+      "bytes": 159841
+    },
+    {
+      "package": "@quantkit/math",
+      "version": "0.0.1",
+      "tarball": "quantkit-math-0.0.1.tgz",
+      "sha256": "b11267a4a6cfead89f349fc9e5c47694f6323dc3e795366360b69b031c431bab",
+      "bytes": 245572
+    },
+    {
+      "package": "@quantkit/mcp",
+      "version": "0.0.1",
+      "tarball": "quantkit-mcp-0.0.1.tgz",
+      "sha256": "b20ee0b95bd71a3697964729648f52027a47092f9b9dd182cc7ed0b742972e50",
+      "bytes": 59457
+    },
+    {
+      "package": "@quantkit/options",
+      "version": "0.0.1",
+      "tarball": "quantkit-options-0.0.1.tgz",
+      "sha256": "6a975bf671cd9ac00ec0598cae1209daeb56dfe29928fef3ff025fa2625f42d9",
+      "bytes": 479015
+    },
+    {
+      "package": "@quantkit/performance",
+      "version": "0.0.1",
+      "tarball": "quantkit-performance-0.0.1.tgz",
+      "sha256": "0f00421602f5edeb7f1b88ca73915d9d5436f1e6a189de508e4449fe7edf0326",
+      "bytes": 91157
+    },
+    {
+      "package": "@quantkit/portfolio",
+      "version": "0.0.1",
+      "tarball": "quantkit-portfolio-0.0.1.tgz",
+      "sha256": "b4b78904aed26d9f9127e8b2f36305a7261606d8930444c4637aa1d4f6d39a94",
+      "bytes": 466473
+    },
+    {
+      "package": "@quantkit/research",
+      "version": "0.0.1",
+      "tarball": "quantkit-research-0.0.1.tgz",
+      "sha256": "77f8a271fb35bee886a4aa6aa1cf84b297d0ee4d3fd44ccbfeb34b13cf5bd398",
+      "bytes": 167218
+    },
+    {
+      "package": "@quantkit/risk",
+      "version": "0.0.1",
+      "tarball": "quantkit-risk-0.0.1.tgz",
+      "sha256": "2f0b77f07a7a5125af81b0e04a7ddd12bc97c428e9ae272e58f80b595832d637",
+      "bytes": 364090
+    },
+    {
+      "package": "@quantkit/scenarios",
+      "version": "0.0.1",
+      "tarball": "quantkit-scenarios-0.0.1.tgz",
+      "sha256": "c792320ff32f3234ac7cc977eb7a284011fbb486d17d591da50fd7424ec48fe6",
+      "bytes": 152763
+    },
+    {
+      "package": "@quantkit/strategy",
+      "version": "0.0.1",
+      "tarball": "quantkit-strategy-0.0.1.tgz",
+      "sha256": "5738f5bc1a42627baf59acc83edb6afd7cc10ff4ae2a2b235d534314c6425c46",
+      "bytes": 227315
+    },
+    {
+      "package": "@quantkit/structure",
+      "version": "0.0.1",
+      "tarball": "quantkit-structure-0.0.1.tgz",
+      "sha256": "bd0bea0c761b4b717a0bedc72c256a5263b12d8ebcba14dc464bf95267937ba0",
+      "bytes": 75656
+    },
+    {
+      "package": "@quantkit/technical-analysis",
+      "version": "0.0.1",
+      "tarball": "quantkit-technical-analysis-0.0.1.tgz",
+      "sha256": "26b21dcea07f558e729022fa854c020b6a9602187cdffd3ee6a374e19d723994",
+      "bytes": 614898
+    },
+    {
+      "package": "@quantkit/valuation",
+      "version": "0.0.1",
+      "tarball": "quantkit-valuation-0.0.1.tgz",
+      "sha256": "4e6f9c6081aef9095fd421bf4af88bfb981a7320c30c39455673d4ac21e80aac",
+      "bytes": 151269
+    },
+    {
+      "package": "@quantkit/volatility",
+      "version": "0.0.1",
+      "tarball": "quantkit-volatility-0.0.1.tgz",
+      "sha256": "39bef9ac612040a8b7afc59f03736bb36a59197e45edf438004bdda9cdc58e19",
+      "bytes": 421235
+    },
+    {
+      "package": "@quantkit/workflows",
+      "version": "0.0.1",
+      "tarball": "quantkit-workflows-0.0.1.tgz",
+      "sha256": "1db9de1778266d6861fd1f2545627b36883fe8ecfb958354c2982158cf8ed0c9",
+      "bytes": 288607
+    },
+    {
+      "package": "quantkit",
+      "version": "0.0.1",
+      "tarball": "quantkit-0.0.1.tgz",
+      "sha256": "0c4045391e6953255ca00253771525d0e3dbd0dcf8b3cac963f39e9d0a7efd59",
+      "bytes": 15779
+    }
+  ]
+}

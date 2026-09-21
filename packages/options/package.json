@@ -1,0 +1,180 @@
+{
+  "name": "@totalfinance/options",
+  "version": "0.0.1",
+  "description": "TotalFinance options: contracts, pricing engines, Greeks, and implied volatility. Browser-safe, zero runtime dependencies.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "options",
+    "quant",
+    "finance",
+    "black-scholes",
+    "greeks",
+    "implied-volatility",
+    "option-pricing",
+    "heston",
+    "sabr",
+    "monte-carlo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/options"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/options#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "black-scholes": [
+        "./dist/black-scholes.d.ts"
+      ],
+      "batch": [
+        "./dist/batch.d.ts"
+      ],
+      "black76": [
+        "./dist/black76.d.ts"
+      ],
+      "bachelier": [
+        "./dist/bachelier.d.ts"
+      ],
+      "monte-carlo": [
+        "./dist/monte-carlo.d.ts"
+      ],
+      "heston": [
+        "./dist/heston.d.ts"
+      ],
+      "sabr": [
+        "./dist/sabr.d.ts"
+      ],
+      "local-volatility": [
+        "./dist/local-volatility.d.ts"
+      ],
+      "exotics": [
+        "./dist/exotics.d.ts"
+      ],
+      "parity": [
+        "./dist/parity.d.ts"
+      ],
+      "schema": [
+        "./dist/schema.d.ts"
+      ],
+      "lattice": [
+        "./dist/lattice.d.ts"
+      ],
+      "payoff": [
+        "./dist/payoff.d.ts"
+      ],
+      "pricer": [
+        "./dist/pricer.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./black-scholes": {
+      "types": "./dist/black-scholes.d.ts",
+      "import": "./dist/black-scholes.js",
+      "default": "./dist/black-scholes.js"
+    },
+    "./batch": {
+      "types": "./dist/batch.d.ts",
+      "import": "./dist/batch.js",
+      "default": "./dist/batch.js"
+    },
+    "./black76": {
+      "types": "./dist/black76.d.ts",
+      "import": "./dist/black76.js",
+      "default": "./dist/black76.js"
+    },
+    "./bachelier": {
+      "types": "./dist/bachelier.d.ts",
+      "import": "./dist/bachelier.js",
+      "default": "./dist/bachelier.js"
+    },
+    "./monte-carlo": {
+      "types": "./dist/monte-carlo.d.ts",
+      "import": "./dist/monte-carlo.js",
+      "default": "./dist/monte-carlo.js"
+    },
+    "./heston": {
+      "types": "./dist/heston.d.ts",
+      "import": "./dist/heston.js",
+      "default": "./dist/heston.js"
+    },
+    "./sabr": {
+      "types": "./dist/sabr.d.ts",
+      "import": "./dist/sabr.js",
+      "default": "./dist/sabr.js"
+    },
+    "./local-volatility": {
+      "types": "./dist/local-volatility.d.ts",
+      "import": "./dist/local-volatility.js",
+      "default": "./dist/local-volatility.js"
+    },
+    "./exotics": {
+      "types": "./dist/exotics.d.ts",
+      "import": "./dist/exotics.js",
+      "default": "./dist/exotics.js"
+    },
+    "./parity": {
+      "types": "./dist/parity.d.ts",
+      "import": "./dist/parity.js",
+      "default": "./dist/parity.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "import": "./dist/schema.js",
+      "default": "./dist/schema.js"
+    },
+    "./lattice": {
+      "types": "./dist/lattice.d.ts",
+      "import": "./dist/lattice.js",
+      "default": "./dist/lattice.js"
+    },
+    "./payoff": {
+      "types": "./dist/payoff.d.ts",
+      "import": "./dist/payoff.js",
+      "default": "./dist/payoff.js"
+    },
+    "./pricer": {
+      "types": "./dist/pricer.d.ts",
+      "import": "./dist/pricer.js",
+      "default": "./dist/pricer.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

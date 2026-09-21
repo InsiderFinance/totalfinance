@@ -1,0 +1,78 @@
+{
+  "name": "@totalfinance/strategy",
+  "version": "0.0.1",
+  "description": "TotalFinance options strategy & profit calculator: payoff, breakevens, mark-to-market, Greeks. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "options",
+    "finance",
+    "quant",
+    "options-strategy",
+    "profit-calculator",
+    "payoff",
+    "breakeven",
+    "iron-condor",
+    "probability-of-profit",
+    "strategy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/strategy"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/strategy#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./scanner": {
+      "types": "./dist/scanner.d.ts",
+      "import": "./dist/scanner.js",
+      "default": "./dist/scanner.js"
+    },
+    "./probability": {
+      "types": "./dist/probability.d.ts",
+      "import": "./dist/probability.js",
+      "default": "./dist/probability.js"
+    },
+    "./from-chain": {
+      "types": "./dist/from-chain.d.ts",
+      "import": "./dist/from-chain.js",
+      "default": "./dist/from-chain.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/risk": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

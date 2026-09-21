@@ -1,0 +1,87 @@
+{
+  "name": "@totalfinance/structure",
+  "version": "0.0.1",
+  "description": "TotalFinance options market structure: dealer-positioning estimates (GEX/DEX/vanna/charm), levels (walls, zero-gamma, max pain, pin risk), scenario maps, and options flow. All positioning is estimated and labeled.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "structure",
+    "options",
+    "finance",
+    "quant",
+    "gamma-exposure",
+    "gex",
+    "max-pain",
+    "options-flow",
+    "dealer-positioning",
+    "0dte"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/structure"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/structure#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./exposure": {
+      "types": "./dist/exposure.d.ts",
+      "import": "./dist/exposure.js",
+      "default": "./dist/exposure.js"
+    },
+    "./flow": {
+      "types": "./dist/flow.d.ts",
+      "import": "./dist/flow.js",
+      "default": "./dist/flow.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "OPTION-FLOW-DRIFT.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/calendars": "workspace:*",
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "typesVersions": {
+    "*": {
+      "exposure": [
+        "./dist/exposure.d.ts"
+      ],
+      "flow": [
+        "./dist/flow.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  }
+}

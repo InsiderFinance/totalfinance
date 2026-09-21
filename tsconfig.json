@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "types": ["node"],
+    "paths": {
+      "@totalfinance/core": ["./packages/core/src/index.ts"],
+      "@totalfinance/core/*": ["./packages/core/src/*"],
+      "@totalfinance/crypto": ["./packages/crypto/src/index.ts"],
+      "@totalfinance/crypto/*": ["./packages/crypto/src/*"],
+      "@totalfinance/valuation": ["./packages/valuation/src/index.ts"],
+      "@totalfinance/valuation/*": ["./packages/valuation/src/*"],
+      "@totalfinance/fundamentals": ["./packages/fundamentals/src/index.ts"],
+      "@totalfinance/fundamentals/*": ["./packages/fundamentals/src/*"],
+      "@totalfinance/research": ["./packages/research/src/index.ts"],
+      "@totalfinance/research/*": ["./packages/research/src/*"],
+      "@totalfinance/foreign-exchange": ["./packages/foreign-exchange/src/index.ts"],
+      "@totalfinance/foreign-exchange/*": ["./packages/foreign-exchange/src/*"],
+      "@totalfinance/commodities": ["./packages/commodities/src/index.ts"],
+      "@totalfinance/commodities/*": ["./packages/commodities/src/*"],
+      "@totalfinance/calendars": ["./packages/calendars/src/index.ts"],
+      "@totalfinance/calendars/*": ["./packages/calendars/src/*"],
+      "@totalfinance/workflows": ["./packages/workflows/src/index.ts"],
+      "@totalfinance/workflows/local": ["./packages/workflows/src/local/index.ts"],
+      "@totalfinance/workflows/*": ["./packages/workflows/src/*"],
+      "@totalfinance/cli": ["./packages/cli/src/index.ts"],
+      "@totalfinance/cli/*": ["./packages/cli/src/*"],
+      "@totalfinance/http": ["./packages/http/src/index.ts"],
+      "@totalfinance/http/*": ["./packages/http/src/*"],
+      "@totalfinance/math": ["./packages/math/src/index.ts"],
+      "@totalfinance/math/*": ["./packages/math/src/*"],
+      "@totalfinance/performance": ["./packages/performance/src/index.ts"],
+      "@totalfinance/performance/*": ["./packages/performance/src/*"],
+      "@totalfinance/portfolio": ["./packages/portfolio/src/index.ts"],
+      "@totalfinance/portfolio/*": ["./packages/portfolio/src/*"],
+      "@totalfinance/scenarios": ["./packages/scenarios/src/index.ts"],
+      "@totalfinance/scenarios/*": ["./packages/scenarios/src/*"],
+      "@totalfinance/risk": ["./packages/risk/src/index.ts"],
+      "@totalfinance/risk/*": ["./packages/risk/src/*"],
+      "@totalfinance/backtest": ["./packages/backtest/src/index.ts"],
+      "@totalfinance/backtest/*": ["./packages/backtest/src/*"],
+      "@totalfinance/options": ["./packages/options/src/index.ts"],
+      "@totalfinance/options/*": ["./packages/options/src/*"],
+      "@totalfinance/volatility": ["./packages/volatility/src/index.ts"],
+      "@totalfinance/volatility/*": ["./packages/volatility/src/*"],
+      "@totalfinance/structure": ["./packages/structure/src/index.ts"],
+      "@totalfinance/structure/*": ["./packages/structure/src/*"],
+      "@totalfinance/technical-analysis": ["./packages/technical-analysis/src/index.ts"],
+      "@totalfinance/technical-analysis/*": ["./packages/technical-analysis/src/*"],
+      "@totalfinance/strategy": ["./packages/strategy/src/index.ts"],
+      "@totalfinance/strategy/*": ["./packages/strategy/src/*"],
+      "@totalfinance/fixed-income": ["./packages/fixed-income/src/index.ts"],
+      "@totalfinance/fixed-income/*": ["./packages/fixed-income/src/*"],
+      "@totalfinance/mcp": ["./packages/mcp/src/index.ts"],
+      "@totalfinance/mcp/*": ["./packages/mcp/src/*"],
+      "totalfinance": ["./packages/totalfinance/src/index.ts"],
+      "totalfinance/*": ["./packages/totalfinance/src/*"]
+    }
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/test/**/*.ts",
+    // Benchmarks are deliberately NOT run by `pnpm run ci` (they are slow and noisy), but that also
+    // left them outside typecheck — and a file nothing compiles and nothing runs rots in both
+    // directions at once. The BSM benchmark still used the pre-3B.N field names (`t`/`rate`/`vol`),
+    // so every scalar call omitted three required fields and priced NaN. It reported timings the
+    // whole time; the summary read "NaNx faster" and nothing failed. Compiling them costs almost
+    // nothing and would have caught that at the rename that caused it.
+    "packages/*/bench/**/*.ts",
+    "examples/*/src/**/*.ts",
+    "docs/**/*.test.ts",
+    "tools/**/*.ts"
+  ],
+  "exclude": ["**/dist/**", "**/node_modules/**"]
+}

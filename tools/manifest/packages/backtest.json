@@ -1,0 +1,820 @@
+{
+  "package": "@totalfinance/backtest",
+  "domain": "backtest",
+  "tier": "facade",
+  "exports": {
+    "accruedFromTerms": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): accrued interest per unit from the coupon terms alone (ACT/365F or 30/360), never fetched"
+    },
+    "adapterFor": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the adapter a specification uses — its own for custom, the built-in otherwise; a built-in kind with an adapter refuses"
+    },
+    "AGENT_BENCH_RUN_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./environment"],
+      "role": "constant",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): Decision 11: the most episode × seed runs one bench call may take (200)"
+    },
+    "agentBaselines": {
+      "kind": "object",
+      "entrypoints": [".", "./environment"],
+      "role": "namespace",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): the six maintained baseline policies — holdCash, buyAndHold, periodicRebalance, randomValidAction (draws only from the mask), riskParity (inverse realized volatility from the feature block), momentumCrossover (lookback returns) — each a labeled policy with the feature recipes it requires"
+    },
+    "agentBaselines.buyAndHold": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — buys equal weights (or `input.weights`) at the first step and holds; the trend baseline; returns a frozen { label, requires, decide }"
+    },
+    "agentBaselines.holdCash": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — the policy that never trades — the floor every strategy table is read against; returns a frozen { label, requires, decide }"
+    },
+    "agentBaselines.momentumCrossover": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — long where the fast lookback return exceeds the slow one, flat otherwise; refuses a fast window that is not shorter than the slow; returns a frozen { label, requires, decide }"
+    },
+    "agentBaselines.periodicRebalance": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — trades to equal (or the given) weights every k sessions; the mean-reversion baseline; returns a frozen { label, requires, decide }"
+    },
+    "agentBaselines.randomValidAction": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — draws an allowed side and instrument from the mask and a size up to 5% of NAV from a seeded generator — zero mask violations by construction; returns a frozen { label, requires, decide }"
+    },
+    "agentBaselines.riskParity": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a maintained baseline policy — inverse realized-volatility weights from the feature block the policy declares it requires, rebalanced every k sessions; returns a frozen { label, requires, decide }"
+    },
+    "assertFillModelConformance": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the conformance suite a custom fill model must pass (determinism, immutability, price within the observation, quantity within the order, finite JSON-safe decisions); refuses with backtest.adapter_nonconformant naming the check"
+    },
+    "assertInstrumentAdapterConformance": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the adapter conformance suite: pure, deterministic, finite, JSON-safe, payloads shaped as events"
+    },
+    "attribution": {
+      "kind": "function",
+      "entrypoints": [".", "./tearsheet"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "BACKTEST_RUN_ARTIFACT_TYPE": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): the artifactType every backtest-run artifact carries ('totalfinance.backtest-run')"
+    },
+    "BACKTEST_RUN_KIND_LIST": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): the run kinds in table order ('cross-sectional', 'cross-sectional-grid'; options and portfolio join in slices 4 and 5)"
+    },
+    "BACKTEST_RUN_KINDS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): the frozen, data-only descriptor per run kind — verb, bulk row sets of the request and the run, callback fields, model fields"
+    },
+    "BACKTEST_RUN_LIMITS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): Decision 9's bounded-work table (core's ARTIFACT_WORK_LIMITS re-exported for this subpath's callers)"
+    },
+    "backtestRunArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): describe a crossSectionalBacktest or crossSectionalBacktestGrid result verbatim with the request that reproduces it (bulk row sets of the request AND the run embedded or referenced by content-hashed handle, callbacks recorded and omitted, execution and cost models by description), the run hash, and the FC8 identity list, and save it as an identified artifact"
+    },
+    "barTriggerPrice": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): where a bar fills an order, or null — the touch rule shared with the shipped broker"
+    },
+    "BENCHMARK_FIXTURE_VERSION": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "borrow": {
+      "kind": "object",
+      "entrypoints": [".", "./costs", "./execution"],
+      "role": "namespace"
+    },
+    "borrow.annualRate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "borrow.none": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "brokers": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "brokers.simulated": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "checkDataAlignment": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "compareBacktestRuns": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): typed deltas of two runs of one kind — identity, the performance block name by name (tolerance-aware), final-holding membership, rebalance-by-rebalance turnover and cost deltas, per-variation deltas and whether the best moved (grids), the hygiene verdict, and the structural run diff"
+    },
+    "createPaperBroker": {
+      "kind": "function",
+      "entrypoints": ["./paper"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): Decision 7 — the first execution adapter, deterministic and credential-free: submit verifies the grant and journals (one key, one plan; a retry returns the same receipt), step meets open orders with the market through the engines' own fill path and returns fills plus ledger events, cancel/deliver/halt are the hazard surface; a stateful factory, so a helper"
+    },
+    "createPortfolioStepper": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): portfolioBacktest's per-instant loop driven from outside — open(index) runs the lifecycle facts and the external flows due and returns the session context, close(index, orders) executes the caller's orders through the execution policy with the margin check and the valuation mark and returns the rows the step appended, finish() assembles the same result over the instants closed so far; out-of-order calls refuse; the trading environment's seam"
+    },
+    "createTradingEnvironment": {
+      "kind": "function",
+      "entrypoints": [".", "./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): the deterministic trading-agent environment over the portfolio engine's stepper seam — reset() positions the episode at the first decision instant, step(action) applies cancellations, queues the action's orders, and advances one instant where every open order meets the market through the declared fill model (the next-observation law), finish() returns the engine's own result; typed rejections never throw, a repeated order id is an idempotent retry, the trace hash chains every canonical action"
+    },
+    "CROSS_SECTIONAL_GRID_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./cross-sectional"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): Decision 9: the hard ceiling on variations one synchronous sweep may run (4,096)"
+    },
+    "CROSS_SECTIONAL_GRID_DEFAULT_MAXIMUM": {
+      "kind": "value",
+      "entrypoints": ["./cross-sectional"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): Decision 9: variations one synchronous sweep runs unless the caller raises the ceiling (256)"
+    },
+    "CROSS_SECTIONAL_POSITION_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./cross-sectional"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 2 (FC8, 2026-09-03): Decision 9: open positions one construction may hold"
+    },
+    "CROSS_SECTIONAL_ROW_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./cross-sectional"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 2 (FC8, 2026-09-03): Decision 9: rows one synchronous run may read"
+    },
+    "CROSS_SECTIONAL_WINDOW_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./cross-sectional"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 6 (FC8, 2026-09-04): the hard ceiling on windows one walk-forward call may run (1,000) — each window is a grid run plus a held-out run"
+    },
+    "crossOver": {
+      "kind": "function",
+      "entrypoints": [".", "./event-driven"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open",
+        "1": "open"
+      }
+    },
+    "crossOverSeries": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "crossSectionalBacktest": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-sectional"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_backtest_cross_sectional_run"],
+      "shape": "report",
+      "note": "Stage 4.6 slice 2 (FC8, 2026-09-03): the point-in-time cross-sectional engine — universe membership and eligibility from research, one signal (recipe / score / screen / callback), quantile selection, weights with dollar/sector/beta/factor neutrality and caps, quantities from the portfolio allocator, fills through the execution policy, every fill a NormalizedFill folded by the FC7 reducer; the reported final value equals the ledger NAV or the run refuses (backtest.ledger_reconciliation_failed)"
+    },
+    "crossSectionalBacktestGrid": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-sectional"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): the cartesian product of declarative variations over one crossSectionalBacktest request, run as independent calls of the same function (each child equals its direct run), with the research-hygiene verdicts composed verbatim from @totalfinance/risk — researchProtocol over the trial Sharpes, probabilityOfBacktestOverfitting over the periods × variations return matrix, deflatedSharpeRatio for the best trial; bounded by maximumVariations (backtest.grid_too_large); the sweep hash and every child run hash recorded"
+    },
+    "crossSectionalPurgedFolds": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-sectional"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 6 (FC8, 2026-09-04): purged k-fold evaluation of a cross-sectional grid — folds from @totalfinance/risk purgedKFold over the session index (purge gap and embargo included), the grid chooses on the pooled training segments, the choice runs once on the held-out block; training segments left under two sessions are dropped with an input.degenerate warning"
+    },
+    "crossSectionalWalkForward": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-sectional"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 6 (FC8, 2026-09-04): walk-forward evaluation of a cross-sectional grid — on every training span the grid chooses a variation by its selection metric, the choice runs once on the following held-out span, the held-out returns are stitched in order; rolling or anchored, step defaults to the test span; every window's choice is a direct crossSectionalBacktestGrid run and every held-out run a direct crossSectionalBacktest call; bounded by CROSS_SECTIONAL_WINDOW_CEILING (backtest.grid_too_large)"
+    },
+    "crossUnder": {
+      "kind": "function",
+      "entrypoints": [".", "./event-driven"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open",
+        "1": "open"
+      }
+    },
+    "crossUnderSeries": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "describeExecutionPolicy": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the JSON-safe projection of a policy every result carries under assumptions.execution"
+    },
+    "ENVIRONMENT_EPISODE_IDS": {
+      "kind": "value",
+      "entrypoints": ["./environment"],
+      "role": "constant",
+      "note": "Stage 7B.1 slice 3 (AT4, 2026-09-05): Decision 8: the twenty maintained episode ids, in catalogue order"
+    },
+    "environmentEpisode": {
+      "kind": "function",
+      "entrypoints": [".", "./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 3 (AT4, 2026-09-05): one maintained scenario built from its seed — the complete definition, the seed, the session count, and the expectations its suite asserts; twenty ids (regimes, data hazards, lifecycle, margin pressure, multi-currency, model/market disagreement), every row generated from mulberry32"
+    },
+    "equityToReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./vectorized"],
+      "role": "helper"
+    },
+    "eventDriven": {
+      "kind": "function",
+      "entrypoints": [".", "./event-driven"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "execution": {
+      "kind": "object",
+      "entrypoints": ["./execution"],
+      "role": "namespace",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the execution policies — simplified() is the honest default whose label names every member; declared() validates every member under a label the caller signs"
+    },
+    "EXECUTION_RECEIPT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./paper"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): the execution receipt's kind"
+    },
+    "EXECUTION_RECEIPT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./paper"],
+      "role": "constant",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): the execution receipt's schema version"
+    },
+    "execution.declared": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): a declared policy: the given members override the simplified ones, each validated; realism declared"
+    },
+    "execution.simplified": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the honest default policy: bar touch fills, full fills, no spread/impact/latency/borrow, cash account; realism simplified"
+    },
+    "fees": {
+      "kind": "object",
+      "entrypoints": [".", "./costs", "./execution"],
+      "role": "namespace"
+    },
+    "fees.bps": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "fees.fixed": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "fees.none": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "fees.perShare": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "fillModels": {
+      "kind": "object",
+      "entrypoints": ["./execution"],
+      "role": "namespace",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the built-in fill models, one per observation kind"
+    },
+    "fillModels.bar": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the bar touch model — the SimulatedBroker rules verbatim (market at open, market-on-close at close, limit/stop on the range), halts, price limits, participation"
+    },
+    "fillModels.orderBook": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the order-book model — walks the opposite side by level, average price and levels consumed, limits stop the walk"
+    },
+    "fillModels.quote": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the quote model — buy at the ask, sell at the bid, limits when marketable, stops on the touch side, staleness named or refused, locked/crossed at mid or refused"
+    },
+    "fillOrderWithPolicy": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): one order against one observation through a declared execution policy — the fill decision, slippage, half-spread, impact, commission, and the ledger's NormalizedFill; the portfolio engine and the paper broker share this exact arithmetic"
+    },
+    "gtSeries": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "impactModels": {
+      "kind": "object",
+      "entrypoints": ["./execution"],
+      "role": "namespace",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): market-impact models as a fraction of the reference price"
+    },
+    "impactModels.none": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): no impact"
+    },
+    "impactModels.squareRoot": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the square-root law over quantity / average daily volume; no impact without a volume"
+    },
+    "instrumentAdapters": {
+      "kind": "object",
+      "entrypoints": ["./portfolio"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the eight built-in instrument adapters (equity, etf, option, future, fx-forward, crypto-spot, crypto-perpetual, bond), keyed by kind"
+    },
+    "latchSeries": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "latencyModels": {
+      "kind": "object",
+      "entrypoints": ["./execution"],
+      "role": "namespace",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): latency models in observations after submission"
+    },
+    "latencyModels.sessions": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): an integer number of sessions of latency"
+    },
+    "listEnvironmentEpisodes": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 3 (AT4, 2026-09-05): the catalogue at its default seed — id, title, and session count per episode, in catalogue order"
+    },
+    "ltSeries": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "maintenanceMarginBreached": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): whether equity is below the maintenance requirement on the gross notional, with the shortfall"
+    },
+    "MAXIMUM_ENVIRONMENT_STEPS": {
+      "kind": "value",
+      "entrypoints": ["./environment"],
+      "role": "constant",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): Decision 11: the most steps one episode may take (100,000)"
+    },
+    "monteCarloResample": {
+      "kind": "function",
+      "entrypoints": [".", "./tearsheet"],
+      "role": "analysis",
+      "determinism": "seeded",
+      "shape": "report"
+    },
+    "normalizedFillsFromBacktest": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "B6 bridge: a backtest's trades as ledger NormalizedFills (instrumentId = symbol, multiplier and costs carried)"
+    },
+    "normalizedFillFromDecision": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): a filled decision to the portfolio-owned NormalizedFill — the backtest package defines no fill of its own"
+    },
+    "OPTIONS_BOOK_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./options"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 4 (FC8, 2026-09-04): Decision 9: open positions one synchronous options book may hold (10,000)"
+    },
+    "optionsBacktest": {
+      "kind": "function",
+      "entrypoints": ["./options"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_backtest_options_run"],
+      "shape": "report",
+      "note": "Preview P1 (2026-09-03): open legs re-mark from the exact current-snapshot contract quote by default (marking.volatility 'current-quote'); a missing/ambiguous/stale/unpriceable mark refuses (backtest.mark_unavailable) or takes a named, counted fallback; the policy is echoed in assumptions.marking and every trade carries its mark counts and exit volatilities; Stage 4.6 slice 4 (2026-09-04): a position BOOK — several rules hold several trades, pre-trade limits with rows, combo/legged fills, quote freshness, calendars/diagonals leg by leg, split lineage, dividend evidence and early assignment, the surface summary, and the portfolio ledger the equity reconciles to"
+    },
+    "optionsTearSheet": {
+      "kind": "function",
+      "entrypoints": ["./options"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "orderTouchSequence": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the fill sequence of the orders one bar touched under the four ambiguity policies; reject refuses with backtest.ambiguous_intrabar"
+    },
+    "PORTFOLIO_CALENDARS": {
+      "kind": "value",
+      "entrypoints": ["./portfolio"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the calendar names a run may name ('NYSE', 'CBOE', 'ALWAYS_OPEN')"
+    },
+    "PORTFOLIO_INSTRUMENT_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./portfolio"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): Decision 9: instruments one synchronous run may hold (50,000)"
+    },
+    "PORTFOLIO_ROW_CEILING": {
+      "kind": "value",
+      "entrypoints": ["./portfolio"],
+      "role": "constant",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): Decision 9: rows one synchronous run may read per row set (5,000,000)"
+    },
+    "portfolioBacktest": {
+      "kind": "function",
+      "entrypoints": [".", "./portfolio"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_backtest_portfolio_run"],
+      "shape": "report",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the ledger-backed multi-asset simulator — instants from the observations (a calendar keeps sessions), lifecycle facts per adapter, external flows, marks, the declarative model on a schedule (proposePortfolioRebalance) or a direct callback, orders through the execution policy with settlement lags and fill terms, the margin check with forced liquidation, and a valuation mark per date; the equity is the ledger NAV"
+    },
+    "RATIONALE_BYTE_LIMIT": {
+      "kind": "value",
+      "entrypoints": ["./environment"],
+      "role": "constant",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): Decision 6: bytes of an action's rationale the trace keeps (4,096); longer text is truncated with a diagnostic, never refused"
+    },
+    "readBacktestRun": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): Gate B read door + foreign-type refusal + the run-level migration policy under totalfinance.backtest-run:<kind> + report re-validation (the run hash recomputed) + supplied referenced rows verified by hash and restored"
+    },
+    "replayBacktestRun": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): re-issue the run's verb from the stored request (referenced rows hash-verified, live models taken back and verified against their recorded descriptions) and compare the run hash; a run that recorded a caller function refuses by name (artifact.not_replayable)"
+    },
+    "requireAccountingPolicy": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the accounting guard: base currency, opening balances, lot relief, the settlement table"
+    },
+    "requireCreatePaperBrokerInput": {
+      "kind": "function",
+      "entrypoints": ["./paper"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): the broker's construction input in the (functionName, label, value) order"
+    },
+    "requireCrossSectionalBacktestGridRequest": {
+      "kind": "function",
+      "entrypoints": ["./cross-sectional"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): the grid-request guard in the (functionName, label, value) order — axes, paths, values, the ceiling, the selection metric, the hygiene knobs; the base request through the engine's own guard"
+    },
+    "requireCrossSectionalBacktestRequest": {
+      "kind": "function",
+      "entrypoints": ["./cross-sectional"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 2 (FC8, 2026-09-03): the whole-request guard in the (functionName, label, value) order; returns the declared field definitions"
+    },
+    "requireCrossSectionalPurgedFoldsRequest": {
+      "kind": "function",
+      "entrypoints": ["./cross-sectional"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 6 (FC8, 2026-09-04): the purged-folds request guard in the (functionName, label, value) order — the grid through its own guard, folds, embargo, purgeGap"
+    },
+    "requireCrossSectionalWalkForwardRequest": {
+      "kind": "function",
+      "entrypoints": ["./cross-sectional"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 6 (FC8, 2026-09-04): the walk-forward request guard in the (functionName, label, value) order — the grid through its own guard, the span counts, the step, the mode"
+    },
+    "requiredInitialMargin": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): equity a new position requires at entry under the policy"
+    },
+    "requireEnvironmentAction": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): the action guard in the (functionName, label, value) order — hold, or orders with optional cancellations and a rationale; refuses outright for callers who want the teaching error rather than the rejection row step() returns"
+    },
+    "requireEnvironmentEpisodeInput": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 3 (AT4, 2026-09-05): the episode-input guard in the (functionName, label, value) order — the definition, an optional seed, and the actions in order (each through the action guard; at most the episode ceiling)"
+    },
+    "requireEnvironmentLimits": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 2 (AT4, 2026-09-05): the limits guard in the (functionName, label, value) order — FC7's PolicyLimits members verbatim plus allowUndefinedRiskOptions, maximumPositionNotional, and onBreach ('terminate' | 'reject-and-continue')"
+    },
+    "requireEnvironmentOrder": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): one environment order in the (functionName, label, value) order, validated through the execution grammar it extends (requireOrderIntent) — the order id optional, the submission instant stamped by the environment"
+    },
+    "requireExecutionPolicy": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the whole-policy guard every engine applies to what execution.declared assembled"
+    },
+    "requireFeatureRecipes": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 2 (AT4, 2026-09-05): the feature-recipes guard in the (functionName, label, value) order — positive integer lookbacks for close-to-close returns and realized volatility (with an annualization), and the drawdown flag; every recipe reads bars at or before the instant only"
+    },
+    "requireFillContext": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the fill-context guard"
+    },
+    "requireFillDecision": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the fill-decision guard: the closed filled | unfilled union"
+    },
+    "requireInstrumentSpecification": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the instrument guard: kind, currency, multiplier, the terms each kind needs (contract, coupon, forward, roll), the adapter law"
+    },
+    "requireMarginPolicy": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the margin-policy guard"
+    },
+    "requireMarketObservation": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the market-observation guard: the closed union over bar, quote, trade, and order book"
+    },
+    "requireOptionsBacktestConfig": {
+      "kind": "function",
+      "entrypoints": ["./options"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 4 (FC8, 2026-09-04): the options-backtest request guard in the (functionName, label, value) order — the generated closed-request spec plus the hand laws (the iterable chains, the rules and their ids, the book, the limits, the fill and freshness policies, the corporate actions, the dividends)"
+    },
+    "requireOrderIntent": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the order-intent guard (closed keys, side/type enums, prices required by type, finite instants) in the (functionName, label, value) order"
+    },
+    "requirePaperInstrument": {
+      "kind": "function",
+      "entrypoints": ["./paper"],
+      "role": "helper",
+      "note": "Stage 7B.2 slice 3 (AT5, 2026-09-06): an instrument's paper fill terms in the (functionName, label, value) order"
+    },
+    "requirePortfolioBacktestRequest": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the whole-request guard in the (functionName, label, value) order"
+    },
+    "requirePortfolioMarketData": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): the market-data guard: every row set typed and bounded"
+    },
+    "requirePortfolioStepperRequest": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): the stepper request guard in the (functionName, label, value) order — portfolioBacktest's request without a strategy; a strategy member teaches which verb wants it"
+    },
+    "requireRewardComposition": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 2 (AT4, 2026-09-05): the reward-composition guard in the (functionName, label, value) order — finite weights on the eight components, a benchmark with a weight and an instrument, an optional goal callback (which makes the definition non-replayable)"
+    },
+    "requireTradingEnvironmentDefinition": {
+      "kind": "function",
+      "entrypoints": ["./environment"],
+      "role": "helper",
+      "note": "Stage 7B.1 slice 1 (AT4, 2026-09-05): the environment definition guard in the (functionName, label, value) order — the stepper's request plus maximumSteps; a strategy member teaches which verb wants it"
+    },
+    "returnStatistics": {
+      "kind": "function",
+      "entrypoints": [".", "./tearsheet"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "runAgentBench": {
+      "kind": "function",
+      "entrypoints": [".", "./environment"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_backtest_environment_episode"],
+      "shape": "report",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): Agent Bench — a policy over the episode library at every seed; per episode the absolute gates (look-ahead by midpoint perturbation, replay equality through the episode verb, duplicate orders under the retry suite, external-order attempts, reconciliation) with the mask and limit counts, apart from the strategy table (return, volatility, Sharpe, Sortino, drawdown, turnover, cost, exposure, violations); pooled means; no single score by design"
+    },
+    "runEnvironmentEpisode": {
+      "kind": "function",
+      "entrypoints": [".", "./environment"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 7B.1 slice 3 (AT4, 2026-09-05): drive an environment with a recorded action trace from reset to the end — every step's canonical action, reward, and identity, the trace hash, and the engine's own result; refuses when the trace outlives the episode; the `environment` run kind's verb (save/read/replay/compare through @totalfinance/backtest/artifacts)"
+    },
+    "scoreAgentTranscript": {
+      "kind": "function",
+      "entrypoints": [".", "./environment"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 7B.1 slice 4 (AT4, 2026-09-05): a recorded transport transcript scored against what a journey expected — operation selection, first-attempt validity, recovery after a teaching error, argument predicates, numerical parity with a direct call, the refusal expected, traceability to artifacts, calls and bytes against a budget; deterministic"
+    },
+    "SimulatedBroker": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "artifact"
+    },
+    "slippage": {
+      "kind": "object",
+      "entrypoints": [".", "./costs", "./execution"],
+      "role": "namespace"
+    },
+    "slippage.bps": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "slippage.fixed": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "slippage.none": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "slippage.spread": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "cost/broker model factory"
+    },
+    "splitShares": {
+      "kind": "function",
+      "entrypoints": ["./portfolio"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 5 (FC8, 2026-09-04): a split ratio as small positive integers (2 → 2:1, 1.5 → 3:2); an irrational ratio refuses"
+    },
+    "spreadModels": {
+      "kind": "object",
+      "entrypoints": ["./execution"],
+      "role": "namespace",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): half-spread models paid by an aggressor"
+    },
+    "spreadModels.halfSpreadBps": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): a constant half-spread in basis points"
+    },
+    "spreadModels.none": {
+      "kind": "function",
+      "entrypoints": ["./execution"],
+      "role": "artifact",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): no spread"
+    },
+    "tearSheet": {
+      "kind": "function",
+      "entrypoints": [".", "./tearsheet"],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "toEquityPoints": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper"
+    },
+    "vectorized": {
+      "kind": "function",
+      "entrypoints": [".", "./vectorized"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_backtest_vectorized_run"],
+      "shape": "report"
+    },
+    "walkForward": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report"
+    }
+  }
+}

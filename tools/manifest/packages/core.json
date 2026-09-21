@@ -1,0 +1,1194 @@
+{
+  "package": "@totalfinance/core",
+  "domain": "core",
+  "tier": "trusted",
+  "exports": {
+    "__QK_SCHEMA_FACADE__": {
+      "kind": "value",
+      "entrypoints": ["./schema"],
+      "role": "constant"
+    },
+    "addDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "alwaysOpen.addBusinessDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.businessDaysBetween": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.isBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.isHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.isHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.name": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "alwaysOpen.nextBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.previousBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.session": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "alwaysOpen.timezone": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "alwaysOpen.version": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "ANALYSIS_ARTIFACT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "ANALYSIS_ARTIFACT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "applyReportMigrations": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): Gate B's migration policy applied a second time at the REPORT level through the { kind, schemaVersion, report } view — newer refuses, older restores only through the caller's registry under the family-scoped kind, every step echoed (Decision 5)"
+    },
+    "ArbitrageError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "ARTIFACT_WORK_LIMITS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 4 (2026-09-02): Decision 9's bounded-work table (defaults a caller may lower, hard maxima never passed) shared by every fitted-model / research-run adapter"
+    },
+    "artifactReplayParity": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 1 (2026-09-02): byte-exact replay parity between a saved value and its recomputation — identical hashes or the first differing paths (Decision 7)"
+    },
+    "assertFiniteResult": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "assertFiniteValue": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "BarSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "between": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "CANONICAL_DATA_MAX_DEPTH": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the default nesting limit of the bounded stored-data scanner (64 containers)"
+    },
+    "CANONICAL_JSON_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20): the canonical-serialization version"
+    },
+    "canonicalJsonOf": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): canonical JSON v1 — sorted keys, shortest round-trip numbers, non-finite wrapper"
+    },
+    "canonicalStringWorkUnits": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the canonical work cost of one string (1 + ceil(length / 64)) — the scanner's string term, exported so callers size budgets by the same law"
+    },
+    "clamp": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "compareAnalysisArtifacts": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_artifact_compare"],
+      "shape": "report",
+      "note": "Stage 4.5 slice 1 (2026-09-02): structural leaf-by-leaf comparison of two same-type artifacts — every difference named with both values and deltas, added/removed paths, honest truncation, explicit two-sided tolerance only, market-moved and library-version warnings (Decision 6)"
+    },
+    "compareCalculationArtifacts": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Dogfooding adoption comparison: explicit per-side metric paths, units and independent tolerances; exact recorded input/assumption comparison and hash verification. Close values never waive different or absent economic context. Direct SDK only; no implicit transport registration."
+    },
+    "COMPARISON_LIMITS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the default and hard-maximum work caps of compareAnalysisArtifacts / artifactReplayParity (Decision 9)"
+    },
+    "compoundFactor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "compoundingPeriodsPerYear": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC0/FC1: periods-per-year of a discrete InterestCompounding form; null for continuous/simple"
+    },
+    "ConfigurationError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "CONTENT_HASH_PREFIX": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20): 'sha256:'"
+    },
+    "contentHash": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): 'sha256:<hex>' identity over the canonical form"
+    },
+    "CONVENTIONS_VERSION": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "ConvergenceError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "coreSchemas": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "namespace"
+    },
+    "CorporateActionSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "createAnalysisArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Gate B artifact spine (2026-08-20): Law-2 result saved verbatim with content-hash id, inputs hash, createdFrom lineage"
+    },
+    "createArtifactMigrationRegistry": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Gate B artifact spine (2026-08-20): explicit never-silent schema migrations; registry is an argument, never global"
+    },
+    "createMarketSnapshot": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Gate B artifact spine (2026-08-20): versioned immutable market-state envelope, conventions explicit, provenance outside identity"
+    },
+    "createRuleCalendar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "createScenarioSet": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Gate B artifact spine (2026-08-20): named shock/override definitions as pure data, risk's shock vocabulary"
+    },
+    "createTableHandle": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Gate B artifact spine (2026-08-20): large-table reference — contentHash + counts + opaque locator, never inlined rows"
+    },
+    "DataError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "dayOfWeek": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "DEFAULT_COMPOUNDING": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "DEFAULT_DAY_COUNT": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "DEFAULT_DIVIDEND_YIELD": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "DEFAULT_GREEK_UNITS": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "defineCalendar": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "definePricer": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "artifact",
+      "note": "Gate C extension contracts (2026-08-20): structural definition — frozen, bound, capability grammar checked; behavioral proof is validatePricer"
+    },
+    "discountFactor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "DividendSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "easterSunday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "emptyDiagnostics": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ensureEnum": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ensureFinite": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ensureFiniteWhenPresent": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7); the OPTIONAL-field sibling of requireFiniteFields — absent is allowed, present runs the same wrong_type/nan/not_finite ladder"
+    },
+    "ensureKnownKeys": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ensureNonNegative": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ensurePositive": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ErrorCode": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "facade": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "finalizeResult": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "finiteOrNull": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "flattenSummaryParameters": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-03): a validated summary's flat parameter view (arrays become indexed keys) used for named parameter deltas — takes the whole FittedModelSummary through its validator, like every door"
+    },
+    "formatMoney": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "formatOccSymbol": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a parse/quote artifact carries decoration (expiresAt, venue fields); consumed members are laddered",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "formatPercent": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "fromCanonicalJson": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): parse + unwrap the canonical form"
+    },
+    "goodFriday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "InputError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "isAnalysisArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): artifact predicate (structural, no id verification)"
+    },
+    "isTrustworthy": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "C hygiene: converged !== false and no error-severity warning — read from diagnostics"
+    },
+    "isComputed": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isContentHashString": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): hash-string predicate"
+    },
+    "isFiniteNumber": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isFittedModelSummary": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "a predicate over an ARBITRARY value: it answers false for anything malformed and never teaches — the closed-key law lives on requireFittedModelSummary, which it routes through completely",
+      "note": "Stage 4.5 slice 1 (2026-09-02): fitted-model summary predicate routed through the complete validator (never a shallow sniff)"
+    },
+    "isMarketSnapshot": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): snapshot predicate (structural, no id verification)"
+    },
+    "isNonFiniteNumber": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): predicate for the { nonFinite } wrapper"
+    },
+    "isNonNegative": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isoDateToEpochMs": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isPositive": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isQuantError": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isScenarioSet": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): scenario-set predicate"
+    },
+    "isTableHandle": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): handle predicate"
+    },
+    "JSON_SCHEMA_MAX_DEPTH": {
+      "kind": "value",
+      "entrypoints": ["./schema"],
+      "role": "constant",
+      "note": "Stage 7A (2026-09-03): the deepest nesting requireJSONSchema walks before refusing a document as a cycle"
+    },
+    "lastWeekdayOfMonth": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "MARKET_SNAPSHOT_KIND": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "MARKET_SNAPSHOT_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "marketSnapshotContentHash": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): snapshot identity — provenance excluded"
+    },
+    "missingFieldError": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "missingRequirements": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): a runner's pre-flight — every unsatisfied REQUIRED requirement at once"
+    },
+    "nthWeekdayOfMonth": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "observationFor": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): pure lookup by requirement identity"
+    },
+    "observedHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "optionalObservationValue": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): absent optional is undefined; the consuming pricer discloses its default"
+    },
+    "OptionContractSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "optionExpiryToMs": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "OptionQuoteSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "OptionTradeSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "OrderBookLevelSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "OrderBookSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "parseIsoDate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "parseOccSymbol": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "sideOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "B6 one order vocabulary: the side of a signed quantity (zero refused)"
+    },
+    "signOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "B6 one order vocabulary: the sign of a side"
+    },
+    "ORDER_SIDES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "B6 one order vocabulary"
+    },
+    "ORDER_TYPES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "B6 one order vocabulary (kebab-case)"
+    },
+    "TIME_IN_FORCE_VALUES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "B6 one order vocabulary"
+    },
+    "isOccOptionSymbol": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "plausibilityWarnings": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "PostconditionError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "QuantError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "QuoteSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "RateCurvePointSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "RateCurveSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "RawFundamentalsRecordSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "readAnalysisArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "mcpTools": ["totalfinance_artifact_read"],
+      "note": "Gate B artifact spine (2026-08-20): restore + migrate + VERIFY id — a tampered artifact is refused"
+    },
+    "readMarketSnapshot": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): restore + migrate + validate a stored snapshot"
+    },
+    "requireInstantMarketSnapshot": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B guard: an option-pricing consumer refuses a date-granular snapshot (asOfConvention date-midnight-utc) with the fix"
+    },
+    "readScenarioSet": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): restore + migrate + validate a stored scenario set"
+    },
+    "requireArgumentArray": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "requireArgumentObject": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "requireComparisonTolerance": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the explicit two-sided tolerance law (both members finite and ≥ 0, never defaulted) every comparison verb applies"
+    },
+    "requireFiniteFields": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7); the shared 3B.1b enforcement path for a request object's numeric fields — present, a number, finite, each failure with its own code"
+    },
+    "requireFittedModelSummary": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the complete fitted-model summary validator (closed keys at every level, honesty rules: null objective needs a reason, ordered ranges, hash identities) shared by every calibration adapter (Decision 2)"
+    },
+    "requireJSONSchema": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the structural guard for a JSON Schema document (the JSONSchema type this subpath owns) — an operation's or a tool's published output schema is validated once, where it is declared (functionName, field, value: core's guard order; signature-policy row)"
+    },
+    "requirementKey": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): canonical requirement identity (optional excluded) — how runners match and errors name"
+    },
+    "requireObservationValue": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): missing REQUIRED observation throws pricer.requirement_unsatisfied naming the descriptor"
+    },
+    "requireRateCurveData": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 4.5 slice 2 (2026-09-02): the ONE core RateCurve data validator (closed keys, three day counts, compounding, ascending pillars at or after asOf) made public so @totalfinance/fixed-income's yieldCurveFromRateCurve / rateCurveFromYieldCurve prove curve data through the same law the market snapshot applies — no second validator"
+    },
+    "requireRepresentableResult": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Law 7's input-driven twin (2026-08-23 review wave): refuse a computed result finite inputs pushed past IEEE-754 — a teaching overflow refusal, beside assertFiniteValue's library-defect report; the overflow mutant holds the law"
+    },
+    "requireWorkLimit": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the count-safe validator of one Decision 9 limit (safe integer ≥ floor, ≤ the law's hard maximum; undefined takes the default or refuses)"
+    },
+    "residualStatistics": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): count, root-mean-square, and maximum absolute value of a residual list (null statistics when empty) — the one residual statistic every projection reports"
+    },
+    "resolveAsOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "resolveValuationAsOf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "usEquityMarketDateUtcMs": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "usEquityMarketDayIndex": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "usEquitySessionInstant": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "isUsEquityHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "US_EQUITY_HALF_DAY_RULES": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "resolvedExpiry": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "round": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "sameRequirement": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): same kind + subject, optional ignored"
+    },
+    "scanCanonicalData": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "argument 0 is the ARBITRARY stored value under proof — the scanner exists to refuse hostile shapes inside it (accessors, cycles, class instances, symbols, functions) and to measure its cost; the closed-key law lives on argument 1 (the options), which is validated closed",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the bounded stop-at-limit stored-data scanner promoted from @totalfinance/scenarios (one scanner, one Barrier A cost law) — proves behavior-free canonical data without invoking it and refuses before any door allocates"
+    },
+    "SCENARIO_SET_KIND": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "SCENARIO_SET_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "scenarioSetContentHash": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): scenario-set identity — provenance excluded"
+    },
+    "schema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "namespace"
+    },
+    "schema.array": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.boolean": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.enum": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.literal": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.null": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.number": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.object": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.record": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.string": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.union": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "schema.unknown": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "schema",
+      "note": "schema combinator"
+    },
+    "selectQuotePrice": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a parse/quote artifact carries decoration (expiresAt, venue fields); consumed members are laddered",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "seriesFacade": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "sha256Hex": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Gate B artifact spine (2026-08-20): pure-TS synchronous SHA-256 (browser-safe), FIPS-pinned"
+    },
+    "stableSum": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Law 7's order-honest summation (2026-08-23 fourth review): signed addends summed so a REPRESENTABLE total is never lost to left-to-right overflow — non-finite from stableSum means the true total exceeds MAX_VALUE, which is exactly when a refusal is honest"
+    },
+    "suspiciousReturnsWarning": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "TABLE_HANDLE_KIND": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20)"
+    },
+    "TABLE_MEDIA_TYPE_ARROW_RESERVED": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Gate B artifact spine (2026-08-20): Arrow mapping reserved, implemented only with a measured large-table consumer"
+    },
+    "tableHandleForRows": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Stage 4.5 slice 1 (2026-09-02): mints the table handle for a row set under the ONE column law (records → sorted key union; numbers → one value column) with the rows' canonical content hash (Decision 4)"
+    },
+    "toFixedSafe": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "TradeSchema": {
+      "kind": "object",
+      "entrypoints": ["./schema"],
+      "role": "schema"
+    },
+    "UnsupportedError": {
+      "kind": "class",
+      "entrypoints": ["."],
+      "role": "error"
+    },
+    "usEquityCloseUtcMs": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "validate": {
+      "kind": "function",
+      "entrypoints": ["./schema"],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "validateClosedRequest": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "the reusable closed-request validator (spec 3B.1b): generated contract specs, hand-authored teaching"
+    },
+    "validateMarketObservation": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): descriptor + value of that kind's type"
+    },
+    "validateMarketRequirement": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): one typed requirement descriptor — known kind, closed keys, typed subject fields"
+    },
+    "validatePricer": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): the behavioral conformance kit over caller-supplied probes — bidirectional requirement honesty, capability honesty, selection honesty"
+    },
+    "validateResolvedExpiry": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "validateSelectionReport": {
+      "kind": "function",
+      "entrypoints": ["./pricing"],
+      "role": "helper",
+      "note": "Gate C extension contracts (2026-08-20): the inspectable engine-selection grammar (explicit has no candidates; automatic shows its work)"
+    },
+    "verifyReferencedRows": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): caller-supplied rows for a referenced table must hash to the stored handle (artifact.referenced_data_mismatch otherwise) — replay never runs over different data"
+    },
+    "warning": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "WarningCode": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "weekendsOnly": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "namespace"
+    },
+    "weekendsOnly.addBusinessDays": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.businessDaysBetween": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.isBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.isHalfDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.isHoliday": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.name": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "weekendsOnly.nextBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.previousBusinessDay": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.session": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "weekendsOnly.timezone": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "weekendsOnly.version": {
+      "kind": "value",
+      "entrypoints": ["."],
+      "role": "constant"
+    },
+    "wrongShapeError": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "yearFraction": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    },
+    "ymd": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7)"
+    }
+  }
+}

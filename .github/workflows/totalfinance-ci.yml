@@ -1,0 +1,145 @@
+# TotalFinance CI.
+#
+# Until this existed, every gate in the library ran only when a human typed `pnpm run ci`. That is 35
+# contract-conformance gates, the naming gates, the drift and determinism checks and the packed-consumer
+# suite — all of them real, none of them automatic, and a PR could go green in review having never run
+# any of them.
+#
+# It is also why a compiler-version drift went undiagnosed: `typescript` was declared with a caret
+# range, so two checkouts installed different patches and disagreed about a generated artifact neither
+# had edited. One machine cannot find that. A matrix can.
+#
+# The matrix is the point, not decoration:
+#   22.13.x  the MINIMUM this package claims to support (`engines.node`). A claim nothing tested.
+#   24.x     what development happens on.
+#   26.x     current, and where the artifact disagreement was first seen.
+name: TotalFinance CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push supersedes an in-flight run on the same ref; the old answer is about code nobody has now.
+concurrency:
+  group: totalfinance-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: ci (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    # The contract-conformance suite regenerates the enforcement record in-process more than once, and
+    # one generation is ~190s of real library calls. The full run is ~12 minutes on the development
+    # machine and slower on the oldest supported Node, so this is headroom rather than a target — and it
+    # is the real backstop for a hung run, which is why the in-test budgets do not need to be tight.
+    timeout-minutes: 60
+    strategy:
+      # Every version reports. Stopping at the first failure hides whether a break is universal or
+      # version-specific, which is the single most useful thing a matrix can tell you.
+      fail-fast: false
+      matrix:
+        node: ['22.13.0', '24.x', '26.x']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          # Taken from `packageManager` in package.json rather than pinned again here, so the
+          # two cannot disagree.
+          package_json_file: package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      # `--frozen-lockfile` is load-bearing: it is what makes the TypeScript pin actually hold. An
+      # install that may resolve a newer patch is an install that may rewrite a generated artifact.
+      - run: pnpm install --frozen-lockfile
+
+      # `pnpm run ci` is the whole suite: format, lint, typecheck, build, tests with coverage, and the
+      # API report. That includes `tools/packed-consumer.test.ts`, which packs real tarballs, installs
+      # them, and imports them as ESM, CJS, through esbuild and under strict TypeScript resolution — so
+      # the published-consumer experience is covered here rather than in a separate job.
+      # No NODE_OPTIONS here on purpose. The conformance suite needs a larger heap than Node's 4 GB
+      # default — it regenerates the enforcement record in-process more than once — and that requirement
+      # is declared in `vitest.config.ts` (`poolOptions.*.execArgv`), where it reaches the pooled child
+      # that actually runs out. Setting it here as well would make `pnpm run ci` pass in CI and fail on
+      # a contributor's machine, which is how the reviewer hit it.
+      - run: pnpm run ci
+
+  # The release rehearsal (Stage 5A, Decision 9): the dry-run packs the fixed group and writes the hash
+  # manifest, the tarballs are published into a Verdaccio started in this job, and the registry smoke
+  # installs them back from that registry and runs the consumer journeys against the committed
+  # expectations. It proves the publish tooling on every push, so the first time it meets npmjs.org is
+  # not the first time it runs. The @totalfinance scope has no uplink in the rehearsal config: a package the
+  # dry-run forgot cannot be filled in from the real registry.
+  release-rehearsal:
+    name: release rehearsal (local registry)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: dry-run — pack the fixed group and write the hash manifest
+        run: pnpm release:dry-run --skip-ci
+
+      - name: start a local registry
+        run: |
+          mkdir -p release
+          (pnpm dlx verdaccio@6 --config tools/release/verdaccio.yaml --listen 4873 > release/verdaccio.log 2>&1 &)
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:4873/-/ping > /dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo "::error::verdaccio did not start"; cat release/verdaccio.log; exit 1
+
+      - name: publish the tarballs into the local registry (provenance off — a loopback registry cannot attest)
+        run: pnpm release:publish --registry http://localhost:4873
+
+      - name: registry smoke — install from the local registry and run the consumer journeys
+        run: pnpm release:smoke --version "$(node -p "require('./packages/core/package.json').version")" --registry http://localhost:4873
+
+  # Clean-repository generation (Stage 4.7, FC9 Decision 9): the whole regeneration chain runs in its
+  # lawful order on a clean checkout and the job fails if any generated artifact — the signature and
+  # naming inventories, the contracts, the enforcement record, the validation specs, the API reports,
+  # the READMEs, llms.txt, the bundle report, the OpenAPI document, the docs inventory, the field
+  # reference — comes out different from what is committed. A generated file that drifts from its
+  # declarations cannot land unnoticed.
+  regen-check:
+    name: clean-repository generation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm regen:check

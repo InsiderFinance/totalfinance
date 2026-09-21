@@ -1,0 +1,87 @@
+{
+  "name": "@totalfinance/core",
+  "version": "0.0.1",
+  "description": "TotalFinance core: types, conventions, errors, diagnostics, assumptions, and a zero-dependency schema facade.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "quant",
+    "finance",
+    "typescript",
+    "day-count",
+    "occ-symbology",
+    "trading-calendar",
+    "conventions",
+    "schema",
+    "core"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/core#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "schema": [
+        "./dist/schema/index.d.ts"
+      ],
+      "pricing": [
+        "./dist/pricing.d.ts"
+      ],
+      "artifacts": [
+        "./dist/artifacts/index.d.ts"
+      ],
+      "package.json": [
+        "./package.json"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js",
+      "default": "./dist/schema/index.js"
+    },
+    "./pricing": {
+      "types": "./dist/pricing.d.ts",
+      "import": "./dist/pricing.js",
+      "default": "./dist/pricing.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts/index.d.ts",
+      "import": "./dist/artifacts/index.js",
+      "default": "./dist/artifacts/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

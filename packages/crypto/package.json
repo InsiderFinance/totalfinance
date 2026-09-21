@@ -1,0 +1,79 @@
+{
+  "name": "@totalfinance/crypto",
+  "version": "0.0.1",
+  "description": "TotalFinance crypto analytics: perpetual-swap funding, dated-futures basis, cash-and-carry, and the perp-vs-future no-arbitrage carry spread. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "crypto",
+    "finance",
+    "quant",
+    "perpetual",
+    "funding-rate",
+    "basis",
+    "carry",
+    "cash-and-carry",
+    "bitcoin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/crypto"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/crypto#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./carry": {
+      "types": "./dist/carry.d.ts",
+      "import": "./dist/carry.js",
+      "default": "./dist/carry.js"
+    },
+    "./curve": {
+      "types": "./dist/curve.d.ts",
+      "import": "./dist/curve.js",
+      "default": "./dist/curve.js"
+    },
+    "./inverse": {
+      "types": "./dist/inverse.d.ts",
+      "import": "./dist/inverse.js",
+      "default": "./dist/inverse.js"
+    },
+    "./liquidation": {
+      "types": "./dist/liquidation.d.ts",
+      "import": "./dist/liquidation.js",
+      "default": "./dist/liquidation.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

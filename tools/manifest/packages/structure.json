@@ -1,0 +1,58 @@
+{
+  "package": "@totalfinance/structure",
+  "domain": "structure",
+  "tier": "facade",
+  "exports": {
+    "deltaAdjustedPremium": {
+      "kind": "function",
+      "entrypoints": [".", "./flow"],
+      "role": "helper"
+    },
+    "exposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_structure_exposures"],
+      "shape": "report"
+    },
+    "exposureFromGreeks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Supplied-Greek snapshot accounting: explicitly separate GEX/DEX signs, real observation lineage, units, exclusions and duplicate disclosure. No model recomputation, scenario repricing or implied full-market coverage. Direct SDK only."
+    },
+    "ExposureProfile": {
+      "kind": "class",
+      "entrypoints": [".", "./exposure"],
+      "role": "artifact"
+    },
+    "flow": {
+      "kind": "function",
+      "entrypoints": [".", "./flow"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_structure_flow"],
+      "shape": "report",
+      "note": "FlowAnalysis carries assumptions/diagnostics inline with no value nesting (same species as exposure/ExposureProfile)"
+    },
+    "FlowAnalysis": {
+      "kind": "class",
+      "entrypoints": [".", "./flow"],
+      "role": "artifact"
+    },
+    "optionFlowDrift": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "Session-aware observed option-premium drift, not modeled dealer hedging drift; classification coverage bounds are not statistical confidence intervals."
+    },
+    "unusualness": {
+      "kind": "function",
+      "entrypoints": [".", "./flow"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    }
+  }
+}

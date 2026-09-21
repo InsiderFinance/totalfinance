@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "types": []
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.test.ts", "test/**/*"],
+  "references": [
+    { "path": "../backtest/tsconfig.build.json" },
+    { "path": "../calendars/tsconfig.build.json" },
+    { "path": "../core/tsconfig.build.json" },
+    { "path": "../crypto/tsconfig.build.json" },
+    { "path": "../fixed-income/tsconfig.build.json" },
+    { "path": "../math/tsconfig.build.json" },
+    { "path": "../options/tsconfig.build.json" },
+    { "path": "../performance/tsconfig.build.json" },
+    { "path": "../portfolio/tsconfig.build.json" },
+    { "path": "../research/tsconfig.build.json" },
+    { "path": "../risk/tsconfig.build.json" },
+    { "path": "../scenarios/tsconfig.build.json" },
+    { "path": "../strategy/tsconfig.build.json" },
+    { "path": "../structure/tsconfig.build.json" },
+    { "path": "../technical-analysis/tsconfig.build.json" },
+    { "path": "../volatility/tsconfig.build.json" }
+  ]
+}

@@ -1,0 +1,574 @@
+{
+  "package": "@totalfinance/volatility",
+  "domain": "volatility",
+  "tier": "facade",
+  "exports": {
+    "arbitrageReport": {
+      "kind": "function",
+      "entrypoints": [".", "./arbitrage"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "atmTermStructure": {
+      "kind": "function",
+      "entrypoints": [".", "./term"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "atmTotalVariance": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "calendarSkew": {
+      "kind": "function",
+      "entrypoints": [".", "./term"],
+      "hasExplain": true,
+      "role": "helper",
+      "note": "H22 facade (closed 2026-08-19): far minus near ATM skew slope; .explain() discloses both slopes and the canonical log-moneyness step"
+    },
+    "calibrateEssvi": {
+      "kind": "function",
+      "entrypoints": [".", "./essvi"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateEventMove": {
+      "kind": "function",
+      "entrypoints": [".", "./earnings"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateEventVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./earnings"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateHestonSurface": {
+      "kind": "function",
+      "entrypoints": [".", "./heston-surface"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report grammar (assumptions + diagnostics inline) — converted in E5"
+    },
+    "calibrateSabrSmile": {
+      "kind": "function",
+      "entrypoints": [".", "./sabr"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateSsvi": {
+      "kind": "function",
+      "entrypoints": [".", "./ssvi"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateSvi": {
+      "kind": "function",
+      "entrypoints": [".", "./svi"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateVannaVolga": {
+      "kind": "function",
+      "entrypoints": [".", "./vanna-volga"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrateVannaVolga5": {
+      "kind": "function",
+      "entrypoints": [".", "./vanna-volga"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "calibrationWeights": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "checkButterfly": {
+      "kind": "function",
+      "entrypoints": [".", "./arbitrage"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "checkCalendar": {
+      "kind": "function",
+      "entrypoints": [".", "./arbitrage"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "compareFittedModels": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 3 (2026-09-02): same-family typed comparison — named parameter deltas, objective/convergence/residual deltas, arbitrage-status change, market and calibration identity, the structural fit diff, and a shared-grid evaluation difference under a stated placement rule (forecasting families require caller-supplied evaluation inputs)"
+    },
+    "essviArbitrageFree": {
+      "kind": "function",
+      "entrypoints": ["./essvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "essviTotalVariance": {
+      "kind": "function",
+      "entrypoints": ["./essvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "essviVolatility": {
+      "kind": "function",
+      "entrypoints": ["./essvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "estimateVolatilitySpotBeta": {
+      "kind": "function",
+      "entrypoints": [".", "./volatility-spot-beta"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "evaluateFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 3 (2026-09-02): dispatches to the family's direct evaluator with the fit verbatim and every non-default option threaded; values (number | null)[] with per-point reasons; extrapolation outside the stored calibrated range is counted and warned, never silent"
+    },
+    "eventStrippedVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "eventVolatilityAtExpiry": {
+      "kind": "function",
+      "entrypoints": [".", "./earnings"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 2 (2026-09-02): the forward door of calibrateEventVolatility — the additive-event-variance model's ATM volatility at any expiries, measured from the fit's own assumptions.asOf, through the ONE formula behind perExpiry.fittedVolatility (the family evaluator for the event-volatility artifact)"
+    },
+    "eventVolatilityDecomposition": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_volatility_event"],
+      "shape": "report"
+    },
+    "expectedMoveFromImpliedVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_volatility_expected_move"]
+    },
+    "expectedMoveFromStraddle": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "fitGarch": {
+      "kind": "function",
+      "entrypoints": [".", "./forecast"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "fitHarRv": {
+      "kind": "function",
+      "entrypoints": [".", "./forecast"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "FITTED_MODEL_FAMILIES": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 3 (2026-09-02): the frozen, data-only descriptor per family (calibrator, evaluator, model version, warm-startability, referenceable row sets, cost class, required data, supported products) — Program 5's registry metadata without a registry"
+    },
+    "FITTED_MODEL_LIMITS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 3 (2026-09-02): Decision 9 defaults and hard maxima for the fitted-model verbs (embedded bytes/rows, differences, leaves, grid points, restarts, holdout evaluations)"
+    },
+    "fittedModelArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Stage 4.5 slice 3 (2026-09-02): projects a direct calibrator's verbatim result into the fitted-model report (core FittedModelSummary + fit + calibration) and saves it as ONE AnalysisArtifact — identity in inputs, bulk once in result, a declared row set optionally referenced by TableHandle; refuses over-limit embedding with the teaching to reference"
+    },
+    "fittedModelHoldout": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 3 (2026-09-02): deterministic holdout ({ indices } | { everyNth, offset } | time-series { lastCount }) — fits on the retained points through the direct calibrator and reports in-sample and out-of-sample residuals through the direct evaluator"
+    },
+    "fittedModelStability": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 3 (2026-09-02): re-runs the direct calibrator from seeded (mulberry32, seed REQUIRED) relative perturbations of the free start members and reports per-parameter spread, objective spread, convergence count, and a tolerance verdict"
+    },
+    "forwardSkew": {
+      "kind": "function",
+      "entrypoints": [".", "./term"],
+      "hasExplain": true,
+      "role": "helper",
+      "note": "H23 facade (closed 2026-08-19): forward skew; .explain() discloses both up/down total-variance legs and echoes the applied step"
+    },
+    "forwardVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./term"],
+      "hasExplain": true,
+      "role": "helper",
+      "note": "H21 facade (closed 2026-08-19): forward vol between expiries; .explain() discloses near/far total variances and the time gap"
+    },
+    "garchForecast": {
+      "kind": "function",
+      "entrypoints": [".", "./forecast"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "report grammar (assumptions + diagnostics inline) — converted in E5"
+    },
+    "harRvForecast": {
+      "kind": "function",
+      "entrypoints": [".", "./forecast"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "H24 facade (closed 2026-08-19): HAR-RV one-step forecast; .explain() discloses predictors and per-term contributions that sum to the value"
+    },
+    "impliedVolatilityPercentile": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "impliedVolatilityRank": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "impliedVolatilityStatistics": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_volatility_metrics"]
+    },
+    "localVolatilitySurface": {
+      "kind": "function",
+      "entrypoints": [".", "./local-volatility"],
+      "role": "artifact",
+      "note": "surface/cube factory"
+    },
+    "minimumVarianceDelta": {
+      "kind": "function",
+      "entrypoints": [".", "./min-variance-delta"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "observedSkew": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope",
+      "note": "Observed quote/delta skew with actual wing coordinates and explicit unavailable states; distinct from model-fitted skew."
+    },
+    "phiValue": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "prepareSlices": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "probabilityInTheMoney": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_volatility_probability_in_the_money"]
+    },
+    "probabilityOfTouch": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_volatility_probability_of_touch"]
+    },
+    "readFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 3 (2026-09-02): Gate B read door + foreign-type refusal + the caller's registry applied a second time at the REPORT level (family-scoped kind, integer model version) + report re-validation; returns the report with the envelope and both migration echoes"
+    },
+    "realizedImpliedSpread": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "role": "helper",
+      "note": "H25 ratified plain (2026-08-19): named-input scalar; volatility-point basis stated at the head"
+    },
+    "replayFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 3 (2026-09-02): re-issues the direct calibrator from the stored calibration (referenced rows re-verified by hash) and proves byte parity through artifactReplayParity; a library-version difference is disclosed, never refused"
+    },
+    "RISK_NEUTRAL_ESTIMATE": {
+      "kind": "object",
+      "entrypoints": [".", "./estimate"],
+      "role": "namespace"
+    },
+    "riskNeutralDistribution": {
+      "kind": "function",
+      "entrypoints": [".", "./analytics"],
+      "role": "artifact",
+      "note": "constructs a distribution artifact (query methods, like volSurface) — reclassified from analysis in E5"
+    },
+    "riskReversalButterfly": {
+      "kind": "function",
+      "entrypoints": [".", "./risk-reversal"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "sabrBartlettGreeks": {
+      "kind": "function",
+      "entrypoints": [".", "./sabr-delta"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "skew": {
+      "kind": "function",
+      "entrypoints": [".", "./skew"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "smileFromQuotes": {
+      "kind": "function",
+      "entrypoints": [".", "./risk-reversal"],
+      "role": "artifact",
+      "note": "surface/cube factory"
+    },
+    "ssviArbitrageFree": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "ssviSliceW": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "ssviToSVI": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "ssviTotalVariance": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "ssviVolatility": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "stickyRegime": {
+      "kind": "function",
+      "entrypoints": [".", "./sticky-regime"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "SURFACE_MARKET_KEYS": {
+      "kind": "value",
+      "entrypoints": ["./surface"],
+      "role": "constant",
+      "note": "Law 12 allowlist — the documented keys of the adjacent interface, shared across modules"
+    },
+    "SURFACE_SCHEMA_VERSION": {
+      "kind": "value",
+      "entrypoints": [".", "./surface"],
+      "role": "constant"
+    },
+    "surfaceArbitrageReport": {
+      "kind": "function",
+      "entrypoints": [".", "./arbitrage"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "surfaceLocalVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./local-volatility"],
+      "role": "artifact",
+      "note": "constructs a LocalVolSurface artifact (same species as localVolSurface) — reclassified from analysis in E5"
+    },
+    "surfacePCA": {
+      "kind": "function",
+      "entrypoints": [".", "./surface-pca"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "surfacePcaScenarios": {
+      "kind": "function",
+      "entrypoints": [".", "./surface-pca"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "sviButterflyFree": {
+      "kind": "function",
+      "entrypoints": ["./svi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "sviG": {
+      "kind": "function",
+      "entrypoints": ["./svi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "sviMinG": {
+      "kind": "function",
+      "entrypoints": ["./svi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "sviTotalVariance": {
+      "kind": "function",
+      "entrypoints": ["./svi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "sviVolatility": {
+      "kind": "function",
+      "entrypoints": ["./svi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "swaptionCube": {
+      "kind": "function",
+      "entrypoints": [".", "./swaption-cube"],
+      "role": "artifact",
+      "note": "surface/cube factory"
+    },
+    "swaptionCubeVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./swaption-cube"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "tailRiskIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./tail-risk"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "thetaAt": {
+      "kind": "function",
+      "entrypoints": ["./ssvi"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "vannaVolga5Density": {
+      "kind": "function",
+      "entrypoints": ["./vanna-volga"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "vannaVolgaApproximation": {
+      "kind": "function",
+      "entrypoints": ["./vanna-volga"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "vannaVolgaDensity": {
+      "kind": "function",
+      "entrypoints": ["./vanna-volga"],
+      "role": "kernel",
+      "note": "model evaluator (root-flat today — kernels-off-roots ledger)"
+    },
+    "varianceIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./variance-index"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "varianceRiskPremium": {
+      "kind": "function",
+      "entrypoints": [".", "./event"],
+      "role": "helper",
+      "note": "H26 ratified plain (2026-08-19): named-input scalar; annualized-variance basis stated at the head"
+    },
+    "varianceRiskPremiumTermStructure": {
+      "kind": "function",
+      "entrypoints": [".", "./variance-index"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "varianceSwapRate": {
+      "kind": "function",
+      "entrypoints": [".", "./analytics"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "VOLATILITY_FITTED_MODEL_ARTIFACT_TYPE": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 3 (2026-09-02): the artifactType every volatility fitted-model artifact carries ('volatility.fitted-model'); the family lives in the result and in inputs.parameters"
+    },
+    "VOLATILITY_MODEL_FAMILIES": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 3 (2026-09-02): the closed list of the twelve volatility fitted-model families (Decision 2)"
+    },
+    "volatilityCone": {
+      "kind": "function",
+      "entrypoints": [".", "./analytics"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "H27 facade (closed 2026-08-19): realized-vol cone rows; .explain() echoes windows, periodsPerYear and the annualization convention"
+    },
+    "volatilitySurface": {
+      "kind": "function",
+      "entrypoints": [".", "./surface"],
+      "role": "artifact",
+      "mcpTools": ["totalfinance_volatility_surface"],
+      "note": "surface/cube factory"
+    },
+    "VolatilitySurface": {
+      "kind": "class",
+      "entrypoints": [".", "./surface"],
+      "hasStream": true,
+      "role": "artifact"
+    },
+    "warmStartFrom": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 3 (2026-09-02): the family's initialParameters option (or the surface's hestonInitialParameters config) filled from a saved fit; families with no starting point refuse with the reason"
+    }
+  }
+}

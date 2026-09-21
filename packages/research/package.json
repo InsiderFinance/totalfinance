@@ -1,0 +1,79 @@
+{
+  "name": "@totalfinance/research",
+  "version": "0.0.1",
+  "description": "Point-in-time research primitives: universe screening, cross-sectional style factors, and event studies",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "research",
+    "screening",
+    "factor-model",
+    "event-study",
+    "point-in-time",
+    "backtest-hygiene",
+    "quantitative"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/research"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/research#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./screening": {
+      "types": "./dist/screening.d.ts",
+      "import": "./dist/screening.js",
+      "default": "./dist/screening.js"
+    },
+    "./factors": {
+      "types": "./dist/factors.d.ts",
+      "import": "./dist/factors.js",
+      "default": "./dist/factors.js"
+    },
+    "./events": {
+      "types": "./dist/events.d.ts",
+      "import": "./dist/events.js",
+      "default": "./dist/events.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.ts",
+      "import": "./dist/artifacts.js",
+      "default": "./dist/artifacts.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/fundamentals": "workspace:*",
+    "@totalfinance/valuation": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

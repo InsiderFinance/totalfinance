@@ -1,0 +1,825 @@
+/**
+ * `@totalfinance/technical-analysis` — technical indicators with aligned batch output and serializable streaming state.
+ *
+ * Every indicator is both a batch function and a stream:
+ *   - `technicalAnalysis.rsi(closes, { period: 14 })` → aligned `number[]` (NaN warmup),
+ *   - `technicalAnalysis.rsi.explain(closes, { period: 14 })` → `{ value, warmup }`,
+ *   - `technicalAnalysis.rsi.stream({ period: 14 })` → stateful stream (`.next()`, `.toJSON()`),
+ *   - `technicalAnalysis.rsi.fromJSON(snapshot)` → restored stream.
+ *
+ * Batch is derived from the stream, so batch and stream outputs are identical by construction.
+ */
+
+import {
+  dollarBars,
+  dollarImbalanceBars,
+  dollarRunBars,
+  imbalanceBars,
+  kagi,
+  lineBreak,
+  pointAndFigure,
+  rangeBars,
+  renko,
+  runBars,
+  tickBars,
+  volumeBars,
+  volumeImbalanceBars,
+  volumeRunBars,
+} from './chart-types.js';
+import {
+  breakouts,
+  channel,
+  fibExtension,
+  fibRetracement,
+  fractals,
+  gapFill,
+  gaps,
+  lineAt,
+  marketStructure,
+  openingRange,
+  openingRangeBreakout,
+  orbRetest,
+  pivots,
+  previousSessionLevels,
+  sessionRanges,
+  supportResistance,
+  swings,
+  trendlines,
+} from './price-action.js';
+
+export {
+  sma,
+  ema,
+  wma,
+  rma,
+  dema,
+  tema,
+  trima,
+  t3,
+  kama,
+  hma,
+  zlema,
+  alma,
+  vidya,
+  mcginley,
+  superSmoother,
+  vwma,
+  rollingVwap,
+  anchoredVwap,
+  frama,
+  mama,
+} from './moving-averages.js';
+export { rsi } from './rsi.js';
+export { macd } from './macd.js';
+export {
+  roc,
+  rocp,
+  rocr,
+  rocr100,
+  momentum,
+  cmo,
+  apo,
+  ppo,
+  stochRsi,
+  trix,
+  dpo,
+  tsi,
+  kst,
+  connorsRsi,
+  cci,
+  williamsR,
+  awesomeOscillator,
+  ultimateOscillator,
+  fisherTransform,
+  macdExt,
+  macdFix,
+} from './oscillators.js';
+export { bbands } from './bands.js';
+export { atr, stochastic, adx, vwap, obv } from './bars.js';
+export { barsFromColumns, columnsFromBars } from './columns.js';
+export type { BarColumns } from './columns.js';
+
+// The classic TA-Lib / pandas-ta spellings, exported as real bindings so the name a user reaches for
+// first (`import { stoch, willr, bb }`) resolves under ESM instead of failing as "not a function".
+// (String aliases in `./aliases.ts` still power `resolveIndicator(name)`; these are the import ergonomics.)
+export { stochastic as stoch } from './bars.js';
+export { bbands as bb } from './bands.js';
+export { williamsR as willr } from './oscillators.js';
+export {
+  dmi,
+  plusDI,
+  minusDI,
+  plusDM,
+  minusDM,
+  dx,
+  adxr,
+  aroon,
+  aroonOscillator,
+  psar,
+  psarExt,
+  supertrend,
+  ichimoku,
+  vortex,
+  donchianTrend,
+  linreg,
+  linregSlope,
+  linregIntercept,
+  linregAngle,
+  tsf,
+  chandelierExit,
+  zigzag,
+} from './trend.js';
+export {
+  natr,
+  bollingerBandWidth,
+  bollingerPercentB,
+  keltner,
+  donchian,
+  standardDeviation,
+  variance,
+  historicalVolatility,
+  realizedVolatility,
+  relativeVolatilityIndex,
+  parkinson,
+  garmanKlass,
+  rogersSatchell,
+  yangZhang,
+  chaikinVolatility,
+} from './volatility.js';
+export {
+  adLine,
+  chaikinOscillator,
+  chaikinMoneyFlow,
+  mfi,
+  pvt,
+  easeOfMovement,
+  forceIndex,
+  nvi,
+  pvi,
+  klinger,
+  vfi,
+  relativeVolume,
+  cvd,
+  volumeProfile,
+  orderBookImbalance,
+} from './volume.js';
+export {
+  tradeSign,
+  cumulativeVolumeDelta,
+  CvdAggregator,
+  tickVolumeProfile,
+  bookImbalance,
+  microprice,
+  footprintBars,
+} from './microstructure.js';
+export type {
+  Trade,
+  Quote,
+  BookLevel,
+  OrderBook,
+  SignContext,
+  AggressorMethod,
+  CvdResult,
+  CvdParameters,
+  TickVolumeBin,
+  TickVolumeProfile,
+  TickVolumeProfileParameters,
+  BookImbalanceParameters,
+  FootprintBar,
+  FootprintBarParameters,
+} from './microstructure.js';
+export {
+  candleAverage,
+  candleColor,
+  cdlDojiTalib,
+  cdlMarubozuTalib,
+  cdlClosingMarubozuTalib,
+  talibCandle,
+  CANDLE_SETTINGS,
+  TALIB_CANDLE_NAMES,
+} from './candle-talib.js';
+export type { CandleRangeType, CandleSetting, CandleSettingName } from './candle-talib.js';
+export { candlesticks, candlestickNames, detectCandles, CandleView } from './candlesticks.js';
+export {
+  cdlPattern,
+  cdlInside,
+  cdlDoji,
+  cdlZ,
+  CDL_ALIASES,
+  PANDAS_CDL_ALIASES,
+  resolveCandleName,
+} from './candle-aliases.js';
+export {
+  dsp,
+  ebsw,
+  htDcPeriod,
+  htDcPhase,
+  htPhasor,
+  htSine,
+  htTrendMode,
+  htTrendline,
+  msw,
+  HilbertCore,
+} from './cycle.js';
+export {
+  bias,
+  cfo,
+  forecastOscillator,
+  coppock,
+  cti,
+  efficiencyRatio,
+  centerOfGravity,
+  psychologicalLine,
+  slope,
+  pvo,
+  elderRay,
+  brar,
+  kdj,
+  relativeVigorIndex,
+  pgo,
+  trixHistogram,
+  smiErgodic,
+  volumeWeightedMacd,
+  inertia,
+  laguerreRsi,
+  qqe,
+  rsx,
+  schaffTrendCycle,
+  squeeze,
+  squeezePro,
+  projectionOscillator,
+  tdSequential,
+} from './momentum-ext.js';
+export {
+  fwma,
+  sineWma,
+  pascalWma,
+  symmetricWma,
+  jma,
+  holtWinterMovingAverage,
+  rainbowMovingAverage,
+  movingAverageRibbon,
+  gannHighLowActivator,
+  vwapBands,
+  sessionVwap,
+  rollingAnchoredVwap,
+  hl2,
+  hlc3,
+  ohlc4,
+  wcp,
+  zlma,
+} from './overlap-ext.js';
+export {
+  amat,
+  choppinessIndex,
+  chandeKrollStop,
+  centralPivotRange,
+  linearDecay,
+  exponentialDecay,
+  increasing,
+  decreasing,
+  longRun,
+  shortRun,
+  pMax,
+  qstick,
+  ttmTrend,
+  verticalHorizontalFilter,
+  trendSignals,
+  crossSignals,
+} from './trend-ext.js';
+export {
+  aberration,
+  accelerationBands,
+  holtWinterChannel,
+  massIndex,
+  priceDistance,
+  elderThermometer,
+  ulcerIndex,
+  atrBands,
+  percentAtr,
+  volatilityStop,
+} from './volatility-ext.js';
+export {
+  archerObv,
+  marketFacilitationIndex,
+  priceVolume,
+  priceVolumeRank,
+  volumeOscillator,
+  williamsAd,
+  efi,
+  emv,
+  kvo,
+} from './volume-ext.js';
+export {
+  movingAverage,
+  mavp,
+  midpoint,
+  midprice,
+  bop,
+  stochFast,
+  beta,
+  correl,
+  pairs,
+  rollingMin,
+  rollingMax,
+  rollingSum,
+  rollingMinIndex,
+  rollingMaxIndex,
+  rollingMinMax,
+  rollingMinMaxIndex,
+} from './statistics.js';
+export {
+  renko,
+  RenkoStream,
+  lineBreak,
+  LineBreakStream,
+  kagi,
+  pointAndFigure,
+  rangeBars,
+  tickBars,
+  volumeBars,
+  dollarBars,
+  imbalanceBars,
+  volumeImbalanceBars,
+  dollarImbalanceBars,
+  runBars,
+  volumeRunBars,
+  dollarRunBars,
+  aggregators,
+  BarAggregator,
+  InformationBarAggregator,
+} from './chart-types.js';
+export {
+  pivots,
+  swings,
+  fractals,
+  supportResistance,
+  trendlines,
+  channel,
+  lineAt,
+  breakouts,
+  gaps,
+  marketStructure,
+  sessionRanges,
+  openingRange,
+  openingRangeBreakout,
+  orbRetest,
+  fibRetracement,
+  fibExtension,
+  FIB_RETRACEMENT_LEVELS,
+  FIB_EXTENSION_LEVELS,
+  previousSessionLevels,
+  gapFill,
+} from './price-action.js';
+export type { FibLevel, PriorSessionLevel, GapFillEvent } from './price-action.js';
+export {
+  fairValueGaps,
+  orderBlocks,
+  liquiditySweeps,
+  smcSweep,
+  swingTrailingStop,
+  atrTrailingStop,
+  equalHighs,
+  equalLows,
+} from './price-action-ext.js';
+export type {
+  ZonePoint,
+  FvgParameters,
+  OrderBlockParameters,
+  LiquiditySweepParameters,
+  LiquiditySweepPoint,
+  TrailingStopPoint,
+  SwingTrailingStopParameters,
+  AtrTrailingStopParameters,
+  EqualLevelParameters,
+  EqualLevelPoint,
+  SmcSweepParameters,
+} from './price-action-ext.js';
+export { resample, alignToBars } from './resample.js';
+export type {
+  TimeBar,
+  ResampledBar,
+  ResampleInterval,
+  ResampleOptions,
+  AlignOptions,
+} from './resample.js';
+export { divergence, divergences } from './divergence.js';
+export type {
+  DivergenceKind,
+  DivergenceCode,
+  DivergencePoint,
+  DivergenceEvent,
+  DivergenceParameters,
+  SwingWindow,
+} from './divergence.js';
+export { returns, logReturns, rollingVolatility } from './series.js';
+export { drawdown } from './performance-ext.js';
+export {
+  acos,
+  asin,
+  atan,
+  ceil,
+  cos,
+  cosh,
+  exp,
+  floor,
+  ln,
+  log10,
+  sin,
+  sinh,
+  sqrt,
+  tan,
+  tanh,
+  add,
+  sub,
+  mult,
+  div,
+  crossover,
+  crossany,
+} from './math.js';
+export {
+  bar,
+  typicalPrice,
+  medianPrice,
+  weightedClose,
+  averagePrice,
+  realBody,
+  upperShadow,
+  lowerShadow,
+  candleRange,
+  trueRange,
+  gap,
+  heikinAshi,
+} from './transforms.js';
+export { features, FeaturePipeline } from './pipeline.js';
+export {
+  defineIndicator,
+  register,
+  getIndicator,
+  hasIndicator,
+  listIndicators,
+  indicatorCategories,
+  registryMarkdown,
+} from './registry.js';
+export {
+  ALIAS_TABLE,
+  resolveIndicator,
+  resolveIndicatorName,
+  aliasesOf,
+  compatibilityMatrixMarkdown,
+} from './aliases.js';
+export { indicatorWarmup, indicatorWarmups, warmupMarkdown } from './warmup.js';
+export type { WarmupMetadata } from './warmup.js';
+// Targeted discovery (agent-native): one indicator's card + name/alias search with pagination.
+export { describeIndicator, searchIndicators } from './discover.js';
+export type {
+  IndicatorDescription,
+  IndicatorRow,
+  IndicatorMatchEvidence,
+  SearchMatchMode,
+  SearchIndicatorsOptions,
+  SearchIndicatorsResult,
+} from './discover.js';
+export type {
+  IndicatorNumberOutput,
+  IndicatorOutputValue,
+  IndicatorVisualization,
+  IndicatorOutputMetadata,
+} from './output-meta.js';
+export {
+  shift,
+  lag,
+  difference,
+  change,
+  fractionalChange,
+  cumulativeSum,
+  zScore,
+  normalize,
+  rescale,
+  rollingMedian,
+  rollingMeanAbsoluteDeviation,
+  standardError,
+  rollingRank,
+  percentRank,
+  rollingQuantile,
+  winsorize,
+  skew,
+  kurtosis,
+  entropy,
+  covariance,
+  rSquared,
+  rollingRegression,
+  tosStdevAll,
+  barSince,
+  valueWhen,
+  rollingMean,
+  rollingBeta,
+  rollingCorrelation,
+  highestBars,
+  lowestBars,
+} from './features-ext.js';
+export type {
+  RescaleParameters,
+  QuantileParameters,
+  WinsorizeParameters,
+  CovarianceParameters,
+  RegressionPoint,
+  TosStdevAllParameters,
+  TosStdevAllPoint,
+  ValueWhenParameters,
+} from './features-ext.js';
+export {
+  signal,
+  SignalBuilder,
+  RuleBuilder,
+  SignalContext,
+  condition,
+  crossOver,
+  crossUnder,
+  gt,
+  lt,
+  gte,
+  lte,
+  rising,
+  falling,
+  between,
+  not,
+} from './signal.js';
+
+export type {
+  BarInput,
+  IndicatorStream,
+  LiveStream,
+  Indicator,
+  TechnicalAnalysisSnapshot,
+  SnapshotState,
+  TechnicalAnalysisExplain,
+  TechnicalAnalysisAssumptionExtras,
+  IndicatorConventions,
+} from './framework.js';
+export {
+  SCHEMA_VERSION,
+  checkSnapshotVersion,
+  readSnapshot,
+  snapshotOf,
+  streamAsync,
+  collectAsync,
+} from './framework.js';
+export type {
+  PeriodParameters,
+  T3Parameters,
+  KamaParameters,
+  AlmaParameters,
+  VidyaParameters,
+  AnchoredVwapParameters,
+  FramaParameters,
+  MamaParameters,
+  MamaPoint,
+} from './moving-averages.js';
+export type { RsiParameters } from './rsi.js';
+export type { MacdParameters, MacdPoint } from './macd.js';
+export type { BollingerParameters, BollingerPoint } from './bands.js';
+export type {
+  StochasticParameters,
+  StochasticPoint,
+  AdxPoint,
+  // The Wilder family's optional-period input (ATR/ADX/NATR default to 14). Distinct from
+  // moving-averages' `PeriodParameters`, whose period is REQUIRED — and exported because
+  // `FeaturePipeline#atr` and `SignalBuilder#atr` take it, so a consumer must be able to name it.
+  WilderPeriodParameters,
+} from './bars.js';
+export type {
+  RocParameters,
+  ApoParameters,
+  PpoParameters,
+  PpoPoint,
+  StochRsiParameters,
+  StochRsiPoint,
+  TsiParameters,
+  TsiPoint,
+  KstParameters,
+  KstPoint,
+  ConnorsRsiParameters,
+  AwesomeParameters,
+  UltimateParameters,
+  FisherParameters,
+  FisherPoint,
+  MovingAverageType,
+  MacdExtParameters,
+  MacdFixParameters,
+} from './oscillators.js';
+export type {
+  DmiPoint,
+  AroonPoint,
+  PsarParameters,
+  PsarPoint,
+  PsarExtParameters,
+  SupertrendParameters,
+  SupertrendPoint,
+  IchimokuParameters,
+  IchimokuPoint,
+  VortexPoint,
+  LinregPoint,
+  ChandelierParameters,
+  ChandelierPoint,
+  ZigZagParameters,
+  ZigZagPivot,
+} from './trend.js';
+export type {
+  KeltnerParameters,
+  ChannelPoint,
+  StandardDeviationParameters,
+  HistoricalVolatilityParameters,
+  RangeVolatilityParameters,
+  ChaikinVolatilityParameters,
+  RviParameters,
+} from './volatility.js';
+export type {
+  ChaikinOscParameters,
+  EomParameters,
+  KlingerParameters,
+  KlingerPoint,
+  VfiParameters,
+  VolumeProfileParameters,
+  VolumeBin,
+  VolumeProfile,
+  OrderBookLevel,
+} from './volume.js';
+export type { CandleDetector, CandleMatch } from './candlesticks.js';
+export type { CandleZParameters, CandleZPoint } from './candle-aliases.js';
+export type {
+  DspParameters,
+  EbswParameters,
+  HilbertOut,
+  MswParameters,
+  MswPoint,
+  PhasorPoint,
+  SinePoint,
+} from './cycle.js';
+export type {
+  CoppockParameters,
+  PvoParameters,
+  PvoPoint,
+  ElderRayPoint,
+  BrarPoint,
+  KdjParameters,
+  KdjPoint,
+  RvgiPoint,
+  TrixHistogramParameters,
+  TrixHistogramPoint,
+  SmiParameters,
+  SmiPoint,
+  VwMacdParameters,
+  InertiaParameters,
+  LaguerreParameters,
+  QqeParameters,
+  QqePoint,
+  StcParameters,
+  SqueezeParameters,
+  SqueezePoint,
+  SqueezeProParameters,
+  SqueezeProPoint,
+  ProjectionPoint,
+  TdSequentialParameters,
+  TdSequentialPoint,
+} from './momentum-ext.js';
+export type {
+  JmaParameters,
+  HwmaParameters,
+  RainbowParameters,
+  MovingAverageRibbonParameters,
+  GannHiLoPoint,
+  VwapBandsParameters,
+  VwapBandsPoint,
+  SessionVwapParameters,
+  RollingAnchoredVwapParameters,
+  AnchoredVwapPoint,
+} from './overlap-ext.js';
+export type {
+  ChandeKrollStopParameters,
+  ChandeKrollStopPoint,
+  CprPoint,
+  AmatParameters,
+  AmatPoint,
+  TrendTestParameters,
+  PmaxParameters,
+  PmaxPoint,
+  TrendSignalPoint,
+  CrossSignalParameters,
+} from './trend-ext.js';
+export type {
+  AberrationParameters,
+  AberrationPoint,
+  AccelerationBandsParameters,
+  HoltWinterChannelParameters,
+  MassIndexParameters,
+  ElderThermometerParameters,
+  ElderThermometerPoint,
+  AtrBandsParameters,
+  VolatilityStopParameters,
+  VolatilityStopPoint,
+} from './volatility-ext.js';
+export type {
+  ArcherObvParameters,
+  ArcherObvPoint,
+  PriceVolumeParameters,
+  VolumeOscillatorParameters,
+} from './volume-ext.js';
+export type { DrawdownPoint } from './performance-ext.js';
+export type {
+  MovingAverageName,
+  MovingAverageParameters,
+  MavpParameters,
+  Pair,
+  MinMaxPoint,
+  MinMaxIndexPoint,
+} from './statistics.js';
+export type {
+  RenkoParameters,
+  RenkoBrick,
+  LineBreakParameters,
+  LineBreakBar,
+  KagiParameters,
+  KagiSegment,
+  PnfParameters,
+  PnfColumn,
+  RangeBarParameters,
+  CountBarParameters,
+  VolumeBarParameters,
+  DollarBarParameters,
+  InformationBarParameters,
+  AggregateStream,
+} from './chart-types.js';
+export type {
+  PivotMethod,
+  PivotLevels,
+  SwingPoint,
+  Swings,
+  SrLevel,
+  SupportResistance,
+  Line,
+  Gap,
+  SwingLabel,
+  LabeledSwing,
+  StructureEvent,
+  StructureEventType,
+  MarketStructure,
+  SessionRange,
+  OpeningRange,
+} from './price-action.js';
+export type { RollingVolatilityParameters } from './series.js';
+export type { HeikinAshiBar } from './transforms.js';
+export type { Field, FeatureColumn } from './pipeline.js';
+export type {
+  IndicatorInputs,
+  IndicatorCategory,
+  IndicatorMetadata,
+  RegisteredIndicator,
+  IndicatorDefinition,
+} from './registry.js';
+export type { IndicatorAliasRow } from './aliases.js';
+export type { Operand, Condition, SignalEvent, Rule, Term } from './signal.js';
+
+/** Chart-construction group: alternative chart types built from OHLC bars. */
+export const charts = {
+  renko,
+  lineBreak,
+  kagi,
+  pointAndFigure,
+  rangeBars,
+  tickBars,
+  volumeBars,
+  dollarBars,
+  imbalanceBars,
+  volumeImbalanceBars,
+  dollarImbalanceBars,
+  runBars,
+  volumeRunBars,
+  dollarRunBars,
+} as const;
+
+/** Price-action group: swings, structure, ranges, and level detection. */
+export const priceAction = {
+  pivots,
+  swings,
+  fractals,
+  supportResistance,
+  trendlines,
+  channel,
+  lineAt,
+  breakouts,
+  gaps,
+  marketStructure,
+  sessionRanges,
+  openingRange,
+  openingRangeBreakout,
+  orbRetest,
+  fibRetracement,
+  fibExtension,
+  previousSessionLevels,
+  gapFill,
+} as const;
+
+// The eponymous `ta` namespace object was DELETED (P3.3): it duplicated the module's own
+// exports one level down (umbrella users saw `technicalAnalysis.ta`). Use the module namespace instead:
+// `import * as ta from '@totalfinance/technical-analysis'`.

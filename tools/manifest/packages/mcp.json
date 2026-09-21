@@ -1,0 +1,151 @@
+{
+  "package": "@totalfinance/mcp",
+  "domain": "mcp",
+  "tier": "integration",
+  "exports": {
+    "analysisTools": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "artifactPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): adapter over the workflows journey pack of the same name (opt-in)"
+    },
+    "backtestPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "calendarPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "createTotalFinanceMcpServer": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "cryptoPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "defaultPacks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "defaultTools": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "defineTool": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "fixedIncomePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "journeyPacks": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): adapter over the workflows journey pack of the same name (opt-in)"
+    },
+    "optionsPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "performancePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "portfolioPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): adapter over the workflows journey pack of the same name (opt-in)"
+    },
+    "researchPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): adapter over the workflows journey pack of the same name (opt-in)"
+    },
+    "riskPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "scenarioPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 2 (2026-09-03): adapter over the workflows journey pack of the same name (opt-in)"
+    },
+    "strategyPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "structurePack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "technicalAnalysisPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    },
+    "toolNameFor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Pre-publish interface repairs B1 (2026-09-19): the one rule from a dotted operation id to its MCP tool name (dots become underscores); the dotted id stays the identity in _meta, resource URIs, HTTP paths and the CLI"
+    },
+    "toolFromOperation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A (2026-09-03): the adapter from a registry operation to an MCP tool — the server routes its calls through runOperation; MCP owns no schema, budget, seed rule, or effect of it"
+    },
+    "valuationPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 4.7 slice 2 (FC9, 2026-09-04): the company-valuation journey pack — totalfinance.valuation.company (discountedCashFlowFromStatements with an optional sensitivity table), opt-in beside the other journey packs"
+    },
+    "volatilityPack": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "MCP integration (server/pack/tool builders)"
+    }
+  }
+}

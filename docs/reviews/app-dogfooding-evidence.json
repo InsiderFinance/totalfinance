@@ -1,0 +1,1393 @@
+{
+  "evidence": {
+    "appRevision": "b215ca54d958cfe24c8a45cc455d1ed05052f74d",
+    "netDriftRevision": "f09445511a9bcfc0f3de55fb652db250dc4999b8",
+    "asOf": "2026-06-04T15:00:00.000Z",
+    "optionSnapshotSource": "https://www.insiderfinance.io/api/v1/opc (format=json)",
+    "snapshotRows": 196,
+    "snapshotDates": [
+      "2026-06-04T14:34:47.000Z",
+      "2026-06-04T14:35:23.000Z",
+      "2026-06-04T14:35:30.000Z"
+    ],
+    "syntheticChain": true,
+    "node": "v26.5.0"
+  },
+  "priceGrid": {
+    "cases": 162,
+    "maximumAbsolutePerShareDifference": {
+      "price": 0.00008864365921112949,
+      "delta": 6.89248627061545e-8,
+      "gamma": 1.84385839929746e-12,
+      "theta": 8.12899814128798e-9,
+      "vega": 7.57449658550513e-14,
+      "rho": 5.093435140324232e-7
+    }
+  },
+  "impliedVolatility": {
+    "total": 196,
+    "bothConverged": 195,
+    "maxDifference": 0.00002545231358230815,
+    "maxAppResidual": 0.00008992634641202812,
+    "maxFacadeDifference": 0.0003135249277368135,
+    "maxFacadeResidual": 0.0009874372721405678,
+    "maxQuantResidual": 3.2606806144031e-11,
+    "failures": [
+      {
+        "ticker": "SPY",
+        "type": "call",
+        "strike": 645,
+        "expiry": "2026-07-17",
+        "price": 111.5,
+        "appConverged": false,
+        "appReason": "not-bracketed",
+        "quantConverged": false,
+        "quantWarnings": ["implied_volatility.below_intrinsic"],
+        "appVolatility": "NaN",
+        "appFacadeVolatility": 0.151,
+        "quantVolatility": null,
+        "difference": null,
+        "facadeDifference": null,
+        "facadeResidual": null,
+        "appResidual": null,
+        "quantResidual": null
+      }
+    ],
+    "largestDifferences": [
+      {
+        "ticker": "SPY",
+        "type": "put",
+        "strike": 645,
+        "expiry": "2026-06-18",
+        "price": 0.145,
+        "appConverged": true,
+        "quantConverged": true,
+        "quantWarnings": [],
+        "appVolatility": 0.33904141700544344,
+        "appFacadeVolatility": 0.3389638453685775,
+        "quantVolatility": 0.3390159646918611,
+        "difference": 0.00002545231358230815,
+        "facadeDifference": 0.00005211932328363922,
+        "facadeResidual": 0.000186842426506989,
+        "appResidual": 0.00007875513267710521,
+        "quantResidual": 3.1363800445660672e-15
+      },
+      {
+        "ticker": "MSTR",
+        "type": "put",
+        "strike": 139,
+        "expiry": "2026-06-18",
+        "price": 13.825,
+        "appConverged": true,
+        "quantConverged": true,
+        "quantWarnings": [],
+        "appVolatility": 0.7972459411125199,
+        "appFacadeVolatility": 0.7972465376357892,
+        "quantVolatility": 0.797256284588022,
+        "difference": 0.000010343475502105903,
+        "facadeDifference": 0.000009746952232769779,
+        "facadeResidual": 0.00008362423262653351,
+        "appResidual": 0.00008932897291558106,
+        "quantResidual": 3.552713678800501e-15
+      },
+      {
+        "ticker": "MSTR",
+        "type": "call",
+        "strike": 120,
+        "expiry": "2026-06-18",
+        "price": 14.5,
+        "appConverged": true,
+        "quantConverged": true,
+        "quantWarnings": [],
+        "appVolatility": 0.8969053603031689,
+        "appFacadeVolatility": 0.896905882796457,
+        "quantVolatility": 0.8969152243064666,
+        "difference": 0.000009864003297721524,
+        "facadeDifference": 0.000009341510009641674,
+        "facadeResidual": 0.00007286710710729949,
+        "appResidual": 0.00007749908905907432,
+        "quantResidual": 2.842170943040401e-14
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "name": "longCall",
+      "namedBuilderMaximumDifference": 0,
+      "legs": [
+        {
+          "kind": "call",
+          "strike": 100,
+          "premium": 4.505672583047703,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 0,
+      "maxProfit": "Infinity",
+      "maxLoss": -450.5672583047703,
+      "breakevens": [104.5056725830477],
+      "appPnl": -10.15997316952788,
+      "quantPnl": -9.999999999999943,
+      "unalignedDayCountPnlDifference": 0.1599731695279374,
+      "alignedDayCountPnlDifference": -0.00037106348001003653,
+      "appContractValue": 4.404072851352424,
+      "quantEnvelopeValue": -9.999999999999943,
+      "quantCurrentMarketValue": 440.56725830477035,
+      "appProbability": 0.3346478827798589,
+      "quantProbability": {
+        "probabilityOfProfit": 0.33679201525722413,
+        "expectedValue": -7.384571868904111,
+        "riskReward": "Infinity",
+        "probabilityOfTouch": [
+          {
+            "price": 104.5056725830477,
+            "probability": 0.6710400309717985
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    },
+    {
+      "name": "bullCallSpread",
+      "namedBuilderMaximumDifference": 0,
+      "legs": [
+        {
+          "kind": "call",
+          "strike": 100,
+          "premium": 4.505672583047703,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "call",
+          "strike": 110,
+          "premium": 0.8603708426578166,
+          "quantity": -1,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 9.094947017729282e-13,
+      "maxProfit": 635.4698259610113,
+      "maxLoss": -364.53017403898866,
+      "breakevens": [103.64530174038988],
+      "appPnl": -39.23747117009424,
+      "quantPnl": -39.186914830524756,
+      "unalignedDayCountPnlDifference": 0.050556339569482134,
+      "alignedDayCountPnlDifference": -0.0006909724426549246,
+      "appContractValue": 3.2529270286889442,
+      "quantEnvelopeValue": -39.186914830524756,
+      "quantCurrentMarketValue": 325.3432592084639,
+      "appProbability": 0.3642968953874858,
+      "quantProbability": {
+        "probabilityOfProfit": 0.3664976885681248,
+        "expectedValue": -37.2555141275534,
+        "riskReward": 1.7432571326538364,
+        "probabilityOfTouch": [
+          {
+            "price": 103.64530174038988,
+            "probability": 0.7301309296533132
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    },
+    {
+      "name": "bearPutSpread",
+      "namedBuilderMaximumDifference": 0,
+      "legs": [
+        {
+          "kind": "put",
+          "strike": 110,
+          "premium": 10.4112094398642,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "put",
+          "strike": 100,
+          "premium": 3.7155258532353144,
+          "quantity": -1,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 1.0231815394945443e-12,
+      "maxProfit": 330.4316413371125,
+      "maxLoss": -669.5683586628884,
+      "breakevens": [103.30431641337111],
+      "appPnl": -0.7585014300421022,
+      "quantPnl": -0.8130851694746752,
+      "unalignedDayCountPnlDifference": -0.054583739432573,
+      "alignedDayCountPnlDifference": 0.0006909724441896969,
+      "appContractValue": 6.688098572328464,
+      "quantEnvelopeValue": -0.8130851694746752,
+      "quantCurrentMarketValue": 668.7552734934137,
+      "appProbability": 0.6236419097515542,
+      "quantProbability": {
+        "probabilityOfProfit": 0.6214220943173545,
+        "expectedValue": 3.1569814256758644,
+        "riskReward": 0.4934994867394517,
+        "probabilityOfTouch": [
+          {
+            "price": 103.30431641337111,
+            "probability": 0.7541560364838811
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    },
+    {
+      "name": "ironCondor",
+      "namedBuilderMaximumDifference": 2.2737367544323206e-13,
+      "legs": [
+        {
+          "kind": "call",
+          "strike": 105,
+          "premium": 2.145169539225685,
+          "quantity": -1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "call",
+          "strike": 110,
+          "premium": 1.0603708426578167,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "put",
+          "strike": 95,
+          "premium": 1.8347476036468726,
+          "quantity": -1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "put",
+          "strike": 90,
+          "premium": 0.949282556497938,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 9.094947017729282e-13,
+      "maxProfit": 197.02637437168028,
+      "maxLoss": -302.9736256283197,
+      "breakevens": [93.0297362562832, 106.9702637437168],
+      "appPnl": -37.11178934672841,
+      "quantPnl": -37.18318609611535,
+      "unalignedDayCountPnlDifference": -0.07139674938694185,
+      "alignedDayCountPnlDifference": 0.0015834091412045836,
+      "appContractValue": -2.341381637184087,
+      "quantEnvelopeValue": -37.18318609611535,
+      "quantCurrentMarketValue": -234.20956046779563,
+      "appProbability": 0.5012327835306609,
+      "quantProbability": {
+        "probabilityOfProfit": 0.5010206401431432,
+        "expectedValue": -38.57357147195087,
+        "riskReward": 0.6503086661853107,
+        "probabilityOfTouch": [
+          {
+            "price": 93.0297362562832,
+            "probability": 0.481998259232681
+          },
+          {
+            "price": 106.9702637437168,
+            "probability": 0.5158122743003464
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    },
+    {
+      "name": "coveredCall",
+      "rawCompositionError": "strategy: payoff() is single-expiration analytics, but this position spans multiple expiries (a calendar/diagonal). Use value() or scenarioTable() for a time-aware mark-to-market.",
+      "namedBuilderMaximumDifference": 0,
+      "legs": [
+        {
+          "kind": "call",
+          "strike": 105,
+          "premium": 2.145169539225685,
+          "quantity": -1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "stock",
+          "strike": 100,
+          "premium": 100,
+          "quantity": 100,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 0,
+      "maxProfit": 714.5169539225685,
+      "maxLoss": -9785.483046077432,
+      "breakevens": [97.85483046077431],
+      "appPnl": -22.664899511795376,
+      "quantPnl": -22.809915896204984,
+      "unalignedDayCountPnlDifference": -0.14501638440960818,
+      "alignedDayCountPnlDifference": 0.0004475683164244515,
+      "appContractValue": -2.371818534343639,
+      "quantEnvelopeValue": -22.809915896204984,
+      "quantCurrentMarketValue": 9762.673130181227,
+      "appProbability": 0.5832289500642033,
+      "quantProbability": {
+        "probabilityOfProfit": 0.5854373022272861,
+        "expectedValue": 35.146206484790234,
+        "riskReward": 0.07301805649839502,
+        "probabilityOfTouch": [
+          {
+            "price": 97.85483046077431,
+            "probability": 0.8325924350155057
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    },
+    {
+      "name": "straddle",
+      "namedBuilderMaximumDifference": 0,
+      "legs": [
+        {
+          "kind": "call",
+          "strike": 100,
+          "premium": 4.505672583047703,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        },
+        {
+          "kind": "put",
+          "strike": 100,
+          "premium": 3.9155258532353145,
+          "quantity": 1,
+          "expiry": "2026-07-17"
+        }
+      ],
+      "terminalMaxError": 9.094947017729282e-13,
+      "maxProfit": "Infinity",
+      "maxLoss": -842.1198436283017,
+      "breakevens": [91.57880156371698, 108.42119843628302],
+      "appPnl": -20.279672340409505,
+      "quantPnl": -20.000000000000682,
+      "unalignedDayCountPnlDifference": 0.2796723404088226,
+      "alignedDayCountPnlDifference": -0.0007421269622369664,
+      "appContractValue": 8.218401712878922,
+      "quantEnvelopeValue": -20.000000000000682,
+      "quantCurrentMarketValue": 822.119843628301,
+      "appProbability": 0.4135912360406135,
+      "quantProbability": {
+        "probabilityOfProfit": 0.413850980673933,
+        "expectedValue": -15.119484424623808,
+        "riskReward": "Infinity",
+        "probabilityOfTouch": [
+          {
+            "price": 91.57880156371698,
+            "probability": 0.3921393450119434
+          },
+          {
+            "price": 108.42119843628302,
+            "probability": 0.4353865851006973
+          }
+        ],
+        "assumptions": {
+          "conventionsVersion": "0.0.1",
+          "dayCount": "ACT/365F",
+          "asOf": 1780585200000,
+          "timeToExpiryYears": 0.11837899543378996,
+          "marketSource": "merged",
+          "probabilityModel": {
+            "measure": "riskNeutral",
+            "drift": 0.05,
+            "volatility": 0.3,
+            "volatilityModel": "lognormal",
+            "timeToExpiryYears": 0.11837899543378996
+          }
+        }
+      }
+    }
+  ],
+  "libraryNamedStrategyCount": 58,
+  "appNamedStrategyCount": 58,
+  "calendar": {
+    "appPnl": 156.6500730949926,
+    "quantPnl": 156.77816559248328,
+    "calendarPayoffError": "strategy: payoff() is single-expiration analytics, but this position spans multiple expiries (a calendar/diagonal). Use value() or scenarioTable() for a time-aware mark-to-market.",
+    "remainingLegMark": [0, 356.7781655924833]
+  },
+  "scaledStockStrategies": {
+    "app": [
+      {
+        "name": "Collar",
+        "slug": "collar",
+        "requestedUnits": 2,
+        "actualShares": 100,
+        "optionContracts": [2, -2]
+      },
+      {
+        "name": "Covered Call",
+        "slug": "covered-call",
+        "requestedUnits": 2,
+        "actualShares": 100,
+        "optionContracts": [-2]
+      },
+      {
+        "name": "Covered Short Straddle",
+        "slug": "covered-short-straddle",
+        "requestedUnits": 2,
+        "actualShares": 100,
+        "optionContracts": [-2, -2]
+      },
+      {
+        "name": "Covered Short Strangle",
+        "slug": "covered-short-strangle",
+        "requestedUnits": 2,
+        "actualShares": 100,
+        "optionContracts": [-2, -2]
+      },
+      {
+        "name": "Protective Put",
+        "slug": "protective-put",
+        "requestedUnits": 2,
+        "actualShares": 100,
+        "optionContracts": [2]
+      }
+    ],
+    "quantCoveredCall": [
+      {
+        "kind": "stock",
+        "strike": 0,
+        "premium": 100,
+        "quantity": 200,
+        "expiry": "2026-07-17"
+      },
+      {
+        "kind": "call",
+        "strike": 105,
+        "quantity": -2,
+        "premium": 2,
+        "expiry": "2026-07-17"
+      }
+    ]
+  },
+  "boundaryCases": {
+    "twentySecondsToExpiry": {
+      "app": 0,
+      "quant": 0.009529421667849647
+    },
+    "zeroCostProfitPercent": "Infinity"
+  },
+  "exposure": {
+    "app": {
+      "netGEX": 389380.871726976,
+      "totalGEX": 3485721.1746941805,
+      "netDEX": 14263332.762667492,
+      "zeroGamma": 103.27737921994945,
+      "walls": {
+        "callWall": null,
+        "putWall": {
+          "strike": 97.5,
+          "gex": -7151.2473800213775,
+          "openInterest": 220
+        }
+      }
+    },
+    "quant": {
+      "netGEX": 389380.8717269758,
+      "grossGEX": 3485721.1746941805,
+      "netDEX": 90278689.33991335,
+      "levels": {
+        "zeroGamma": 103.27417198893728,
+        "gammaFlips": [103.27417198893728],
+        "gammaRegime": "positive",
+        "callWall": 95,
+        "putWall": 105,
+        "maxGammaStrike": 95,
+        "minGammaStrike": 105,
+        "maxPain": 95,
+        "largestCallOpenInterest": 95,
+        "largestPutOpenInterest": 105,
+        "vannaWall": 95,
+        "charmWall": 105,
+        "pinRisk": {
+          "strike": 95,
+          "atRisk": false
+        },
+        "zeroDaysToExpiryWall": null,
+        "weeklyOpexWall": 95,
+        "monthlyOpexWall": 95
+      },
+      "netDrift": {
+        "gammaRegime": "positive",
+        "zeroGamma": 103.27417198893728,
+        "distanceToZeroGamma": 0.03274171988937283,
+        "bias": "pin",
+        "charmFlowPerDay": 146476.0025088538,
+        "vannaFlowPerVolatilityPoint": -436485.2169877368
+      }
+    },
+    "deltaSeparateConvention": 14263332.76266749,
+    "simulation": {
+      "relativeIvAdjustment": 0.5,
+      "simulatedNetGEX": 281647.18187931343,
+      "returnedZeroGamma": 103.27737921994945,
+      "rootFromShockedSmile": 107.48667839123502
+    }
+  },
+  "skew": {
+    "app": {
+      "expiry": "2026-07-17T06:00:00.000Z",
+      "daysToExpiry": 43,
+      "contractCount": 66,
+      "atmIvPct": 30,
+      "atmStrike": 100,
+      "rr25Pts": 2.500000000000002,
+      "put25IvPct": 31,
+      "call25IvPct": 28.499999999999996,
+      "put25Strike": 95,
+      "call25Strike": 107.5,
+      "bf25Pts": -0.2500000000000002,
+      "rr10Pts": 5.499999999999999,
+      "put10Strike": 87.5,
+      "call10Strike": 115,
+      "skewSlopePtsPer1Pct": -0.20000000000000026,
+      "smile": [
+        {
+          "strike": 60,
+          "moneyness": -0.4,
+          "callIvPct": 38,
+          "putIvPct": 38,
+          "otmIvPct": 38,
+          "ivVsAtmPts": 8.000000000000002,
+          "callDelta": 0.9999706178050995,
+          "putDelta": -0.00002938219490046534,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 62.5,
+          "moneyness": -0.375,
+          "callIvPct": 37.5,
+          "putIvPct": 37.5,
+          "otmIvPct": 37.5,
+          "ivVsAtmPts": 7.500000000000001,
+          "callDelta": 0.9999126917298583,
+          "putDelta": -0.0000873082701416824,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 65,
+          "moneyness": -0.35,
+          "callIvPct": 37,
+          "putIvPct": 37,
+          "otmIvPct": 37,
+          "ivVsAtmPts": 7.000000000000001,
+          "callDelta": 0.9997621341258278,
+          "putDelta": -0.00023786587417217437,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 67.5,
+          "moneyness": -0.32499999999999996,
+          "callIvPct": 36.5,
+          "putIvPct": 36.5,
+          "otmIvPct": 36.5,
+          "ivVsAtmPts": 6.5,
+          "callDelta": 0.9994016628552546,
+          "putDelta": -0.0005983371447454135,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 70,
+          "moneyness": -0.30000000000000004,
+          "callIvPct": 36,
+          "putIvPct": 36,
+          "otmIvPct": 36,
+          "ivVsAtmPts": 6,
+          "callDelta": 0.9986020123547413,
+          "putDelta": -0.0013979876452586398,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 72.5,
+          "moneyness": -0.275,
+          "callIvPct": 35.5,
+          "putIvPct": 35.5,
+          "otmIvPct": 35.5,
+          "ivVsAtmPts": 5.499999999999999,
+          "callDelta": 0.9969503388376844,
+          "putDelta": -0.003049661162315593,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 75,
+          "moneyness": -0.25,
+          "callIvPct": 35,
+          "putIvPct": 35,
+          "otmIvPct": 35,
+          "ivVsAtmPts": 4.999999999999999,
+          "callDelta": 0.9937607327944091,
+          "putDelta": -0.006239267205590893,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 77.5,
+          "moneyness": -0.22499999999999998,
+          "callIvPct": 34.5,
+          "putIvPct": 34.5,
+          "otmIvPct": 34.5,
+          "ivVsAtmPts": 4.499999999999998,
+          "callDelta": 0.9879819562639894,
+          "putDelta": -0.012018043736010528,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 80,
+          "moneyness": -0.19999999999999996,
+          "callIvPct": 34,
+          "putIvPct": 34,
+          "otmIvPct": 34,
+          "ivVsAtmPts": 3.9999999999999982,
+          "callDelta": 0.9781315539714573,
+          "putDelta": -0.02186844602854264,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 82.5,
+          "moneyness": -0.17500000000000004,
+          "callIvPct": 33.5,
+          "putIvPct": 33.5,
+          "otmIvPct": 33.5,
+          "ivVsAtmPts": 3.4999999999999973,
+          "callDelta": 0.9622976766080725,
+          "putDelta": -0.03770232339192749,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 85,
+          "moneyness": -0.15000000000000002,
+          "callIvPct": 32.99999999999999,
+          "putIvPct": 32.99999999999999,
+          "otmIvPct": 32.99999999999999,
+          "ivVsAtmPts": 2.9999999999999973,
+          "callDelta": 0.9382531561789534,
+          "putDelta": -0.061746843821046574,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 87.5,
+          "moneyness": -0.125,
+          "callIvPct": 32.5,
+          "putIvPct": 32.5,
+          "otmIvPct": 32.5,
+          "ivVsAtmPts": 2.500000000000002,
+          "callDelta": 0.9037131857528731,
+          "putDelta": -0.09628681424712698,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 90,
+          "moneyness": -0.09999999999999998,
+          "callIvPct": 32,
+          "putIvPct": 32,
+          "otmIvPct": 32,
+          "ivVsAtmPts": 2.0000000000000018,
+          "callDelta": 0.8567345387976588,
+          "putDelta": -0.14326546120234115,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 92.5,
+          "moneyness": -0.07499999999999996,
+          "callIvPct": 31.5,
+          "putIvPct": 31.5,
+          "otmIvPct": 31.5,
+          "ivVsAtmPts": 1.5000000000000013,
+          "callDelta": 0.7962044375691629,
+          "putDelta": -0.20379556243083705,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 95,
+          "moneyness": -0.050000000000000044,
+          "callIvPct": 31,
+          "putIvPct": 31,
+          "otmIvPct": 31,
+          "ivVsAtmPts": 1.0000000000000009,
+          "callDelta": 0.7223145500031832,
+          "putDelta": -0.27768544999681677,
+          "callOpenInterest": 5000,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 97.5,
+          "moneyness": -0.025000000000000022,
+          "callIvPct": 30.5,
+          "putIvPct": 30.5,
+          "otmIvPct": 30.5,
+          "ivVsAtmPts": 0.5000000000000004,
+          "callDelta": 0.6368813912650113,
+          "putDelta": -0.36311860873498875,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 100,
+          "moneyness": 0,
+          "callIvPct": 30,
+          "putIvPct": 30,
+          "otmIvPct": 30,
+          "ivVsAtmPts": 0,
+          "callDelta": 0.5433801635794994,
+          "putDelta": -0.45661983642050064,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 102.5,
+          "moneyness": 0.02499999999999991,
+          "callIvPct": 29.5,
+          "putIvPct": 29.5,
+          "otmIvPct": 29.5,
+          "ivVsAtmPts": -0.5000000000000004,
+          "callDelta": 0.4466159534053022,
+          "putDelta": -0.5533840465946978,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 105,
+          "moneyness": 0.050000000000000044,
+          "callIvPct": 28.999999999999996,
+          "putIvPct": 28.999999999999996,
+          "otmIvPct": 28.999999999999996,
+          "ivVsAtmPts": -1.0000000000000009,
+          "callDelta": 0.35205569409776905,
+          "putDelta": -0.647944305902231,
+          "callOpenInterest": 100,
+          "putOpenInterest": 3000
+        },
+        {
+          "strike": 107.5,
+          "moneyness": 0.07499999999999996,
+          "callIvPct": 28.499999999999996,
+          "putIvPct": 28.499999999999996,
+          "otmIvPct": 28.499999999999996,
+          "ivVsAtmPts": -1.5000000000000013,
+          "callDelta": 0.26495607326928655,
+          "putDelta": -0.7350439267307134,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 110,
+          "moneyness": 0.10000000000000009,
+          "callIvPct": 27.999999999999996,
+          "putIvPct": 27.999999999999996,
+          "otmIvPct": 27.999999999999996,
+          "ivVsAtmPts": -2.0000000000000018,
+          "callDelta": 0.18950339415252335,
+          "putDelta": -0.8104966058474766,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 112.5,
+          "moneyness": 0.125,
+          "callIvPct": 27.499999999999996,
+          "putIvPct": 27.499999999999996,
+          "otmIvPct": 27.499999999999996,
+          "ivVsAtmPts": -2.500000000000002,
+          "callDelta": 0.12819346885678848,
+          "putDelta": -0.8718065311432115,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 115,
+          "moneyness": 0.1499999999999999,
+          "callIvPct": 27,
+          "putIvPct": 27,
+          "otmIvPct": 27,
+          "ivVsAtmPts": -2.9999999999999973,
+          "callDelta": 0.0816103148902941,
+          "putDelta": -0.9183896851097059,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 117.5,
+          "moneyness": 0.17500000000000004,
+          "callIvPct": 26.5,
+          "putIvPct": 26.5,
+          "otmIvPct": 26.5,
+          "ivVsAtmPts": -3.4999999999999973,
+          "callDelta": 0.04863451952485646,
+          "putDelta": -0.9513654804751436,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 120,
+          "moneyness": 0.19999999999999996,
+          "callIvPct": 26,
+          "putIvPct": 26,
+          "otmIvPct": 26,
+          "ivVsAtmPts": -3.9999999999999982,
+          "callDelta": 0.02697643718658079,
+          "putDelta": -0.9730235628134192,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 122.5,
+          "moneyness": 0.2250000000000001,
+          "callIvPct": 25.5,
+          "putIvPct": 25.5,
+          "otmIvPct": 25.5,
+          "ivVsAtmPts": -4.499999999999998,
+          "callDelta": 0.013841283497631,
+          "putDelta": -0.986158716502369,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 125,
+          "moneyness": 0.25,
+          "callIvPct": 25,
+          "putIvPct": 25,
+          "otmIvPct": 25,
+          "ivVsAtmPts": -4.999999999999999,
+          "callDelta": 0.006525017934713957,
+          "putDelta": -0.9934749820652861,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 127.5,
+          "moneyness": 0.2749999999999999,
+          "callIvPct": 24.5,
+          "putIvPct": 24.5,
+          "otmIvPct": 24.5,
+          "ivVsAtmPts": -5.499999999999999,
+          "callDelta": 0.002805227612796268,
+          "putDelta": -0.9971947723872038,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 130,
+          "moneyness": 0.30000000000000004,
+          "callIvPct": 24,
+          "putIvPct": 24,
+          "otmIvPct": 24,
+          "ivVsAtmPts": -6,
+          "callDelta": 0.0010908365830056897,
+          "putDelta": -0.9989091634169943,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 132.5,
+          "moneyness": 0.32499999999999996,
+          "callIvPct": 23.5,
+          "putIvPct": 23.5,
+          "otmIvPct": 23.5,
+          "ivVsAtmPts": -6.5,
+          "callDelta": 0.00038017422978316515,
+          "putDelta": -0.9996198257702168,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 135,
+          "moneyness": 0.3500000000000001,
+          "callIvPct": 23,
+          "putIvPct": 23,
+          "otmIvPct": 23,
+          "ivVsAtmPts": -7.000000000000001,
+          "callDelta": 0.00011754489217632377,
+          "putDelta": -0.9998824551078237,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 137.5,
+          "moneyness": 0.375,
+          "callIvPct": 22.499999999999996,
+          "putIvPct": 22.499999999999996,
+          "otmIvPct": 22.499999999999996,
+          "ivVsAtmPts": -7.500000000000001,
+          "callDelta": 0.000031875729529023436,
+          "putDelta": -0.999968124270471,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 140,
+          "moneyness": 0.3999999999999999,
+          "callIvPct": 21.999999999999996,
+          "putIvPct": 21.999999999999996,
+          "otmIvPct": 21.999999999999996,
+          "ivVsAtmPts": -8.000000000000002,
+          "callDelta": 0.000007484778660878875,
+          "putDelta": -0.9999925152213391,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        }
+      ],
+      "termSlopePts": null,
+      "nextExpiry": null,
+      "expiries": [
+        {
+          "expiry": "2026-07-17T06:00:00.000Z",
+          "daysToExpiry": 43,
+          "contractCount": 66,
+          "atmIvPct": 30,
+          "atmStrike": 100,
+          "rr25Pts": 2.500000000000002,
+          "put25IvPct": 31,
+          "call25IvPct": 28.499999999999996,
+          "put25Strike": 95,
+          "call25Strike": 107.5,
+          "bf25Pts": -0.2500000000000002,
+          "rr10Pts": 5.499999999999999,
+          "put10Strike": 87.5,
+          "call10Strike": 115,
+          "skewSlopePtsPer1Pct": -0.20000000000000026
+        }
+      ]
+    },
+    "quant": {
+      "value": {
+        "expiry": "2026-07-17",
+        "timeToExpiryYears": 0.11837899543378996,
+        "forward": 100.59365013668054,
+        "atmImpliedVolatility": 0.29881269972663893,
+        "put10DeltaImpliedVolatility": 0.32460480069206626,
+        "put25DeltaImpliedVolatility": 0.3118734261824458,
+        "call25DeltaImpliedVolatility": 0.2840089103896402,
+        "call10DeltaImpliedVolatility": 0.2719738557336557,
+        "riskReversal25Delta": 0.027864515792805578,
+        "riskReversal10Delta": 0.052630944958410586,
+        "butterfly25Delta": -0.0008715314405959296,
+        "butterfly10Delta": -0.0005233715137779593,
+        "putSkew": 0.01306072645580686,
+        "callSkew": -0.014803789336998718,
+        "skewSlope": -0.20127113879427116,
+        "smileCurvature": -0.20122921778726874,
+        "wingSteepness": 0.0006963198536359405
+      },
+      "assumptions": {
+        "conventionsVersion": "0.0.1",
+        "dayCount": "ACT/365F",
+        "compounding": "continuous",
+        "asOf": 1780585200000,
+        "model": "vol-surface:interpolated",
+        "timeToExpiryYears": 0.11837899543378996
+      },
+      "diagnostics": {
+        "engine": "vol-skew",
+        "method": "smile-delta-interpolation",
+        "converged": true,
+        "warnings": []
+      }
+    },
+    "narrowApp": {
+      "expiry": "2026-07-17T06:00:00.000Z",
+      "daysToExpiry": 43,
+      "contractCount": 10,
+      "atmIvPct": 30,
+      "atmStrike": 100,
+      "rr25Pts": 2.0000000000000018,
+      "put25IvPct": 31,
+      "call25IvPct": 28.999999999999996,
+      "put25Strike": 95,
+      "call25Strike": 105,
+      "bf25Pts": 0,
+      "rr10Pts": null,
+      "put10Strike": null,
+      "call10Strike": null,
+      "skewSlopePtsPer1Pct": -0.20000000000000018,
+      "smile": [
+        {
+          "strike": 95,
+          "moneyness": -0.050000000000000044,
+          "callIvPct": 31,
+          "putIvPct": 31,
+          "otmIvPct": 31,
+          "ivVsAtmPts": 1.0000000000000009,
+          "callDelta": 0.7223145500031832,
+          "putDelta": -0.27768544999681677,
+          "callOpenInterest": 5000,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 97.5,
+          "moneyness": -0.025000000000000022,
+          "callIvPct": 30.5,
+          "putIvPct": 30.5,
+          "otmIvPct": 30.5,
+          "ivVsAtmPts": 0.5000000000000004,
+          "callDelta": 0.6368813912650113,
+          "putDelta": -0.36311860873498875,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 100,
+          "moneyness": 0,
+          "callIvPct": 30,
+          "putIvPct": 30,
+          "otmIvPct": 30,
+          "ivVsAtmPts": 0,
+          "callDelta": 0.5433801635794994,
+          "putDelta": -0.45661983642050064,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 102.5,
+          "moneyness": 0.02499999999999991,
+          "callIvPct": 29.5,
+          "putIvPct": 29.5,
+          "otmIvPct": 29.5,
+          "ivVsAtmPts": -0.5000000000000004,
+          "callDelta": 0.4466159534053022,
+          "putDelta": -0.5533840465946978,
+          "callOpenInterest": 100,
+          "putOpenInterest": 120
+        },
+        {
+          "strike": 105,
+          "moneyness": 0.050000000000000044,
+          "callIvPct": 28.999999999999996,
+          "putIvPct": 28.999999999999996,
+          "otmIvPct": 28.999999999999996,
+          "ivVsAtmPts": -1.0000000000000009,
+          "callDelta": 0.35205569409776905,
+          "putDelta": -0.647944305902231,
+          "callOpenInterest": 100,
+          "putOpenInterest": 3000
+        }
+      ],
+      "termSlopePts": null,
+      "nextExpiry": null,
+      "expiries": [
+        {
+          "expiry": "2026-07-17T06:00:00.000Z",
+          "daysToExpiry": 43,
+          "contractCount": 10,
+          "atmIvPct": 30,
+          "atmStrike": 100,
+          "rr25Pts": 2.0000000000000018,
+          "put25IvPct": 31,
+          "call25IvPct": 28.999999999999996,
+          "put25Strike": 95,
+          "call25Strike": 105,
+          "bf25Pts": 0,
+          "rr10Pts": null,
+          "put10Strike": null,
+          "call10Strike": null,
+          "skewSlopePtsPer1Pct": -0.20000000000000018
+        }
+      ]
+    },
+    "narrowQuant": {
+      "value": {
+        "expiry": "2026-07-17",
+        "timeToExpiryYears": 0.11837899543378996,
+        "forward": 100.59365013668054,
+        "atmImpliedVolatility": 0.29881269972663893,
+        "put10DeltaImpliedVolatility": 0.31,
+        "put25DeltaImpliedVolatility": 0.31,
+        "call25DeltaImpliedVolatility": 0.29,
+        "call10DeltaImpliedVolatility": 0.29,
+        "riskReversal25Delta": 0.020000000000000018,
+        "riskReversal10Delta": 0.020000000000000018,
+        "butterfly25Delta": 0.0011873002733610583,
+        "butterfly10Delta": 0.0011873002733610583,
+        "putSkew": 0.011187300273361067,
+        "callSkew": -0.00881269972663895,
+        "skewSlope": -0.18624720144118423,
+        "smileCurvature": 0.3997282763362086,
+        "wingSteepness": 0
+      },
+      "assumptions": {
+        "conventionsVersion": "0.0.1",
+        "dayCount": "ACT/365F",
+        "compounding": "continuous",
+        "asOf": 1780585200000,
+        "model": "vol-surface:interpolated",
+        "timeToExpiryYears": 0.11837899543378996
+      },
+      "diagnostics": {
+        "engine": "vol-skew",
+        "method": "smile-delta-interpolation",
+        "converged": true,
+        "warnings": [
+          {
+            "code": "volatility.skew_delta_extrapolated",
+            "message": "p10 delta point (call-delta 0.900) is outside the fitted delta range [0.352, 0.722].",
+            "severity": "warn",
+            "context": {
+              "label": "p10",
+              "target": 0.9,
+              "min": 0.35205569409776905,
+              "max": 0.7223145500031832
+            }
+          },
+          {
+            "code": "volatility.skew_delta_extrapolated",
+            "message": "p25 delta point (call-delta 0.750) is outside the fitted delta range [0.352, 0.722].",
+            "severity": "warn",
+            "context": {
+              "label": "p25",
+              "target": 0.75,
+              "min": 0.35205569409776905,
+              "max": 0.7223145500031832
+            }
+          },
+          {
+            "code": "volatility.skew_delta_extrapolated",
+            "message": "c25 delta point (call-delta 0.250) is outside the fitted delta range [0.352, 0.722].",
+            "severity": "warn",
+            "context": {
+              "label": "c25",
+              "target": 0.25,
+              "min": 0.35205569409776905,
+              "max": 0.7223145500031832
+            }
+          },
+          {
+            "code": "volatility.skew_delta_extrapolated",
+            "message": "c10 delta point (call-delta 0.100) is outside the fitted delta range [0.352, 0.722].",
+            "severity": "warn",
+            "context": {
+              "label": "c10",
+              "target": 0.1,
+              "min": 0.35205569409776905,
+              "max": 0.7223145500031832
+            }
+          }
+        ]
+      }
+    }
+  },
+  "netDrift": {
+    "app": {
+      "callDrift": 1500,
+      "putDrift": -200,
+      "netDirectionalDrift": 1700,
+      "bullishPremium": 2800,
+      "bearishPremium": 1100,
+      "classifiedPremium": 3900,
+      "unknownPremium": 310,
+      "totalPremium": 4210,
+      "callPremium": 2810,
+      "putPremium": 1400,
+      "totalVolume": 28,
+      "netDirectionalVolume": 10,
+      "confidence": 0.9263657957244655,
+      "confidenceLabel": "High",
+      "signal": "BULLISH_EXPANSION",
+      "volumeConfirmation": "CONFIRMED",
+      "topDriver": {
+        "trade": {
+          "ticker": "TEST",
+          "cp": "Call",
+          "tradeDirection": "A",
+          "price": 2,
+          "size": 10,
+          "premium": 2000,
+          "strike": 100,
+          "spot": 100,
+          "createdTimestamp": 1780585200000
+        },
+        "isCall": true,
+        "initiation": "BUYER",
+        "sentiment": "BULLISH",
+        "directionalPremium": 2000,
+        "premium": 2000,
+        "contracts": 10,
+        "minuteOfDay": 660
+      },
+      "tradeCount": 5,
+      "hasPrice": true,
+      "isLowConfidence": false
+    },
+    "appBuckets": [
+      {
+        "minute": 660,
+        "call": 2000,
+        "put": 0,
+        "net": 2000,
+        "callBand": [2000, 2000],
+        "confidence": 1
+      },
+      {
+        "minute": 661,
+        "call": 1500,
+        "put": 0,
+        "net": 1500,
+        "callBand": [1500, 1500],
+        "confidence": 1
+      },
+      {
+        "minute": 662,
+        "call": 1500,
+        "put": 600,
+        "net": 900,
+        "callBand": [1500, 1500],
+        "confidence": 1
+      },
+      {
+        "minute": 663,
+        "call": 1500,
+        "put": -200,
+        "net": 1700,
+        "callBand": [1500, 1500],
+        "confidence": 1
+      },
+      {
+        "minute": 664,
+        "call": 1500,
+        "put": -200,
+        "net": 1700,
+        "callBand": [1190, 1810],
+        "confidence": 0.9263657957244655
+      }
+    ],
+    "libraryGroups": [
+      {
+        "type": "call",
+        "trades": 3,
+        "size": 17,
+        "premium": 2810,
+        "buyPremium": 2310,
+        "sellPremium": 500,
+        "netPremium": 1810,
+        "volumeOpenInterestRatio": null
+      },
+      {
+        "type": "put",
+        "trades": 2,
+        "size": 11,
+        "premium": 1400,
+        "buyPremium": 600,
+        "sellPremium": 800,
+        "netPremium": -200,
+        "volumeOpenInterestRatio": null
+      }
+    ],
+    "explicitUnknownWasReclassified": "buy",
+    "providerPreservedGroups": [
+      {
+        "type": "call",
+        "trades": 3,
+        "size": 17,
+        "premium": 2810,
+        "buyPremium": 2000,
+        "sellPremium": 500,
+        "netPremium": 1500,
+        "volumeOpenInterestRatio": null
+      },
+      {
+        "type": "put",
+        "trades": 2,
+        "size": 11,
+        "premium": 1400,
+        "buyPremium": 600,
+        "sellPremium": 800,
+        "netPremium": -200,
+        "volumeOpenInterestRatio": null
+      }
+    ]
+  },
+  "performance": {
+    "description": "7 warmed samples, median ms per 300-point 4-leg curve; Node, not browser; rich value includes extended Greeks; batch includes column construction and aggregation of P&L plus five first-order Greeks",
+    "appCurveMs": 0.21879200000000765,
+    "libraryCurveMs": 20.363167000000033,
+    "richRatio": 93.07089381695548,
+    "batchCurveMs": 0.42399999999997817,
+    "batchRatio": 1.9379136348676522,
+    "batchMaxPnlDifference": 0.0018589064229246333,
+    "sinkFinite": true
+  }
+}

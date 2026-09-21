@@ -1,0 +1,229 @@
+{
+  "package": "@totalfinance/research",
+  "domain": "research",
+  "tier": "facade",
+  "exports": {
+    "aggregateEventStudies": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 pooled event studies: shared-convention check, recomputed AAR/CAAR/tests over the pooled events"
+    },
+    "alignEventWindows": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 alignment helper: the ONE anchoring code path exposed alone — anchor date + resolved window rows or the exclusion reason"
+    },
+    "CANONICAL_FACTOR_RECIPES": {
+      "kind": "object",
+      "entrypoints": [".", "./factors"],
+      "role": "constant",
+      "note": "FC3 the seven canonical recipe families — versioned artifacts carrying the not-universal-truth disclosure"
+    },
+    "compareResearchRuns": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 5 (2026-09-03): typed deltas of two runs of one kind — identity, membership, rank moves, score deltas, exclusion reasons, coefficients, abnormal returns per offset, per-quantile/horizon values, hygiene verdict, and the structural run diff"
+    },
+    "compositeFactorScore": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 weighted composite of standardized vectors, direction-signed, weights normalized+echoed"
+    },
+    "eligibleObservationsAt": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the observations a decision at asOf may see — availability at or before the cutoff (an explicit session lag through the caller’s session index), the latest version per instrument, universe members only when a history is given; the same law the screening verbs apply"
+    },
+    "eventStudy": {
+      "kind": "function",
+      "entrypoints": [".", "./events"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_research_event_study"],
+      "shape": "report",
+      "note": "FC3 event study: session-anchored windows, four expected-return models, AR/CAR/AAR/CAAR with cross-sectional tests, overlap policy explicit"
+    },
+    "factorDecay": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 rank IC per stated horizon — the signal decay curve"
+    },
+    "factorSpreadReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 top-minus-bottom quantile forward return, equal-weighted legs"
+    },
+    "factorTurnover": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 per-quantile membership turnover between formations"
+    },
+    "formQuantilePortfolios": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 quantile formation: exact partition of the valued entries, sizing disclosed"
+    },
+    "informationCoefficient": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 IC: Pearson + Spearman over paired instruments, null-with-reason below three pairs"
+    },
+    "neutralizeFactor": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 neutralization: group demeaning + OLS projection removal, residuals orthogonal by construction"
+    },
+    "rankUniverse": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_research_rank"],
+      "shape": "report",
+      "note": "FC3 rank: one declared numeric field, explicit tie policy, stable"
+    },
+    "readResearchRun": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 5 (2026-09-03): Gate B read door + foreign-type refusal + the run-level migration policy under research.run:<kind> (core applyReportMigrations) + report re-validation"
+    },
+    "replayResearchRun": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 5 (2026-09-03): re-issue the run's direct operation from the stored input (referenced rows hash-verified) and compare canonical bytes; a run that recorded a caller callback refuses by name"
+    },
+    "requireDefinitionsMap": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 guard-of-guards: the definitions Map every declaration-aware guard consumes, typed"
+    },
+    "requireFieldDefinitions": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 vendor-adapter guard: declared research fields (kind + unit), keyed for the grammar checks"
+    },
+    "requireMarketEvent": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 vendor-adapter guard: the frozen MarketEvent contract"
+    },
+    "requireReturnObservations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 vendor-adapter guard: per-session return rows, failing row named"
+    },
+    "requireScreenFilter": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "helper",
+      "note": "FC3 grammar guard: the closed recursive filter union against the declarations (unit-incompatible comparisons teach)"
+    },
+    "requireUniverseHistory": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "helper",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): the universe-history guard in the (functionName, label, value) order"
+    },
+    "requireUniverseObservation": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 vendor-adapter guard: one universe row against the declarations (unknown field teaches)"
+    },
+    "requireUniverseObservations": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "FC3 vendor-adapter guard: an observation array, failing row named"
+    },
+    "RESEARCH_RUN_ARTIFACT_TYPE": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 5 (2026-09-03): the artifactType every research-run artifact carries ('research.run')"
+    },
+    "RESEARCH_RUN_KINDS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 5 (2026-09-03): the frozen, data-only descriptor per run kind — operation, bulk row-set patterns, callback fields, cost class"
+    },
+    "RESEARCH_RUN_LIMITS": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 5 (2026-09-03): Decision 9's bounded-work table (core's ARTIFACT_WORK_LIMITS re-exported for this subpath's callers)"
+    },
+    "researchRunArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 5 (2026-09-03): describe a direct FC3 operation's result verbatim with the input that reproduces it (rows embedded or referenced by content-hashed handle, callbacks recorded and omitted, hygiene block and recipe verbatim) and save it as an identified artifact"
+    },
+    "scoreUniverse": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_research_score"],
+      "shape": "report",
+      "note": "FC3 composite score over standardized declared fields, explicit missing policy"
+    },
+    "screenUniverse": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "analysis",
+      "mcpTools": ["totalfinance_research_screen"],
+      "shape": "report",
+      "note": "FC3 point-in-time screen: closed grammar, stable ordering, honest exclusion ledger"
+    },
+    "standardizeFactor": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 standardization: z-score or average-rank percentile, moments echoed"
+    },
+    "universeMembershipAt": {
+      "kind": "function",
+      "entrypoints": [".", "./screening"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.6 slice 1 (FC8, 2026-09-03): members of a universe history at an instant (half-open intervals) and, against a previous instant, the additions and exits with reason and delisting return"
+    },
+    "winsorizeFactor": {
+      "kind": "function",
+      "entrypoints": [".", "./factors"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC3 winsorization: classic order-statistic replacement (exactly idempotent), bounds echoed"
+    }
+  }
+}

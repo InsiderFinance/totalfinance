@@ -1,0 +1,672 @@
+{
+  "package": "@totalfinance/math",
+  "domain": "math",
+  "tier": "trusted",
+  "exports": {
+    "acf": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "adaptiveSimpson": {
+      "kind": "function",
+      "entrypoints": [".", "./integration"],
+      "role": "kernel"
+    },
+    "adaptiveSimpsonSafe": {
+      "kind": "function",
+      "entrypoints": [".", "./integration"],
+      "role": "kernel"
+    },
+    "antitheticSampler": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "augmentedDickeyFullerTest": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "bfgs": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "bicubicInterp": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "bilinearInterp": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "bisection": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "bivariateNormalCdf": {
+      "kind": "function",
+      "entrypoints": [".", "./bivariate"],
+      "role": "kernel"
+    },
+    "bootstrap": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "bracketExpand": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "brent": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "brentMin": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "brownianBridge": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "chiSquare": {
+      "kind": "object",
+      "entrypoints": [".", "./distributions"],
+      "role": "namespace"
+    },
+    "chiSquare.cdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "chiSquare.inverseCdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "cholesky": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "choleskySolve": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "controlVariateEstimate": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel"
+    },
+    "correlatedNormalSampler": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "correlation": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "covariance": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "covarianceMatrix": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "determinant": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "differentialEvolution": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "eigen": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "eigenvalues": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "engleGranger": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "estimateCovariance": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "findRoot": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "gamma": {
+      "kind": "object",
+      "entrypoints": [".", "./distributions"],
+      "role": "namespace"
+    },
+    "gamma.cdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "gamma.inverseCdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "gaussLegendre": {
+      "kind": "function",
+      "entrypoints": [".", "./integration"],
+      "role": "kernel"
+    },
+    "gaussLegendreNodes": {
+      "kind": "function",
+      "entrypoints": [".", "./integration"],
+      "role": "kernel"
+    },
+    "goldenSectionMin": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "halley": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "haltonPoint": {
+      "kind": "function",
+      "entrypoints": [".", "./lowdiscrepancy"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "haltonSequence": {
+      "kind": "function",
+      "entrypoints": [".", "./lowdiscrepancy"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "householder": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "hurstExponent": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "identity": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "jacobiEigen": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "kalmanFilter": {
+      "kind": "function",
+      "entrypoints": [".", "./filters"],
+      "role": "kernel"
+    },
+    "kalmanLogLikelihood": {
+      "kind": "function",
+      "entrypoints": [".", "./filters"],
+      "role": "kernel"
+    },
+    "kalmanSmooth": {
+      "kind": "function",
+      "entrypoints": [".", "./filters"],
+      "role": "kernel"
+    },
+    "kpssTest": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "kurtosis": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "ledoitWolfShrinkage": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "levenbergMarquardt": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "lgamma": {
+      "kind": "function",
+      "entrypoints": [".", "./distributions"],
+      "role": "kernel"
+    },
+    "linearInterp": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "ljungBox": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "luDecompose": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "luSolve": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "makeBicubicInterpolator": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "makeLinearInterpolator": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "makeNaturalCubicSpline": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "makePchipInterpolator": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "matrixMultiply": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "matrixVectorProduct": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "max": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "mean": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "median": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "medianAbsoluteDeviation": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "min": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "monteCarlo": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "mulberry32": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "nearestCorrelation": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "nearestPsd": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "nelderMead": {
+      "kind": "function",
+      "entrypoints": [".", "./optimize"],
+      "role": "kernel"
+    },
+    "newton": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "normal": {
+      "kind": "object",
+      "entrypoints": [".", "./normal"],
+      "role": "namespace"
+    },
+    "normal.cdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.inverseCdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.logCdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.logPdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.logSurvivalFunction": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.pdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normal.survivalFunction": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "normalCdf": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalInverseCdf": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalLogCdf": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalLogPdf": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalLogSurvivalFunction": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalPdf": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "normalSample": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a PRNG carries state decoration (getState, algorithm fields); the sampler consumes next() and guards it"
+    },
+    "normalSurvivalFunction": {
+      "kind": "function",
+      "entrypoints": [".", "./normal"],
+      "role": "kernel"
+    },
+    "ols": {
+      "kind": "function",
+      "entrypoints": [".", "./regression"],
+      "role": "kernel"
+    },
+    "ouHalfLife": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "pacf": {
+      "kind": "function",
+      "entrypoints": [".", "./timeseries"],
+      "role": "kernel"
+    },
+    "pseudoInverse": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "qrDecompose": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "qrSolve": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "quantile": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "regularizedBeta": {
+      "kind": "function",
+      "entrypoints": [".", "./distributions"],
+      "role": "kernel"
+    },
+    "regularizedGammaP": {
+      "kind": "function",
+      "entrypoints": [".", "./distributions"],
+      "role": "kernel"
+    },
+    "restoreRandomNumberGenerator": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a snapshot arrives from JSON/foreign serializers and may carry metadata; the algorithm discriminant and per-field guards carry correctness"
+    },
+    "ridder": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "rollingCorrelation": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "rollingCovariance": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "rollingMean": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "rollingStandardDeviation": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "secant": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "skewness": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "SOBOL_MAX_DIMENSIONS": {
+      "kind": "value",
+      "entrypoints": [".", "./lowdiscrepancy"],
+      "role": "constant"
+    },
+    "sobolSequence": {
+      "kind": "function",
+      "entrypoints": [".", "./lowdiscrepancy"],
+      "role": "kernel",
+      "determinism": "seeded"
+    },
+    "solveAll": {
+      "kind": "function",
+      "entrypoints": [".", "./solvers"],
+      "role": "kernel"
+    },
+    "standardDeviation": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "stratifiedUniforms": {
+      "kind": "function",
+      "entrypoints": [".", "./montecarlo"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a PRNG carries state decoration (getState, algorithm fields); the sampler consumes next() and guards it"
+    },
+    "studentT": {
+      "kind": "object",
+      "entrypoints": [".", "./distributions"],
+      "role": "namespace"
+    },
+    "studentT.cdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "studentT.inverseCdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "studentT.pdf": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "studentT.survivalFunction": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "kernel"
+    },
+    "sum": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "svd": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "transpose": {
+      "kind": "function",
+      "entrypoints": [".", "./linalg"],
+      "role": "kernel"
+    },
+    "trimmedMean": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "uniformSamples": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "policyNote": "C05 open artifact: a PRNG carries state decoration (getState, algorithm fields); the sampler consumes next() and guards it"
+    },
+    "validateInterpolationData": {
+      "kind": "function",
+      "entrypoints": [".", "./interpolation"],
+      "role": "kernel"
+    },
+    "variance": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "welfordVariance": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "winsorize": {
+      "kind": "function",
+      "entrypoints": [".", "./statistics"],
+      "role": "kernel"
+    },
+    "xoshiro128ss": {
+      "kind": "function",
+      "entrypoints": [".", "./random"],
+      "role": "kernel",
+      "determinism": "seeded"
+    }
+  }
+}

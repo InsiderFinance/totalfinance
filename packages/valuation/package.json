@@ -1,0 +1,71 @@
+{
+  "name": "@totalfinance/valuation",
+  "version": "0.0.1",
+  "description": "TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "valuation",
+    "npv",
+    "irr",
+    "time-value-of-money",
+    "amortization",
+    "capital-budgeting"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/valuation"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/valuation#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./cash-flows": {
+      "types": "./dist/cash-flows.d.ts",
+      "import": "./dist/cash-flows.js",
+      "default": "./dist/cash-flows.js"
+    },
+    "./corporate": {
+      "types": "./dist/corporate.d.ts",
+      "import": "./dist/corporate.js",
+      "default": "./dist/corporate.js"
+    },
+    "./forecasting": {
+      "types": "./dist/forecasting.d.ts",
+      "import": "./dist/forecasting.js",
+      "default": "./dist/forecasting.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/fundamentals": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

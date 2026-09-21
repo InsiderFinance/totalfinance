@@ -1,0 +1,589 @@
+{
+  "package": "@totalfinance/fixed-income",
+  "domain": "fixed-income",
+  "tier": "facade",
+  "exports": {
+    "addMonths": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "adjustDate": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "inputPolicies": {
+        "2": "open"
+      },
+      "policyNote": "C05 open artifact: the calendar argument is a built Calendar (methods + decoration); consumed members are invoked, not validated per-field",
+      "note": "date/curve arithmetic utility"
+    },
+    "bachelierKernel": {
+      "kind": "function",
+      "entrypoints": ["./rates"],
+      "role": "kernel",
+      "note": "flat kernel on the FI root — evict to an expert subpath (kernels-off-roots ledger)"
+    },
+    "bermudanSwaption": {
+      "kind": "function",
+      "entrypoints": [".", "./lattice"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "blackKernel": {
+      "kind": "function",
+      "entrypoints": ["./rates"],
+      "role": "kernel",
+      "note": "flat kernel on the FI root — evict to an expert subpath (kernels-off-roots ledger)"
+    },
+    "BOND_DISCOUNT_CURVE_PRICER_NAME": {
+      "kind": "value",
+      "entrypoints": ["./pricer"],
+      "role": "constant",
+      "note": "Stage 4.4b Gate C discount-curve bond adapter identity"
+    },
+    "BOND_SETTLEMENT_DATE_PROJECTION": {
+      "kind": "value",
+      "entrypoints": ["./pricer"],
+      "role": "constant",
+      "note": "Stage 4.4b exact UTC settlement-date projection disclosure"
+    },
+    "bondDiscountCurvePricer": {
+      "kind": "function",
+      "entrypoints": ["./pricer"],
+      "role": "artifact",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "Stage 4.4b Gate C adapter factory: delegates to priceMultiCurve with explicit curve, quote-basis, interpolation, extrapolation, and settlement-projection economics"
+    },
+    "bondFuture": {
+      "kind": "function",
+      "entrypoints": [".", "./futures"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "bondFutureCtdFrontier": {
+      "kind": "function",
+      "entrypoints": [".", "./futures"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "bondFutureHedge": {
+      "kind": "function",
+      "entrypoints": [".", "./futures"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "bonds": {
+      "kind": "object",
+      "entrypoints": [".", "./bonds"],
+      "role": "namespace"
+    },
+    "bonds.amortizing": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "bonds.fixedRate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "bonds.floatingRateNote": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "bonds.inflationLinked": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "bonds.zeroCoupon": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "bootstrapHazardFromCds": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "role": "artifact",
+      "note": "survival-curve factory (behavior-based reclass, D5) — same tier as curves.bootstrap"
+    },
+    "breakevenInflation": {
+      "kind": "function",
+      "entrypoints": [".", "./inflation"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "callableBond": {
+      "kind": "function",
+      "entrypoints": [".", "./lattice"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "capFloorPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "cdsBasis": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "role": "helper",
+      "note": "H01 ratified plain (2026-08-17): decimal spreads validated with unit hints; positive = CDS rich relative to the bond"
+    },
+    "cdsParSpread": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "H02 facade (closed 2026-08-17): par spread over ParCdsSpecification; .explain() discloses the leg decomposition"
+    },
+    "cdsValue": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "cir": {
+      "kind": "function",
+      "entrypoints": [".", "./models"],
+      "role": "artifact",
+      "note": "short-rate model factory"
+    },
+    "cmsConvexityAdjustment": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "compareDates": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "compareFittedModels": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 4 (2026-09-02): same-family typed comparison — pillar-vector parameter deltas, the structural fit diff, currency and market disclosure, and per-measure evaluation differences on the union of pillar dates"
+    },
+    "conversionFactor": {
+      "kind": "function",
+      "entrypoints": [".", "./futures"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "convertibleBond": {
+      "kind": "function",
+      "entrypoints": [".", "./convertible"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "cpiSeasonality": {
+      "kind": "function",
+      "entrypoints": [".", "./inflation"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "credit": {
+      "kind": "object",
+      "entrypoints": [".", "./credit"],
+      "role": "namespace"
+    },
+    "credit.bootstrapHazardFromCds": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "survival-curve factory (behavior-based reclass, D5) — same tier as curves.bootstrap"
+    },
+    "credit.cdsBasis": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "H01 ratified plain (2026-08-17): decimal spreads validated with unit hints; positive = CDS rich relative to the bond"
+    },
+    "credit.creditSpreadCurve": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "H03 facade (closed 2026-08-17): par spreads per tenor; .explain() echoes every per-tenor CDS convention"
+    },
+    "credit.creditTriangleHazard": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "credit.flatHazard": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "credit curve factory"
+    },
+    "credit.survivalFromHazards": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "credit curve factory"
+    },
+    "credit.survivalFromProbabilities": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "credit curve factory"
+    },
+    "creditSpreadCurve": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "H03 facade (closed 2026-08-17): par spreads per tenor; .explain() echoes every per-tenor CDS convention"
+    },
+    "creditTriangleHazard": {
+      "kind": "function",
+      "entrypoints": [".", "./credit"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "crossCurrencyBasisCurve": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-currency"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "CURVE_MODEL_FAMILIES": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the closed list of the four curve families (discount, projection, multi-curve, hazard)"
+    },
+    "curveMetrics": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open",
+        "1": "open"
+      }
+    },
+    "curves": {
+      "kind": "object",
+      "entrypoints": [".", "./curves"],
+      "role": "namespace"
+    },
+    "curves.bootstrap": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.bootstrapMultiCurve": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.bootstrapProjection": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.discountFactor": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.flat": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.fromDiscountFactors": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "curves.fromZeroRates": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "instrument/curve factory"
+    },
+    "daysInMonth": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "daysInYear": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "discountFromZero": {
+      "kind": "function",
+      "entrypoints": [".", "./curves"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "evaluateFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the restored curve's own discount / zeroRate / instantaneousForward (or survival / hazard) at dates in one stated measure; dates outside the calibrated pillar range are counted and warned under the stored extrapolation (a throw curve refuses on its own)"
+    },
+    "FITTED_MODEL_FAMILIES": {
+      "kind": "object",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the frozen, data-only descriptor per curve family — Program 5's registry metadata without a registry"
+    },
+    "fittedModelArtifact": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "artifact",
+      "note": "Stage 4.5 slice 4 (2026-09-02): projects a bootstrap's live result (YieldCurve / MultiCurve / SurvivalCurve) into its data and the core FittedModelSummary (exact-bootstrap objective, repricing residuals through the public valuation) and saves ONE AnalysisArtifact; live curves in the calibration are stored as data; a currency is required"
+    },
+    "fittedModelHoldout": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 4 (2026-09-02): refits on the retained instruments and reprices the held-out ones through the public valuation (forwardRate / swapRate / cdsParSpread) — Program 5's residuals for an exact bootstrap; deterministic { indices } or { everyNth, offset } splits"
+    },
+    "FIXED_INCOME_FITTED_MODEL_ARTIFACT_TYPE": {
+      "kind": "value",
+      "entrypoints": ["./artifacts"],
+      "role": "constant",
+      "note": "Stage 4.5 slice 4 (2026-09-02): the artifactType every fixed-income fitted-model artifact carries ('fixed-income.fitted-model')"
+    },
+    "forwardCmsRate": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "forwardSwap": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "fraValue": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "g2pp": {
+      "kind": "function",
+      "entrypoints": [".", "./models"],
+      "role": "artifact",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "short-rate model factory"
+    },
+    "generateSchedule": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "hullWhite": {
+      "kind": "function",
+      "entrypoints": [".", "./models"],
+      "role": "artifact",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "short-rate model factory"
+    },
+    "impliedCrossCurrencyBasis": {
+      "kind": "function",
+      "entrypoints": [".", "./cross-currency"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "isEndOfMonth": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "isLeapYear": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "oasAnalytics": {
+      "kind": "function",
+      "entrypoints": [".", "./lattice"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "paymentsPerYear": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "priceFromYield": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "priceMultiCurve": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "role": "analysis",
+      "shape": "report",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "rateCurveFromYieldCurve": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 4.5 slice 2 (2026-09-02): a live YieldCurve → core RateCurve data (asOf at UTC midnight, continuous zeros, every pillar incl. the anchor, interpolation echoed; ACT/ACT and 30E/360 refuse by name) proven through core's one requireRateCurveData — the snapshot bridge for restored curve artifacts and the fixed-income half of Gate B's domain-mapper box"
+    },
+    "readFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "helper",
+      "note": "Stage 4.5 slice 4 (2026-09-02): Gate B read door + foreign-type refusal + the report-level migration policy (core applyReportMigrations) + report re-validation incl. the stored curve data"
+    },
+    "replayFittedModel": {
+      "kind": "function",
+      "entrypoints": ["./artifacts"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Stage 4.5 slice 4 (2026-09-02): re-issues the bootstrap from the stored calibration (input curves restored exactly, referenced rows hash-verified) and proves byte parity of the curve data"
+    },
+    "shortRateTree": {
+      "kind": "function",
+      "entrypoints": [".", "./models"],
+      "role": "artifact",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "short-rate model factory"
+    },
+    "swapRate": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "H04 facade (closed 2026-08-17): par rate over ParSwapSpecification; .explain() discloses the leg decomposition"
+    },
+    "swaptionPrice": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "swapValue": {
+      "kind": "function",
+      "entrypoints": [".", "./rates"],
+      "role": "analysis",
+      "shape": "envelope"
+    },
+    "swapXva": {
+      "kind": "function",
+      "entrypoints": [".", "./xva"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "tipsIndexRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./inflation"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "vasicek": {
+      "kind": "function",
+      "entrypoints": [".", "./models"],
+      "role": "artifact",
+      "note": "short-rate model factory"
+    },
+    "yearFraction": {
+      "kind": "function",
+      "entrypoints": [".", "./conventions"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    },
+    "yieldCurveFromRateCurve": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "artifact",
+      "note": "Stage 4.5 slice 2 (2026-09-02): core RateCurve data → a live YieldCurve — the bond pricer's former private curve builder made public and unchanged (UTC-midnight asOf, the curve's own dayCount/compounding, a conflicting stored interpolation refuses); bondDiscountCurvePricer calls it, one engine"
+    },
+    "yieldMetrics": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_fixed_income_bond_analytics"],
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "yieldToCall": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "hasExplain": true,
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "H05 facade (closed 2026-08-17): mirrors yieldToMaturity.explain — solver facts, resolved call price + accrued in the decomposition, call/price basis echoed"
+    },
+    "yieldToMaturity": {
+      "kind": "function",
+      "entrypoints": [".", "./bonds"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    "zeroCouponInflationSwap": {
+      "kind": "function",
+      "entrypoints": [".", "./inflation"],
+      "role": "analysis",
+      "shape": "report"
+    },
+    "zeroFromDiscount": {
+      "kind": "function",
+      "entrypoints": [".", "./curves"],
+      "role": "helper",
+      "note": "date/curve arithmetic utility"
+    }
+  }
+}

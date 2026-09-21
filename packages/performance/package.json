@@ -1,0 +1,116 @@
+{
+  "name": "@totalfinance/performance",
+  "version": "0.0.1",
+  "description": "TotalFinance performance metrics: returns, Sharpe/Sortino/Calmar, drawdowns. Browser-safe, light imports.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "quant",
+    "performance",
+    "sharpe-ratio",
+    "sortino",
+    "drawdown",
+    "returns",
+    "portfolio",
+    "trading"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/performance"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/performance#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./sharpe": {
+      "types": "./dist/sharpe.d.ts",
+      "import": "./dist/sharpe.js",
+      "default": "./dist/sharpe.js"
+    },
+    "./returns": {
+      "types": "./dist/returns.d.ts",
+      "import": "./dist/returns.js",
+      "default": "./dist/returns.js"
+    },
+    "./drawdown": {
+      "types": "./dist/drawdown.d.ts",
+      "import": "./dist/drawdown.js",
+      "default": "./dist/drawdown.js"
+    },
+    "./metrics": {
+      "types": "./dist/metrics.d.ts",
+      "import": "./dist/metrics.js",
+      "default": "./dist/metrics.js"
+    },
+    "./analyze": {
+      "types": "./dist/analyze.d.ts",
+      "import": "./dist/analyze.js",
+      "default": "./dist/analyze.js"
+    },
+    "./ratios": {
+      "types": "./dist/ratios.d.ts",
+      "import": "./dist/ratios.js",
+      "default": "./dist/ratios.js"
+    },
+    "./relative": {
+      "types": "./dist/relative.d.ts",
+      "import": "./dist/relative.js",
+      "default": "./dist/relative.js"
+    },
+    "./activity": {
+      "types": "./dist/activity.d.ts",
+      "import": "./dist/activity.js",
+      "default": "./dist/activity.js"
+    },
+    "./rolling": {
+      "types": "./dist/rolling.d.ts",
+      "import": "./dist/rolling.js",
+      "default": "./dist/rolling.js"
+    },
+    "./flow-aware": {
+      "types": "./dist/flow-aware.d.ts",
+      "import": "./dist/flow-aware.js",
+      "default": "./dist/flow-aware.js"
+    },
+    "./sector-performance": {
+      "types": "./dist/sector-performance.d.ts",
+      "import": "./dist/sector-performance.js",
+      "default": "./dist/sector-performance.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/valuation": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

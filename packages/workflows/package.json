@@ -1,0 +1,79 @@
+{
+  "name": "@totalfinance/workflows",
+  "version": "0.0.1",
+  "description": "TotalFinance workflows: the protocol-neutral operation registry — one operation definition drives the SDK-facing runtime, the CLI, OpenAPI, and MCP. Read-only, provider-free, browser-safe.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "totalfinance",
+    "finance",
+    "quant",
+    "operations",
+    "workflows",
+    "registry",
+    "agent",
+    "mcp",
+    "openapi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "packages/workflows"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./local": {
+      "types": "./dist/local/index.d.ts",
+      "import": "./dist/local/index.js",
+      "default": "./dist/local/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "etc",
+    "LICENSE",
+    "STABILITY.md",
+    "!dist/.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@totalfinance/backtest": "workspace:*",
+    "@totalfinance/calendars": "workspace:*",
+    "@totalfinance/core": "workspace:*",
+    "@totalfinance/crypto": "workspace:*",
+    "@totalfinance/fixed-income": "workspace:*",
+    "@totalfinance/math": "workspace:*",
+    "@totalfinance/options": "workspace:*",
+    "@totalfinance/performance": "workspace:*",
+    "@totalfinance/portfolio": "workspace:*",
+    "@totalfinance/research": "workspace:*",
+    "@totalfinance/risk": "workspace:*",
+    "@totalfinance/scenarios": "workspace:*",
+    "@totalfinance/strategy": "workspace:*",
+    "@totalfinance/structure": "workspace:*",
+    "@totalfinance/technical-analysis": "workspace:*",
+    "@totalfinance/valuation": "workspace:*",
+    "@totalfinance/volatility": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/workflows#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues"
+}

@@ -1,0 +1,25 @@
+{
+  "package": "@totalfinance/http",
+  "domain": "http",
+  "tier": "integration",
+  "exports": {
+    "createLocalHttpServer": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the loopback, read-only local HTTP server over the operation registry — one OperationError shape for every failure, X-Request-Id on every response; jobs and artifacts attach through the injected runner and store"
+    },
+    "openApiDocument": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the OpenAPI 3.1 document generated from a registry — the operations' schemas verbatim, components keyed by id, the x-totalfinance vendor extension; committed under etc/openapi.json and gated"
+    },
+    "statusForError": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "Stage 7A slice 5 (2026-09-03): the HTTP status an OperationError maps to (404 unknown · 413 too large · 400 input.* · 409 cancelled · 500 internal · 422 otherwise) — published so the guide and the server agree"
+    }
+  }
+}

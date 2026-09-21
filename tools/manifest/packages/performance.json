@@ -1,0 +1,288 @@
+{
+  "package": "@totalfinance/performance",
+  "domain": "performance",
+  "tier": "facade",
+  "exports": {
+    "alpha": {
+      "kind": "function",
+      "entrypoints": [".", "./relative"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "analyze": {
+      "kind": "function",
+      "entrypoints": [".", "./analyze"],
+      "hasExplain": true,
+      "role": "facade",
+      "mcpTools": ["totalfinance_performance_analyze"]
+    },
+    "ANNUALIZATION_KEYS": {
+      "kind": "value",
+      "entrypoints": ["./sharpe"],
+      "role": "constant",
+      "note": "Law 12 allowlist — the documented keys of the adjacent interface, shared across modules"
+    },
+    "annualizationAssumptions": {
+      "kind": "function",
+      "entrypoints": ["./sharpe"],
+      "role": "helper"
+    },
+    "annualizedReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "annualizedVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./sharpe"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "benchmarkRelativeTimeline": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 date-aligned relative performance; missing dates become gaps, never interpolated"
+    },
+    "beta": {
+      "kind": "function",
+      "entrypoints": [".", "./relative"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "calmar": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "contributionByGroup": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 single-period contribution = weight × return per group, reconciliation residual disclosed"
+    },
+    "cumulativeReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./returns"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "DEFAULT_PERIODS_PER_YEAR": {
+      "kind": "value",
+      "entrypoints": ["./sharpe"],
+      "role": "constant"
+    },
+    "degenerateAwareDiagnostics": {
+      "kind": "function",
+      "entrypoints": ["./sharpe"],
+      "role": "helper"
+    },
+    "equityCurve": {
+      "kind": "function",
+      "entrypoints": [".", "./returns"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "expectancy": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "exposure": {
+      "kind": "function",
+      "entrypoints": [".", "./activity"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "hitRate": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "informationRatio": {
+      "kind": "function",
+      "entrypoints": [".", "./relative"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "linkSubperiodReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 explicit linking policy: geometric compounds, arithmetic sums — never inferred"
+    },
+    "logReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./returns"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "maxDrawdown": {
+      "kind": "function",
+      "entrypoints": [".", "./drawdown"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "maxDrawdownFromReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./drawdown"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "modifiedDietzReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 Modified Dietz single-period estimator with the per-flow day weights exposed"
+    },
+    "moneyWeightedReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 MWR: the investor schedule's dated IRR composed from valuation's solver, .explain report preserved whole"
+    },
+    "omega": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "portfolioReturnIndex": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 total-return index chained from an explicit base; null-on-any-gap policy, disclosed"
+    },
+    "profitFactor": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "requireSeries": {
+      "kind": "function",
+      "entrypoints": ["./sharpe"],
+      "role": "helper"
+    },
+    "returnsDiagnostics": {
+      "kind": "function",
+      "entrypoints": ["./sharpe"],
+      "role": "helper"
+    },
+    "riskAdjustedAssumptions": {
+      "kind": "function",
+      "entrypoints": ["./sharpe"],
+      "role": "helper"
+    },
+    "rollingReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./rolling"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "rollingSharpe": {
+      "kind": "function",
+      "entrypoints": [".", "./rolling"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "rollingVolatility": {
+      "kind": "function",
+      "entrypoints": [".", "./rolling"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "sectorPerformance": {
+      "kind": "function",
+      "entrypoints": [".", "./sector-performance"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Equal-weight sector returns from explicitly supplied same-period member returns; no fabricated snapshot lineage"
+    },
+    "sectorPerformanceSnapshot": {
+      "kind": "function",
+      "entrypoints": [".", "./sector-performance"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Point-in-time completed-session sector returns with effective-dated classifications, cutoffs, selected-input lineage and explicit exclusions"
+    },
+    "segmentExternalFlows": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 per-account flow segmentation; internal transfers identified and netted to zero external flow"
+    },
+    "sharpe": {
+      "kind": "function",
+      "entrypoints": [".", "./sharpe"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "SHARPE_KEYS": {
+      "kind": "value",
+      "entrypoints": ["./sharpe"],
+      "role": "constant",
+      "note": "Law 12 allowlist — the documented keys of the adjacent interface, shared across modules"
+    },
+    "simpleReturns": {
+      "kind": "function",
+      "entrypoints": [".", "./returns"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "sortino": {
+      "kind": "function",
+      "entrypoints": [".", "./metrics"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "timeWeightedReturn": {
+      "kind": "function",
+      "entrypoints": [".", "./flow-aware"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "FC4 TWR: geometric link of subperiod returns under the stated mark-first flow convention; gaps excluded, never forward-filled"
+    },
+    "trackingError": {
+      "kind": "function",
+      "entrypoints": [".", "./relative"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "treynor": {
+      "kind": "function",
+      "entrypoints": [".", "./relative"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "turnover": {
+      "kind": "function",
+      "entrypoints": [".", "./activity"],
+      "hasExplain": true,
+      "role": "facade"
+    },
+    "underwater": {
+      "kind": "function",
+      "entrypoints": [".", "./drawdown"],
+      "role": "helper",
+      "note": "series transform (facade twin with .explain lives on the main metric)"
+    },
+    "winLossStatistics": {
+      "kind": "function",
+      "entrypoints": [".", "./ratios"],
+      "hasExplain": true,
+      "role": "facade"
+    }
+  }
+}
