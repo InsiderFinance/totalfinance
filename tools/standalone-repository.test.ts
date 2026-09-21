@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { defaultTools } from '../packages/mcp/src/index.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, '');
 const read = (path: string) => readFileSync(resolve(ROOT, path), 'utf8');
@@ -72,6 +73,18 @@ describe('the standalone TotalFinance repository', () => {
       expect(pkg.version).toMatch(/^\d+\.\d+\.\d+(?:-[\w.]+)?$/);
     }
     expect(JSON.parse(read('.changeset/config.json')).baseBranch).toBe('main');
+  });
+
+  it('recomputes the release-smoke MCP identity from the renamed tool names', () => {
+    const names = defaultTools()
+      .map((tool) => tool.name)
+      .sort();
+    const expected = JSON.parse(read('tools/release/smoke-expected.json'));
+    expect(expected.mcp).toEqual({
+      tools: names.length,
+      namesSha256: createHash('sha256').update(names.join('\n')).digest('hex'),
+    });
+    expect(names.every((name) => name.startsWith('totalfinance_'))).toBe(true);
   });
 
   it('runs CI from the root on main and PRs, with supported Nodes and a pinned regeneration runtime', () => {
