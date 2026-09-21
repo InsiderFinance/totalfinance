@@ -29,6 +29,7 @@ import { describe, expect, it } from 'vitest';
 import { KB, measureBundle } from './bundle-size/measure.js';
 import { BUNDLE_BUDGETS } from './bundle-size/budgets.js';
 import { workspaceAlias } from './bundle-size/workspace-alias.js';
+import { reportedConsumerFixtures } from './bundle-size/packed-report.js';
 
 const root = (path: string): string => fileURLToPath(new URL(`../${path}`, import.meta.url));
 const page = readFileSync(root('docs/bundle-size.md'), 'utf8');
@@ -54,6 +55,34 @@ function publishedRows(): Map<string, { gzipKB: number; budget: string; notes: s
 const rows = publishedRows();
 
 describe('published bundle table (3B.N8-DOCS item 7)', () => {
+  it('separates used-function installed measurements from whole-entrypoint ceilings', () => {
+    expect(page).toContain('## Small installed consumers');
+    expect(page).toContain('## Whole-entrypoint ceilings');
+    expect(page).toContain('not** the cost of importing one function');
+    expect(page).toContain('https://github.com/evanw/esbuild/issues/1420');
+    expect(page).toContain("import { normalCdf } from 'totalfinance/math'");
+  });
+
+  it('publishes both bundler budgets from the installed-consumer fixture record', () => {
+    const matches = [
+      ...page.matchAll(
+        /^\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|\s*([\d.]+) KiB \/ < ([\d.]+) KiB\s*\|\s*([\d.]+) KiB \/ < ([\d.]+) KiB\s*\|$/gm,
+      ),
+    ];
+    expect(matches.map((match) => match[1])).toEqual(
+      reportedConsumerFixtures().map((fixture) => fixture.id),
+    );
+    for (const [index, fixture] of reportedConsumerFixtures().entries()) {
+      const row = matches[index]!;
+      expect(row[2]).toBe(fixture.specifier);
+      expect(Number(row[4])).toBe(fixture.budgetKiB.esbuild);
+      expect(Number(row[6])).toBe(fixture.budgetKiB.rollup);
+      // Display rounding may add at most half of a tenth KiB. Exact bytes remain the CI gate.
+      expect(Number(row[3])).toBeLessThanOrEqual(fixture.budgetKiB.esbuild + 0.05);
+      expect(Number(row[5])).toBeLessThanOrEqual(fixture.budgetKiB.rollup + 0.05);
+    }
+  });
+
   it('publishes every budgeted entrypoint, and none that is not budgeted', () => {
     const declared = BUNDLE_BUDGETS.map((budget) => budget.specifier).sort();
     expect([...rows.keys()].sort()).toEqual(declared);

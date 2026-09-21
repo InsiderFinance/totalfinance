@@ -67,7 +67,7 @@ describe('conventions are disclosed in-band, not only in prose', () => {
         described.conventions,
         `${canonical} is named in talib-differences.md (as \`${documentedAs}\`) but declares no ` +
           `conventions, so a caller can only learn the difference by reading the doc. Add an entry ` +
-          `to CONVENTIONS in registry.ts.`,
+          `to the indicator's named contract in builtin-metadata.ts.`,
       ).toBeDefined();
       expect(Object.keys(described.conventions ?? {}).length).toBeGreaterThan(0);
     },
@@ -99,7 +99,7 @@ describe('conventions are disclosed in-band, not only in prose', () => {
 
   it('the direct call and the discovery path disclose the same thing', () => {
     // Two paths reach these facts — a result envelope and a tool schema — and an agent may see
-    // either. They read from one registry entry so they cannot disagree.
+    // either. Both paths consume the named contracts in builtin-metadata.ts.
     for (const { canonical } of divergent) {
       const fromDiscovery = ta.describeIndicator(canonical).conventions;
       const indicator = (ta as unknown as Record<string, { explain?: unknown }>)[canonical];

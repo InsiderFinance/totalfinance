@@ -3,9 +3,30 @@
  *
  * One install, ONE grammar: every domain is a namespace, and only the flagship options-pricing
  * gestures are hoisted to the top level. There is NO new API here — everything comes from a scoped
- * `@totalfinance/*` package, and the lean deep entrypoints (`totalfinance/options`, `totalfinance/technical-analysis`,
- * `@totalfinance/options/black-scholes`, …) remain the tree-shakeable path.
+ * `@totalfinance/*` package. For portable browser tree shaking, use named imports from domain
+ * entrypoints (`totalfinance/options`, `totalfinance/technical-analysis`, `@totalfinance/math`, …)
+ * or supported feature subpaths such as `@totalfinance/options/black-scholes`.
  *
+ * Namespace convenience has a bundler tradeoff: `import { math } from 'totalfinance'` followed by
+ * `math.normalCdf(0)` retains the whole math namespace in esbuild (issue #1420); Rollup shakes this
+ * static use. Direct `import * as math from 'totalfinance/math'` with static member use also shakes.
+ * Dynamic namespace access, enumeration, and registries retain the implementations they can reach.
+ * Installation size differs from final bundle size; plain Node ESM does no automatic dead-code
+ * elimination. Facades include validation and `.explain()` services, and indicators carry streaming
+ * support, not just a bare formula. Type-only imports add no runtime code.
+ * See https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md
+ * and https://github.com/evanw/esbuild/issues/1420.
+ *
+ * Browser default:
+ * ```ts
+ * import { blackScholes } from 'totalfinance/options';
+ * import { normalCdf } from 'totalfinance/math';
+ *
+ * blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
+ * normalCdf(0); // 0.5
+ * ```
+ *
+ * Root convenience API (with the namespace tradeoff above):
  * ```ts
  * import { blackScholes, option, market, engines, technicalAnalysis, volatility } from 'totalfinance';
  *

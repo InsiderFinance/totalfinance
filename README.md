@@ -63,15 +63,17 @@ registry-wide batch≡stream + serialization property tests.
 
 ## Install
 
-Everything under one install—the `totalfinance` umbrella exposes every domain as a namespace and hoists
-only the five flagship option gestures (`blackScholes`, `option`, `market`, `engines`, `impliedVolatility`):
+Everything under one install: use the `totalfinance` umbrella, then import named functions from its
+domain subpaths for portable browser tree shaking:
 
 ```sh
 pnpm add totalfinance
 ```
 
 ```ts
-import { blackScholes, risk, technicalAnalysis } from 'totalfinance';
+import { blackScholes } from 'totalfinance/options';
+import { valueAtRisk } from 'totalfinance/risk';
+import { rsi } from 'totalfinance/technical-analysis';
 
 blackScholes.call({
   spot: 100,
@@ -80,14 +82,19 @@ blackScholes.call({
   riskFreeRate: 0.045,
   volatility: 0.22,
 }); // => 0.8983...
-technicalAnalysis
-  .rsi([
-    44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
-    46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
-  ])
-  .at(-1); // => 57.92 — RSI-14 needs 15+ closes (fewer is an all-NaN warmup)
-risk.valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
+rsi([
+  44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
+  46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
+]).at(-1); // => 57.92 — RSI-14 needs 15+ closes (fewer is an all-NaN warmup)
+valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
 ```
+
+The root still exposes every domain as a namespace and hoists only five flagship option gestures:
+`blackScholes`, `option`, `market`, `engines`, `impliedVolatility`. Namespace convenience such as
+`import { math } from 'totalfinance'` followed by `math.normalCdf(0)` has a bundler tradeoff:
+esbuild retains the whole math namespace ([issue #1420](https://github.com/evanw/esbuild/issues/1420));
+Rollup shakes this static use. Direct `import * as math from 'totalfinance/math'` with static member
+use also shakes; dynamic namespace access and registries retain the implementations they can reach.
 
 **Runtime contract:** ESM-only, Node ≥ 22.13.0 (the supported LTS lines). `require()` works via
 Node's `require(ESM)` interop — unflagged since 22.12.0, warning-free since 22.13.0 — through the
@@ -95,12 +102,17 @@ Node's `require(ESM)` interop — unflagged since 22.12.0, warning-free since 22
 `nodenext` and `bundler` resolution) are verified in CI against the **packed tarballs**, not the
 workspace.
 
-Or install only what you need — every `@totalfinance/*` package is independently published and
-tree-shakeable:
+Or choose a scoped package for a smaller installation (after publication):
 
 ```sh
 pnpm add @totalfinance/options
 ```
+
+Named imports from `@totalfinance/<domain>` and supported feature subpaths work too. Installation
+size is not final bundle size: a bundler can remove unused code, while plain Node ESM performs no
+automatic dead-code elimination. Facades include validation and `.explain()` services; indicators
+also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+See [Imports and bundles](./docs/guides/imports-and-bundles.md) for examples and measured budgets.
 
 ## One line
 

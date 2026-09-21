@@ -1,9 +1,11 @@
 /**
  * `@totalfinance/technical-analysis/rsi` — Wilder's Relative Strength Index (spec §13.3).
  *
- * A lean deep entrypoint (imports only the framework) so the RSI bundle stays small.
+ * A lean deep entrypoint: the framework and RSI's own contract, never the discovery registry.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -106,11 +108,13 @@ class RsiStream implements IndicatorStream<number, number> {
  * rising series), TotalFinance returns **100** (the RS → ∞ limit; TradingView's convention). TA-Lib
  * emits 0 there and pandas-ta NaN — see `docs/compatibility/talib-differences.md`.
  */
-export const rsi = makeIndicator<RsiParameters, number, number>(
-  (p) => new RsiStream(requirePeriod(p.period ?? 14, 'rsi')),
-  RsiStream.fromJSON,
-  () => NaN,
-  { period: 14 },
+export const rsi = withBuiltinMetadata(
+  makeIndicator<RsiParameters, number, number>(
+    (p) => new RsiStream(requirePeriod(p.period ?? 14, 'rsi')),
+    RsiStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.rsiMetadata,
 );
 
 export { RsiStream };

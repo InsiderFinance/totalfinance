@@ -65,6 +65,33 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     }
   });
 
+  it('generates import guidance in both agent docs and includes the canonical public guide', () => {
+    for (const content of [concise, full]) {
+      expect(content).toContain('## Imports and bundles');
+      expect(content).toContain('named imports from `totalfinance/<domain>`');
+      expect(content).toContain('`@totalfinance/<domain>`');
+      expect(content).toContain('](guides/imports-and-bundles.md)');
+      expect(content).toContain('no automatic dead-code');
+    }
+    const guide = readFileSync(
+      new URL('../docs/guides/imports-and-bundles.md', import.meta.url),
+      'utf8',
+    );
+    expect(full).toContain(
+      guide
+        .trim()
+        .replace(/^(#+) /gm, '$1# ')
+        .replace('](../bundle-size.md)', '](bundle-size.md)'),
+    );
+    expect(full).toContain('](bundle-size.md)');
+    expect(full).not.toContain('](../bundle-size.md)');
+    expect(full).toContain("import * as math from 'totalfinance/math'");
+    expect(full).toContain("import { math } from 'totalfinance'");
+    expect(full).toContain('https://github.com/evanw/esbuild/issues/1420');
+    expect(full).toContain('Rollup shakes this static use');
+    expect(full).toContain('unpublished preview');
+  });
+
   it('contains all full-profile operations with exact complete input/output schemas and notes', () => {
     const sections = new Map(
       full

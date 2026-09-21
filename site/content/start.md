@@ -2,6 +2,9 @@
 
 You do not need to construct a portfolio, register an operation, start a server, or connect a data provider to calculate an option price. Install one domain package and call the function that answers your question.
 
+TotalFinance is an unpublished preview. The examples describe its supported imports; they do not
+claim that an npm installation has been verified. Use the version page to check release availability.
+
 ## Small input, direct answer
 
 ```ts
@@ -86,7 +89,22 @@ Technical indicators have aligned warmup periods. Leading warmup values are not 
 
 ## Choose imports deliberately
 
-The umbrella offers domain namespaces for convenient discovery. Independently installable packages and explicit subpaths keep specialized uses focused. The complete reference lists every supported import path, including type-only exports. Browser-safe calculations remain separate from Node-only CLI, HTTP, MCP, and filesystem helpers.
+For portable browser tree shaking, use named imports from `totalfinance/<domain>` or
+`@totalfinance/<domain>`, as above, or supported feature subpaths such as `@totalfinance/math/normal`.
+The umbrella keeps domain namespaces and the five flagship option exports (`blackScholes`, `option`,
+`market`, `engines`, `impliedVolatility`) for convenience.
+
+The tradeoff is bundler-dependent: `import { math } from 'totalfinance'` followed by
+`math.normalCdf(0)` retains the whole math namespace in esbuild
+([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use.
+Direct `import * as math from 'totalfinance/math'` with static member use also shakes. Dynamic
+namespace access and registries retain the implementations they can reach.
+
+Installation size is not final bundle size, and plain Node ESM performs no automatic dead-code
+elimination. Facades include validation and `.explain()` services; indicators also carry streaming
+support. Type-only imports add no runtime code. Browser-safe calculations remain separate from
+Node-only CLI, HTTP, MCP, and filesystem helpers. Read
+[Imports and bundles](../../docs/guides/imports-and-bundles.md) for examples and measured budgets.
 
 ## Reproduce before extending
 

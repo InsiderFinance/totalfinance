@@ -7,6 +7,8 @@
  * serializable stream wrapped into the aligned batch+stream facade.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import { ErrorCode, InputError, requireArgumentObject } from '@totalfinance/core';
 import {
   type BarInput,
@@ -115,15 +117,17 @@ function rocFacade(mode: RocMode, defaultPeriod: number) {
     (p) => new RocStream({ period: requirePeriod(p.period ?? defaultPeriod, mode), mode }),
     RocStream.restore(mode),
     nan,
-    { period: defaultPeriod },
   );
 }
 
-export const roc = rocFacade('roc', 10);
-export const rocp = rocFacade('rocp', 10);
-export const rocr = rocFacade('rocr', 10);
-export const rocr100 = rocFacade('rocr100', 10);
-export const momentum = rocFacade('mom', 10);
+export const roc = withBuiltinMetadata(rocFacade('roc', 10), builtinMetadata.rocMetadata);
+export const rocp = withBuiltinMetadata(rocFacade('rocp', 10), builtinMetadata.rocpMetadata);
+export const rocr = withBuiltinMetadata(rocFacade('rocr', 10), builtinMetadata.rocrMetadata);
+export const rocr100 = withBuiltinMetadata(
+  rocFacade('rocr100', 10),
+  builtinMetadata.rocr100Metadata,
+);
+export const momentum = withBuiltinMetadata(rocFacade('mom', 10), builtinMetadata.momentumMetadata);
 
 // ───────────────────────── CMO (Chande Momentum Oscillator) ─────────────────────────
 
@@ -245,14 +249,16 @@ export interface CmoParameters {
   /** Reproduce TA-Lib's Wilder-smoothed CMO (`2·RSI − 100`) instead of Chande's simple sums. */
   talib?: boolean;
 }
-export const cmo = makeIndicator<CmoParameters, number, number>(
-  (p) =>
-    (requireBooleanWhenPresent(p.talib, 'cmo', 'talib') ?? false)
-      ? new CmoTalibStream(requirePeriod(p.period ?? 14, 'cmo'))
-      : new CmoStream(requirePeriod(p.period ?? 14, 'cmo')),
-  (s) => (s['kind'] === 'cmoTalib' ? CmoTalibStream.fromJSON(s) : CmoStream.fromJSON(s)),
-  nan,
-  { period: 14 },
+export const cmo = withBuiltinMetadata(
+  makeIndicator<CmoParameters, number, number>(
+    (p) =>
+      (requireBooleanWhenPresent(p.talib, 'cmo', 'talib') ?? false)
+        ? new CmoTalibStream(requirePeriod(p.period ?? 14, 'cmo'))
+        : new CmoStream(requirePeriod(p.period ?? 14, 'cmo')),
+    (s) => (s['kind'] === 'cmoTalib' ? CmoTalibStream.fromJSON(s) : CmoStream.fromJSON(s)),
+    nan,
+  ),
+  builtinMetadata.cmoMetadata,
 );
 
 // ───────────────────────── APO / PPO ─────────────────────────
@@ -309,14 +315,17 @@ class ApoStream implements IndicatorStream<number, number> {
   }
 }
 
-export const apo = makeIndicator<ApoParameters, number, number>(
-  (p) =>
-    new ApoStream({
-      fast: requirePeriod(p.fast ?? 12, 'apo', 'fast'),
-      slow: requirePeriod(p.slow ?? 26, 'apo', 'slow'),
-    }),
-  ApoStream.fromJSON,
-  nan,
+export const apo = withBuiltinMetadata(
+  makeIndicator<ApoParameters, number, number>(
+    (p) =>
+      new ApoStream({
+        fast: requirePeriod(p.fast ?? 12, 'apo', 'fast'),
+        slow: requirePeriod(p.slow ?? 26, 'apo', 'slow'),
+      }),
+    ApoStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.apoMetadata,
 );
 
 class PpoStream implements IndicatorStream<number, PpoPoint> {
@@ -366,15 +375,18 @@ class PpoStream implements IndicatorStream<number, PpoPoint> {
   }
 }
 
-export const ppo = makeIndicator<PpoParameters, number, PpoPoint>(
-  (p) =>
-    new PpoStream({
-      fast: requirePeriod(p.fast ?? 12, 'ppo', 'fast'),
-      slow: requirePeriod(p.slow ?? 26, 'ppo', 'slow'),
-      signal: requirePeriod(p.signal ?? 9, 'ppo', 'signal'),
-    }),
-  PpoStream.fromJSON,
-  () => ({ ppo: NaN, signal: NaN, histogram: NaN }),
+export const ppo = withBuiltinMetadata(
+  makeIndicator<PpoParameters, number, PpoPoint>(
+    (p) =>
+      new PpoStream({
+        fast: requirePeriod(p.fast ?? 12, 'ppo', 'fast'),
+        slow: requirePeriod(p.slow ?? 26, 'ppo', 'slow'),
+        signal: requirePeriod(p.signal ?? 9, 'ppo', 'signal'),
+      }),
+    PpoStream.fromJSON,
+    () => ({ ppo: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.ppoMetadata,
 );
 
 // ───────────────────────── StochRSI ─────────────────────────
@@ -472,16 +484,19 @@ class StochRsiStream implements IndicatorStream<number, StochRsiPoint> {
   }
 }
 
-export const stochRsi = makeIndicator<StochRsiParameters, number, StochRsiPoint>(
-  (p) =>
-    new StochRsiStream({
-      rsiPeriod: requirePeriod(p.rsiPeriod ?? 14, 'stochRsi', 'rsiPeriod'),
-      stochPeriod: requirePeriod(p.stochPeriod ?? 14, 'stochRsi', 'stochPeriod'),
-      kPeriod: requirePeriod(p.kPeriod ?? 3, 'stochRsi', 'kPeriod'),
-      dPeriod: requirePeriod(p.dPeriod ?? 3, 'stochRsi', 'dPeriod'),
-    }),
-  StochRsiStream.fromJSON,
-  () => ({ k: NaN, d: NaN }),
+export const stochRsi = withBuiltinMetadata(
+  makeIndicator<StochRsiParameters, number, StochRsiPoint>(
+    (p) =>
+      new StochRsiStream({
+        rsiPeriod: requirePeriod(p.rsiPeriod ?? 14, 'stochRsi', 'rsiPeriod'),
+        stochPeriod: requirePeriod(p.stochPeriod ?? 14, 'stochRsi', 'stochPeriod'),
+        kPeriod: requirePeriod(p.kPeriod ?? 3, 'stochRsi', 'kPeriod'),
+        dPeriod: requirePeriod(p.dPeriod ?? 3, 'stochRsi', 'dPeriod'),
+      }),
+    StochRsiStream.fromJSON,
+    () => ({ k: NaN, d: NaN }),
+  ),
+  builtinMetadata.stochRsiMetadata,
 );
 
 // ───────────────────────── TRIX ─────────────────────────
@@ -555,11 +570,13 @@ class TrixStream implements IndicatorStream<number, number> {
  * Warmup is TA-Lib's TRIX lookback, `3·(period − 1) + 1`: the triple EMA itself first exists at
  * `3·(period − 1)`, and the rate of change needs the bar after that.
  */
-export const trix = makeIndicator<{ period?: number }, number, number>(
-  (p) => new TrixStream(requirePeriod(p.period ?? 30, 'trix')),
-  TrixStream.fromJSON,
-  nan,
-  { period: 30 },
+export const trix = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new TrixStream(requirePeriod(p.period ?? 30, 'trix')),
+    TrixStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.trixMetadata,
 );
 
 // ───────────────────────── DPO (Detrended Price Oscillator) ─────────────────────────
@@ -635,10 +652,13 @@ class DpoStream implements IndicatorStream<number, number> {
   }
 }
 
-export const dpo = makeIndicator<PeriodParameters, number, number>(
-  (p) => new DpoStream(requirePeriod(p.period, 'dpo')),
-  DpoStream.fromJSON,
-  nan,
+export const dpo = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new DpoStream(requirePeriod(p.period, 'dpo')),
+    DpoStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.dpoMetadata,
 );
 
 // ───────────────────────── TSI (True Strength Index) ─────────────────────────
@@ -724,15 +744,18 @@ class TsiStream implements IndicatorStream<number, TsiPoint> {
   }
 }
 
-export const tsi = makeIndicator<TsiParameters, number, TsiPoint>(
-  (p) =>
-    new TsiStream({
-      long: requirePeriod(p.long ?? 25, 'tsi', 'long'),
-      short: requirePeriod(p.short ?? 13, 'tsi', 'short'),
-      signal: requirePeriod(p.signal ?? 13, 'tsi', 'signal'),
-    }),
-  TsiStream.fromJSON,
-  () => ({ tsi: NaN, signal: NaN }),
+export const tsi = withBuiltinMetadata(
+  makeIndicator<TsiParameters, number, TsiPoint>(
+    (p) =>
+      new TsiStream({
+        long: requirePeriod(p.long ?? 25, 'tsi', 'long'),
+        short: requirePeriod(p.short ?? 13, 'tsi', 'short'),
+        signal: requirePeriod(p.signal ?? 13, 'tsi', 'signal'),
+      }),
+    TsiStream.fromJSON,
+    () => ({ tsi: NaN, signal: NaN }),
+  ),
+  builtinMetadata.tsiMetadata,
 );
 
 // ───────────────────────── KST (Know Sure Thing) ─────────────────────────
@@ -861,32 +884,35 @@ function requireKstPeriodTuple(
   }
 }
 
-export const kst = makeIndicator<KstParameters, number, KstPoint>(
-  (p) => {
-    for (const field of ['rocPeriods', 'smaPeriods'] as const) {
-      const v = (p as Record<string, unknown>)[field];
-      if (v !== undefined && !Array.isArray(v)) {
-        throw new InputError(
-          `kst: ${field} must be an array of four periods when provided. Received ${v === null ? 'null' : typeof v}.`,
-          { code: ErrorCode.InputWrongType, context: { field } },
-        );
+export const kst = withBuiltinMetadata(
+  makeIndicator<KstParameters, number, KstPoint>(
+    (p) => {
+      for (const field of ['rocPeriods', 'smaPeriods'] as const) {
+        const v = (p as Record<string, unknown>)[field];
+        if (v !== undefined && !Array.isArray(v)) {
+          throw new InputError(
+            `kst: ${field} must be an array of four periods when provided. Received ${v === null ? 'null' : typeof v}.`,
+            { code: ErrorCode.InputWrongType, context: { field } },
+          );
+        }
+        if (Array.isArray(v)) requireKstPeriodTuple(v, 'kst', field);
       }
-      if (Array.isArray(v)) requireKstPeriodTuple(v, 'kst', field);
-    }
-    const rocPeriods = (p.rocPeriods ?? [10, 15, 20, 30]).map((n, i) =>
-      requirePeriod(n, 'kst', `rocPeriods[${i}]`),
-    ) as [number, number, number, number];
-    const smaPeriods = (p.smaPeriods ?? [10, 10, 10, 15]).map((n, i) =>
-      requirePeriod(n, 'kst', `smaPeriods[${i}]`),
-    ) as [number, number, number, number];
-    return new KstStream({
-      rocPeriods: rocPeriods,
-      smaPeriods: smaPeriods,
-      signal: requirePeriod(p.signal ?? 9, 'kst', 'signal'),
-    });
-  },
-  KstStream.fromJSON,
-  () => ({ kst: NaN, signal: NaN }),
+      const rocPeriods = (p.rocPeriods ?? [10, 15, 20, 30]).map((n, i) =>
+        requirePeriod(n, 'kst', `rocPeriods[${i}]`),
+      ) as [number, number, number, number];
+      const smaPeriods = (p.smaPeriods ?? [10, 10, 10, 15]).map((n, i) =>
+        requirePeriod(n, 'kst', `smaPeriods[${i}]`),
+      ) as [number, number, number, number];
+      return new KstStream({
+        rocPeriods: rocPeriods,
+        smaPeriods: smaPeriods,
+        signal: requirePeriod(p.signal ?? 9, 'kst', 'signal'),
+      });
+    },
+    KstStream.fromJSON,
+    () => ({ kst: NaN, signal: NaN }),
+  ),
+  builtinMetadata.kstMetadata,
 );
 
 // ───────────────────────── Connors RSI ─────────────────────────
@@ -972,15 +998,18 @@ class ConnorsRsiStream implements IndicatorStream<number, number> {
   }
 }
 
-export const connorsRsi = makeIndicator<ConnorsRsiParameters, number, number>(
-  (p) =>
-    new ConnorsRsiStream({
-      rsiPeriod: requirePeriod(p.rsiPeriod ?? 3, 'connorsRsi', 'rsiPeriod'),
-      streakPeriod: requirePeriod(p.streakPeriod ?? 2, 'connorsRsi', 'streakPeriod'),
-      rankPeriod: requirePeriod(p.rankPeriod ?? 100, 'connorsRsi', 'rankPeriod'),
-    }),
-  ConnorsRsiStream.fromJSON,
-  nan,
+export const connorsRsi = withBuiltinMetadata(
+  makeIndicator<ConnorsRsiParameters, number, number>(
+    (p) =>
+      new ConnorsRsiStream({
+        rsiPeriod: requirePeriod(p.rsiPeriod ?? 3, 'connorsRsi', 'rsiPeriod'),
+        streakPeriod: requirePeriod(p.streakPeriod ?? 2, 'connorsRsi', 'streakPeriod'),
+        rankPeriod: requirePeriod(p.rankPeriod ?? 100, 'connorsRsi', 'rankPeriod'),
+      }),
+    ConnorsRsiStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.connorsRsiMetadata,
 );
 
 // ───────────────────────── CCI (Commodity Channel Index) ─────────────────────────
@@ -1039,11 +1068,13 @@ class CciStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const cci = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new CciStream(requirePeriod(p.period ?? 14, 'cci')),
-  CciStream.fromJSON,
-  nan,
-  { period: 14 },
+export const cci = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new CciStream(requirePeriod(p.period ?? 14, 'cci')),
+    CciStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.cciMetadata,
 );
 
 // ───────────────────────── Williams %R ─────────────────────────
@@ -1089,11 +1120,14 @@ class WilliamsRStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const williamsR = makeIndicator<{ period?: number }, BarInput, number>(
-  // Williams %R lookback defaults to 14 (universal); echoed via `.explain()`.
-  (p) => new WilliamsRStream(requirePeriod(p.period ?? 14, 'williamsR')),
-  WilliamsRStream.fromJSON,
-  nan,
+export const williamsR = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    // Williams %R lookback defaults to 14 (universal); echoed via `.explain()`.
+    (p) => new WilliamsRStream(requirePeriod(p.period ?? 14, 'williamsR')),
+    WilliamsRStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.williamsRMetadata,
 );
 
 // ───────────────────────── Awesome Oscillator ─────────────────────────
@@ -1141,14 +1175,17 @@ class AwesomeStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const awesomeOscillator = makeIndicator<AwesomeParameters, BarInput, number>(
-  (p) =>
-    new AwesomeStream({
-      fast: requirePeriod(p.fast ?? 5, 'awesomeOscillator', 'fast'),
-      slow: requirePeriod(p.slow ?? 34, 'awesomeOscillator', 'slow'),
-    }),
-  AwesomeStream.fromJSON,
-  nan,
+export const awesomeOscillator = withBuiltinMetadata(
+  makeIndicator<AwesomeParameters, BarInput, number>(
+    (p) =>
+      new AwesomeStream({
+        fast: requirePeriod(p.fast ?? 5, 'awesomeOscillator', 'fast'),
+        slow: requirePeriod(p.slow ?? 34, 'awesomeOscillator', 'slow'),
+      }),
+    AwesomeStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.awesomeOscillatorMetadata,
 );
 
 // ───────────────────────── Ultimate Oscillator ─────────────────────────
@@ -1232,15 +1269,18 @@ class UltimateStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const ultimateOscillator = makeIndicator<UltimateParameters, BarInput, number>(
-  (p) =>
-    new UltimateStream({
-      short: requirePeriod(p.short ?? 7, 'ultimateOscillator', 'short'),
-      medium: requirePeriod(p.medium ?? 14, 'ultimateOscillator', 'medium'),
-      long: requirePeriod(p.long ?? 28, 'ultimateOscillator', 'long'),
-    }),
-  UltimateStream.fromJSON,
-  nan,
+export const ultimateOscillator = withBuiltinMetadata(
+  makeIndicator<UltimateParameters, BarInput, number>(
+    (p) =>
+      new UltimateStream({
+        short: requirePeriod(p.short ?? 7, 'ultimateOscillator', 'short'),
+        medium: requirePeriod(p.medium ?? 14, 'ultimateOscillator', 'medium'),
+        long: requirePeriod(p.long ?? 28, 'ultimateOscillator', 'long'),
+      }),
+    UltimateStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.ultimateOscillatorMetadata,
 );
 
 // ───────────────────────── Fisher Transform ─────────────────────────
@@ -1307,10 +1347,13 @@ class FisherStream implements IndicatorStream<BarInput, FisherPoint> {
   }
 }
 
-export const fisherTransform = makeIndicator<FisherParameters, BarInput, FisherPoint>(
-  (p) => new FisherStream(requirePeriod(p.period ?? 9, 'fisherTransform')),
-  FisherStream.fromJSON,
-  () => ({ fisher: NaN, trigger: NaN }),
+export const fisherTransform = withBuiltinMetadata(
+  makeIndicator<FisherParameters, BarInput, FisherPoint>(
+    (p) => new FisherStream(requirePeriod(p.period ?? 9, 'fisherTransform')),
+    FisherStream.fromJSON,
+    () => ({ fisher: NaN, trigger: NaN }),
+  ),
+  builtinMetadata.fisherTransformMetadata,
 );
 
 // ───────────────────────── MACDEXT / MACDFIX ─────────────────────────
@@ -1456,46 +1499,49 @@ class MacdExtStream implements IndicatorStream<number, MacdPoint> {
   }
 }
 
-export const macdExt = makeIndicator<MacdExtParameters, number, MacdPoint>(
-  (p) => {
-    const fastMovingAverageType = requireOneOf(
-      p.fastMovingAverageType ?? 'ema',
-      MOVING_AVERAGE_TYPES,
-      'macdExt',
-      'fastMovingAverageType',
-    );
-    const slowMovingAverageType = requireOneOf(
-      p.slowMovingAverageType ?? 'ema',
-      MOVING_AVERAGE_TYPES,
-      'macdExt',
-      'slowMovingAverageType',
-    );
-    const signalMovingAverageType = requireOneOf(
-      p.signalMovingAverageType ?? 'ema',
-      MOVING_AVERAGE_TYPES,
-      'macdExt',
-      'signalMovingAverageType',
-    );
-    return new MacdExtStream({
-      fast: movingAverageStream(
-        fastMovingAverageType,
-        requirePeriod(p.fast ?? 12, 'macdExt', 'fast'),
-      ),
-      slow: movingAverageStream(
-        slowMovingAverageType,
-        requirePeriod(p.slow ?? 26, 'macdExt', 'slow'),
-      ),
-      signalMovingAverage: movingAverageStream(
-        signalMovingAverageType,
-        requirePeriod(p.signal ?? 9, 'macdExt', 'signal'),
-      ),
-      fastType: fastMovingAverageType,
-      slowType: slowMovingAverageType,
-      signalType: signalMovingAverageType,
-    });
-  },
-  MacdExtStream.fromJSON,
-  () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+export const macdExt = withBuiltinMetadata(
+  makeIndicator<MacdExtParameters, number, MacdPoint>(
+    (p) => {
+      const fastMovingAverageType = requireOneOf(
+        p.fastMovingAverageType ?? 'ema',
+        MOVING_AVERAGE_TYPES,
+        'macdExt',
+        'fastMovingAverageType',
+      );
+      const slowMovingAverageType = requireOneOf(
+        p.slowMovingAverageType ?? 'ema',
+        MOVING_AVERAGE_TYPES,
+        'macdExt',
+        'slowMovingAverageType',
+      );
+      const signalMovingAverageType = requireOneOf(
+        p.signalMovingAverageType ?? 'ema',
+        MOVING_AVERAGE_TYPES,
+        'macdExt',
+        'signalMovingAverageType',
+      );
+      return new MacdExtStream({
+        fast: movingAverageStream(
+          fastMovingAverageType,
+          requirePeriod(p.fast ?? 12, 'macdExt', 'fast'),
+        ),
+        slow: movingAverageStream(
+          slowMovingAverageType,
+          requirePeriod(p.slow ?? 26, 'macdExt', 'slow'),
+        ),
+        signalMovingAverage: movingAverageStream(
+          signalMovingAverageType,
+          requirePeriod(p.signal ?? 9, 'macdExt', 'signal'),
+        ),
+        fastType: fastMovingAverageType,
+        slowType: slowMovingAverageType,
+        signalType: signalMovingAverageType,
+      });
+    },
+    MacdExtStream.fromJSON,
+    () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.macdExtMetadata,
 );
 
 export interface MacdFixParameters {
@@ -1503,18 +1549,21 @@ export interface MacdFixParameters {
 }
 
 /** MACDFIX — fixed 12/26 EMA MACD with a configurable signal period (TA-Lib MACDFIX). */
-export const macdFix = makeIndicator<MacdFixParameters, number, MacdPoint>(
-  (p) =>
-    new MacdExtStream({
-      fast: new EmaStream(12),
-      slow: new EmaStream(26),
-      signalMovingAverage: new EmaStream(requirePeriod(p.signal ?? 9, 'macdFix', 'signal')),
-      fastType: 'ema',
-      slowType: 'ema',
-      signalType: 'ema',
-    }),
-  MacdExtStream.fromJSON,
-  () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+export const macdFix = withBuiltinMetadata(
+  makeIndicator<MacdFixParameters, number, MacdPoint>(
+    (p) =>
+      new MacdExtStream({
+        fast: new EmaStream(12),
+        slow: new EmaStream(26),
+        signalMovingAverage: new EmaStream(requirePeriod(p.signal ?? 9, 'macdFix', 'signal')),
+        fastType: 'ema',
+        slowType: 'ema',
+        signalType: 'ema',
+      }),
+    MacdExtStream.fromJSON,
+    () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.macdFixMetadata,
 );
 
 export {

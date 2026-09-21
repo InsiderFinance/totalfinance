@@ -6,6 +6,8 @@
  * full TA-Lib → TotalFinance name map. `cdlInside` is the inside-bar pattern facade.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import { requireArgumentArray, ErrorCode, InputError } from '@totalfinance/core';
 import { candlesticks, candlestickNames, detectCandles, type CandleMatch } from './candlesticks.js';
 import {
@@ -270,15 +272,18 @@ class CandleZStream implements IndicatorStream<BarInput, CandleZPoint> {
 }
 
 /** pandas-ta `cdl_z`: rolling sample z-score normalization of OHLC candles. */
-export const cdlZ = makeIndicator<CandleZParameters, BarInput, CandleZPoint>(
-  (p) => {
-    const period = requirePeriod(p.period ?? 30, 'cdlZ', 'period', 2);
-    const ddof = requireNonNegativeInt(p.ddof ?? 1, 'cdlZ', 'ddof');
-    requireAtMost(ddof, period - 1, 'cdlZ', 'ddof', 'period - 1');
-    return new CandleZStream({ period, ddof });
-  },
-  CandleZStream.fromJSON,
-  () => ({ open: NaN, high: NaN, low: NaN, close: NaN }),
+export const cdlZ = withBuiltinMetadata(
+  makeIndicator<CandleZParameters, BarInput, CandleZPoint>(
+    (p) => {
+      const period = requirePeriod(p.period ?? 30, 'cdlZ', 'period', 2);
+      const ddof = requireNonNegativeInt(p.ddof ?? 1, 'cdlZ', 'ddof');
+      requireAtMost(ddof, period - 1, 'cdlZ', 'ddof', 'period - 1');
+      return new CandleZStream({ period, ddof });
+    },
+    CandleZStream.fromJSON,
+    () => ({ open: NaN, high: NaN, low: NaN, close: NaN }),
+  ),
+  builtinMetadata.cdlZMetadata,
 );
 
 export { CandleZStream };

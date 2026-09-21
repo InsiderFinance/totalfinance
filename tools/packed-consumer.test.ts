@@ -21,6 +21,8 @@ import {
 } from './release/registry-smoke.js';
 import type { ReleaseManifest } from './release/dry-run.js';
 import { playgrounds } from '../site/src/playgrounds/index.js';
+import { registerInstalledConsumerTests } from './bundle-size/consumer-tests.js';
+import { assertInstalledIndicatorMetadata } from './bundle-size/indicator-metadata-consumer.js';
 
 /**
  * Alignment-spec P1.5 — the PACKED-consumer matrix. Workspace imports prove nothing about what
@@ -490,6 +492,23 @@ afterAll(() => {
     }
   }
 }, 60_000);
+
+// TS1/TS3 reuse the tarballs and installation above; no duplicate pack/install cycle.
+registerInstalledConsumerTests(() => consumer);
+
+it('the complete installed indicator catalog is independent of discovery imports', async () => {
+  const coverage = await assertInstalledIndicatorMetadata(consumer);
+  expect(coverage.names).toBe(335);
+  expect(coverage.identities).toBe(321);
+  expect(coverage.leafEntrypoints).toBeGreaterThan(20);
+  expect(coverage.comparisons).toBeGreaterThan(335 * 10);
+  expect(coverage.dependentDefaults.sort()).toEqual([
+    'chaikinVolatility.rocPeriod',
+    'relativeVolatilityIndex.stdevPeriod',
+    'vidya.cmoPeriod',
+  ]);
+  expect(coverage.nullableDefaults).toContain('tosStdevAll.period');
+}, 120_000);
 
 describe('site copy buttons against installed tarballs and release receipts', () => {
   let result: SiteExamplesSmokeResult;

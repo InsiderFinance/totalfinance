@@ -1,5 +1,7 @@
 /** MACD — Moving Average Convergence/Divergence (spec §13.3). */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -76,16 +78,18 @@ class MacdStream implements IndicatorStream<number, MacdPoint> {
 
 const nanPoint = (): MacdPoint => ({ macd: NaN, signal: NaN, histogram: NaN });
 
-export const macd = makeIndicator<MacdParameters, number, MacdPoint>(
-  (p) =>
-    new MacdStream({
-      fast: requirePeriod(p.fast ?? 12, 'macd', 'fast'),
-      slow: requirePeriod(p.slow ?? 26, 'macd', 'slow'),
-      signal: requirePeriod(p.signal ?? 9, 'macd', 'signal'),
-    }),
-  MacdStream.fromJSON,
-  nanPoint,
-  { fast: 12, slow: 26, signal: 9 },
+export const macd = withBuiltinMetadata(
+  makeIndicator<MacdParameters, number, MacdPoint>(
+    (p) =>
+      new MacdStream({
+        fast: requirePeriod(p.fast ?? 12, 'macd', 'fast'),
+        slow: requirePeriod(p.slow ?? 26, 'macd', 'slow'),
+        signal: requirePeriod(p.signal ?? 9, 'macd', 'signal'),
+      }),
+    MacdStream.fromJSON,
+    nanPoint,
+  ),
+  builtinMetadata.macdMetadata,
 );
 
 export { MacdStream };

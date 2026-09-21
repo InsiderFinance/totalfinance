@@ -8,6 +8,8 @@
  * entry/exit flags.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -110,10 +112,13 @@ class ChoppinessStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const choppinessIndex = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new ChoppinessStream(requirePeriod(p.period ?? 14, 'choppinessIndex', 'period', 2)),
-  ChoppinessStream.fromJSON,
-  nan,
+export const choppinessIndex = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new ChoppinessStream(requirePeriod(p.period ?? 14, 'choppinessIndex', 'period', 2)),
+    ChoppinessStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.choppinessIndexMetadata,
 );
 
 // ───────────────────────── Chande Kroll Stop ─────────────────────────
@@ -207,19 +212,18 @@ class ChandeKrollStopStream implements IndicatorStream<BarInput, ChandeKrollStop
   }
 }
 
-export const chandeKrollStop = makeIndicator<
-  ChandeKrollStopParameters,
-  BarInput,
-  ChandeKrollStopPoint
->(
-  (p) =>
-    new ChandeKrollStopStream({
-      atrPeriod: requirePeriod(p.atrPeriod ?? 10, 'chandeKrollStop', 'atrPeriod'),
-      mult: requirePositive(p.multiplier ?? 1, 'chandeKrollStop', 'multiplier'),
-      period: requirePeriod(p.period ?? 9, 'chandeKrollStop', 'period'),
-    }),
-  ChandeKrollStopStream.fromJSON,
-  () => ({ long: NaN, short: NaN }),
+export const chandeKrollStop = withBuiltinMetadata(
+  makeIndicator<ChandeKrollStopParameters, BarInput, ChandeKrollStopPoint>(
+    (p) =>
+      new ChandeKrollStopStream({
+        atrPeriod: requirePeriod(p.atrPeriod ?? 10, 'chandeKrollStop', 'atrPeriod'),
+        mult: requirePositive(p.multiplier ?? 1, 'chandeKrollStop', 'multiplier'),
+        period: requirePeriod(p.period ?? 9, 'chandeKrollStop', 'period'),
+      }),
+    ChandeKrollStopStream.fromJSON,
+    () => ({ long: NaN, short: NaN }),
+  ),
+  builtinMetadata.chandeKrollStopMetadata,
 );
 
 // ───────────────────────── Central Pivot Range ─────────────────────────
@@ -261,10 +265,13 @@ class CentralPivotRangeStream implements IndicatorStream<BarInput, CprPoint> {
   }
 }
 
-export const centralPivotRange = makeIndicator<Record<string, never>, BarInput, CprPoint>(
-  () => new CentralPivotRangeStream(),
-  CentralPivotRangeStream.fromJSON,
-  () => ({ pivot: NaN, topCentral: NaN, bottomCentral: NaN }),
+export const centralPivotRange = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, BarInput, CprPoint>(
+    () => new CentralPivotRangeStream(),
+    CentralPivotRangeStream.fromJSON,
+    () => ({ pivot: NaN, topCentral: NaN, bottomCentral: NaN }),
+  ),
+  builtinMetadata.centralPivotRangeMetadata,
 );
 
 // ───────────────────────── decay lines ─────────────────────────
@@ -301,20 +308,26 @@ class DecayStream implements IndicatorStream<number, number> {
 }
 
 /** Linear decay floor — the series may rise freely but falls no faster than `1/period` per bar. */
-export const linearDecay = makeIndicator<{ period?: number }, number, number>(
-  (p) => new DecayStream('linearDecay', 1 / requirePeriod(p.period ?? 5, 'linearDecay')),
-  DecayStream.restore('linearDecay'),
-  nan,
+export const linearDecay = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new DecayStream('linearDecay', 1 / requirePeriod(p.period ?? 5, 'linearDecay')),
+    DecayStream.restore('linearDecay'),
+    nan,
+  ),
+  builtinMetadata.linearDecayMetadata,
 );
 /** Exponential decay floor — same shape, with an `exp(−period)` step (decays far more slowly). */
-export const exponentialDecay = makeIndicator<{ period?: number }, number, number>(
-  (p) =>
-    new DecayStream(
-      'exponentialDecay',
-      Math.exp(-requirePeriod(p.period ?? 5, 'exponentialDecay')),
-    ),
-  DecayStream.restore('exponentialDecay'),
-  nan,
+export const exponentialDecay = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) =>
+      new DecayStream(
+        'exponentialDecay',
+        Math.exp(-requirePeriod(p.period ?? 5, 'exponentialDecay')),
+      ),
+    DecayStream.restore('exponentialDecay'),
+    nan,
+  ),
+  builtinMetadata.exponentialDecayMetadata,
 );
 
 // ───────────────────────── increasing / decreasing ─────────────────────────
@@ -385,30 +398,34 @@ class TrendTestStream implements IndicatorStream<number, number> {
 }
 
 /** 1 when the series is higher than `period` bars ago (strict → every step rose). */
-export const increasing = makeIndicator<TrendTestParameters, number, number>(
-  (p) =>
-    new TrendTestStream(
-      'increasing',
-      requirePeriod(p.period ?? 1, 'increasing'),
-      requireBooleanWhenPresent(p.strict, 'increasing', 'strict') ?? false,
-      true,
-    ),
-  TrendTestStream.restore('increasing'),
-  nan,
-  { period: 1, strict: false },
+export const increasing = withBuiltinMetadata(
+  makeIndicator<TrendTestParameters, number, number>(
+    (p) =>
+      new TrendTestStream(
+        'increasing',
+        requirePeriod(p.period ?? 1, 'increasing'),
+        requireBooleanWhenPresent(p.strict, 'increasing', 'strict') ?? false,
+        true,
+      ),
+    TrendTestStream.restore('increasing'),
+    nan,
+  ),
+  builtinMetadata.increasingMetadata,
 );
 /** 1 when the series is lower than `period` bars ago (strict → every step fell). */
-export const decreasing = makeIndicator<TrendTestParameters, number, number>(
-  (p) =>
-    new TrendTestStream(
-      'decreasing',
-      requirePeriod(p.period ?? 1, 'decreasing'),
-      requireBooleanWhenPresent(p.strict, 'decreasing', 'strict') ?? false,
-      false,
-    ),
-  TrendTestStream.restore('decreasing'),
-  nan,
-  { period: 1, strict: false },
+export const decreasing = withBuiltinMetadata(
+  makeIndicator<TrendTestParameters, number, number>(
+    (p) =>
+      new TrendTestStream(
+        'decreasing',
+        requirePeriod(p.period ?? 1, 'decreasing'),
+        requireBooleanWhenPresent(p.strict, 'decreasing', 'strict') ?? false,
+        false,
+      ),
+    TrendTestStream.restore('decreasing'),
+    nan,
+  ),
+  builtinMetadata.decreasingMetadata,
 );
 
 // ───────────────────────── long-run / short-run (two-series) ─────────────────────────
@@ -464,16 +481,22 @@ class RunStream implements IndicatorStream<Pair, number> {
 }
 
 /** 1 when fast (`x`) and slow (`y`) are both rising over the lookback — a confirmed up-run. */
-export const longRun = makeIndicator<{ period?: number }, Pair, number>(
-  (p) => new RunStream('longRun', requirePeriod(p.period ?? 2, 'longRun'), true),
-  RunStream.restore('longRun'),
-  nan,
+export const longRun = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, Pair, number>(
+    (p) => new RunStream('longRun', requirePeriod(p.period ?? 2, 'longRun'), true),
+    RunStream.restore('longRun'),
+    nan,
+  ),
+  builtinMetadata.longRunMetadata,
 );
 /** 1 when fast (`x`) and slow (`y`) are both falling over the lookback — a confirmed down-run. */
-export const shortRun = makeIndicator<{ period?: number }, Pair, number>(
-  (p) => new RunStream('shortRun', requirePeriod(p.period ?? 2, 'shortRun'), false),
-  RunStream.restore('shortRun'),
-  nan,
+export const shortRun = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, Pair, number>(
+    (p) => new RunStream('shortRun', requirePeriod(p.period ?? 2, 'shortRun'), false),
+    RunStream.restore('shortRun'),
+    nan,
+  ),
+  builtinMetadata.shortRunMetadata,
 );
 
 // ───────────────────────── Archer Moving Averages Trends ─────────────────────────
@@ -573,16 +596,19 @@ class AmatStream implements IndicatorStream<number, AmatPoint> {
 }
 
 /** Archer Moving Averages Trends (pandas-ta `amat`). */
-export const amat = makeIndicator<AmatParameters, number, AmatPoint>(
-  (p) =>
-    new AmatStream({
-      fast: requirePeriod(p.fast ?? 8, 'amat', 'fast'),
-      slow: requirePeriod(p.slow ?? 21, 'amat', 'slow'),
-      lookback: requirePeriod(p.lookback ?? 2, 'amat', 'lookback'),
-      movingAverageType: p.movingAverageType ?? 'ema',
-    }),
-  AmatStream.fromJSON,
-  () => ({ long: NaN, short: NaN }),
+export const amat = withBuiltinMetadata(
+  makeIndicator<AmatParameters, number, AmatPoint>(
+    (p) =>
+      new AmatStream({
+        fast: requirePeriod(p.fast ?? 8, 'amat', 'fast'),
+        slow: requirePeriod(p.slow ?? 21, 'amat', 'slow'),
+        lookback: requirePeriod(p.lookback ?? 2, 'amat', 'lookback'),
+        movingAverageType: p.movingAverageType ?? 'ema',
+      }),
+    AmatStream.fromJSON,
+    () => ({ long: NaN, short: NaN }),
+  ),
+  builtinMetadata.amatMetadata,
 );
 
 // ───────────────────────── PMax (MA-based Supertrend) ─────────────────────────
@@ -675,14 +701,17 @@ class PmaxStream implements IndicatorStream<BarInput, PmaxPoint> {
   }
 }
 
-export const pMax = makeIndicator<PmaxParameters, BarInput, PmaxPoint>(
-  (p) =>
-    new PmaxStream(
-      requirePeriod(p.period ?? 10, 'pMax'),
-      requirePositive(p.multiplier ?? 3, 'pMax', 'multiplier'),
-    ),
-  PmaxStream.fromJSON,
-  () => ({ pmax: NaN, trend: NaN }),
+export const pMax = withBuiltinMetadata(
+  makeIndicator<PmaxParameters, BarInput, PmaxPoint>(
+    (p) =>
+      new PmaxStream(
+        requirePeriod(p.period ?? 10, 'pMax'),
+        requirePositive(p.multiplier ?? 3, 'pMax', 'multiplier'),
+      ),
+    PmaxStream.fromJSON,
+    () => ({ pmax: NaN, trend: NaN }),
+  ),
+  builtinMetadata.pMaxMetadata,
 );
 
 // ───────────────────────── Q Stick ─────────────────────────
@@ -710,10 +739,13 @@ class QstickStream implements IndicatorStream<BarInput, number> {
 }
 
 /** Q Stick — SMA of (close − open); positive = bullish bodies dominate. */
-export const qstick = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new QstickStream(requirePeriod(p.period ?? 10, 'qstick')),
-  QstickStream.fromJSON,
-  nan,
+export const qstick = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new QstickStream(requirePeriod(p.period ?? 10, 'qstick')),
+    QstickStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.qstickMetadata,
 );
 
 // ───────────────────────── TTM Trend ─────────────────────────
@@ -746,10 +778,13 @@ class TtmTrendStream implements IndicatorStream<BarInput, number> {
 }
 
 /** TTM Trend — +1 when close is above the SMA of HL2 over the lookback, −1 otherwise. */
-export const ttmTrend = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new TtmTrendStream(requirePeriod(p.period ?? 6, 'ttmTrend')),
-  TtmTrendStream.fromJSON,
-  nan,
+export const ttmTrend = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new TtmTrendStream(requirePeriod(p.period ?? 6, 'ttmTrend')),
+    TtmTrendStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.ttmTrendMetadata,
 );
 
 // ───────────────────────── Vertical Horizontal Filter ─────────────────────────
@@ -799,10 +834,13 @@ class VhfStream implements IndicatorStream<number, number> {
 }
 
 /** Vertical Horizontal Filter — trend strength = range / summed absolute change. */
-export const verticalHorizontalFilter = makeIndicator<{ period?: number }, number, number>(
-  (p) => new VhfStream(requirePeriod(p.period ?? 28, 'verticalHorizontalFilter')),
-  VhfStream.fromJSON,
-  nan,
+export const verticalHorizontalFilter = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new VhfStream(requirePeriod(p.period ?? 28, 'verticalHorizontalFilter')),
+    VhfStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.verticalHorizontalFilterMetadata,
 );
 
 // ───────────────────────── trend / cross signal state machines ─────────────────────────
@@ -840,10 +878,13 @@ class TrendSignalsStream implements IndicatorStream<number, TrendSignalPoint> {
 }
 
 /** Turn a trend series (>0 ⇒ in-trend) into trend/entry/exit flags. */
-export const trendSignals = makeIndicator<Record<string, never>, number, TrendSignalPoint>(
-  () => new TrendSignalsStream(),
-  TrendSignalsStream.fromJSON,
-  () => ({ trend: NaN, entry: NaN, exit: NaN }),
+export const trendSignals = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, number, TrendSignalPoint>(
+    () => new TrendSignalsStream(),
+    TrendSignalsStream.fromJSON,
+    () => ({ trend: NaN, entry: NaN, exit: NaN }),
+  ),
+  builtinMetadata.trendSignalsMetadata,
 );
 
 export interface CrossSignalParameters {
@@ -902,12 +943,15 @@ class CrossSignalsStream implements IndicatorStream<number, TrendSignalPoint> {
 }
 
 /** Cross-based long/flat state machine: enter when the series crosses above `above`, exit below `below`. */
-export const crossSignals = makeIndicator<CrossSignalParameters, number, TrendSignalPoint>(
-  (p) =>
-    new CrossSignalsStream(
-      requireFinite(p.above ?? 0, 'crossSignals', 'above'),
-      requireFinite(p.below ?? 0, 'crossSignals', 'below'),
-    ),
-  CrossSignalsStream.fromJSON,
-  () => ({ trend: NaN, entry: NaN, exit: NaN }),
+export const crossSignals = withBuiltinMetadata(
+  makeIndicator<CrossSignalParameters, number, TrendSignalPoint>(
+    (p) =>
+      new CrossSignalsStream(
+        requireFinite(p.above ?? 0, 'crossSignals', 'above'),
+        requireFinite(p.below ?? 0, 'crossSignals', 'below'),
+      ),
+    CrossSignalsStream.fromJSON,
+    () => ({ trend: NaN, entry: NaN, exit: NaN }),
+  ),
+  builtinMetadata.crossSignalsMetadata,
 );

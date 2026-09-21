@@ -12,6 +12,9 @@
 > **Queue authority:** [`../implementation-order.md`](../implementation-order.md) controls when each
 > slice starts. Phase 3B and the original core-freeze program have closed; this specification retains
 > their compute contracts and the separate locally verified repair closeout.
+> **Current pre-release repair (2026-09-21):** [installed-consumer bundle guarantees](./tree-shaking-and-consumer-budgets.md)
+> are in progress in the standalone TotalFinance repository. This bounded import/validation repair
+> precedes the exact release rehearsal; it does not reopen FC0–FC9 or authorize publication.
 > **Permanent API authority:** [`../library-alignment-spec.md`](../library-alignment-spec.md) and
 > [`../platform-completeness-roadmap.md`](../platform-completeness-roadmap.md). Every public API added
 > here must satisfy their naming, argument, result, runtime, layering, determinism, provenance, and

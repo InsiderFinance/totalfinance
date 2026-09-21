@@ -1,14 +1,20 @@
 # Getting Started
 
-Install the `totalfinance` umbrella package — one install for the whole toolkit. The options API is
-re-exported flat; every other package is a namespace (`technicalAnalysis`, `risk`, `volatility`, `strategy`, …):
+TotalFinance is an unpublished preview. Until npm publication, use a
+[source checkout](https://github.com/InsiderFinance/totalfinance#develop); the install commands below describe the planned published
+experience, not a completed registry installation.
+
+The `totalfinance` umbrella provides one install for the whole toolkit. For portable browser tree
+shaking, use named imports from its domain subpaths:
 
 ```sh
 pnpm add totalfinance
 ```
 
 ```ts
-import { blackScholes, risk, technicalAnalysis } from 'totalfinance';
+import { blackScholes } from 'totalfinance/options';
+import { valueAtRisk } from 'totalfinance/risk';
+import { rsi } from 'totalfinance/technical-analysis';
 
 blackScholes.call({
   spot: 100,
@@ -17,22 +23,32 @@ blackScholes.call({
   riskFreeRate: 0.045,
   volatility: 0.22,
 }); // => 0.8983...
-technicalAnalysis
-  .rsi([
-    44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
-    46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
-  ])
-  .at(-1); // => 57.92 — RSI-14 needs 15+ closes (fewer is an all-NaN warmup)
-risk.valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
+rsi([
+  44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
+  46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
+]).at(-1); // => 57.92 — RSI-14 needs 15+ closes (fewer is an all-NaN warmup)
+valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
 ```
 
-If you want the leanest possible bundle, install only the packages you need instead — every
-`@totalfinance/*` package is independently published and tree-shakeable, with deep per-feature
-entrypoints. The options package includes the Black-Scholes facade and the pro option-pricing API:
+The root keeps its convenience API: domain namespaces (`math`, `technicalAnalysis`, `risk`,
+`options`, …) and only five hoisted option gestures (`blackScholes`, `option`, `market`, `engines`,
+`impliedVolatility`), not the entire options API flat. There is a bundler tradeoff:
+`import { math } from 'totalfinance'; math.normalCdf(0)` retains the whole math namespace with
+esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use.
+Direct `import * as math from 'totalfinance/math'` with static member use also shakes.
+
+For a smaller installation, choose only the scoped packages you need. Named imports from
+`@totalfinance/<domain>` and supported feature subpaths are also portable browser choices:
 
 ```sh
 pnpm add @totalfinance/options
 ```
+
+Installation size and final bundle size are different: installing the umbrella does not require
+shipping every domain. Plain Node ESM does no automatic dead-code elimination. Dynamic namespace
+access and registries retain reachable implementations; type-only imports add no runtime code.
+See [Imports and bundles](./guides/imports-and-bundles.md) for import examples, facade costs, and
+generated measurements.
 
 ## Facade API
 

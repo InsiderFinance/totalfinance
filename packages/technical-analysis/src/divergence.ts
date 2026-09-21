@@ -16,6 +16,8 @@
  * `price-action`.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   ErrorCode,
   InputError,
@@ -329,11 +331,13 @@ function makeStream(parameters: DivergenceParameters): DivergenceStream {
  * yields a numeric {@link DivergencePoint} (`code: 0` when nothing confirms). For the friendly
  * event-list form with string `kind`, use {@link divergences}.
  */
-export const divergence = makeIndicator<DivergenceParameters, Pair, DivergencePoint>(
-  makeStream,
-  DivergenceStream.fromJSON,
-  nanPoint,
-  { swing: { left: 5, right: 5 }, kinds: [...ALL_KINDS] },
+export const divergence = withBuiltinMetadata(
+  makeIndicator<DivergenceParameters, Pair, DivergencePoint>(
+    makeStream,
+    DivergenceStream.fromJSON,
+    nanPoint,
+  ),
+  builtinMetadata.divergenceMetadata,
 );
 
 /**

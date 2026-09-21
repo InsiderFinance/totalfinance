@@ -1,5 +1,7 @@
 /** Bollinger Bands (spec §13.3). */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -95,15 +97,17 @@ const nanPoint = (): BollingerPoint => ({
   percentB: NaN,
 });
 
-export const bbands = makeIndicator<BollingerParameters, number, BollingerPoint>(
-  (p) =>
-    new BollingerStream({
-      period: requirePeriod(p.period ?? 20, 'bbands'),
-      standardDeviation: requirePositive(p.standardDeviation ?? 2, 'bbands', 'standardDeviation'),
-    }),
-  BollingerStream.fromJSON,
-  nanPoint,
-  { period: 20, standardDeviation: 2 },
+export const bbands = withBuiltinMetadata(
+  makeIndicator<BollingerParameters, number, BollingerPoint>(
+    (p) =>
+      new BollingerStream({
+        period: requirePeriod(p.period ?? 20, 'bbands'),
+        standardDeviation: requirePositive(p.standardDeviation ?? 2, 'bbands', 'standardDeviation'),
+      }),
+    BollingerStream.fromJSON,
+    nanPoint,
+  ),
+  builtinMetadata.bbandsMetadata,
 );
 
 export { BollingerStream };

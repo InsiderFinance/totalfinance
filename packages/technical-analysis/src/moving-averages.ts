@@ -7,6 +7,8 @@
  * batch+stream facade by `makeIndicator`, so batch output equals stream output by construction.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import { ErrorCode, InputError } from '@totalfinance/core';
 
 import {
@@ -1309,133 +1311,194 @@ class FramaStream implements IndicatorStream<BarInput, number> {
 
 const nan = (): number => NaN;
 
-export const sma = makeIndicator<PeriodParameters, number, number>(
-  (p) => new SmaStream(requirePeriod(p.period, 'sma')),
-  SmaStream.fromJSON,
-  nan,
+export const sma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new SmaStream(requirePeriod(p.period, 'sma')),
+    SmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.smaMetadata,
 );
-export const ema = makeIndicator<PeriodParameters, number, number>(
-  (p) => new EmaStream(requirePeriod(p.period, 'ema')),
-  EmaStream.fromJSON,
-  nan,
+export const ema = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new EmaStream(requirePeriod(p.period, 'ema')),
+    EmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.emaMetadata,
 );
-export const wma = makeIndicator<PeriodParameters, number, number>(
-  (p) => new WmaStream(requirePeriod(p.period, 'wma')),
-  WmaStream.fromJSON,
-  nan,
+export const wma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new WmaStream(requirePeriod(p.period, 'wma')),
+    WmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.wmaMetadata,
 );
-export const rma = makeIndicator<PeriodParameters, number, number>(
-  (p) => new RmaStream(requirePeriod(p.period, 'rma')),
-  RmaStream.fromJSON,
-  nan,
+export const rma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new RmaStream(requirePeriod(p.period, 'rma')),
+    RmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rmaMetadata,
 );
-export const dema = makeIndicator<PeriodParameters, number, number>(
-  (p) => new DemaStream(requirePeriod(p.period, 'dema')),
-  DemaStream.fromJSON,
-  nan,
+export const dema = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new DemaStream(requirePeriod(p.period, 'dema')),
+    DemaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.demaMetadata,
 );
-export const tema = makeIndicator<PeriodParameters, number, number>(
-  (p) => new TemaStream(requirePeriod(p.period, 'tema')),
-  TemaStream.fromJSON,
-  nan,
+export const tema = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new TemaStream(requirePeriod(p.period, 'tema')),
+    TemaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.temaMetadata,
 );
-export const trima = makeIndicator<PeriodParameters, number, number>(
-  (p) => new TrimaStream(requirePeriod(p.period, 'trima')),
-  TrimaStream.fromJSON,
-  nan,
+export const trima = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new TrimaStream(requirePeriod(p.period, 'trima')),
+    TrimaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.trimaMetadata,
 );
-export const t3 = makeIndicator<T3Parameters, number, number>(
-  (p) =>
-    new T3Stream({
-      period: requirePeriod(p.period, 't3'),
-      volumeFactor: requireInRange(p.volumeFactor ?? 0.7, 't3', 'volumeFactor', 0, 1),
-    }),
-  T3Stream.fromJSON,
-  nan,
+export const t3 = withBuiltinMetadata(
+  makeIndicator<T3Parameters, number, number>(
+    (p) =>
+      new T3Stream({
+        period: requirePeriod(p.period, 't3'),
+        volumeFactor: requireInRange(p.volumeFactor ?? 0.7, 't3', 'volumeFactor', 0, 1),
+      }),
+    T3Stream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.t3Metadata,
 );
-export const kama = makeIndicator<KamaParameters, number, number>(
-  (p) =>
-    new KamaStream({
-      period: requirePeriod(p.period, 'kama'),
-      fast: requirePeriod(p.fast ?? 2, 'kama', 'fast'),
-      slow: requirePeriod(p.slow ?? 30, 'kama', 'slow'),
-    }),
-  KamaStream.fromJSON,
-  nan,
+export const kama = withBuiltinMetadata(
+  makeIndicator<KamaParameters, number, number>(
+    (p) =>
+      new KamaStream({
+        period: requirePeriod(p.period, 'kama'),
+        fast: requirePeriod(p.fast ?? 2, 'kama', 'fast'),
+        slow: requirePeriod(p.slow ?? 30, 'kama', 'slow'),
+      }),
+    KamaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.kamaMetadata,
 );
-export const hma = makeIndicator<PeriodParameters, number, number>(
-  (p) => new HmaStream(requirePeriod(p.period, 'hma')),
-  HmaStream.fromJSON,
-  nan,
+export const hma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new HmaStream(requirePeriod(p.period, 'hma')),
+    HmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.hmaMetadata,
 );
-export const zlema = makeIndicator<PeriodParameters, number, number>(
-  (p) => new ZlemaStream(requirePeriod(p.period, 'zlema')),
-  ZlemaStream.fromJSON,
-  nan,
+export const zlema = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new ZlemaStream(requirePeriod(p.period, 'zlema')),
+    ZlemaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.zlemaMetadata,
 );
-export const alma = makeIndicator<AlmaParameters, number, number>(
-  (p) =>
-    new AlmaStream({
-      period: requirePeriod(p.period, 'alma'),
-      offset: requireInRange(p.offset ?? 0.85, 'alma', 'offset', 0, 1),
-      sigma: requirePositive(p.sigma ?? 6, 'alma', 'sigma'),
-    }),
-  AlmaStream.fromJSON,
-  nan,
+export const alma = withBuiltinMetadata(
+  makeIndicator<AlmaParameters, number, number>(
+    (p) =>
+      new AlmaStream({
+        period: requirePeriod(p.period, 'alma'),
+        offset: requireInRange(p.offset ?? 0.85, 'alma', 'offset', 0, 1),
+        sigma: requirePositive(p.sigma ?? 6, 'alma', 'sigma'),
+      }),
+    AlmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.almaMetadata,
 );
-export const vidya = makeIndicator<VidyaParameters, number, number>(
-  (p) =>
-    new VidyaStream({
-      period: requirePeriod(p.period, 'vidya'),
-      cmoPeriod: requirePeriod(p.cmoPeriod ?? p.period, 'vidya', 'cmoPeriod'),
-    }),
-  VidyaStream.fromJSON,
-  nan,
+export const vidya = withBuiltinMetadata(
+  makeIndicator<VidyaParameters, number, number>(
+    (p) =>
+      new VidyaStream({
+        period: requirePeriod(p.period, 'vidya'),
+        cmoPeriod: requirePeriod(p.cmoPeriod ?? p.period, 'vidya', 'cmoPeriod'),
+      }),
+    VidyaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.vidyaMetadata,
 );
-export const mcginley = makeIndicator<PeriodParameters, number, number>(
-  (p) => new McGinleyStream(requirePeriod(p.period, 'mcginley')),
-  McGinleyStream.fromJSON,
-  nan,
+export const mcginley = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new McGinleyStream(requirePeriod(p.period, 'mcginley')),
+    McGinleyStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.mcginleyMetadata,
 );
-export const superSmoother = makeIndicator<PeriodParameters, number, number>(
-  (p) => new SuperSmootherStream(requirePeriod(p.period, 'superSmoother')),
-  SuperSmootherStream.fromJSON,
-  nan,
+export const superSmoother = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new SuperSmootherStream(requirePeriod(p.period, 'superSmoother')),
+    SuperSmootherStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.superSmootherMetadata,
 );
-export const vwma = makeIndicator<PeriodParameters, BarInput, number>(
-  (p) => new VwmaStream(requirePeriod(p.period, 'vwma', 'period', 1, 'bars')),
-  VwmaStream.fromJSON,
-  nan,
+export const vwma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, number>(
+    (p) => new VwmaStream(requirePeriod(p.period, 'vwma', 'period', 1, 'bars')),
+    VwmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.vwmaMetadata,
 );
-export const rollingVwap = makeIndicator<PeriodParameters, BarInput, number>(
-  (p) => new RollingVwapStream(requirePeriod(p.period, 'rollingVwap', 'period', 1, 'bars')),
-  RollingVwapStream.fromJSON,
-  nan,
+export const rollingVwap = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, number>(
+    (p) => new RollingVwapStream(requirePeriod(p.period, 'rollingVwap', 'period', 1, 'bars')),
+    RollingVwapStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rollingVwapMetadata,
 );
-export const anchoredVwap = makeIndicator<AnchoredVwapParameters, BarInput, number>(
-  (p) => new AnchoredVwapStream(requireNonNegativeInt(p.anchor, 'anchoredVwap', 'anchor', 'bars')),
-  AnchoredVwapStream.fromJSON,
-  nan,
+export const anchoredVwap = withBuiltinMetadata(
+  makeIndicator<AnchoredVwapParameters, BarInput, number>(
+    (p) =>
+      new AnchoredVwapStream(requireNonNegativeInt(p.anchor, 'anchoredVwap', 'anchor', 'bars')),
+    AnchoredVwapStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.anchoredVwapMetadata,
 );
-export const frama = makeIndicator<FramaParameters, BarInput, number>(
-  (p) => new FramaStream(requirePeriod(p.period, 'frama', 'period', 1, 'bars')),
-  FramaStream.fromJSON,
-  nan,
+export const frama = withBuiltinMetadata(
+  makeIndicator<FramaParameters, BarInput, number>(
+    (p) => new FramaStream(requirePeriod(p.period, 'frama', 'period', 1, 'bars')),
+    FramaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.framaMetadata,
 );
-export const mama = makeIndicator<MamaParameters, BarInput, MamaPoint>(
-  (p) => {
-    // `alpha` is used directly as a smoothing weight, so enforce 0 < slowLimit ≤ fastLimit ≤ 1.
-    const fastLimit = p.fastLimit ?? 0.5;
-    const slowLimit = p.slowLimit ?? 0.05;
-    requirePositive(fastLimit, 'mama', 'fastLimit');
-    requirePositive(slowLimit, 'mama', 'slowLimit');
-    requireInRange(fastLimit, 'mama', 'fastLimit', 0, 1);
-    requireInRange(slowLimit, 'mama', 'slowLimit', 0, 1);
-    requireAtMost(slowLimit, fastLimit, 'mama', 'slowLimit', 'fastLimit');
-    return new MamaStream({ fastLimit, slowLimit });
-  },
-  MamaStream.fromJSON,
-  () => ({ mama: NaN, fama: NaN }),
+export const mama = withBuiltinMetadata(
+  makeIndicator<MamaParameters, BarInput, MamaPoint>(
+    (p) => {
+      // `alpha` is used directly as a smoothing weight, so enforce 0 < slowLimit ≤ fastLimit ≤ 1.
+      const fastLimit = p.fastLimit ?? 0.5;
+      const slowLimit = p.slowLimit ?? 0.05;
+      requirePositive(fastLimit, 'mama', 'fastLimit');
+      requirePositive(slowLimit, 'mama', 'slowLimit');
+      requireInRange(fastLimit, 'mama', 'fastLimit', 0, 1);
+      requireInRange(slowLimit, 'mama', 'slowLimit', 0, 1);
+      requireAtMost(slowLimit, fastLimit, 'mama', 'slowLimit', 'fastLimit');
+      return new MamaStream({ fastLimit, slowLimit });
+    },
+    MamaStream.fromJSON,
+    () => ({ mama: NaN, fama: NaN }),
+  ),
+  builtinMetadata.mamaMetadata,
 );
 
 export {

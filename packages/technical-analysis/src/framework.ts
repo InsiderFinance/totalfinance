@@ -1045,7 +1045,7 @@ function validateSeries<In>(
 }
 
 /**
- * Registration-time metadata bound onto a facade (one slot per indicator, keyed by a symbol):
+ * Metadata bound onto a facade (one slot per indicator, keyed by a symbol):
  * `defaults` are the indicator's declared parameter defaults, echoed through
  * `.explain().assumptions.parameters` merged under the caller's parameters — the disclosure law (R1): a
  * default that engages is a default that is disclosed. A default's value may be a resolver
@@ -1055,9 +1055,9 @@ function validateSeries<In>(
 interface RuntimeMetadata {
   defaults: Record<string, unknown>;
   inputs?: IndicatorInputKind;
-  /** Registry-declared parameter names — when bound, unknown param keys are rejected (Law 12). */
+  /** Declared parameter names — when bound, unknown param keys are rejected (Law 12). */
   parameters?: readonly string[];
-  /** Registry-declared conventions, echoed by `.explain()` (see {@link IndicatorConventions}). */
+  /** Declared conventions, echoed by `.explain()` (see {@link IndicatorConventions}). */
   conventions?: IndicatorConventions;
 }
 
@@ -1071,13 +1071,14 @@ function metaOf(indicator: unknown): RuntimeMetadata | undefined {
 
 /**
  * Bind registration metadata onto a facade built by {@link makeIndicator} — the single choke point
- * of the disclosure law: the registry declares each indicator's parameter defaults once, and every
- * `.explain()` call echoes them (merged under the caller's parameters) from then on. Also records the
+ * of the disclosure law: built-in leaves bind their shared private contracts at construction, and
+ * custom registry entries bind their declarations at registration. Every `.explain()` call echoes
+ * defaults merged under the caller's parameters. Also records the
  * input kind so the batch facade can shape-check the first element (number series vs OHLC bars vs
  * `{ x, y }` pairs). Later bindings merge over earlier ones, so an alias registration re-binding
  * identical data is a no-op.
  *
- * @internal — called by `registry.register`; not part of the public API surface.
+ * @internal — called by built-in construction and `registry.register`; not public API.
  */
 export function bindIndicatorMetadata(
   indicator: unknown,
@@ -1146,8 +1147,8 @@ function resolveEchoParams(
  * Build a facade indicator from a stream factory, a restorer, and a NaN-sentinel factory.
  * `defaults` (when declared) are the indicator's industry-standard parameters, echoed through
  * `.explain().assumptions.parameters` merged under the caller's parameters — the disclosure contract: a
- * default that engages is a default that is disclosed. Registration (`registry.register`) binds the
- * registry-declared defaults and the input kind onto the same slot via {@link bindIndicatorMetadata}.
+ * default that engages is a default that is disclosed. Built-in construction and custom registration
+ * bind the complete contract onto the same slot via {@link bindIndicatorMetadata}.
  */
 export function makeIndicator<Params, In, Out>(
   make: (parameters: Params) => IndicatorStream<In, Out>,
@@ -1162,7 +1163,7 @@ export function makeIndicator<Params, In, Out>(
   // silent-miscompute class first-touch exists to kill — so reject a defined non-plain-object here with a
   // typed teaching error naming the indicator and the correct object-parameters call.
   const resolve = (parameters?: Params): Params => {
-    // Law 12: once the registry has bound the declared parameter names, an unknown key in the
+    // Law 12: once construction or registration has bound the parameter names, an unknown key in the
     // parameters object is rejected with a did-you-mean — `{ perid: 7 }` must never silently compute
     // the default period.
     if (

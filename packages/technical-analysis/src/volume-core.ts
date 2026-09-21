@@ -10,6 +10,8 @@
  * volume by close-to-close direction); trade-level aggressor CVD lives in `@totalfinance/structure`.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   ensureFiniteWhenPresent,
   CONVENTIONS_VERSION,
@@ -71,10 +73,13 @@ class AdLineStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const adLine = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new AdLineStream(),
-  AdLineStream.fromJSON,
-  nanNum,
+export const adLine = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new AdLineStream(),
+    AdLineStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.adLineMetadata,
 );
 
 // ───────────────────────── Chaikin Oscillator ─────────────────────────
@@ -126,14 +131,17 @@ class ChaikinOscStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const chaikinOscillator = makeIndicator<ChaikinOscParameters, BarInput, number>(
-  (p) =>
-    new ChaikinOscStream({
-      fast: requirePeriod(p.fast ?? 3, 'chaikinOscillator', 'fast'),
-      slow: requirePeriod(p.slow ?? 10, 'chaikinOscillator', 'slow'),
-    }),
-  ChaikinOscStream.fromJSON,
-  nanNum,
+export const chaikinOscillator = withBuiltinMetadata(
+  makeIndicator<ChaikinOscParameters, BarInput, number>(
+    (p) =>
+      new ChaikinOscStream({
+        fast: requirePeriod(p.fast ?? 3, 'chaikinOscillator', 'fast'),
+        slow: requirePeriod(p.slow ?? 10, 'chaikinOscillator', 'slow'),
+      }),
+    ChaikinOscStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.chaikinOscillatorMetadata,
 );
 
 // ───────────────────────── Chaikin Money Flow ─────────────────────────
@@ -202,11 +210,13 @@ class CmfStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const chaikinMoneyFlow = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new CmfStream(requirePeriod(p.period ?? 20, 'chaikinMoneyFlow')),
-  CmfStream.fromJSON,
-  nanNum,
-  { period: 20 },
+export const chaikinMoneyFlow = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new CmfStream(requirePeriod(p.period ?? 20, 'chaikinMoneyFlow')),
+    CmfStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.chaikinMoneyFlowMetadata,
 );
 
 // ───────────────────────── Money Flow Index ─────────────────────────
@@ -296,11 +306,14 @@ class MfiStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const mfi = makeIndicator<{ period?: number }, BarInput, number>(
-  // Money-Flow Index lookback defaults to 14 (universal); echoed via `.explain()`.
-  (p) => new MfiStream(requirePeriod(p.period ?? 14, 'mfi')),
-  MfiStream.fromJSON,
-  nanNum,
+export const mfi = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    // Money-Flow Index lookback defaults to 14 (universal); echoed via `.explain()`.
+    (p) => new MfiStream(requirePeriod(p.period ?? 14, 'mfi')),
+    MfiStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.mfiMetadata,
 );
 
 // ───────────────────────── Price-Volume Trend ─────────────────────────
@@ -334,10 +347,13 @@ class PvtStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const pvt = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new PvtStream(),
-  PvtStream.fromJSON,
-  nanNum,
+export const pvt = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new PvtStream(),
+    PvtStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.pvtMetadata,
 );
 
 // ───────────────────────── Ease of Movement ─────────────────────────
@@ -393,14 +409,17 @@ class EomStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const easeOfMovement = makeIndicator<EomParameters, BarInput, number>(
-  (p) =>
-    new EomStream({
-      period: requirePeriod(p.period, 'easeOfMovement', 'period', 1, 'bars'),
-      scale: requirePositive(p.scale ?? 1e8, 'easeOfMovement', 'scale'),
-    }),
-  EomStream.fromJSON,
-  nanNum,
+export const easeOfMovement = withBuiltinMetadata(
+  makeIndicator<EomParameters, BarInput, number>(
+    (p) =>
+      new EomStream({
+        period: requirePeriod(p.period, 'easeOfMovement', 'period', 1, 'bars'),
+        scale: requirePositive(p.scale ?? 1e8, 'easeOfMovement', 'scale'),
+      }),
+    EomStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.easeOfMovementMetadata,
 );
 
 // ───────────────────────── Force Index ─────────────────────────
@@ -441,11 +460,13 @@ class ForceIndexStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const forceIndex = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new ForceIndexStream(requirePeriod(p.period ?? 13, 'forceIndex')),
-  ForceIndexStream.fromJSON,
-  nanNum,
-  { period: 13 },
+export const forceIndex = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new ForceIndexStream(requirePeriod(p.period ?? 13, 'forceIndex')),
+    ForceIndexStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.forceIndexMetadata,
 );
 
 // ───────────────────────── Negative / Positive Volume Index ─────────────────────────
@@ -501,15 +522,21 @@ class VolumeIndexStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const nvi = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new VolumeIndexStream({ positive: false, kind: 'nvi' }),
-  VolumeIndexStream.restore(false, 'nvi'),
-  nanNum,
+export const nvi = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new VolumeIndexStream({ positive: false, kind: 'nvi' }),
+    VolumeIndexStream.restore(false, 'nvi'),
+    nanNum,
+  ),
+  builtinMetadata.nviMetadata,
 );
-export const pvi = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new VolumeIndexStream({ positive: true, kind: 'pvi' }),
-  VolumeIndexStream.restore(true, 'pvi'),
-  nanNum,
+export const pvi = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new VolumeIndexStream({ positive: true, kind: 'pvi' }),
+    VolumeIndexStream.restore(true, 'pvi'),
+    nanNum,
+  ),
+  builtinMetadata.pviMetadata,
 );
 
 // ───────────────────────── Klinger Volume Oscillator ─────────────────────────
@@ -601,15 +628,18 @@ class KlingerStream implements IndicatorStream<BarInput, KlingerPoint> {
   }
 }
 
-export const klinger = makeIndicator<KlingerParameters, BarInput, KlingerPoint>(
-  (p) =>
-    new KlingerStream({
-      fast: requirePeriod(p.fast ?? 34, 'klinger', 'fast'),
-      slow: requirePeriod(p.slow ?? 55, 'klinger', 'slow'),
-      signal: requirePeriod(p.signal ?? 13, 'klinger', 'signal'),
-    }),
-  KlingerStream.fromJSON,
-  () => ({ klinger: NaN, signal: NaN }),
+export const klinger = withBuiltinMetadata(
+  makeIndicator<KlingerParameters, BarInput, KlingerPoint>(
+    (p) =>
+      new KlingerStream({
+        fast: requirePeriod(p.fast ?? 34, 'klinger', 'fast'),
+        slow: requirePeriod(p.slow ?? 55, 'klinger', 'slow'),
+        signal: requirePeriod(p.signal ?? 13, 'klinger', 'signal'),
+      }),
+    KlingerStream.fromJSON,
+    () => ({ klinger: NaN, signal: NaN }),
+  ),
+  builtinMetadata.klingerMetadata,
 );
 
 // ───────────────────────── Volume Flow Indicator (Katsanos) ─────────────────────────
@@ -750,16 +780,19 @@ class VfiStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const vfi = makeIndicator<VfiParameters, BarInput, number>(
-  (p) =>
-    new VfiStream({
-      period: requirePeriod(p.period ?? 130, 'vfi'),
-      coefficient: requirePositive(p.coefficient ?? 0.2, 'vfi', 'coefficient'),
-      volumeCutoff: requirePositive(p.volumeCutoff ?? 2.5, 'vfi', 'volumeCutoff'),
-      smooth: requirePeriod(p.smooth ?? 3, 'vfi', 'smooth'),
-    }),
-  VfiStream.fromJSON,
-  nanNum,
+export const vfi = withBuiltinMetadata(
+  makeIndicator<VfiParameters, BarInput, number>(
+    (p) =>
+      new VfiStream({
+        period: requirePeriod(p.period ?? 130, 'vfi'),
+        coefficient: requirePositive(p.coefficient ?? 0.2, 'vfi', 'coefficient'),
+        volumeCutoff: requirePositive(p.volumeCutoff ?? 2.5, 'vfi', 'volumeCutoff'),
+        smooth: requirePeriod(p.smooth ?? 3, 'vfi', 'smooth'),
+      }),
+    VfiStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.vfiMetadata,
 );
 
 // ───────────────────────── relative volume ─────────────────────────
@@ -789,10 +822,13 @@ class RelativeVolumeStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const relativeVolume = makeIndicator<PeriodParameters, BarInput, number>(
-  (p) => new RelativeVolumeStream(requirePeriod(p.period, 'relativeVolume', 'period', 1, 'bars')),
-  RelativeVolumeStream.fromJSON,
-  nanNum,
+export const relativeVolume = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, number>(
+    (p) => new RelativeVolumeStream(requirePeriod(p.period, 'relativeVolume', 'period', 1, 'bars')),
+    RelativeVolumeStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.relativeVolumeMetadata,
 );
 
 // ───────────────────────── Cumulative Volume Delta (bar proxy) ─────────────────────────
@@ -827,10 +863,13 @@ class CvdStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const cvd = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new CvdStream(),
-  CvdStream.fromJSON,
-  nanNum,
+export const cvd = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new CvdStream(),
+    CvdStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.cvdMetadata,
 );
 
 // ───────────────────────── volume profile (batch utility) ─────────────────────────

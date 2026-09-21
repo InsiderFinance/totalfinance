@@ -7,6 +7,8 @@
  * compose with the pipeline and the rest of the catalog.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -93,15 +95,24 @@ const lagFacade = (kind: LagKind, functionName: string) =>
   );
 
 /** Lag a series by `period` bars: `output[i] = input[i − period]`. */
-export const shift = lagFacade('shift', 'shift');
+export const shift = withBuiltinMetadata(
+  lagFacade('shift', 'shift'),
+  builtinMetadata.shiftMetadata,
+);
 /** Alias of `shift` (causal lag; leading is not possible in a streaming model). */
 export const lag = shift;
 /** Discrete difference: `input[i] − input[i − period]`. */
-export const difference = lagFacade('diff', 'diff');
+export const difference = withBuiltinMetadata(
+  lagFacade('diff', 'diff'),
+  builtinMetadata.diffMetadata,
+);
 /** Alias of `diff`. */
 export const change = difference;
 /** Fractional change: `(input[i] − input[i − period]) / input[i − period]`. */
-export const fractionalChange = lagFacade('fractionalChange', 'fractionalChange');
+export const fractionalChange = withBuiltinMetadata(
+  lagFacade('fractionalChange', 'fractionalChange'),
+  builtinMetadata.fractionalChangeMetadata,
+);
 
 // ───────────────────────── cumulative sum ─────────────────────────
 
@@ -126,10 +137,13 @@ class CumStream implements IndicatorStream<number, number> {
 }
 
 /** Running cumulative sum. */
-export const cumulativeSum = makeIndicator<Record<string, never>, number, number>(
-  () => new CumStream(),
-  CumStream.fromJSON,
-  nan,
+export const cumulativeSum = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, number, number>(
+    () => new CumStream(),
+    CumStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.cumMetadata,
 );
 
 // ───────────────────────── rolling window statistics ─────────────────────────
@@ -327,15 +341,30 @@ const rollingFacade = (
   );
 
 /** Rolling z-score: `(value − mean) / populationStd` over the window (0 on a flat window). */
-export const zScore = rollingFacade('zScore', 'zScore', 2);
+export const zScore = withBuiltinMetadata(
+  rollingFacade('zScore', 'zScore', 2),
+  builtinMetadata.zScoreMetadata,
+);
 /** Rolling min-max normalization to [0, 1] (0.5 on a flat window). */
-export const normalize = rollingFacade('normalize', 'normalize');
+export const normalize = withBuiltinMetadata(
+  rollingFacade('normalize', 'normalize'),
+  builtinMetadata.normalizeMetadata,
+);
 /** Rolling median. */
-export const rollingMedian = rollingFacade('rollingMedian', 'rollingMedian');
+export const rollingMedian = withBuiltinMetadata(
+  rollingFacade('rollingMedian', 'rollingMedian'),
+  builtinMetadata.rollingMedianMetadata,
+);
 /** Rolling mean absolute deviation from the window mean. */
-export const rollingMeanAbsoluteDeviation = rollingFacade('mad', 'mad');
+export const rollingMeanAbsoluteDeviation = withBuiltinMetadata(
+  rollingFacade('mad', 'mad'),
+  builtinMetadata.madMetadata,
+);
 /** Rolling standard error of the mean: sampleStd / √n. */
-export const standardError = rollingFacade('standardError', 'standardError', 2);
+export const standardError = withBuiltinMetadata(
+  rollingFacade('standardError', 'standardError', 2),
+  builtinMetadata.standardErrorMetadata,
+);
 
 export interface RescaleParameters {
   period?: number;
@@ -346,32 +375,50 @@ export interface RescaleParameters {
 }
 
 /** Rolling rescale of the min-max-normalized value into [min, max]. */
-export const rescale = makeIndicator<RescaleParameters, number, number>(
-  (p) => {
-    const min = requireFinite(p.min ?? 0, 'rescale', 'min');
-    const max = requireFinite(p.max ?? 1, 'rescale', 'max');
-    requireAtMost(min, max, 'rescale', 'min', 'max');
-    return new RollingStatStream({
-      kind: 'rescale',
-      period: requirePeriod(p.period ?? 20, 'rescale'),
-      lo: min,
-      hi: max,
-    });
-  },
-  RollingStatStream.fromJSON,
-  nan,
+export const rescale = withBuiltinMetadata(
+  makeIndicator<RescaleParameters, number, number>(
+    (p) => {
+      const min = requireFinite(p.min ?? 0, 'rescale', 'min');
+      const max = requireFinite(p.max ?? 1, 'rescale', 'max');
+      requireAtMost(min, max, 'rescale', 'min', 'max');
+      return new RollingStatStream({
+        kind: 'rescale',
+        period: requirePeriod(p.period ?? 20, 'rescale'),
+        lo: min,
+        hi: max,
+      });
+    },
+    RollingStatStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rescaleMetadata,
 );
 
 /** Rolling 1-based ordinal rank of the current value within the window. */
-export const rollingRank = rollingFacade('rollingRank', 'rollingRank');
+export const rollingRank = withBuiltinMetadata(
+  rollingFacade('rollingRank', 'rollingRank'),
+  builtinMetadata.rollingRankMetadata,
+);
 /** Rolling percentile position of the current value within the window, in [0, 100]. */
-export const percentRank = rollingFacade('percentRank', 'percentRank', 2);
+export const percentRank = withBuiltinMetadata(
+  rollingFacade('percentRank', 'percentRank', 2),
+  builtinMetadata.percentRankMetadata,
+);
 /** Rolling sample skewness (bias-corrected Fisher-Pearson G1). */
-export const skew = rollingFacade('skew', 'skew', 3);
+export const skew = withBuiltinMetadata(
+  rollingFacade('skew', 'skew', 3),
+  builtinMetadata.skewMetadata,
+);
 /** Rolling sample excess kurtosis (bias-corrected G2). */
-export const kurtosis = rollingFacade('kurtosis', 'kurtosis', 4);
+export const kurtosis = withBuiltinMetadata(
+  rollingFacade('kurtosis', 'kurtosis', 4),
+  builtinMetadata.kurtosisMetadata,
+);
 /** Rolling Shannon entropy (pandas-ta: each value as a fraction of the window sum), in bits. */
-export const entropy = rollingFacade('entropy', 'entropy', 1, 10);
+export const entropy = withBuiltinMetadata(
+  rollingFacade('entropy', 'entropy', 1, 10),
+  builtinMetadata.entropyMetadata,
+);
 
 export interface QuantileParameters {
   period?: number;
@@ -380,16 +427,19 @@ export interface QuantileParameters {
 }
 
 /** Rolling quantile (linear interpolation). */
-export const rollingQuantile = makeIndicator<QuantileParameters, number, number>(
-  (p) =>
-    new RollingStatStream({
-      kind: 'rollingQuantile',
-      period: requirePeriod(p.period ?? 20, 'rollingQuantile'),
-      lo: requireInRange(p.quantile ?? 0.5, 'rollingQuantile', 'quantile', 0, 1),
-      hi: 1,
-    }),
-  RollingStatStream.fromJSON,
-  nan,
+export const rollingQuantile = withBuiltinMetadata(
+  makeIndicator<QuantileParameters, number, number>(
+    (p) =>
+      new RollingStatStream({
+        kind: 'rollingQuantile',
+        period: requirePeriod(p.period ?? 20, 'rollingQuantile'),
+        lo: requireInRange(p.quantile ?? 0.5, 'rollingQuantile', 'quantile', 0, 1),
+        hi: 1,
+      }),
+    RollingStatStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rollingQuantileMetadata,
 );
 
 export interface WinsorizeParameters {
@@ -401,20 +451,23 @@ export interface WinsorizeParameters {
 }
 
 /** Rolling winsorize: clip the current value to the window's [lower, upper] quantiles. */
-export const winsorize = makeIndicator<WinsorizeParameters, number, number>(
-  (p) => {
-    const lower = requireInRange(p.lower ?? 0.05, 'winsorize', 'lower', 0, 1);
-    const upper = requireInRange(p.upper ?? 0.95, 'winsorize', 'upper', 0, 1);
-    requireAtMost(lower, upper, 'winsorize', 'lower', 'upper');
-    return new RollingStatStream({
-      kind: 'winsorize',
-      period: requirePeriod(p.period ?? 20, 'winsorize'),
-      lo: lower,
-      hi: upper,
-    });
-  },
-  RollingStatStream.fromJSON,
-  nan,
+export const winsorize = withBuiltinMetadata(
+  makeIndicator<WinsorizeParameters, number, number>(
+    (p) => {
+      const lower = requireInRange(p.lower ?? 0.05, 'winsorize', 'lower', 0, 1);
+      const upper = requireInRange(p.upper ?? 0.95, 'winsorize', 'upper', 0, 1);
+      requireAtMost(lower, upper, 'winsorize', 'lower', 'upper');
+      return new RollingStatStream({
+        kind: 'winsorize',
+        period: requirePeriod(p.period ?? 20, 'winsorize'),
+        lo: lower,
+        hi: upper,
+      });
+    },
+    RollingStatStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.winsorizeMetadata,
 );
 
 // ───────────────────────── paired rolling regression ─────────────────────────
@@ -521,15 +574,17 @@ class CovarianceStream extends PairWindowStream<number> {
 }
 
 /** Rolling covariance of a paired series (sample denominator by default). */
-export const covariance = makeIndicator<CovarianceParameters, Pair, number>(
-  (p) =>
-    new CovarianceStream(
-      requirePeriod(p.period ?? 20, 'covariance', 'period', 2),
-      requireBooleanWhenPresent(p.sample, 'covariance', 'sample') ?? true,
-    ),
-  CovarianceStream.fromJSON,
-  nan,
-  { period: 20, sample: true },
+export const covariance = withBuiltinMetadata(
+  makeIndicator<CovarianceParameters, Pair, number>(
+    (p) =>
+      new CovarianceStream(
+        requirePeriod(p.period ?? 20, 'covariance', 'period', 2),
+        requireBooleanWhenPresent(p.sample, 'covariance', 'sample') ?? true,
+      ),
+    CovarianceStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.covarianceMetadata,
 );
 
 class RSquaredStream extends PairWindowStream<number> {
@@ -551,10 +606,13 @@ class RSquaredStream extends PairWindowStream<number> {
 }
 
 /** Rolling R² (squared Pearson correlation) of a paired series. */
-export const rSquared = makeIndicator<{ period?: number }, Pair, number>(
-  (p) => new RSquaredStream(requirePeriod(p.period ?? 20, 'rSquared', 'period', 2)),
-  RSquaredStream.fromJSON,
-  nan,
+export const rSquared = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, Pair, number>(
+    (p) => new RSquaredStream(requirePeriod(p.period ?? 20, 'rSquared', 'period', 2)),
+    RSquaredStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rSquaredMetadata,
 );
 
 export interface RegressionPoint {
@@ -589,10 +647,13 @@ class RegressionStream extends PairWindowStream<RegressionPoint> {
 }
 
 /** Rolling ordinary-least-squares regression of y on x: `{ slope, intercept, rSquared }`. */
-export const rollingRegression = makeIndicator<{ period?: number }, Pair, RegressionPoint>(
-  (p) => new RegressionStream(requirePeriod(p.period ?? 20, 'rollingRegression', 'period', 2)),
-  RegressionStream.fromJSON,
-  () => ({ slope: NaN, intercept: NaN, rSquared: NaN }),
+export const rollingRegression = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, Pair, RegressionPoint>(
+    (p) => new RegressionStream(requirePeriod(p.period ?? 20, 'rollingRegression', 'period', 2)),
+    RegressionStream.fromJSON,
+    () => ({ slope: NaN, intercept: NaN, rSquared: NaN }),
+  ),
+  builtinMetadata.rollingRegressionMetadata,
 );
 
 export interface TosStdevAllParameters {
@@ -690,22 +751,25 @@ class TosStdevAllStream implements IndicatorStream<number, TosStdevAllPoint> {
  * / pandas-ta's `tos_stdevall` draws (a constant line over the whole chart); pass an explicit `period`
  * for a fixed rolling window. See docs/compatibility/talib-differences.md.
  */
-export const tosStdevAll = makeIndicator<TosStdevAllParameters, number, TosStdevAllPoint>(
-  (p) => {
-    // `null` and `undefined` both mean the expanding all-history window, so the disclosed
-    // `period: null` can be passed back verbatim and reproduce the same computation.
-    const period = p.period == null ? null : requirePeriod(p.period, 'tosStdevAll', 'period', 3);
-    const ddof = requireNonNegativeInt(p.ddof ?? 1, 'tosStdevAll', 'ddof');
-    if (period !== null) requireAtMost(ddof, period - 1, 'tosStdevAll', 'ddof', 'period - 1');
-    return new TosStdevAllStream(period, sortedStds(p.stds), ddof);
-  },
-  TosStdevAllStream.fromJSON,
-  // Warmup rows keep the requested band count (NaN placeholders) so the output shape is stable for
-  // chart columns, destructuring, and table pipelines.
-  (p) => {
-    const bands = sortedStds(p.stds).map(() => NaN);
-    return { line: NaN, lower: [...bands], upper: [...bands] };
-  },
+export const tosStdevAll = withBuiltinMetadata(
+  makeIndicator<TosStdevAllParameters, number, TosStdevAllPoint>(
+    (p) => {
+      // `null` and `undefined` both mean the expanding all-history window, so the disclosed
+      // `period: null` can be passed back verbatim and reproduce the same computation.
+      const period = p.period == null ? null : requirePeriod(p.period, 'tosStdevAll', 'period', 3);
+      const ddof = requireNonNegativeInt(p.ddof ?? 1, 'tosStdevAll', 'ddof');
+      if (period !== null) requireAtMost(ddof, period - 1, 'tosStdevAll', 'ddof', 'period - 1');
+      return new TosStdevAllStream(period, sortedStds(p.stds), ddof);
+    },
+    TosStdevAllStream.fromJSON,
+    // Warmup rows keep the requested band count (NaN placeholders) so the output shape is stable for
+    // chart columns, destructuring, and table pipelines.
+    (p) => {
+      const bands = sortedStds(p.stds).map(() => NaN);
+      return { line: NaN, lower: [...bands], upper: [...bands] };
+    },
+  ),
+  builtinMetadata.tosStdevAllMetadata,
 );
 
 // ───────────────────────── bar-since / value-when ─────────────────────────
@@ -732,10 +796,13 @@ class BarSinceStream implements IndicatorStream<number, number> {
 }
 
 /** Bars since the input condition (`> 0`) was last true (0 on a true bar; NaN before the first). */
-export const barSince = makeIndicator<Record<string, never>, number, number>(
-  () => new BarSinceStream(),
-  BarSinceStream.fromJSON,
-  nan,
+export const barSince = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, number, number>(
+    () => new BarSinceStream(),
+    BarSinceStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.barSinceMetadata,
 );
 
 export interface ValueWhenParameters {
@@ -776,10 +843,13 @@ class ValueWhenStream implements IndicatorStream<Pair, number> {
 }
 
 /** The source (`y`) value when the condition (`x > 0`) was last true (the `occurrence`-th most recent). */
-export const valueWhen = makeIndicator<ValueWhenParameters, Pair, number>(
-  (p) => new ValueWhenStream(requireNonNegativeInt(p.occurrence ?? 0, 'valueWhen', 'occurrence')),
-  ValueWhenStream.fromJSON,
-  nan,
+export const valueWhen = withBuiltinMetadata(
+  makeIndicator<ValueWhenParameters, Pair, number>(
+    (p) => new ValueWhenStream(requireNonNegativeInt(p.occurrence ?? 0, 'valueWhen', 'occurrence')),
+    ValueWhenStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.valueWhenMetadata,
 );
 
 // ───────────────────────── conventional aliases ─────────────────────────

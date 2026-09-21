@@ -392,7 +392,8 @@ function priceTyped(input: Black76TypedInput, functionName: string): number {
   return black76Price(input);
 }
 
-const call = facade(
+// Wrapper construction is side-effect-free; expert imports must not retain unused facades.
+const call = /* @__PURE__ */ facade(
   'black76.call',
   (i: Black76Input) => (
     validate(i, 'black76.call'),
@@ -411,7 +412,7 @@ const call = facade(
     }
   ),
 );
-const put = facade(
+const put = /* @__PURE__ */ facade(
   'black76.put',
   (i: Black76Input) => (
     validate(i, 'black76.put'),
@@ -430,7 +431,7 @@ const put = facade(
     }
   ),
 );
-const price = facade(
+const price = /* @__PURE__ */ facade(
   'black76.price',
   (i: Black76TypedInput) => priceTyped(i, 'black76.price'),
   (i: Black76TypedInput): Computed<number> => ({
@@ -443,7 +444,7 @@ const price = facade(
     }),
   }),
 );
-const greeks = facade(
+const greeks = /* @__PURE__ */ facade(
   'black76.greeks',
   (i: Black76TypedInput): Greeks => {
     validateTyped(i, 'black76.greeks');
@@ -462,7 +463,7 @@ const greeks = facade(
     };
   },
 );
-const extendedGreeks = facade(
+const extendedGreeks = /* @__PURE__ */ facade(
   'black76.extendedGreeks',
   (i: Black76TypedInput): ExtendedGreeks => {
     validateTyped(i, 'black76.extendedGreeks');
@@ -557,7 +558,7 @@ export const black76: {
     Record<never, never>,
     number | null
   >;
-} = {
+} = /* @__PURE__ */ (() => ({
   call,
   put,
   price,
@@ -569,4 +570,4 @@ export const black76: {
     [ErrorCode.ImpliedVolatilityBelowIntrinsic, ErrorCode.ImpliedVolatilityAboveMax],
     'implied vol did not converge',
   ),
-};
+}))();

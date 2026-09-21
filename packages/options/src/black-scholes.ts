@@ -2,8 +2,9 @@
  * `@totalfinance/options/black-scholes` — the Black–Scholes facade.
  *
  * This is a HOT-PATH deep entrypoint (spec §6, §21.5). It imports only the BSM kernel, tiny core
- * invariants, and `@totalfinance/math` — never the schema facade or other engines — so it stays under
- * the 8 KB gzip budget. Full runtime validation is opt-in elsewhere.
+ * invariants, and `@totalfinance/math` — never schema machinery or other engines. Public inputs
+ * retain their runtime guards. Whole-entrypoint and used-function budgets are tested separately;
+ * see `docs/bundle-size.md` for current measurements and the supported import patterns.
  *
  * Each facade function returns a plain value and throws typed errors on failure. Its `.explain()`
  * companion returns the rich `{ value, assumptions, diagnostics }` envelope and reports quantitative
@@ -209,7 +210,9 @@ function explainTyped(input: BlackScholesTypedInput, functionName: string): Comp
 const untyped = (input: BlackScholesInput, functionName: string): void =>
   ensureKnownKeys(functionName, 'input', input, BSM_KEYS);
 
-const call = facade(
+// These constructors only allocate callable/explain pairs. They do not calculate, validate an
+// input, or invoke the callbacks until used. Expert-only imports may discard the unused pairs.
+const call = /* @__PURE__ */ facade(
   'blackScholes.call',
   (input: BlackScholesInput) => (
     untyped(input, 'blackScholes.call'),
@@ -221,7 +224,7 @@ const call = facade(
   ),
 );
 
-const put = facade(
+const put = /* @__PURE__ */ facade(
   'blackScholes.put',
   (input: BlackScholesInput) => (
     untyped(input, 'blackScholes.put'),
@@ -233,7 +236,7 @@ const put = facade(
   ),
 );
 
-const price = facade(
+const price = /* @__PURE__ */ facade(
   'blackScholes.price',
   (input: BlackScholesTypedInput) => priceTyped(input, 'blackScholes.price'),
   (input: BlackScholesTypedInput) => explainTyped(input, 'blackScholes.price'),
@@ -241,7 +244,7 @@ const price = facade(
 
 // ---- greeks ----
 
-const greeks = facade(
+const greeks = /* @__PURE__ */ facade(
   'blackScholes.greeks',
   (input: BlackScholesTypedInput): Greeks => {
     const q = validateCore(input, 'blackScholes.greeks');
@@ -264,7 +267,7 @@ const greeks = facade(
 
 // ---- higher-order greeks ----
 
-const extendedGreeks = facade(
+const extendedGreeks = /* @__PURE__ */ facade(
   'blackScholes.extendedGreeks',
   (input: BlackScholesTypedInput): ExtendedGreeks => {
     const q = validateCore(input, 'blackScholes.extendedGreeks');
@@ -466,7 +469,7 @@ export const blackScholes: {
     Record<never, never>,
     number | null
   >;
-} = {
+} = /* @__PURE__ */ (() => ({
   call,
   put,
   price,
@@ -478,7 +481,7 @@ export const blackScholes: {
     [ErrorCode.ImpliedVolatilityBelowIntrinsic, ErrorCode.ImpliedVolatilityAboveMax],
     'implied volatility did not converge',
   ),
-};
+}))();
 
 // The expert kernel surface of this model subpath (P3.3): direct scalar results with required,
 // named financial inputs. Zero added bundle cost — the facade already imports them.

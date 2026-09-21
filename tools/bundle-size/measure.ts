@@ -12,9 +12,10 @@ export interface BundleMeasurement {
 }
 
 /**
- * Bundle a single source entrypoint exactly as a downstream app's bundler would, then minify and
- * gzip it. `alias` maps `@totalfinance/*` package specifiers to their source `index.ts` so we measure
- * the real tree-shaken cost of a deep entrypoint without a build step.
+ * Bundle an entire source entrypoint, preserving its exported surface, then minify and gzip it.
+ * `alias` resolves public package specifiers to source for a fast whole-entrypoint budget without
+ * a build step. This is NOT a used-function consumer measurement: installed-consumer tests own
+ * the cost and retained-module guarantees for a caller importing only selected functions.
  *
  * This is the enforcement mechanism for spec §21.5 (bundle budgets) and the hot-path rule (§6):
  * a compute entrypoint must not drag in validators or JSON-Schema machinery.

@@ -12,7 +12,8 @@ All `@totalfinance/*` packages stay pinned at **`0.0.1`** for the entire pre-rel
 milestones (`0.1`, `0.2`, … in `totalfinance-implementation-spec.md` §24) are **development milestones,
 not npm versions** — the published version remains `0.0.1` until the first real release.
 
-Because a changeset would bump the version on the next `changeset version` run (e.g. a `minor` from
-`0.0.1` → `0.1.0`), **do not add changesets until we are actually cutting a release.** Track work in
-`totalfinance-implementation-tasklist.md` instead. Human-readable per-phase milestone notes live in
-`docs/milestones/` (named by development phase, not version, since we stay on `0.0.1`).
+Record user-visible changes in a changeset as required by `CONTRIBUTING.md`. Adding a changeset
+does not change package versions or publish anything. **Do not run `changeset version` or publish
+without explicit release authorization.** The fixed group remains at its current development
+version until the approved preview release commit. `docs/implementation-order.md` owns the work
+queue; the release runbook owns version selection and publication.

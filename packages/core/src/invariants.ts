@@ -6,7 +6,8 @@
  * compute entrypoints stay within bundle budget.
  */
 
-import { ErrorCode, InputError, missingFieldError } from './errors.js';
+import { InputError, missingFieldError } from './errors.js';
+import * as ValidationCode from './validation-codes.js';
 
 /** Throw unless `value` is a finite number. */
 export function ensureFinite(value: number, field: string, functionName: string): void {
@@ -14,7 +15,7 @@ export function ensureFinite(value: number, field: string, functionName: string)
     throw new InputError(
       `${functionName}: ${field} must be a finite number. Received ${describe(value)}.`,
       {
-        code: Number.isNaN(value) ? ErrorCode.InputNaN : ErrorCode.InputNotFinite,
+        code: Number.isNaN(value) ? ValidationCode.InputNaN : ValidationCode.InputNotFinite,
         context: { field, value: contextValue(value), function: functionName },
       },
     );
@@ -26,7 +27,7 @@ export function ensurePositive(
   value: number,
   field: string,
   functionName: string,
-  code: string = ErrorCode.InputOutOfRange,
+  code: string = ValidationCode.InputOutOfRange,
 ): void {
   ensureFinite(value, field, functionName);
   if (value <= 0) {
@@ -42,7 +43,7 @@ export function ensureNonNegative(
   value: number,
   field: string,
   functionName: string,
-  code: string = ErrorCode.InputOutOfRange,
+  code: string = ValidationCode.InputOutOfRange,
 ): void {
   ensureFinite(value, field, functionName);
   if (value < 0) {
@@ -98,7 +99,7 @@ export function ensureEnum<T extends string>(
     throw new InputError(
       `${functionName}: ${field} must be one of ${allowed.join(', ')}; got ${got}.`,
       {
-        code: ErrorCode.InputInvalidEnum,
+        code: ValidationCode.InputInvalidEnum,
         context: { field, value: contextValue(value), function: functionName },
       },
     );
@@ -111,7 +112,7 @@ export function requireArgumentObject(functionName: string, field: string, value
   throw new InputError(
     `${functionName}: ${field} must be an object of named fields, got ${received}.`,
     {
-      code: ErrorCode.InputWrongType,
+      code: ValidationCode.InputWrongType,
       context: { function: functionName, field, received },
     },
   );
@@ -122,7 +123,7 @@ export function requireArgumentArray(functionName: string, field: string, value:
   if (Array.isArray(value) || ArrayBuffer.isView(value)) return;
   const received = value === null ? 'null' : typeof value;
   throw new InputError(`${functionName}: ${field} must be an array, got ${received}.`, {
-    code: ErrorCode.InputWrongType,
+    code: ValidationCode.InputWrongType,
     context: { function: functionName, field, received },
   });
 }
@@ -234,7 +235,7 @@ export function requireFiniteFields(
       throw new InputError(
         `${functionName}: ${path} must be a number. Received ${describe(value as never)}.`,
         {
-          code: ErrorCode.InputWrongType,
+          code: ValidationCode.InputWrongType,
           context: { function: functionName, field: path, received: typeof value },
         },
       );
@@ -265,7 +266,7 @@ export function ensureFiniteWhenPresent(value: unknown, field: string, functionN
     throw new InputError(
       `${functionName}: ${field} must be a number. Received ${describe(value as never)}.`,
       {
-        code: ErrorCode.InputWrongType,
+        code: ValidationCode.InputWrongType,
         context: { function: functionName, field, received: typeof value },
       },
     );
@@ -325,7 +326,7 @@ export function ensureKnownKeys(
         suggestion !== undefined ? ` — did you mean "${suggestion}"?` : ''
       } Allowed fields: ${allowed.join(', ')}.`,
       {
-        code: ErrorCode.InputUnknownField,
+        code: ValidationCode.InputUnknownField,
         context: {
           function: functionName,
           field,

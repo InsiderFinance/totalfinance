@@ -12,6 +12,8 @@
  * a per-bar σ handed to `@totalfinance/volatility`'s annualized consumers is wrong by √252, silently.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -73,11 +75,13 @@ class NatrStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const natr = makeIndicator<PeriodParameters, BarInput, number>(
-  (p) => new NatrStream(requirePeriod(p.period ?? 14, 'natr')),
-  NatrStream.fromJSON,
-  nanNum,
-  { period: 14 },
+export const natr = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, number>(
+    (p) => new NatrStream(requirePeriod(p.period ?? 14, 'natr')),
+    NatrStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.natrMetadata,
 );
 
 // ───────────────────────── Bollinger Width & %B ─────────────────────────
@@ -133,35 +137,41 @@ class BollingerBandFieldStream implements IndicatorStream<number, number> {
   }
 }
 
-export const bollingerBandWidth = makeIndicator<BollingerParameters, number, number>(
-  (p) =>
-    new BollingerBandFieldStream({
-      period: requirePeriod(p.period, 'bollingerBandWidth'),
-      standardDeviation: requirePositive(
-        p.standardDeviation ?? 2,
-        'bollingerBandWidth',
-        'standardDeviation',
-      ),
-      field: 'bandwidth',
-      kind: 'bollingerBandWidth',
-    }),
-  BollingerBandFieldStream.restore('bandwidth', 'bollingerBandWidth'),
-  nanNum,
+export const bollingerBandWidth = withBuiltinMetadata(
+  makeIndicator<BollingerParameters, number, number>(
+    (p) =>
+      new BollingerBandFieldStream({
+        period: requirePeriod(p.period, 'bollingerBandWidth'),
+        standardDeviation: requirePositive(
+          p.standardDeviation ?? 2,
+          'bollingerBandWidth',
+          'standardDeviation',
+        ),
+        field: 'bandwidth',
+        kind: 'bollingerBandWidth',
+      }),
+    BollingerBandFieldStream.restore('bandwidth', 'bollingerBandWidth'),
+    nanNum,
+  ),
+  builtinMetadata.bollingerBandWidthMetadata,
 );
-export const bollingerPercentB = makeIndicator<BollingerParameters, number, number>(
-  (p) =>
-    new BollingerBandFieldStream({
-      period: requirePeriod(p.period, 'bollingerPercentB'),
-      standardDeviation: requirePositive(
-        p.standardDeviation ?? 2,
-        'bollingerPercentB',
-        'standardDeviation',
-      ),
-      field: 'percentB',
-      kind: 'bollingerPercentB',
-    }),
-  BollingerBandFieldStream.restore('percentB', 'bollingerPercentB'),
-  nanNum,
+export const bollingerPercentB = withBuiltinMetadata(
+  makeIndicator<BollingerParameters, number, number>(
+    (p) =>
+      new BollingerBandFieldStream({
+        period: requirePeriod(p.period, 'bollingerPercentB'),
+        standardDeviation: requirePositive(
+          p.standardDeviation ?? 2,
+          'bollingerPercentB',
+          'standardDeviation',
+        ),
+        field: 'percentB',
+        kind: 'bollingerPercentB',
+      }),
+    BollingerBandFieldStream.restore('percentB', 'bollingerPercentB'),
+    nanNum,
+  ),
+  builtinMetadata.bollingerPercentBMetadata,
 );
 
 // ───────────────────────── Keltner Channels ─────────────────────────
@@ -219,17 +229,19 @@ class KeltnerStream implements IndicatorStream<BarInput, ChannelPoint> {
   }
 }
 
-export const keltner = makeIndicator<KeltnerParameters, BarInput, ChannelPoint>(
-  (p) =>
-    new KeltnerStream({
-      period: requirePeriod(p.period ?? 20, 'keltner'),
-      // The standard Keltner channel: EMA 20 mid, 10-period ATR bands, multiplier 2.
-      atrPeriod: requirePeriod(p.atrPeriod ?? 10, 'keltner', 'atrPeriod'),
-      mult: requirePositive(p.multiplier ?? 2, 'keltner', 'multiplier'),
-    }),
-  KeltnerStream.fromJSON,
-  () => ({ upper: NaN, middle: NaN, lower: NaN }),
-  { period: 20, atrPeriod: 10, multiplier: 2 },
+export const keltner = withBuiltinMetadata(
+  makeIndicator<KeltnerParameters, BarInput, ChannelPoint>(
+    (p) =>
+      new KeltnerStream({
+        period: requirePeriod(p.period ?? 20, 'keltner'),
+        // The standard Keltner channel: EMA 20 mid, 10-period ATR bands, multiplier 2.
+        atrPeriod: requirePeriod(p.atrPeriod ?? 10, 'keltner', 'atrPeriod'),
+        mult: requirePositive(p.multiplier ?? 2, 'keltner', 'multiplier'),
+      }),
+    KeltnerStream.fromJSON,
+    () => ({ upper: NaN, middle: NaN, lower: NaN }),
+  ),
+  builtinMetadata.keltnerMetadata,
 );
 
 // ───────────────────────── Donchian Channels ─────────────────────────
@@ -275,11 +287,13 @@ class DonchianStream implements IndicatorStream<BarInput, ChannelPoint> {
   }
 }
 
-export const donchian = makeIndicator<PeriodParameters, BarInput, ChannelPoint>(
-  (p) => new DonchianStream(requirePeriod(p.period ?? 20, 'donchian')),
-  DonchianStream.fromJSON,
-  () => ({ upper: NaN, middle: NaN, lower: NaN }),
-  { period: 20 },
+export const donchian = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, ChannelPoint>(
+    (p) => new DonchianStream(requirePeriod(p.period ?? 20, 'donchian')),
+    DonchianStream.fromJSON,
+    () => ({ upper: NaN, middle: NaN, lower: NaN }),
+  ),
+  builtinMetadata.donchianMetadata,
 );
 
 // ───────────────────────── rolling stddev / variance ─────────────────────────
@@ -359,31 +373,37 @@ class MomentStream implements IndicatorStream<number, number> {
   }
 }
 
-export const standardDeviation = makeIndicator<StandardDeviationParameters, number, number>(
-  (p) => {
-    const sample = p.sample ?? false;
-    return new MomentStream({
-      period: requirePeriod(p.period, 'standardDeviation', 'period', sample ? 2 : 1),
-      sample,
-      variance: false,
-      kind: 'standardDeviation',
-    });
-  },
-  MomentStream.fromJSON,
-  nanNum,
+export const standardDeviation = withBuiltinMetadata(
+  makeIndicator<StandardDeviationParameters, number, number>(
+    (p) => {
+      const sample = p.sample ?? false;
+      return new MomentStream({
+        period: requirePeriod(p.period, 'standardDeviation', 'period', sample ? 2 : 1),
+        sample,
+        variance: false,
+        kind: 'standardDeviation',
+      });
+    },
+    MomentStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.standardDeviationMetadata,
 );
-export const variance = makeIndicator<StandardDeviationParameters, number, number>(
-  (p) => {
-    const sample = p.sample ?? false;
-    return new MomentStream({
-      period: requirePeriod(p.period, 'variance', 'period', sample ? 2 : 1),
-      sample,
-      variance: true,
-      kind: 'variance',
-    });
-  },
-  MomentStream.fromJSON,
-  nanNum,
+export const variance = withBuiltinMetadata(
+  makeIndicator<StandardDeviationParameters, number, number>(
+    (p) => {
+      const sample = p.sample ?? false;
+      return new MomentStream({
+        period: requirePeriod(p.period, 'variance', 'period', sample ? 2 : 1),
+        sample,
+        variance: true,
+        kind: 'variance',
+      });
+    },
+    MomentStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.varianceMetadata,
 );
 
 // ───────────────────────── close-to-close historical volatility ─────────────────────────
@@ -458,14 +478,17 @@ class HistoricalVolatilityStream implements IndicatorStream<number, number> {
   }
 }
 
-export const historicalVolatility = makeIndicator<HistoricalVolatilityParameters, number, number>(
-  (p) =>
-    new HistoricalVolatilityStream({
-      period: requirePeriod(p.period, 'historicalVolatility', 'period', 2),
-      scale: requireAnnualization(p.annualization, 'historicalVolatility'),
-    }),
-  HistoricalVolatilityStream.fromJSON,
-  nanNum,
+export const historicalVolatility = withBuiltinMetadata(
+  makeIndicator<HistoricalVolatilityParameters, number, number>(
+    (p) =>
+      new HistoricalVolatilityStream({
+        period: requirePeriod(p.period, 'historicalVolatility', 'period', 2),
+        scale: requireAnnualization(p.annualization, 'historicalVolatility'),
+      }),
+    HistoricalVolatilityStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.historicalVolatilityMetadata,
 );
 
 /**
@@ -529,14 +552,17 @@ class RealizedVolatilityStream implements IndicatorStream<number, number> {
   }
 }
 
-export const realizedVolatility = makeIndicator<HistoricalVolatilityParameters, number, number>(
-  (p) =>
-    new RealizedVolatilityStream({
-      period: requirePeriod(p.period, 'realizedVolatility'),
-      scale: requireAnnualization(p.annualization, 'realizedVolatility'),
-    }),
-  RealizedVolatilityStream.fromJSON,
-  nanNum,
+export const realizedVolatility = withBuiltinMetadata(
+  makeIndicator<HistoricalVolatilityParameters, number, number>(
+    (p) =>
+      new RealizedVolatilityStream({
+        period: requirePeriod(p.period, 'realizedVolatility'),
+        scale: requireAnnualization(p.annualization, 'realizedVolatility'),
+      }),
+    RealizedVolatilityStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.realizedVolatilityMetadata,
 );
 
 // ───────────────────────── range-based OHLC volatility estimators ─────────────────────────
@@ -639,9 +665,18 @@ function rangeVolatilityFacade(kind: string, term: (bar: BarInput) => number) {
   );
 }
 
-export const parkinson = rangeVolatilityFacade('parkinson', parkinsonTerm);
-export const garmanKlass = rangeVolatilityFacade('garmanKlass', garmanKlassTerm);
-export const rogersSatchell = rangeVolatilityFacade('rogersSatchell', rogersSatchellTerm);
+export const parkinson = withBuiltinMetadata(
+  rangeVolatilityFacade('parkinson', parkinsonTerm),
+  builtinMetadata.parkinsonMetadata,
+);
+export const garmanKlass = withBuiltinMetadata(
+  rangeVolatilityFacade('garmanKlass', garmanKlassTerm),
+  builtinMetadata.garmanKlassMetadata,
+);
+export const rogersSatchell = withBuiltinMetadata(
+  rangeVolatilityFacade('rogersSatchell', rogersSatchellTerm),
+  builtinMetadata.rogersSatchellMetadata,
+);
 
 // ───────────────────────── Yang-Zhang volatility ─────────────────────────
 
@@ -730,14 +765,17 @@ class YangZhangStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const yangZhang = makeIndicator<RangeVolatilityParameters, BarInput, number>(
-  (p) =>
-    new YangZhangStream({
-      period: requirePeriod(p.period, 'yangZhang', 'period', 2, 'bars'),
-      scale: requireAnnualization(p.annualization, 'yangZhang', 'bars'),
-    }),
-  YangZhangStream.fromJSON,
-  nanNum,
+export const yangZhang = withBuiltinMetadata(
+  makeIndicator<RangeVolatilityParameters, BarInput, number>(
+    (p) =>
+      new YangZhangStream({
+        period: requirePeriod(p.period, 'yangZhang', 'period', 2, 'bars'),
+        scale: requireAnnualization(p.annualization, 'yangZhang', 'bars'),
+      }),
+    YangZhangStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.yangZhangMetadata,
 );
 
 // ───────────────────────── Chaikin Volatility ─────────────────────────
@@ -800,14 +838,17 @@ class ChaikinVolatilityStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const chaikinVolatility = makeIndicator<ChaikinVolatilityParameters, BarInput, number>(
-  (p) =>
-    new ChaikinVolatilityStream({
-      period: requirePeriod(p.period, 'chaikinVolatility', 'period', 1, 'bars'),
-      rocPeriod: requirePeriod(p.rocPeriod ?? p.period, 'chaikinVolatility', 'rocPeriod'),
-    }),
-  ChaikinVolatilityStream.fromJSON,
-  nanNum,
+export const chaikinVolatility = withBuiltinMetadata(
+  makeIndicator<ChaikinVolatilityParameters, BarInput, number>(
+    (p) =>
+      new ChaikinVolatilityStream({
+        period: requirePeriod(p.period, 'chaikinVolatility', 'period', 1, 'bars'),
+        rocPeriod: requirePeriod(p.rocPeriod ?? p.period, 'chaikinVolatility', 'rocPeriod'),
+      }),
+    ChaikinVolatilityStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.chaikinVolatilityMetadata,
 );
 
 // ───────────────────────── Relative Volatility Index (Dorsey) ─────────────────────────
@@ -887,19 +928,22 @@ export interface RviParameters {
   period?: number;
   stdevPeriod?: number;
 }
-export const relativeVolatilityIndex = makeIndicator<RviParameters, number, number>(
-  (p) =>
-    new RviStream({
-      stdevPeriod: requirePeriod(
-        p.stdevPeriod ?? p.period ?? 14,
-        'relativeVolatilityIndex',
-        'stdevPeriod',
-        2,
-      ),
-      smoothPeriod: requirePeriod(p.period ?? 14, 'relativeVolatilityIndex'),
-    }),
-  RviStream.fromJSON,
-  nanNum,
+export const relativeVolatilityIndex = withBuiltinMetadata(
+  makeIndicator<RviParameters, number, number>(
+    (p) =>
+      new RviStream({
+        stdevPeriod: requirePeriod(
+          p.stdevPeriod ?? p.period ?? 14,
+          'relativeVolatilityIndex',
+          'stdevPeriod',
+          2,
+        ),
+        smoothPeriod: requirePeriod(p.period ?? 14, 'relativeVolatilityIndex'),
+      }),
+    RviStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.relativeVolatilityIndexMetadata,
 );
 
 export {

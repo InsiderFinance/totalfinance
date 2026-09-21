@@ -10,6 +10,8 @@
  * `open` defaults to `close` when a bar omits it — some feeds carry only HLC.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   ensureFinite,
   ensureFiniteWhenPresent,
@@ -189,14 +191,38 @@ function statelessBar(kind: string, fn: (bar: BarInput) => number) {
   );
 }
 
-export const typicalPrice = statelessBar('typicalPrice', tpOf);
-export const medianPrice = statelessBar('medianPrice', mpOf);
-export const weightedClose = statelessBar('weightedClose', wcOf);
-export const averagePrice = statelessBar('averagePrice', apOf);
-export const realBody = statelessBar('realBody', bodyOf);
-export const upperShadow = statelessBar('upperShadow', upperShadowOf);
-export const lowerShadow = statelessBar('lowerShadow', lowerShadowOf);
-export const candleRange = statelessBar('candleRange', rangeOf);
+export const typicalPrice = withBuiltinMetadata(
+  statelessBar('typicalPrice', tpOf),
+  builtinMetadata.typicalPriceMetadata,
+);
+export const medianPrice = withBuiltinMetadata(
+  statelessBar('medianPrice', mpOf),
+  builtinMetadata.medianPriceMetadata,
+);
+export const weightedClose = withBuiltinMetadata(
+  statelessBar('weightedClose', wcOf),
+  builtinMetadata.weightedCloseMetadata,
+);
+export const averagePrice = withBuiltinMetadata(
+  statelessBar('averagePrice', apOf),
+  builtinMetadata.averagePriceMetadata,
+);
+export const realBody = withBuiltinMetadata(
+  statelessBar('realBody', bodyOf),
+  builtinMetadata.realBodyMetadata,
+);
+export const upperShadow = withBuiltinMetadata(
+  statelessBar('upperShadow', upperShadowOf),
+  builtinMetadata.upperShadowMetadata,
+);
+export const lowerShadow = withBuiltinMetadata(
+  statelessBar('lowerShadow', lowerShadowOf),
+  builtinMetadata.lowerShadowMetadata,
+);
+export const candleRange = withBuiltinMetadata(
+  statelessBar('candleRange', rangeOf),
+  builtinMetadata.candleRangeMetadata,
+);
 
 // ---- true range (needs the prior close; emits from the first bar) ----
 
@@ -222,10 +248,13 @@ class TrueRangeStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const trueRange = makeIndicator<Empty, BarInput, number>(
-  () => new TrueRangeStream(),
-  TrueRangeStream.fromJSON,
-  () => NaN,
+export const trueRange = withBuiltinMetadata(
+  makeIndicator<Empty, BarInput, number>(
+    () => new TrueRangeStream(),
+    TrueRangeStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.trueRangeMetadata,
 );
 
 // ---- gap (open minus prior close; warmup 1) ----
@@ -256,10 +285,13 @@ class GapStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const gap = makeIndicator<Empty, BarInput, number>(
-  () => new GapStream(),
-  GapStream.fromJSON,
-  () => NaN,
+export const gap = withBuiltinMetadata(
+  makeIndicator<Empty, BarInput, number>(
+    () => new GapStream(),
+    GapStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.gapMetadata,
 );
 
 // ---- Heikin-Ashi (smoothed candles; also re-exported by chart-types) ----
@@ -307,10 +339,13 @@ class HeikinAshiStream implements IndicatorStream<BarInput, HeikinAshiBar> {
 
 const nanHa = (): HeikinAshiBar => ({ open: NaN, high: NaN, low: NaN, close: NaN });
 
-export const heikinAshi = makeIndicator<Empty, BarInput, HeikinAshiBar>(
-  () => new HeikinAshiStream(),
-  HeikinAshiStream.fromJSON,
-  nanHa,
+export const heikinAshi = withBuiltinMetadata(
+  makeIndicator<Empty, BarInput, HeikinAshiBar>(
+    () => new HeikinAshiStream(),
+    HeikinAshiStream.fromJSON,
+    nanHa,
+  ),
+  builtinMetadata.heikinAshiMetadata,
 );
 
 export { MapBarStream, TrueRangeStream, GapStream, HeikinAshiStream };

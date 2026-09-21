@@ -48,7 +48,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     specifier: '@totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
     budgetKB: 11.75,
-    intent: 'hot path; verified to contain no schema/validator code',
+    intent: 'all model exports; runtime guards included, schema/JSON-Schema machinery excluded',
     forbidden: [
       {
         needle: 'toJSONSchema',
@@ -170,9 +170,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/math/montecarlo',
     entry: 'packages/math/src/montecarlo.ts',
-    budgetKB: 7.25,
+    budgetKB: 7.375,
     intent: 'Sobol direction numbers are generated, not a vendored table',
     rationale:
+      '7.25 → 7.375 KB (installed-consumer repair, 2026-09-21): measured 7,501 B with Node 22.23.2/esbuild 0.25.12. Shared input codes are private named constants so guard-only consumers can drop the complete error registry; whole-registry consumers pay small binding overhead. No added module family; the lean expert-price fixtures independently cap the resulting savings. ' +
       'WS9.5 lifted the 13-dimension Sobol cap to 1111 dimensions. The direction numbers are ' +
       'GENERATED from primitive polynomials at load (a few KB of code), NOT a ~50 KB vendored table, ' +
       'so the base Monte-Carlo path stays lean — this budget is the proof. 6 KB (was 5) in 3B.1b: ' +
@@ -201,9 +202,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/calendars/crypto',
     entry: 'packages/calendars/src/crypto.ts',
-    budgetKB: 4.75,
+    budgetKB: 4.875,
     intent: 'aliases alwaysOpen and pulls in no exchange-holiday dataset',
     rationale:
+      '4.75 → 4.875 KB (installed-consumer repair, 2026-09-21): measured 4,934 B with Node 22.23.2/esbuild 0.25.12. The shared validation-code split adds small binding overhead to whole-registry consumers while allowing guard-only kernels to discard unrelated codes. The no-dataset boundary remains enforced. ' +
       '3.5 KB (was 3): the 2026-08-02 defect-fix wave made createRuleCalendar copy its rule arrays ' +
       'and session object at construction and reject an all-weekend configuration, so one calendar ' +
       'can no longer answer the same rule two ways depending on query order. Measured 3,169 B. The ' +
@@ -271,9 +273,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/technical-analysis/rsi',
     entry: 'packages/technical-analysis/src/rsi.ts',
-    budgetKB: 8.25,
+    budgetKB: 8.75,
     intent: 'single indicator, deep entrypoint',
     rationale:
+      '8.25 → 8.75 KB (installed-consumer correctness repair, 2026-09-21): measured 8,842 B with Node 22.23.2/esbuild 0.25.12. The leaf now binds its own closed parameter set, defaults, input kind and conventions through a private immutable-copy helper; previously the full registry had to run before these guards and disclosures existed. No other indicator or discovery catalog is retained; installed cross-bundler boundaries verify that independently. ' +
       '7 KB (was 6): 3B.1a put the snapshot READER into the framework module every indicator already ' +
       'imports — envelope validation, the indicator-identity guard, the non-finite codec, and the ' +
       'checked state accessors with their teaching messages. Measured at +1.6 KB gzip (5.0 → 6.6), ' +
@@ -290,9 +293,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/fixed-income/lattice',
     entry: 'packages/fixed-income/src/lattice.ts',
-    budgetKB: 12.75,
+    budgetKB: 12.875,
     intent: 'short-rate lattice; pulls the option/BSM kernel for the equity leg',
     rationale:
+      '12.75 → 12.875 KB (installed-consumer repair, 2026-09-21): measured 13,112 B with Node 22.23.2/esbuild 0.25.12. The shared validation-code split adds small binding overhead when the full error registry is also needed; no new runtime dependency or capability. Separate installed expert-price fixtures enforce removal of the unrelated registry and facades. ' +
       '9 KB (was 8): E5 added the Law 12 spec-key guards, bond/curve instance teaching errors, and ' +
       'the bermudan report grammar (assumptions echo + diagnostics) — deliberate boundary code ' +
       '(~0.6 KB gzip), not dependency creep; the import graph is unchanged. ' +
@@ -418,10 +422,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/backtest/paper',
     entry: 'packages/backtest/src/paper/index.ts',
-    budgetKB: 37,
+    budgetKB: 37.125,
     intent:
       'Stage 7B.2 createPaperBroker: the first execution adapter over the engines’ own fill path — submit (grant verification, idempotency, the receipt), step (fills through fillOrderWithPolicy and the ledger events), cancel, deliver, halt; its own entrypoint so the engines never pay for the broker',
     rationale:
+      '37 → 37.125 KB (installed-consumer repair, 2026-09-21): measured 37,920 B with Node 22.23.2/esbuild 0.25.12. Private shared validation constants add binding overhead to whole-registry consumers while preserving code identities and allowing guard-only consumers to discard the registry. No broker behavior or dependency changed. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21): 34.5 -> 37 KB, measured 36.1 KB. All-or-none combo fills against one observation instant with the net-limit check, the submission stamp and the observation-before-submission refusal. ' +
       '34 → 34.5 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the broker refuses an OCC option symbol it has no multiplier for, at creation and at submit, through the core OCC grammar predicate (the grammar was split from expiry resolution so this costs the parse, not the session calendar: 36.6 KB with the calendar, 34,876 B without); 60 B over the 34 KB line. ' +
       'September 2026 R06/R07: 33 → 34 KB, measured 33,969 B. Persisted order/instrument/fill context, identity restoration, and replay-safe partial observations replace the empty restart state. ' +
@@ -457,10 +462,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 495,
+    budgetKB: 497.25,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
+      '495 → 497.25 KB (installed-consumer correctness repair, 2026-09-21): measured 508,947 B with Node 22.23.2/esbuild 0.25.12. All built-in TA facades now bind their own shared metadata before registry import. The complete operation catalog includes that construction code and shared named declarations; narrow consumers are separately budgeted, and no runtime dependency or financial calculation changed. ' +
       'Freeze correctness repairs (2026-09-21): 494 -> 495 KB, measured 494.3 KB on supported Node 22. Durable write-ahead grant recovery, plan-scoped combo lifecycle and hedge-capacity validation, and separate embedded execution-cost attribution. No new dependency; the local filesystem coordinator remains outside the browser root. ' +
       'Pre-publish interface repairs B (2026-09-21, wire contracts): 488 -> 494 KB, measured 492.8 KB. The shared envelope schema (the spilled-handle branch), grant consumption in the stores, the combo grammar on the trade wire, and the C code registries. ' +
       'September 2026 R08/R10/R14: 476 → 482 KB, measured 490,994 B. Full discriminated trade input/output schemas, trusted approval lookup, transactional journal integration and corrected domain engines. Node-only file locking stays in the local subpath, never this browser-safe root. ' +
@@ -592,10 +598,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: 'totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 680,
+    budgetKB: 681.25,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      '680 → 681.25 KB (installed-consumer correctness repair, 2026-09-21): measured 697,387 B with Node 22.23.2/esbuild 0.25.12. Built-in TA contracts are now shared named declarations bound by every leaf, so the all-exports umbrella includes their construction code. This protects narrow-import correctness without relying on discovery side effects; separate installed-function budgets enforce lean imports and document the esbuild root-namespace limitation. ' +
       'Pre-publish interface repairs B and C (2026-09-21): 674 -> 680 KB, measured 677.8 KB. Combos and one order vocabulary, chainGreeks and usEquityOption, the unified portfolio VaR door, and every code as a registry member. ' +
       'Pre-publish interface repairs (2026-09-18, assumptions and units): 672 → 674 KB, measured 689,089 B. One engine-inversion kernel with style-aware bounds (the American door, a European contract with a named engine, and the chain-health report share it), the chain-health American rows and dividend disclosure, the OCC grammar predicate and its refusals in the plan, paper broker and rebalance, the required annualization and risk-free rate, and the display-unit Greek kernel in risk; every other entrypoint stays inside its own line after the grammar/calendar split. ' +
       'Pre-publish interface repairs (2026-09-16, valuation instants): 670 → 672 KB, measured 686,738 B. The core time module grew by the session table and the strict valuation door; ' +

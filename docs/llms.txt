@@ -5,6 +5,12 @@
 - [Full API and operation catalog](llms-full.txt) — every public entrypoint, type-only export, and registered operation.
 - [Operation catalog](llms-full.txt#operation-catalog) — full schemas, profiles, permissions, handles, costs, and SDK-only notes.
 
+## Imports and bundles
+
+For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths. Root namespace re-exports are convenient but bundler-dependent. Installation size, final bundle size, and plain Node ESM loading are different; Node does no automatic dead-code elimination.
+
+- [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.
+
 ## Six task journeys
 
 - [Price options and inspect Greeks](llms-full.txt#journey-options)

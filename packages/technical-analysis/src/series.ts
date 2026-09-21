@@ -1,5 +1,7 @@
 /** Returns and rolling volatility (spec §13.3). */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -132,26 +134,35 @@ class RollingVolatilityStream implements IndicatorStream<number, number> {
   }
 }
 
-export const returns = makeIndicator<Record<never, never>, number, number>(
-  () => new ReturnsStream(),
-  ReturnsStream.fromJSON,
-  () => NaN,
+export const returns = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, number, number>(
+    () => new ReturnsStream(),
+    ReturnsStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.returnsMetadata,
 );
 
-export const logReturns = makeIndicator<Record<never, never>, number, number>(
-  () => new LogReturnsStream(),
-  LogReturnsStream.fromJSON,
-  () => NaN,
+export const logReturns = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, number, number>(
+    () => new LogReturnsStream(),
+    LogReturnsStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.logReturnsMetadata,
 );
 
-export const rollingVolatility = makeIndicator<RollingVolatilityParameters, number, number>(
-  (p) =>
-    new RollingVolatilityStream({
-      period: requirePeriod(p.period, 'rollingVolatility', 'period', 2),
-      scale: requireAnnualization(p.annualization, 'rollingVolatility'),
-    }),
-  RollingVolatilityStream.fromJSON,
-  () => NaN,
+export const rollingVolatility = withBuiltinMetadata(
+  makeIndicator<RollingVolatilityParameters, number, number>(
+    (p) =>
+      new RollingVolatilityStream({
+        period: requirePeriod(p.period, 'rollingVolatility', 'period', 2),
+        scale: requireAnnualization(p.annualization, 'rollingVolatility'),
+      }),
+    RollingVolatilityStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.rollingVolatilityMetadata,
 );
 
 export { ReturnsStream, LogReturnsStream, RollingVolatilityStream };

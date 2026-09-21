@@ -344,7 +344,8 @@ const untyped = (i: BachelierInput, functionName: string): void => {
   }
 };
 
-const call = facade(
+// Wrapper construction is side-effect-free; expert imports must not retain unused facades.
+const call = /* @__PURE__ */ facade(
   'bachelier.call',
   (i: BachelierInput) => (
     untyped(i, 'bachelier.call'),
@@ -362,7 +363,7 @@ const call = facade(
     }
   ),
 );
-const put = facade(
+const put = /* @__PURE__ */ facade(
   'bachelier.put',
   (i: BachelierInput) => (
     untyped(i, 'bachelier.put'),
@@ -380,7 +381,7 @@ const put = facade(
     }
   ),
 );
-const price = facade(
+const price = /* @__PURE__ */ facade(
   'bachelier.price',
   (i: BachelierTypedInput) => priceTyped(i, 'bachelier.price'),
   (i: BachelierTypedInput): Computed<number> => ({
@@ -392,7 +393,7 @@ const price = facade(
     }),
   }),
 );
-const greeks = facade(
+const greeks = /* @__PURE__ */ facade(
   'bachelier.greeks',
   (i: BachelierTypedInput): Greeks => {
     validateTyped(i, 'bachelier.greeks');
@@ -410,7 +411,7 @@ const greeks = facade(
     };
   },
 );
-const extendedGreeks = facade(
+const extendedGreeks = /* @__PURE__ */ facade(
   'bachelier.extendedGreeks',
   (i: BachelierTypedInput): ExtendedGreeks => {
     validateTyped(i, 'bachelier.extendedGreeks');
@@ -499,7 +500,7 @@ export const bachelier: {
     Record<never, never>,
     number | null
   >;
-} = {
+} = /* @__PURE__ */ (() => ({
   call,
   put,
   price,
@@ -511,4 +512,4 @@ export const bachelier: {
     [ErrorCode.ImpliedVolatilityBelowIntrinsic],
     'implied vol did not converge',
   ),
-};
+}))();

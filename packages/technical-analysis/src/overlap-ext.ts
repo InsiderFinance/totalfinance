@@ -1,3 +1,5 @@
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import { ErrorCode, InputError } from '@totalfinance/core';
 /**
  * Modern moving averages & overlap studies (spec §13.3; pandas-ta parity).
@@ -107,32 +109,41 @@ function pascalWeights(n: number): number[] {
   return w;
 }
 
-export const fwma = makeIndicator<PeriodParameters, number, number>(
-  (p) =>
-    new WeightedMovingAverageStream({
-      kind: 'fwma',
-      weights: fibonacciWeights(requirePeriod(p.period, 'fwma')),
-    }),
-  WeightedMovingAverageStream.restore('fwma'),
-  nan,
+export const fwma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) =>
+      new WeightedMovingAverageStream({
+        kind: 'fwma',
+        weights: fibonacciWeights(requirePeriod(p.period, 'fwma')),
+      }),
+    WeightedMovingAverageStream.restore('fwma'),
+    nan,
+  ),
+  builtinMetadata.fwmaMetadata,
 );
-export const sineWma = makeIndicator<PeriodParameters, number, number>(
-  (p) =>
-    new WeightedMovingAverageStream({
-      kind: 'sineWma',
-      weights: sineWeights(requirePeriod(p.period, 'sineWma')),
-    }),
-  WeightedMovingAverageStream.restore('sineWma'),
-  nan,
+export const sineWma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) =>
+      new WeightedMovingAverageStream({
+        kind: 'sineWma',
+        weights: sineWeights(requirePeriod(p.period, 'sineWma')),
+      }),
+    WeightedMovingAverageStream.restore('sineWma'),
+    nan,
+  ),
+  builtinMetadata.sineWmaMetadata,
 );
-export const pascalWma = makeIndicator<PeriodParameters, number, number>(
-  (p) =>
-    new WeightedMovingAverageStream({
-      kind: 'pascalWma',
-      weights: pascalWeights(requirePeriod(p.period, 'pascalWma')),
-    }),
-  WeightedMovingAverageStream.restore('pascalWma'),
-  nan,
+export const pascalWma = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) =>
+      new WeightedMovingAverageStream({
+        kind: 'pascalWma',
+        weights: pascalWeights(requirePeriod(p.period, 'pascalWma')),
+      }),
+    WeightedMovingAverageStream.restore('pascalWma'),
+    nan,
+  ),
+  builtinMetadata.pascalWmaMetadata,
 );
 /** Symmetric (triangular) weighted MA — identical to the triangular MA (`trima`). */
 export const symmetricWma = trima;
@@ -201,15 +212,18 @@ class JmaStream implements IndicatorStream<number, number> {
   }
 }
 
-export const jma = makeIndicator<JmaParameters, number, number>(
-  (p) =>
-    new JmaStream({
-      period: requirePeriod(p.period, 'jma'),
-      phase: requireInRange(p.phase ?? 0, 'jma', 'phase', -100, 100),
-      power: requirePositive(p.power ?? 1, 'jma', 'power'),
-    }),
-  JmaStream.fromJSON,
-  nan,
+export const jma = withBuiltinMetadata(
+  makeIndicator<JmaParameters, number, number>(
+    (p) =>
+      new JmaStream({
+        period: requirePeriod(p.period, 'jma'),
+        phase: requireInRange(p.phase ?? 0, 'jma', 'phase', -100, 100),
+        power: requirePositive(p.power ?? 1, 'jma', 'power'),
+      }),
+    JmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.jmaMetadata,
 );
 
 // ───────────────────────── Holt-Winters MA ─────────────────────────
@@ -287,33 +301,36 @@ class HwmaStream implements IndicatorStream<number, number> {
   }
 }
 
-export const holtWinterMovingAverage = makeIndicator<HwmaParameters, number, number>(
-  (p) =>
-    new HwmaStream({
-      levelSmoothing: requireInRange(
-        p.levelSmoothing ?? 0.2,
-        'holtWinterMovingAverage',
-        'levelSmoothing',
-        0,
-        1,
-      ),
-      trendSmoothing: requireInRange(
-        p.trendSmoothing ?? 0.1,
-        'holtWinterMovingAverage',
-        'trendSmoothing',
-        0,
-        1,
-      ),
-      accelerationSmoothing: requireInRange(
-        p.accelerationSmoothing ?? 0.1,
-        'holtWinterMovingAverage',
-        'accelerationSmoothing',
-        0,
-        1,
-      ),
-    }),
-  HwmaStream.fromJSON,
-  nan,
+export const holtWinterMovingAverage = withBuiltinMetadata(
+  makeIndicator<HwmaParameters, number, number>(
+    (p) =>
+      new HwmaStream({
+        levelSmoothing: requireInRange(
+          p.levelSmoothing ?? 0.2,
+          'holtWinterMovingAverage',
+          'levelSmoothing',
+          0,
+          1,
+        ),
+        trendSmoothing: requireInRange(
+          p.trendSmoothing ?? 0.1,
+          'holtWinterMovingAverage',
+          'trendSmoothing',
+          0,
+          1,
+        ),
+        accelerationSmoothing: requireInRange(
+          p.accelerationSmoothing ?? 0.1,
+          'holtWinterMovingAverage',
+          'accelerationSmoothing',
+          0,
+          1,
+        ),
+      }),
+    HwmaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.holtWinterMovingAverageMetadata,
 );
 
 // ───────────────────────── Rainbow MA ─────────────────────────
@@ -372,14 +389,17 @@ class RainbowMovingAverageStream implements IndicatorStream<number, number> {
   }
 }
 
-export const rainbowMovingAverage = makeIndicator<RainbowParameters, number, number>(
-  (p) =>
-    new RainbowMovingAverageStream({
-      period: requirePeriod(p.period ?? 2, 'rainbowMovingAverage'),
-      levels: requireParallelStreamCount(p.levels ?? 10, 'rainbowMovingAverage', 'levels'),
-    }),
-  RainbowMovingAverageStream.fromJSON,
-  nan,
+export const rainbowMovingAverage = withBuiltinMetadata(
+  makeIndicator<RainbowParameters, number, number>(
+    (p) =>
+      new RainbowMovingAverageStream({
+        period: requirePeriod(p.period ?? 2, 'rainbowMovingAverage'),
+        levels: requireParallelStreamCount(p.levels ?? 10, 'rainbowMovingAverage', 'levels'),
+      }),
+    RainbowMovingAverageStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rainbowMovingAverageMetadata,
 );
 
 // ───────────────────────── MA ribbon ─────────────────────────
@@ -429,22 +449,25 @@ class MovingAverageRibbonStream implements IndicatorStream<number, number[]> {
 }
 
 const DEFAULT_RIBBON = [10, 20, 30, 40, 50];
-export const movingAverageRibbon = makeIndicator<MovingAverageRibbonParameters, number, number[]>(
-  (p) => {
-    if (p.periods !== undefined && !Array.isArray(p.periods)) {
-      throw new InputError(
-        `movingAverageRibbon: periods must be an array of periods when provided. Received ${p.periods === null ? 'null' : typeof p.periods}.`,
-        { code: ErrorCode.InputWrongType, context: { field: 'periods' } },
+export const movingAverageRibbon = withBuiltinMetadata(
+  makeIndicator<MovingAverageRibbonParameters, number, number[]>(
+    (p) => {
+      if (p.periods !== undefined && !Array.isArray(p.periods)) {
+        throw new InputError(
+          `movingAverageRibbon: periods must be an array of periods when provided. Received ${p.periods === null ? 'null' : typeof p.periods}.`,
+          { code: ErrorCode.InputWrongType, context: { field: 'periods' } },
+        );
+      }
+      const periods = p.periods ?? DEFAULT_RIBBON;
+      requireParallelStreamCount(periods.length, 'movingAverageRibbon', 'periods.length');
+      return new MovingAverageRibbonStream(
+        periods.map((n, i) => requirePeriod(n, 'movingAverageRibbon', `periods[${i}]`)),
       );
-    }
-    const periods = p.periods ?? DEFAULT_RIBBON;
-    requireParallelStreamCount(periods.length, 'movingAverageRibbon', 'periods.length');
-    return new MovingAverageRibbonStream(
-      periods.map((n, i) => requirePeriod(n, 'movingAverageRibbon', `periods[${i}]`)),
-    );
-  },
-  MovingAverageRibbonStream.fromJSON,
-  (p) => (p.periods ?? DEFAULT_RIBBON).map(() => NaN),
+    },
+    MovingAverageRibbonStream.fromJSON,
+    (p) => (p.periods ?? DEFAULT_RIBBON).map(() => NaN),
+  ),
+  builtinMetadata.movingAverageRibbonMetadata,
 );
 
 // ───────────────────────── Gann HiLo Activator ─────────────────────────
@@ -509,10 +532,13 @@ class GannHiLoStream implements IndicatorStream<BarInput, GannHiLoPoint> {
   }
 }
 
-export const gannHighLowActivator = makeIndicator<{ period?: number }, BarInput, GannHiLoPoint>(
-  (p) => new GannHiLoStream(requirePeriod(p.period ?? 3, 'gannHighLowActivator')),
-  GannHiLoStream.fromJSON,
-  () => ({ value: NaN, trend: NaN }),
+export const gannHighLowActivator = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, GannHiLoPoint>(
+    (p) => new GannHiLoStream(requirePeriod(p.period ?? 3, 'gannHighLowActivator')),
+    GannHiLoStream.fromJSON,
+    () => ({ value: NaN, trend: NaN }),
+  ),
+  builtinMetadata.gannHighLowActivatorMetadata,
 );
 
 // ───────────────────────── VWAP bands ─────────────────────────
@@ -566,10 +592,13 @@ class VwapBandsStream implements IndicatorStream<BarInput, VwapBandsPoint> {
   }
 }
 
-export const vwapBands = makeIndicator<VwapBandsParameters, BarInput, VwapBandsPoint>(
-  (p) => new VwapBandsStream(requirePositive(p.multiplier ?? 2, 'vwapBands', 'multiplier')),
-  VwapBandsStream.fromJSON,
-  () => ({ vwap: NaN, upper: NaN, lower: NaN }),
+export const vwapBands = withBuiltinMetadata(
+  makeIndicator<VwapBandsParameters, BarInput, VwapBandsPoint>(
+    (p) => new VwapBandsStream(requirePositive(p.multiplier ?? 2, 'vwapBands', 'multiplier')),
+    VwapBandsStream.fromJSON,
+    () => ({ vwap: NaN, upper: NaN, lower: NaN }),
+  ),
+  builtinMetadata.vwapBandsMetadata,
 );
 
 // ───────────────────────── session VWAP (periodic reset) ─────────────────────────
@@ -622,10 +651,14 @@ class SessionVwapStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const sessionVwap = makeIndicator<SessionVwapParameters, BarInput, number>(
-  (p) => new SessionVwapStream(requirePeriod(p.resetEvery, 'sessionVwap', 'resetEvery', 1, 'bars')),
-  SessionVwapStream.fromJSON,
-  nan,
+export const sessionVwap = withBuiltinMetadata(
+  makeIndicator<SessionVwapParameters, BarInput, number>(
+    (p) =>
+      new SessionVwapStream(requirePeriod(p.resetEvery, 'sessionVwap', 'resetEvery', 1, 'bars')),
+    SessionVwapStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.sessionVwapMetadata,
 );
 
 // ───────────────────────── rolling auto-anchored VWAP ─────────────────────────
@@ -718,19 +751,19 @@ class RollingAnchoredVwapStream implements IndicatorStream<BarInput, AnchoredVwa
   }
 }
 
-export const rollingAnchoredVwap = makeIndicator<
-  RollingAnchoredVwapParameters,
-  BarInput,
-  AnchoredVwapPoint
->(
-  (p) =>
-    new RollingAnchoredVwapStream({
-      lookback: requirePeriod(p.lookback ?? 50, 'rollingAnchoredVwap', 'lookback'),
-      anchorLow:
-        requireOneOf(p.anchor ?? 'low', ['low', 'high'], 'rollingAnchoredVwap', 'anchor') === 'low',
-    }),
-  RollingAnchoredVwapStream.fromJSON,
-  () => ({ vwap: NaN, anchorBarsAgo: NaN }),
+export const rollingAnchoredVwap = withBuiltinMetadata(
+  makeIndicator<RollingAnchoredVwapParameters, BarInput, AnchoredVwapPoint>(
+    (p) =>
+      new RollingAnchoredVwapStream({
+        lookback: requirePeriod(p.lookback ?? 50, 'rollingAnchoredVwap', 'lookback'),
+        anchorLow:
+          requireOneOf(p.anchor ?? 'low', ['low', 'high'], 'rollingAnchoredVwap', 'anchor') ===
+          'low',
+      }),
+    RollingAnchoredVwapStream.fromJSON,
+    () => ({ vwap: NaN, anchorBarsAgo: NaN }),
+  ),
+  builtinMetadata.rollingAnchoredVwapMetadata,
 );
 
 // ───────────────────────── price-source aliases ─────────────────────────

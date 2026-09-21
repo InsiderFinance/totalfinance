@@ -9,8 +9,8 @@ const root = (p: string): string => fileURLToPath(new URL(`../../${p}`, import.m
 const alias = workspaceAlias();
 
 /**
- * Spec §21.5 — these budgets are claims about what downstream apps pay. A budget is only valid if a
- * test imports exactly that entrypoint and verifies what was bundled.
+ * Spec §21.5 — whole-entrypoint ceilings (all exports retained). Installed-consumer budgets
+ * separately cover the actual cost of selected functions and import spellings across bundlers.
  *
  * The budgets, their rationales, and the structural guarantees are declared in `budgets.ts`, because
  * the published table in `docs/bundle-size.md` is generated from the same record. Keeping them apart

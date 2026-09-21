@@ -1,5 +1,5 @@
 /** Agent docs from export maps/checker/JSDoc and live registries. Run `pnpm tsx tools/llms-docs.ts`. */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { aliasesOf } from '../packages/technical-analysis/src/aliases.js';
@@ -81,6 +81,14 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
     '',
     '- [Full API and operation catalog](llms-full.txt) — every public entrypoint, type-only export, and registered operation.',
     '- [Operation catalog](llms-full.txt#operation-catalog) — full schemas, profiles, permissions, handles, costs, and SDK-only notes.',
+    '',
+    '## Imports and bundles',
+    '',
+    'For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, ' +
+      'or supported feature subpaths. Root namespace re-exports are convenient but bundler-dependent. ' +
+      'Installation size, final bundle size, and plain Node ESM loading are different; Node does no automatic dead-code elimination.',
+    '',
+    '- [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.',
     '',
     '## Six task journeys',
     '',
@@ -229,8 +237,17 @@ export function buildLlmsFullTxt(reference: PublicReference = buildPublicReferen
     '',
     SUMMARY,
     '',
-    'Generated from package export maps, TypeScript source/checker/JSDoc, stability files and live operation metadata. ' +
+    'Generated from package export maps, TypeScript source/checker/JSDoc, public guides, stability files and live operation metadata. ' +
       'No root-only API reports, inferred financial defaults, or publication claims.',
+    '',
+    // Keep the detailed import advice identical to the public guide; rebase its headings and link
+    // for docs/llms-full.txt without copying a second hand-maintained version of the guidance.
+    readFileSync(resolve(ROOT, 'docs/guides/imports-and-bundles.md'), 'utf8')
+      .trim()
+      .replace(/^(#+) /gm, '$1# ')
+      .replace('](../bundle-size.md)', '](bundle-size.md)'),
+    '',
+    '[Imports and bundles guide](guides/imports-and-bundles.md)',
     '',
   ];
   for (const journey of AGENT_JOURNEYS) {

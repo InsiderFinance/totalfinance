@@ -7,6 +7,8 @@
  * `kvo`→`klinger`.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -111,15 +113,18 @@ class ArcherObvStream implements IndicatorStream<BarInput, ArcherObvPoint> {
   }
 }
 
-export const archerObv = makeIndicator<ArcherObvParameters, BarInput, ArcherObvPoint>(
-  (p) =>
-    new ArcherObvStream({
-      fast: requirePeriod(p.fast ?? 4, 'archerObv', 'fast'),
-      slow: requirePeriod(p.slow ?? 12, 'archerObv', 'slow'),
-      runLength: requirePeriod(p.runLength ?? 2, 'archerObv', 'runLength'),
-    }),
-  ArcherObvStream.fromJSON,
-  () => ({ obv: NaN, fast: NaN, slow: NaN, long: NaN, short: NaN }),
+export const archerObv = withBuiltinMetadata(
+  makeIndicator<ArcherObvParameters, BarInput, ArcherObvPoint>(
+    (p) =>
+      new ArcherObvStream({
+        fast: requirePeriod(p.fast ?? 4, 'archerObv', 'fast'),
+        slow: requirePeriod(p.slow ?? 12, 'archerObv', 'slow'),
+        runLength: requirePeriod(p.runLength ?? 2, 'archerObv', 'runLength'),
+      }),
+    ArcherObvStream.fromJSON,
+    () => ({ obv: NaN, fast: NaN, slow: NaN, long: NaN, short: NaN }),
+  ),
+  builtinMetadata.archerObvMetadata,
 );
 
 // ───────────────────────── Market Facilitation Index ─────────────────────────
@@ -143,10 +148,13 @@ class MarketFacilitationIndexStream implements IndicatorStream<BarInput, number>
 }
 
 /** Bill Williams Market Facilitation Index — (high − low) / volume. */
-export const marketFacilitationIndex = makeIndicator<Record<string, never>, BarInput, number>(
-  () => new MarketFacilitationIndexStream(),
-  MarketFacilitationIndexStream.fromJSON,
-  nan,
+export const marketFacilitationIndex = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, BarInput, number>(
+    () => new MarketFacilitationIndexStream(),
+    MarketFacilitationIndexStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.marketFacilitationIndexMetadata,
 );
 
 // ───────────────────────── Price · Volume ─────────────────────────
@@ -193,15 +201,18 @@ class PriceVolumeStream implements IndicatorStream<BarInput, number> {
 }
 
 /** Price · Volume — close × volume, optionally signed by the close-to-close direction. */
-export const priceVolume = makeIndicator<PriceVolumeParameters, BarInput, number>(
-  (p) =>
-    new PriceVolumeStream(
-      requireBooleanWhenPresent(p.signed, 'priceVolume', 'signed') === undefined
-        ? (p.signed ?? false)
-        : (p.signed as boolean),
-    ),
-  PriceVolumeStream.fromJSON,
-  nan,
+export const priceVolume = withBuiltinMetadata(
+  makeIndicator<PriceVolumeParameters, BarInput, number>(
+    (p) =>
+      new PriceVolumeStream(
+        requireBooleanWhenPresent(p.signed, 'priceVolume', 'signed') === undefined
+          ? (p.signed ?? false)
+          : (p.signed as boolean),
+      ),
+    PriceVolumeStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.priceVolumeMetadata,
 );
 
 // ───────────────────────── Price Volume Rank ─────────────────────────
@@ -246,10 +257,13 @@ class PriceVolumeRankStream implements IndicatorStream<BarInput, number> {
  * Price Volume Rank — 1: price↑ & volume↑, 2: price↑ & volume↓, 3: price↓ & volume↑,
  * 4: price↓ & volume↓ (ties count as "down").
  */
-export const priceVolumeRank = makeIndicator<Record<string, never>, BarInput, number>(
-  () => new PriceVolumeRankStream(),
-  PriceVolumeRankStream.fromJSON,
-  nan,
+export const priceVolumeRank = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, BarInput, number>(
+    () => new PriceVolumeRankStream(),
+    PriceVolumeRankStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.priceVolumeRankMetadata,
 );
 
 // ───────────────────────── Volume Oscillator ─────────────────────────
@@ -298,14 +312,17 @@ class VolumeOscillatorStream implements IndicatorStream<BarInput, number> {
 }
 
 /** Volume Oscillator — 100·(EMA_fast(volume) − EMA_slow(volume)) / EMA_slow(volume). */
-export const volumeOscillator = makeIndicator<VolumeOscillatorParameters, BarInput, number>(
-  (p) =>
-    new VolumeOscillatorStream(
-      requirePeriod(p.fast ?? 5, 'volumeOscillator', 'fast'),
-      requirePeriod(p.slow ?? 10, 'volumeOscillator', 'slow'),
-    ),
-  VolumeOscillatorStream.fromJSON,
-  nan,
+export const volumeOscillator = withBuiltinMetadata(
+  makeIndicator<VolumeOscillatorParameters, BarInput, number>(
+    (p) =>
+      new VolumeOscillatorStream(
+        requirePeriod(p.fast ?? 5, 'volumeOscillator', 'fast'),
+        requirePeriod(p.slow ?? 10, 'volumeOscillator', 'slow'),
+      ),
+    VolumeOscillatorStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.volumeOscillatorMetadata,
 );
 
 // ───────────────────────── Williams Accumulation / Distribution ─────────────────────────
@@ -344,10 +361,13 @@ class WilliamsAdStream implements IndicatorStream<BarInput, number> {
 }
 
 /** Williams Accumulation/Distribution — running sum of close − true-low/high on up/down days. */
-export const williamsAd = makeIndicator<Record<string, never>, BarInput, number>(
-  () => new WilliamsAdStream(),
-  WilliamsAdStream.fromJSON,
-  nan,
+export const williamsAd = withBuiltinMetadata(
+  makeIndicator<Record<string, never>, BarInput, number>(
+    () => new WilliamsAdStream(),
+    WilliamsAdStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.williamsAdMetadata,
 );
 
 // ───────────────────────── conventional aliases ─────────────────────────

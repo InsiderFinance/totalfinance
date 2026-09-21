@@ -9,6 +9,8 @@
  * matching TA-Lib's `real` argument).
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -237,10 +239,13 @@ class DspStream implements IndicatorStream<number, number> {
 }
 
 /** Detrended Synthetic Price: `close - EMA(close, period)` (pandas-ta `dsp`). */
-export const dsp = makeIndicator<DspParameters, number, number>(
-  (p) => new DspStream(requirePeriod(p.period ?? 14, 'dsp')),
-  DspStream.fromJSON,
-  () => NaN,
+export const dsp = withBuiltinMetadata(
+  makeIndicator<DspParameters, number, number>(
+    (p) => new DspStream(requirePeriod(p.period ?? 14, 'dsp')),
+    DspStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.dspMetadata,
 );
 
 export interface EbswParameters {
@@ -339,14 +344,17 @@ class EbswStream implements IndicatorStream<number, number> {
  * Matches pandas-ta **including its degree/radian translation defect** — it is not Ehlers's published
  * filter (see `EbswStream` and `docs/compatibility/talib-differences.md`).
  */
-export const ebsw = makeIndicator<EbswParameters, number, number>(
-  (p) =>
-    new EbswStream({
-      period: requirePeriod(p.period ?? 40, 'ebsw', 'period', 39),
-      bars: requirePeriod(p.bars ?? 10, 'ebsw', 'bars'),
-    }),
-  EbswStream.fromJSON,
-  () => NaN,
+export const ebsw = withBuiltinMetadata(
+  makeIndicator<EbswParameters, number, number>(
+    (p) =>
+      new EbswStream({
+        period: requirePeriod(p.period ?? 40, 'ebsw', 'period', 39),
+        bars: requirePeriod(p.bars ?? 10, 'ebsw', 'bars'),
+      }),
+    EbswStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.ebswMetadata,
 );
 
 export interface MswParameters {
@@ -412,10 +420,13 @@ class MswStream implements IndicatorStream<number, MswPoint> {
 }
 
 /** Mesa Sine Wave (pandas-ta/tulipy `msw`). */
-export const msw = makeIndicator<MswParameters, number, MswPoint>(
-  (p) => new MswStream(requirePeriod(p.period ?? 5, 'msw', 'period', 2)),
-  MswStream.fromJSON,
-  () => ({ sine: NaN, lead: NaN }),
+export const msw = withBuiltinMetadata(
+  makeIndicator<MswParameters, number, MswPoint>(
+    (p) => new MswStream(requirePeriod(p.period ?? 5, 'msw', 'period', 2)),
+    MswStream.fromJSON,
+    () => ({ sine: NaN, lead: NaN }),
+  ),
+  builtinMetadata.mswMetadata,
 );
 
 // ───────────────────────── scalar HT facades ─────────────────────────
@@ -455,9 +466,18 @@ function htScalar(kind: string, pick: (output: HilbertOut) => number) {
   );
 }
 
-export const htDcPeriod = htScalar('htDcPeriod', (o) => o.dcPeriod);
-export const htDcPhase = htScalar('htDcPhase', (o) => o.dcPhase);
-export const htTrendline = htScalar('htTrendline', (o) => o.trendline);
+export const htDcPeriod = withBuiltinMetadata(
+  htScalar('htDcPeriod', (o) => o.dcPeriod),
+  builtinMetadata.htDcPeriodMetadata,
+);
+export const htDcPhase = withBuiltinMetadata(
+  htScalar('htDcPhase', (o) => o.dcPhase),
+  builtinMetadata.htDcPhaseMetadata,
+);
+export const htTrendline = withBuiltinMetadata(
+  htScalar('htTrendline', (o) => o.trendline),
+  builtinMetadata.htTrendlineMetadata,
+);
 
 // ───────────────────────── HT_PHASOR ─────────────────────────
 
@@ -486,10 +506,13 @@ class HtPhasorStream implements IndicatorStream<number, PhasorPoint> {
   }
 }
 
-export const htPhasor = makeIndicator<Empty, number, PhasorPoint>(
-  () => new HtPhasorStream(),
-  HtPhasorStream.fromJSON,
-  () => ({ inPhase: NaN, quadrature: NaN }),
+export const htPhasor = withBuiltinMetadata(
+  makeIndicator<Empty, number, PhasorPoint>(
+    () => new HtPhasorStream(),
+    HtPhasorStream.fromJSON,
+    () => ({ inPhase: NaN, quadrature: NaN }),
+  ),
+  builtinMetadata.htPhasorMetadata,
 );
 
 // ───────────────────────── HT_SINE ─────────────────────────
@@ -521,10 +544,13 @@ class HtSineStream implements IndicatorStream<number, SinePoint> {
   }
 }
 
-export const htSine = makeIndicator<Empty, number, SinePoint>(
-  () => new HtSineStream(),
-  HtSineStream.fromJSON,
-  () => ({ sine: NaN, leadSine: NaN }),
+export const htSine = withBuiltinMetadata(
+  makeIndicator<Empty, number, SinePoint>(
+    () => new HtSineStream(),
+    HtSineStream.fromJSON,
+    () => ({ sine: NaN, leadSine: NaN }),
+  ),
+  builtinMetadata.htSineMetadata,
 );
 
 // ───────────────────────── HT_TRENDMODE ─────────────────────────
@@ -579,10 +605,13 @@ class HtTrendModeStream implements IndicatorStream<number, number> {
   }
 }
 
-export const htTrendMode = makeIndicator<Empty, number, number>(
-  () => new HtTrendModeStream(),
-  HtTrendModeStream.fromJSON,
-  () => NaN,
+export const htTrendMode = withBuiltinMetadata(
+  makeIndicator<Empty, number, number>(
+    () => new HtTrendModeStream(),
+    HtTrendModeStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.htTrendModeMetadata,
 );
 
 export {

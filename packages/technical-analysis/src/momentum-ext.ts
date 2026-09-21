@@ -8,6 +8,8 @@
  * — QQE, RSX, Schaff, Laguerre, TD Sequential, Squeeze — land in the next slice.)
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   ErrorCode,
   InputError,
@@ -64,10 +66,13 @@ class BiasStream implements IndicatorStream<number, number> {
   }
 }
 
-export const bias = makeIndicator<{ period?: number }, number, number>(
-  (p) => new BiasStream(requirePeriod(p.period ?? 26, 'bias')),
-  BiasStream.fromJSON,
-  nan,
+export const bias = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new BiasStream(requirePeriod(p.period ?? 26, 'bias')),
+    BiasStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.biasMetadata,
 );
 
 // ───────────────────────── CFO / forecast oscillator ─────────────────────────
@@ -115,26 +120,32 @@ class LinregOscStream implements IndicatorStream<number, number> {
 }
 
 /** Chande Forecast Oscillator: % distance of price from its linear-regression value. */
-export const cfo = makeIndicator<{ period?: number }, number, number>(
-  (p) =>
-    new LinregOscStream({
-      period: requirePeriod(p.period ?? 14, 'cfo'),
-      kind: 'cfo',
-      useForecast: false,
-    }),
-  LinregOscStream.restore('cfo', false),
-  nan,
+export const cfo = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) =>
+      new LinregOscStream({
+        period: requirePeriod(p.period ?? 14, 'cfo'),
+        kind: 'cfo',
+        useForecast: false,
+      }),
+    LinregOscStream.restore('cfo', false),
+    nan,
+  ),
+  builtinMetadata.cfoMetadata,
 );
 /** Forecast Oscillator: % distance of price from its time-series forecast (one bar ahead). */
-export const forecastOscillator = makeIndicator<{ period?: number }, number, number>(
-  (p) =>
-    new LinregOscStream({
-      period: requirePeriod(p.period ?? 14, 'forecastOscillator'),
-      kind: 'forecastOscillator',
-      useForecast: true,
-    }),
-  LinregOscStream.restore('forecastOscillator', true),
-  nan,
+export const forecastOscillator = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) =>
+      new LinregOscStream({
+        period: requirePeriod(p.period ?? 14, 'forecastOscillator'),
+        kind: 'forecastOscillator',
+        useForecast: true,
+      }),
+    LinregOscStream.restore('forecastOscillator', true),
+    nan,
+  ),
+  builtinMetadata.forecastOscillatorMetadata,
 );
 
 // ───────────────────────── Coppock curve ─────────────────────────
@@ -186,15 +197,18 @@ class CoppockStream implements IndicatorStream<number, number> {
   }
 }
 
-export const coppock = makeIndicator<CoppockParameters, number, number>(
-  (p) =>
-    new CoppockStream({
-      longRoc: requirePeriod(p.longRoc ?? 14, 'coppock', 'longRoc'),
-      shortRoc: requirePeriod(p.shortRoc ?? 11, 'coppock', 'shortRoc'),
-      wmaPeriod: requirePeriod(p.wma ?? 10, 'coppock', 'wma'),
-    }),
-  CoppockStream.fromJSON,
-  nan,
+export const coppock = withBuiltinMetadata(
+  makeIndicator<CoppockParameters, number, number>(
+    (p) =>
+      new CoppockStream({
+        longRoc: requirePeriod(p.longRoc ?? 14, 'coppock', 'longRoc'),
+        shortRoc: requirePeriod(p.shortRoc ?? 11, 'coppock', 'shortRoc'),
+        wmaPeriod: requirePeriod(p.wma ?? 10, 'coppock', 'wma'),
+      }),
+    CoppockStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.coppockMetadata,
 );
 
 // ───────────────────────── CTI (correlation trend, Ehlers) ─────────────────────────
@@ -243,10 +257,13 @@ class CtiStream implements IndicatorStream<number, number> {
   }
 }
 
-export const cti = makeIndicator<{ period?: number }, number, number>(
-  (p) => new CtiStream(requirePeriod(p.period ?? 12, 'cti')),
-  CtiStream.fromJSON,
-  nan,
+export const cti = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new CtiStream(requirePeriod(p.period ?? 12, 'cti')),
+    CtiStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.ctiMetadata,
 );
 
 // ───────────────────────── efficiency ratio (Kaufman) ─────────────────────────
@@ -309,10 +326,13 @@ class EfficiencyRatioStream implements IndicatorStream<number, number> {
   }
 }
 
-export const efficiencyRatio = makeIndicator<{ period?: number }, number, number>(
-  (p) => new EfficiencyRatioStream(requirePeriod(p.period ?? 10, 'efficiencyRatio')),
-  EfficiencyRatioStream.fromJSON,
-  nan,
+export const efficiencyRatio = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new EfficiencyRatioStream(requirePeriod(p.period ?? 10, 'efficiencyRatio')),
+    EfficiencyRatioStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.efficiencyRatioMetadata,
 );
 
 // ───────────────────────── center of gravity (Ehlers) ─────────────────────────
@@ -357,10 +377,13 @@ class CenterOfGravityStream implements IndicatorStream<number, number> {
   }
 }
 
-export const centerOfGravity = makeIndicator<{ period?: number }, number, number>(
-  (p) => new CenterOfGravityStream(requirePeriod(p.period ?? 10, 'centerOfGravity')),
-  CenterOfGravityStream.fromJSON,
-  nan,
+export const centerOfGravity = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new CenterOfGravityStream(requirePeriod(p.period ?? 10, 'centerOfGravity')),
+    CenterOfGravityStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.centerOfGravityMetadata,
 );
 
 // ───────────────────────── psychological line ─────────────────────────
@@ -425,10 +448,13 @@ class PsychologicalLineStream implements IndicatorStream<number, number> {
   }
 }
 
-export const psychologicalLine = makeIndicator<{ period?: number }, number, number>(
-  (p) => new PsychologicalLineStream(requirePeriod(p.period ?? 12, 'psychologicalLine')),
-  PsychologicalLineStream.fromJSON,
-  nan,
+export const psychologicalLine = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new PsychologicalLineStream(requirePeriod(p.period ?? 12, 'psychologicalLine')),
+    PsychologicalLineStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.psychologicalLineMetadata,
 );
 
 // ───────────────────────── slope (rise / run) ─────────────────────────
@@ -461,10 +487,13 @@ class SlopeStream implements IndicatorStream<number, number> {
   }
 }
 
-export const slope = makeIndicator<{ period?: number }, number, number>(
-  (p) => new SlopeStream(requirePeriod(p.period ?? 1, 'slope')),
-  SlopeStream.fromJSON,
-  nan,
+export const slope = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new SlopeStream(requirePeriod(p.period ?? 1, 'slope')),
+    SlopeStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.slopeMetadata,
 );
 
 // ───────────────────────── PVO (percentage volume oscillator) ─────────────────────────
@@ -528,15 +557,18 @@ class PvoStream implements IndicatorStream<BarInput, PvoPoint> {
   }
 }
 
-export const pvo = makeIndicator<PvoParameters, BarInput, PvoPoint>(
-  (p) =>
-    new PvoStream({
-      fast: requirePeriod(p.fast ?? 12, 'pvo', 'fast'),
-      slow: requirePeriod(p.slow ?? 26, 'pvo', 'slow'),
-      signal: requirePeriod(p.signal ?? 9, 'pvo', 'signal'),
-    }),
-  PvoStream.fromJSON,
-  () => ({ pvo: NaN, signal: NaN, histogram: NaN }),
+export const pvo = withBuiltinMetadata(
+  makeIndicator<PvoParameters, BarInput, PvoPoint>(
+    (p) =>
+      new PvoStream({
+        fast: requirePeriod(p.fast ?? 12, 'pvo', 'fast'),
+        slow: requirePeriod(p.slow ?? 26, 'pvo', 'slow'),
+        signal: requirePeriod(p.signal ?? 9, 'pvo', 'signal'),
+      }),
+    PvoStream.fromJSON,
+    () => ({ pvo: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.pvoMetadata,
 );
 
 // ───────────────────────── Elder Ray ─────────────────────────
@@ -574,10 +606,13 @@ class ElderRayStream implements IndicatorStream<BarInput, ElderRayPoint> {
   }
 }
 
-export const elderRay = makeIndicator<{ period?: number }, BarInput, ElderRayPoint>(
-  (p) => new ElderRayStream(requirePeriod(p.period ?? 13, 'elderRay')),
-  ElderRayStream.fromJSON,
-  () => ({ bull: NaN, bear: NaN }),
+export const elderRay = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, ElderRayPoint>(
+    (p) => new ElderRayStream(requirePeriod(p.period ?? 13, 'elderRay')),
+    ElderRayStream.fromJSON,
+    () => ({ bull: NaN, bear: NaN }),
+  ),
+  builtinMetadata.elderRayMetadata,
 );
 
 // ───────────────────────── BRAR ─────────────────────────
@@ -705,10 +740,13 @@ class BrarStream implements IndicatorStream<BarInput, BrarPoint> {
   }
 }
 
-export const brar = makeIndicator<{ period?: number }, BarInput, BrarPoint>(
-  (p) => new BrarStream(requirePeriod(p.period ?? 26, 'brar')),
-  BrarStream.fromJSON,
-  () => ({ popularityIndex: NaN, willingnessIndex: NaN }),
+export const brar = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, BrarPoint>(
+    (p) => new BrarStream(requirePeriod(p.period ?? 26, 'brar')),
+    BrarStream.fromJSON,
+    () => ({ popularityIndex: NaN, willingnessIndex: NaN }),
+  ),
+  builtinMetadata.brarMetadata,
 );
 
 // ───────────────────────── KDJ ─────────────────────────
@@ -787,14 +825,17 @@ class KdjStream implements IndicatorStream<BarInput, KdjPoint> {
   }
 }
 
-export const kdj = makeIndicator<KdjParameters, BarInput, KdjPoint>(
-  (p) =>
-    new KdjStream({
-      period: requirePeriod(p.period ?? 9, 'kdj'),
-      signal: requirePeriod(p.signal ?? 3, 'kdj', 'signal'),
-    }),
-  KdjStream.fromJSON,
-  () => ({ k: NaN, d: NaN, j: NaN }),
+export const kdj = withBuiltinMetadata(
+  makeIndicator<KdjParameters, BarInput, KdjPoint>(
+    (p) =>
+      new KdjStream({
+        period: requirePeriod(p.period ?? 9, 'kdj'),
+        signal: requirePeriod(p.signal ?? 3, 'kdj', 'signal'),
+      }),
+    KdjStream.fromJSON,
+    () => ({ k: NaN, d: NaN, j: NaN }),
+  ),
+  builtinMetadata.kdjMetadata,
 );
 
 // ───────────────────────── Relative Vigor Index (RVGI) ─────────────────────────
@@ -874,10 +915,13 @@ class RvgiStream implements IndicatorStream<BarInput, RvgiPoint> {
   }
 }
 
-export const relativeVigorIndex = makeIndicator<{ period?: number }, BarInput, RvgiPoint>(
-  (p) => new RvgiStream(requirePeriod(p.period ?? 14, 'relativeVigorIndex')),
-  RvgiStream.fromJSON,
-  () => ({ rvi: NaN, signal: NaN }),
+export const relativeVigorIndex = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, RvgiPoint>(
+    (p) => new RvgiStream(requirePeriod(p.period ?? 14, 'relativeVigorIndex')),
+    RvgiStream.fromJSON,
+    () => ({ rvi: NaN, signal: NaN }),
+  ),
+  builtinMetadata.relativeVigorIndexMetadata,
 );
 
 // ───────────────────────── PGO (Pretty Good Oscillator) ─────────────────────────
@@ -930,10 +974,13 @@ class PgoStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const pgo = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new PgoStream(requirePeriod(p.period ?? 14, 'pgo')),
-  PgoStream.fromJSON,
-  nan,
+export const pgo = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new PgoStream(requirePeriod(p.period ?? 14, 'pgo')),
+    PgoStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.pgoMetadata,
 );
 
 // ───────────────────────── TRIX histogram ─────────────────────────
@@ -989,14 +1036,17 @@ export interface TrixHistogramParameters {
   period?: number;
   signal?: number;
 }
-export const trixHistogram = makeIndicator<TrixHistogramParameters, number, TrixHistogramPoint>(
-  (p) =>
-    new TrixHistogramStream({
-      period: requirePeriod(p.period ?? 15, 'trixHistogram'),
-      signal: requirePeriod(p.signal ?? 9, 'trixHistogram', 'signal'),
-    }),
-  TrixHistogramStream.fromJSON,
-  () => ({ trix: NaN, signal: NaN, histogram: NaN }),
+export const trixHistogram = withBuiltinMetadata(
+  makeIndicator<TrixHistogramParameters, number, TrixHistogramPoint>(
+    (p) =>
+      new TrixHistogramStream({
+        period: requirePeriod(p.period ?? 15, 'trixHistogram'),
+        signal: requirePeriod(p.signal ?? 9, 'trixHistogram', 'signal'),
+      }),
+    TrixHistogramStream.fromJSON,
+    () => ({ trix: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.trixHistogramMetadata,
 );
 
 // ───────────────────────── SMI Ergodic ─────────────────────────
@@ -1041,15 +1091,18 @@ class SmiErgodicStream implements IndicatorStream<number, SmiPoint> {
   }
 }
 
-export const smiErgodic = makeIndicator<SmiParameters, number, SmiPoint>(
-  (p) =>
-    new SmiErgodicStream({
-      long: requirePeriod(p.long ?? 20, 'smiErgodic', 'long'),
-      short: requirePeriod(p.short ?? 5, 'smiErgodic', 'short'),
-      signal: requirePeriod(p.signal ?? 5, 'smiErgodic', 'signal'),
-    }),
-  SmiErgodicStream.fromJSON,
-  () => ({ smi: NaN, signal: NaN, oscillator: NaN }),
+export const smiErgodic = withBuiltinMetadata(
+  makeIndicator<SmiParameters, number, SmiPoint>(
+    (p) =>
+      new SmiErgodicStream({
+        long: requirePeriod(p.long ?? 20, 'smiErgodic', 'long'),
+        short: requirePeriod(p.short ?? 5, 'smiErgodic', 'short'),
+        signal: requirePeriod(p.signal ?? 5, 'smiErgodic', 'signal'),
+      }),
+    SmiErgodicStream.fromJSON,
+    () => ({ smi: NaN, signal: NaN, oscillator: NaN }),
+  ),
+  builtinMetadata.smiErgodicMetadata,
 );
 
 // ───────────────────────── volume-weighted MACD ─────────────────────────
@@ -1111,15 +1164,18 @@ class VolumeWeightedMacdStream implements IndicatorStream<BarInput, MacdPoint> {
   }
 }
 
-export const volumeWeightedMacd = makeIndicator<VwMacdParameters, BarInput, MacdPoint>(
-  (p) =>
-    new VolumeWeightedMacdStream({
-      fast: requirePeriod(p.fast ?? 12, 'volumeWeightedMacd', 'fast'),
-      slow: requirePeriod(p.slow ?? 26, 'volumeWeightedMacd', 'slow'),
-      signal: requirePeriod(p.signal ?? 9, 'volumeWeightedMacd', 'signal'),
-    }),
-  VolumeWeightedMacdStream.fromJSON,
-  () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+export const volumeWeightedMacd = withBuiltinMetadata(
+  makeIndicator<VwMacdParameters, BarInput, MacdPoint>(
+    (p) =>
+      new VolumeWeightedMacdStream({
+        fast: requirePeriod(p.fast ?? 12, 'volumeWeightedMacd', 'fast'),
+        slow: requirePeriod(p.slow ?? 26, 'volumeWeightedMacd', 'slow'),
+        signal: requirePeriod(p.signal ?? 9, 'volumeWeightedMacd', 'signal'),
+      }),
+    VolumeWeightedMacdStream.fromJSON,
+    () => ({ macd: NaN, signal: NaN, histogram: NaN }),
+  ),
+  builtinMetadata.volumeWeightedMacdMetadata,
 );
 
 // ───────────────────────── inertia (linreg of RVI) ─────────────────────────
@@ -1166,14 +1222,17 @@ class InertiaStream implements IndicatorStream<number, number> {
   }
 }
 
-export const inertia = makeIndicator<InertiaParameters, number, number>(
-  (p) =>
-    new InertiaStream({
-      period: requirePeriod(p.period ?? 20, 'inertia'),
-      rviPeriod: requirePeriod(p.rviPeriod ?? 14, 'inertia', 'rviPeriod', 2),
-    }),
-  InertiaStream.fromJSON,
-  nan,
+export const inertia = withBuiltinMetadata(
+  makeIndicator<InertiaParameters, number, number>(
+    (p) =>
+      new InertiaStream({
+        period: requirePeriod(p.period ?? 20, 'inertia'),
+        rviPeriod: requirePeriod(p.rviPeriod ?? 14, 'inertia', 'rviPeriod', 2),
+      }),
+    InertiaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.inertiaMetadata,
 );
 
 // ───────────────────────── Laguerre RSI (Ehlers) ─────────────────────────
@@ -1242,10 +1301,13 @@ class LaguerreRsiStream implements IndicatorStream<number, number> {
   }
 }
 
-export const laguerreRsi = makeIndicator<LaguerreParameters, number, number>(
-  (p) => new LaguerreRsiStream(requireInRange(p.gamma ?? 0.5, 'laguerreRsi', 'gamma', 0, 1)),
-  LaguerreRsiStream.fromJSON,
-  nan,
+export const laguerreRsi = withBuiltinMetadata(
+  makeIndicator<LaguerreParameters, number, number>(
+    (p) => new LaguerreRsiStream(requireInRange(p.gamma ?? 0.5, 'laguerreRsi', 'gamma', 0, 1)),
+    LaguerreRsiStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.laguerreRsiMetadata,
 );
 
 // ───────────────────────── QQE (Quantitative Qualitative Estimation) ─────────────────────────
@@ -1361,15 +1423,18 @@ class QqeStream implements IndicatorStream<number, QqePoint> {
   }
 }
 
-export const qqe = makeIndicator<QqeParameters, number, QqePoint>(
-  (p) =>
-    new QqeStream({
-      rsiPeriod: requirePeriod(p.rsiPeriod ?? 14, 'qqe', 'rsiPeriod'),
-      smooth: requirePeriod(p.smooth ?? 5, 'qqe', 'smooth'),
-      factor: requirePositive(p.factor ?? 4.236, 'qqe', 'factor'),
-    }),
-  QqeStream.fromJSON,
-  () => ({ rsiMovingAverage: NaN, longBand: NaN, shortBand: NaN }),
+export const qqe = withBuiltinMetadata(
+  makeIndicator<QqeParameters, number, QqePoint>(
+    (p) =>
+      new QqeStream({
+        rsiPeriod: requirePeriod(p.rsiPeriod ?? 14, 'qqe', 'rsiPeriod'),
+        smooth: requirePeriod(p.smooth ?? 5, 'qqe', 'smooth'),
+        factor: requirePositive(p.factor ?? 4.236, 'qqe', 'factor'),
+      }),
+    QqeStream.fromJSON,
+    () => ({ rsiMovingAverage: NaN, longBand: NaN, shortBand: NaN }),
+  ),
+  builtinMetadata.qqeMetadata,
 );
 
 // ───────────────────────── RSX (Jurik) ─────────────────────────
@@ -1483,10 +1548,13 @@ class RsxStream implements IndicatorStream<number, number> {
   }
 }
 
-export const rsx = makeIndicator<{ period?: number }, number, number>(
-  (p) => new RsxStream(requirePeriod(p.period ?? 14, 'rsx')),
-  RsxStream.fromJSON,
-  nan,
+export const rsx = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new RsxStream(requirePeriod(p.period ?? 14, 'rsx')),
+    RsxStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.rsxMetadata,
 );
 
 // ───────────────────────── Schaff Trend Cycle ─────────────────────────
@@ -1579,15 +1647,18 @@ class SchaffTrendCycleStream implements IndicatorStream<number, number> {
   }
 }
 
-export const schaffTrendCycle = makeIndicator<StcParameters, number, number>(
-  (p) =>
-    new SchaffTrendCycleStream({
-      fast: requirePeriod(p.fast ?? 23, 'schaffTrendCycle', 'fast'),
-      slow: requirePeriod(p.slow ?? 50, 'schaffTrendCycle', 'slow'),
-      cycle: requirePeriod(p.cycle ?? 10, 'schaffTrendCycle', 'cycle'),
-    }),
-  SchaffTrendCycleStream.fromJSON,
-  nan,
+export const schaffTrendCycle = withBuiltinMetadata(
+  makeIndicator<StcParameters, number, number>(
+    (p) =>
+      new SchaffTrendCycleStream({
+        fast: requirePeriod(p.fast ?? 23, 'schaffTrendCycle', 'fast'),
+        slow: requirePeriod(p.slow ?? 50, 'schaffTrendCycle', 'slow'),
+        cycle: requirePeriod(p.cycle ?? 10, 'schaffTrendCycle', 'cycle'),
+      }),
+    SchaffTrendCycleStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.schaffTrendCycleMetadata,
 );
 
 // ───────────────────────── TTM Squeeze ─────────────────────────
@@ -1805,32 +1876,35 @@ class SqueezeStream implements IndicatorStream<BarInput, SqueezePoint> {
   }
 }
 
-export const squeeze = makeIndicator<SqueezeParameters, BarInput, SqueezePoint>(
-  (p) =>
-    new SqueezeStream({
-      bollingerBandPeriod: requirePeriod(
-        p.bollingerBandPeriod ?? 20,
-        'squeeze',
-        'bollingerBandPeriod',
-      ),
-      bollingerStandardDeviations: requirePositive(
-        p.bollingerStandardDeviations ?? 2,
-        'squeeze',
-        'bollingerStandardDeviations',
-      ),
-      keltnerChannelPeriod: requirePeriod(
-        p.keltnerChannelPeriod ?? 20,
-        'squeeze',
-        'keltnerChannelPeriod',
-      ),
-      keltnerChannelMultiplier: requirePositive(
-        p.keltnerChannelMultiplier ?? 1.5,
-        'squeeze',
-        'keltnerChannelMultiplier',
-      ),
-    }),
-  SqueezeStream.fromJSON,
-  () => ({ on: NaN, momentum: NaN }),
+export const squeeze = withBuiltinMetadata(
+  makeIndicator<SqueezeParameters, BarInput, SqueezePoint>(
+    (p) =>
+      new SqueezeStream({
+        bollingerBandPeriod: requirePeriod(
+          p.bollingerBandPeriod ?? 20,
+          'squeeze',
+          'bollingerBandPeriod',
+        ),
+        bollingerStandardDeviations: requirePositive(
+          p.bollingerStandardDeviations ?? 2,
+          'squeeze',
+          'bollingerStandardDeviations',
+        ),
+        keltnerChannelPeriod: requirePeriod(
+          p.keltnerChannelPeriod ?? 20,
+          'squeeze',
+          'keltnerChannelPeriod',
+        ),
+        keltnerChannelMultiplier: requirePositive(
+          p.keltnerChannelMultiplier ?? 1.5,
+          'squeeze',
+          'keltnerChannelMultiplier',
+        ),
+      }),
+    SqueezeStream.fromJSON,
+    () => ({ on: NaN, momentum: NaN }),
+  ),
+  builtinMetadata.squeezeMetadata,
 );
 
 // ───────────────────────── SqueezePro (3 compression levels) ─────────────────────────
@@ -2030,28 +2104,31 @@ function requireOrderedMultipliers(p: SqueezeProParameters): OrderedMultipliers 
   };
 }
 
-export const squeezePro = makeIndicator<SqueezeProParameters, BarInput, SqueezeProPoint>(
-  (p) =>
-    new SqueezeProStream({
-      bollingerBandPeriod: requirePeriod(
-        p.bollingerBandPeriod ?? 20,
-        'squeezePro',
-        'bollingerBandPeriod',
-      ),
-      bollingerStandardDeviations: requirePositive(
-        p.bollingerStandardDeviations ?? 2,
-        'squeezePro',
-        'bollingerStandardDeviations',
-      ),
-      keltnerChannelPeriod: requirePeriod(
-        p.keltnerChannelPeriod ?? 20,
-        'squeezePro',
-        'keltnerChannelPeriod',
-      ),
-      ...requireOrderedMultipliers(p),
-    }),
-  SqueezeProStream.fromJSON,
-  () => ({ lowCompression: NaN, normalCompression: NaN, highCompression: NaN, momentum: NaN }),
+export const squeezePro = withBuiltinMetadata(
+  makeIndicator<SqueezeProParameters, BarInput, SqueezeProPoint>(
+    (p) =>
+      new SqueezeProStream({
+        bollingerBandPeriod: requirePeriod(
+          p.bollingerBandPeriod ?? 20,
+          'squeezePro',
+          'bollingerBandPeriod',
+        ),
+        bollingerStandardDeviations: requirePositive(
+          p.bollingerStandardDeviations ?? 2,
+          'squeezePro',
+          'bollingerStandardDeviations',
+        ),
+        keltnerChannelPeriod: requirePeriod(
+          p.keltnerChannelPeriod ?? 20,
+          'squeezePro',
+          'keltnerChannelPeriod',
+        ),
+        ...requireOrderedMultipliers(p),
+      }),
+    SqueezeProStream.fromJSON,
+    () => ({ lowCompression: NaN, normalCompression: NaN, highCompression: NaN, momentum: NaN }),
+  ),
+  builtinMetadata.squeezeProMetadata,
 );
 
 // ───────────────────────── projection oscillator (Widner) ─────────────────────────
@@ -2118,10 +2195,13 @@ class ProjectionOscillatorStream implements IndicatorStream<BarInput, Projection
   }
 }
 
-export const projectionOscillator = makeIndicator<{ period?: number }, BarInput, ProjectionPoint>(
-  (p) => new ProjectionOscillatorStream(requirePeriod(p.period ?? 14, 'projectionOscillator')),
-  ProjectionOscillatorStream.fromJSON,
-  () => ({ po: NaN, upper: NaN, lower: NaN }),
+export const projectionOscillator = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, ProjectionPoint>(
+    (p) => new ProjectionOscillatorStream(requirePeriod(p.period ?? 14, 'projectionOscillator')),
+    ProjectionOscillatorStream.fromJSON,
+    () => ({ po: NaN, upper: NaN, lower: NaN }),
+  ),
+  builtinMetadata.projectionOscillatorMetadata,
 );
 
 // ───────────────────────── TD Sequential (DeMark core) ─────────────────────────
@@ -2228,10 +2308,13 @@ class TdSequentialStream implements IndicatorStream<BarInput, TdSequentialPoint>
   }
 }
 
-export const tdSequential = makeIndicator<TdSequentialParameters, BarInput, TdSequentialPoint>(
-  (p) => new TdSequentialStream(requirePeriod(p.lookback ?? 4, 'tdSequential', 'lookback')),
-  TdSequentialStream.fromJSON,
-  () => ({ setup: NaN, countdown: NaN, direction: NaN }),
+export const tdSequential = withBuiltinMetadata(
+  makeIndicator<TdSequentialParameters, BarInput, TdSequentialPoint>(
+    (p) => new TdSequentialStream(requirePeriod(p.lookback ?? 4, 'tdSequential', 'lookback')),
+    TdSequentialStream.fromJSON,
+    () => ({ setup: NaN, countdown: NaN, direction: NaN }),
+  ),
+  builtinMetadata.tdSequentialMetadata,
 );
 
 export {

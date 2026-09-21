@@ -27,7 +27,16 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Preview launch queue (2026-09-07)
 
-**Current handoff (2026-09-21): standalone TotalFinance migration COMPLETE (local);
+**Current handoff (2026-09-21): bounded tree-shaking hardening IN PROGRESS.** The maintainer
+authorized [installed-consumer bundle guarantees](./specs/tree-shaking-and-consumer-budgets.md)
+after measuring bundler-dependent umbrella namespace retention and unused analytic facade overhead.
+Complete its TS1–TS5 checklist before the exact-release freeze/rehearsal. Preserve the existing
+public API and runtime validation, including registry-independent metadata for every built-in
+indicator; this is packaging hardening, not a new financial feature phase.
+Organization and website acceptance may proceed in parallel. Publication and deployment still
+require their separate approval gates.
+
+**Previous handoff (2026-09-21): standalone TotalFinance migration COMPLETE (local);
 latest hosted checks remain a release gate.** `InsiderFinance/totalfinance:main` is now the library's source of truth,
 with all 25 packages, imports, runtime namespaces, transports, documentation and root-layout CI
 migrated without old-name aliases. The code revision is `6eeb459064062511a3889562b64333b6b8c07e10`.
@@ -125,6 +134,10 @@ acceptance in step 3. This documentation repair does not reopen core implementat
    `36cbd5352`) and the September 21 composition/persistence closeout at `af0d7cd2a`. Both supported
    Node full gates and clean-tree regeneration pass; no implementation item remains in this repair.
    After step 4, contract changes require the published compatibility/versioning policy.
+   3c. **Tree-shaking and installed-consumer budgets — IN PROGRESS.** Follow
+   [`tree-shaking-and-consumer-budgets.md`](./specs/tree-shaking-and-consumer-budgets.md): preserve
+   API/validation, remove avoidable retained wrapper and registry code, prove portable imports in
+   esbuild/Rollup installed-package consumers, and document the namespace limitation honestly.
 4. **Freeze and rehearse the exact release revision.** After the preceding source changes, review
    the fixed-group version bump to `0.1.0-preview.0`, regenerate evidence, run the full gates and
    release rehearsal on the committed release tree, and retain the artifact hashes. Use the
@@ -143,8 +156,8 @@ acceptance in step 3. This documentation repair does not reopen core implementat
 WASM, new data adapters, additional features and hosted/live trading do not postpone this bounded
 preview queue. Search implementation is not permission to publish, deploy, merge or switch engines.
 
-No new core feature phase is being opened. The freeze-repair checklist is locally complete;
-the remaining work in this queue is release integration and acceptance, not another library build phase.
+No new core feature phase is being opened. The historical freeze-repair checklist is locally complete;
+the new bounded bundle hardening must pass its own gates before release integration and acceptance.
 
 For PR #336 specifically, use the
 [`sector-performance readiness checklist`](./reviews/sector-performance-readiness.md): it owns

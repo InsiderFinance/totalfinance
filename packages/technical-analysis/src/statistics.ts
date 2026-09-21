@@ -7,6 +7,8 @@
  * function because its period varies per bar.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -157,19 +159,22 @@ function restoreMovingAverageByKind(s: TechnicalAnalysisSnapshot): IndicatorStre
   }
 }
 
-export const movingAverage = makeIndicator<MovingAverageParameters, number, number>(
-  (p) =>
-    movingAverageStreamByName(
-      requireOneOf(
-        p.movingAverageType ?? 'sma',
-        MOVING_AVERAGE_NAMES,
-        'movingAverage',
-        'movingAverageType',
+export const movingAverage = withBuiltinMetadata(
+  makeIndicator<MovingAverageParameters, number, number>(
+    (p) =>
+      movingAverageStreamByName(
+        requireOneOf(
+          p.movingAverageType ?? 'sma',
+          MOVING_AVERAGE_NAMES,
+          'movingAverage',
+          'movingAverageType',
+        ),
+        requirePeriod(p.period, 'movingAverage'),
       ),
-      requirePeriod(p.period, 'movingAverage'),
-    ),
-  restoreMovingAverageByKind,
-  nan,
+    restoreMovingAverageByKind,
+    nan,
+  ),
+  builtinMetadata.movingAverageMetadata,
 );
 
 /**
@@ -265,10 +270,13 @@ class MidpointStream implements IndicatorStream<number, number> {
   }
 }
 
-export const midpoint = makeIndicator<PeriodParameters, number, number>(
-  (p) => new MidpointStream(requirePeriod(p.period, 'midpoint')),
-  MidpointStream.fromJSON,
-  nan,
+export const midpoint = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, number>(
+    (p) => new MidpointStream(requirePeriod(p.period, 'midpoint')),
+    MidpointStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.midpointMetadata,
 );
 
 class MidpriceStream implements IndicatorStream<BarInput, number> {
@@ -310,10 +318,13 @@ class MidpriceStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const midprice = makeIndicator<PeriodParameters, BarInput, number>(
-  (p) => new MidpriceStream(requirePeriod(p.period, 'midprice', 'period', 1, 'bars')),
-  MidpriceStream.fromJSON,
-  nan,
+export const midprice = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, BarInput, number>(
+    (p) => new MidpriceStream(requirePeriod(p.period, 'midprice', 'period', 1, 'bars')),
+    MidpriceStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.midpriceMetadata,
 );
 
 // ───────────────────────── bop — balance of power ─────────────────────────
@@ -337,10 +348,9 @@ class BopStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const bop = makeIndicator<Empty, BarInput, number>(
-  () => new BopStream(),
-  BopStream.fromJSON,
-  nan,
+export const bop = withBuiltinMetadata(
+  makeIndicator<Empty, BarInput, number>(() => new BopStream(), BopStream.fromJSON, nan),
+  builtinMetadata.bopMetadata,
 );
 
 // ───────────────────────── stochFast ─────────────────────────
@@ -417,10 +427,13 @@ class BetaStream implements IndicatorStream<Pair, number> {
   }
 }
 
-export const beta = makeIndicator<PeriodParameters, Pair, number>(
-  (p) => new BetaStream(requirePeriod(p.period, 'beta', 'period', 1, 'pair')),
-  BetaStream.fromJSON,
-  nan,
+export const beta = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, Pair, number>(
+    (p) => new BetaStream(requirePeriod(p.period, 'beta', 'period', 1, 'pair')),
+    BetaStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.betaMetadata,
 );
 
 class CorrelStream implements IndicatorStream<Pair, number> {
@@ -476,10 +489,13 @@ class CorrelStream implements IndicatorStream<Pair, number> {
   }
 }
 
-export const correl = makeIndicator<PeriodParameters, Pair, number>(
-  (p) => new CorrelStream(requirePeriod(p.period, 'correl', 'period', 1, 'pair')),
-  CorrelStream.fromJSON,
-  nan,
+export const correl = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, Pair, number>(
+    (p) => new CorrelStream(requirePeriod(p.period, 'correl', 'period', 1, 'pair')),
+    CorrelStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.correlMetadata,
 );
 
 /** Zip two equal-length series into the `Pair[]` that `beta` / `correl` consume. Throws on a length
@@ -572,13 +588,28 @@ function rollFacade(mode: RollMode) {
   );
 }
 
-export const rollingMin = rollFacade('min');
-export const rollingMax = rollFacade('max');
-export const rollingSum = rollFacade('sum');
+export const rollingMin = withBuiltinMetadata(
+  rollFacade('min'),
+  builtinMetadata.rollingMinMetadata,
+);
+export const rollingMax = withBuiltinMetadata(
+  rollFacade('max'),
+  builtinMetadata.rollingMaxMetadata,
+);
+export const rollingSum = withBuiltinMetadata(
+  rollFacade('sum'),
+  builtinMetadata.rollingSumMetadata,
+);
 /** Bars ago (0 = current bar) of the lowest value in the window. */
-export const rollingMinIndex = rollFacade('minIndex');
+export const rollingMinIndex = withBuiltinMetadata(
+  rollFacade('minIndex'),
+  builtinMetadata.rollingMinIndexMetadata,
+);
 /** Bars ago (0 = current bar) of the highest value in the window. */
-export const rollingMaxIndex = rollFacade('maxIndex');
+export const rollingMaxIndex = withBuiltinMetadata(
+  rollFacade('maxIndex'),
+  builtinMetadata.rollingMaxIndexMetadata,
+);
 
 export interface MinMaxPoint {
   min: number;
@@ -621,10 +652,13 @@ class MinMaxStream implements IndicatorStream<number, MinMaxPoint> {
   }
 }
 
-export const rollingMinMax = makeIndicator<PeriodParameters, number, MinMaxPoint>(
-  (p) => new MinMaxStream(requirePeriod(p.period, 'rollingMinMax')),
-  MinMaxStream.fromJSON,
-  () => ({ min: NaN, max: NaN }),
+export const rollingMinMax = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, MinMaxPoint>(
+    (p) => new MinMaxStream(requirePeriod(p.period, 'rollingMinMax')),
+    MinMaxStream.fromJSON,
+    () => ({ min: NaN, max: NaN }),
+  ),
+  builtinMetadata.rollingMinMaxMetadata,
 );
 
 class MinMaxIndexStream implements IndicatorStream<number, MinMaxIndexPoint> {
@@ -665,10 +699,13 @@ class MinMaxIndexStream implements IndicatorStream<number, MinMaxIndexPoint> {
   }
 }
 
-export const rollingMinMaxIndex = makeIndicator<PeriodParameters, number, MinMaxIndexPoint>(
-  (p) => new MinMaxIndexStream(requirePeriod(p.period, 'rollingMinMaxIndex')),
-  MinMaxIndexStream.fromJSON,
-  () => ({ minIndex: NaN, maxIndex: NaN }),
+export const rollingMinMaxIndex = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, MinMaxIndexPoint>(
+    (p) => new MinMaxIndexStream(requirePeriod(p.period, 'rollingMinMaxIndex')),
+    MinMaxIndexStream.fromJSON,
+    () => ({ minIndex: NaN, maxIndex: NaN }),
+  ),
+  builtinMetadata.rollingMinMaxIndexMetadata,
 );
 
 export {

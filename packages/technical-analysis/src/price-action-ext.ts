@@ -12,6 +12,8 @@
  * the event bars with `r.direction !== 0`.
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -116,13 +118,16 @@ class FvgStream implements IndicatorStream<BarInput, ZonePoint> {
   }
 }
 
-export const fairValueGaps = makeIndicator<FvgParameters, BarInput, ZonePoint>(
-  (p) =>
-    new FvgStream(
-      requireInRange(p.minimumGapPercent ?? 0, 'fairValueGaps', 'minimumGapPercent', 0, Infinity),
-    ),
-  FvgStream.fromJSON,
-  nanZone,
+export const fairValueGaps = withBuiltinMetadata(
+  makeIndicator<FvgParameters, BarInput, ZonePoint>(
+    (p) =>
+      new FvgStream(
+        requireInRange(p.minimumGapPercent ?? 0, 'fairValueGaps', 'minimumGapPercent', 0, Infinity),
+      ),
+    FvgStream.fromJSON,
+    nanZone,
+  ),
+  builtinMetadata.fairValueGapsMetadata,
 );
 
 // ───────────────────────── Order Block ─────────────────────────
@@ -187,10 +192,13 @@ class OrderBlockStream implements IndicatorStream<BarInput, ZonePoint> {
   }
 }
 
-export const orderBlocks = makeIndicator<OrderBlockParameters, BarInput, ZonePoint>(
-  (p) => new OrderBlockStream(requirePeriod(p.lookback ?? 5, 'orderBlocks', 'lookback')),
-  OrderBlockStream.fromJSON,
-  nanZone,
+export const orderBlocks = withBuiltinMetadata(
+  makeIndicator<OrderBlockParameters, BarInput, ZonePoint>(
+    (p) => new OrderBlockStream(requirePeriod(p.lookback ?? 5, 'orderBlocks', 'lookback')),
+    OrderBlockStream.fromJSON,
+    nanZone,
+  ),
+  builtinMetadata.orderBlocksMetadata,
 );
 
 // ───────────────────────── Liquidity Sweep ─────────────────────────
@@ -254,14 +262,13 @@ class LiquiditySweepStream implements IndicatorStream<BarInput, LiquiditySweepPo
   }
 }
 
-export const liquiditySweeps = makeIndicator<
-  LiquiditySweepParameters,
-  BarInput,
-  LiquiditySweepPoint
->(
-  (p) => new LiquiditySweepStream(requirePeriod(p.lookback ?? 20, 'liquiditySweeps', 'lookback')),
-  LiquiditySweepStream.fromJSON,
-  () => ({ direction: NaN, level: NaN }),
+export const liquiditySweeps = withBuiltinMetadata(
+  makeIndicator<LiquiditySweepParameters, BarInput, LiquiditySweepPoint>(
+    (p) => new LiquiditySweepStream(requirePeriod(p.lookback ?? 20, 'liquiditySweeps', 'lookback')),
+    LiquiditySweepStream.fromJSON,
+    () => ({ direction: NaN, level: NaN }),
+  ),
+  builtinMetadata.liquiditySweepsMetadata,
 );
 
 // ───────────────────────── pandas-ta SMC sweep scalar ─────────────────────────
@@ -331,14 +338,17 @@ class SmcSweepStream implements IndicatorStream<BarInput, number> {
 }
 
 /** pandas-ta `smc_sweep`: +1 bullish low sweep, -1 bearish high sweep, 0 none. */
-export const smcSweep = makeIndicator<SmcSweepParameters, BarInput, number>(
-  (p) =>
-    new SmcSweepStream(
-      requirePeriod(p.period ?? 15, 'smcSweep'),
-      requirePositive(p.wickMultiplier ?? 1.5, 'smcSweep', 'wickMultiplier'),
-    ),
-  SmcSweepStream.fromJSON,
-  () => NaN,
+export const smcSweep = withBuiltinMetadata(
+  makeIndicator<SmcSweepParameters, BarInput, number>(
+    (p) =>
+      new SmcSweepStream(
+        requirePeriod(p.period ?? 15, 'smcSweep'),
+        requirePositive(p.wickMultiplier ?? 1.5, 'smcSweep', 'wickMultiplier'),
+      ),
+    SmcSweepStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.smcSweepMetadata,
 );
 
 // ───────────────────────── causal confirmed-swing primitive ─────────────────────────
@@ -474,15 +484,14 @@ class SwingTrailingStopStream implements IndicatorStream<BarInput, TrailingStopP
 }
 
 /** Structure-based trailing stop: trails the most recent confirmed swing low (long) / high (short). */
-export const swingTrailingStop = makeIndicator<
-  SwingTrailingStopParameters,
-  BarInput,
-  TrailingStopPoint
->(
-  (p) =>
-    new SwingTrailingStopStream(requirePeriod(p.strength ?? 2, 'swingTrailingStop', 'strength')),
-  SwingTrailingStopStream.fromJSON,
-  () => ({ stop: NaN, trend: NaN }),
+export const swingTrailingStop = withBuiltinMetadata(
+  makeIndicator<SwingTrailingStopParameters, BarInput, TrailingStopPoint>(
+    (p) =>
+      new SwingTrailingStopStream(requirePeriod(p.strength ?? 2, 'swingTrailingStop', 'strength')),
+    SwingTrailingStopStream.fromJSON,
+    () => ({ stop: NaN, trend: NaN }),
+  ),
+  builtinMetadata.swingTrailingStopMetadata,
 );
 
 export interface AtrTrailingStopParameters {
@@ -551,18 +560,17 @@ class AtrTrailingStopStream implements IndicatorStream<BarInput, TrailingStopPoi
 }
 
 /** ATR trailing stop (Vervoort / UT-Bot): close-anchored `close ± multiplier·ATR`, trailed per leg. */
-export const atrTrailingStop = makeIndicator<
-  AtrTrailingStopParameters,
-  BarInput,
-  TrailingStopPoint
->(
-  (p) =>
-    new AtrTrailingStopStream(
-      requirePeriod(p.period ?? 14, 'atrTrailingStop'),
-      requirePositive(p.multiplier ?? 3, 'atrTrailingStop', 'multiplier'),
-    ),
-  AtrTrailingStopStream.fromJSON,
-  () => ({ stop: NaN, trend: NaN }),
+export const atrTrailingStop = withBuiltinMetadata(
+  makeIndicator<AtrTrailingStopParameters, BarInput, TrailingStopPoint>(
+    (p) =>
+      new AtrTrailingStopStream(
+        requirePeriod(p.period ?? 14, 'atrTrailingStop'),
+        requirePositive(p.multiplier ?? 3, 'atrTrailingStop', 'multiplier'),
+      ),
+    AtrTrailingStopStream.fromJSON,
+    () => ({ stop: NaN, trend: NaN }),
+  ),
+  builtinMetadata.atrTrailingStopMetadata,
 );
 
 // ───────────────────────── equal highs / equal lows (liquidity pools) ─────────────────────────
@@ -656,6 +664,12 @@ const equalLevel = (high: boolean, functionName: string) =>
   );
 
 /** Equal highs — consecutive swing highs within `tolerance` (a buy-side liquidity pool). */
-export const equalHighs = equalLevel(true, 'equalHighs');
+export const equalHighs = withBuiltinMetadata(
+  equalLevel(true, 'equalHighs'),
+  builtinMetadata.equalHighsMetadata,
+);
 /** Equal lows — consecutive swing lows within `tolerance` (a sell-side liquidity pool). */
-export const equalLows = equalLevel(false, 'equalLows');
+export const equalLows = withBuiltinMetadata(
+  equalLevel(false, 'equalLows'),
+  builtinMetadata.equalLowsMetadata,
+);

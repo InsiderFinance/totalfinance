@@ -7,6 +7,8 @@
  * aligned batch+stream facade; ZigZag is a batch function (its final leg is provisional by nature).
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import type { QuantWarning } from '@totalfinance/core';
 import {
   CONVENTIONS_VERSION,
@@ -79,7 +81,6 @@ function projected<P, In, R extends object>(
   makeInner: (p: P) => IndicatorStream<In, R>,
   restoreInner: (s: TechnicalAnalysisSnapshot) => IndicatorStream<In, R>,
   field: keyof R & string,
-  defaults?: Record<string, unknown>,
 ) {
   return makeIndicator<P, In, number>(
     (p) => new ProjectStream(makeInner(p), field, kind),
@@ -90,7 +91,6 @@ function projected<P, In, R extends object>(
       return x;
     },
     nanNum,
-    defaults,
   );
 }
 
@@ -207,46 +207,58 @@ class DmiStream implements IndicatorStream<BarInput, DmiPoint> {
   }
 }
 
-export const dmi = makeIndicator<WilderPeriodParameters, BarInput, DmiPoint>(
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'dmi')),
-  DmiStream.fromJSON,
-  () => ({ plusDI: NaN, minusDI: NaN, dx: NaN, plusDM: NaN, minusDM: NaN }),
-  { period: 14 },
+export const dmi = withBuiltinMetadata(
+  makeIndicator<WilderPeriodParameters, BarInput, DmiPoint>(
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'dmi')),
+    DmiStream.fromJSON,
+    () => ({ plusDI: NaN, minusDI: NaN, dx: NaN, plusDM: NaN, minusDM: NaN }),
+  ),
+  builtinMetadata.dmiMetadata,
 );
-export const plusDI = projected<WilderPeriodParameters, BarInput, DmiPoint>(
-  'plusDI',
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'plusDI')),
-  DmiStream.fromJSON,
-  'plusDI',
-  { period: 14 },
+export const plusDI = withBuiltinMetadata(
+  projected<WilderPeriodParameters, BarInput, DmiPoint>(
+    'plusDI',
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'plusDI')),
+    DmiStream.fromJSON,
+    'plusDI',
+  ),
+  builtinMetadata.plusDIMetadata,
 );
-export const minusDI = projected<WilderPeriodParameters, BarInput, DmiPoint>(
-  'minusDI',
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'minusDI')),
-  DmiStream.fromJSON,
-  'minusDI',
-  { period: 14 },
+export const minusDI = withBuiltinMetadata(
+  projected<WilderPeriodParameters, BarInput, DmiPoint>(
+    'minusDI',
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'minusDI')),
+    DmiStream.fromJSON,
+    'minusDI',
+  ),
+  builtinMetadata.minusDIMetadata,
 );
-export const dx = projected<WilderPeriodParameters, BarInput, DmiPoint>(
-  'dx',
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'dx')),
-  DmiStream.fromJSON,
-  'dx',
-  { period: 14 },
+export const dx = withBuiltinMetadata(
+  projected<WilderPeriodParameters, BarInput, DmiPoint>(
+    'dx',
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'dx')),
+    DmiStream.fromJSON,
+    'dx',
+  ),
+  builtinMetadata.dxMetadata,
 );
-export const plusDM = projected<WilderPeriodParameters, BarInput, DmiPoint>(
-  'plusDM',
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'plusDM', 'period', 1, 'bars')),
-  DmiStream.fromJSON,
-  'plusDM',
-  { period: 14 },
+export const plusDM = withBuiltinMetadata(
+  projected<WilderPeriodParameters, BarInput, DmiPoint>(
+    'plusDM',
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'plusDM', 'period', 1, 'bars')),
+    DmiStream.fromJSON,
+    'plusDM',
+  ),
+  builtinMetadata.plusDMMetadata,
 );
-export const minusDM = projected<WilderPeriodParameters, BarInput, DmiPoint>(
-  'minusDM',
-  (p) => new DmiStream(requirePeriod(p.period ?? 14, 'minusDM', 'period', 1, 'bars')),
-  DmiStream.fromJSON,
-  'minusDM',
-  { period: 14 },
+export const minusDM = withBuiltinMetadata(
+  projected<WilderPeriodParameters, BarInput, DmiPoint>(
+    'minusDM',
+    (p) => new DmiStream(requirePeriod(p.period ?? 14, 'minusDM', 'period', 1, 'bars')),
+    DmiStream.fromJSON,
+    'minusDM',
+  ),
+  builtinMetadata.minusDMMetadata,
 );
 
 // ───────────────────────── ADXR ─────────────────────────
@@ -315,11 +327,13 @@ class AdxrStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const adxr = makeIndicator<WilderPeriodParameters, BarInput, number>(
-  (p) => new AdxrStream(requirePeriod(p.period ?? 14, 'adxr')),
-  AdxrStream.fromJSON,
-  nanNum,
-  { period: 14 },
+export const adxr = withBuiltinMetadata(
+  makeIndicator<WilderPeriodParameters, BarInput, number>(
+    (p) => new AdxrStream(requirePeriod(p.period ?? 14, 'adxr')),
+    AdxrStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.adxrMetadata,
 );
 
 // ───────────────────────── Aroon ─────────────────────────
@@ -381,11 +395,13 @@ class AroonStream implements IndicatorStream<BarInput, AroonPoint> {
   }
 }
 
-export const aroon = makeIndicator<{ period?: number }, BarInput, AroonPoint>(
-  (p) => new AroonStream(requirePeriod(p.period ?? 14, 'aroon')),
-  AroonStream.fromJSON,
-  () => ({ up: NaN, down: NaN }),
-  { period: 14 },
+export const aroon = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, AroonPoint>(
+    (p) => new AroonStream(requirePeriod(p.period ?? 14, 'aroon')),
+    AroonStream.fromJSON,
+    () => ({ up: NaN, down: NaN }),
+  ),
+  builtinMetadata.aroonMetadata,
 );
 
 class AroonOscStream implements IndicatorStream<BarInput, number> {
@@ -411,11 +427,14 @@ class AroonOscStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const aroonOscillator = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new AroonOscStream(requirePeriod(p.period ?? 14, 'aroonOscillator', 'period', 1, 'bars')),
-  AroonOscStream.fromJSON,
-  nanNum,
-  { period: 14 },
+export const aroonOscillator = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) =>
+      new AroonOscStream(requirePeriod(p.period ?? 14, 'aroonOscillator', 'period', 1, 'bars')),
+    AroonOscStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.aroonOscillatorMetadata,
 );
 
 // ───────────────────────── Parabolic SAR ─────────────────────────
@@ -548,15 +567,18 @@ class PsarStream implements IndicatorStream<BarInput, PsarPoint> {
   }
 }
 
-export const psar = makeIndicator<PsarParameters, BarInput, PsarPoint>(
-  (p) => {
-    const step = requirePositive(p.step ?? 0.02, 'psar', 'step');
-    const max = requirePositive(p.max ?? 0.2, 'psar', 'max');
-    requireAtMost(step, max, 'psar', 'step', 'max');
-    return new PsarStream({ step, maxAf: max });
-  },
-  PsarStream.fromJSON,
-  () => ({ sar: NaN, trend: NaN }),
+export const psar = withBuiltinMetadata(
+  makeIndicator<PsarParameters, BarInput, PsarPoint>(
+    (p) => {
+      const step = requirePositive(p.step ?? 0.02, 'psar', 'step');
+      const max = requirePositive(p.max ?? 0.2, 'psar', 'max');
+      requireAtMost(step, max, 'psar', 'step', 'max');
+      return new PsarStream({ step, maxAf: max });
+    },
+    PsarStream.fromJSON,
+    () => ({ sar: NaN, trend: NaN }),
+  ),
+  builtinMetadata.psarMetadata,
 );
 
 // ───────────────────────── Extended SAR (SAREXT) ─────────────────────────
@@ -730,31 +752,34 @@ class PsarExtStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const psarExt = makeIndicator<PsarExtParameters, BarInput, number>(
-  (p) => {
-    const accelInitLong = requirePositive(p.accelInitLong ?? 0.02, 'psarExt', 'accelInitLong');
-    const accelLong = requirePositive(p.accelLong ?? 0.02, 'psarExt', 'accelLong');
-    const accelMaxLong = requirePositive(p.accelMaxLong ?? 0.2, 'psarExt', 'accelMaxLong');
-    const accelInitShort = requirePositive(p.accelInitShort ?? 0.02, 'psarExt', 'accelInitShort');
-    const accelShort = requirePositive(p.accelShort ?? 0.02, 'psarExt', 'accelShort');
-    const accelMaxShort = requirePositive(p.accelMaxShort ?? 0.2, 'psarExt', 'accelMaxShort');
-    requireAtMost(accelInitLong, accelMaxLong, 'psarExt', 'accelInitLong', 'accelMaxLong');
-    requireAtMost(accelLong, accelMaxLong, 'psarExt', 'accelLong', 'accelMaxLong');
-    requireAtMost(accelInitShort, accelMaxShort, 'psarExt', 'accelInitShort', 'accelMaxShort');
-    requireAtMost(accelShort, accelMaxShort, 'psarExt', 'accelShort', 'accelMaxShort');
-    return new PsarExtStream({
-      startValue: requireFinite(p.startValue ?? 0, 'psarExt', 'startValue'),
-      offset: requireFinite(p.offsetOnReverse ?? 0, 'psarExt', 'offsetOnReverse'),
-      afInitLong: accelInitLong,
-      afLong: accelLong,
-      afMaxLong: accelMaxLong,
-      afInitShort: accelInitShort,
-      afShort: accelShort,
-      afMaxShort: accelMaxShort,
-    });
-  },
-  PsarExtStream.fromJSON,
-  nanNum,
+export const psarExt = withBuiltinMetadata(
+  makeIndicator<PsarExtParameters, BarInput, number>(
+    (p) => {
+      const accelInitLong = requirePositive(p.accelInitLong ?? 0.02, 'psarExt', 'accelInitLong');
+      const accelLong = requirePositive(p.accelLong ?? 0.02, 'psarExt', 'accelLong');
+      const accelMaxLong = requirePositive(p.accelMaxLong ?? 0.2, 'psarExt', 'accelMaxLong');
+      const accelInitShort = requirePositive(p.accelInitShort ?? 0.02, 'psarExt', 'accelInitShort');
+      const accelShort = requirePositive(p.accelShort ?? 0.02, 'psarExt', 'accelShort');
+      const accelMaxShort = requirePositive(p.accelMaxShort ?? 0.2, 'psarExt', 'accelMaxShort');
+      requireAtMost(accelInitLong, accelMaxLong, 'psarExt', 'accelInitLong', 'accelMaxLong');
+      requireAtMost(accelLong, accelMaxLong, 'psarExt', 'accelLong', 'accelMaxLong');
+      requireAtMost(accelInitShort, accelMaxShort, 'psarExt', 'accelInitShort', 'accelMaxShort');
+      requireAtMost(accelShort, accelMaxShort, 'psarExt', 'accelShort', 'accelMaxShort');
+      return new PsarExtStream({
+        startValue: requireFinite(p.startValue ?? 0, 'psarExt', 'startValue'),
+        offset: requireFinite(p.offsetOnReverse ?? 0, 'psarExt', 'offsetOnReverse'),
+        afInitLong: accelInitLong,
+        afLong: accelLong,
+        afMaxLong: accelMaxLong,
+        afInitShort: accelInitShort,
+        afShort: accelShort,
+        afMaxShort: accelMaxShort,
+      });
+    },
+    PsarExtStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.psarExtMetadata,
 );
 
 // ───────────────────────── Donchian trend ─────────────────────────
@@ -811,12 +836,14 @@ class DonchianTrendStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const donchianTrend = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) =>
-    new DonchianTrendStream(requirePeriod(p.period ?? 20, 'donchianTrend', 'period', 1, 'bars')),
-  DonchianTrendStream.fromJSON,
-  nanNum,
-  { period: 20 },
+export const donchianTrend = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) =>
+      new DonchianTrendStream(requirePeriod(p.period ?? 20, 'donchianTrend', 'period', 1, 'bars')),
+    DonchianTrendStream.fromJSON,
+    nanNum,
+  ),
+  builtinMetadata.donchianTrendMetadata,
 );
 
 // ───────────────────────── Supertrend ─────────────────────────
@@ -917,14 +944,17 @@ class SupertrendStream implements IndicatorStream<BarInput, SupertrendPoint> {
   }
 }
 
-export const supertrend = makeIndicator<SupertrendParameters, BarInput, SupertrendPoint>(
-  (p) =>
-    new SupertrendStream({
-      period: requirePeriod(p.period, 'supertrend', 'period', 1, 'bars'),
-      mult: requirePositive(p.multiplier ?? 3, 'supertrend', 'multiplier'),
-    }),
-  SupertrendStream.fromJSON,
-  () => ({ supertrend: NaN, direction: NaN }),
+export const supertrend = withBuiltinMetadata(
+  makeIndicator<SupertrendParameters, BarInput, SupertrendPoint>(
+    (p) =>
+      new SupertrendStream({
+        period: requirePeriod(p.period, 'supertrend', 'period', 1, 'bars'),
+        mult: requirePositive(p.multiplier ?? 3, 'supertrend', 'multiplier'),
+      }),
+    SupertrendStream.fromJSON,
+    () => ({ supertrend: NaN, direction: NaN }),
+  ),
+  builtinMetadata.supertrendMetadata,
 );
 
 // ───────────────────────── Ichimoku ─────────────────────────
@@ -1047,16 +1077,19 @@ class IchimokuStream implements IndicatorStream<BarInput, IchimokuPoint> {
   }
 }
 
-export const ichimoku = makeIndicator<IchimokuParameters, BarInput, IchimokuPoint>(
-  (p) =>
-    new IchimokuStream({
-      conv: requirePeriod(p.conversion ?? 9, 'ichimoku', 'conversion'),
-      basePeriod: requirePeriod(p.base ?? 26, 'ichimoku', 'base'),
-      spanBPeriod: requirePeriod(p.spanB ?? 52, 'ichimoku', 'spanB'),
-      displacement: requirePeriod(p.displacement ?? 26, 'ichimoku', 'displacement'),
-    }),
-  IchimokuStream.fromJSON,
-  () => ({ tenkan: NaN, kijun: NaN, senkouA: NaN, senkouB: NaN, chikou: NaN, displacement: NaN }),
+export const ichimoku = withBuiltinMetadata(
+  makeIndicator<IchimokuParameters, BarInput, IchimokuPoint>(
+    (p) =>
+      new IchimokuStream({
+        conv: requirePeriod(p.conversion ?? 9, 'ichimoku', 'conversion'),
+        basePeriod: requirePeriod(p.base ?? 26, 'ichimoku', 'base'),
+        spanBPeriod: requirePeriod(p.spanB ?? 52, 'ichimoku', 'spanB'),
+        displacement: requirePeriod(p.displacement ?? 26, 'ichimoku', 'displacement'),
+      }),
+    IchimokuStream.fromJSON,
+    () => ({ tenkan: NaN, kijun: NaN, senkouA: NaN, senkouB: NaN, chikou: NaN, displacement: NaN }),
+  ),
+  builtinMetadata.ichimokuMetadata,
 );
 
 // ───────────────────────── Vortex ─────────────────────────
@@ -1171,11 +1204,13 @@ class VortexStream implements IndicatorStream<BarInput, VortexPoint> {
   }
 }
 
-export const vortex = makeIndicator<{ period?: number }, BarInput, VortexPoint>(
-  (p) => new VortexStream(requirePeriod(p.period ?? 14, 'vortex')),
-  VortexStream.fromJSON,
-  () => ({ viPlus: NaN, viMinus: NaN }),
-  { period: 14 },
+export const vortex = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, VortexPoint>(
+    (p) => new VortexStream(requirePeriod(p.period ?? 14, 'vortex')),
+    VortexStream.fromJSON,
+    () => ({ viPlus: NaN, viMinus: NaN }),
+  ),
+  builtinMetadata.vortexMetadata,
 );
 
 // ───────────────────────── Linear regression / TSF ─────────────────────────
@@ -1238,34 +1273,49 @@ class LinregStream implements IndicatorStream<number, LinregPoint> {
   }
 }
 
-export const linreg = makeIndicator<PeriodParameters, number, LinregPoint>(
-  (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
-  LinregStream.fromJSON,
-  () => ({ value: NaN, slope: NaN, intercept: NaN, angle: NaN, forecast: NaN }),
+export const linreg = withBuiltinMetadata(
+  makeIndicator<PeriodParameters, number, LinregPoint>(
+    (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
+    LinregStream.fromJSON,
+    () => ({ value: NaN, slope: NaN, intercept: NaN, angle: NaN, forecast: NaN }),
+  ),
+  builtinMetadata.linregMetadata,
 );
-export const linregSlope = projected<PeriodParameters, number, LinregPoint>(
-  'linregSlope',
-  (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
-  LinregStream.fromJSON,
-  'slope',
+export const linregSlope = withBuiltinMetadata(
+  projected<PeriodParameters, number, LinregPoint>(
+    'linregSlope',
+    (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
+    LinregStream.fromJSON,
+    'slope',
+  ),
+  builtinMetadata.linregSlopeMetadata,
 );
-export const linregIntercept = projected<PeriodParameters, number, LinregPoint>(
-  'linregIntercept',
-  (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
-  LinregStream.fromJSON,
-  'intercept',
+export const linregIntercept = withBuiltinMetadata(
+  projected<PeriodParameters, number, LinregPoint>(
+    'linregIntercept',
+    (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
+    LinregStream.fromJSON,
+    'intercept',
+  ),
+  builtinMetadata.linregInterceptMetadata,
 );
-export const linregAngle = projected<PeriodParameters, number, LinregPoint>(
-  'linregAngle',
-  (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
-  LinregStream.fromJSON,
-  'angle',
+export const linregAngle = withBuiltinMetadata(
+  projected<PeriodParameters, number, LinregPoint>(
+    'linregAngle',
+    (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
+    LinregStream.fromJSON,
+    'angle',
+  ),
+  builtinMetadata.linregAngleMetadata,
 );
-export const tsf = projected<PeriodParameters, number, LinregPoint>(
-  'tsf',
-  (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
-  LinregStream.fromJSON,
-  'forecast',
+export const tsf = withBuiltinMetadata(
+  projected<PeriodParameters, number, LinregPoint>(
+    'tsf',
+    (p) => new LinregStream(requirePeriod(p.period, 'linreg')),
+    LinregStream.fromJSON,
+    'forecast',
+  ),
+  builtinMetadata.tsfMetadata,
 );
 
 // ───────────────────────── Chandelier exits ─────────────────────────
@@ -1335,14 +1385,17 @@ class ChandelierStream implements IndicatorStream<BarInput, ChandelierPoint> {
   }
 }
 
-export const chandelierExit = makeIndicator<ChandelierParameters, BarInput, ChandelierPoint>(
-  (p) =>
-    new ChandelierStream({
-      period: requirePeriod(p.period, 'chandelierExit', 'period', 1, 'bars'),
-      mult: requirePositive(p.multiplier ?? 3, 'chandelierExit', 'multiplier'),
-    }),
-  ChandelierStream.fromJSON,
-  () => ({ long: NaN, short: NaN }),
+export const chandelierExit = withBuiltinMetadata(
+  makeIndicator<ChandelierParameters, BarInput, ChandelierPoint>(
+    (p) =>
+      new ChandelierStream({
+        period: requirePeriod(p.period, 'chandelierExit', 'period', 1, 'bars'),
+        mult: requirePositive(p.multiplier ?? 3, 'chandelierExit', 'multiplier'),
+      }),
+    ChandelierStream.fromJSON,
+    () => ({ long: NaN, short: NaN }),
+  ),
+  builtinMetadata.chandelierExitMetadata,
 );
 
 // ───────────────────────── ZigZag (batch; final leg provisional) ─────────────────────────

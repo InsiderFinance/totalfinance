@@ -20,7 +20,6 @@ import { runScenarios, scenarioTarget } from '@totalfinance/scenarios';
 import { expectedMoveFromImpliedVolatility } from '@totalfinance/volatility';
 import { exposure } from '@totalfinance/structure';
 import * as ta from '@totalfinance/technical-analysis';
-import * as technicalAnalysis from '@totalfinance/technical-analysis';
 import { legs, strategy } from '@totalfinance/strategy';
 import { bonds, priceFromYield } from '@totalfinance/fixed-income';
 import { futuresBasis, perpetualFunding } from '@totalfinance/crypto';
@@ -65,8 +64,8 @@ import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts
  * lines. Because every block RUNS here in CI, the README examples can never rot. Regenerate with
  * `pnpm tsx tools/readme-gen.ts`; `tools/readme-gen.test.ts` fails on drift.
  *
- * The umbrella (`totalfinance`) block runs against the scoped bindings (identical objects); that the
- * `totalfinance` re-export is those same objects is guarded separately by `packages/totalfinance/test`.
+ * The umbrella (`totalfinance`) block runs against its domain subpaths; their identity with the
+ * scoped bindings is also guarded separately by `packages/totalfinance/test`.
  */
 describe('README examples (run in CI so the generated package READMEs can never rot)', () => {
   it('@totalfinance/core', () => {
@@ -676,9 +675,12 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(routes).toContain('/operations/totalfinance.option.price/run');
   });
 
-  it('totalfinance', () => {
+  it('totalfinance', async () => {
+    const { blackScholes } = await import('totalfinance/options');
+    const { rsi } = await import('totalfinance/technical-analysis');
     // readme:begin
-    // import { blackScholes, technicalAnalysis } from 'totalfinance';
+    // import { blackScholes } from 'totalfinance/options';
+    // import { rsi } from 'totalfinance/technical-analysis';
     const price = blackScholes.call({
       spot: 100,
       strike: 105,
@@ -686,7 +688,7 @@ describe('README examples (run in CI so the generated package READMEs can never 
       riskFreeRate: 0.045,
       volatility: 0.22,
     });
-    const rsi = technicalAnalysis.rsi.explain(
+    const momentum = rsi.explain(
       [
         44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61,
         46.28, 46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
@@ -695,8 +697,8 @@ describe('README examples (run in CI so the generated package READMEs can never 
     );
     // readme:end
     expect(price).toBeGreaterThan(0);
-    expect(rsi.value).toHaveLength(20);
-    expect(rsi.value.at(-1)).toBeCloseTo(57.915, 2);
+    expect(momentum.value).toHaveLength(20);
+    expect(momentum.value.at(-1)).toBeCloseTo(57.915, 2);
   });
 
   it('@totalfinance/volatility/artifacts', () => {

@@ -6,6 +6,8 @@
  * Volatility Stop trailing line. (`relativeVolatilityIndex` already ships in `./volatility`.)
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -87,14 +89,17 @@ class AberrationStream implements IndicatorStream<BarInput, AberrationPoint> {
   }
 }
 
-export const aberration = makeIndicator<AberrationParameters, BarInput, AberrationPoint>(
-  (p) =>
-    new AberrationStream(
-      requirePeriod(p.period ?? 5, 'aberration'),
-      requirePeriod(p.atrPeriod ?? 15, 'aberration', 'atrPeriod'),
-    ),
-  AberrationStream.fromJSON,
-  () => ({ zeroLine: NaN, upperBand: NaN, lowerBand: NaN, atr: NaN }),
+export const aberration = withBuiltinMetadata(
+  makeIndicator<AberrationParameters, BarInput, AberrationPoint>(
+    (p) =>
+      new AberrationStream(
+        requirePeriod(p.period ?? 5, 'aberration'),
+        requirePeriod(p.atrPeriod ?? 15, 'aberration', 'atrPeriod'),
+      ),
+    AberrationStream.fromJSON,
+    () => ({ zeroLine: NaN, upperBand: NaN, lowerBand: NaN, atr: NaN }),
+  ),
+  builtinMetadata.aberrationMetadata,
 );
 
 // ───────────────────────── Acceleration Bands ─────────────────────────
@@ -152,14 +157,17 @@ class AccelerationBandsStream implements IndicatorStream<BarInput, ChannelPoint>
   }
 }
 
-export const accelerationBands = makeIndicator<AccelerationBandsParameters, BarInput, ChannelPoint>(
-  (p) =>
-    new AccelerationBandsStream(
-      requirePeriod(p.period ?? 20, 'accelerationBands'),
-      requirePositive(p.multiplier ?? 4, 'accelerationBands', 'multiplier'),
-    ),
-  AccelerationBandsStream.fromJSON,
-  nanChannel,
+export const accelerationBands = withBuiltinMetadata(
+  makeIndicator<AccelerationBandsParameters, BarInput, ChannelPoint>(
+    (p) =>
+      new AccelerationBandsStream(
+        requirePeriod(p.period ?? 20, 'accelerationBands'),
+        requirePositive(p.multiplier ?? 4, 'accelerationBands', 'multiplier'),
+      ),
+    AccelerationBandsStream.fromJSON,
+    nanChannel,
+  ),
+  builtinMetadata.accelerationBandsMetadata,
 );
 
 // ───────────────────────── Holt-Winters Channel ─────────────────────────
@@ -276,41 +284,44 @@ class HoltWinterChannelStream implements IndicatorStream<number, ChannelPoint> {
   }
 }
 
-export const holtWinterChannel = makeIndicator<HoltWinterChannelParameters, number, ChannelPoint>(
-  (p) =>
-    new HoltWinterChannelStream({
-      levelSmoothing: requireInRange(
-        p.levelSmoothing ?? 0.2,
-        'holtWinterChannel',
-        'levelSmoothing',
-        0,
-        1,
-      ),
-      trendSmoothing: requireInRange(
-        p.trendSmoothing ?? 0.1,
-        'holtWinterChannel',
-        'trendSmoothing',
-        0,
-        1,
-      ),
-      accelerationSmoothing: requireInRange(
-        p.accelerationSmoothing ?? 0.1,
-        'holtWinterChannel',
-        'accelerationSmoothing',
-        0,
-        1,
-      ),
-      varianceSmoothing: requireInRange(
-        p.varianceSmoothing ?? 0.1,
-        'holtWinterChannel',
-        'varianceSmoothing',
-        0,
-        1,
-      ),
-      scalar: requirePositive(p.scalar ?? 1, 'holtWinterChannel', 'scalar'),
-    }),
-  HoltWinterChannelStream.fromJSON,
-  nanChannel,
+export const holtWinterChannel = withBuiltinMetadata(
+  makeIndicator<HoltWinterChannelParameters, number, ChannelPoint>(
+    (p) =>
+      new HoltWinterChannelStream({
+        levelSmoothing: requireInRange(
+          p.levelSmoothing ?? 0.2,
+          'holtWinterChannel',
+          'levelSmoothing',
+          0,
+          1,
+        ),
+        trendSmoothing: requireInRange(
+          p.trendSmoothing ?? 0.1,
+          'holtWinterChannel',
+          'trendSmoothing',
+          0,
+          1,
+        ),
+        accelerationSmoothing: requireInRange(
+          p.accelerationSmoothing ?? 0.1,
+          'holtWinterChannel',
+          'accelerationSmoothing',
+          0,
+          1,
+        ),
+        varianceSmoothing: requireInRange(
+          p.varianceSmoothing ?? 0.1,
+          'holtWinterChannel',
+          'varianceSmoothing',
+          0,
+          1,
+        ),
+        scalar: requirePositive(p.scalar ?? 1, 'holtWinterChannel', 'scalar'),
+      }),
+    HoltWinterChannelStream.fromJSON,
+    nanChannel,
+  ),
+  builtinMetadata.holtWinterChannelMetadata,
 );
 
 // ───────────────────────── Mass Index ─────────────────────────
@@ -374,14 +385,17 @@ class MassIndexStream implements IndicatorStream<BarInput, number> {
   }
 }
 
-export const massIndex = makeIndicator<MassIndexParameters, BarInput, number>(
-  (p) =>
-    new MassIndexStream(
-      requirePeriod(p.fast ?? 9, 'massIndex', 'fast'),
-      requirePeriod(p.slow ?? 25, 'massIndex', 'slow'),
-    ),
-  MassIndexStream.fromJSON,
-  nan,
+export const massIndex = withBuiltinMetadata(
+  makeIndicator<MassIndexParameters, BarInput, number>(
+    (p) =>
+      new MassIndexStream(
+        requirePeriod(p.fast ?? 9, 'massIndex', 'fast'),
+        requirePeriod(p.slow ?? 25, 'massIndex', 'slow'),
+      ),
+    MassIndexStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.massIndexMetadata,
 );
 
 // ───────────────────────── Price Distance ─────────────────────────
@@ -421,10 +435,13 @@ class PriceDistanceStream implements IndicatorStream<BarInput, number> {
 }
 
 /** Price Distance — 2·(H−L) + |open − close[drift]| − |close − open|. */
-export const priceDistance = makeIndicator<{ drift?: number }, BarInput, number>(
-  (p) => new PriceDistanceStream(requirePeriod(p.drift ?? 1, 'priceDistance', 'drift')),
-  PriceDistanceStream.fromJSON,
-  nan,
+export const priceDistance = withBuiltinMetadata(
+  makeIndicator<{ drift?: number }, BarInput, number>(
+    (p) => new PriceDistanceStream(requirePeriod(p.drift ?? 1, 'priceDistance', 'drift')),
+    PriceDistanceStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.priceDistanceMetadata,
 );
 
 // ───────────────────────── Elder's Market Thermometer ─────────────────────────
@@ -507,19 +524,18 @@ class ElderThermometerStream implements IndicatorStream<BarInput, ElderThermomet
   }
 }
 
-export const elderThermometer = makeIndicator<
-  ElderThermometerParameters,
-  BarInput,
-  ElderThermometerPoint
->(
-  (p) =>
-    new ElderThermometerStream({
-      period: requirePeriod(p.period ?? 20, 'elderThermometer'),
-      longK: requirePositive(p.long ?? 2, 'elderThermometer', 'long'),
-      shortK: requirePositive(p.short ?? 0.5, 'elderThermometer', 'short'),
-    }),
-  ElderThermometerStream.fromJSON,
-  () => ({ thermo: NaN, movingAverage: NaN, long: NaN, short: NaN }),
+export const elderThermometer = withBuiltinMetadata(
+  makeIndicator<ElderThermometerParameters, BarInput, ElderThermometerPoint>(
+    (p) =>
+      new ElderThermometerStream({
+        period: requirePeriod(p.period ?? 20, 'elderThermometer'),
+        longK: requirePositive(p.long ?? 2, 'elderThermometer', 'long'),
+        shortK: requirePositive(p.short ?? 0.5, 'elderThermometer', 'short'),
+      }),
+    ElderThermometerStream.fromJSON,
+    () => ({ thermo: NaN, movingAverage: NaN, long: NaN, short: NaN }),
+  ),
+  builtinMetadata.elderThermometerMetadata,
 );
 
 // ───────────────────────── Ulcer Index ─────────────────────────
@@ -566,10 +582,13 @@ class UlcerIndexStream implements IndicatorStream<number, number> {
 }
 
 /** Ulcer Index — RMS of percent drawdown from the rolling `period` high close. */
-export const ulcerIndex = makeIndicator<{ period?: number }, number, number>(
-  (p) => new UlcerIndexStream(requirePeriod(p.period ?? 14, 'ulcerIndex')),
-  UlcerIndexStream.fromJSON,
-  nan,
+export const ulcerIndex = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, number, number>(
+    (p) => new UlcerIndexStream(requirePeriod(p.period ?? 14, 'ulcerIndex')),
+    UlcerIndexStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.ulcerIndexMetadata,
 );
 
 // ───────────────────────── ATR Bands ─────────────────────────
@@ -619,14 +638,17 @@ class AtrBandsStream implements IndicatorStream<BarInput, ChannelPoint> {
 }
 
 /** ATR Bands — SMA(close) ± multiplier·ATR (an SMA-centred ATR channel). */
-export const atrBands = makeIndicator<AtrBandsParameters, BarInput, ChannelPoint>(
-  (p) =>
-    new AtrBandsStream(
-      requirePeriod(p.period ?? 14, 'atrBands'),
-      requirePositive(p.multiplier ?? 2, 'atrBands', 'multiplier'),
-    ),
-  AtrBandsStream.fromJSON,
-  nanChannel,
+export const atrBands = withBuiltinMetadata(
+  makeIndicator<AtrBandsParameters, BarInput, ChannelPoint>(
+    (p) =>
+      new AtrBandsStream(
+        requirePeriod(p.period ?? 14, 'atrBands'),
+        requirePositive(p.multiplier ?? 2, 'atrBands', 'multiplier'),
+      ),
+    AtrBandsStream.fromJSON,
+    nanChannel,
+  ),
+  builtinMetadata.atrBandsMetadata,
 );
 
 // ───────────────────────── ATR percent ─────────────────────────
@@ -659,10 +681,13 @@ class PercentAtrStream implements IndicatorStream<BarInput, number> {
 }
 
 /** ATR as a percent of close (a.k.a. ATRP). */
-export const percentAtr = makeIndicator<{ period?: number }, BarInput, number>(
-  (p) => new PercentAtrStream(requirePeriod(p.period ?? 14, 'percentAtr')),
-  PercentAtrStream.fromJSON,
-  nan,
+export const percentAtr = withBuiltinMetadata(
+  makeIndicator<{ period?: number }, BarInput, number>(
+    (p) => new PercentAtrStream(requirePeriod(p.period ?? 14, 'percentAtr')),
+    PercentAtrStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.percentAtrMetadata,
 );
 
 // ───────────────────────── Volatility Stop ─────────────────────────
@@ -742,16 +767,15 @@ class VolatilityStopStream implements IndicatorStream<BarInput, VolatilityStopPo
   }
 }
 
-export const volatilityStop = makeIndicator<
-  VolatilityStopParameters,
-  BarInput,
-  VolatilityStopPoint
->(
-  (p) =>
-    new VolatilityStopStream(
-      requirePeriod(p.period ?? 20, 'volatilityStop'),
-      requirePositive(p.multiplier ?? 2, 'volatilityStop', 'multiplier'),
-    ),
-  VolatilityStopStream.fromJSON,
-  () => ({ stop: NaN, trend: NaN }),
+export const volatilityStop = withBuiltinMetadata(
+  makeIndicator<VolatilityStopParameters, BarInput, VolatilityStopPoint>(
+    (p) =>
+      new VolatilityStopStream(
+        requirePeriod(p.period ?? 20, 'volatilityStop'),
+        requirePositive(p.multiplier ?? 2, 'volatilityStop', 'multiplier'),
+      ),
+    VolatilityStopStream.fromJSON,
+    () => ({ stop: NaN, trend: NaN }),
+  ),
+  builtinMetadata.volatilityStopMetadata,
 );

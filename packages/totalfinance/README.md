@@ -6,6 +6,8 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
+Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+
 ```sh
 pnpm add totalfinance
 ```
@@ -13,7 +15,8 @@ pnpm add totalfinance
 ## Example
 
 ```ts
-import { blackScholes, technicalAnalysis } from 'totalfinance';
+import { blackScholes } from 'totalfinance/options';
+import { rsi } from 'totalfinance/technical-analysis';
 const price = blackScholes.call({
   spot: 100,
   strike: 105,
@@ -21,7 +24,7 @@ const price = blackScholes.call({
   riskFreeRate: 0.045,
   volatility: 0.22,
 });
-const rsi = technicalAnalysis.rsi.explain(
+const momentum = rsi.explain(
   [
     44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61,
     46.28, 46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
@@ -31,6 +34,18 @@ const rsi = technicalAnalysis.rsi.explain(
 ```
 
 _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot rot._
+
+## Imports and bundles
+
+For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+
+Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+
+The root keeps every domain as a namespace and hoists only five option gestures: `blackScholes`, `option`, `market`, `engines`, `impliedVolatility`.
+
+`import { math } from 'totalfinance'` followed by `math.normalCdf(0)` retains the whole math namespace in esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use. Direct `import * as math from 'totalfinance/math'` with static member use also shakes. Dynamic namespace access, enumeration, and registries retain the implementations they can reach.
+
+See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
 ## API
 

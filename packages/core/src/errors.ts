@@ -6,6 +6,8 @@
  * only in major versions.
  */
 
+import * as ValidationCode from './validation-codes.js';
+
 export interface QuantErrorOptions {
   /** Stable, machine-readable code, e.g. `input.negative_spot`. */
   code: string;
@@ -85,22 +87,26 @@ export function isQuantError(value: unknown, code?: string): value is QuantError
 /**
  * Canonical error codes used in the 0.0.1 surface. The set is open — packages may introduce new
  * codes — but these are documented and stable.
+ *
+ * Static references to package-private constants let guard-only consumers discard this registry
+ * while retaining the same error classes. Explicit properties preserve the public property order
+ * and literal readonly types, without a second code object or construction side effects.
  */
 export const ErrorCode = {
-  InputNaN: 'input.nan',
-  InputNotFinite: 'input.not_finite',
-  InputNegativeSpot: 'input.negative_spot',
-  InputNegativeStrike: 'input.negative_strike',
-  InputNegativeVolatility: 'input.negative_volatility',
-  InputNegativeTime: 'input.negative_time',
-  InputOutOfRange: 'input.out_of_range',
-  InputInvalidEnum: 'input.invalid_enum',
-  InputMissingField: 'input.missing_field',
-  InputUnknownField: 'input.unknown_field',
-  InputWrongType: 'input.wrong_type',
+  InputNaN: ValidationCode.InputNaN,
+  InputNotFinite: ValidationCode.InputNotFinite,
+  InputNegativeSpot: ValidationCode.InputNegativeSpot,
+  InputNegativeStrike: ValidationCode.InputNegativeStrike,
+  InputNegativeVolatility: ValidationCode.InputNegativeVolatility,
+  InputNegativeTime: ValidationCode.InputNegativeTime,
+  InputOutOfRange: ValidationCode.InputOutOfRange,
+  InputInvalidEnum: ValidationCode.InputInvalidEnum,
+  InputMissingField: ValidationCode.InputMissingField,
+  InputUnknownField: ValidationCode.InputUnknownField,
+  InputWrongType: ValidationCode.InputWrongType,
   /** The argument is an object but not the expected SHAPE (right type, wrong slots) — distinct from a
    * single missing field. Emitted by {@link wrongShapeError}. */
-  InputWrongShape: 'input.wrong_shape',
+  InputWrongShape: ValidationCode.InputWrongShape,
   ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence',
   ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic',
   ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound',
@@ -204,11 +210,11 @@ export const ErrorCode = {
   OperationHandleStoreMissing: 'operation.handle_store_missing',
   OperationHandleUnknown: 'operation.handle_unknown',
   OperationHandleKindMismatch: 'operation.handle_kind_mismatch',
-  InputLengthMismatch: 'input.length_mismatch',
+  InputLengthMismatch: ValidationCode.InputLengthMismatch,
   McpDeadlineExceeded: 'mcp.deadline_exceeded',
   McpInputTooLarge: 'mcp.input_too_large',
   McpInternalError: 'mcp.internal_error',
-  PostconditionNonFinite: 'postcondition.non_finite_result',
+  PostconditionNonFinite: ValidationCode.PostconditionNonFinite,
   McpUnknownTool: 'mcp.unknown_tool',
   PipelineDuplicateAlias: 'pipeline.duplicate_alias',
   PipelineLengthMismatch: 'pipeline.length_mismatch',
@@ -260,9 +266,9 @@ export const ErrorCode = {
   /** Warning: a resting order's prices/quantity were adjusted for a corporate action (split). */
   BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted',
   /** Warning: a coupon rate looks like a percent typed as a decimal (e.g. 5 for 5%). */
-  InputSuspiciousCouponRate: 'input.suspicious_coupon_rate',
+  InputSuspiciousCouponRate: ValidationCode.InputSuspiciousCouponRate,
   /** Warning: a yield looks like a percent typed as a decimal (e.g. 5 for 5%). */
-  InputSuspiciousYield: 'input.suspicious_yield',
+  InputSuspiciousYield: ValidationCode.InputSuspiciousYield,
   /** Warning: model parameters violate the Feller condition; the variance floor is attainable. */
   ModelFellerConditionViolated: 'model.feller_condition_violated',
 
@@ -369,7 +375,7 @@ export function missingFieldError(
   // SECOND line rather than a replacement, because the example has to stay pasteable.
   if (hint !== undefined) lines.push(`  ${field}: ${hint}`);
   return new InputError(lines.join('\n'), {
-    code: ErrorCode.InputMissingField,
+    code: ValidationCode.InputMissingField,
     context: { function: functionName, field, example, ...(hint === undefined ? {} : { hint }) },
   });
 }
@@ -391,7 +397,7 @@ export function wrongShapeError(
     {
       // A wrong-shape object is not a single missing field — it has its own code so a caller/agent can
       // dispatch on "you passed the wrong slots" separately from "you omitted one field" (F15).
-      code: ErrorCode.InputWrongShape,
+      code: ValidationCode.InputWrongShape,
       context: { function: functionName, expected, receivedKeys: keys },
     },
   );

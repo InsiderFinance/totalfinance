@@ -1,5 +1,7 @@
 /** Bar-input indicators: ATR, Stochastic, ADX, VWAP, OBV (spec §13.3). */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type BarInput,
   type IndicatorStream,
@@ -396,22 +398,28 @@ class ObvStream implements IndicatorStream<BarInput, number> {
 
 const nan = (): number => NaN;
 
-export const atr = makeIndicator<WilderPeriodParameters, BarInput, number>(
-  (p) => new AtrStream(requirePeriod(p.period ?? 14, 'atr')),
-  AtrStream.fromJSON,
-  nan,
-  { period: 14 },
+export const atr = withBuiltinMetadata(
+  makeIndicator<WilderPeriodParameters, BarInput, number>(
+    (p) => new AtrStream(requirePeriod(p.period ?? 14, 'atr')),
+    AtrStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.atrMetadata,
 );
-export const stochastic = makeIndicator<StochasticParameters, BarInput, StochasticPoint>(
-  (p) =>
-    new StochasticStream({
-      kPeriod: requirePeriod(p.kPeriod ?? 14, 'stochastic', 'kPeriod'),
-      dPeriod: requirePeriod(p.dPeriod ?? 3, 'stochastic', 'dPeriod'),
-      smoothK: requirePeriod(p.smoothK ?? 1, 'stochastic', 'smoothK'),
-    }),
-  StochasticStream.fromJSON,
-  () => ({ k: NaN, d: NaN }),
-  { kPeriod: 14, dPeriod: 3, smoothK: 1 },
+// stochFast is the same facade. Historically its later registration supplied the effective
+// conventions for both names; bind that contract here while discovery keeps each name's description.
+export const stochastic = withBuiltinMetadata(
+  makeIndicator<StochasticParameters, BarInput, StochasticPoint>(
+    (p) =>
+      new StochasticStream({
+        kPeriod: requirePeriod(p.kPeriod ?? 14, 'stochastic', 'kPeriod'),
+        dPeriod: requirePeriod(p.dPeriod ?? 3, 'stochastic', 'dPeriod'),
+        smoothK: requirePeriod(p.smoothK ?? 1, 'stochastic', 'smoothK'),
+      }),
+    StochasticStream.fromJSON,
+    () => ({ k: NaN, d: NaN }),
+  ),
+  builtinMetadata.stochFastMetadata,
 );
 
 /**
@@ -420,21 +428,29 @@ export const stochastic = makeIndicator<StochasticParameters, BarInput, Stochast
  * the classic slow stochastic (TA-Lib STOCH's slowk).
  */
 export const stochFast = stochastic;
-export const adx = makeIndicator<WilderPeriodParameters, BarInput, AdxPoint>(
-  (p) => new AdxStream(requirePeriod(p.period ?? 14, 'adx')),
-  AdxStream.fromJSON,
-  () => ({ adx: NaN, plusDI: NaN, minusDI: NaN }),
-  { period: 14 },
+export const adx = withBuiltinMetadata(
+  makeIndicator<WilderPeriodParameters, BarInput, AdxPoint>(
+    (p) => new AdxStream(requirePeriod(p.period ?? 14, 'adx')),
+    AdxStream.fromJSON,
+    () => ({ adx: NaN, plusDI: NaN, minusDI: NaN }),
+  ),
+  builtinMetadata.adxMetadata,
 );
-export const vwap = makeIndicator<Record<never, never>, BarInput, number>(
-  () => new VwapStream(),
-  VwapStream.fromJSON,
-  nan,
+export const vwap = withBuiltinMetadata(
+  makeIndicator<Record<never, never>, BarInput, number>(
+    () => new VwapStream(),
+    VwapStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.vwapMetadata,
 );
-export const obv = makeIndicator<{ talib?: boolean }, BarInput, number>(
-  (p) => new ObvStream(requireBooleanWhenPresent(p?.talib, 'obv', 'talib') ?? false),
-  ObvStream.fromJSON,
-  nan,
+export const obv = withBuiltinMetadata(
+  makeIndicator<{ talib?: boolean }, BarInput, number>(
+    (p) => new ObvStream(requireBooleanWhenPresent(p?.talib, 'obv', 'talib') ?? false),
+    ObvStream.fromJSON,
+    nan,
+  ),
+  builtinMetadata.obvMetadata,
 );
 
 export { AtrStream, StochasticStream, AdxStream, VwapStream, ObvStream };

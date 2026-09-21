@@ -1,5 +1,7 @@
 /** pandas-ta performance-style indicators that are useful inside TA pipelines. */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -43,10 +45,13 @@ class DrawdownStream implements IndicatorStream<number, DrawdownPoint> {
   }
 }
 
-export const drawdown = makeIndicator<Empty, number, DrawdownPoint>(
-  () => new DrawdownStream(),
-  DrawdownStream.fromJSON,
-  () => ({ drawdown: NaN, percent: NaN, log: NaN }),
+export const drawdown = withBuiltinMetadata(
+  makeIndicator<Empty, number, DrawdownPoint>(
+    () => new DrawdownStream(),
+    DrawdownStream.fromJSON,
+    () => ({ drawdown: NaN, percent: NaN, log: NaN }),
+  ),
+  builtinMetadata.drawdownMetadata,
 );
 
 export { DrawdownStream };

@@ -1,5 +1,7 @@
 /** Element-wise math transforms/operators (TA-Lib Math Transform/Operators; pandas-ta math). */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import {
   type IndicatorStream,
   type TechnicalAnalysisSnapshot,
@@ -80,26 +82,38 @@ const binary = (kind: string, fn: (x: number, y: number) => number) =>
     () => NaN,
   );
 
-export const acos = unary('acos', Math.acos);
-export const asin = unary('asin', Math.asin);
-export const atan = unary('atan', Math.atan);
-export const ceil = unary('ceil', Math.ceil);
-export const cos = unary('cos', Math.cos);
-export const cosh = unary('cosh', Math.cosh);
-export const exp = unary('exp', Math.exp);
-export const floor = unary('floor', Math.floor);
-export const ln = unary('ln', Math.log);
-export const log10 = unary('log10', Math.log10);
-export const sin = unary('sin', Math.sin);
-export const sinh = unary('sinh', Math.sinh);
-export const sqrt = unary('sqrt', Math.sqrt);
-export const tan = unary('tan', Math.tan);
-export const tanh = unary('tanh', Math.tanh);
+export const acos = withBuiltinMetadata(unary('acos', Math.acos), builtinMetadata.acosMetadata);
+export const asin = withBuiltinMetadata(unary('asin', Math.asin), builtinMetadata.asinMetadata);
+export const atan = withBuiltinMetadata(unary('atan', Math.atan), builtinMetadata.atanMetadata);
+export const ceil = withBuiltinMetadata(unary('ceil', Math.ceil), builtinMetadata.ceilMetadata);
+export const cos = withBuiltinMetadata(unary('cos', Math.cos), builtinMetadata.cosMetadata);
+export const cosh = withBuiltinMetadata(unary('cosh', Math.cosh), builtinMetadata.coshMetadata);
+export const exp = withBuiltinMetadata(unary('exp', Math.exp), builtinMetadata.expMetadata);
+export const floor = withBuiltinMetadata(unary('floor', Math.floor), builtinMetadata.floorMetadata);
+export const ln = withBuiltinMetadata(unary('ln', Math.log), builtinMetadata.lnMetadata);
+export const log10 = withBuiltinMetadata(unary('log10', Math.log10), builtinMetadata.log10Metadata);
+export const sin = withBuiltinMetadata(unary('sin', Math.sin), builtinMetadata.sinMetadata);
+export const sinh = withBuiltinMetadata(unary('sinh', Math.sinh), builtinMetadata.sinhMetadata);
+export const sqrt = withBuiltinMetadata(unary('sqrt', Math.sqrt), builtinMetadata.sqrtMetadata);
+export const tan = withBuiltinMetadata(unary('tan', Math.tan), builtinMetadata.tanMetadata);
+export const tanh = withBuiltinMetadata(unary('tanh', Math.tanh), builtinMetadata.tanhMetadata);
 
-export const add = binary('add', (x, y) => x + y);
-export const sub = binary('sub', (x, y) => x - y);
-export const mult = binary('mult', (x, y) => x * y);
-export const div = binary('div', (x, y) => x / y);
+export const add = withBuiltinMetadata(
+  binary('add', (x, y) => x + y),
+  builtinMetadata.addMetadata,
+);
+export const sub = withBuiltinMetadata(
+  binary('sub', (x, y) => x - y),
+  builtinMetadata.subMetadata,
+);
+export const mult = withBuiltinMetadata(
+  binary('mult', (x, y) => x * y),
+  builtinMetadata.multMetadata,
+);
+export const div = withBuiltinMetadata(
+  binary('div', (x, y) => x / y),
+  builtinMetadata.divMetadata,
+);
 
 /** The cross family: one class, two public indicators, so the restorer guards the pair. */
 const CROSS_PAIR_KINDS = ['crossover', 'crossany'] as const;
@@ -145,17 +159,23 @@ class CrossPairStream implements IndicatorStream<Pair, number> {
 }
 
 /** 1 on the bar where `x` crosses above `y`, else 0. */
-export const crossover = makeIndicator<Empty, Pair, number>(
-  () => new CrossPairStream({ kind: 'crossover', mode: 'over' }),
-  CrossPairStream.fromJSON,
-  () => NaN,
+export const crossover = withBuiltinMetadata(
+  makeIndicator<Empty, Pair, number>(
+    () => new CrossPairStream({ kind: 'crossover', mode: 'over' }),
+    CrossPairStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.crossoverMetadata,
 );
 
 /** 1 on the bar where `x` crosses either above or below `y`, else 0. */
-export const crossany = makeIndicator<Empty, Pair, number>(
-  () => new CrossPairStream({ kind: 'crossany', mode: 'any' }),
-  CrossPairStream.fromJSON,
-  () => NaN,
+export const crossany = withBuiltinMetadata(
+  makeIndicator<Empty, Pair, number>(
+    () => new CrossPairStream({ kind: 'crossany', mode: 'any' }),
+    CrossPairStream.fromJSON,
+    () => NaN,
+  ),
+  builtinMetadata.crossanyMetadata,
 );
 
 export { UnaryMathStream, BinaryMathStream, CrossPairStream };

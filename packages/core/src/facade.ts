@@ -13,7 +13,8 @@
  */
 
 import type { Computed } from './computed.js';
-import { ErrorCode, InputError, PostconditionError } from './errors.js';
+import { InputError, PostconditionError } from './errors.js';
+import * as ValidationCode from './validation-codes.js';
 
 /**
  * The central first-argument container guard shared by {@link facade} and {@link seriesFacade}.
@@ -39,7 +40,7 @@ function requireFirstArg(
           ? 'object'
           : typeof value;
   throw new InputError(`${label}: expected ${expected} as the first argument, got ${received}.`, {
-    code: ErrorCode.InputWrongType,
+    code: ValidationCode.InputWrongType,
     context: { function: label, received },
   });
 }
@@ -54,7 +55,7 @@ function requireLaterArgsNotNull(label: string, args: readonly unknown[]): void 
     if (args[i] === null) {
       throw new InputError(
         `${label}: argument ${i + 1} is null — omit it (or pass an options object) instead.`,
-        { code: ErrorCode.InputWrongType, context: { function: label, position: i } },
+        { code: ValidationCode.InputWrongType, context: { function: label, position: i } },
       );
     }
   }
@@ -91,7 +92,7 @@ export function assertFiniteResult(label: string, result: Computed<unknown>): vo
     `${label}: successful result carries a non-finite number at ${hits[0]} — this is a library ` +
       'defect (Law 7); undefined quantities are reported as null with a warning explaining the ' +
       'null. Please report it with your inputs.',
-    { code: ErrorCode.PostconditionNonFinite, context: { function: label, paths: hits } },
+    { code: ValidationCode.PostconditionNonFinite, context: { function: label, paths: hits } },
   );
 }
 
@@ -116,7 +117,7 @@ export function requireRepresentableResult<T>(functionName: string, result: T): 
   if (hits.length === 0) return result;
   throw new InputError(
     `${functionName}: the computed ${hits[0]} is not representable in IEEE-754 double precision — the input magnitudes overflow the arithmetic. Reduce the magnitudes (or rescale the units) and recompute.`,
-    { code: ErrorCode.InputOutOfRange, context: { function: functionName, paths: hits } },
+    { code: ValidationCode.InputOutOfRange, context: { function: functionName, paths: hits } },
   );
 }
 
@@ -227,7 +228,7 @@ export function assertFiniteValue(label: string, value: unknown): void {
     `${label}: successful result carries a non-finite number at ${hits[0]} — this is a library ` +
       'defect (Law 7); undefined quantities are reported as null with a warning explaining the ' +
       'null. Please report it with your inputs.',
-    { code: ErrorCode.PostconditionNonFinite, context: { function: label, paths: hits } },
+    { code: ValidationCode.PostconditionNonFinite, context: { function: label, paths: hits } },
   );
 }
 

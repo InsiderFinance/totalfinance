@@ -12,6 +12,8 @@
  * trend context. Thresholds use TA-Lib's default factors (BodyLong 1×, BodyDoji 0.1×, Near 0.2×, …).
  */
 
+import * as builtinMetadata from './builtin-metadata.js';
+import { withBuiltinMetadata } from './indicator-metadata.js';
 import { requireArgumentArray } from '@totalfinance/core';
 import {
   type BarInput,
@@ -979,10 +981,13 @@ class CandleStream implements IndicatorStream<BarInput, number> {
 }
 
 function candlePattern(name: string, def: PatternDef) {
-  return makeIndicator<Empty, BarInput, number>(
-    () => new CandleStream({ name, length: def.length, detect: def.detect }),
-    CandleStream.restore(name, def.length, def.detect),
-    () => NaN,
+  return withBuiltinMetadata(
+    makeIndicator<Empty, BarInput, number>(
+      () => new CandleStream({ name, length: def.length, detect: def.detect }),
+      CandleStream.restore(name, def.length, def.detect),
+      () => NaN,
+    ),
+    builtinMetadata.candlestickMetadata,
   );
 }
 

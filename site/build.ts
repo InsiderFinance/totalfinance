@@ -149,6 +149,7 @@ export async function buildSite(): Promise<void> {
   documents.set('site/content/agents.md', 'agents');
   documents.set('docs/getting-started.md', 'guides/getting-started');
   documents.set('docs/stability.md', 'guides/stability');
+  documents.set('docs/bundle-size.md', 'guides/bundle-size');
   documents.set('SECURITY.md', 'guides/security');
   const guideCards: string[] = [];
   for (const [source, path] of documents) {

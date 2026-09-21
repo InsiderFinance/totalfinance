@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 223,
+    "surfaces": 225,
     "byClass": {
-      "current-runnable": 87,
-      "future-target": 43,
+      "current-runnable": 88,
+      "future-target": 44,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4466,
-    "checkedUnderTruthfulness": 169,
-    "checkedUnderVocabulary": 43,
+    "executableFences": 4476,
+    "checkedUnderTruthfulness": 170,
+    "checkedUnderVocabulary": 44,
     "shippedNamesWatched": 9460,
     "documentedExceptions": 7,
     "findings": 0
@@ -159,6 +159,13 @@
       "codeFences": 2
     },
     {
+      "path": "docs/guides/imports-and-bundles.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 5
+    },
+    {
       "path": "docs/guides/levels.md",
       "class": "current-runnable",
       "owner": "human",
@@ -275,7 +282,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4212
+      "codeFences": 4217
     },
     {
       "path": "docs/llms.txt",
@@ -1158,6 +1165,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 2
+    },
+    {
+      "path": "docs/specs/tree-shaking-and-consumer-budgets.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/vanna-volga-5-density.md",
