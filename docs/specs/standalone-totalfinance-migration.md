@@ -1,6 +1,6 @@
 # TotalFinance — standalone repository migration
 
-Status: source migration committed and pushed; local verification complete; hosted diagnostic portability fix in verification.
+Status: repository migration COMPLETE (local verification); latest hosted checks remain a release gate.
 The maintainer selected `InsiderFinance/totalfinance` and confirmed that
 TotalFinance replaces the provisional library name everywhere, not just in the repository URL.
 This bounded migration precedes the versioned release rehearsal in `implementation-order.md`.
@@ -113,6 +113,14 @@ The regenerated artifact changes 4,956 diagnostic preview strings and no other J
 summary, verdict, rejection, mutation and identity is identical. The final minimum-Node focused
 run passes 106 tests; Node 24 independently passes the 35 probe/repository tests. The metadata
 heading repair at `e8e4805` also passed the complete clean-tree regeneration chain.
+The final tooling revision, `caddcde213d6f4b50789c5a19514cb3b0cd0d712`, passed another complete
+clean-tree `pnpm regen:check` on Node 22.23.2 with zero changed bytes. Typecheck and changed-tool
+lint passed as well. These follow-up commits change tooling, its tests and API-report prose, not
+the runtime package source covered by the two full CI passes above.
+
+The permanent checkout is `/Users/agent/code/totalfinance`, cloned from the public remote, with
+dependencies installed and both the library and developer site built. Temporary review worktrees
+are not the source home. Continue from this repository's `docs/implementation-order.md`.
 
 ### Next owner actions
 
