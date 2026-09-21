@@ -2037,7 +2037,7 @@ export async function buildEnforcementRecord(): Promise<{
       }
       producers.set(contract, make);
       if (process.env['TOTALFINANCE_PRODUCER_TRACE'])
-        process.stderr.write(`__QK_PRODUCER ${contract} <- ${candidate.id}\n`);
+        process.stderr.write(`__TOTALFINANCE_PRODUCER ${contract} <- ${candidate.id}\n`);
       break;
     }
   }
@@ -2282,7 +2282,7 @@ export async function buildEnforcementRecord(): Promise<{
       });
       continue;
     }
-    if (trace) process.stderr.write(`__QK_MEASURING ${record.id}\n`);
+    if (trace) process.stderr.write(`__TOTALFINANCE_MEASURING ${record.id}\n`);
     // A constructor path addresses the class; `Foo.constructor` would resolve to `Function` itself.
     const isConstructor = record.id.endsWith('.constructor');
     const resolveId = resolveIdOf(record.id);

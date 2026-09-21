@@ -2,6 +2,12 @@
 
 Date: September 7, 2026. Status: historical comparison, recorded before implementation.
 
+Standalone-repository note: the application fixtures, adapters and comparison runner referenced
+below remain in the private application repository; they are not dependencies of TotalFinance.
+The recorded measurements are retained here, but app rollout instructions belong to that app's
+current documentation. Library names have been updated to TotalFinance; this does not assert that
+the private app's flags, scripts or imports have already been migrated to the new namespace.
+
 **Implementation follow-up:** the user approved repairs and the later OPC, GEX/DEX, observed-skew
 and premium-drift migrations. Current completion evidence, opt-in controls and remaining acceptance
 gates live in [app-dogfooding-implementation.md](./app-dogfooding-implementation.md). The findings,
@@ -36,14 +42,14 @@ PR #286, publish packages, or deploy. Existing completed implementation stages r
 - **Recorded market inputs:** 196 SPY/MSTR/TSLA quotes captured June 4, 2026, across June 18,
   July 17, and October 16 expiries. The existing fixture's generator sampled and filtered the chain.
   These are historical captured inputs, not current prices, a complete market sample, or vendor-IV
-  truth. [Fixture](../../../src/utils/shared/quantlib/iv/__tests__/fixtures/opcChainSample.json),
-  [capture/sampling script](../../../scripts/iv-fixtures/generateOpcFixtures.js).
+  truth. Sources: the private app's `opcChainSample.json` fixture and `generateOpcFixtures.js`
+  capture/sampling script, not shipped in this repository.
 - **Synthetic cases:** 162 scalar pricing/Greek combinations; six app-selected strategies rebuilt
   through both TotalFinance raw legs and named builders; 161 expiry prices per strategy; a calendar
   evaluated at the near expiry; quantity and near-expiry boundary probes; a 66-contract GEX/skew
   chain; and a five-print net-drift tape. The GEX chain deliberately uses TotalFinance-computed Greeks
   as the app's supplied Greeks, isolating aggregation and convention differences.
-- The [portable comparison runner](../../../scripts/totalfinance-dogfood/README.md) uses built **public
+- The private app's portable comparison runner uses built **public
   package exports** and actual app/PR functions. Its 24 compatibility assertions passed. The
   [recorded results](./app-dogfooding-evidence.json) retain numerical outputs and assumptions;
   smile-point arrays are omitted from that compact record but emitted by the runner.
@@ -83,9 +89,8 @@ Do not characterize this as necessarily a bad market quote: dividends, model cho
 and spread selection are candidates to examine. But a fixed fallback is not a successful solve.
 The app's averaging path accepts finite fallback values as though they were solved leg IVs.
 Dogfooding should preserve an unavailable/failed state, and any user-selected estimate must be
-visibly identified as an estimate. [App wrapper and default](../../../src/utils/shared/quantlib/BlackScholes.ts),
-[OPC initialization](../../../src/screens/OptionsProfitCalculatorStrategy/OptionsProfitCalculatorStrategy.tsx),
-[TotalFinance IV contract](../../packages/options/src/iv.ts).
+visibly identified as an estimate. Private app sources: `BlackScholes.ts` and
+`OptionsProfitCalculatorStrategy.tsx`. Public [TotalFinance IV contract](../../packages/options/src/iv.ts).
 
 ### Strategy construction and payoff
 
@@ -134,9 +139,8 @@ intended convention in an app-owned contract; permit explained changes rather th
 The app's normalized profit factor also contains explicit logistic/bounding heuristics, not the
 library's expected P&L or realized trading profit factor. Retain it as an app-labeled heuristic or
 replace it as a separately approved product decision. Do not map by similar names.
-[App kernel](../../../src/utils/shared/quantlib/strategyKernel.ts),
-[app strategy analytics](../../../src/utils/shared/quantlib/StrategyBuilder.ts),
-[TotalFinance position/results](../../packages/strategy/src/position.ts).
+Private app sources: `strategyKernel.ts` and `StrategyBuilder.ts`.
+Public [TotalFinance position/results](../../packages/strategy/src/position.ts).
 
 ### Reproduced defects, not convention differences
 
@@ -223,10 +227,8 @@ Other mappings needing explicit approval:
   directional labels are product heuristics. Keep them app-owned initially; review and explain
   each before treating it as a universal library calculation.
 
-Source contracts: [app exposure calculations](../../../src/utils/client/gex/calculations.ts),
-[API-to-app transform](../../../src/utils/shared/gex/transformGEXData.ts),
-[live/selection filtering and consumers](../../../src/hooks/useGEXDataFromAPI.ts),
-[library exposure](../../packages/structure/src/exposure.ts).
+Private app source contracts: GEX `calculations.ts`, `transformGEXData.ts`, and
+`useGEXDataFromAPI.ts`. Public [library exposure](../../packages/structure/src/exposure.ts).
 
 **A reproduced app simulation inconsistency:** adding 50% relative IV changed this fixture's
 headline net GEX from $389,380.87 to $281,647.18, but the returned zero-gamma level stayed at
@@ -260,7 +262,8 @@ rollout, then extract a reusable observed-chain skew operation with provided-del
 explicit tolerances, selected-strike/actual-delta provenance and unavailable-wing reasons. Keep
 surface/model skew as a distinct capability. A model view should offer a visible opt-in and show
 extrapolation diagnostics. This distinction belongs in SDK and agent output, not just a tooltip.
-[App skew](../../../src/utils/client/gex/skew.ts), [library skew](../../packages/volatility/src/skew.ts).
+App skew lives in the private app's GEX `skew.ts`; [library skew](../../packages/volatility/src/skew.ts)
+is included here.
 
 For broader volatility features, TotalFinance already exposes IV rank **and** percentile, expected move,
 realized/implied spread, variance risk premium and event decomposition; do not rebuild those in
@@ -318,7 +321,7 @@ integration and UI review; this comparison does not certify its whole applicatio
       **533 TotalFinance tests among 637 total** because its ignores omit `/totalfinance/`. Running the
       library's batch test under root Jest reproduces the Vitest/CommonJS import failure. Exclude
       the library from root Jest; keep its own Vitest/CI job. The 515 targeted app tests passing
-      does not make this merged tree globally green. [Root Jest config](../../../jest.config.js).
+      does not make this merged tree globally green. The root Jest config remains app-owned.
 - [ ] Define a typed app adapter contract: timestamp/time zone, expiry, instrument style, multiplier,
       premiums/fill sides, signed quantities, dividends, rate, common/per-leg volatility, units,
       output meanings and unavailable states. Keep frozen raw input plus normalized input for each

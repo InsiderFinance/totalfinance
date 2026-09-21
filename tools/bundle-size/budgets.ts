@@ -55,7 +55,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
         why: 'hot-path rule (§6): the compute entrypoint must not pull schema/JSON-Schema machinery',
       },
       {
-        needle: '__QK_SCHEMA_FACADE__',
+        needle: '__TOTALFINANCE_SCHEMA_FACADE__',
         why: 'the runtime schema facade lives at its own entrypoint',
       },
     ],
@@ -106,7 +106,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'the Gate B artifact spine: canonical JSON, SHA-256 identity, snapshot/artifact/scenario envelopes — its own entrypoint so pricing bundles never pay for it',
     forbidden: [
       {
-        needle: '__QK_SCHEMA_FACADE__',
+        needle: '__TOTALFINANCE_SCHEMA_FACADE__',
         why: 'the spine serializes envelopes; it must not pull the runtime schema facade',
       },
     ],
@@ -230,7 +230,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     forbidden: [
       { needle: 'blackScholesPrice', why: 'sector returns must not pull option-pricing engines' },
       {
-        needle: '__QK_SCHEMA_FACADE__',
+        needle: '__TOTALFINANCE_SCHEMA_FACADE__',
         why: 'pure sector computation must not pull schema machinery',
       },
     ],

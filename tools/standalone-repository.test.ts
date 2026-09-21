@@ -11,7 +11,7 @@ const read = (path: string) => readFileSync(resolve(ROOT, path), 'utf8');
 const historical = 'docs/evidence/release-dry-run-0.0.1-rehearsal.json';
 // Split deliberately so the removal gate cannot rewrite its own target in a future migration.
 const retiredBrand = new RegExp(['quant', 'kit'].join(''), 'i');
-const retiredFlag = new RegExp('\\b' + ['Q', 'K_'].join(''));
+const retiredFlag = new RegExp(['Q', 'K_'].join(''));
 
 describe('the standalone TotalFinance repository', () => {
   it('is the Git root, without a parent application or nested library checkout', () => {

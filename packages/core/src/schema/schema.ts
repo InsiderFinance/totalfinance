@@ -24,7 +24,7 @@ import type {
 } from './standard.js';
 
 /** Marker so the bundle harness can prove this module never leaks into a compute entrypoint. */
-export const __QK_SCHEMA_FACADE__ = 'totalfinance/schema';
+export const __TOTALFINANCE_SCHEMA_FACADE__ = 'totalfinance/schema';
 
 export type ValidationMode = 'strict' | 'coerce' | 'passthrough' | 'off';
 

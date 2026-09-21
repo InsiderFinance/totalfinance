@@ -6,7 +6,7 @@
  * module, so the validator code stays out of their bundles.
  */
 
-export { schema, validate, __QK_SCHEMA_FACADE__ } from './schema.js';
+export { schema, validate, __TOTALFINANCE_SCHEMA_FACADE__ } from './schema.js';
 
 export type {
   Schema,

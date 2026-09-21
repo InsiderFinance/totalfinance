@@ -4,8 +4,8 @@
     "identities": 41983,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3769,
-      "explicit": 38052,
+      "canonical-term": 3770,
+      "explicit": 38051,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
@@ -46791,12 +46791,13 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|export|__QK_SCHEMA_FACADE__",
-      "name": "__QK_SCHEMA_FACADE__",
+      "id": "@totalfinance/core|export|__TOTALFINANCE_SCHEMA_FACADE__",
+      "name": "__TOTALFINANCE_SCHEMA_FACADE__",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./schema"],
-      "disposition": "explicit"
+      "disposition": "canonical-term",
+      "policy": "The library own namespace prefix."
     },
     {
       "id": "@totalfinance/core|export|addDays",
@@ -56454,7 +56455,7 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|literal-value|__QK_SCHEMA_FACADE__:totalfinance/schema",
+      "id": "@totalfinance/core|literal-value|__TOTALFINANCE_SCHEMA_FACADE__:totalfinance/schema",
       "name": "totalfinance/schema",
       "kind": "literal-value",
       "position": "serialized",

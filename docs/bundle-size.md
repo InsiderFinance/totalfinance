@@ -48,12 +48,12 @@ allowed to. The `Budget` column is the contract.
 These are enforced, not merely measured — the byte count is the lesser half of the claim.
 
 - **`@totalfinance/options/black-scholes` bundles no `toJSONSchema`.** Hot-path rule (§6): the compute entrypoint must not pull schema/JSON-Schema machinery.
-- **`@totalfinance/options/black-scholes` bundles no `__QK_SCHEMA_FACADE__`.** The runtime schema facade lives at its own entrypoint.
+- **`@totalfinance/options/black-scholes` bundles no `__TOTALFINANCE_SCHEMA_FACADE__`.** The runtime schema facade lives at its own entrypoint.
 - **`@totalfinance/core` bundles no `2001-09-11`.** Calendars 0.1 acceptance: core must not ship exchange holiday datasets; the NYSE closure list lives in @totalfinance/calendars.
-- **`@totalfinance/core/artifacts` bundles no `__QK_SCHEMA_FACADE__`.** The spine serializes envelopes; it must not pull the runtime schema facade.
+- **`@totalfinance/core/artifacts` bundles no `__TOTALFINANCE_SCHEMA_FACADE__`.** The spine serializes envelopes; it must not pull the runtime schema facade.
 - **`@totalfinance/calendars/crypto` bundles no `2001-09-11`.** Decoupled from us-market.js: the NYSE 9/11 closure (a us-market-only date) must not leak in.
 - **`@totalfinance/performance/sector-performance` bundles no `blackScholesPrice`.** Sector returns must not pull option-pricing engines.
-- **`@totalfinance/performance/sector-performance` bundles no `__QK_SCHEMA_FACADE__`.** Pure sector computation must not pull schema machinery.
+- **`@totalfinance/performance/sector-performance` bundles no `__TOTALFINANCE_SCHEMA_FACADE__`.** Pure sector computation must not pull schema machinery.
 - **`@totalfinance/performance/sharpe` bundles no `black-scholes-merton`.** Must not transitively bundle option pricing (§15.1)7.75 → 8 KB (Stage 4.5 slice 1, 2026-09-02): ten artifact error/warning codes (the Stage 4.5 comparison, replay, model-version, referenced-data, embedded-input, and operation codes) joined core’s central ErrorCode/WarningCode tables, which every entrypoint carries whole — measured 8,091 B, 155 B over the old line; no new imports..
 
 ## Why the budgets are what they are

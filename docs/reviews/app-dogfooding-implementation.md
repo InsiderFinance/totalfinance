@@ -4,6 +4,11 @@ Status: implementation complete; integrated checks green. Browser/data acceptanc
 remain gated below. Implements the repairs and all recommended app migration slices of
 [the comparison and adoption plan](./app-dogfooding-comparison.md), requested September 7, 2026.
 
+Standalone-repository note: this is historical app-integration evidence, not an executable setup
+guide for this public repository. App sources, rollout controls and benchmark runners remain in
+the private application repository. Library names have been updated to TotalFinance; the app's
+actual installed packages, flags and scripts still need their separately reviewed namespace migration.
+
 The additional reusable SDK capabilities discovered during adoption are tracked separately in
 [dogfooding-driven library value](../specs/dogfooding-library-value.md). They extend the library's
 supplied-Greek, chain-health and saved-comparison workflows; they do not change the app's default
@@ -77,8 +82,7 @@ with no cross-user SSR history or vendor-payload upload.
 The model remains the app's European, zero-dividend analytic proxy. American exercise, actual
 dividends, non-100 contract multipliers, different day counts, probability of profit and the app's
 profit-factor heuristic have **not** been silently migrated or certified by BSM agreement.
-See [OPC contracts](../../../src/screens/OptionsProfitCalculatorStrategy/volatility-and-return-contracts.md)
-and [the adapter](../../../src/utils/shared/totalfinance/opcAdapter.ts).
+The OPC contracts and `opcAdapter.ts` remain in the private application repository.
 
 ### C: GEX/DEX and observed skew
 
@@ -101,7 +105,7 @@ drives pricing/filtering; genuine future observations remain ineligible without 
 The app deliberately selects put-minus-call risk reversal. The library default is call-minus-put;
 all IV/RR/BF units are decimal until the app's explicit display conversion. Missing OTM sides and
 IV-bearing quote counts can differ from the legacy observer; these method differences are disclosed.
-See [GEX contracts](../../../src/utils/client/gex/totalfinance-contract.md).
+The app-specific GEX contract remains in the private application repository.
 
 ### D: premium drift
 
@@ -116,7 +120,7 @@ The relevant PR #286 UI was ported onto current develop, not merged wholesale. F
 research retain their existing graph mode. The new default-off view uses independently authorized
 all-side smart-flow requests, disclosed filter scope, an explicit Eastern session and loaded-subset
 warnings. It cannot infer net flow from an ask-only feed or bypass subscription checks.
-See [app usage and policy](../../../src/components/NetDrift/README.md) and
+See the private application's NetDrift usage policy and
 [public premium-drift semantics](../../packages/structure/OPTION-FLOW-DRIFT.md).
 
 Both new library operations are classified public SDK surfaces and included in generated reference
@@ -127,31 +131,21 @@ distinct from fitted skew and option-premium drift distinct from dealer hedging 
 ## Local controls and rollback
 
 The app consumes six unpublished, content-addressed tarballs through ordinary public package
-resolution and Yarn. Follow [packed consumption](../../../vendor/totalfinance/README.md); no app import
+resolution and Yarn. Packed consumption is documented in the private application repository; no app import
 depends on a private TotalFinance source path. The normal working checkout and its dependencies were
 not changed; this implementation lives in the isolated PR worktree.
 
-| Feature                 | Opt-in                                                                                     | Rollback                                           |
-| ----------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| OPC                     | `NEXT_PUBLIC_TOTALFINANCE_OPC_MODE=shadow` or `totalfinance`                               | Unset or `legacy`, then restart/rebuild            |
-| GEX/DEX + observed skew | `NEXT_PUBLIC_TOTALFINANCE_GEX_MODE=shadow` or `totalfinance`; session selector on the page | Select legacy; unset build flag for default legacy |
-| Trading-premium drift   | `NEXT_PUBLIC_TOTALFINANCE_NET_DRIFT=1`                                                     | Unset; existing flow graph remains available       |
+The application has separate default-off controls for OPC, GEX/DEX with observed skew, and
+trading-premium drift. Consult its current runbook for the exact flag names and rollback commands;
+the standalone library rename does not change the private app's configuration or installed artifacts.
 
 Shadow preserves displayed legacy results. OPC opt-in still requires measured agreement; GEX opt-in
 permits explicitly labelled vendor/model differences. These controls do not authorize deployment,
 data redistribution, publication, or live trading. Keep duplicate legacy math until browser/data
 acceptance is complete and a separate rollout/removal change is approved.
 
-For a manual local review in a worktree without its own ignored environment file, use the existing
-development environment without copying credentials into tracked files. From the app root:
-
-```sh
-DOTENV_CONFIG_PATH=/absolute/path/to/existing-app/.env.development \
-NEXT_PUBLIC_TOTALFINANCE_OPC_MODE=shadow \
-NEXT_PUBLIC_TOTALFINANCE_GEX_MODE=shadow \
-NEXT_PUBLIC_TOTALFINANCE_NET_DRIFT=1 \
-node -r dotenv/config node_modules/next/dist/bin/next dev -p 3100
-```
+For a manual local review, follow the private app's development runbook and existing authorized
+environment. Never copy app credentials into this public repository.
 
 OPC is `/options-profit-calculator`; GEX is `/gamma-exposure/SPY`. The premium-drift routes and
 session query parameters are listed in the NetDrift guide. Use a session available to the signed-in
@@ -216,9 +210,8 @@ evidence. History-backed volatility additions still need defined histories; no n
 rank/percentile feature or IV-solver replacement is claimed. Current OPC strike selection,
 probability/score heuristics and its improved existing IV solver remain app-owned, as documented.
 
-Repeatable benchmarks: `node scripts/totalfinance-dogfood/benchmark.mts` and the `--gex` variant; see
-[runner documentation](../../../scripts/totalfinance-dogfood/README.md). Warm Node measurements, not
-rendering/frame-time certification:
+The repeatable OPC/GEX benchmark commands remain in the private app's runner documentation.
+The recorded results below are warm Node measurements, not rendering/frame-time certification:
 
 | Measured work                     |    Median |        p95 | Scope                                                 |
 | --------------------------------- | --------: | ---------: | ----------------------------------------------------- |

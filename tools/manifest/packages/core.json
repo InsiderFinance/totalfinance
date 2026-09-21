@@ -3,7 +3,7 @@
   "domain": "core",
   "tier": "trusted",
   "exports": {
-    "__QK_SCHEMA_FACADE__": {
+    "__TOTALFINANCE_SCHEMA_FACADE__": {
       "kind": "value",
       "entrypoints": ["./schema"],
       "role": "constant"

@@ -38,7 +38,7 @@ import { NON_TERMINATING_BOUNDARIES } from './contract-policy.js';
 const GENERATOR = fileURLToPath(new URL('./contract-enforcement.ts', import.meta.url));
 
 /**
- * PER BOUNDARY, not per run — the timer resets on every `__QK_MEASURING` trace.
+ * PER BOUNDARY, not per run — the timer resets on every `__TOTALFINANCE_MEASURING` trace.
  *
  * It was a whole-run budget, and that is unstable by construction: the bound has to exceed a healthy
  * full pass, and a healthy full pass gets slower every time the harness learns to measure more. It
@@ -139,7 +139,7 @@ function runGenerator(skip: readonly string[]): Promise<Attempt> {
       const lines = buffered.split('\n');
       buffered = lines.pop() ?? '';
       for (const line of lines) {
-        const trace = /^__QK_MEASURING (.+)$/.exec(line);
+        const trace = /^__TOTALFINANCE_MEASURING (.+)$/.exec(line);
         if (trace) {
           inFlight = trace[1]!;
           arm(BOUNDARY_BUDGET_MS);
