@@ -20,9 +20,18 @@ const authorizations = createFileAuthorizationStore({ directory });
 const jobs = createFileJobStore({ directory });
 const results: unknown[] = [];
 const channel = parentPort ?? process;
-const send = (message: unknown): void => {
-  if (parentPort) parentPort.postMessage(message);
-  else process.send?.(message as object);
+const send = (message: unknown, finish = false): void => {
+  if (parentPort) {
+    parentPort.postMessage(message);
+    if (finish) parentPort.close();
+  } else {
+    // Wait for the complete IPC write before disconnecting. Large result batches otherwise
+    // lose their reply on the minimum Node runtime and masquerade as a store deadlock.
+    process.send?.(message as object, (error) => {
+      if (error) process.exitCode = 1;
+      if (finish && process.connected) process.disconnect();
+    });
+  }
 };
 
 // Stop a real writer at the two sides of its journal rename; the parent kills the process.
@@ -52,6 +61,9 @@ channel.once('message', () => {
   try {
     for (let index = 0; index < count; index += 1) {
       switch (action) {
+        case 'large-reply':
+          results.push({ payload: 'x'.repeat(256 * 1024) });
+          break;
         case 'crash-artifact-index':
           artifacts.put({ kind: 'report', value: { id: 'orphan' }, createdTimestampMs: CREATED });
           break;
@@ -160,12 +172,9 @@ channel.once('message', () => {
           throw new Error(`unknown fixture action ${String(action)}`);
       }
     }
-    send({ results });
+    send({ results }, true);
   } catch (error) {
-    send({ error: { code: (error as { code?: string }).code, message: String(error) } });
-  } finally {
-    if (parentPort) parentPort.close();
-    else process.disconnect();
+    send({ error: { code: (error as { code?: string }).code, message: String(error) } }, true);
   }
 });
 send('ready');

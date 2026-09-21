@@ -223,13 +223,16 @@ try {
       capabilities: configured.capabilities,
     };
     process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
-    process.exit(report.node.meetsFloor ? 0 : 2);
+    // A capability report exceeds a pipe buffer. Natural exit lets stdout drain on every
+    // supported Node version; process.exit() can truncate otherwise-valid doctor JSON.
+    process.exitCode = report.node.meetsFloor ? 0 : 2;
+  } else {
+    const transport = new StdioServerTransport();
+    await configured.server.connect(transport);
   }
-  const transport = new StdioServerTransport();
-  await configured.server.connect(transport);
 } catch (error) {
   process.stderr.write(
     `totalfinance-mcp: ${error instanceof Error ? error.message : String(error)}\n`,
   );
-  process.exit(2);
+  process.exitCode = 2;
 }

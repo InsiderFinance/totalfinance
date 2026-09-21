@@ -29,6 +29,8 @@ describe('configured binary and truthful doctor', () => {
         'trade:approve',
       );
       expect(result.status, result.stderr).toBe(0);
+      // Exercise more than one pipe buffer: early process.exit() truncated this on Node 22.13.
+      expect(Buffer.byteLength(result.stdout)).toBeGreaterThan(8192);
       const report = JSON.parse(result.stdout);
       expect(report.server.tools).toBe(report.capabilities.tools.length);
       expect(report.capabilities).toMatchObject({

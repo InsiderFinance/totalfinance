@@ -424,6 +424,18 @@ describe('file journal identity and migration', () => {
 });
 
 describe('independent-process persistence regressions', () => {
+  it('flushes a large worker reply before disconnecting the IPC channel', async () => {
+    const worker = await start('large-reply', fresh());
+    const message = once(worker.child, 'message');
+    worker.child.send('go');
+    const [reply] = (await message) as [{ results: { payload: string }[] }];
+    expect(reply.results).toHaveLength(1);
+    const payload = reply.results[0]!.payload;
+    expect(payload).toHaveLength(256 * 1024);
+    expect(hash(payload)).toBe(hash('x'.repeat(256 * 1024)));
+    await worker.exited;
+  });
+
   it('recovers registers after a job worker is forcibly terminated while its host stays alive', async () => {
     const directory = fresh();
     const store = createFileArtifactStore({ directory });
