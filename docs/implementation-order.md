@@ -27,12 +27,17 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Preview launch queue (2026-09-07)
 
-**Current handoff (2026-09-21): standalone TotalFinance migration IN PROGRESS.** The maintainer
-selected `InsiderFinance/totalfinance`, with the library at the root of `main`, and directed a
-complete public rename without old-name aliases. Follow the
-[standalone migration checklist](./specs/standalone-totalfinance-migration.md) before the exact
-versioned release rehearsal. Future library changes belong in this repository. Npm publication,
-release versions, credentials and website deployment remain separately approved steps.
+**Current handoff (2026-09-21): standalone TotalFinance source PUSHED; local verification COMPLETE;
+hosted artifact drift under investigation.** `InsiderFinance/totalfinance:main` is now the library's source of truth,
+with all 25 packages, imports, runtime namespaces, transports, documentation and root-layout CI
+migrated without old-name aliases. The code revision is `6eeb459064062511a3889562b64333b6b8c07e10`.
+The [migration acceptance record](./specs/standalone-totalfinance-migration.md) owns its verification:
+full CI passes independently on minimum Node 22.13.0 and Node 24.21.0, each with 12,088 library
+tests and 79 site tests. The first hosted artifact-generation difference remains an open gate.
+Future library changes belong here, not in the private app's
+library copy. **Next: the remaining organization and website acceptance in steps 2–3, then the exact
+versioned release rehearsal in step 4.** Npm publication, release versions, credentials and website
+deployment remain separately approved steps.
 
 **Previous handoff (2026-09-21): freeze repairs COMPLETE (local); source-freeze ready.** The
 [September 21 checklist](./specs/pre-publish-interface-repairs.md#september-21-freeze-repair-checklist-takes-precedence-over-historical-completion-claims)
@@ -41,10 +46,9 @@ plans, combo lifecycle and scaled net limits, single-charge execution costs, and
 authorization recovery. Final source `af0d7cd2a` passed complete CI on **Node 22.23.2 and 24.21.0**
 (each: **551 files / 12,080 library tests, 79 site tests, all 25 API reports**) and byte-stable
 regeneration on Node 22. The linked spec records the full acceptance evidence.
-**Next: steps 2–4 below** — settle the public library repository and publishing ownership, extract
-only the library with standalone CI, finish the remaining production-site acceptance, then choose
-and rehearse the exact versioned release candidate. These local gates do not certify hosted CI or
-authorize repository creation, version changes, npm publication, or deployment.
+Repository selection and extraction are superseded by the current handoff above. The remaining
+organization, production-site and exact-release gates are still required; this older freeze record
+does not certify hosted CI or authorize version changes, npm publication, or deployment.
 
 **Previous handoff (2026-09-21):** A1 (valuation
 instants) LANDED at `be14108d3`; A2–A8 (one Greek unit system, required volatility scale,
@@ -92,12 +96,13 @@ acceptance in step 3. This documentation repair does not reopen core implementat
    and prevent stale responses. Lock both ranking and loading into CI regression tests.
 2. **Release prerequisites — integration COMPLETE; organization gates OPEN.**
    [PR #336](https://github.com/InsiderFinance/insiderfinance-app/pull/336) is integrated into #303
-   and locally verified, including sector-performance search. Resolve hosted Actions startup and
-   obtain a passing supported-Node matrix before release. Confirm the
-   public source home, scope/package publishing rights, approval-environment reviewers, rollback
-   owner, and website domain/hosting destination with the maintainer. The public library subtree,
-   not private app source, belongs in the public repository. These organization decisions can run
-   in parallel with step 1; they cannot be assumed or replaced by local tests.
+   and locally verified, including sector-performance search. The public source home is now
+   `InsiderFinance/totalfinance:main`; standalone Actions jobs actually start. Obtain a passing
+   latest supported-Node matrix and release rehearsal before release. Confirm scope/package
+   publishing rights, approval-environment reviewers, rollback owner, and website domain/hosting
+   destination with the maintainer. No private app source or Git history was imported. These
+   organization decisions can run in parallel with website acceptance; they cannot be assumed or
+   replaced by local tests.
 3. **Production website polish and acceptance — examples COMPLETE (local); deployment acceptance OPEN.**
    Introductory examples now lead with explicit sample inputs, a useful call and its actual output;
    full-playground reproduction and large sample setup are separately expandable. Both copy surfaces
@@ -108,7 +113,9 @@ acceptance in step 3. This documentation repair does not reopen core implementat
    Complete desktop/mobile/keyboard review of search, navigation, copy actions and every playground;
    check WebMCP in a supported host without treating mocks as real-host evidence. Finish the existing
    app browser and captured-data checks below as well. Provider acquisition/projection, cache
-   freshness and rollout remain app-owned; do not silently enable a production engine.
+   freshness and rollout remain app-owned; do not silently enable a production engine. The private
+   app's installed artifacts, imports and opt-in flags were not renamed by this standalone move;
+   migrate and verify those separately when adopting the TotalFinance packages.
    3b. **Pre-publish interface repairs — COMPLETE (local), source-freeze ready.**
    [`pre-publish-interface-repairs.md`](./specs/pre-publish-interface-repairs.md) records the landed interfaces
    (A: assumptions and units at `be14108d3` and `a750f1cd4`; B: wire contracts and C: hygiene at

@@ -98,6 +98,7 @@ describe('the standalone TotalFinance repository', () => {
     expect(read('.nvmrc').trim()).toMatch(/^22\.\d+\.\d+$/);
     expect(ci).toContain('cache-dependency-path: pnpm-lock.yaml');
     expect(ci).toContain('pnpm regen:check');
+    expect(ci).toContain('git diff --no-ext-diff -- tools/manifest/public-enforcement.json');
   });
 
   it('keeps npm publication disabled until separately enabled and approved', () => {

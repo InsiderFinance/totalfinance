@@ -143,3 +143,10 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm regen:check
+      # Retain the actual evidence before the ephemeral runner disappears. A filename alone cannot
+      # explain a platform-specific drift in numerical diagnostics or measured return values.
+      - name: Show regeneration differences
+        if: failure()
+        run: |
+          git diff --no-ext-diff --stat
+          git diff --no-ext-diff -- tools/manifest/public-enforcement.json
