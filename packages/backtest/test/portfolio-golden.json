@@ -1,90 +1,90 @@
 {
   "model-monthly": {
-    "hash": "sha256:ceecca67c8c0246d5d3b043dcd4976f999435c289a50e2d7cd225500747da018",
+    "hash": "sha256:11352711b8507e8bc363a6046db98ff352d6c9b7ba7eb5ce838159982ac73450",
     "finalValue": 104800,
     "sessions": 10,
     "fills": 1,
     "events": 2
   },
   "direct-callback": {
-    "hash": "sha256:c6fa23db2d5c68b72a3d214794853794059c30ff58962b8841c1411ec9cc62b9",
+    "hash": "sha256:2083818d4769399ab93e22b6d3027cbb54d037801be171a4bc71dabbf5b5bea2",
     "finalValue": 100800,
     "sessions": 10,
     "fills": 1,
     "events": 2
   },
   "equity-dividend-split-t2": {
-    "hash": "sha256:ce67ed3884022d4ffd686001428fa7f420e5e71c159063b71ab23c9218e9a15d",
+    "hash": "sha256:4c37c9f930727a7c9a42d262450642fdb3b41622d6d7c957d89c6f3dfe04e462",
     "finalValue": 100100,
     "sessions": 10,
     "fills": 1,
     "events": 4
   },
   "option-assignment": {
-    "hash": "sha256:4bf21f76cc891360529143562ee7295b0ee7b08c3c50e088dc95437a33065a82",
+    "hash": "sha256:bc2ea7a8a50da15b2fa6c71846f806e79a23bff3a0cb0dcbc0db061967ee3cd8",
     "finalValue": 99700,
     "sessions": 8,
     "fills": 1,
     "events": 3
   },
   "future-roll-expiry": {
-    "hash": "sha256:35607a1e2dbdab75d116bf4e3534583c9378acfbea8f3f41eb07240502be4204",
+    "hash": "sha256:92a710b5fb63596db4f0a4c8377e63102626d95e709512d795c8c10975a07500",
     "finalValue": 100800,
     "sessions": 10,
     "fills": 1,
     "events": 12
   },
   "crypto-funding": {
-    "hash": "sha256:e9b30e5cc8b434b904bad17074db5dd447d6cf72678f313cd9532a96ac747eaf",
+    "hash": "sha256:0df0d1bf8018a0042193b8b98742ede83e962644ddd663dd944c1f030ed455cf",
     "finalValue": 1001206.102,
     "sessions": 6,
     "fills": 2,
     "events": 10
   },
   "fx-forward-maturity": {
-    "hash": "sha256:34dc732fc9c00097f61129f6f95c948685a83ec64be20d3ebbfd1649010d852a",
+    "hash": "sha256:0096e01d84f18cd6dbfc6f6ac69f6541636dfc8b0412bbd40a416ac60c980da8",
     "finalValue": 1005000,
     "sessions": 7,
     "fills": 1,
     "events": 4
   },
   "bond-coupon-redemption": {
-    "hash": "sha256:ca62b27f2942600cad119f2da35783cc482d0247c826cc73128a5d752b9a18ff",
+    "hash": "sha256:e5a3caacd4767534d2b8d2309bbff9ba56f36d9072259f04c7138312f6c8fdfe",
     "finalValue": 1002116.4383561644,
     "sessions": 8,
     "fills": 1,
     "events": 4
   },
   "custom-adapter": {
-    "hash": "sha256:fca9feb35d2b5213bd3aa6378ea4e5b5a5529f627fea8e4d4a90a4226eb162e4",
+    "hash": "sha256:a27ed3bfd660808a0163054c5eec18e9b54a01ae3bc6a32b15904352caaf53fa",
     "finalValue": 100030,
     "sessions": 5,
     "fills": 1,
     "events": 2
   },
   "external-flows": {
-    "hash": "sha256:f8416062a4d58bc52300bdc57abce2e950fe403b8201323a5f5a8406f5c18e50",
+    "hash": "sha256:bef6cb99d617a44eb4a68fe1a2da4e4aee9d8068cfec3347fce9f7eacc936888",
     "finalValue": 134800,
     "sessions": 10,
     "fills": 1,
     "events": 4
   },
   "margin-none": {
-    "hash": "sha256:2e46471695f7ba9541208e3090f4beae775f5e91833b154b8e202924c3a35415",
+    "hash": "sha256:e7ae74393f3e703d7302ed0ec1708ffb37e63248c3c52c60f58a7bf099ca6925",
     "finalValue": 28000,
     "sessions": 6,
     "fills": 2,
     "events": 3
   },
   "margin-pro-rata": {
-    "hash": "sha256:227eefd5bf96a8982c6f74f891826b8f7154c29283c8d23aa0155d8f28109ae1",
+    "hash": "sha256:9bf853d3ce6dce0f975bf75c26659bcbdb2d937998e1c99cbc0e0e16ce2542ad",
     "finalValue": 30656.25,
     "sessions": 6,
     "fills": 34,
     "events": 35
   },
   "margin-close-largest-loss": {
-    "hash": "sha256:2477a71747ad1f1ab49cf5bf116c030eac5d0ab85ffd57fba98d5d6b7fefd564",
+    "hash": "sha256:7472c9f21cfabafa2a4832b6347a0d55adabdb3eb0268cacc3dc2304900585d8",
     "finalValue": 38800,
     "sessions": 6,
     "fills": 3,
