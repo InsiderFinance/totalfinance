@@ -28,12 +28,13 @@ checks remained red; that decision does not waive the hosted matrix for release.
 ### Preview launch queue (2026-09-07)
 
 **Current handoff (2026-09-21): standalone TotalFinance source PUSHED; local verification COMPLETE;
-hosted artifact drift under investigation.** `InsiderFinance/totalfinance:main` is now the library's source of truth,
+hosted diagnostic portability fix in verification.** `InsiderFinance/totalfinance:main` is now the library's source of truth,
 with all 25 packages, imports, runtime namespaces, transports, documentation and root-layout CI
 migrated without old-name aliases. The code revision is `6eeb459064062511a3889562b64333b6b8c07e10`.
 The [migration acceptance record](./specs/standalone-totalfinance-migration.md) owns its verification:
 full CI passes independently on minimum Node 22.13.0 and Node 24.21.0, each with 12,088 library
-tests and 79 site tests. The first hosted artifact-generation difference remains an open gate.
+tests and 79 site tests. Hosted generation identified only last-digit noise in diagnostic return
+previews; the renderer repair preserves library outputs and awaits its hosted rerun.
 Future library changes belong here, not in the private app's
 library copy. **Next: the remaining organization and website acceptance in steps 2–3, then the exact
 versioned release rehearsal in step 4.** Npm publication, release versions, credentials and website

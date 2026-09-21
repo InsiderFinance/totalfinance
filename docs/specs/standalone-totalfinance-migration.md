@@ -1,6 +1,6 @@
 # TotalFinance — standalone repository migration
 
-Status: source migration committed and pushed; local verification complete; hosted artifact drift under investigation.
+Status: source migration committed and pushed; local verification complete; hosted diagnostic portability fix in verification.
 The maintainer selected `InsiderFinance/totalfinance` and confirmed that
 TotalFinance replaces the provisional library name everywhere, not just in the repository URL.
 This bounded migration precedes the versioned release rehearsal in `implementation-order.md`.
@@ -43,7 +43,7 @@ This bounded migration precedes the versioned release rehearsal in `implementati
       test pass from the standalone tree. Record exact revisions and results below.
 - [x] Inspect the staged public tree for accidental app files, secrets and obsolete dependencies.
 - [x] Commit and push the standalone repository; verify the remote head and inspect hosted checks.
-- [ ] Update the execution handoff with the repository result and the remaining release gates.
+- [x] Update the execution handoff with the repository result and the remaining release gates.
 
 ## Verification and handoff
 
@@ -67,8 +67,9 @@ with the other three percentages unchanged.
 - Hosted [TotalFinance CI](https://github.com/InsiderFinance/totalfinance/actions/workflows/totalfinance-ci.yml)
   started all five real jobs after the first push: Node 22.13.0, 24.x and 26.x, regeneration, and
   local-registry release rehearsal. Startup is no longer blocked as it was in the parent repository.
-  The local-registry release rehearsal passed. The first hosted regeneration run reported drift
-  in `tools/manifest/public-enforcement.json` despite identical summary counts; investigation is open.
+  The local-registry release rehearsal passed twice. Hosted regeneration exposed last-digit
+  floating-point differences in diagnostic return previews, not changed enforcement claims; the
+  portability repair is described below and still requires its hosted rerun.
   Inspect the latest run on `main`; this local record does not certify its final hosted conclusion.
 - The original app checkout and private PR were not modified or pushed. Their existing package
   artifacts, imports, flags and adapters require a separate app-owned namespace migration before
@@ -82,6 +83,8 @@ formatting differences. The 13 complete portfolio journeys were also compared ag
 source: every non-brand result field was identical. Only the namespace-bound result hashes changed;
 all numerical golden assertions are preserved. The default MCP tool-name hash was similarly
 recomputed from the same 23 renamed tools. Historical release-manifest bytes remain unchanged.
+API-report headings and console labels now read each package's actual metadata name, including the
+unscoped umbrella, rather than assuming that every directory is a scoped package.
 
 The minimum-runtime verification then found one runtime output defect and one test-fixture defect:
 MCP `doctor` could exit before its large JSON report drained, and the persistence-test worker could
@@ -95,6 +98,21 @@ An initial concurrent minimum-Node run passed all 12,088 assertions but reported
 `onTaskUpdate` communication timeout. That run is not counted as green. The isolated complete rerun
 at the same commit passed with exit code zero and no reporter errors; this is the minimum-runtime
 closing evidence above. No reporter error was suppressed and no test budget was increased.
+
+Hosted regeneration then exposed 18 `returned`-preview differences: Linux x64 and macOS arm64
+produced the same enforcement results but slightly different final floating-point digits. For
+example, a preview contained `0.2476734303459216` versus `0.24767343034592149`. The return-preview
+renderer now uses 12 significant digits for finite fractional numbers, before its existing
+120-character truncation. This is only the diagnostic string in the measurement artifact, not a
+library return value, financial calculation, solver tolerance, or golden numerical assertion.
+Integers and non-finite scalar evidence retain their previous representation. Regression tests
+cover both observed platform pairs, nested previews, meaningful numerical differences, safe
+integers, tiny values, non-finite scalars and non-mutation of the actual result. Exact verdict,
+identity, dimension, error-code and whole-record determinism gates remain enabled.
+The regenerated artifact changes 4,956 diagnostic preview strings and no other JSON leaf: every
+summary, verdict, rejection, mutation and identity is identical. The final minimum-Node focused
+run passes 106 tests; Node 24 independently passes the 35 probe/repository tests. The metadata
+heading repair at `e8e4805` also passed the complete clean-tree regeneration chain.
 
 ### Next owner actions
 

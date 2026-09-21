@@ -174,6 +174,45 @@ const probeScalarWith = (target: (...args: unknown[]) => unknown) =>
     coordinates: [{ kind: 'object', optional: false, fields: [] }, SOURCE],
   }).filter((r) => r.argumentIndex === 1);
 
+describe('portable diagnostic return previews', () => {
+  const preview = (value: unknown) => probeScalarWith(() => value)[0]?.returned;
+
+  it('renders the observed Linux and macOS scalar results identically', () => {
+    expect(preview(0.2476734303459216)).toBe('0.247673430346');
+    expect(preview(0.24767343034592149)).toBe(preview(0.2476734303459216));
+  });
+
+  it('rounds nested numbers before truncation, including the observed bond diagnostics', () => {
+    const shared = { price: 19.731781625930868, context: 'x'.repeat(120) };
+    const left = { straightPrice: 20.31046066468418, optionValue: 0.578679038753311, ...shared };
+    const right = { straightPrice: 20.310460664684136, optionValue: 0.5786790387532683, ...shared };
+    expect(preview(left)).toBe(preview(right));
+    expect(preview(left)).toHaveLength(120);
+    expect(preview(left)).toContain('"optionValue":0.578679038753');
+  });
+
+  it('retains meaningful numerical differences and exact safe integers', () => {
+    expect(preview(0.25)).not.toBe(preview(0.2476734303459216));
+    expect(preview(Number.MAX_SAFE_INTEGER)).toBe(String(Number.MAX_SAFE_INTEGER));
+    expect(preview({ integer: Number.MAX_SAFE_INTEGER })).toContain('9007199254740991');
+    expect(preview(1e-300)).toBe('1e-300');
+  });
+
+  it('does not turn non-finite scalar evidence into a plausible finite result', () => {
+    expect(preview(NaN)).toBe('NaN');
+    expect(preview(Infinity)).toBe('Infinity');
+    expect(preview(-Infinity)).toBe('-Infinity');
+    expect(preview(null)).toBe('null');
+    expect(preview(undefined)).toBe('undefined');
+  });
+
+  it('does not round or mutate the library result itself', () => {
+    const result = { values: [0.24767343034592149] };
+    expect(preview(result)).toBe('{"values":[0.247673430346]}');
+    expect(result.values[0]).toBe(0.24767343034592149);
+  });
+});
+
 describe('scalar coordinates are probed, not skipped', () => {
   it('emits omit / wrong-type / invalid-literal for a declared scalar', () => {
     const mutations = probeScalarWith(strict)

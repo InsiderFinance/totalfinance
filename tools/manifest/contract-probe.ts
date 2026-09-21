@@ -273,13 +273,23 @@ export interface ProbeCoordinate {
   fields?: readonly FieldNodeLike[];
 }
 
-/** Render a returned value compactly enough for a failure message, and revealingly. */
+/**
+ * Render a diagnostic preview, not a numerical oracle. Twelve significant digits keep useful
+ * magnitudes while removing last-bit platform noise (observed on Linux x64 vs macOS arm64).
+ * Round before truncating: otherwise a one-character precision difference also moves the cut-off.
+ * Integers and non-finite scalars retain their existing representation. This never changes the
+ * actual return value, the acceptance verdict, or the package tests' numerical tolerances.
+ */
 function renderReturn(value: unknown): string {
-  if (typeof value === 'number') return Number.isFinite(value) ? String(value) : String(value);
+  const previewNumber = (number: number): number =>
+    Number.isFinite(number) && !Number.isInteger(number) ? Number(number.toPrecision(12)) : number;
+  if (typeof value === 'number') return String(previewNumber(value));
   if (typeof value === 'string') return JSON.stringify(value);
   if (value === null || value === undefined) return String(value);
   try {
-    return JSON.stringify(value).slice(0, 120);
+    return JSON.stringify(value, (_key: string, item: unknown) =>
+      typeof item === 'number' ? previewNumber(item) : item,
+    ).slice(0, 120);
   } catch {
     return Object.prototype.toString.call(value);
   }
