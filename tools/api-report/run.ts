@@ -1,4 +1,4 @@
-import { checkReports, writeReports } from './generate.js';
+import { checkReports, packageNameFor, writeReports } from './generate.js';
 
 const mode = process.argv.includes('--write')
   ? 'write'
@@ -11,7 +11,7 @@ if (mode === 'write') {
   if (written.length === 0) {
     console.log('api-report: no packages with source entrypoints found.');
   } else {
-    console.log(`api-report: wrote ${written.map((p) => `@totalfinance/${p}`).join(', ')}`);
+    console.log(`api-report: wrote ${written.map(packageNameFor).join(', ')}`);
   }
   process.exit(0);
 }
@@ -21,21 +21,21 @@ let failed = false;
 for (const r of results) {
   switch (r.status) {
     case 'ok':
-      console.log(`✓ @totalfinance/${r.pkg} API report up to date`);
+      console.log(`✓ ${packageNameFor(r.pkg)} API report up to date`);
       break;
     case 'skipped':
-      console.log(`· @totalfinance/${r.pkg} skipped (no source entrypoint yet)`);
+      console.log(`· ${packageNameFor(r.pkg)} skipped (no source entrypoint yet)`);
       break;
     case 'missing-snapshot':
       failed = true;
       console.error(
-        `✗ @totalfinance/${r.pkg} has no committed API report. Run \`pnpm api:update\`.`,
+        `✗ ${packageNameFor(r.pkg)} has no committed API report. Run \`pnpm api:update\`.`,
       );
       break;
     case 'drift':
       failed = true;
       console.error(
-        `✗ @totalfinance/${r.pkg} API report is stale. Run \`pnpm api:update\` and review.`,
+        `✗ ${packageNameFor(r.pkg)} API report is stale. Run \`pnpm api:update\` and review.`,
       );
       break;
   }

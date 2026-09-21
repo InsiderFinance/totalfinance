@@ -71,6 +71,9 @@ describe('the standalone TotalFinance repository', () => {
       expect(pkg.repository.url).toBe('git+https://github.com/InsiderFinance/totalfinance.git');
       expect(pkg.repository.directory).toBe(`packages/${directory}`);
       expect(pkg.version).toMatch(/^\d+\.\d+\.\d+(?:-[\w.]+)?$/);
+      expect(read(`packages/${directory}/etc/${directory}.api.md`).split('\n')[0]).toBe(
+        `# ${pkg.name} — public API`,
+      );
     }
     expect(JSON.parse(read('.changeset/config.json')).baseBranch).toBe('main');
   });
