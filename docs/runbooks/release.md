@@ -111,7 +111,10 @@ pnpm release:smoke --version 0.1.0 --tarballs release
 
 CI also runs a local Verdaccio publish/install rehearsal. Its `@insiderfinance/*` rule has **no
 public-registry fallback**; a missing artifact cannot be filled from npm. Legacy private aliases
-also have no fallback. The following publishes only to a disposable local registry:
+also have no fallback. Verdaccio 6 synthesizes a `latest` tag when absent, even for a first
+`candidate` upload, so local tag state does not certify npm's promotion boundary. Public publishing
+separately reads tags before/after, verifies `candidate`, and refuses unexpected `latest` changes;
+it never automatically repairs tags. The following publishes only to a disposable local registry:
 
 ```sh
 pnpm dlx verdaccio@6 --config tools/release/verdaccio.yaml --listen 4873

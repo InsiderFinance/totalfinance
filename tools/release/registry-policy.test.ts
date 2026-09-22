@@ -7,8 +7,14 @@ import {
   type ReleaseArtifact,
   type ReleaseManifest,
 } from './artifact-policy.js';
-import { assertPublishToolchain } from './publish-tarballs.js';
-import { planPublication, releaseRegistry, verifyRegistryArtifact } from './registry-policy.js';
+import { assertPublishToolchain, rehearsalToken } from './publish-tarballs.js';
+import {
+  assertCandidateTags,
+  planPublication,
+  registryTags,
+  releaseRegistry,
+  verifyRegistryArtifact,
+} from './registry-policy.js';
 import { fixtureMetadata } from './test-fixtures.js';
 
 const bytes = 'synthetic approved bytes';
@@ -35,6 +41,95 @@ const manifest: ReleaseManifest = {
 };
 
 describe('registry preflight and trusted publication', () => {
+  it('reuses the local rehearsal account without exposing its token or authenticating a public registry', async () => {
+    const request = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(Response.json({ error: 'user exists' }, { status: 409 }))
+      .mockResolvedValueOnce(Response.json({ token: 'local-test-token' }, { status: 201 }));
+    expect(await rehearsalToken('http://127.0.0.1:4873', request)).toBe('local-test-token');
+    expect(request).toHaveBeenCalledTimes(2);
+    expect(request.mock.calls[1]![1]?.headers).toHaveProperty(
+      'authorization',
+      `Basic ${Buffer.from('rehearsal:rehearsal-only-local-registry').toString('base64')}`,
+    );
+    await expect(rehearsalToken(NPMJS, request)).rejects.toThrow('loopback-only');
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+  it('accepts a new rehearsal account but refuses failed local authentication', async () => {
+    expect(
+      await rehearsalToken(
+        'http://localhost:4873',
+        vi
+          .fn<typeof fetch>()
+          .mockResolvedValue(Response.json({ token: 'created-token' }, { status: 201 })),
+      ),
+    ).toBe('created-token');
+    await expect(
+      rehearsalToken(
+        'http://localhost:4873',
+        vi
+          .fn<typeof fetch>()
+          .mockResolvedValue(Response.json({ error: 'refused' }, { status: 401 })),
+      ),
+    ).rejects.toThrow('(401)');
+  });
+  it('checks public candidate/latest readback instead of inferring it from a successful upload', () => {
+    expect(() =>
+      assertCandidateTags(PUBLIC_PACKAGE_NAME, '0.1.0', {}, { candidate: '0.1.0' }),
+    ).not.toThrow();
+    expect(() =>
+      assertCandidateTags(
+        PUBLIC_PACKAGE_NAME,
+        '0.1.1',
+        { latest: '0.1.0' },
+        { candidate: '0.1.1', latest: '0.1.0' },
+      ),
+    ).not.toThrow();
+    for (const after of [{}, { candidate: '0.1.0', latest: '0.1.0' }, { candidate: '0.0.1' }])
+      expect(() => assertCandidateTags(PUBLIC_PACKAGE_NAME, '0.1.0', {}, after)).toThrow(
+        'stop promotion',
+      );
+    expect(() =>
+      assertCandidateTags(
+        PUBLIC_PACKAGE_NAME,
+        '0.1.0',
+        { latest: '0.1.0' },
+        { candidate: '0.1.0', latest: '0.1.0' },
+      ),
+    ).toThrow();
+  });
+  it('reads tag state with absence distinct from an auth/network error or malformed metadata', async () => {
+    expect(
+      await registryTags(
+        PUBLIC_PACKAGE_NAME,
+        NPMJS,
+        vi.fn<typeof fetch>().mockResolvedValue(new Response('', { status: 404 })),
+      ),
+    ).toEqual({});
+    expect(
+      await registryTags(
+        PUBLIC_PACKAGE_NAME,
+        NPMJS,
+        vi
+          .fn<typeof fetch>()
+          .mockResolvedValue(Response.json({ 'dist-tags': { candidate: '0.1.0' } })),
+      ),
+    ).toEqual({ candidate: '0.1.0' });
+    await expect(
+      registryTags(
+        PUBLIC_PACKAGE_NAME,
+        NPMJS,
+        vi.fn<typeof fetch>().mockResolvedValue(new Response('', { status: 403 })),
+      ),
+    ).rejects.toThrow('tags failed');
+    await expect(
+      registryTags(
+        PUBLIC_PACKAGE_NAME,
+        NPMJS,
+        vi.fn<typeof fetch>().mockResolvedValue(Response.json({ 'dist-tags': { candidate: 1 } })),
+      ),
+    ).rejects.toThrow('Invalid registry tags');
+  });
   it.each([
     'https://evil.test',
     'https://registry.npmjs.org/other',

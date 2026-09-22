@@ -6,7 +6,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { NPMJS, verifyApproved, type ReleaseManifest } from './artifact-policy.js';
-import { planPublication, releaseRegistry } from './registry-policy.js';
+import {
+  assertCandidateTags,
+  planPublication,
+  registryTags,
+  releaseRegistry,
+} from './registry-policy.js';
 export { verifyApproved } from './artifact-policy.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -38,8 +43,14 @@ export function assertPublishToolchain(node: string, npm: string): void {
     throw new Error('Trusted publishing requires the pinned Node 24 runtime and npm >=11.5.1');
 }
 
-async function rehearsalToken(registry: string): Promise<string> {
-  const response = await fetch(`${registry}/-/user/org.couchdb.user:rehearsal`, {
+export async function rehearsalToken(
+  registry: string,
+  request: typeof fetch = fetch,
+): Promise<string> {
+  if (!releaseRegistry(registry).loopback)
+    throw new Error('Rehearsal authentication is loopback-only');
+  const url = `${registry}/-/user/org.couchdb.user:rehearsal`;
+  const options: RequestInit = {
     method: 'PUT',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -51,7 +62,19 @@ async function rehearsalToken(registry: string): Promise<string> {
       date: new Date().toISOString(),
     }),
     signal: AbortSignal.timeout(30_000),
-  });
+  };
+  let response = await request(url, options);
+  // Existing Verdaccio users log in with Basic authentication; blindly creating again returns 409.
+  if (response.status === 409) {
+    response = await request(url, {
+      ...options,
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Basic ${Buffer.from('rehearsal:rehearsal-only-local-registry').toString('base64')}`,
+      },
+      signal: AbortSignal.timeout(30_000),
+    });
+  }
   const body = (await response.json()) as { token?: string };
   if (!response.ok || !body.token)
     throw new Error(`Could not obtain loopback rehearsal token (${response.status})`);
@@ -115,10 +138,23 @@ async function main(): Promise<void> {
   const existing = values['dry-run']
     ? []
     : await planPublication(manifest, registry, values.resume!);
+  const tagsBefore =
+    !loopback && !values['dry-run']
+      ? await Promise.all(
+          manifest.packages.map((artifact) => registryTags(artifact.package, registry)),
+        )
+      : undefined;
+  if (tagsBefore?.some((tags) => tags['latest'] === manifest.version))
+    throw new Error(
+      'This version is already latest; stop candidate publication and verify its promotion record',
+    );
   const home = mkdtempSync(join(tmpdir(), 'totalfinance-publish-'));
   try {
     const userconfig = join(home, '.npmrc');
-    const token = loopback && !values['dry-run'] ? await rehearsalToken(registry) : undefined;
+    const token =
+      loopback && !values['dry-run'] && existing.some((present) => !present)
+        ? await rehearsalToken(registry)
+        : undefined;
     const auth = values['bootstrap-token']
       ? '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n'
       : token
@@ -160,8 +196,17 @@ async function main(): Promise<void> {
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
+  if (tagsBefore) {
+    for (const [index, artifact] of manifest.packages.entries())
+      assertCandidateTags(
+        artifact.package,
+        artifact.version,
+        tagsBefore[index]!,
+        await registryTags(artifact.package, registry),
+      );
+  }
   process.stdout.write(
-    `release:publish: ${manifest.packages.length} candidate artifacts checked; latest was not changed\n`,
+    `release:publish: ${manifest.packages.length} candidate artifacts checked; ${tagsBefore ? 'public candidate/latest tags verified' : loopback ? 'local rehearsal only (Verdaccio may synthesize latest)' : 'dry run; no uploads or tag changes'}\n`,
   );
 }
 

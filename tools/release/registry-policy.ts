@@ -23,6 +23,41 @@ export function releaseRegistry(value: string): { registry: string; loopback: bo
   return { registry: url.origin, loopback };
 }
 
+/** Public tag readback is separate from artifact identity; never infer tags from publish exit 0. */
+export async function registryTags(
+  name: string,
+  registry: string,
+  request: typeof fetch = fetch,
+): Promise<Record<string, string>> {
+  releaseRegistry(registry);
+  const response = await request(`${registry}/${encodeURIComponent(name)}`, {
+    redirect: 'error',
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (response.status === 404) return {};
+  if (!response.ok) throw new Error(`Registry tags failed: ${name} (${response.status})`);
+  const tags = object(object(await response.json(), 'registry package')['dist-tags'], 'dist-tags');
+  if (Object.values(tags).some((value) => typeof value !== 'string'))
+    throw new Error(`Invalid registry tags: ${name}`);
+  return tags as Record<string, string>;
+}
+
+export function assertCandidateTags(
+  name: string,
+  version: string,
+  before: Record<string, string>,
+  after: Record<string, string>,
+): void {
+  if (
+    after['candidate'] !== version ||
+    after['latest'] !== before['latest'] ||
+    after['latest'] === version
+  )
+    throw new Error(
+      `Unexpected registry tags after candidate publication: ${name}; stop promotion and follow release-rollback.md`,
+    );
+}
+
 /** Read-only: 404 alone means absent. Auth/network errors never authorize a new upload. */
 export async function verifyRegistryArtifact(
   artifact: ReleaseArtifact,
