@@ -41,7 +41,23 @@ export async function verifyRegistryArtifact(
   if (!response.ok)
     throw new Error(`Registry metadata failed: ${artifact.package} (${response.status})`);
   const metadata = object(await response.json(), 'registry metadata');
-  validatePackageMetadata(metadata, artifact.package, artifact.version);
+  // npm normalizes bin paths when publishing ("./dist/bin.js" becomes "dist/bin.js").
+  // Restore only that equivalent spelling for metadata validation; the packed manifest and
+  // downloaded tarball remain exact-byte checks. Wrong/traversing/absolute paths still fail.
+  const bin = object(metadata['bin'], 'registry bin');
+  validatePackageMetadata(
+    {
+      ...metadata,
+      bin: Object.fromEntries(
+        Object.entries(bin).map(([name, path]) => [
+          name,
+          typeof path === 'string' && !path.startsWith('./') ? `./${path}` : path,
+        ]),
+      ),
+    },
+    artifact.package,
+    artifact.version,
+  );
   const dist = object(metadata['dist'], 'registry dist');
   if (
     typeof dist['tarball'] !== 'string' ||

@@ -62,6 +62,50 @@ describe('registry preflight and trusted publication', () => {
     expect(() => assertPublishToolchain('24.21.0', '11.5.1')).not.toThrow();
     expect(() => assertPublishToolchain('24.21.0', '11.19.1\n')).not.toThrow();
   });
+  it.each([PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME])(
+    'accepts npm-normalized bin metadata for %s while still checking exact artifact bytes',
+    async (name) => {
+      const pkg = fixtureMetadata(name);
+      pkg['bin'] = Object.fromEntries(
+        Object.entries(pkg['bin'] as Record<string, string>).map(([key, path]) => [
+          key,
+          path.replace(/^\.\//, ''),
+        ]),
+      );
+      const request = vi
+        .fn<typeof fetch>()
+        .mockResolvedValueOnce(
+          Response.json({ ...pkg, dist: { tarball: `${NPMJS}/${name}/-/test.tgz` } }),
+        )
+        .mockResolvedValueOnce(new Response(bytes));
+      expect(await verifyRegistryArtifact(artifact(name), NPMJS, request)).toBe(true);
+      expect(request).toHaveBeenCalledTimes(2);
+      const changed = vi
+        .fn<typeof fetch>()
+        .mockResolvedValueOnce(
+          Response.json({ ...pkg, dist: { tarball: `${NPMJS}/${name}/-/test.tgz` } }),
+        )
+        .mockResolvedValueOnce(new Response('different bytes'));
+      await expect(verifyRegistryArtifact(artifact(name), NPMJS, changed)).rejects.toThrow(
+        /differ from approval/,
+      );
+    },
+  );
+  it.each([
+    '../modules/cli/dist/bin.js',
+    '/modules/cli/dist/bin.js',
+    '././modules/cli/dist/bin.js',
+    'modules/cli/dist/other.js',
+    42,
+  ])('still rejects invalid registry executable path %s before download', async (path) => {
+    const pkg = fixtureMetadata();
+    pkg['bin'] = { ...(pkg['bin'] as Record<string, unknown>), totalfinance: path };
+    const request = vi.fn<typeof fetch>().mockResolvedValueOnce(Response.json(pkg));
+    await expect(verifyRegistryArtifact(artifact(), NPMJS, request)).rejects.toThrow(
+      /Invalid executable paths/,
+    );
+    expect(request).toHaveBeenCalledTimes(1);
+  });
   it('resumes a main-only partial publish only after checking main metadata and exact bytes', async () => {
     const request = vi
       .fn<typeof fetch>()
