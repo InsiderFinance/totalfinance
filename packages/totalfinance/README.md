@@ -2,21 +2,21 @@
 
 > TotalFinance umbrella: one install, namespace re-exports of the whole browser-first quant toolkit (options, vol, TA, strategy, risk, structure, backtest, fixed-income, performance, calendars).
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add totalfinance
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { blackScholes } from 'totalfinance/options';
-import { rsi } from 'totalfinance/technical-analysis';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
 const price = blackScholes.call({
   spot: 100,
   strike: 105,
@@ -37,13 +37,13 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 The root keeps every domain as a namespace and hoists only five option gestures: `blackScholes`, `option`, `market`, `engines`, `impliedVolatility`.
 
-`import { math } from 'totalfinance'` followed by `math.normalCdf(0)` retains the whole math namespace in esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use. Direct `import * as math from 'totalfinance/math'` with static member use also shakes. Dynamic namespace access, enumeration, and registries retain the implementations they can reach.
+`import { math } from '@insiderfinance/totalfinance'` followed by `math.normalCdf(0)` retains the whole math namespace in esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use. Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes. Dynamic namespace access, enumeration, and registries retain the implementations they can reach.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 

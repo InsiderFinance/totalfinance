@@ -19,10 +19,18 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { basename, dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { readFixedGroup, type ReleaseManifest } from './dry-run.js';
+import { readFixedGroup } from './dry-run.js';
+import { PUBLIC_PACKAGE_NAME } from '../public-packages.js';
+import {
+  NPMJS,
+  PUBLIC_ROSTER,
+  validatePackageMetadata,
+  verifyApproved,
+} from './artifact-policy.js';
+import { verifyRegistryGroup } from './registry-policy.js';
 import {
   runSiteExamplesAgainstInstalled,
   type SiteExamplesSmokeResult,
@@ -179,12 +187,12 @@ const PRICE = {
 };
 
 const SDK_MJS = `
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { createOperationRegistry, defaultPacks, jsonSafe } from '@totalfinance/workflows';
-import { blackScholes } from '@totalfinance/options';
-import * as ta from '@totalfinance/technical-analysis';
-import { legs, strategy } from '@totalfinance/strategy';
-import * as backtest from '@totalfinance/backtest';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { createOperationRegistry, defaultPacks, jsonSafe } from '@insiderfinance/totalfinance/workflows';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
+import * as backtest from '@insiderfinance/totalfinance/backtest';
 const registry = createOperationRegistry({ packs: defaultPacks() });
 const result = registry.run({ id: 'totalfinance.option.price', input: ${JSON.stringify(PRICE)} });
 // the five-minute journey (docs/examples/five-minute-journey.test.ts), verbatim
@@ -202,13 +210,13 @@ console.log('JOURNEY ' + canonicalJsonOf({ price, rsiLast: rsi.value.at(-1), pop
 
 const CANON_MJS = `
 import { readFileSync } from 'node:fs';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { jsonSafe } from '@insiderfinance/totalfinance/workflows';
 console.log('CANON ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync(process.argv[2], 'utf8')))));
 `;
 
 const MCP_MJS = `
-import { createTotalFinanceMcpServer, defaultPacks } from '@totalfinance/mcp';
+import { createTotalFinanceMcpServer, defaultPacks } from '@insiderfinance/totalfinance-mcp';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 const server = createTotalFinanceMcpServer({ packs: defaultPacks() });
@@ -263,11 +271,14 @@ export function observeWithEvidence(
   version: string,
   expectedPackages: string[],
 ): SmokeEvidence {
+  if (JSON.stringify([...expectedPackages].sort()) !== JSON.stringify([...PUBLIC_ROSTER].sort()))
+    fail('Smoke requires exactly the main and MCP public packages');
   for (const name of expectedPackages) {
     const installed = join(consumer, 'node_modules', name);
     const manifest = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8')) as {
       version: string;
     };
+    validatePackageMetadata(manifest, name, version);
     if (manifest.version !== version)
       fail(`${name} installed at ${manifest.version}, expected ${version}`);
     if (!existsSync(join(installed, 'STABILITY.md')))
@@ -285,7 +296,15 @@ export function observeWithEvidence(
   const priceStructured = marker(sdk, 'PRICE_STRUCTURED');
   const journey = marker(sdk, 'JOURNEY');
 
-  const cli = join(consumer, 'node_modules', '@totalfinance', 'cli', 'dist', 'bin.js');
+  const cli = join(
+    consumer,
+    'node_modules',
+    PUBLIC_PACKAGE_NAME,
+    'modules',
+    'cli',
+    'dist',
+    'bin.js',
+  );
   const store = join(work, 'store');
   const listed = JSON.parse(
     sh('node', [cli, 'operations', 'list', '--store', store], consumer),
@@ -315,7 +334,15 @@ export function observeWithEvidence(
   if (cliStructured !== priceStructured)
     fail('the CLI result differs from the SDK result for the same input');
 
-  const http = join(consumer, 'node_modules', '@totalfinance', 'http', 'dist', 'bin.js');
+  const http = join(
+    consumer,
+    'node_modules',
+    PUBLIC_PACKAGE_NAME,
+    'modules',
+    'http',
+    'dist',
+    'bin.js',
+  );
   const document = JSON.parse(sh('node', [http, '--openapi', '--profile', 'full'], consumer)) as {
     openapi: string;
     paths: Record<string, unknown>;
@@ -351,7 +378,7 @@ export function observe(
   return observeWithEvidence(consumer, version, expectedPackages).observation;
 }
 
-function compare(observed: SmokeObservation, expected: SmokeObservation): string[] {
+export function compare(observed: SmokeObservation, expected: SmokeObservation): string[] {
   const differences: string[] = [];
   const check = (label: string, a: unknown, b: unknown): void => {
     if (JSON.stringify(a) !== JSON.stringify(b))
@@ -366,7 +393,7 @@ function compare(observed: SmokeObservation, expected: SmokeObservation): string
   return differences;
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const args = process.argv.slice(2).filter((a, i) => !(i === 0 && a === '--'));
   const { values } = parseArgs({
     args,
@@ -374,6 +401,7 @@ function main(): void {
       version: { type: 'string' },
       registry: { type: 'string' },
       tarballs: { type: 'string' },
+      approved: { type: 'string' },
       'write-expected': { type: 'boolean', default: false },
       keep: { type: 'boolean', default: false },
       receipt: { type: 'string' },
@@ -382,6 +410,8 @@ function main(): void {
   });
   if (!values.version) fail('--version <v> is required (the exact fixed-group version)', 2);
   if (values.registry && values.tarballs) fail('pass --registry or --tarballs, not both', 2);
+  if (values.approved && values.tarballs)
+    fail('--approved is for registry verification, not tarball rehearsal', 2);
   const version = values.version;
   if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?(?:\+[a-zA-Z0-9.-]+)?$/.test(version))
     fail('--version must be an exact semantic version', 2);
@@ -400,7 +430,7 @@ function main(): void {
     if (values.tarballs) {
       const dir = resolve(ROOT, values.tarballs);
       const manifestBytes = readFileSync(join(dir, 'RELEASE_HASHES.json'));
-      const manifest = JSON.parse(manifestBytes.toString('utf8')) as ReleaseManifest;
+      const manifest = verifyApproved(dir);
       if (manifest.version !== version)
         fail(`the tarballs are ${manifest.version}, not ${version}`, 2);
       if (manifest.commit !== source.sourceCommit)
@@ -412,16 +442,7 @@ function main(): void {
         fail('tarball manifest must contain the exact fixed package group once each', 2);
       }
       for (const artifact of manifest.packages) {
-        if (basename(artifact.tarball) !== artifact.tarball || artifact.version !== version)
-          fail('invalid tarball manifest entry', 2);
         const path = join(dir, artifact.tarball);
-        const bytes = readFileSync(path);
-        if (
-          bytes.length !== artifact.bytes ||
-          createHash('sha256').update(bytes).digest('hex') !== artifact.sha256
-        ) {
-          fail(`tarball hash/length mismatch: ${artifact.package}`, 2);
-        }
         dependencies[artifact.package] = `file:${path}`;
       }
       origin = {
@@ -433,10 +454,14 @@ function main(): void {
       for (const name of group) dependencies[name] = version;
       origin = {
         kind: 'registry-verification',
-        registry: normalizeRegistry(
-          values.registry ?? sh('npm', ['config', 'get', 'registry'], consumer).trim(),
-        ),
+        registry: normalizeRegistry(values.registry ?? NPMJS),
       };
+      if (values.approved) {
+        const manifest = verifyApproved(resolve(ROOT, values.approved));
+        if (manifest.version !== version || manifest.commit !== source.sourceCommit)
+          fail('Approved artifacts must match the smoke version and source commit', 2);
+        await verifyRegistryGroup(manifest, origin.registry);
+      }
     }
     writeFileSync(
       join(consumer, 'package.json'),
@@ -448,12 +473,12 @@ function main(): void {
     );
     const install = ['install', '--no-audit', '--no-fund', '--ignore-scripts', '--loglevel=error'];
     if (origin.kind === 'registry-verification') {
-      // Pin the scoped registry as well: an unrelated user-level @totalfinance:registry must not
+      // Pin the scoped registry as well: an unrelated user-level @insiderfinance:registry must not
       // silently change which registry this receipt claims was checked. Credentials stay in
       // the caller's normal npm configuration; none are copied into the consumer or receipt.
       writeFileSync(
         join(consumer, '.npmrc'),
-        `registry=${origin.registry}/\n@totalfinance:registry=${origin.registry}/\n`,
+        `registry=${origin.registry}/\n@insiderfinance:registry=${origin.registry}/\n`,
       );
       install.push('--registry', `${origin.registry}/`);
     }
@@ -506,12 +531,10 @@ function main(): void {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try {
-    main();
-  } catch (error) {
+  main().catch((error: unknown) => {
     process.stderr.write(
       `release:smoke: ${error instanceof Error ? error.message : String(error)}\n`,
     );
     process.exitCode = error instanceof SmokeFailure ? error.exitCode : 1;
-  }
+  });
 }

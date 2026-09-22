@@ -544,8 +544,8 @@ function previewLots(
  *
  * @example
  * ```ts
- * import { createMarketSnapshot } from '@totalfinance/core/artifacts';
- * import { proposePortfolioRebalance } from '@totalfinance/portfolio/policy';
+ * import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
+ * import { proposePortfolioRebalance } from '@insiderfinance/totalfinance/portfolio/policy';
  *
  * const proposal = proposePortfolioRebalance({
  *   portfolio: ledger.state,

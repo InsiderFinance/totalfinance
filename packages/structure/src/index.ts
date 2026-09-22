@@ -1,12 +1,12 @@
 /**
- * `@totalfinance/structure` — options market-structure analytics: dealer-positioning exposure
+ * `@insiderfinance/totalfinance/structure` — options market-structure analytics: dealer-positioning exposure
  * (GEX/DEX/vega/vanna/charm), levels (walls, zero-gamma, max pain, pin risk), scenario maps, and
  * options flow (aggressor/sweep/block/spread).
  *
  * Every positioning estimate echoes its position-sign conventions in `assumptions` and carries its
  * model limitations as `model.limitation` entries in `diagnostics.warnings` (R2). These analytics
  * infer positioning from open interest, prices, and conventions — they do not know true dealer
- * books. Consumes the canonical `OptionQuote[]` / `OptionTrade[]` from `@totalfinance/core`.
+ * books. Consumes the canonical `OptionQuote[]` / `OptionTrade[]` from `@insiderfinance/totalfinance/core`.
  */
 
 export { exposure, ExposureProfile } from './exposure.js';

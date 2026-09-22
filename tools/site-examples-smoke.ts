@@ -137,14 +137,12 @@ export function runSiteExamplesAgainstInstalled(
   const files = samples.map((sample) => {
     if (!/^[a-z0-9][a-z0-9-]*$/.test(sample.id)) throw new Error(`Unsafe example id: ${sample.id}`);
     for (const entrypoint of importsOf(sample)) {
-      if (!/^(?:@totalfinance\/[a-z0-9-]+|totalfinance)(?:\/[a-z0-9/-]+)?$/.test(entrypoint)) {
+      if (!/^@insiderfinance\/totalfinance(?:-mcp)?(?:\/[a-z0-9-]+)*$/.test(entrypoint)) {
         throw new Error(
           `${sample.id}: ${entrypoint} is not an installed TotalFinance package entrypoint.`,
         );
       }
-      const name = entrypoint.startsWith('@')
-        ? entrypoint.split('/').slice(0, 2).join('/')
-        : 'totalfinance';
+      const name = entrypoint.split('/').slice(0, 2).join('/');
       const path = realpathSync(join(installed, name));
       if (!within(installed, path))
         throw new Error(`${sample.id}: ${name} resolves outside the installed consumer tree.`);

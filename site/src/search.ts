@@ -88,9 +88,9 @@ export function search(
     .sort(
       (a, b) =>
         b.score - a.score ||
-        // Keep every distinct import available; prefer the domain package over its umbrella alias.
-        Number(a.record.category === 'totalfinance') -
-          Number(b.record.category === 'totalfinance') ||
+        // Keep every distinct import available; prefer a domain entry point over the root alias.
+        Number(a.record.category === '@insiderfinance/totalfinance') -
+          Number(b.record.category === '@insiderfinance/totalfinance') ||
         a.index - b.index,
     )
     .slice(0, limit)

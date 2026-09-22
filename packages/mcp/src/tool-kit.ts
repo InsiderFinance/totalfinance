@@ -147,7 +147,7 @@ export function defineTool<I>(definition: {
     typeof schema.toJSONSchema !== 'function'
   ) {
     refuse(
-      'schema must be a @totalfinance/core/schema Schema (safeParse + toJSONSchema).',
+      'schema must be a @insiderfinance/totalfinance/core/schema Schema (safeParse + toJSONSchema).',
       'definition.schema',
     );
   }

@@ -1,6 +1,6 @@
 import { ensureFiniteWhenPresent } from './options-internal.js';
 /**
- * `@totalfinance/risk/portfolio` — portfolio-level risk approximations (spec §15.3): concentration,
+ * `@insiderfinance/totalfinance/risk/portfolio` — portfolio-level risk approximations (spec §15.3): concentration,
  * liquidity, margin, and Greeks aggregation. Pure functions over weights / positions / Greeks; no
  * market data or option pricing pulled in.
  */

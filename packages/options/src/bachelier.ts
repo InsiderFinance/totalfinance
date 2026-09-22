@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/options/bachelier` — the Bachelier (normal) model (spec §9.3).
+ * `@insiderfinance/totalfinance/options/bachelier` — the Bachelier (normal) model (spec §9.3).
  *
  * Prices an option on a forward `F` under arithmetic Brownian motion. Volatility is a NORMAL vol in
  * price units (not a percentage), so vega is reported per 1.00 of normal vol (`units.vega: perPoint`).

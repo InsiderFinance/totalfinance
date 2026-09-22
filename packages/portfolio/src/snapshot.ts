@@ -3,7 +3,7 @@
  * (FC7 required API; agent-native Permanent law 2: valuation combines ledger FACTS with an
  * explicit market snapshot; P&L is a derived report, never ledger state).
  *
- * The market is a Gate B `MarketSnapshot` (`@totalfinance/core/artifacts`) — the platform's ONE
+ * The market is a Gate B `MarketSnapshot` (`@insiderfinance/totalfinance/core/artifacts`) — the platform's ONE
  * container for "market state at an instant" — validated through `readMarketSnapshot` so there is
  * exactly one validator. Position marks come from `observations.spots`; base-currency conversion
  * uses explicit {@link CurrencyPairQuote}s in FC5's vocabulary and arithmetic (see
@@ -154,8 +154,8 @@ const EXAMPLE_CALL =
  *
  * @example
  * ```ts
- * import { createMarketSnapshot } from '@totalfinance/core/artifacts';
- * import { applyPortfolioEvents, portfolioSnapshot } from '@totalfinance/portfolio';
+ * import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
+ * import { applyPortfolioEvents, portfolioSnapshot } from '@insiderfinance/totalfinance/portfolio';
  *
  * const state = applyPortfolioEvents({ portfolio: { baseCurrency: 'USD' }, events });
  * const market = createMarketSnapshot({

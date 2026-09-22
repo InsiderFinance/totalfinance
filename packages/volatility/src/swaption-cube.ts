@@ -5,10 +5,10 @@
  * calibrates a SABR smile per node (`calibrateSabrSmile`) and interpolates the SABR parameters bilinearly
  * across the grid, so the vol at any `(expiry, tenor, strike)` — including between quoted nodes — is one
  * call. Pricing a swaption is then `annuity · Black(forward, strike, cubeVolatility, expiry)`, with the forward
- * and annuity supplied from `@totalfinance/fixed-income` — `forwardSwap(curves, spec)` returns exactly that
+ * and annuity supplied from `@insiderfinance/totalfinance/fixed-income` — `forwardSwap(curves, spec)` returns exactly that
  * curve-driven pair from a live OIS/projection curve (kept out of this package to avoid a dependency).
  *
- * Home note: this lives in `@totalfinance/volatility` (not `fixed-income`) because it is a vol object built on the
+ * Home note: this lives in `@insiderfinance/totalfinance/volatility` (not `fixed-income`) because it is a vol object built on the
  * SABR machinery here; `fixed-income` does not depend on `vol`, so building it here adds no package edge.
  */
 

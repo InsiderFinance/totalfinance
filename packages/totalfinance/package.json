@@ -1,6 +1,6 @@
 {
   "name": "totalfinance",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance umbrella: one install, namespace re-exports of the whole browser-first quant toolkit (options, vol, TA, strategy, risk, structure, backtest, fixed-income, performance, calendars).",
   "license": "Apache-2.0",
   "keywords": [
@@ -169,11 +169,8 @@
     "@totalfinance/portfolio": "workspace:*",
     "@totalfinance/scenarios": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "private": true
 }

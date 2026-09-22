@@ -1,4 +1,4 @@
-# Strategy catalogue (`@totalfinance/strategy`)
+# Strategy catalogue (`@insiderfinance/totalfinance/strategy`)
 
 The strategy package builds an option **position** from legs and computes the full profit-calculator
 surface: expiration payoff, breakevens, max profit/loss, mark-to-market value + Greeks, probability of
@@ -13,7 +13,7 @@ means long, negative means short. Options use contracts; stocks use shares. No s
 is silently assumed, and no strategy name is required for calculation.
 
 ```ts
-import { legs, strategy } from '@totalfinance/strategy';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
 
 const position = strategy([
   legs.call({ strike: 100, premium: 6, quantity: 2 }),
@@ -43,7 +43,7 @@ inactive row before calculating. Signed position quantity is not a trade instruc
 close reduces an existing short, rather than necessarily creating a long.
 
 ```ts
-import type { LegInput } from '@totalfinance/strategy';
+import type { LegInput } from '@insiderfinance/totalfinance/strategy';
 
 const editableLegs: LegInput[] = [
   { kind: 'call', strike: 100, premium: 6, quantity: 2 },

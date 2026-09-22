@@ -3,7 +3,7 @@
  * investment profit or loss; every method here states its flow-timing convention explicitly and
  * echoes it back in `assumptions`. Missing marks become GAPS in `diagnostics.gaps` — never a
  * silent forward fill. The money-weighted return COMPOSES `datedInternalRateOfReturn` from
- * `@totalfinance/valuation` (the FC1 solver) and preserves its root/convergence diagnostics whole.
+ * `@insiderfinance/totalfinance/valuation` (the FC1 solver) and preserves its root/convergence diagnostics whole.
  * Annualization is explicit — `'none'` or a declared basis — and never inferred from timestamps.
  */
 
@@ -533,7 +533,7 @@ const SIGN_CONVENTION =
 
 /**
  * Money-weighted return: the dated internal rate of return of the INVESTOR's cash-flow schedule,
- * composed from `datedInternalRateOfReturn` in `@totalfinance/valuation` (annual compounding,
+ * composed from `datedInternalRateOfReturn` in `@insiderfinance/totalfinance/valuation` (annual compounding,
  * ACT/365F — echoed in `solverReport.assumptions`).
  *
  * Sign convention (echoed in `assumptions.signConvention`): flows are stated from the INVESTOR's

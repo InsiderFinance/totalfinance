@@ -8,7 +8,7 @@ import {
 } from '@totalfinance/core/artifacts';
 import type { CanonicalDataScanOptions } from '@totalfinance/core/artifacts';
 
-// The bounded stored-data scanner is the spine's (`@totalfinance/core/artifacts`, Stage 4.5 Decision 9):
+// The bounded stored-data scanner is the spine's (`@insiderfinance/totalfinance/core/artifacts`, Stage 4.5 Decision 9):
 // one scanner, one cost law (Stage 4.4b Decision 10), shared by every artifact door. This module keeps
 // the scenario-specific detachment and request-shell helpers and re-exports the scanner so the
 // runner's call sites and its boundary tests read unchanged.

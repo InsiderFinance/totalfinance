@@ -18,7 +18,7 @@ import {
   warning,
 } from '@totalfinance/core';
 
-// `facade()` / `Facade` now live in @totalfinance/core (DX1.1) so every package builds scalar facades the
+// `facade()` / `Facade` now live in @insiderfinance/totalfinance/core (DX1.1) so every package builds scalar facades the
 // same way. Re-exported here so the options modules' existing `./facade-util.js` imports are unchanged.
 export { facade };
 export type { Facade };

@@ -101,21 +101,21 @@ import assert from 'node:assert/strict';
 import { readFileSync, realpathSync } from 'node:fs';
 import { relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { InputError, QuantError } from '@totalfinance/core';
-import { listIndicators } from '@totalfinance/technical-analysis/registry';
-import { indicatorWarmups } from '@totalfinance/technical-analysis/warmup';
+import { InputError, QuantError } from '@insiderfinance/totalfinance/core';
+import { listIndicators } from '@insiderfinance/totalfinance/technical-analysis/registry';
+import { indicatorWarmups } from '@insiderfinance/totalfinance/technical-analysis/warmup';
 ${PROBE_RUNTIME}
 const modules = realpathSync('node_modules') + sep;
 function installedPath(specifier) {
   const path = realpathSync(fileURLToPath(import.meta.resolve(specifier)));
   assert.ok(path.startsWith(modules), 'Host discovery escaped installed node_modules: ' + path);
   const id = relative(modules, path).split(sep).join('/');
-  assert.match(id, /^(?:@totalfinance\/[^/]+|totalfinance)\/(?:dist\/.+\.js|package\.json)$/);
+  assert.match(id, /^@insiderfinance\/totalfinance\/(?:modules\/[^/]+\/dist\/.+\.js|package\.json)$/);
   return path;
 }
-for (const specifier of ['@totalfinance/core', '@totalfinance/technical-analysis/registry',
-  '@totalfinance/technical-analysis/warmup']) installedPath(specifier);
-const manifest = JSON.parse(readFileSync(installedPath('@totalfinance/technical-analysis/package.json'), 'utf8'));
+for (const specifier of ['@insiderfinance/totalfinance/core', '@insiderfinance/totalfinance/technical-analysis/registry',
+  '@insiderfinance/totalfinance/technical-analysis/warmup']) installedPath(specifier);
+const manifest = JSON.parse(readFileSync(installedPath('@insiderfinance/totalfinance/package.json'), 'utf8'));
 const registered = listIndicators();
 const entries = [...registered].sort((a, b) => a.name.localeCompare(b.name));
 const effectiveConventions = new Map();
@@ -207,7 +207,7 @@ const catalog = entries.map(entry => {
 });
 const leaves = [];
 for (const key of Object.keys(manifest.exports).sort()) {
-  if (key === '.' || key === './package.json' || key === './registry') continue;
+  if (!key.startsWith('./technical-analysis/') || key === './technical-analysis/registry') continue;
   const specifier = manifest.name + key.slice(1);
   installedPath(specifier);
   const namespace = await import(specifier);
@@ -242,7 +242,16 @@ export async function assertInstalledIndicatorMetadata(
 ): Promise<IndicatorMetadataCoverage> {
   const directory = realpathSync(consumer);
   // Resolve first, so a missing installation cannot fall back to the workspace through cwd.
-  realpathSync(join(directory, 'node_modules', '@totalfinance', 'technical-analysis'));
+  realpathSync(
+    join(
+      directory,
+      'node_modules',
+      '@insiderfinance',
+      'totalfinance',
+      'modules',
+      'technical-analysis',
+    ),
+  );
   const baseline = JSON.parse(
     execFileSync(process.execPath, ['--input-type=module', '--eval', DISCOVER_BASELINE], {
       cwd: directory,
@@ -260,7 +269,7 @@ export async function assertInstalledIndicatorMetadata(
 
   for (const leaf of baseline.leaves) {
     const source = `import * as leaf from ${JSON.stringify(leaf.specifier)};
-import { InputError, QuantError } from '@totalfinance/core';
+import { InputError, QuantError } from '@insiderfinance/totalfinance/core';
 ${PROBE_RUNTIME}
 globalThis.consumerCall = (path, probes) => {
   const indicator = path.reduce((value, key) => value[key], leaf);
@@ -284,7 +293,9 @@ globalThis.consumerCall = (path, probes) => {
     );
     assert.deepEqual(
       measurement.retainedModules.filter(({ id }) =>
-        /@totalfinance\/technical-analysis\/dist\/(?:registry|aliases|warmup|index)\.js$/.test(id),
+        /@insiderfinance\/totalfinance\/modules\/technical-analysis\/dist\/(?:registry|aliases|warmup|index)\.js$/.test(
+          id,
+        ),
       ),
       [],
       `${leaf.specifier}: registry/discovery machinery leaked into the browser bundle`,

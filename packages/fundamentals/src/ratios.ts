@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/fundamentals/ratios` — the direct ratio operations (FC2). Every head returns a
+ * `@insiderfinance/totalfinance/fundamentals/ratios` — the direct ratio operations (FC2). Every head returns a
  * decimal ratio or `null`, and `.explain()` states the formula, the numerator and denominator it
  * actually used, every disclosed derivation, and the reason behind any `null`.
  */

@@ -7,9 +7,9 @@
  * Both halves of that had failed, because the budgets lived in `budgets.test.ts` and the published
  * table lived in `docs/bundle-size.md`, hand-kept, with nothing between them:
  *
- *   - `@totalfinance/math` was published as "< 14 KB" while the test allowed 33 KB. A consumer budgeting
+ *   - `@insiderfinance/totalfinance/math` was published as "< 14 KB" while the test allowed 33 KB. A consumer budgeting
  *     from the doc would have been wrong by 2.4x — and 14 KB was a real budget once, four raises ago.
- *   - `@totalfinance/options/black-scholes` was published as "< 8 KB" after 3B.N2 moved it to 8.5 KB.
+ *   - `@insiderfinance/totalfinance/options/black-scholes` was published as "< 8 KB" after 3B.N2 moved it to 8.5 KB.
  *   - Six budgeted entrypoints — `math/montecarlo`, `calendars/crypto`, the three `fixed-income`
  *     modules, and the umbrella root — were absent from the table entirely, including the largest
  *     number in the library (the umbrella at < 310 KB).
@@ -45,7 +45,7 @@ export interface BundleBudget {
 
 export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
-    specifier: '@totalfinance/options/black-scholes',
+    specifier: '@insiderfinance/totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
     budgetKB: 11.75,
     intent: 'all model exports; runtime guards included, schema/JSON-Schema machinery excluded',
@@ -87,19 +87,19 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '11.5 → 11.75 KB (dogfooding warning registration, 2026-09-07): three public WarningCode entries for quote-only chain health, duplicate supplied contracts and no eligible supplied quotes grow the shared registry. Isolated old/new measurements are 11,717 → 11,783 B gzip (+66 B), seven bytes beyond the old line. The contributing source set is identical; no sector, artifact, provider or schema implementation is added to pricing. Structural forbidden-dependency checks remain unchanged.',
   },
   {
-    specifier: '@totalfinance/core',
+    specifier: '@insiderfinance/totalfinance/core',
     entry: 'packages/core/src/index.ts',
     budgetKB: 20,
     intent: 'types, errors, conventions, dates, symbology, calendar engine; no exchange datasets',
     forbidden: [
       {
         needle: '2001-09-11',
-        why: 'Calendars 0.1 acceptance: core must not ship exchange holiday datasets; the NYSE closure list lives in @totalfinance/calendars',
+        why: 'Calendars 0.1 acceptance: core must not ship exchange holiday datasets; the NYSE closure list lives in @insiderfinance/totalfinance/calendars',
       },
     ],
   },
   {
-    specifier: '@totalfinance/core/artifacts',
+    specifier: '@insiderfinance/totalfinance/core/artifacts',
     entry: 'packages/core/src/artifacts/index.ts',
     budgetKB: 32,
     intent:
@@ -117,7 +117,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'families with full boundary validation. The hot-path guarantee is structural: core’s ' +
       'root entrypoint does not re-export this module, so its own 20 KB budget proves compute ' +
       'bundles stay artifact-free. 14 → 14.5 KB (correction wave, 2026-08-23): the full nested validators — table handles, chain-quote numerics, curve pillars — and the re-verified inputsHash (measured 14,487 B). 14.5 → 15.5 KB (defect-fix wave, 2026-08-23): the ONE shared provenance validator (closed keys, typed fields, structured warnings) and the sound is* guards — every public guard now routes through its complete read-door validator instead of a five-field sniff, with the extra teachings that entails (measured 15,338 B). 15.5 → 16 KB (RateCurve one-contract wave, 2026-08-23): the shared curve validator the snapshot spine bundles now derives every pillar’s discount factor through core’s own compounding transform (yearFraction + discountFactor) and refuses pre-asOf pillars — economics checks with their teachings, replacing the advisory-field sign heuristic (measured 15,926 B). 16 → 16.5 KB (FC7 closeout, 2026-08-29): canonical JSON now refuses sparse/accessor/decorated arrays and behavioral or hidden object members without invoking them, so the bytes hashed are exactly the stored data the reducer observes (measured 16,448 B, headroom 448 B).' +
-      '16.5 → 23 KB (Stage 4.5 slice 1, 2026-09-02): the bounded stored-data scanner promoted from @totalfinance/scenarios (one scanner, one Barrier A cost law, now with a closed options request), the structural compareAnalysisArtifacts / artifactReplayParity walk with its teaching refusals and count-safe limits, the fitted-model summary validator, and tableHandleForRows (measured 23,159 B, headroom 393 B).' +
+      '16.5 → 23 KB (Stage 4.5 slice 1, 2026-09-02): the bounded stored-data scanner promoted from @insiderfinance/totalfinance/scenarios (one scanner, one Barrier A cost law, now with a closed options request), the structural compareAnalysisArtifacts / artifactReplayParity walk with its teaching refusals and count-safe limits, the fitted-model summary validator, and tableHandleForRows (measured 23,159 B, headroom 393 B).' +
       ' 23 → 24.5 KB (Stage 4.5 slice 4, 2026-09-03): the shared fitted-model kit — ARTIFACT_WORK_LIMITS with its named floors, the work-limit and comparison-tolerance validators, the family-scoped report migration walk, referenced-row hash verification, parameter flattening, and residual statistics — one engine every domain adapter (volatility, fixed-income, research) rides instead of three copies — each helper a closed, typed door of its own, and a referenced-row handle must describe the rows in every member, not only by hash (measured 24,804 B, headroom 284 B).' +
       '24.5 -> 24.75 KB (Stage 4.6 slice 2, 2026-09-03): four more backtest codes registered centrally (backtest.input_too_large, delisting_return_missing, universe_membership_unknown, ledger_reconciliation_failed) reach every entrypoint that imports the ErrorCode registry; measured 25,104 B against 25,088 B, headroom now 240 B. No artifact code changed.' +
       '24.75 → 25.25 KB (Stage 7B.2 slice 1, 2026-09-05): the nine trade codes and operation.capability_missing registered in core ride every entrypoint that bundles the error taxonomy; measured 25,405 B against a 24.75 KB line this row sat within a few dozen bytes of, so the budget moves a step and the growth is recorded, not absorbed.' +
@@ -125,7 +125,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/core/pricing',
+    specifier: '@insiderfinance/totalfinance/core/pricing',
     entry: 'packages/core/src/pricing.ts',
     budgetKB: 15,
     intent:
@@ -142,7 +142,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/math',
+    specifier: '@insiderfinance/totalfinance/math',
     entry: 'packages/math/src/index.ts',
     budgetKB: 40.5,
     intent: 'the whole numerical suite; consumers tree-shake to far less via deep entrypoints',
@@ -168,7 +168,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '40 → 40.5 KB (Stage 7B.2 slice 1, 2026-09-05): the nine trade codes and operation.capability_missing registered in core ride every entrypoint that bundles the error taxonomy; measured 41,004 B against a 40 KB line this row sat within a few dozen bytes of, so the budget moves a step and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/math/montecarlo',
+    specifier: '@insiderfinance/totalfinance/math/montecarlo',
     entry: 'packages/math/src/montecarlo.ts',
     budgetKB: 7.375,
     intent: 'Sobol direction numbers are generated, not a vendored table',
@@ -185,7 +185,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '7 → 7.25 KB (Stage 7B.1 slice 1, 2026-09-05): the eight environment codes registered in core (the not_reset refusal and the seven rejection-row codes the trading environment returns) ride every entrypoint that bundles the error taxonomy; measured 7,216 B against a 7 KB line this row already sat within a few dozen bytes of, so the budget moves a quarter kilobyte and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/math/normal',
+    specifier: '@insiderfinance/totalfinance/math/normal',
     entry: 'packages/math/src/normal.ts',
     budgetKB: 3,
     intent: 'standard normal only — the canonical lean deep entrypoint',
@@ -194,13 +194,13 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'numerical suite. `/normal` is the canonical hot path — used by stats, options, anything.',
   },
   {
-    specifier: '@totalfinance/calendars/nyse',
+    specifier: '@insiderfinance/totalfinance/calendars/nyse',
     entry: 'packages/calendars/src/nyse.ts',
     budgetKB: 8,
     intent: 'rules-based — no giant holiday tables',
   },
   {
-    specifier: '@totalfinance/calendars/crypto',
+    specifier: '@insiderfinance/totalfinance/calendars/crypto',
     entry: 'packages/calendars/src/crypto.ts',
     budgetKB: 4.875,
     intent: 'aliases alwaysOpen and pulls in no exchange-holiday dataset',
@@ -223,7 +223,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     ],
   },
   {
-    specifier: '@totalfinance/performance/sector-performance',
+    specifier: '@insiderfinance/totalfinance/performance/sector-performance',
     entry: 'packages/performance/src/sector-performance.ts',
     budgetKB: 10.5,
     intent: 'simple and audited sector returns; no option pricing or schema machinery',
@@ -238,7 +238,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     ],
   },
   {
-    specifier: '@totalfinance/performance/sharpe',
+    specifier: '@insiderfinance/totalfinance/performance/sharpe',
     entry: 'packages/performance/src/sharpe.ts',
     budgetKB: 9,
     intent: 'verified to pull in no option pricing',
@@ -252,7 +252,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'resolvePeriodsPerYear/resolveRiskFreeRate ladders and the front-door guards on the public ' +
       'helpers (requireSeries, degenerateAwareDiagnostics, riskAdjustedAssumptions) live in this ' +
       'module and carry their teaching strings (measured 7,381 B). ' +
-      '7 KB (was 6.5), 3B.1b Law-12 statistics cluster: this package computes over the @totalfinance/math ' +
+      '7 KB (was 6.5), 3B.1b Law-12 statistics cluster: this package computes over the @insiderfinance/totalfinance/math ' +
       'statistics reductions, whose options are now closed boundaries; the entrypoint inherits the ' +
       'did-you-mean key guard and its teaching strings (measured 6,799 B). ' +
       "Previously 6.5 KB (was 6): the 2026-08-02 wave grew core's Law-7 finiteness walker to cover provenance, " +
@@ -271,7 +271,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     ],
   },
   {
-    specifier: '@totalfinance/technical-analysis/rsi',
+    specifier: '@insiderfinance/totalfinance/technical-analysis/rsi',
     entry: 'packages/technical-analysis/src/rsi.ts',
     budgetKB: 8.75,
     intent: 'single indicator, deep entrypoint',
@@ -291,7 +291,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '8 → 8.25 KB (Stage 7B.2 slice 1, 2026-09-05): the nine trade codes and operation.capability_missing registered in core ride every entrypoint that bundles the error taxonomy; measured 8,267 B against a 8 KB line this row sat within a few dozen bytes of, so the budget moves a step and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/fixed-income/lattice',
+    specifier: '@insiderfinance/totalfinance/fixed-income/lattice',
     entry: 'packages/fixed-income/src/lattice.ts',
     budgetKB: 12.875,
     intent: 'short-rate lattice; pulls the option/BSM kernel for the equity leg',
@@ -314,7 +314,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '12.5 → 12.75 KB (Stage 7B.1 slice 1, 2026-09-05): the eight environment codes registered in core (the not_reset refusal and the seven rejection-row codes the trading environment returns) ride every entrypoint that bundles the error taxonomy; measured 12,816 B against a 12.5 KB line this row already sat within a few dozen bytes of, so the budget moves a quarter kilobyte and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/fixed-income/convertible',
+    specifier: '@insiderfinance/totalfinance/fixed-income/convertible',
     entry: 'packages/fixed-income/src/convertible.ts',
     budgetKB: 8.75,
     intent: 'convertible bond pricing, reported separately so a consumer sees what it pays',
@@ -330,7 +330,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '8.5 → 8.75 KB (Stage 7B.2 slice 1, 2026-09-05): the nine trade codes and operation.capability_missing registered in core ride every entrypoint that bundles the error taxonomy; measured 8,752 B against a 8.5 KB line this row sat within a few dozen bytes of, so the budget moves a step and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/fixed-income/xva',
+    specifier: '@insiderfinance/totalfinance/fixed-income/xva',
     entry: 'packages/fixed-income/src/xva.ts',
     budgetKB: 11.75,
     intent: 'CVA/DVA/FVA valuation adjustments, reported separately',
@@ -352,7 +352,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '11.25 → 11.5 KB (Stage 7B.1 slice 1, 2026-09-05): the eight environment codes registered in core (the not_reset refusal and the seven rejection-row codes the trading environment returns) ride every entrypoint that bundles the error taxonomy; measured 11,611 B against a 11.25 KB line this row already sat within a few dozen bytes of, so the budget moves a quarter kilobyte and the growth is recorded, not absorbed.',
   },
   {
-    specifier: '@totalfinance/volatility/artifacts',
+    specifier: '@insiderfinance/totalfinance/volatility/artifacts',
     entry: 'packages/volatility/src/artifacts.ts',
     budgetKB: 88,
     intent:
@@ -369,7 +369,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/fixed-income/artifacts',
+    specifier: '@insiderfinance/totalfinance/fixed-income/artifacts',
     entry: 'packages/fixed-income/src/artifacts.ts',
     budgetKB: 45.5,
     intent:
@@ -380,7 +380,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/backtest/portfolio',
+    specifier: '@insiderfinance/totalfinance/backtest/portfolio',
     entry: 'packages/backtest/src/portfolio/index.ts',
     budgetKB: 114,
     intent:
@@ -388,12 +388,12 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     rationale:
       'Pre-publish interface repairs (2026-09-16, valuation instants): 112 → 114 KB, measured 114,967 B. The same core time helpers plus the stamped snapshot asOf convention; ' +
       'September 2026 R01–R05: 101 → 112 KB, measured 113,585 B. Causal timing, projected-ledger entry funding, signed lifecycle events and fixed-income-owned calendar accrual replace silent-wrong-number paths. Reusing bonds.fixedRate deliberately adds the existing validated bond/schedule implementation; no second formula or new public helper is introduced. Pricing hot-path budgets remain unchanged. ' +
-      'Stage 4.6 slice 5 (2026-09-04): the engine (instants, lifecycle, flows, marks, the declarative proposal through proposePortfolioRebalance, execution, the margin check, the valuation marks), the adapters, and the guards, over @totalfinance/portfolio, @totalfinance/calendars, and the execution layer — measured 99,744 B against 102,400 B, headroom 2,656 B.' +
+      'Stage 4.6 slice 5 (2026-09-04): the engine (instants, lifecycle, flows, marks, the declarative proposal through proposePortfolioRebalance, execution, the margin check, the valuation marks), the adapters, and the guards, over @insiderfinance/totalfinance/portfolio, @insiderfinance/totalfinance/calendars, and the execution layer — measured 99,744 B against 102,400 B, headroom 2,656 B.' +
       "100 → 101 KB (Stage 7B.2 slice 3, 2026-09-06): the engine's fill sequence moved into fillOrderWithPolicy, whose typed doors (the policy, order, observation, terms, and instants re-validated for a direct caller) now ride the portfolio entry; measured 102,518 B.",
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/portfolio/trade',
+    specifier: '@insiderfinance/totalfinance/portfolio/trade',
     entry: 'packages/portfolio/src/trade/index.ts',
     budgetKB: 77.5,
     intent:
@@ -405,7 +405,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/backtest/environment',
+    specifier: '@insiderfinance/totalfinance/backtest/environment',
     entry: 'packages/backtest/src/environment/index.ts',
     budgetKB: 142,
     intent:
@@ -414,13 +414,13 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       '141 → 142 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the environment features require an annualization (no per-bar volatility feeding annualized consumers), the bench baseline and episodes name theirs, and the paper broker and plan it composes refuse an OCC option symbol without a declared multiplier through the core OCC grammar predicate; measured 144,489 B, 105 B over the 141 KB line. ' +
       'September 2026 R01–R05: 129 → 141 KB, measured 142,528 B. Inherits the corrected portfolio engine and existing fixed-income calendar owner; adds explicit currency funding in the multi-currency episode. The engine/environment split and hot-path exclusions remain intact. ' +
       'Stage 7B.1 slice 1 (2026-09-05): the environment core (the definition and action guards, reset/step over the stepper seam, open-order carry-forward and cancel/replace, idempotent retry, the trace hash) on top of the multi-asset engine it composes — the engine with its eight adapters is ~99 KB of the whole. Measured 103,352 B (100.9 KB) at landing; the budget is 103 KB so slice 2 (limits, the mask, the reward, features) reconciles its growth rather than absorbs it.' +
-      "103 → 119 KB (Stage 7B.1 slice 2, 2026-09-05): limits judged post-trade by FC7's monitorPortfolio (the environment bundles the monitor rather than re-deriving one family of it), the pre-trade projection and the action mask, the reward composition, the feature recipes over @totalfinance/math and @totalfinance/performance, and the freshness block. Measured 119,353 B (116.6 KB); the budget is 119 KB so slice 3 (the episode library and the environment run kind) reconciles its growth rather than absorbs it." +
+      "103 → 119 KB (Stage 7B.1 slice 2, 2026-09-05): limits judged post-trade by FC7's monitorPortfolio (the environment bundles the monitor rather than re-deriving one family of it), the pre-trade projection and the action mask, the reward composition, the feature recipes over @insiderfinance/totalfinance/math and @insiderfinance/totalfinance/performance, and the freshness block. Measured 119,353 B (116.6 KB); the budget is 119 KB so slice 3 (the episode library and the environment run kind) reconciles its growth rather than absorbs it." +
       '119 → 124 KB (Stage 7B.1 slice 3, 2026-09-05): runEnvironmentEpisode (the trace-driven episode the artifact spine replays) and the twenty seeded scenario generators of the episode library. Measured 124,798 B (121.9 KB); the budget is 124 KB so slice 4 (the baselines and Agent Bench) reconciles its growth rather than absorbs it.' +
       '124 → 129 KB (Stage 7B.1 slice 4, 2026-09-05): Agent Bench — the six baseline policies, runAgentBench with its leakage probe and retry drive, and the transcript scorer. Measured 128,804 B (125.8 KB); the budget is 129 KB so slice 5 (the operation and the closeout) reconciles its growth rather than absorbs it.',
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/backtest/paper',
+    specifier: '@insiderfinance/totalfinance/backtest/paper',
     entry: 'packages/backtest/src/paper/index.ts',
     budgetKB: 37.125,
     intent:
@@ -430,10 +430,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'Pre-publish interface repairs B5/B6 (2026-09-21): 34.5 -> 37 KB, measured 36.1 KB. All-or-none combo fills against one observation instant with the net-limit check, the submission stamp and the observation-before-submission refusal. ' +
       '34 → 34.5 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the broker refuses an OCC option symbol it has no multiplier for, at creation and at submit, through the core OCC grammar predicate (the grammar was split from expiry resolution so this costs the parse, not the session calendar: 36.6 KB with the calendar, 34,876 B without); 60 B over the 34 KB line. ' +
       'September 2026 R06/R07: 33 → 34 KB, measured 33,969 B. Persisted order/instrument/fill context, identity restoration, and replay-safe partial observations replace the empty restart state. ' +
-      'Stage 7B.2 slice 3 (2026-09-06): the broker composes @totalfinance/portfolio/trade (the grant verification, the journal fold) and the execution module (the policy, the fill models, the shared fill helper) — measured 31,207 B at landing (2026-09-06) against a 33 KB line.',
+      'Stage 7B.2 slice 3 (2026-09-06): the broker composes @insiderfinance/totalfinance/portfolio/trade (the grant verification, the journal fold) and the execution module (the policy, the fill models, the shared fill helper) — measured 31,207 B at landing (2026-09-06) against a 33 KB line.',
   },
   {
-    specifier: '@totalfinance/backtest/artifacts',
+    specifier: '@insiderfinance/totalfinance/backtest/artifacts',
     entry: 'packages/backtest/src/artifacts.ts',
     budgetKB: 235.5,
     intent:
@@ -449,7 +449,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/research/artifacts',
+    specifier: '@insiderfinance/totalfinance/research/artifacts',
     entry: 'packages/research/src/artifacts.ts',
     budgetKB: 44,
     intent:
@@ -460,7 +460,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/workflows',
+    specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
     budgetKB: 497.25,
     intent:
@@ -470,8 +470,8 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'Freeze correctness repairs (2026-09-21): 494 -> 495 KB, measured 494.3 KB on supported Node 22. Durable write-ahead grant recovery, plan-scoped combo lifecycle and hedge-capacity validation, and separate embedded execution-cost attribution. No new dependency; the local filesystem coordinator remains outside the browser root. ' +
       'Pre-publish interface repairs B (2026-09-21, wire contracts): 488 -> 494 KB, measured 492.8 KB. The shared envelope schema (the spilled-handle branch), grant consumption in the stores, the combo grammar on the trade wire, and the C code registries. ' +
       'September 2026 R08/R10/R14: 476 → 482 KB, measured 490,994 B. Full discriminated trade input/output schemas, trusted approval lookup, transactional journal integration and corrected domain engines. Node-only file locking stays in the local subpath, never this browser-safe root. ' +
-      'Stage 7A slice 1 (2026-09-03): the operation contract, the registry with its registration refusals, the runtime (byte budget, strict parse, seed policy, deadline verdict, JSON-safe output, identity), and the twenty-four operations re-homed from @totalfinance/mcp WITH the compute they compose — every domain pack (options, TA, strategy, volatility, structure, risk, performance, calendars, crypto, fixed income, the opt-in backtest). Big by design and measured, like the MCP server it replaces the schemas of: a transport imports this; an application that wants one calculation imports its domain package (measured 206,220 B, headroom 6,772 B). ' +
-      '208 → 330 KB (Stage 7A slice 2, 2026-09-03): the ten journey operations compose @totalfinance/portfolio (ledger, snapshot, P&L, timeline, policy monitor), @totalfinance/scenarios, @totalfinance/research and the options backtester, so the package now bundles those four surfaces too — the same by-design shape as slice 1, measured rather than absorbed (measured 335,951 B, headroom 1,969 B; the journey packs are opt-in, so a transport that enables only the domain packs still pays for them here — a consumer that wants one calculation imports its domain package). ' +
+      'Stage 7A slice 1 (2026-09-03): the operation contract, the registry with its registration refusals, the runtime (byte budget, strict parse, seed policy, deadline verdict, JSON-safe output, identity), and the twenty-four operations re-homed from @insiderfinance/totalfinance-mcp WITH the compute they compose — every domain pack (options, TA, strategy, volatility, structure, risk, performance, calendars, crypto, fixed income, the opt-in backtest). Big by design and measured, like the MCP server it replaces the schemas of: a transport imports this; an application that wants one calculation imports its domain package (measured 206,220 B, headroom 6,772 B). ' +
+      '208 → 330 KB (Stage 7A slice 2, 2026-09-03): the ten journey operations compose @insiderfinance/totalfinance/portfolio (ledger, snapshot, P&L, timeline, policy monitor), @insiderfinance/totalfinance/scenarios, @insiderfinance/totalfinance/research and the options backtester, so the package now bundles those four surfaces too — the same by-design shape as slice 1, measured rather than absorbed (measured 335,951 B, headroom 1,969 B; the journey packs are opt-in, so a transport that enables only the domain packs still pays for them here — a consumer that wants one calculation imports its domain package). ' +
       '330 → 334 KB (Stage 7A slice 3, 2026-09-03): the handle grammar, the memory artifact and job stores with their shared validators, the runtime handle resolution and large-output spill, and the bounded preview (measured 339,416 B, headroom 2,600 B). ' +
       '334 → 372 KB (Stage 4.6 slice 3, 2026-09-04): totalfinance.backtest.cross_sectional_run composes crossSectionalBacktest and a declared execution policy, so the opt-in backtest pack now bundles the cross-sectional engine — research eligibility and scoring, the allocator, the execution policy, the ledger fold — the same by-design shape as the journey packs, measured rather than absorbed (measured 378,003 B, headroom 2,925 B). ' +
       '372 → 382 KB (Stage 4.6 slice 4, 2026-09-04): totalfinance.backtest.options_run now composes the options book — the rule book, the limits, the fill and freshness policies, calendars and diagonals, corporate actions, dividends, the surface, and the ledger fold (measured 387,285 B, headroom 3,883 B). ' +
@@ -483,7 +483,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/research',
+    specifier: '@insiderfinance/totalfinance/research',
     entry: 'packages/research/src/index.ts',
     budgetKB: 25.25,
     intent: 'point-in-time screening, style factors, and event studies',
@@ -504,7 +504,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/foreign-exchange',
+    specifier: '@insiderfinance/totalfinance/foreign-exchange',
     entry: 'packages/foreign-exchange/src/index.ts',
     budgetKB: 10.75,
     intent: 'currency pairs, conversion, forwards and parity, currency exposure',
@@ -518,7 +518,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/portfolio',
+    specifier: '@insiderfinance/totalfinance/portfolio',
     entry: 'packages/portfolio/src/index.ts',
     budgetKB: 104,
     intent:
@@ -530,7 +530,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'teaching validation, the pure lot/cash reducer (four relief policies), the versioned ' +
       'events-not-state ledger envelope riding the Gate B artifact spine (canonical JSON + ' +
       'content hash + registered migrations), the explicit market/as-of valuation snapshot, and ' +
-      'the flow/mark series seam into @totalfinance/performance. Runtime dependencies are exactly ' +
+      'the flow/mark series seam into @insiderfinance/totalfinance/performance. Runtime dependencies are exactly ' +
       'core + performance (the FC0 graph row); the spine and the performance flow-aware module ' +
       'are what this entrypoint pays for beyond its own teaching strings. Measured 22,423 B at landing; the budget is 23 KB so the next slice ' +
       '(timeline/P&L) must reconcile its growth rather than absorb it. 23 → 37 KB (slice 2, 2026-08-28): portfolioPnl (the reconciled ' +
@@ -565,7 +565,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/commodities',
+    specifier: '@insiderfinance/totalfinance/commodities',
     entry: 'packages/commodities/src/index.ts',
     budgetKB: 11,
     intent: 'cost-of-carry forwards, implied carry inputs, roll analytics, curve state',
@@ -582,7 +582,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: '@totalfinance/scenarios',
+    specifier: '@insiderfinance/totalfinance/scenarios',
     entry: 'packages/scenarios/src/index.ts',
     budgetKB: 72,
     intent:
@@ -596,7 +596,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
-    specifier: 'totalfinance',
+    specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
     budgetKB: 681.25,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
@@ -607,7 +607,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'Pre-publish interface repairs (2026-09-18, assumptions and units): 672 → 674 KB, measured 689,089 B. One engine-inversion kernel with style-aware bounds (the American door, a European contract with a named engine, and the chain-health report share it), the chain-health American rows and dividend disclosure, the OCC grammar predicate and its refusals in the plan, paper broker and rebalance, the required annualization and risk-free rate, and the display-unit Greek kernel in risk; every other entrypoint stays inside its own line after the grammar/calendar split. ' +
       'Pre-publish interface repairs (2026-09-16, valuation instants): 670 → 672 KB, measured 686,738 B. The core time module grew by the session table and the strict valuation door; ' +
       'All 13 domains behind one specifier. Real apps either tree-shake it (the umbrella is ' +
-      '`sideEffects: false` re-exports) or import `totalfinance/<domain>` and pay only that slice. The ' +
+      '`sideEffects: false` re-exports) or import `@insiderfinance/totalfinance/<domain>` and pay only that slice. The ' +
       'budget exists so the kitchen-sink number is a MEASURED claim in CI, not folklore. ' +
       '300 KB → 310 KB in Phase 3B.N6: the naming normalization expanded thousands of identifiers ' +
       '(`iv` → `impliedVolatility`, `cvar` → `conditionalValueAtRisk`, …) and esbuild preserves ' +
@@ -689,8 +689,8 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'line). 366 → 367 KB: the H10–H12 reports — contribution rows, the stress envelope with its ' +
       'explicit-base-mark guard, and the self-interpreting grid axes (measured 375,167 B). ' +
       '367 → 368 KB: FC0 — the ONE InterestCompounding grammar (periodic object form + floor ' +
-      'guards in core dates) and the @totalfinance/fundamentals first slice riding the umbrella ' +
-      '(measured 376,413 B). 368 → 374 KB: FC1 — the @totalfinance/valuation cash-flow foundation ' +
+      'guards in core dates) and the @insiderfinance/totalfinance/fundamentals first slice riding the umbrella ' +
+      '(measured 376,413 B). 368 → 374 KB: FC1 — the @insiderfinance/totalfinance/valuation cash-flow foundation ' +
       '(27 heads: discounting, the all-roots IRR facades, loans/amortization, capital ' +
       'budgeting and depreciation) rides the umbrella (measured 381,990 B). 374 → 402 KB: FC2 — ' +
       'corporate valuation and typed fundamentals: the statement contracts and their guards, ' +
@@ -698,14 +698,14 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'DCF family (direct/reverse/sensitivity/scenario/probabilistic), the equity models, ' +
       'comparable/APV/LBO, and the three-statement forecasting compositions (measured 411,055 B; ' +
       '402 → 403 KB after the one-grammar report conformance added assumptions/diagnostics to every ' +
-      'analysis result — measured 411,735 B). 403 → 412 KB: FC3 — @totalfinance/research rides the ' +
+      'analysis result — measured 411,735 B). 403 → 412 KB: FC3 — @insiderfinance/totalfinance/research rides the ' +
       'umbrella: the declared-field screen grammar and its teaching errors, the factor toolkit ' +
       'and canonical recipes, and the event-study module (measured 427,863 B with events landed; ' +
       'the research package alone gzips to 20,363 B). 418 → 431 KB: FC4 + FC5 — the flow-aware ' +
       'performance module (time/money-weighted returns with the mark-first flow convention spelled ' +
       'out, Modified Dietz, the null-on-any-gap return index, benchmark alignment, contribution) ' +
-      'plus @totalfinance/foreign-exchange riding the umbrella (pairs/conversion/parity/forward and ' +
-      'NDF valuation/exposure; measured 440,899 B). 431 → 436 KB: FC6 — @totalfinance/commodities ' +
+      'plus @insiderfinance/totalfinance/foreign-exchange riding the umbrella (pairs/conversion/parity/forward and ' +
+      'NDF valuation/exposure; measured 440,899 B). 431 → 436 KB: FC6 — @insiderfinance/totalfinance/commodities ' +
       'rides the umbrella: cost-of-carry forwards and their inverses, roll analytics, curve-state ' +
       'classification, seasonality, and the explicit-factor conversion law (measured 446,091 B; ' +
       'the commodities package alone gzips to 9,385 B). 436 → 437 KB: Gates B+C — eight new ' +
@@ -734,17 +734,17 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'hardening ride the umbrella once (measured 547,080 B = 534.26 KB after strict public ' +
       'ArrayLike parity, intrinsic typed-array snapshotting, provenance/hash/fold parity, and ' +
       'shared-validator hostile-input safety; headroom 760 B). 535 → 567 KB (Stage 4.4b): ' +
-      '@totalfinance/scenarios, the fixed-income Gate-C bond adapter, and their central diagnostic ' +
+      '@insiderfinance/totalfinance/scenarios, the fixed-income Gate-C bond adapter, and their central diagnostic ' +
       'codes ride the umbrella once (measured 577,711 B gzip).' +
       "567 → 570 KB (Stage 4.5 slice 2, 2026-09-02): the direct-API warm starts (initialParameters on SVI/SSVI/eSSVI/SABR/GARCH with their start validators and echoes, the Heston initialParameters rename), the event-volatility forward evaluator with its generated closed-request spec, the fixed-income curve mappers (the pricer's curve builder made public, with the complete built-curve guard), and core's requireRateCurveData now on the root — all ride the umbrella once (measured 583,351 B = 569.7 KB, headroom 329 B)." +
       ' 570 → 572 KB (Preview P1, 2026-09-03): current-quote marking in the options backtester — the per-leg contract lookup with its four missing-mark causes and their teachings, the named fallbacks with per-trade evidence, the marking policy in the generated closed-request spec — plus the per-leg volatility overrides in the strategy mark-to-market and the risk P&L explain (measured 584,206 B = 570.5 KB, headroom 1,522 B).' +
       '572 -> 575 KB (Stage 4.6 slice 1, 2026-09-03): the umbrella re-exports the research universe vocabulary and the portfolio normalized-fill bridge (NormalizedFill guard + portfolioEventsFromFill) plus the three central codes; measured 588,028 B against 585,728 B, headroom now 772 B. The backtest execution subpath is NOT on the umbrella and adds nothing here.' +
       '575 -> 594 KB (Stage 4.6 slice 2, 2026-09-03): the umbrella re-exports the backtest root, which now carries crossSectionalBacktest — the loop over research eligibility and scoring, the allocator, the execution policy, and the ledger fold, plus its closed request guard — measured 607,224 B against 588,800 B, headroom now 1,032 B; the research, portfolio, and risk surfaces it composes were already on the umbrella, so the growth is the engine itself.' +
-      '594 -> 600 KB (Stage 4.6 slice 3, 2026-09-04): the backtest root now also carries crossSectionalBacktestGrid — the product runner, its closed guard, and the three risk hygiene verbs it composes (already on the umbrella through @totalfinance/risk, so the growth is the runner) — measured 609,964 B against 614,400 B, headroom 4,436 B. The artifacts subpath is NOT on the umbrella and adds nothing here. ' +
-      '600 KB → 612 KB (Stage 4.6 slice 5, 2026-09-04): the umbrella re-exports @totalfinance/backtest, whose root now carries the portfolio engine and its adapters beside the cross-sectional engine and the options book — measured 623,192 B against 626,688 B, headroom 3,496 B. ' +
+      '594 -> 600 KB (Stage 4.6 slice 3, 2026-09-04): the backtest root now also carries crossSectionalBacktestGrid — the product runner, its closed guard, and the three risk hygiene verbs it composes (already on the umbrella through @insiderfinance/totalfinance/risk, so the growth is the runner) — measured 609,964 B against 614,400 B, headroom 4,436 B. The artifacts subpath is NOT on the umbrella and adds nothing here. ' +
+      '600 KB → 612 KB (Stage 4.6 slice 5, 2026-09-04): the umbrella re-exports @insiderfinance/totalfinance/backtest, whose root now carries the portfolio engine and its adapters beside the cross-sectional engine and the options book — measured 623,192 B against 626,688 B, headroom 3,496 B. ' +
       '612 → 615 KB (Stage 4.6 slice 6, 2026-09-04): the backtest root now also carries crossSectionalWalkForward and crossSectionalPurgedFolds — the out-of-sample procedure over the grid, its two guards, and the fold plan — measured 625,782 B against 629,760 B, headroom 3,978 B.' +
       '615 KB → 617 KB (Stage 7B.1 slice 1, 2026-09-05): the root re-exports createTradingEnvironment, so the umbrella now bundles the environment core over the engine it already carried — +2.4 KB gzip for the guards, the open-order bookkeeping, and the trace identity (measured 630,154 B against 615 KB).' +
-      "617 KB → 623 KB (Stage 7B.1 slice 2, 2026-09-05): the environment's limits, mask, reward, and feature modules ride the umbrella (+5.1 KB gzip; the monitor it composes was already bundled through @totalfinance/portfolio); measured 635,348 B." +
+      "617 KB → 623 KB (Stage 7B.1 slice 2, 2026-09-05): the environment's limits, mask, reward, and feature modules ride the umbrella (+5.1 KB gzip; the monitor it composes was already bundled through @insiderfinance/totalfinance/portfolio); measured 635,348 B." +
       '623 → 628 KB (Stage 7B.1 slice 3, 2026-09-05): the episode verb and the scenario library ride the umbrella (+5.3 KB gzip; measured 640,654 B).' +
       '628 → 634 KB (Stage 7B.1 slice 4, 2026-09-05): the bench, the baselines, and the transcript scorer ride the umbrella (+3.9 KB gzip; measured 644,625 B).' +
       "634 → 640 KB (Stage 7B.2 slice 1, 2026-09-05): the trade lifecycle's first slice rides the umbrella (+3.7 KB gzip; measured 652,937 B)." +

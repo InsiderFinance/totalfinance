@@ -32,7 +32,7 @@ import {
 /**
  * The seven-form compounding ladder, taught at this package's boundary. Core owns the
  * {@link InterestCompounding} vocabulary and the factor arithmetic but exports no validator, and
- * the FC0 dependency graph forbids the `@totalfinance/valuation` edge that carries one — so the ladder
+ * the FC0 dependency graph forbids the `@insiderfinance/totalfinance/valuation` edge that carries one — so the ladder
  * is restated here rather than imported.
  */
 function requireCompoundingWhenPresent(

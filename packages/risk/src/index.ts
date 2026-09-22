@@ -1,6 +1,6 @@
 /**
- * `@totalfinance/risk` — risk & portfolio analytics (spec §12.2). Depends only on `@totalfinance/core`,
- * `@totalfinance/math` and `@totalfinance/performance`; importing a VaR helper never drags in option pricing.
+ * `@insiderfinance/totalfinance/risk` — risk & portfolio analytics (spec §12.2). Depends only on `@insiderfinance/totalfinance/core`,
+ * `@insiderfinance/totalfinance/math` and `@insiderfinance/totalfinance/performance`; importing a VaR helper never drags in option pricing.
  *
  * Four pillars, each also available as a focused sub-path import:
  *   • `./var`       VaR / CVaR (parametric · historical · Monte-Carlo) + portfolio decomposition
@@ -8,7 +8,7 @@
  *   • `./factor`    factor / PCA exposure
  *   • `./optimize`  min-variance · max-Sharpe · mean-variance · risk parity · HRP · Kelly
  *
- * Return/performance metrics (Sharpe, Sortino, drawdown, …) live in `@totalfinance/performance`
+ * Return/performance metrics (Sharpe, Sortino, drawdown, …) live in `@insiderfinance/totalfinance/performance`
  * (the nested namespace re-export was removed in P3.3 — one namespace level per concept).
  */
 
@@ -71,7 +71,7 @@ export type {
   ExplainPositionPnlInput,
 } from './pnl-explain.js';
 // The structural shape of a strategy `Position` that the book / VaR / P&L-explain analytics accept.
-// Risk owns these mirrors so it never imports `@totalfinance/strategy` (the layering points strategy → risk).
+// Risk owns these mirrors so it never imports `@insiderfinance/totalfinance/strategy` (the layering points strategy → risk).
 export type {
   StrategyLegKind,
   StrategyLeg,
@@ -278,4 +278,4 @@ export type {
 } from './evt.js';
 
 // The nested `performance` namespace re-export was DELETED (P3.3, one namespace level):
-// import performance metrics from '@totalfinance/performance' or the umbrella's `performance`.
+// import performance metrics from '@insiderfinance/totalfinance/performance' or the umbrella's `performance`.

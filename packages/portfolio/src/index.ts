@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/portfolio` — durable portfolio management (FC7, Stage 4.4): the event-derived,
+ * `@insiderfinance/totalfinance/portfolio` — durable portfolio management (FC7, Stage 4.4): the event-derived,
  * browser-safe economic-state package decided in
  * `docs/agent-native-portfolio-and-trading-platform.md` (D5).
  *
@@ -12,10 +12,10 @@
  *   {@link readPortfolioLedgerSnapshot}, {@link portfolioLedgerContentHash});
  * - {@link portfolioSnapshot} — explicit market/as-of valuation (NAV, settled/unsettled cash,
  *   unrealized P&L);
- * - {@link portfolioPerformanceInputs} — the exact flow/mark series `@totalfinance/performance`'s
+ * - {@link portfolioPerformanceInputs} — the exact flow/mark series `@insiderfinance/totalfinance/performance`'s
  *   FC4 calls consume (the ledger FEEDS TWR/MWR, never re-implements them).
  *
- * `analyzeBook` in `@totalfinance/risk` remains the independent one-off book calculation; nothing
+ * `analyzeBook` in `@insiderfinance/totalfinance/risk` remains the independent one-off book calculation; nothing
  * here is required for direct calculations (Permanent law 10).
  */
 

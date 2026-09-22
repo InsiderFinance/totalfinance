@@ -1,5 +1,5 @@
 /**
- * The one runtime every transport calls (Stage 7A Decision 2) — extracted from `@totalfinance/mcp`'s
+ * The one runtime every transport calls (Stage 7A Decision 2) — extracted from `@insiderfinance/totalfinance-mcp`'s
  * server so the byte budget, the strict parse, the seed policy, the deadline verdict, the JSON-safe
  * normalization, and the error mapping exist exactly once.
  */

@@ -288,7 +288,7 @@ function coveredBody(artifact: Omit<AnalysisArtifact, 'id'>): Record<string, unk
  *
  * @example
  * ```ts
- * import { createAnalysisArtifact, marketSnapshotContentHash } from '@totalfinance/core/artifacts';
+ * import { createAnalysisArtifact, marketSnapshotContentHash } from '@insiderfinance/totalfinance/core/artifacts';
  *
  * const report = impliedVolatilitySurface({ ... });        // any Law-2 result, verbatim
  * const artifact = createAnalysisArtifact({
@@ -485,7 +485,7 @@ export function readAnalysisArtifact(input: {
   }
   if (version > ANALYSIS_ARTIFACT_SCHEMA_VERSION) {
     throw artifactError(
-      `readAnalysisArtifact: artifact schema version ${version} is newer than this build supports (${ANALYSIS_ARTIFACT_SCHEMA_VERSION}). Upgrade @totalfinance/core to restore it.`,
+      `readAnalysisArtifact: artifact schema version ${version} is newer than this build supports (${ANALYSIS_ARTIFACT_SCHEMA_VERSION}). Upgrade @insiderfinance/totalfinance to restore it.`,
       ErrorCode.SnapshotUnsupportedVersion,
       { version, supported: ANALYSIS_ARTIFACT_SCHEMA_VERSION },
     );

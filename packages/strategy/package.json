@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/strategy",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance options strategy & profit calculator: payoff, breakevens, mark-to-market, Greeks. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
@@ -68,11 +68,8 @@
     "@totalfinance/options": "workspace:*",
     "@totalfinance/risk": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "private": true
 }

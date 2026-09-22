@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/portfolio/policy` — the portfolio-side management surface (FC7 slice 4, Stage 4.4):
+ * `@insiderfinance/totalfinance/portfolio/policy` — the portfolio-side management surface (FC7 slice 4, Stage 4.4):
  * an explicit, user-supplied investment policy over the event-derived ledger.
  *
  * - {@link createModelPortfolio} — an immutable, content-addressed strategic/tactical/glide-path

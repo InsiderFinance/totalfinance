@@ -15,6 +15,7 @@ import { escapeHtml, renderPlayground } from './src/render.js';
 import { options } from './src/playgrounds/options.js';
 import { playgrounds } from './src/playgrounds/index.js';
 import { buildPublicReference, type ReferenceEntry } from '../tools/public-reference.js';
+import { MCP_PACKAGE_NAME } from '../tools/public-packages.js';
 import { readSiteVersion } from './version.js';
 import { restoreReleaseArchives } from './archives.js';
 import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/local/profiles.js';
@@ -64,7 +65,7 @@ function page(path: string, title: string, body: string, active = ''): void {
 }
 
 export const referencePath = (entry: Pick<ReferenceEntry, 'package' | 'entrypoint'>): string =>
-  `reference/${entry.package.replace('@totalfinance/', '')}/${entry.entrypoint.slice(entry.package.length).replace(/^\//, '') || 'index'}`;
+  `reference/${entry.package === MCP_PACKAGE_NAME ? 'mcp' : 'totalfinance'}/${entry.entrypoint.slice(entry.package.length).replace(/^\//, '') || 'index'}`;
 
 function memberTable(members: ReferenceEntry['members']): string {
   return `<div class="table-scroll"><table><thead><tr><th>Name / type</th><th>Meaning & unit</th><th>Optional / default</th></tr></thead><tbody>${members.map((member) => `<tr><td><code>${escapeHtml(member.name)}</code><br/><code>${escapeHtml(member.type)}</code></td><td>${escapeHtml(member.description)}<br/><small>${escapeHtml(unitByName(member.name.split('.').at(-1)!))}</small></td><td>${member.optional ? 'Optional' : 'Required / declared member'}<br/>${escapeHtml(member.defaultValue ?? 'No @default declared; consult the signature and description.')}</td></tr>`).join('')}</tbody></table></div>`;
@@ -335,12 +336,16 @@ export async function buildSite(): Promise<void> {
       if (previous) {
         if (!previous.keywords.includes(entry.entrypoint))
           previous.keywords += ` ${entry.entrypoint}`;
+        if (previous.category === entry.package && entry.entrypoint !== entry.package) {
+          previous.url = exportUrls.get(entry.id)!;
+          previous.category = entry.entrypoint;
+        }
       } else
         referenceSearch.set(key, {
           title: entry.name,
           url: exportUrls.get(entry.id)!,
           description: entry.description.slice(0, 160) || `${entry.kind} from ${entry.entrypoint}`,
-          category: entry.package,
+          category: entry.entrypoint,
           kind: entry.kind,
           keywords: `${entry.entrypoint} ${entry.kind} ${entry.tags
             .map((tag) => tag.text)
@@ -414,9 +419,9 @@ export async function buildSite(): Promise<void> {
     `<div class="prose">
     <p class="eyebrow">Know what you are running</p><h1>Versions & stability</h1>
     <p class="version-badge">${escapeHtml(release.label)}</p>
-    <p>These pages and playgrounds are generated from the same fixed package group. A development build is not a published preview or stable release.</p>
-    ${release.published ? `<h2>Install this exact release</h2><pre>pnpm add totalfinance@${release.version}</pre><pre>npx -y @totalfinance/mcp@${release.version}</pre>` : '<h2>Use this source build</h2><p>This checkout is not verified as matching a public release. In the TotalFinance directory, run:</p><pre>pnpm install --frozen-lockfile\npnpm build\npnpm site:build\npnpm site:dev</pre><p>Import from the workspace or test its packed tarballs. Registry install examples elsewhere are release instructions, not evidence that this source is published.</p>'}
-    <h2>Preview versus stable</h2><p>Preview releases are explicitly pre-1.0 and may include deliberate breaking changes. Stable status requires a verified stable registry release, its own smoke tests, and maintainer authorization. ${release.channel === 'stable' ? 'This build matches the recorded stable release.' : 'No stable release is advertised by this build.'}</p>
+    <p>These pages and playgrounds describe two public packages: the main toolkit and optional MCP server. A development build is not proof of npm publication.</p>
+    ${release.published ? `<h2>Install this exact release</h2><pre>pnpm add @insiderfinance/totalfinance@${release.version}</pre><pre>npx -y @insiderfinance/totalfinance-mcp@${release.version}</pre>` : '<h2>Use this source build</h2><p>This checkout is not verified as matching a public release. In the TotalFinance directory, run:</p><pre>pnpm install --frozen-lockfile\npnpm build\npnpm site:build\npnpm site:dev</pre><p>Import from the workspace or test its packed tarballs. Registry install examples elsewhere are release instructions, not evidence that this source is published.</p>'}
+    <h2>Pre-1.0 stability</h2><p>Version 0.1.0 is pre-1.0 software, not a 1.0 stability guarantee. Breaking changes may occur. A version without a prerelease suffix does not establish API maturity. ${release.published ? 'This build matches a recorded public registry verification.' : 'No public release is advertised by this build.'}</p>
     <p><a href="/versions/${release.version}/">Browse this version-pinned documentation snapshot</a>.</p>
     ${archivedVersions.length ? `<h2>Earlier releases</h2><ul>${archivedVersions.map((version) => `<li><a href="/versions/${version}/">${escapeHtml(version)}</a> — preserved pages, search, examples, and assets</li>`).join('')}</ul>` : ''}
     <h2>Package stability</h2><p>Read <a href="/guides/stability/">the stability policy</a> and the package-level contracts in the reference. A model or platform subpath can have a different maturity from the package as a whole.</p>

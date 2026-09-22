@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance core: types, conventions, errors, diagnostics, assumptions, and a zero-dependency schema facade.",
   "license": "Apache-2.0",
   "keywords": [
@@ -77,11 +77,8 @@
   "scripts": {
     "build": "tsc -b tsconfig.build.json"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "private": true
 }

@@ -1,22 +1,22 @@
-# @totalfinance/portfolio
+# @insiderfinance/totalfinance/portfolio
 
 > Durable portfolio management: the immutable economic-event ledger, pure event reduction, lots and multi-currency cash, valuation snapshots, and flow-aware performance inputs
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/portfolio
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { createPortfolioLedger, portfolioSnapshot } from '@totalfinance/portfolio';
-import { createMarketSnapshot } from '@totalfinance/core/artifacts';
+import { createPortfolioLedger, portfolioSnapshot } from '@insiderfinance/totalfinance/portfolio';
+import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
 // Portfolio truth is a fold over immutable economic events: a deposit, then a fill.
 const instrumentId = 'AAPL';
 const ledger = createPortfolioLedger({
@@ -71,15 +71,15 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
 ## API
 
-`@totalfinance/portfolio` exposes **40** runtime exports (**229** including types) across 7 entrypoints (`.`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
+`@insiderfinance/totalfinance/portfolio` exposes **40** runtime exports (**229** including types) across 7 entrypoints (`.`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
 
 ## License
 

@@ -1,11 +1,11 @@
 /**
- * `@totalfinance/portfolio/performance` — the P&L reconciliation seam between the ledger and FC4's
- * flow-aware performance calls (`@totalfinance/performance`).
+ * `@insiderfinance/totalfinance/portfolio/performance` — the P&L reconciliation seam between the ledger and FC4's
+ * flow-aware performance calls (`@insiderfinance/totalfinance/performance`).
  *
  * The ledger FEEDS `timeWeightedReturn` / `moneyWeightedReturn` / `modifiedDietzReturn`; it never
  * re-implements them (agent-native Permanent law "No second engine"; FC7 exit gate: "TWR/MWR
  * consume the exact ledger flows and marks and match FC4 direct calls"). The output types here
- * ARE FC4's `PortfolioValuation` and `ExternalCashFlow`, imported from `@totalfinance/performance` —
+ * ARE FC4's `PortfolioValuation` and `ExternalCashFlow`, imported from `@insiderfinance/totalfinance/performance` —
  * not structural copies — so the seam cannot drift from the consumer.
  *
  * Convention agreement, stated once and tested: FC4's time-weighted convention is "a valuation
@@ -34,7 +34,7 @@ import type { PortfolioValuationMark } from './marks.js';
 import { foldToMarks, requireValuationMarks } from './marks.js';
 import { requirePortfolioLedger } from './state.js';
 
-// Subpath completeness: `@totalfinance/portfolio/performance` consumers can name the quote type.
+// Subpath completeness: `@insiderfinance/totalfinance/portfolio/performance` consumers can name the quote type.
 export type { CurrencyPairQuote } from './internal.js';
 
 /** One dated valuation mark: the market (and any FX quotes) to value the ledger with on a date. */
@@ -96,8 +96,8 @@ const EXAMPLE_CALL =
  *
  * @example
  * ```ts
- * import { timeWeightedReturn } from '@totalfinance/performance';
- * import { portfolioPerformanceInputs } from '@totalfinance/portfolio/performance';
+ * import { timeWeightedReturn } from '@insiderfinance/totalfinance/performance';
+ * import { portfolioPerformanceInputs } from '@insiderfinance/totalfinance/portfolio/performance';
  *
  * const series = portfolioPerformanceInputs({ ledger, valuationMarks });
  * const twr = timeWeightedReturn({

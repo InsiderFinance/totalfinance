@@ -1,7 +1,7 @@
 /**
  * Chain access helpers for the options backtester: resolve snapshot times, compute days-to-expiry,
  * list and select expiries, and bridge the declarative entry rule onto `strategyFromChain` — or, for
- * the multi-expiry structures (Stage 4.6), onto `@totalfinance/strategy`'s calendar and diagonal
+ * the multi-expiry structures (Stage 4.6), onto `@insiderfinance/totalfinance/strategy`'s calendar and diagonal
  * constructors with the near leg chosen by delta and the far leg by days.
  */
 

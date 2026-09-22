@@ -1,9 +1,9 @@
 /**
- * `@totalfinance/performance/relative` — benchmark-relative performance metrics (spec §15.1).
+ * `@insiderfinance/totalfinance/performance/relative` — benchmark-relative performance metrics (spec §15.1).
  *
  * Each takes a per-period strategy return series and an aligned benchmark return series (same length,
  * same periodicity) and reports the standard CAPM-style relationships: beta, Jensen's alpha, tracking
- * error, the information ratio, and the Treynor ratio. Imports only `@totalfinance/math` + `@totalfinance/core`.
+ * error, the information ratio, and the Treynor ratio. Imports only `@insiderfinance/totalfinance/math` + `@insiderfinance/totalfinance/core`.
  *
  * Every metric here is a facade (design law #3): the plain call returns a number; `.explain()`
  * echoes the annualization factor (and risk-free rate) where applied. `beta` applies no

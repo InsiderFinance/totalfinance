@@ -4,9 +4,17 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { sabrVolatility } from '@totalfinance/options/sabr';
-import { type SVIParameters, calibrateSabrSmile, calibrateSvi } from '@totalfinance/volatility';
-import { sviButterflyFree, sviTotalVariance, sviVolatility } from '@totalfinance/volatility/svi';
+import { sabrVolatility } from '@insiderfinance/totalfinance/options/sabr';
+import {
+  type SVIParameters,
+  calibrateSabrSmile,
+  calibrateSvi,
+} from '@insiderfinance/totalfinance/volatility';
+import {
+  sviButterflyFree,
+  sviTotalVariance,
+  sviVolatility,
+} from '@insiderfinance/totalfinance/volatility/svi';
 
 describe('docs: raw-SVI smile calibration', () => {
   it('fits five intuitive parameters to a market smile and stays arbitrage-free', () => {

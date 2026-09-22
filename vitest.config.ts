@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
+import { publicSourcePaths } from './tools/public-packages.js';
 
 const fromRoot = (p: string): string => fileURLToPath(new URL(p, import.meta.url));
 
@@ -11,6 +12,11 @@ const fromRoot = (p: string): string => fileURLToPath(new URL(p, import.meta.url
 export default defineConfig({
   resolve: {
     alias: {
+      ...Object.fromEntries(
+        Object.entries(publicSourcePaths(fromRoot('.')))
+          .sort(([a], [b]) => b.length - a.length)
+          .map(([name, paths]) => [name, fromRoot(paths[0]!)]),
+      ),
       '@totalfinance/core/schema': fromRoot('./packages/core/src/schema/index.ts'),
       '@totalfinance/core/artifacts': fromRoot('./packages/core/src/artifacts/index.ts'),
       '@totalfinance/core/pricing': fromRoot('./packages/core/src/pricing.ts'),

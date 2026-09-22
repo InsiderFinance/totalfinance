@@ -1,6 +1,6 @@
-import { vectorized, fees } from '@totalfinance/backtest';
-import { sma } from '@totalfinance/technical-analysis';
-import { underwater } from '@totalfinance/performance';
+import { vectorized, fees } from '@insiderfinance/totalfinance/backtest';
+import { sma } from '@insiderfinance/totalfinance/technical-analysis';
+import { underwater } from '@insiderfinance/totalfinance/performance';
 import type { Playground } from '../types.js';
 
 export const backtesting: Playground = {
@@ -117,7 +117,7 @@ export const backtesting: Playground = {
           description:
             '120 synthetic observations, not historical market data. Preview: the first three bars. Expand for the complete literal dataset and imports; Copy setup + call includes all of it. The 252-period annualization is a stated assumption, not a trading calendar.',
           preview: JSON.stringify(data.slice(0, 3), null, 2),
-          code: `import { vectorized, fees } from '@totalfinance/backtest';\nimport { sma } from '@totalfinance/technical-analysis';\n\n// Synthetic sample data, not market history.\nconst data = [\n${data.map((bar) => `  ${JSON.stringify(bar)},`).join('\n')}\n];`,
+          code: `import { vectorized, fees } from '@insiderfinance/totalfinance/backtest';\nimport { sma } from '@insiderfinance/totalfinance/technical-analysis';\n\n// Synthetic sample data, not market history.\nconst data = [\n${data.map((bar) => `  ${JSON.stringify(bar)},`).join('\n')}\n];`,
         },
         code: `const averages = sma(data.map(bar => bar.close), { period: ${period} });\nconst signal = data.map((bar, index) =>\n  Number.isFinite(averages[index]) && bar.close > averages[index]!\n);\nconst backtest = vectorized({\n  data,\n  signal,\n  initialCapital: ${initialCapital},\n  executionLag: 1, // Execute the previous bar's signal.\n  periodsPerYear: 252,\n  fees: fees.bps(${feeBasisPoints}),\n});\nconst result = {\n  finalValue: backtest.finalValue,\n  maxDrawdown: backtest.performance.maxDrawdown,\n  tradeCount: backtest.trades.length,\n};\nconsole.log(result);`,
         result: {
@@ -126,7 +126,7 @@ export const backtesting: Playground = {
           tradeCount: result.trades.length,
         },
       },
-      code: `import { vectorized, fees } from '@totalfinance/backtest';\nimport { sma } from '@totalfinance/technical-analysis';\nimport { underwater } from '@totalfinance/performance';\n\n// Synthetic data, not a historical market series.\nconst data = Array.from({ length: 120 }, (_, index) => {\n  const close = 100 + index * 0.08 + Math.sin(index / 7) * 5 + Math.cos(index / 3) * 1.2;\n  return { symbol: 'SAMPLE', timestampMs: Date.UTC(2026, 0, 1) + index * 86400000, open: close, high: close, low: close, close };\n});\nconst averages = sma(data.map(bar => bar.close), { period: ${period} });\nconst signal = data.map((bar, index) => Number.isFinite(averages[index]) && bar.close > averages[index]!);\nconst backtest = vectorized({ data, signal, initialCapital: ${initialCapital}, executionLag: 1, periodsPerYear: 252, fees: fees.bps(${feeBasisPoints}) });\nconst result = { backtest, drawdowns: underwater(backtest.points.map(point => point.equity)) };\nconsole.log(result);`,
+      code: `import { vectorized, fees } from '@insiderfinance/totalfinance/backtest';\nimport { sma } from '@insiderfinance/totalfinance/technical-analysis';\nimport { underwater } from '@insiderfinance/totalfinance/performance';\n\n// Synthetic data, not a historical market series.\nconst data = Array.from({ length: 120 }, (_, index) => {\n  const close = 100 + index * 0.08 + Math.sin(index / 7) * 5 + Math.cos(index / 3) * 1.2;\n  return { symbol: 'SAMPLE', timestampMs: Date.UTC(2026, 0, 1) + index * 86400000, open: close, high: close, low: close, close };\n});\nconst averages = sma(data.map(bar => bar.close), { period: ${period} });\nconst signal = data.map((bar, index) => Number.isFinite(averages[index]) && bar.close > averages[index]!);\nconst backtest = vectorized({ data, signal, initialCapital: ${initialCapital}, executionLag: 1, periodsPerYear: 252, fees: fees.bps(${feeBasisPoints}) });\nconst result = { backtest, drawdowns: underwater(backtest.points.map(point => point.equity)) };\nconsole.log(result);`,
     };
   },
 };

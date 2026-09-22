@@ -1,6 +1,6 @@
 /**
  * Small internal linear-algebra helpers for portfolio math. Heavy primitives (Cholesky, eigen,
- * nearest-PSD, correlated sampling) come from `@totalfinance/math`; these are the lightweight vector
+ * nearest-PSD, correlated sampling) come from `@insiderfinance/totalfinance/math`; these are the lightweight vector
  * operations the risk formulas lean on.
  */
 

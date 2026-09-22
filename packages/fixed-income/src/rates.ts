@@ -659,7 +659,7 @@ export interface ForwardSwapResult {
  * The curve-driven forward swap rate and annuity of a (possibly forward-starting) swap — the two curve
  * inputs a swaption needs, in one call. For a swaption struck at `K` expiring at `startDate`, the price
  * is `annuity · Black(forwardSwapRate, K, σ, T)` (Bachelier for normal σ). Pair this with a vol from
- * `@totalfinance/volatility`'s swaption cube (`swaptionCubeVolatility`) for a fully curve-consistent swaption price, so
+ * `@insiderfinance/totalfinance/volatility`'s swaption cube (`swaptionCubeVolatility`) for a fully curve-consistent swaption price, so
  * the forward and annuity come from the live (OIS/projection) curves rather than stale market nodes.
  */
 export function forwardSwap(

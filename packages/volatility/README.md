@@ -1,21 +1,21 @@
-# @totalfinance/volatility
+# @insiderfinance/totalfinance/volatility
 
 > TotalFinance volatility: implied-vol surfaces, skew/smile metrics, IV rank/percentile, and event-volatility (expected move, probability ITM/touch). Browser-safe.
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/volatility
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { expectedMoveFromImpliedVolatility } from '@totalfinance/volatility';
+import { expectedMoveFromImpliedVolatility } from '@insiderfinance/totalfinance/volatility';
 const move = expectedMoveFromImpliedVolatility({
   spot: 100,
   impliedVolatility: 0.2,
@@ -27,18 +27,18 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
-## Example — `@totalfinance/volatility/artifacts`
+## Example — `@insiderfinance/totalfinance/volatility/artifacts`
 
 ```ts
-import { calibrateSvi } from '@totalfinance/volatility';
-import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@totalfinance/volatility/artifacts';
-import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+import { calibrateSvi } from '@insiderfinance/totalfinance/volatility';
+import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@insiderfinance/totalfinance/volatility/artifacts';
+import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
 // A smile in total variance w(k) — here generated from known SVI parameters.
 const k = [-0.5, -0.35, -0.2, -0.1, -0.03, 0, 0.05, 0.12, 0.22, 0.35, 0.5];
 const w = k.map(
@@ -70,7 +70,7 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## API
 
-`@totalfinance/volatility` exposes **57** runtime exports (**200** including types) across 28 entrypoints (`.`, `./analytics`, `./arbitrage`, `./artifacts`, `./earnings`, `./essvi`, `./estimate`, `./event`, `./forecast`, `./heston-surface`, `./local-volatility`, `./metrics`, `./min-variance-delta`, `./risk-reversal`, `./sabr`, `./sabr-delta`, `./skew`, `./ssvi`, `./sticky-regime`, `./surface`, `./surface-pca`, `./svi`, `./swaption-cube`, `./tail-risk`, `./term`, `./vanna-volga`, `./variance-index`, `./volatility-spot-beta`). See the generated [`etc/volatility.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/volatility/etc/volatility.api.md) for the full surface.
+`@insiderfinance/totalfinance/volatility` exposes **57** runtime exports (**200** including types) across 28 entrypoints (`.`, `./analytics`, `./arbitrage`, `./artifacts`, `./earnings`, `./essvi`, `./estimate`, `./event`, `./forecast`, `./heston-surface`, `./local-volatility`, `./metrics`, `./min-variance-delta`, `./risk-reversal`, `./sabr`, `./sabr-delta`, `./skew`, `./ssvi`, `./sticky-regime`, `./surface`, `./surface-pca`, `./svi`, `./swaption-cube`, `./tail-risk`, `./term`, `./vanna-volga`, `./variance-index`, `./volatility-spot-beta`). See the generated [`etc/volatility.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/volatility/etc/volatility.api.md) for the full surface.
 
 ## License
 

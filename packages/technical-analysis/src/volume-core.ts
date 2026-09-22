@@ -7,7 +7,7 @@
  * volume-profile and order-book-imbalance utilities. OBV and cumulative VWAP live in `./bars`.
  *
  * Bars without a `volume` field are treated as zero-volume. CVD here is a bar-based proxy (it signs
- * volume by close-to-close direction); trade-level aggressor CVD lives in `@totalfinance/structure`.
+ * volume by close-to-close direction); trade-level aggressor CVD lives in `@insiderfinance/totalfinance/structure`.
  */
 
 import * as builtinMetadata from './builtin-metadata.js';

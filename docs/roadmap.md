@@ -1,5 +1,12 @@
 # TotalFinance roadmap — the ambitious surface
 
+Current publication target: `@insiderfinance/totalfinance@0.1.0` and optional
+`@insiderfinance/totalfinance-mcp@0.1.0`, not separately published domain packages. The
+[release contract](./specs/scoped-single-package-release.md) owns this packaging cutover and the
+current implementation queue owns readiness. Historical phase-status snapshots below are not
+additional launch blockers. Optional WASM remains future measured work with unchanged ordinary
+function calls after explicit startup; see the updated acceleration target API.
+
 > Phases 0–6 (the compute library: core, math, calendars, options, volatility, structure, strategy, technical-analysis,
 > performance, risk, backtest, fixed-income, crypto, mcp, and the umbrella) are implemented. Most of
 > the pre-1.0 coherence pass is verified at `e1e846e7`: 308 test files / 6,284 tests, domain reference

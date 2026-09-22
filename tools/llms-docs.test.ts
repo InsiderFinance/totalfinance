@@ -68,8 +68,8 @@ describe('WS9.7 agent-facing docs are up to date', () => {
   it('generates import guidance in both agent docs and includes the canonical public guide', () => {
     for (const content of [concise, full]) {
       expect(content).toContain('## Imports and bundles');
-      expect(content).toContain('named imports from `totalfinance/<domain>`');
-      expect(content).toContain('`@totalfinance/<domain>`');
+      expect(content).toContain('named imports from `@insiderfinance/totalfinance/<domain>`');
+      expect(content).toContain('`@insiderfinance/totalfinance/<domain>`');
       expect(content).toContain('](guides/imports-and-bundles.md)');
       expect(content).toContain('no automatic dead-code');
     }
@@ -85,8 +85,8 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     );
     expect(full).toContain('](bundle-size.md)');
     expect(full).not.toContain('](../bundle-size.md)');
-    expect(full).toContain("import * as math from 'totalfinance/math'");
-    expect(full).toContain("import { math } from 'totalfinance'");
+    expect(full).toContain("import * as math from '@insiderfinance/totalfinance/math'");
+    expect(full).toContain("import { math } from '@insiderfinance/totalfinance'");
     expect(full).toContain('https://github.com/evanw/esbuild/issues/1420');
     expect(full).toContain('Rollup shakes this static use');
     expect(full).toContain('unpublished preview');

@@ -239,7 +239,7 @@ export function defineOperation<Input, Output extends Record<string, unknown>>(d
   ) {
     refuse(
       functionName,
-      'inputSchema must be a @totalfinance/core/schema Schema (safeParse + toJSONSchema).',
+      'inputSchema must be a @insiderfinance/totalfinance/core/schema Schema (safeParse + toJSONSchema).',
       'definition.inputSchema',
     );
   }
@@ -475,7 +475,7 @@ export function requireOperation(
   ) {
     refuse(
       functionName,
-      `${field}.inputSchema must be a @totalfinance/core/schema Schema; ${teaching}.`,
+      `${field}.inputSchema must be a @insiderfinance/totalfinance/core/schema Schema; ${teaching}.`,
       `${field}.inputSchema`,
     );
   }

@@ -3,7 +3,7 @@
  *
  * Moving averages (`./moving-averages`) plus the extended overlap set (`./overlap-ext`):
  * weighted MAs, JMA/HWMA, rainbow & ribbon MAs, VWAP bands, and session/rolling-anchored VWAP.
- * Bollinger / Keltner bands live in `@totalfinance/technical-analysis/bands`.
+ * Bollinger / Keltner bands live in `@insiderfinance/totalfinance/technical-analysis/bands`.
  */
 export * from './moving-averages.js';
 export * from './overlap-ext.js';

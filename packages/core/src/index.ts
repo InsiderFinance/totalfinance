@@ -1,9 +1,9 @@
 /**
- * `@totalfinance/core` — shared types, conventions, errors, diagnostics, assumptions, and small
+ * `@insiderfinance/totalfinance/core` — shared types, conventions, errors, diagnostics, assumptions, and small
  * numeric utilities. Zero runtime dependencies and browser-safe.
  *
  * The runtime schema facade is intentionally NOT re-exported here; import it from
- * `@totalfinance/core/schema` so compute entrypoints never pull validator code (spec §6).
+ * `@insiderfinance/totalfinance/core/schema` so compute entrypoints never pull validator code (spec §6).
  */
 
 export {

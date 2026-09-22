@@ -437,24 +437,39 @@ workload traces and size-scaled benchmarks identify their break-even points.
 
 ### Target API
 
+**September 22 packaging/DX amendment:** this section is future work, not an API available in
+0.1.0. It supersedes the earlier required `createTotalFinance({ compute })` design. The main npm
+package is `@insiderfinance/totalfinance`; acceleration is an optional companion, provisionally
+`@insiderfinance/totalfinance-wasm`, not a second mandatory library or a port of every domain.
+
 The current struct-of-arrays `Float64Array` APIs and `*Into` variants are the correct ABI. Add a
-small backend SPI and bind it at a front door; do not add `backend` to hundreds of function calls.
+small backend SPI with explicit once-per-runtime activation; do not add `backend` to hundreds of
+function calls. Installing or importing the companion must not activate global state by itself.
 
 ```ts
-import { createTotalFinance } from 'totalfinance';
-import { createWasmBackend } from '@totalfinance/wasm';
+// Proposed future API — not shipped in 0.1.0.
+import { enableWasm } from '@insiderfinance/totalfinance-wasm';
+import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options';
 
-const compute = await createWasmBackend({ mode: 'auto' });
-const totalfinanceClient = createTotalFinance({ compute });
-
-const result = totalfinanceClient.options.blackScholesPriceMany(columns);
+await enableWasm({ mode: 'auto' });
+const result = blackScholesPriceMany(columns); // same import, arguments, result and synchronous call
 ```
 
-Direct imports remain pure TypeScript and synchronous:
+Before activation, ordinary imports use TypeScript. After activation, eligible batch calls can use
+the registered backend; scalar calls and unsupported/small workloads remain TypeScript according to
+the explicit policy. Require idempotent concurrent initialization, a version-compatible shared
+registry per installed main-library instance, inspectable backend/fallback status, and safe worker
+startup (each worker is its own runtime). Strict WASM mode must refuse initialization/capability
+failures instead of silently falling back. An isolated advanced context may be added for callers
+needing independent backend policies; it is not the primary beginner path.
 
-```ts
-import { blackScholesPriceMany } from '@totalfinance/options';
-```
+Do not add a duplicate `/wasm/options` function surface at first. The companion's explicit startup
+keeps the usual import paths valid and prevents main-package users from downloading WASM accidentally.
+Browser support is required: bundler-safe asset resolution, configurable asset location, correct
+WASM MIME/CSP guidance, and no Node built-ins in the browser entry point. WASM does not automatically
+move work off the UI thread; heavy browser work belongs in a worker. Threads/shared memory are an
+optional capability with their own cross-origin-isolation requirements, not a prerequisite for
+ordinary single-threaded WASM.
 
 The target backend contract should be narrow and capability-based:
 
@@ -478,7 +493,7 @@ interface ComputeBackend {
 }
 ```
 
-The front door chooses the reference kernel when a backend lacks a capability or when a batch is
+The activated dispatch chooses the reference kernel when a backend lacks a capability or when a batch is
 below the measured crossover threshold. Advanced callers can require a backend and reject fallback.
 Worker/job orchestration is a separate asynchronous layer that chunks these synchronous kernels,
 owns `AbortSignal`, and publishes progress; the public API never returns a `void | Promise<void>`

@@ -9,7 +9,7 @@
  *
  * Volatility estimators REQUIRE `annualization` — the bars per year that scales the per-bar σ by
  * √annualization (252 daily, 52 weekly, 12 monthly) or `1` for the per-bar σ. There is no default:
- * a per-bar σ handed to `@totalfinance/volatility`'s annualized consumers is wrong by √252, silently.
+ * a per-bar σ handed to `@insiderfinance/totalfinance/volatility`'s annualized consumers is wrong by √252, silently.
  */
 
 import * as builtinMetadata from './builtin-metadata.js';

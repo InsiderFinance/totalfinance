@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/portfolio/trade` — the safe trade lifecycle's pure compute (Stage 7B.2, AT5): the
+ * `@insiderfinance/totalfinance/portfolio/trade` — the safe trade lifecycle's pure compute (Stage 7B.2, AT5): the
  * intent and the execution plan it normalizes to, the structured policy, and the preflight that
  * values the portfolio before and after through the ledger's own fold and judges it through the
  * monitor; the authorization grant, the execution journal, and reconciliation (slice 2).

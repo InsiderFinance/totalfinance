@@ -1,6 +1,6 @@
 {
-  "version": "0.0.1",
-  "packages": 25,
+  "version": "0.1.0",
+  "packages": 2,
   "operations": 23,
   "priceStructured": "{\"assumptions\":{\"compounding\":\"continuous\",\"conventionsVersion\":\"0.0.1\",\"dayCount\":\"ACT/365F\",\"dividendModel\":\"none\",\"engine\":\"black-scholes-merton\",\"model\":\"black-scholes-merton\",\"timeToExpiryYears\":0.25,\"units\":{\"rho\":\"per1Percent\",\"theta\":\"perDay\",\"vega\":\"per1Percent\"}},\"diagnostics\":{\"converged\":true,\"engine\":\"black-scholes-merton\",\"method\":\"closed-form\",\"warnings\":[]},\"value\":2.3908769595711306}",
   "journey": "{\"finalValue\":1.2169811320754718,\"pop\":0.502053157808066,\"price\":0.8983963669668142,\"rsiLast\":57.91502067008556}",

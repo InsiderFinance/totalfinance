@@ -1,21 +1,21 @@
-# @totalfinance/mcp
+# @insiderfinance/totalfinance-mcp
 
 > TotalFinance MCP server: exposes the TotalFinance engine to AI agents via the Model Context Protocol. Read-only by default.
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/mcp
+pnpm add @insiderfinance/totalfinance-mcp@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { defaultTools } from '@totalfinance/mcp';
+import { defaultTools } from '@insiderfinance/totalfinance-mcp';
 const toolNames = defaultTools().map((t) => t.name); // the read-only compute tools
 ```
 
@@ -23,9 +23,9 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
@@ -59,7 +59,7 @@ totalfinance-mcp --profile portfolio --store /absolute/path/to/totalfinance-stor
 `--jobs` is explicit and requires a writable `--store`; `--store` alone does not enable jobs.
 `--store-read-only` attaches only a reader and cannot be combined with `--jobs`. Embedders pass
 `jobs: createLocalJobRunner({ registry, directory, profile, packs?, clock })` from
-`@totalfinance/workflows/local` plus the same directory's `artifacts` reader to
+`@insiderfinance/totalfinance/workflows/local` plus the same directory's `artifacts` reader to
 `createTotalFinanceMcpServer`. The runner must reconstruct the same registered operations and versions.
 There is no process-wide job runner and no experimental MCP task dependency.
 
@@ -93,7 +93,7 @@ Only listed operations are wire-supported; callback APIs and unlisted model fami
 
 ## API
 
-`@totalfinance/mcp` exposes **24** runtime exports (**28** including types) across 1 entrypoint. See the generated [`etc/mcp.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/mcp/etc/mcp.api.md) for the full surface.
+`@insiderfinance/totalfinance-mcp` exposes **24** runtime exports (**28** including types) across 1 entrypoint. See the generated [`etc/mcp.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/mcp/etc/mcp.api.md) for the full surface.
 
 ## License
 

@@ -1,8 +1,8 @@
 /**
  * Runtime schemas for core market-data payloads (spec §6, §7.6).
  *
- * Lives under `@totalfinance/core/schema` so it never burdens hot compute paths. These are the canonical
- * payload schemas; domain packages re-export the relevant ones (e.g. `@totalfinance/options` re-exports
+ * Lives under `@insiderfinance/totalfinance/core/schema` so it never burdens hot compute paths. These are the canonical
+ * payload schemas; domain packages re-export the relevant ones (e.g. `@insiderfinance/totalfinance/options` re-exports
  * `OptionContractSchema`).
  */
 

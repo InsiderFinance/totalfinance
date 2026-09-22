@@ -1,6 +1,6 @@
 # TotalFinance TA — the live tier (charting workflows)
 
-The technical-analysis package (`@totalfinance/technical-analysis`) is built for live, charting-product use, not just
+The technical-analysis package (`@insiderfinance/totalfinance/technical-analysis`) is built for live, charting-product use, not just
 end-of-day batch runs. Three pieces make that work: forming-bar `peek()`, multi-timeframe
 `resample`/`alignToBars`, and `divergences`. All are pure (no clock reads) and streaming-first — batch
 output is always derived from the same stream, so what you see live is what a backtest sees.
@@ -15,7 +15,7 @@ Every indicator stream (`indicator.stream(params)`) is a **live stream** with tw
   closed bars never repaint.
 
 ```ts
-import { rsi } from '@totalfinance/technical-analysis';
+import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
 
 const stream = rsi.stream({ period: 14 });
 
@@ -45,7 +45,7 @@ are epoch-aligned (`floor(ts / intervalMs) * intervalMs`); only **closed** highe
 are ever projected onto the lower-timeframe (LTF) index.
 
 ```ts
-import { resample, alignToBars, rsi } from '@totalfinance/technical-analysis';
+import { resample, alignToBars, rsi } from '@insiderfinance/totalfinance/technical-analysis';
 
 // 1m → 1h. Only completed hourly buckets are returned by default; pass { includePartial: true } to
 // also get the still-forming bucket (flagged `partial: true`).
@@ -70,7 +70,7 @@ Regular and hidden price/indicator divergences, confirmed causally: an event is 
 where the second swing's fractal window completes, and the two swings reference earlier bars.
 
 ```ts
-import { divergences, rsi } from '@totalfinance/technical-analysis';
+import { divergences, rsi } from '@insiderfinance/totalfinance/technical-analysis';
 
 const rsiValues = rsi(closes, { period: 14 });
 const events = divergences(closes, rsiValues, {

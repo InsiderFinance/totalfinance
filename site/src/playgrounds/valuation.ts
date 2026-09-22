@@ -1,4 +1,7 @@
-import { discountedCashFlow, type DiscountedCashFlowInput } from '@totalfinance/valuation';
+import {
+  discountedCashFlow,
+  type DiscountedCashFlowInput,
+} from '@insiderfinance/totalfinance/valuation';
 import type { Playground } from '../types.js';
 
 export const valuation: Playground = {
@@ -111,14 +114,14 @@ export const valuation: Playground = {
       example: {
         description:
           'Returns a valuation report. This example prints three selected fields from the firm-basis report, in USD. The sensitivity chart is a separate set of repeated valuations, not a required conversion of the answer.',
-        code: `import { discountedCashFlow, type DiscountedCashFlowInput } from '@totalfinance/valuation';\n\nconst input: DiscountedCashFlowInput = ${JSON.stringify(request, null, 2)};\nconst valuation = discountedCashFlow(input);\nif (valuation.valuationBasis !== 'firm') throw new Error('Expected firm basis.');\nconst result = {\n  enterpriseValue: valuation.enterpriseValue,\n  projectedCashFlowPresentValue: valuation.projectedCashFlowPresentValue,\n  terminalValuePresentValue: valuation.terminalValuePresentValue,\n};\nconsole.log(result);`,
+        code: `import { discountedCashFlow, type DiscountedCashFlowInput } from '@insiderfinance/totalfinance/valuation';\n\nconst input: DiscountedCashFlowInput = ${JSON.stringify(request, null, 2)};\nconst valuation = discountedCashFlow(input);\nif (valuation.valuationBasis !== 'firm') throw new Error('Expected firm basis.');\nconst result = {\n  enterpriseValue: valuation.enterpriseValue,\n  projectedCashFlowPresentValue: valuation.projectedCashFlowPresentValue,\n  terminalValuePresentValue: valuation.terminalValuePresentValue,\n};\nconsole.log(result);`,
         result: {
           enterpriseValue: result.enterpriseValue,
           projectedCashFlowPresentValue: result.projectedCashFlowPresentValue,
           terminalValuePresentValue: result.terminalValuePresentValue,
         },
       },
-      code: `import { discountedCashFlow, type DiscountedCashFlowInput } from '@totalfinance/valuation';\n\nconst input: DiscountedCashFlowInput = ${JSON.stringify(request, null, 2)};\nconst rates = Array.from({ length: 21 }, (_, index) => ${Math.max(perpetualGrowthRate + 0.005, annualDiscountRate - 0.025)} + index * 0.0025);\nconst sensitivity = rates.map(rate => {\n  const row = discountedCashFlow({ ...input, annualDiscountRate: rate });\n  if (row.valuationBasis !== 'firm') throw new Error('Expected firm basis.');\n  return { x: rate, y: row.enterpriseValue };\n});\n// Firm-basis cash flows produce enterprise value.\nconst result = { valuation: discountedCashFlow(input), sensitivity };\nconsole.log(result);`,
+      code: `import { discountedCashFlow, type DiscountedCashFlowInput } from '@insiderfinance/totalfinance/valuation';\n\nconst input: DiscountedCashFlowInput = ${JSON.stringify(request, null, 2)};\nconst rates = Array.from({ length: 21 }, (_, index) => ${Math.max(perpetualGrowthRate + 0.005, annualDiscountRate - 0.025)} + index * 0.0025);\nconst sensitivity = rates.map(rate => {\n  const row = discountedCashFlow({ ...input, annualDiscountRate: rate });\n  if (row.valuationBasis !== 'firm') throw new Error('Expected firm basis.');\n  return { x: rate, y: row.enterpriseValue };\n});\n// Firm-basis cash flows produce enterprise value.\nconst result = { valuation: discountedCashFlow(input), sensitivity };\nconsole.log(result);`,
     };
   },
 };

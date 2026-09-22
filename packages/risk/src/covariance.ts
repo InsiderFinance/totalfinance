@@ -5,7 +5,7 @@ import { ensureEnumWhenPresent, ensureFiniteWhenPresent } from './options-intern
  *
  * This is a cohesive risk-domain operation, not a barrel re-export: it takes returns in the
  * shape portfolio data actually arrives in (observations-major — one row per period, one column
- * per asset), delegates the estimation to `@totalfinance/math`'s `estimateCovariance` (auto
+ * per asset), delegates the estimation to `@insiderfinance/totalfinance/math`'s `estimateCovariance` (auto
  * shrinkage, SPD guarantees, conditioning report), and returns the analysis envelope whose
  * `value` plugs STRAIGHT into `minVariance` / `maxSharpe` / `meanVariance` / `riskParity`:
  *
@@ -38,7 +38,7 @@ export interface CovarianceInput {
   /**
    * Observations-major returns: `returns[t][k]` is asset `k`'s simple return in period `t` —
    * one row per period, one column per asset (the natural CSV/dataframe orientation, and the
-   * TRANSPOSE of `@totalfinance/math`'s variables-major `estimateCovariance` input). Every row must
+   * TRANSPOSE of `@insiderfinance/totalfinance/math`'s variables-major `estimateCovariance` input). Every row must
    * have the same number of assets.
    */
   returns: number[][];
@@ -49,7 +49,7 @@ export interface CovarianceInput {
 /** The documented {@link CovarianceInput} keys — Law 12: an unknown field must throw, never no-op. */
 const COVARIANCE_INPUT_KEYS = ['returns', 'assets'] as const;
 
-/** Estimator options — delegated verbatim to `@totalfinance/math`'s `estimateCovariance`. */
+/** Estimator options — delegated verbatim to `@insiderfinance/totalfinance/math`'s `estimateCovariance`. */
 export type CovarianceOptions = EstimateCovarianceOptions;
 
 /** The documented {@link CovarianceOptions} keys (mirrors `EstimateCovarianceOptions`). */
@@ -268,7 +268,7 @@ const MEAN_RETURNS_INPUT_KEYS = ['returns', 'periodsPerYear'] as const;
 /**
  * Per-asset arithmetic mean returns from observations-major history — the `mu` for
  * `maxSharpe({ mean, covariance })` / `meanVariance({ mean, covariance })`. Kept deliberately small: it is the
- * journey-completing helper, not a statistics suite (see `@totalfinance/math` for that).
+ * journey-completing helper, not a statistics suite (see `@insiderfinance/totalfinance/math` for that).
  */
 export function meanReturns(input: MeanReturnsInput): number[] {
   const functionName = 'meanReturns';

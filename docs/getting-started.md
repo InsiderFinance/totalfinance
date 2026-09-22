@@ -4,17 +4,17 @@ TotalFinance is an unpublished preview. Until npm publication, use a
 [source checkout](https://github.com/InsiderFinance/totalfinance#develop); the install commands below describe the planned published
 experience, not a completed registry installation.
 
-The `totalfinance` umbrella provides one install for the whole toolkit. For portable browser tree
+The `@insiderfinance/totalfinance` umbrella provides one install for the whole toolkit. For portable browser tree
 shaking, use named imports from its domain subpaths:
 
 ```sh
-pnpm add totalfinance
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ```ts
-import { blackScholes } from 'totalfinance/options';
-import { valueAtRisk } from 'totalfinance/risk';
-import { rsi } from 'totalfinance/technical-analysis';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import { valueAtRisk } from '@insiderfinance/totalfinance/risk';
+import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
 
 blackScholes.call({
   spot: 100,
@@ -33,15 +33,15 @@ valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
 The root keeps its convenience API: domain namespaces (`math`, `technicalAnalysis`, `risk`,
 `options`, …) and only five hoisted option gestures (`blackScholes`, `option`, `market`, `engines`,
 `impliedVolatility`), not the entire options API flat. There is a bundler tradeoff:
-`import { math } from 'totalfinance'; math.normalCdf(0)` retains the whole math namespace with
+`import { math } from '@insiderfinance/totalfinance'; math.normalCdf(0)` retains the whole math namespace with
 esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use.
-Direct `import * as math from 'totalfinance/math'` with static member use also shakes.
+Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes.
 
-For a smaller installation, choose only the scoped packages you need. Named imports from
-`@totalfinance/<domain>` and supported feature subpaths are also portable browser choices:
+All domains and feature subpaths come in the main package with no runtime dependencies.
+MCP is the only optional separate package (after publication):
 
 ```sh
-pnpm add @totalfinance/options
+pnpm add @insiderfinance/totalfinance-mcp@0.1.0
 ```
 
 Installation size and final bundle size are different: installing the umbrella does not require
@@ -55,7 +55,7 @@ generated measurements.
 Facade APIs accept flat object inputs and return plain values. Use them for notebooks, dashboards, quick calculations, and hot paths where you want minimal ceremony.
 
 ```ts
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 
 const price = blackScholes.call({
   spot: 100,
@@ -87,7 +87,7 @@ explained.diagnostics.converged; // true
 The pro API separates contracts from markets and always returns a rich envelope.
 
 ```ts
-import { engines, market, option } from '@totalfinance/options';
+import { engines, market, option } from '@insiderfinance/totalfinance/options';
 
 // usEquityCall encodes the US listed convention (American exercise, 16:00 ET close, ×100);
 // exercise style is never silently defaulted — option.call requires an explicit `style`.
@@ -120,7 +120,7 @@ result.diagnostics;
 Runtime schemas live behind explicit schema entrypoints so the compute path stays small.
 
 ```ts
-import { schemas } from '@totalfinance/options/schema';
+import { schemas } from '@insiderfinance/totalfinance/options/schema';
 
 const parsed = schemas.OptionContract.parse({
   underlying: 'AAPL',
@@ -139,20 +139,20 @@ Bachelier) with first- and higher-order Greeks and a multi-method implied-vol su
 Bjerksund–Stensland 1993 & 2002, binomial CRR/JR/Tian/Leisen–Reimer, trinomial, Crank–Nicolson) with
 discrete-dividend handling and `option.compareEngines`; stochastic-vol models (Heston, SABR, Dupire
 local vol) and seeded Monte-Carlo/QMC pricing with barrier/Asian/lookback exotics; the
-`@totalfinance/math` numerical foundation; implied-vol surfaces with SVI/SABR calibration, skew/smile
-metrics and event vol (`@totalfinance/volatility`); options market structure — GEX/DEX/vanna/charm exposure,
-walls, max pain, scenario maps, flow (`@totalfinance/structure`); exchange calendars; 335 registered
+`@insiderfinance/totalfinance/math` numerical foundation; implied-vol surfaces with SVI/SABR calibration, skew/smile
+metrics and event vol (`@insiderfinance/totalfinance/volatility`); options market structure — GEX/DEX/vanna/charm exposure,
+walls, max pain, scenario maps, flow (`@insiderfinance/totalfinance/structure`); exchange calendars; 335 registered
 technical indicators (batch + streaming); performance metrics; risk & portfolio analytics —
-VaR/CVaR, stress/scenario testing, factor/PCA, optimization and research hygiene (`@totalfinance/risk`);
+VaR/CVaR, stress/scenario testing, factor/PCA, optimization and research hygiene (`@insiderfinance/totalfinance/risk`);
 an options strategy/payoff calculator; backtesting — a vectorized research engine and an
-event-driven execution simulator with walk-forward and tear sheets (`@totalfinance/backtest`); and fixed
+event-driven execution simulator with walk-forward and tear sheets (`@insiderfinance/totalfinance/backtest`); and fixed
 income — bonds + analytics, yield-curve bootstrapping, rates derivatives, short-rate models, and
-credit (`@totalfinance/fixed-income`).
+credit (`@insiderfinance/totalfinance/fixed-income`).
 
 Boundaries that still hold:
 
 - `riskFreeRate` and `volatility` are scalar market inputs on the options market object (yield curves live
-  in `@totalfinance/fixed-income`; the scalar vol feeds the `@totalfinance/volatility` surface as fitted IVs).
+  in `@insiderfinance/totalfinance/fixed-income`; the scalar vol feeds the `@insiderfinance/totalfinance/volatility` surface as fitted IVs).
 - Discrete dividends use the documented escrowed-spot approximation across BSM and the American
   engines; the textbook `engines.blackScholes()` ignores dividends by design.
 - Date-only expiries resolve to the named instrument convention — `usEquityCall`/`usEquityPut`

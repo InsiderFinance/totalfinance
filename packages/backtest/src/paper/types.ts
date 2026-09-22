@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/paper` — the paper broker's types (Stage 7B.2, Decision 7).
+ * `@insiderfinance/totalfinance/backtest/paper` — the paper broker's types (Stage 7B.2, Decision 7).
  */
 import type { EpochMs } from '@totalfinance/core';
 import type {

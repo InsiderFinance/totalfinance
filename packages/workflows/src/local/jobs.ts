@@ -237,7 +237,7 @@ function workerEntry(): URL {
     if (existsSync(candidate)) return candidate;
   }
   throw new InputError(
-    'submitJob: the compiled job worker (dist/job-worker.js) is missing — build @totalfinance/cli before submitting a job-class operation.',
+    'submitJob: the compiled job worker is missing — reinstall @insiderfinance/totalfinance (or run pnpm build in a source checkout) before submitting a job-class operation.',
     { code: ErrorCode.OperationInternal, context: { function: 'submitJob', field: 'worker' } },
   );
 }

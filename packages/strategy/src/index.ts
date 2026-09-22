@@ -1,8 +1,8 @@
 /**
- * `@totalfinance/strategy` — the browser-first options profit calculator (spec §12).
+ * `@insiderfinance/totalfinance/strategy` — the browser-first options profit calculator (spec §12).
  *
  * Build a position from legs, then compute expiration payoff, breakevens, max profit/loss,
- * mark-to-market P&L, and per-leg/aggregate Greeks. Does NOT depend on `@totalfinance/volatility`.
+ * mark-to-market P&L, and per-leg/aggregate Greeks. Does NOT depend on `@insiderfinance/totalfinance/volatility`.
  *
  *   const position = strategy([
  *     legs.call({ strike: 100, premium: 4.25, quantity: 1 }),

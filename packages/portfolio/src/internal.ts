@@ -28,8 +28,8 @@ export function describeInputValue(value: unknown): string {
 // ---------------------------------------------------------------------------------------------------
 
 /**
- * One spot exchange-rate quote — `@totalfinance/foreign-exchange`'s (FC5) `CurrencyPairQuote`
- * vocabulary, reused STRUCTURALLY because the FC0 dependency row for `@totalfinance/portfolio`
+ * One spot exchange-rate quote — `@insiderfinance/totalfinance/foreign-exchange`'s (FC5) `CurrencyPairQuote`
+ * vocabulary, reused STRUCTURALLY because the FC0 dependency row for `@insiderfinance/totalfinance/portfolio`
  * (`tools/package-graph.test.ts`) allows only core and performance as runtime edges. The fields,
  * semantics, and conversion arithmetic (direct = multiply by `quotePerBase`, inverted = divide)
  * are identical to FC5's, and the parity test in

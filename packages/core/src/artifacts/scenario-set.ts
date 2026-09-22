@@ -5,7 +5,7 @@
  * a scenario is a list of typed records, and anything a list of records cannot say belongs in
  * caller code via the escape hatch (a custom reprice function), not in a language embedded here.
  *
- * The shock grammar is the one `@totalfinance/risk` already speaks — `{ factor, kind: 'percent' |
+ * The shock grammar is the one `@insiderfinance/totalfinance/risk` already speaks — `{ factor, kind: 'percent' |
  * 'absolute', value }`, with the same factor vocabulary (`spot`, `volatility`, `riskFreeRate`,
  * `time`, `dividend`, or a custom label) — extended with an optional `target` symbol so one
  * scenario can shock AAPL and SPY differently. A spine shock without `target` is exactly a risk
@@ -37,7 +37,7 @@ export const SCENARIO_SET_KIND = 'totalfinance.scenario-set';
 /** Current scenario-set schema version — same bump-with-migration policy as the other envelopes. */
 export const SCENARIO_SET_SCHEMA_VERSION = 1;
 
-/** The factor vocabulary shared with `@totalfinance/risk`'s scenario engine; open for custom labels. */
+/** The factor vocabulary shared with `@insiderfinance/totalfinance/risk`'s scenario engine; open for custom labels. */
 export type ScenarioFactor = 'spot' | 'volatility' | 'riskFreeRate' | 'time' | 'dividend' | string;
 
 /** A relative change: `percent` scales the base level; `absolute` adds in the factor's own unit. */
@@ -344,7 +344,7 @@ export function readScenarioSet(input: {
   }
   if (version > SCENARIO_SET_SCHEMA_VERSION) {
     throw scenarioError(
-      `readScenarioSet: scenarioSet schema version ${version} is newer than this build supports (${SCENARIO_SET_SCHEMA_VERSION}). Upgrade @totalfinance/core to restore it.`,
+      `readScenarioSet: scenarioSet schema version ${version} is newer than this build supports (${SCENARIO_SET_SCHEMA_VERSION}). Upgrade @insiderfinance/totalfinance to restore it.`,
       ErrorCode.SnapshotUnsupportedVersion,
       { version, supported: SCENARIO_SET_SCHEMA_VERSION },
     );

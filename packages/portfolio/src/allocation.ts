@@ -508,7 +508,7 @@ export function sortUnresolved(rows: UnresolvedTarget[]): UnresolvedTarget[] {
  *
  * @example
  * ```ts
- * import { allocatePortfolio } from '@totalfinance/portfolio/policy';
+ * import { allocatePortfolio } from '@insiderfinance/totalfinance/portfolio/policy';
  *
  * const plan = allocatePortfolio({
  *   policy: {

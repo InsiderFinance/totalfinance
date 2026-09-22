@@ -1,4 +1,4 @@
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 import type { Playground } from '../types.js';
 
 export const options: Playground = {
@@ -97,10 +97,10 @@ export const options: Playground = {
       example: {
         description:
           'Returns a number: the option price in USD per share. No array conversion or chart setup is needed. Use blackScholes.greeks(input) for a named Greeks object, or .explain(input) for assumptions and diagnostics.',
-        code: `import { blackScholes } from '@totalfinance/options';\n\nconst input = ${JSON.stringify(request, null, 2)} as const;\nconst result = blackScholes.price(input);\nconsole.log(result);`,
+        code: `import { blackScholes } from '@insiderfinance/totalfinance/options';\n\nconst input = ${JSON.stringify(request, null, 2)} as const;\nconst result = blackScholes.price(input);\nconsole.log(result);`,
         result: price.value,
       },
-      code: `import { blackScholes } from '@totalfinance/options';\n\nconst input = ${JSON.stringify(request, null, 2)} as const;\nconst priceCurve = Array.from({ length: 61 }, (_, index) => {\n  const spot = input.spot * (0.7 + index / 100);\n  return { x: spot, y: blackScholes.price({ ...input, spot }) };\n});\nconst result = {\n  price: blackScholes.price.explain(input),\n  greeks: blackScholes.greeks.explain(input),\n  priceCurve,\n};\nconsole.log(result);`,
+      code: `import { blackScholes } from '@insiderfinance/totalfinance/options';\n\nconst input = ${JSON.stringify(request, null, 2)} as const;\nconst priceCurve = Array.from({ length: 61 }, (_, index) => {\n  const spot = input.spot * (0.7 + index / 100);\n  return { x: spot, y: blackScholes.price({ ...input, spot }) };\n});\nconst result = {\n  price: blackScholes.price.explain(input),\n  greeks: blackScholes.greeks.explain(input),\n  priceCurve,\n};\nconsole.log(result);`,
     };
   },
 };

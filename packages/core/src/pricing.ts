@@ -1,5 +1,5 @@
 /**
- * Gate C — the narrow structural extension contract (`@totalfinance/core/pricing`).
+ * Gate C — the narrow structural extension contract (`@insiderfinance/totalfinance/core/pricing`).
  *
  * This module is the WHOLE protocol a heterogeneous position is priced through: a small structural
  * `Pricer` interface, typed market-requirement descriptors, the engine-selection report grammar,

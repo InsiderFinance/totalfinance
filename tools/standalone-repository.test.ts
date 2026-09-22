@@ -43,8 +43,16 @@ describe('the standalone TotalFinance repository', () => {
     )
       .split('\0')
       .filter(Boolean);
+    // `--cached` includes tracked removals until commit. Audit the actual worktree, while still
+    // including all untracked additions; deleting retired Changesets files is a valid change.
+    const deleted = new Set(
+      execFileSync('git', ['ls-files', '-z', '--deleted'], { cwd: ROOT, encoding: 'utf8' }).split(
+        '\0',
+      ),
+    );
     expect(files.length).toBeGreaterThan(1500);
     const violations = [...new Set(files)].filter((path) => {
+      if (deleted.has(path)) return false;
       if (path === historical) return false;
       if (retiredBrand.test(path) || /(?:^|\/)\.env(?:\.|$)|\.(?:pem|key)$/.test(path)) return true;
       const bytes = readFileSync(resolve(ROOT, path));
@@ -62,9 +70,10 @@ describe('the standalone TotalFinance repository', () => {
     expect(read('docs/evidence/README.md')).toContain('not approval');
   });
 
-  it('names every published package and repository link for TotalFinance', () => {
+  it('keeps source identities private and names the exact two public distribution workspaces', () => {
     for (const directory of readdirSync(resolve(ROOT, 'packages'))) {
       const pkg = JSON.parse(read(`packages/${directory}/package.json`));
+      expect(pkg.private).toBe(true);
       expect(pkg.name).toBe(
         directory === 'totalfinance' ? 'totalfinance' : `@totalfinance/${directory}`,
       );
@@ -75,7 +84,26 @@ describe('the standalone TotalFinance repository', () => {
         `# ${pkg.name} — public API`,
       );
     }
+    for (const [directory, name] of [
+      ['totalfinance', '@insiderfinance/totalfinance'],
+      ['mcp', '@insiderfinance/totalfinance-mcp'],
+    ]) {
+      const pkg = JSON.parse(read(`distribution/${directory}/package.json`));
+      expect(pkg.name).toBe(name);
+      expect(pkg.private).not.toBe(true);
+      expect(pkg.repository.url).toBe('git+https://github.com/InsiderFinance/totalfinance.git');
+      expect(pkg.repository.directory).toBe(`distribution/${directory}`);
+      expect(pkg.version).toBe(JSON.parse(read('distribution/totalfinance/package.json')).version);
+    }
     expect(JSON.parse(read('.changeset/config.json')).baseBranch).toBe('main');
+    expect(JSON.parse(read('.changeset/config.json')).fixed).toEqual([
+      ['@insiderfinance/totalfinance', '@insiderfinance/totalfinance-mcp'],
+    ]);
+    expect(JSON.parse(read('.changeset/config.json')).privatePackages).toEqual({
+      version: false,
+      tag: false,
+    });
+    expect(existsSync(resolve(ROOT, '.changeset/pre.json'))).toBe(false);
   });
 
   it('recomputes the release-smoke MCP identity from the renamed tool names', () => {
@@ -113,6 +141,18 @@ describe('the standalone TotalFinance repository', () => {
     expect(release).not.toContain('steps.where');
     expect(release).not.toContain('working-directory:');
     expect(release).toContain('package_json_file: package.json');
-    expect(release).toContain('pnpm release:publish --dir approved --tag preview');
+    expect(release).toContain('pnpm release:publish --dir release/approved --tag candidate');
+    expect(release).toContain('distribution/${dir}/package.json');
+    expect(release).toContain("node-version: '24.21.0'");
+    expect(release).toContain('id-token: write');
+    expect(release).toContain('--expect-version "$RELEASE_VERSION" --resume');
+    expect(release).toContain('--registry https://registry.npmjs.org --approved release/approved');
+    expect(release).toContain('NPM_BOOTSTRAP_TOKEN');
+    expect(release).toContain('default: false');
+    expect(release).not.toContain('--tag latest');
+    expect(release).not.toContain('npm dist-tag add');
+    expect(read('.github/workflows/totalfinance-ci.yml')).toContain(
+      "require('./distribution/totalfinance/package.json').version",
+    );
   });
 });

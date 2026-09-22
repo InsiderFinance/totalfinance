@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/technical-analysis` — technical indicators with aligned batch output and serializable streaming state.
+ * `@insiderfinance/totalfinance/technical-analysis` — technical indicators with aligned batch output and serializable streaming state.
  *
  * Every indicator is both a batch function and a stream:
  *   - `technicalAnalysis.rsi(closes, { period: 14 })` → aligned `number[]` (NaN warmup),
@@ -822,4 +822,4 @@ export const priceAction = {
 
 // The eponymous `ta` namespace object was DELETED (P3.3): it duplicated the module's own
 // exports one level down (umbrella users saw `technicalAnalysis.ta`). Use the module namespace instead:
-// `import * as ta from '@totalfinance/technical-analysis'`.
+// `import * as ta from '@insiderfinance/totalfinance/technical-analysis'`.

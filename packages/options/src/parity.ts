@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/options/parity` — put-call parity, implied carry, and box-spread financing from a
+ * `@insiderfinance/totalfinance/options/parity` — put-call parity, implied carry, and box-spread financing from a
  * snapshot option chain (spec §WS9.4).
  *
  * Put-call parity says the call/put mid at each strike sits on a straight line in the strike `K`:

@@ -7,7 +7,7 @@ TotalFinance separates programmer/input failures from quantitative failures.
 Facade functions return plain values and throw typed `QuantError` subclasses for invalid inputs or failed solves.
 
 ```ts
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 
 blackScholes.call({
   spot: -1,

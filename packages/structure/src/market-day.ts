@@ -1,6 +1,6 @@
 /**
  * The US options market's calendar DAY (America/New_York), shared by the exposure and flow 0DTE
- * classifications. Internal to `@totalfinance/structure` (not part of the package surface).
+ * classifications. Internal to `@insiderfinance/totalfinance/structure` (not part of the package surface).
  *
  * Expiries resolve to 16:00 ET (`optionExpiryToMs`), which is 20:00/21:00 **UTC** — so a UTC-day
  * comparison is not the trading day. Between 20:00 and 23:59 ET the UTC date is already TOMORROW:

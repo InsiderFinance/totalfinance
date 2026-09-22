@@ -1,12 +1,12 @@
 /**
- * `@totalfinance/backtest/cross-sectional` — point-in-time cross-sectional strategies (Stage 4.6, FC8
+ * `@insiderfinance/totalfinance/backtest/cross-sectional` — point-in-time cross-sectional strategies (Stage 4.6, FC8
  * Decision 4). One verb, {@link crossSectionalBacktest}, over a returns dataset, a universe
  * history, one signal, a rebalance schedule, and a portfolio construction; every decision is a
- * `@totalfinance/research` call, every quantity `@totalfinance/portfolio`'s allocator, every fill a
- * `NormalizedFill` folded by the FC7 reducer, every performance number `@totalfinance/performance`.
+ * `@insiderfinance/totalfinance/research` call, every quantity `@insiderfinance/totalfinance/portfolio`'s allocator, every fill a
+ * `NormalizedFill` folded by the FC7 reducer, every performance number `@insiderfinance/totalfinance/performance`.
  * `crossSectionalBacktestGrid` runs the cartesian product of declarative variations as independent
  * calls of the same function and composes the research-hygiene verdicts; the run artifacts live in
- * `@totalfinance/backtest/artifacts`.
+ * `@insiderfinance/totalfinance/backtest/artifacts`.
  */
 
 export { crossSectionalBacktest } from './engine.js';

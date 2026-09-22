@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/paper` — the paper broker (Stage 7B.2, AT5, Decision 7): the first execution
+ * `@insiderfinance/totalfinance/backtest/paper` — the paper broker (Stage 7B.2, AT5, Decision 7): the first execution
  * adapter, deterministic and credential-free. `submit` verifies the authorization grant and journals
  * (one idempotency key, one plan; a retry returns the same receipt); `step` meets every open order with
  * the market through the engines' own fill path and returns the fills and the ledger events; `cancel`,

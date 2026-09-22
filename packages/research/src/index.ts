@@ -1,5 +1,5 @@
 /**
- * @totalfinance/research — point-in-time research primitives (FC3): universe screening over declared
+ * @insiderfinance/totalfinance/research — point-in-time research primitives (FC3): universe screening over declared
  * fields, cross-sectional style factors, and event studies. Everything here computes over
  * caller-supplied observations; nothing fetches, imputes, or invents data.
  */

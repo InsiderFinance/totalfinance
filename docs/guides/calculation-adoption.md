@@ -14,7 +14,7 @@ the adoption workflow, not an independent numerical oracle. When integrating ano
 record that producer's real input parameters and assumptions instead of copying TotalFinance's labels.
 
 ```ts
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 import {
   artifactReplayParity,
   canonicalJsonOf,
@@ -22,7 +22,7 @@ import {
   createAnalysisArtifact,
   fromCanonicalJson,
   readAnalysisArtifact,
-} from '@totalfinance/core/artifacts';
+} from '@insiderfinance/totalfinance/core/artifacts';
 
 const parameters = {
   spot: 100,
@@ -104,8 +104,8 @@ gamma/charm/vanna hedging estimate. Check coverage and exclusions before interpr
 ### Calculate exposure from supplied Greeks
 
 ```ts
-import { resolvedExpiry } from '@totalfinance/core';
-import { exposureFromGreeks } from '@totalfinance/structure';
+import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
+import { exposureFromGreeks } from '@insiderfinance/totalfinance/structure';
 
 const timestampMs = Date.parse('2026-09-01T15:00:00Z');
 const exposure = exposureFromGreeks({
@@ -153,8 +153,8 @@ volatility scenario: use a pricing model for that separate task.
 ### Inspect a chain without inventing model inputs
 
 ```ts
-import { resolvedExpiry as resolveChainExpiry } from '@totalfinance/core';
-import { optionChainHealth } from '@totalfinance/options';
+import { resolvedExpiry as resolveChainExpiry } from '@insiderfinance/totalfinance/core';
+import { optionChainHealth } from '@insiderfinance/totalfinance/options';
 
 const quoteTime = Date.parse('2026-09-01T15:00:00Z');
 const health = optionChainHealth({

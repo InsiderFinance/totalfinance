@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/math` — the numerical foundation for TotalFinance. No third-party runtime dependencies,
+ * `@insiderfinance/totalfinance/math` — the numerical foundation for TotalFinance. No third-party runtime dependencies,
  * browser-safe.
  *
  * Covers the standard normal distribution, robust 1-D root solvers, descriptive/rolling statistics,

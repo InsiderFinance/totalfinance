@@ -14,7 +14,7 @@ const alias = workspaceAlias();
  *
  * The budgets, their rationales, and the structural guarantees are declared in `budgets.ts`, because
  * the published table in `docs/bundle-size.md` is generated from the same record. Keeping them apart
- * is what let the doc publish "< 14 KB" for `@totalfinance/math` while this file allowed 33 KB, and omit
+ * is what let the doc publish "< 14 KB" for `@insiderfinance/totalfinance/math` while this file allowed 33 KB, and omit
  * six budgeted entrypoints entirely.
  */
 describe('bundle-size budgets', () => {

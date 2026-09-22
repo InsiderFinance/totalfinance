@@ -2,12 +2,12 @@
  * Runnable backtesting examples (spec §16). Each snippet executes in CI with assertions so the
  * vectorized-engine / event-driven / walk-forward / tear-sheet docs cannot drift from working code.
  *
- * The throughline: a backtest is a *model*, and `@totalfinance/backtest` makes its hidden assumptions
+ * The throughline: a backtest is a *model*, and `@insiderfinance/totalfinance/backtest` makes its hidden assumptions
  * (fills, costs, slippage, look-ahead, survivorship) visible on every result.
  */
 
 import { describe, expect, it } from 'vitest';
-import type { Bar } from '@totalfinance/core';
+import type { Bar } from '@insiderfinance/totalfinance/core';
 import {
   brokers,
   crossOver,
@@ -17,15 +17,15 @@ import {
   slippage,
   tearSheet,
   walkForward,
-} from '@totalfinance/backtest';
-import * as backtest from '@totalfinance/backtest';
+} from '@insiderfinance/totalfinance/backtest';
+import * as backtest from '@insiderfinance/totalfinance/backtest';
 
 const DAY = 86_400_000;
 const t0 = Date.UTC(2026, 0, 2);
 const candles = (closes: number[], symbol = 'SPY'): Bar[] =>
   closes.map((c, i) => ({ symbol, timestampMs: t0 + i * DAY, open: c, high: c, low: c, close: c }));
 
-/** A tiny streaming SMA (any `@totalfinance/technical-analysis` stream is structurally compatible). */
+/** A tiny streaming SMA (any `@insiderfinance/totalfinance/technical-analysis` stream is structurally compatible). */
 function sma(period: number): Indicator<number, number> {
   const buf: number[] = [];
   return {

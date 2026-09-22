@@ -1,7 +1,7 @@
 /**
  * Isolated-margin **liquidation & bankruptcy prices** for leveraged perpetual/futures positions —
  * coin-margined (inverse) and USDT-margined (linear) — the most-watched number for a leveraged crypto
- * trader (spec: `docs/specs/perp-liquidation.md`). Depends only on `@totalfinance/core`.
+ * trader (spec: `docs/specs/perp-liquidation.md`). Depends only on `@insiderfinance/totalfinance/core`.
  *
  * Convention (disclosed in `assumptions`): **isolated** margin; the maintenance margin is assessed on the
  * position value **at the mark** (the economically exact mark-to-market definition — liquidation is where

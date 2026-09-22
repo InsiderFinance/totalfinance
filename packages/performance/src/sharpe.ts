@@ -1,7 +1,7 @@
 /**
- * `@totalfinance/performance/sharpe` — the Sharpe ratio and annualized volatility.
+ * `@insiderfinance/totalfinance/performance/sharpe` — the Sharpe ratio and annualized volatility.
  *
- * This deep entrypoint imports only `@totalfinance/math` (mean/stddev) and tiny `@totalfinance/core` facade
+ * This deep entrypoint imports only `@insiderfinance/totalfinance/math` (mean/stddev) and tiny `@insiderfinance/totalfinance/core` facade
  * plumbing — never options, fixed-income, risk, or data packages — so computing a Sharpe ratio stays
  * import-light (spec §15.1).
  *

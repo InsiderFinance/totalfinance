@@ -34,7 +34,7 @@ import {
 } from './optimizer-validation.js';
 
 // The efficient frontier composes the solvers below (FC7 slice 4) and rides on this entrypoint so
-// `@totalfinance/risk/optimize` carries the whole mean-variance family. `frontier.ts` imports the
+// `@insiderfinance/totalfinance/risk/optimize` carries the whole mean-variance family. `frontier.ts` imports the
 // public facades from this module; the cycle is import-time safe because nothing here is read
 // during module evaluation.
 export { efficientFrontier } from './frontier.js';
@@ -662,7 +662,7 @@ export interface MaxSharpeOptions extends OptimizeConstraints {
    * problem takes a daily rate (0.04/252), not 0.04. Default 0.
    *
    * Named `riskFreeRatePerPeriod` (renamed from `riskFreeRate` pre-1.0) because every other
-   * `riskFreeRate` in the library — `@totalfinance/performance`'s sharpe/sortino/alpha, the backtest
+   * `riskFreeRate` in the library — `@insiderfinance/totalfinance/performance`'s sharpe/sortino/alpha, the backtest
    * report — is an ANNUAL rate that the callee de-annualizes. Passing 0.04 here on daily inputs
    * silently subtracted a 4%-per-DAY hurdle, turning every excess return negative and dropping
    * maxSharpe into its min-variance fallback. One spelling per unit: the compiler now catches it.

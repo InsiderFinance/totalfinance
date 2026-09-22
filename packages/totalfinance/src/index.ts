@@ -1,15 +1,15 @@
 /**
- * `totalfinance` — the umbrella package (spec DX4.1; topology finalized in alignment-spec P3.3).
+ * `@insiderfinance/totalfinance` — the umbrella package (spec DX4.1; topology finalized in alignment-spec P3.3).
  *
  * One install, ONE grammar: every domain is a namespace, and only the flagship options-pricing
- * gestures are hoisted to the top level. There is NO new API here — everything comes from a scoped
- * `@totalfinance/*` package. For portable browser tree shaking, use named imports from domain
- * entrypoints (`totalfinance/options`, `totalfinance/technical-analysis`, `@totalfinance/math`, …)
- * or supported feature subpaths such as `@totalfinance/options/black-scholes`.
+ * gestures are hoisted to the top level. There is NO second API here — domain modules share their
+ * implementations inside one self-contained package. For portable browser tree shaking, use named imports from domain
+ * entrypoints (`@insiderfinance/totalfinance/options`, `@insiderfinance/totalfinance/technical-analysis`, `@insiderfinance/totalfinance/math`, …)
+ * or supported feature subpaths such as `@insiderfinance/totalfinance/options/black-scholes`.
  *
- * Namespace convenience has a bundler tradeoff: `import { math } from 'totalfinance'` followed by
+ * Namespace convenience has a bundler tradeoff: `import { math } from '@insiderfinance/totalfinance'` followed by
  * `math.normalCdf(0)` retains the whole math namespace in esbuild (issue #1420); Rollup shakes this
- * static use. Direct `import * as math from 'totalfinance/math'` with static member use also shakes.
+ * static use. Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes.
  * Dynamic namespace access, enumeration, and registries retain the implementations they can reach.
  * Installation size differs from final bundle size; plain Node ESM does no automatic dead-code
  * elimination. Facades include validation and `.explain()` services, and indicators carry streaming
@@ -19,8 +19,8 @@
  *
  * Browser default:
  * ```ts
- * import { blackScholes } from 'totalfinance/options';
- * import { normalCdf } from 'totalfinance/math';
+ * import { blackScholes } from '@insiderfinance/totalfinance/options';
+ * import { normalCdf } from '@insiderfinance/totalfinance/math';
  *
  * blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
  * normalCdf(0); // 0.5
@@ -28,7 +28,7 @@
  *
  * Root convenience API (with the namespace tradeoff above):
  * ```ts
- * import { blackScholes, option, market, engines, technicalAnalysis, volatility } from 'totalfinance';
+ * import { blackScholes, option, market, engines, technicalAnalysis, volatility } from '@insiderfinance/totalfinance';
  *
  * blackScholes.price({ spot: 100, strike: 100, timeToExpiryYears: 1, riskFreeRate: 0.05, volatility: 0.2, type: 'call' });
  * const c = option.usEquityCall({ underlying: 'AAPL', strike: 200, expiry: '2026-09-18' });
@@ -47,10 +47,10 @@
 // Flagship hoist — the five ratified names (spec §5.2), nothing else.
 export { blackScholes, option, market, engines, impliedVolatility } from '@totalfinance/options';
 
-// Every domain is a namespace. `import { volatility } from 'totalfinance'` and
-// `import * as volatility from 'totalfinance/volatility'` see the same surface.
+// Every domain is a namespace. `import { volatility } from '@insiderfinance/totalfinance'` and
+// `import * as volatility from '@insiderfinance/totalfinance/volatility'` see the same surface.
 // 3B.2 nameability: the parameter types of the callables this umbrella exposes, re-exported from
-// the subpath that owns each one — `import type { SabrPriceRequest } from 'totalfinance'` must work
+// the subpath that owns each one — `import type { SabrPriceRequest } from '@insiderfinance/totalfinance'` must work
 // with only the ONE package the consumer installed.
 export type { SchemaCheckContext } from '@totalfinance/core/schema';
 export type {

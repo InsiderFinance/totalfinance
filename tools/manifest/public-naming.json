@@ -267464,8 +267464,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.0.1",
-      "name": "0.0.1",
+      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.0",
+      "name": "0.1.0",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"

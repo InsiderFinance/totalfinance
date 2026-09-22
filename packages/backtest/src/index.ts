@@ -1,10 +1,10 @@
 /**
- * `@totalfinance/backtest` — a vectorized research engine and an event-driven execution simulator
+ * `@insiderfinance/totalfinance/backtest` — a vectorized research engine and an event-driven execution simulator
  * (spec §16). Both return the same `BacktestResult` with an `assumptions` echo (capital, fills,
  * costs, slippage, calendar — dx §2.5) and **implementation-risk diagnostics** (look-ahead,
  * alignment) so a backtest's hidden modelling assumptions are visible.
  *
- * Browser-safe; depends only on `@totalfinance/core`, `@totalfinance/math`, and `@totalfinance/performance`.
+ * Browser-safe; depends only on `@insiderfinance/totalfinance/core`, `@insiderfinance/totalfinance/math`, and `@insiderfinance/totalfinance/performance`.
  */
 
 export { vectorized, equityToReturns } from './vectorized.js';
@@ -15,7 +15,7 @@ export type { EnvelopeSignal, SeriesSignal } from './signals.js';
 
 // The eponymous `backtest` namespace object was DELETED (P3.3): it duplicated the module's
 // own exports one level down (umbrella users saw `backtest.backtest`). Use the module namespace:
-// `import * as backtest from '@totalfinance/backtest'`.
+// `import * as backtest from '@insiderfinance/totalfinance/backtest'`.
 export { SimulatedBroker, brokers } from './broker.js';
 // B6 — one order vocabulary: the side/type/time-in-force names are core's, re-exported here.
 export type { OrderSide, OrderType, TimeInForce } from '@totalfinance/core';

@@ -77,7 +77,7 @@ function newYorkOffsetLabel(year: number, month: number, day: number): string {
 }
 
 /**
- * US equity/options early-close (13:00 ET) rules — the ONE table, consumed by `@totalfinance/calendars`
+ * US equity/options early-close (13:00 ET) rules — the ONE table, consumed by `@insiderfinance/totalfinance/calendars`
  * as well: the day after Thanksgiving, and 24 December and 3 July when they fall on a weekday and
  * are not themselves the observed Christmas / Independence Day holiday. A rule returns the
  * candidate date for a year; {@link isUsEquityHalfDay} applies the weekday/observance exclusions.
@@ -141,7 +141,7 @@ function usEquityOpenUtcMs(year: number, month: number, day: number): EpochMs {
  * ```
  *
  * `'open'` is 09:30 ET; `'close'` is 16:00 ET, or 13:00 ET on an early-close day. Weekends and
- * holidays are not rejected here (the instant still exists); use `@totalfinance/calendars` to ask
+ * holidays are not rejected here (the instant still exists); use `@insiderfinance/totalfinance/calendars` to ask
  * whether the market was open.
  */
 export function usEquitySessionInstant(date: string, session: 'open' | 'close'): EpochMs {

@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/fundamentals/statements` — the typed statement contracts and the utilities over them
+ * `@insiderfinance/totalfinance/fundamentals/statements` — the typed statement contracts and the utilities over them
  * (FC2). Statement TRUTH lives here; ratios and scores consume it.
  */
 

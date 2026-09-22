@@ -15,14 +15,16 @@ describe('DX7.1 the front-page README executes', () => {
   it('a snippet that throws at runtime fails the executor (the guard has teeth)', async () => {
     await expect(
       executeSnippet(
-        "import { blackScholes } from '@totalfinance/options';\nbs.call({ spot: -100, strike: 100, timeToExpiryYears: 1, riskFreeRate: 0, volatility: 0.2 });",
+        "import { blackScholes } from '@insiderfinance/totalfinance/options';\nbs.call({ spot: -100, strike: 100, timeToExpiryYears: 1, riskFreeRate: 0, volatility: 0.2 });",
       ),
     ).rejects.toThrow();
   });
 
   it('a snippet that imports a non-existent binding fails to compile', async () => {
     await expect(
-      executeSnippet("import { doesNotExist } from '@totalfinance/options';\ndoesNotExist();"),
+      executeSnippet(
+        "import { doesNotExist } from '@insiderfinance/totalfinance/options';\ndoesNotExist();",
+      ),
     ).rejects.toThrow();
   });
 });

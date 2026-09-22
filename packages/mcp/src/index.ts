@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/mcp` — a Model Context Protocol server exposing the TotalFinance engine to AI agents.
+ * `@insiderfinance/totalfinance-mcp` — a Model Context Protocol server exposing the TotalFinance engine to AI agents.
  *
  * Read-only by default. It calls the public TotalFinance compute APIs and never re-implements pricing
  * math (spec §18). Run the bundled `totalfinance-mcp` binary for a stdio server, or embed

@@ -6,7 +6,7 @@
  * conformance kit (complete-result comparison). Moved out of `artifacts/` 2026-08-23 (second
  * external review): while it sat there, `pricing.ts` had to import from the artifacts directory
  * to compare canonical results, contradicting pricing's documented "never imports the artifacts
- * layer" rule. `@totalfinance/core/artifacts` still re-exports everything here, so the public
+ * layer" rule. `@insiderfinance/totalfinance/core/artifacts` still re-exports everything here, so the public
  * surface did not move; the core root entrypoint deliberately does NOT re-export it (hot-path
  * bundles stay serialization-free).
  *
@@ -18,7 +18,7 @@
  * - numbers print via `JSON.stringify` (the ES2020 shortest round-trip form — deterministic across
  *   engines), with `-0` folded to `0` because JSON cannot carry the sign bit;
  * - non-finite numbers use the library-wide wrapper grammar `{ nonFinite: 'NaN' | 'Infinity' |
- *   '-Infinity' }` — the SAME encoding `@totalfinance/technical-analysis` stamps into stream snapshots,
+ *   '-Infinity' }` — the SAME encoding `@insiderfinance/totalfinance/technical-analysis` stamps into stream snapshots,
  *   so a TA state nested inside a saved artifact round-trips losslessly (`JSON.stringify(NaN)` is
  *   `null`, and a `null` in a numeric slot reads as `0` downstream — the exact silent-wrong-number
  *   class this library exists to refuse);

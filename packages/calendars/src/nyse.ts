@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/calendars/nyse` — the New York Stock Exchange trading calendar.
+ * `@insiderfinance/totalfinance/calendars/nyse` — the New York Stock Exchange trading calendar.
  *
  * Built from the shared US-equity builder (`usEquityMarketCalendar`) that Cboe also uses: NYSE and
  * Cboe observe the same schedule, so one definition serves both and a fix can never land on one

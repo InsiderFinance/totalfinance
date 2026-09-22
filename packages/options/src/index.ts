@@ -1,12 +1,12 @@
 /**
- * `@totalfinance/options` — option contracts, pricing engines, Greeks, and implied volatility.
+ * `@insiderfinance/totalfinance/options` — option contracts, pricing engines, Greeks, and implied volatility.
  * Browser-safe, zero runtime dependencies.
  *
  * Two API shapes (design law #1):
- *   - facade: `import { blackScholes } from '@totalfinance/options'` → flat args, plain values, `.explain()`.
- *   - pro:    `import { option, market, engines } from '@totalfinance/options'` → rich envelopes.
+ *   - facade: `import { blackScholes } from '@insiderfinance/totalfinance/options'` → flat args, plain values, `.explain()`.
+ *   - pro:    `import { option, market, engines } from '@insiderfinance/totalfinance/options'` → rich envelopes.
  *
- * Hot path: `import { blackScholes } from '@totalfinance/options/black-scholes'` for the leanest bundle.
+ * Hot path: `import { blackScholes } from '@insiderfinance/totalfinance/options/black-scholes'` for the leanest bundle.
  */
 
 export { blackScholes } from './black-scholes.js';
@@ -34,7 +34,7 @@ export type {
   Black76ImpliedVolatilityInput,
   Black76ImpliedVolatilityResult,
 } from './black76.js';
-// Kernels black76Price/black76Greeks/… live on the expert subpath `@totalfinance/options/black76`.
+// Kernels black76Price/black76Greeks/… live on the expert subpath `@insiderfinance/totalfinance/options/black76`.
 
 export { bachelier } from './bachelier.js';
 export type {
@@ -43,7 +43,7 @@ export type {
   BachelierImpliedVolatilityInput,
   BachelierImpliedVolatilityResult,
 } from './bachelier.js';
-// Kernels bachelierPrice/… live on the expert subpath `@totalfinance/options/bachelier`.
+// Kernels bachelierPrice/… live on the expert subpath `@insiderfinance/totalfinance/options/bachelier`.
 
 export { option, priceOption, impliedVolatilityOption } from './pro.js';
 // 3B.2 nameability: the request types of the professional heads, exported so a consumer can
@@ -73,7 +73,7 @@ export type {
 export type { BinomialVariant } from './engines/tree.js';
 
 // Monte-Carlo / quasi-Monte-Carlo European pricing (spec §8.6, §9.3). The flat kernels
-// (monteCarloPrice, monteCarloEuropean) moved to '@totalfinance/options/monte-carlo' (P3.1b
+// (monteCarloPrice, monteCarloEuropean) moved to '@insiderfinance/totalfinance/options/monte-carlo' (P3.1b
 // kernels-off-roots); the curated `gbm` namespace remains the root surface.
 export { gbm } from './monte-carlo.js';
 export type { GbmPathInput, GbmTerminalInput } from './monte-carlo.js';
@@ -184,7 +184,7 @@ export type {
 } from './exotics.js';
 
 // Generic equity binomial lattice types (spec §9 lattice tooling). The `equityLattice`
-// kernel itself moved to '@totalfinance/options/lattice' (P3.1b kernels-off-roots).
+// kernel itself moved to '@insiderfinance/totalfinance/options/lattice' (P3.1b kernels-off-roots).
 export type {
   EquityLattice,
   EquityLatticeOptions,
@@ -215,7 +215,7 @@ export type { OptionBuilderInput, InstrumentBuilderInput } from './contract.js';
 
 // Batch pricing (spec §9.6).
 export { priceMany } from './batch.js';
-// Batch kernels blackScholesPriceMany/blackScholesPriceManyInto/blackScholesImpliedVolatilityMany: `@totalfinance/options/black-scholes`.
+// Batch kernels blackScholesPriceMany/blackScholesPriceManyInto/blackScholesImpliedVolatilityMany: `@insiderfinance/totalfinance/options/black-scholes`.
 export type {
   OptionBatchColumns,
   OptionBatchResult,
@@ -224,7 +224,7 @@ export type {
   PriceManyInput,
 } from './batch.js';
 
-// Expiration payoff primitives (`@totalfinance/options/payoff`): the standalone vanilla intrinsic —
+// Expiration payoff primitives (`@insiderfinance/totalfinance/options/payoff`): the standalone vanilla intrinsic —
 // gross value per unit, model-free, deliberately not P&L (that stays on Position.pnlAtExpiry).
 export { vanillaIntrinsic } from './payoff.js';
 export type { VanillaIntrinsicInput } from './payoff.js';
@@ -291,7 +291,7 @@ export type {
 } from './dividend-term-structure.js';
 
 // Low-level kernel, for advanced users and engine authors.
-// Kernels blackScholesPrice/blackScholesGreeks/… live on the expert subpath `@totalfinance/options/black-scholes`.
+// Kernels blackScholesPrice/blackScholesGreeks/… live on the expert subpath `@insiderfinance/totalfinance/options/black-scholes`.
 export type {
   BlackScholesImpliedVolatilityResult,
   BlackScholesImpliedVolatilityOptions,
@@ -312,7 +312,7 @@ export type {
 
 // Runtime schemas (spec §6) — re-exported here as a convenience on the aggregate entrypoint.
 // Bundlers tree-shake them when unused; for a guaranteed schema-free footprint import the deep
-// `@totalfinance/options/black-scholes` entrypoint (the hot path, enforced by the bundle-size test).
+// `@insiderfinance/totalfinance/options/black-scholes` entrypoint (the hot path, enforced by the bundle-size test).
 export {
   schemas,
   BlackScholesInputSchema,

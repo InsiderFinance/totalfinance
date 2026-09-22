@@ -5,8 +5,8 @@
 premium), profit/loss, or an income prediction.
 
 ```ts
-import { optionFlowDrift, type OptionFlowDriftTrade } from '@totalfinance/structure';
-import { NYSE } from '@totalfinance/calendars';
+import { optionFlowDrift, type OptionFlowDriftTrade } from '@insiderfinance/totalfinance/structure';
+import { NYSE } from '@insiderfinance/totalfinance/calendars';
 
 const trades: OptionFlowDriftTrade[] = []; // canonical core OptionTrade inputs, epoch milliseconds
 const result = optionFlowDrift({
@@ -118,7 +118,7 @@ reject unknown keys. Invalid inputs and non-finite arithmetic produce typed `Inp
 
 ## Public availability
 
-`optionFlowDrift` is exported from `@totalfinance/structure` and through the umbrella's structure
+`optionFlowDrift` is exported from `@insiderfinance/totalfinance/structure` and through the root's structure
 re-export; no deep subpath is required. Raw trade-premium drift remains distinct from dealer
 hedging drift.
 

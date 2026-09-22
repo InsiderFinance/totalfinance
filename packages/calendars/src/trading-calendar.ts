@@ -42,7 +42,7 @@ export function requireCalendar(functionName: string, value: unknown): Calendar 
   if (calendar === null || calendar === undefined || typeof calendar !== 'object') {
     const received = Array.isArray(value) ? 'array' : value === null ? 'null' : typeof value;
     throw new InputError(
-      `${functionName}: calendar must be a Calendar object (e.g. NYSE from '@totalfinance/calendars/nyse'); got ${received}.`,
+      `${functionName}: calendar must be a Calendar object (e.g. NYSE from '@insiderfinance/totalfinance/calendars/nyse'); got ${received}.`,
       {
         code: ErrorCode.InputWrongType,
         context: { function: functionName, field: 'calendar', received },
@@ -61,7 +61,7 @@ export function requireCalendar(functionName: string, value: unknown): Calendar 
     if (typeof calendar[field] !== 'function') {
       throw new InputError(
         `${functionName}: calendar.${field} must be a function — pass a complete Calendar from ` +
-          "@totalfinance/calendars or @totalfinance/core's defineCalendar/createRuleCalendar.",
+          "@insiderfinance/totalfinance/calendars or @insiderfinance/totalfinance/core's defineCalendar/createRuleCalendar.",
         {
           code: ErrorCode.InputWrongType,
           context: { function: functionName, field: `calendar.${field}` },

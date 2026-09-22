@@ -1,7 +1,7 @@
 /**
- * `@totalfinance/backtest/options` — types for the chain-driven options-strategy backtester.
+ * `@insiderfinance/totalfinance/backtest/options` — types for the chain-driven options-strategy backtester.
  *
- * The product surface is DECLARATIVE (matching `@totalfinance/strategy`'s builders and the library's
+ * The product surface is DECLARATIVE (matching `@insiderfinance/totalfinance/strategy`'s builders and the library's
  * S1 input-object idiom): a strategy is `{ entry, exit, roll?, hedge? }` config, with callback
  * escape hatches (`entry.when` / `entry.build` / `exit.when` / `roll.when`) for the tail. The engine
  * composes proven primitives — `strategyFromChain` for entry, `Position.value()` for marking,
@@ -9,7 +9,7 @@
  *
  * Stage 4.6 (FC8 Decision 5): the single open slot is a position BOOK. `entry` may be one rule or
  * several (each with an `id`), `book` bounds how many trades may be open, `limits` are pre-trade
- * gates evaluated on the post-trade book through `@totalfinance/risk`, `fillPolicy` says whether a
+ * gates evaluated on the post-trade book through `@insiderfinance/totalfinance/risk`, `fillPolicy` says whether a
  * structure fills as one combo or leg by leg, `quoteFreshness` refuses fills on stale quotes exactly
  * as marking refuses stale marks, `corporateActions` adjust open legs with lineage, `dividends` are
  * early-assignment evidence, and the run emits the portfolio ledger it reconciles to. Every
@@ -32,14 +32,14 @@ export interface ChainSnapshot {
   /**
    * Snapshot instant — epoch ms or a zoned ISO datetime. A bare `'YYYY-MM-DD'` is refused: the
    * time of day prices the chain. An end-of-day chain is observed at the close —
-   * `usEquitySessionInstant(date, 'close')` from `@totalfinance/core`.
+   * `usEquitySessionInstant(date, 'close')` from `@insiderfinance/totalfinance/core`.
    */
   asOf: EpochMs | string;
   /** Underlying spot at this snapshot (the mark for pricing and delta-hedging). */
   underlyingPrice: number;
   /**
    * Every listed contract's quote. Delta-based strike selection reads `greeks.delta` per quote (stamp
-   * it with `@totalfinance/options` `chainGreeks` if your source lacks it); other selections do not need it.
+   * it with `@insiderfinance/totalfinance/options` `chainGreeks` if your source lacks it); other selections do not need it.
    */
   quotes: OptionQuote[];
 }
@@ -143,7 +143,7 @@ export type EntryRule =
 /** The declarative single-expiry `structure` values (a subset of {@link FromChainType}). */
 export type EntryStructure = Exclude<FromChainType, 'calendar'>;
 
-/** The declarative multi-expiry structures (Stage 4.6), built through `@totalfinance/strategy`'s constructors. */
+/** The declarative multi-expiry structures (Stage 4.6), built through `@insiderfinance/totalfinance/strategy`'s constructors. */
 export type MultiExpiryStructure =
   | 'calendarCallSpread'
   | 'calendarPutSpread'
@@ -371,7 +371,7 @@ export interface LegAttribution {
 /**
  * A closed trade's **greek P&L explain** (entry → exit): the realized gross mark P&L decomposed into
  * greek contributions (the full 2nd-order Taylor + dividend carry) plus an honest `unexplained`
- * residual, via `@totalfinance/risk`'s `explainPositionPnl`. These are the **bare terms** —
+ * residual, via `@insiderfinance/totalfinance/risk`'s `explainPositionPnl`. These are the **bare terms** —
  * the backtest result carries the report envelope (`assumptions`/`diagnostics`) at the top level, so a
  * per-trade row stays a plain record (matching `perLeg`). The terms sum exactly to `total`, which is
  * anchored to the trade's gross (pre-cost) P&L: `total === realizedPnl + costs`. (The day-0 entry edge —

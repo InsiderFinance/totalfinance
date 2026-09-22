@@ -2,7 +2,7 @@
 
 TotalFinance does not hide finance conventions. Pro APIs return a `Computed<T>` envelope with `value`, `assumptions`, and `diagnostics`; facade APIs return plain values but expose the same envelope through `.explain()`.
 
-## 0.0.1 Defaults
+## 0.1.0 Defaults
 
 - Day count: `ACT/365F`
 - Compounding: continuous

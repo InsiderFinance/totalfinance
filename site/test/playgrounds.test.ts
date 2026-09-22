@@ -13,8 +13,8 @@ import { siteExampleCases } from '../../tools/site-examples-smoke.js';
 import { portfolio } from '../src/playgrounds/portfolio.js';
 import { search } from '../src/search.js';
 import { executeReadme } from '../../tools/readme-exec.js';
-import { blackScholes } from '@totalfinance/options';
-import { sma } from '@totalfinance/technical-analysis';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import { sma } from '@insiderfinance/totalfinance/technical-analysis';
 
 describe('the public-site calculation contract', () => {
   it('the public start guide executes and its displayed scalar/array outputs are accurate', async () => {

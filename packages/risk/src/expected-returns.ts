@@ -7,7 +7,7 @@
  *   • `'exponentially-weighted'`  — half-life decay, most recent observation heaviest, with the
  *                                   effective sample size disclosed;
  *   • `'capital-asset-pricing'`   — composes FC2's `capitalAssetPricingExpectedReturn` from
- *                                   `@totalfinance/valuation` per asset (annual by construction);
+ *                                   `@insiderfinance/totalfinance/valuation` per asset (annual by construction);
  *   • `'supplied'`                — a validated pass-through of caller values with an explicit
  *                                   `annualized` flag.
  *
@@ -525,7 +525,7 @@ export function estimateExpectedReturns(
           method: branch,
           annualRiskFreeRate,
           annualMarketRiskPremium,
-          estimationConvention: `annual risk-free rate + beta × annual market risk premium per asset (composes @totalfinance/valuation capitalAssetPricingExpectedReturn); annual by construction — no return sample is consumed`,
+          estimationConvention: `annual risk-free rate + beta × annual market risk premium per asset (composes @insiderfinance/totalfinance/valuation capitalAssetPricingExpectedReturn); annual by construction — no return sample is consumed`,
         },
         diagnostics: { warnings: [], sampleSize: 0 },
       };

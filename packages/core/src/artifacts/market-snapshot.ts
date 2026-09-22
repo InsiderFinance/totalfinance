@@ -12,7 +12,7 @@
  *   compounding and day count: a rate without its convention is not an observation, it is a guess
  *   (the no-silent-economics law);
  * - **observations** — spot/rate/dividend/volatility/curve/surface/chain sections that REUSE the
- *   canonical `@totalfinance/core` market-data vocabulary (`RateCurve`, `OptionQuote`) rather than
+ *   canonical `@insiderfinance/totalfinance/core` market-data vocabulary (`RateCurve`, `OptionQuote`) rather than
  *   minting a second one, which is what lets existing per-domain market objects map in without
  *   changing: an options `market({ spot, riskFreeRate, volatility, dividendYield, asOf })` is one
  *   spot + one flat rate + one flat volatility + one flat dividend yield here, and a fixed-income
@@ -532,7 +532,7 @@ function freezeCanonicalCopy(envelope: MarketSnapshot): MarketSnapshot {
  *
  * @example
  * ```ts
- * import { createMarketSnapshot, marketSnapshotContentHash } from '@totalfinance/core/artifacts';
+ * import { createMarketSnapshot, marketSnapshotContentHash } from '@insiderfinance/totalfinance/core/artifacts';
  *
  * const snapshot = createMarketSnapshot({
  *   asOf: '2026-07-20T10:30:00-04:00',
@@ -743,7 +743,7 @@ export function readMarketSnapshot(input: {
   }
   if (version > MARKET_SNAPSHOT_SCHEMA_VERSION) {
     throw snapshotError(
-      `readMarketSnapshot: snapshot schema version ${version} is newer than this build supports (${MARKET_SNAPSHOT_SCHEMA_VERSION}). Upgrade @totalfinance/core to restore it — restoring blind would misread state.`,
+      `readMarketSnapshot: snapshot schema version ${version} is newer than this build supports (${MARKET_SNAPSHOT_SCHEMA_VERSION}). Upgrade @insiderfinance/totalfinance to restore it — restoring blind would misread state.`,
       ErrorCode.SnapshotUnsupportedVersion,
       { version, supported: MARKET_SNAPSHOT_SCHEMA_VERSION },
     );

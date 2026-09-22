@@ -3,8 +3,8 @@ import {
   portfolioPnl,
   portfolioTimeline,
   type PortfolioEventEnvelope,
-} from '@totalfinance/portfolio';
-import { createMarketSnapshot } from '@totalfinance/core/artifacts';
+} from '@insiderfinance/totalfinance/portfolio';
+import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
 import type { Playground } from '../types.js';
 
 export const portfolio: Playground = {
@@ -143,7 +143,7 @@ export const portfolio: Playground = {
           description:
             'Sample inputs: a USD ledger with an opening deposit, a share purchase and an optional later deposit. The two market snapshots below are hypothetical marks, not a data connection. Copy setup + call includes the complete setup.',
           preview: JSON.stringify({ quantity, openingPrice, closingPrice, deposit }, null, 2),
-          code: `import { createPortfolioLedger, portfolioPnl, type PortfolioEventEnvelope } from '@totalfinance/portfolio';\nimport { createMarketSnapshot } from '@totalfinance/core/artifacts';\n\nconst events: PortfolioEventEnvelope[] = ${JSON.stringify(events, null, 2)};\nconst ledger = createPortfolioLedger({ baseCurrency: 'USD', events });\nconst from = {\n  valuationDate: '${marks[0]!.valuationDate}',\n  market: createMarketSnapshot({\n    asOf: '${marks[0]!.valuationDate}',\n    observations: { spots: { SAMPLE: { price: ${openingPrice}, currency: 'USD' } } },\n  }),\n};\nconst to = {\n  valuationDate: '${marks.at(-1)!.valuationDate}',\n  market: createMarketSnapshot({\n    asOf: '${marks.at(-1)!.valuationDate}',\n    observations: { spots: { SAMPLE: { price: ${closingPrice}, currency: 'USD' } } },\n  }),\n};`,
+          code: `import { createPortfolioLedger, portfolioPnl, type PortfolioEventEnvelope } from '@insiderfinance/totalfinance/portfolio';\nimport { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';\n\nconst events: PortfolioEventEnvelope[] = ${JSON.stringify(events, null, 2)};\nconst ledger = createPortfolioLedger({ baseCurrency: 'USD', events });\nconst from = {\n  valuationDate: '${marks[0]!.valuationDate}',\n  market: createMarketSnapshot({\n    asOf: '${marks[0]!.valuationDate}',\n    observations: { spots: { SAMPLE: { price: ${openingPrice}, currency: 'USD' } } },\n  }),\n};\nconst to = {\n  valuationDate: '${marks.at(-1)!.valuationDate}',\n  market: createMarketSnapshot({\n    asOf: '${marks.at(-1)!.valuationDate}',\n    observations: { spots: { SAMPLE: { price: ${closingPrice}, currency: 'USD' } } },\n  }),\n};`,
         },
         code: `const pnl = portfolioPnl({ ledger, from, to });\nconst result = {\n  endingAccountValue: pnl.to.netAssetValue,\n  investmentReturn: pnl.investmentReturn,\n  externalFlows: pnl.externalFlows,\n  residual: pnl.residual,\n};\nconsole.log(result);`,
         result: {
@@ -153,7 +153,7 @@ export const portfolio: Playground = {
           residual: pnl.residual,
         },
       },
-      code: `import { createPortfolioLedger, portfolioPnl, portfolioTimeline, type PortfolioEventEnvelope } from '@totalfinance/portfolio';\nimport { createMarketSnapshot } from '@totalfinance/core/artifacts';\n\nconst events: PortfolioEventEnvelope[] = ${JSON.stringify(events, null, 2)};\nconst ledger = createPortfolioLedger({ baseCurrency: 'USD', events });\nconst marks = ${JSON.stringify(marks, null, 2)};\nconst valuationMarks = marks.map(mark => ({\n  valuationDate: mark.valuationDate,\n  market: createMarketSnapshot({ asOf: mark.valuationDate, observations: { spots: { SAMPLE: { price: mark.price, currency: 'USD' } } } }),\n}));\nconst result = {\n  pnl: portfolioPnl({ ledger, from: valuationMarks[0]!, to: valuationMarks.at(-1)! }),\n  timeline: portfolioTimeline({ ledger, valuationMarks }),\n};\nconsole.log(result);`,
+      code: `import { createPortfolioLedger, portfolioPnl, portfolioTimeline, type PortfolioEventEnvelope } from '@insiderfinance/totalfinance/portfolio';\nimport { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';\n\nconst events: PortfolioEventEnvelope[] = ${JSON.stringify(events, null, 2)};\nconst ledger = createPortfolioLedger({ baseCurrency: 'USD', events });\nconst marks = ${JSON.stringify(marks, null, 2)};\nconst valuationMarks = marks.map(mark => ({\n  valuationDate: mark.valuationDate,\n  market: createMarketSnapshot({ asOf: mark.valuationDate, observations: { spots: { SAMPLE: { price: mark.price, currency: 'USD' } } } }),\n}));\nconst result = {\n  pnl: portfolioPnl({ ledger, from: valuationMarks[0]!, to: valuationMarks.at(-1)! }),\n  timeline: portfolioTimeline({ ledger, valuationMarks }),\n};\nconsole.log(result);`,
     };
   },
 };

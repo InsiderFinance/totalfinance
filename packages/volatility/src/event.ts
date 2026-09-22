@@ -88,7 +88,7 @@ function expectedMoveFromImpliedVolatilityExplain(
   const retired = RETIRED_VOLATILITY_KEYS.find((key) => key in received);
   if (retired) {
     throw new InputError(
-      `expectedMoveFromImpliedVolatility: '${retired}' is not an input — the field is named impliedVolatility across @totalfinance/volatility. ` +
+      `expectedMoveFromImpliedVolatility: '${retired}' is not an input — the field is named impliedVolatility across @insiderfinance/totalfinance/volatility. ` +
         'e.g. expectedMoveFromImpliedVolatility({ spot: 100, impliedVolatility: 0.2, timeToExpiryYears: 0.25 })',
       {
         code: ErrorCode.InputWrongShape,

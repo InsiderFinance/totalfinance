@@ -1,12 +1,12 @@
 /**
- * `@totalfinance/backtest/options` — the chain-driven options-strategy backtester (roadmap §1.2).
+ * `@insiderfinance/totalfinance/backtest/options` — the chain-driven options-strategy backtester (roadmap §1.2).
  *
  * Run a rules-based options strategy over a time series of historical option chains and get an
  * equity curve, per-trade + per-leg P&L attribution, assignment events, and an options tear sheet.
- * Composes `@totalfinance/strategy` (structures + marking), `@totalfinance/options` (pricing), and
- * `@totalfinance/risk` (margin) — no re-implemented option math. See `docs/specs/options-backtest.md`.
+ * Composes `@insiderfinance/totalfinance/strategy` (structures + marking), `@insiderfinance/totalfinance/options` (pricing), and
+ * `@insiderfinance/totalfinance/risk` (margin) — no re-implemented option math. See `docs/specs/options-backtest.md`.
  *
- *   import { optionsBacktest, optionsTearSheet } from '@totalfinance/backtest/options';
+ *   import { optionsBacktest, optionsTearSheet } from '@insiderfinance/totalfinance/backtest/options';
  *
  *   const result = optionsBacktest({
  *     chains,

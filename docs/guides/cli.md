@@ -1,7 +1,7 @@
 # Command line
 
-`@totalfinance/cli` ships the `totalfinance` binary: the local, machine-first front door to the same operation
-registry every transport adapts (`@totalfinance/workflows`). It owns no schema and no compute — every
+`@insiderfinance/totalfinance` ships the `totalfinance` binary (embedded API at `/cli`): the local, machine-first front door to the same operation
+registry every transport adapts (`@insiderfinance/totalfinance/workflows`). It owns no schema and no compute — every
 command renders `describeOperation`, calls `runOperation`, or drives the file-backed stores and the
 worker-terminated job runner. JSON goes to stdout, logs and prompts to stderr, and the exit code is a
 contract.
@@ -9,10 +9,10 @@ contract.
 ## Quickstart
 
 ```sh
-npx -y @totalfinance/cli operations list --pretty
-npx -y @totalfinance/cli schema totalfinance.option.price --pretty
+npx -y --package=@insiderfinance/totalfinance@0.1.0 totalfinance operations list --pretty
+npx -y --package=@insiderfinance/totalfinance@0.1.0 totalfinance schema totalfinance.option.price --pretty
 echo '{"type":"call","spot":100,"strike":105,"timeToExpiryYears":0.25,"riskFreeRate":0.04,"volatility":0.2}' \
-  | npx -y @totalfinance/cli run totalfinance.option.price --input -
+  | npx -y --package=@insiderfinance/totalfinance@0.1.0 totalfinance run totalfinance.option.price --input -
 ```
 
 ## Commands

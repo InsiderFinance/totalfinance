@@ -5,9 +5,9 @@
  * target delta / width, resolve premiums from a chosen price source, and attach each quote's implied
  * vol to its leg so the position marks with per-leg IVs (WS7.1).
  *
- * Dependency hygiene: this module depends on `@totalfinance/core` types only. Deltas are consumed from the
+ * Dependency hygiene: this module depends on `@insiderfinance/totalfinance/core` types only. Deltas are consumed from the
  * input rows (core `OptionQuote`, `greeks.delta`) — when a delta-based selection needs them and they
- * are absent, it throws an error naming `@totalfinance/options`' `chainGreeks` rather than reaching for
+ * are absent, it throws an error naming `@insiderfinance/totalfinance/options`' `chainGreeks` rather than reaching for
  * that package itself.
  */
 
@@ -225,7 +225,7 @@ function nearestByAbsDelta(rows: OptionQuote[], target: number): OptionQuote {
       throw new InputError(
         `${FN}: delta-based strike selection needs greeks.delta on every ${r.contract.type} quote; ` +
           `${r.contract.type} ${r.contract.strike} @ ${r.contract.expiry} has none. Compute them first ` +
-          `with @totalfinance/options chainGreeks({ quotes, market }) and pass its rows.`,
+          `with @insiderfinance/totalfinance/options chainGreeks({ quotes, market }) and pass its rows.`,
         {
           code: ErrorCode.StrategyDeltaRequired,
           context: { strike: r.contract.strike, type: r.contract.type },

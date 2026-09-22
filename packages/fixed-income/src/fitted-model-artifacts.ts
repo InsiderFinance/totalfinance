@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/fixed-income/artifacts` — the six verbs of Stage 4.5 Decision 3 that an exact
+ * `@insiderfinance/totalfinance/fixed-income/artifacts` — the six verbs of Stage 4.5 Decision 3 that an exact
  * bootstrap can honour, over the four curve families (Decision 2), riding the Gate B spine and
  * the shared fitted-model kit in core: `fittedModelArtifact`, `readFittedModel`,
  * `evaluateFittedModel`, `replayFittedModel`, `compareFittedModels`, `fittedModelHoldout`.
@@ -851,7 +851,7 @@ export function readFittedModel(input: {
   if (artifact.artifactType !== FIXED_INCOME_FITTED_MODEL_ARTIFACT_TYPE) {
     fail(
       functionName,
-      `the artifact's type is '${artifact.artifactType}', not '${FIXED_INCOME_FITTED_MODEL_ARTIFACT_TYPE}' — this reader restores fixed-income curve models only; ${artifact.artifactType.startsWith('volatility.') ? 'use @totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('research.') ? 'use @totalfinance/research/artifacts' : 'read it with the package that owns that type'}.`,
+      `the artifact's type is '${artifact.artifactType}', not '${FIXED_INCOME_FITTED_MODEL_ARTIFACT_TYPE}' — this reader restores fixed-income curve models only; ${artifact.artifactType.startsWith('volatility.') ? 'use @insiderfinance/totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('research.') ? 'use @insiderfinance/totalfinance/research/artifacts' : 'read it with the package that owns that type'}.`,
       ErrorCode.ArtifactFamilyMismatch,
       { artifactType: artifact.artifactType },
     );

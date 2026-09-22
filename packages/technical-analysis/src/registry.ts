@@ -728,7 +728,7 @@ for (const [name, indicator] of Object.entries(candlesticks)) {
 export function registryMarkdown(): string {
   const lines: string[] = ['# TotalFinance indicator registry', ''];
   lines.push(
-    `Auto-generated from \`@totalfinance/technical-analysis\` — ${REGISTRY.size} registered indicators.`,
+    `Auto-generated from \`@insiderfinance/totalfinance/technical-analysis\` — ${REGISTRY.size} registered indicators.`,
     '',
   );
   const categories: IndicatorCategory[] = [
@@ -767,7 +767,7 @@ export function registryMarkdown(): string {
       lines.push(
         `The volatility estimators (${annualized}) require \`annualization\` — the bars per year that scales the`,
         'per-bar σ: `252` for daily bars, `52` weekly, `12` monthly, or `1` to read the per-bar σ. There is no',
-        "default, because a per-bar σ handed to `@totalfinance/volatility`'s realized-vs-implied tools is silently",
+        "default, because a per-bar σ handed to `@insiderfinance/totalfinance/volatility`'s realized-vs-implied tools is silently",
         'wrong by √252.',
         '',
       );

@@ -4,12 +4,12 @@
  * Three packages state the SAME no-arbitrage forward in their own vocabularies, and this bridge
  * proves they agree to machine precision rather than merely resembling each other:
  *
- *   - `@totalfinance/foreign-exchange` — `coveredInterestParityForward`: domestic = QUOTE-currency
+ *   - `@insiderfinance/totalfinance/foreign-exchange` — `coveredInterestParityForward`: domestic = QUOTE-currency
  *     rate, foreign = BASE-currency rate, growth-factor ratio on the spot.
- *   - `@totalfinance/fixed-income` — `crossCurrencyBasisCurve` with no basis: the §14.5 curve
+ *   - `@insiderfinance/totalfinance/fixed-income` — `crossCurrencyBasisCurve` with no basis: the §14.5 curve
  *     arithmetic `F(0,t) = spot · D_for(t) / D_dom(t)`, spot quoted DOMESTIC units per 1 FOREIGN
  *     unit (the same orientation: quote per base).
- *   - `@totalfinance/options` — Black-Scholes with `dividendYield` = the foreign rate (the
+ *   - `@insiderfinance/totalfinance/options` — Black-Scholes with `dividendYield` = the foreign rate (the
  *     Garman-Kohlhagen reading): put-call parity `C − P = D_dom(t) · (F − K)` recovers the same
  *     forward, and the synthetic forward equals `foreignExchangeForwardValue` on the same terms.
  */
@@ -18,9 +18,9 @@ import { describe, expect, it } from 'vitest';
 import {
   coveredInterestParityForward,
   foreignExchangeForwardValue,
-} from '@totalfinance/foreign-exchange';
-import { crossCurrencyBasisCurve, curves } from '@totalfinance/fixed-income';
-import { blackScholes } from '@totalfinance/options';
+} from '@insiderfinance/totalfinance/foreign-exchange';
+import { crossCurrencyBasisCurve, curves } from '@insiderfinance/totalfinance/fixed-income';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 
 // EUR/USD 1.08 — USD (quote) is the domestic leg, EUR (base) the foreign leg.
 const SPOT = 1.08;

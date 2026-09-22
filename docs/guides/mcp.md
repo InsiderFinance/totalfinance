@@ -1,16 +1,16 @@
 # MCP Server
 
-`@totalfinance/mcp` exposes TotalFinance computations to AI agents through the Model Context Protocol. The server is read-only by default and wraps the same public TotalFinance APIs used by application code.
+`@insiderfinance/totalfinance-mcp` exposes TotalFinance computations to AI agents through the Model Context Protocol. The server is read-only by default and wraps the same public TotalFinance APIs used by application code.
 
 ## Quickstart
 
-The checked-in package version is `0.0.1`, an **unpublished preview**. From a built checkout
+The checked-in package version is `0.1.0`, an **unpublished preview**. From a built checkout
 (Node ≥22.13), run the local binary; this does not require a registry release:
 
 ```sh
 pnpm build
-node packages/mcp/dist/bin.js doctor --profile options
-node packages/mcp/dist/bin.js --profile options
+node distribution/mcp/dist/bin.js doctor --profile options
+node distribution/mcp/dist/bin.js --profile options
 ```
 
 **Claude Desktop** — add to `claude_desktop_config.json`:
@@ -18,9 +18,13 @@ node packages/mcp/dist/bin.js --profile options
 ```json
 {
   "mcpServers": {
-    "totalfinance": {
+    "@insiderfinance/totalfinance": {
       "command": "node",
-      "args": ["/absolute/path/to/totalfinance/packages/mcp/dist/bin.js", "--profile", "options"]
+      "args": [
+        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
+        "--profile",
+        "options"
+      ]
     }
   }
 }
@@ -29,7 +33,7 @@ node packages/mcp/dist/bin.js --profile options
 **Claude Code**:
 
 ```sh
-claude mcp add totalfinance -- node /absolute/path/to/totalfinance/packages/mcp/dist/bin.js --profile options
+claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js --profile options
 ```
 
 **Cursor** — add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
@@ -37,9 +41,13 @@ claude mcp add totalfinance -- node /absolute/path/to/totalfinance/packages/mcp/
 ```json
 {
   "mcpServers": {
-    "totalfinance": {
+    "@insiderfinance/totalfinance": {
       "command": "node",
-      "args": ["/absolute/path/to/totalfinance/packages/mcp/dist/bin.js", "--profile", "options"]
+      "args": [
+        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
+        "--profile",
+        "options"
+      ]
     }
   }
 }
@@ -48,11 +56,11 @@ claude mcp add totalfinance -- node /absolute/path/to/totalfinance/packages/mcp/
 ## Install
 
 After a package version has actually been published, pin that exact version to embed
-`createTotalFinanceMcpServer` in your own server. Replace `PUBLISHED_VERSION` with the real release;
-no published version is implied here:
+`createTotalFinanceMcpServer` in your own server. For the planned first release, verify that
+version `0.1.0` is available; no publication is implied here:
 
 ```sh
-pnpm add @totalfinance/mcp@PUBLISHED_VERSION
+pnpm add @insiderfinance/totalfinance-mcp@0.1.0
 ```
 
 ## Run
@@ -101,7 +109,7 @@ The capability ceiling is server configuration; callers cannot enlarge it in too
 ## Tools
 
 A tool's name is its operation id with every dot replaced by an underscore: the operation
-`totalfinance.option.price` is the tool `totalfinance_option_price` (`toolNameFor(id)` in `@totalfinance/mcp`
+`totalfinance.option.price` is the tool `totalfinance_option_price` (`toolNameFor(id)` in `@insiderfinance/totalfinance-mcp`
 is the one rule). The dotted id stays the operation's identity everywhere else — in
 `_meta['totalfinance/operation'].id`, `totalfinance://operations/<id>`, the HTTP paths and the CLI — and
 job submission takes the dotted id in its `id` argument.
@@ -168,7 +176,7 @@ each result is the direct function's result verbatim — nothing is aggregated b
 Wire-only restrictions are narrower schemas, never different meanings: a caller predicate, a custom
 expected-return function, a callback entry/exit rule, or a custom pricer target is SDK-only.
 
-**Trade lifecycle:** the opt-in `trade` pack (from `@totalfinance/workflows`, also in `full`) contains
+**Trade lifecycle:** the opt-in `trade` pack (from `@insiderfinance/totalfinance/workflows`, also in `full`) contains
 `totalfinance_trade_preflight`, `totalfinance_trade_authorize`, `totalfinance_trade_submit`,
 `totalfinance_trade_cancel`, `totalfinance_trade_reconcile`, and `totalfinance_portfolio_record_events`.
 These support preflight, explicit grants, paper execution, reconciliation, and ledger writes—not
@@ -276,12 +284,12 @@ must provide appropriately isolated/filtered stores and runners.
 Embedders attach the shared runner and its artifact reader explicitly:
 
 ```ts
-import { createTotalFinanceMcpServer } from '@totalfinance/mcp';
+import { createTotalFinanceMcpServer } from '@insiderfinance/totalfinance-mcp';
 import {
   createFileArtifactStore,
   createLocalJobRunner,
   registryForProfile,
-} from '@totalfinance/workflows/local';
+} from '@insiderfinance/totalfinance/workflows/local';
 
 const profile = 'backtesting';
 const directory = '/absolute/path/to/totalfinance-store';

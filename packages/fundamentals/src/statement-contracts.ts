@@ -1,5 +1,5 @@
 /**
- * FC2 — the typed statement contracts. `@totalfinance/fundamentals` owns historical statement truth:
+ * FC2 — the typed statement contracts. `@insiderfinance/totalfinance/fundamentals` owns historical statement truth:
  * these are the canonical, compute-facing declarations that valuation and research consume. Raw
  * vendor payloads stay at the data edge (`core.RawFundamentalsRecord`); a data adapter maps them
  * INTO these types, and no compute function ever reads an open field bag.

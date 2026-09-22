@@ -1,6 +1,6 @@
 /**
  * Internal (not an entrypoint): the statistical-hygiene block a research run may carry
- * (Stage 4.5 Decision 4) — up to six VERBATIM `@totalfinance/risk` results the caller attaches.
+ * (Stage 4.5 Decision 4) — up to six VERBATIM `@insiderfinance/totalfinance/risk` results the caller attaches.
  *
  * Research may not import risk (the FC0 layer graph: risk composes research outputs, never the
  * reverse), so the shapes below are declared structurally and kept in lock-step with risk's

@@ -9,20 +9,25 @@ import { assertConsumerConventions } from './consumer-metadata.js';
 /** Harness unit tests use a tiny synthetic install; release claims use the real packed suite. */
 describe('consumer measurement machinery', () => {
   let consumer: string;
+  let main: string;
   let math: string;
   const feature = CONSUMER_FIXTURES.find(({ id }) => id === 'normal-feature')!;
   const unused = CONSUMER_FIXTURES.find(({ id }) => id === 'unused-library')!;
   beforeEach(() => {
     consumer = mkdtempSync(join(tmpdir(), 'consumer-measure-unit-'));
-    math = join(consumer, 'node_modules', '@totalfinance', 'math');
+    main = join(consumer, 'node_modules', '@insiderfinance', 'totalfinance');
+    math = join(main, 'modules', 'math');
     mkdirSync(join(math, 'dist'), { recursive: true });
     writeFileSync(
-      join(math, 'package.json'),
+      join(main, 'package.json'),
       JSON.stringify({
-        name: '@totalfinance/math',
+        name: '@insiderfinance/totalfinance',
         type: 'module',
         sideEffects: false,
-        exports: { '.': './dist/index.js', './normal': './dist/normal.js' },
+        exports: {
+          './math': './modules/math/dist/index.js',
+          './math/normal': './modules/math/dist/normal.js',
+        },
       }),
     );
     writeFileSync(
@@ -79,12 +84,15 @@ describe('consumer measurement machinery', () => {
         consumer,
         {
           ...feature,
-          source: feature.source.replace('@totalfinance/math/normal', '@totalfinance/math'),
+          source: feature.source.replace(
+            '@insiderfinance/totalfinance/math/normal',
+            '@insiderfinance/totalfinance/math',
+          ),
         },
         bundler,
       );
       expect(measured.retainedModules.map(({ id }) => id)).toEqual([
-        '@totalfinance/math/dist/normal.js',
+        '@insiderfinance/totalfinance/modules/math/dist/normal.js',
       ]);
       expect(measured.retainedModules[0]!.bytes).toBeGreaterThan(0);
       expect(measured.code).not.toContain('unwantedSideEffect');
@@ -98,22 +106,22 @@ describe('consumer measurement machinery', () => {
     it(`${bundler}: installed sideEffects metadata controls unused imports`, async () => {
       const fixture = {
         ...unused,
-        source: "import '@totalfinance/math'; globalThis.consumerCall = () => 42;",
+        source: "import '@insiderfinance/totalfinance/math'; globalThis.consumerCall = () => 42;",
       };
       expect((await measureConsumer(consumer, fixture, bundler)).retainedModules).toEqual([]);
       // A global moduleSideEffects:false override would make this positive control fail.
       writeFileSync(
-        join(math, 'package.json'),
+        join(main, 'package.json'),
         JSON.stringify({
-          name: '@totalfinance/math',
+          name: '@insiderfinance/totalfinance',
           type: 'module',
           sideEffects: true,
-          exports: { '.': './dist/index.js' },
+          exports: { './math': './modules/math/dist/index.js' },
         }),
       );
       const retained = await measureConsumer(consumer, fixture, bundler);
       expect(retained.retainedModules.map(({ id }) => id)).toContain(
-        '@totalfinance/math/dist/unused.js',
+        '@insiderfinance/totalfinance/modules/math/dist/unused.js',
       );
       expect(consumerBrowser(retained)['unwantedSideEffect']).toBe(true);
     });
@@ -122,12 +130,12 @@ describe('consumer measurement machinery', () => {
       mkdirSync(join(math, 'src'));
       writeFileSync(join(math, 'src/normal.js'), 'export const normalCdf = () => 1;');
       writeFileSync(
-        join(math, 'package.json'),
+        join(main, 'package.json'),
         JSON.stringify({
-          name: '@totalfinance/math',
+          name: '@insiderfinance/totalfinance',
           type: 'module',
           sideEffects: false,
-          exports: { './normal': './src/normal.js' },
+          exports: { './math/normal': './modules/math/src/normal.js' },
         }),
       );
       await expect(measureConsumer(consumer, feature, bundler)).rejects.toThrow(
@@ -141,6 +149,19 @@ describe('consumer measurement machinery', () => {
         "import { readFileSync } from 'node:fs'; export const normalCdf = () => readFileSync('secret');",
       );
       await expect(measureConsumer(consumer, feature, bundler)).rejects.toThrow();
+    });
+
+    it(`${bundler}: rejects transport modules even when they happen not to import a Node builtin`, async () => {
+      const cli = join(main, 'modules', 'cli', 'dist');
+      mkdirSync(cli, { recursive: true });
+      writeFileSync(join(cli, 'marker.js'), 'export const normalCdf = (x) => x / 2;');
+      writeFileSync(
+        join(math, 'dist/normal.js'),
+        "export { normalCdf } from '../../cli/dist/marker.js';",
+      );
+      await expect(measureConsumer(consumer, feature, bundler)).rejects.toThrow(
+        'Node-only module reached a browser consumer',
+      );
     });
   }
 
@@ -157,12 +178,15 @@ describe('consumer measurement machinery', () => {
       consumer,
       {
         ...feature,
-        source: feature.source.replace('@totalfinance/math/normal', '@totalfinance/math'),
+        source: feature.source.replace(
+          '@insiderfinance/totalfinance/math/normal',
+          '@insiderfinance/totalfinance/math',
+        ),
       },
       'rollup',
     );
     expect(measured.retainedModules.map(({ id }) => id)).toEqual([
-      '@totalfinance/math/dist/normal.js',
+      '@insiderfinance/totalfinance/modules/math/dist/normal.js',
     ]);
     await expect(
       measureConsumer(
@@ -170,7 +194,7 @@ describe('consumer measurement machinery', () => {
         {
           ...feature,
           source:
-            "import { unused } from '@totalfinance/math'; globalThis.consumerCall = (input) => unused(input);",
+            "import { unused } from '@insiderfinance/totalfinance/math'; globalThis.consumerCall = (input) => unused(input);",
         },
         'rollup',
       ),
@@ -196,7 +220,12 @@ describe('consumer fixture record', () => {
 
   it('every import-parity reference resolves to the same canary feature', () => {
     expect(new Set(CONSUMER_FIXTURES.map(({ id }) => id)).size).toBe(CONSUMER_FIXTURES.length);
+    expect(new Set(CONSUMER_FIXTURES.map(({ source }) => source)).size).toBe(
+      CONSUMER_FIXTURES.length,
+    );
     for (const fixture of CONSUMER_FIXTURES) {
+      expect(fixture.specifier).toMatch(/^@insiderfinance\/totalfinance(?:\/|$)/);
+      expect(fixture.source).not.toMatch(/['"](?:@totalfinance\/|totalfinance(?:\/|['"]))/);
       expect(fixture.reason.length).toBeGreaterThan(30);
       if (fixture.parityWith) {
         expect(CONSUMER_FIXTURES.find(({ id }) => id === fixture.parityWith)).toMatchObject({
@@ -215,12 +244,12 @@ describe('consumer fixture record', () => {
     const experts = CONSUMER_FIXTURES.filter(({ canary }) => canary.startsWith('expert'));
     expect(new Set(experts.map(({ specifier }) => specifier))).toEqual(
       new Set([
-        '@totalfinance/options/black-scholes',
-        '@totalfinance/options/black76',
-        '@totalfinance/options/bachelier',
+        '@insiderfinance/totalfinance/options/black-scholes',
+        '@insiderfinance/totalfinance/options/black76',
+        '@insiderfinance/totalfinance/options/bachelier',
       ]),
     );
     for (const fixture of experts)
-      expect(fixture.specifier).toMatch(/^@totalfinance\/options\/[^/]+$/);
+      expect(fixture.specifier).toMatch(/^@insiderfinance\/totalfinance\/options\/[^/]+$/);
   });
 });

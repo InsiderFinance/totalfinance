@@ -11,7 +11,7 @@ Typed statements in, point-in-time ratios out. A statement is visible only from 
 `availableTimestampMs`; nothing is inferred from a period end.
 
 ```ts
-import { analyzeFundamentals } from '@totalfinance/fundamentals';
+import { analyzeFundamentals } from '@insiderfinance/totalfinance/fundamentals';
 
 const period = {
   periodEndDate: '2025-12-31',
@@ -75,8 +75,11 @@ convention is a goal, never a default — and the composition equals the direct 
 projected.
 
 ```ts
-import { discountedCashFlow, discountedCashFlowFromStatements } from '@totalfinance/valuation';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
+import {
+  discountedCashFlow,
+  discountedCashFlowFromStatements,
+} from '@insiderfinance/totalfinance/valuation';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
 
 const valuation = (name: (typeof names)[number]) =>
   discountedCashFlowFromStatements({
@@ -141,7 +144,7 @@ The fundamentals and the valuation become declared fields of a universe, and a s
 names — point in time, by each observation's availability.
 
 ```ts
-import { scoreUniverse } from '@totalfinance/research';
+import { scoreUniverse } from '@insiderfinance/totalfinance/research';
 
 const fieldDefinitions = [
   { fieldName: 'operatingMargin', kind: 'numeric' as const, unit: 'decimal ratio' },
@@ -190,8 +193,11 @@ A ledger with cash, a market snapshot, and a proposal that buys the two best nam
 a proposal, never an order.
 
 ```ts
-import { applyPortfolioEvents, proposePortfolioRebalance } from '@totalfinance/portfolio';
-import { createMarketSnapshot } from '@totalfinance/core/artifacts';
+import {
+  applyPortfolioEvents,
+  proposePortfolioRebalance,
+} from '@insiderfinance/totalfinance/portfolio';
+import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
 
 const deposit = {
   eventId: 'journey:deposit',
@@ -236,7 +242,7 @@ The same score as a cross-sectional signal over a returns dataset. The engine's 
 ledger's net asset value, and the execution policy is named.
 
 ```ts
-import { crossSectionalBacktest } from '@totalfinance/backtest';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
 
 const sessions = [
   '2026-03-06',
@@ -281,7 +287,7 @@ The run's performance block is `analyze` of its equity curve — the same functi
 on any equity or return series.
 
 ```ts
-import { analyze } from '@totalfinance/performance';
+import { analyze } from '@insiderfinance/totalfinance/performance';
 
 const summary = analyze(
   { equity: run.points.map((point) => point.equity) },

@@ -1,9 +1,9 @@
 /**
- * `@totalfinance/fixed-income` — bonds, yield curves, rates derivatives, short-rate models, and credit
+ * `@insiderfinance/totalfinance/fixed-income` — bonds, yield curves, rates derivatives, short-rate models, and credit
  * (spec §14). Browser-safe and clock-free: every function takes explicit dates/market data and an
  * injected valuation date, never the system clock.
  *
- * Built on `@totalfinance/core` (dates, calendars, day counts, errors) and `@totalfinance/math` (solvers,
+ * Built on `@insiderfinance/totalfinance/core` (dates, calendars, day counts, errors) and `@insiderfinance/totalfinance/math` (solvers,
  * interpolation, the normal distribution). Pricing follows the library's correctness-first law —
  * inputs are validated and bad data throws rather than silently degrading.
  */

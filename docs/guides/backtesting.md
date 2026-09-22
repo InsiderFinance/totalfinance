@@ -61,7 +61,7 @@ excluded. Timestamp a published fixing when it becomes available if it is not kn
    its `availableTimestampMs`, a chain by its snapshot, an observation by its timestamp, universe
    membership by its history. A later restatement never reaches an earlier decision.
 2. **Ordering invariance.** Shuffle the input rows and the result is byte-identical.
-3. **The ledger is the truth.** Fills are `NormalizedFill`s from `@totalfinance/portfolio`; the engine
+3. **The ledger is the truth.** Fills are `NormalizedFill`s from `@insiderfinance/totalfinance/portfolio`; the engine
    defines no fill, cash, lot, or P&L shape of its own. `result.ledger` folds to `finalValue`.
 4. **Execution is declared.** The default policy is `execution.simplified()` and every result names
    it in `assumptions.execution`; `execution.declared({...})` is a claim the caller signs.
@@ -70,7 +70,7 @@ excluded. Timestamp a published fixing when it becomes available if it is not kn
 
 ## Artifacts and operations
 
-`@totalfinance/backtest/artifacts` saves any run as a content-addressed artifact (`backtestRunArtifact`),
+`@insiderfinance/totalfinance/backtest/artifacts` saves any run as a content-addressed artifact (`backtestRunArtifact`),
 restores it (`readBacktestRun`), replays it to the same run hash (`replayBacktestRun` — live models
 are taken back and verified against their recorded descriptions), and compares two runs
 (`compareBacktestRuns`). Over the wire, the opt-in `backtestPack` exposes
@@ -99,7 +99,7 @@ the stitched held-out performance; the grid's own hygiene verdicts (`researchPro
 ## A first call
 
 ```ts
-import { crossSectionalBacktest } from '@totalfinance/backtest';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
 
 // Three names, four weekly sessions, one declared field published before the first close.
 const names = ['AAA', 'BBB', 'CCC'];

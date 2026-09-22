@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { blackScholes } from '@totalfinance/options';
-import * as ta from '@totalfinance/technical-analysis';
-import { legs, strategy } from '@totalfinance/strategy';
-import * as backtest from '@totalfinance/backtest';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
+import * as backtest from '@insiderfinance/totalfinance/backtest';
 
 /**
  * DX7.3 — the five-minute journey (dx-spec §7): a newcomer with only autocomplete prices an option,

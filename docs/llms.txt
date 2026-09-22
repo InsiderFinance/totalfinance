@@ -7,7 +7,7 @@
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths. Root namespace re-exports are convenient but bundler-dependent. Installation size, final bundle size, and plain Node ESM loading are different; Node does no automatic dead-code elimination.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>`, or supported feature subpaths. Root namespace re-exports are convenient but bundler-dependent. Installation size, final bundle size, and plain Node ESM loading are different; Node does no automatic dead-code elimination.
 
 - [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.
 
@@ -32,29 +32,6 @@ Explicit packs are an exact selection, not additions to defaults. Check doctor a
 
 ## Packages
 
-- @totalfinance/backtest @ 0.0.1 — pre-1.0 preview; 12 entrypoints. TotalFinance backtesting: a vectorized research engine and an event-driven execution simulator (broker, order types, margin/shorting, costs, corporate actions), walk-forward, tear sheets, and implementation-risk diagnostics. Browser-safe.
-- @totalfinance/calendars @ 0.0.1 — pre-1.0 preview; 4 entrypoints. TotalFinance exchange calendars: rules-based NYSE, CBOE, and 24/7 crypto sessions. Browser-safe.
-- @totalfinance/cli @ 0.0.1 — pre-1.0 preview; 1 entrypoints. TotalFinance local operations: file-backed artifact and job stores and the worker-terminated job runner behind the `totalfinance` command line.
-- @totalfinance/commodities @ 0.0.1 — pre-1.0 preview; 3 entrypoints. Commodity carry and term structure: cost-of-carry forwards, implied carry inputs, roll yield, and curve analytics
-- @totalfinance/core @ 0.0.1 — pre-1.0 preview; 4 entrypoints. TotalFinance core: types, conventions, errors, diagnostics, assumptions, and a zero-dependency schema facade.
-- @totalfinance/crypto @ 0.0.1 — pre-1.0 preview; 5 entrypoints. TotalFinance crypto analytics: perpetual-swap funding, dated-futures basis, cash-and-carry, and the perp-vs-future no-arbitrage carry spread. Browser-safe.
-- @totalfinance/fixed-income @ 0.0.1 — pre-1.0 preview; 15 entrypoints. TotalFinance fixed income: bonds (fixed/zero/FRN/amortizing/inflation) with full analytics, yield curves + bootstrapping, rates derivatives (FRA/swap/OIS/swaption/cap/floor), short-rate models (Vasicek/CIR/Hull-White), and credit (CDS, hazard/survival curves). Browser-safe.
-- @totalfinance/foreign-exchange @ 0.0.1 — pre-1.0 preview; 4 entrypoints. Foreign-exchange foundations: pairs, conversion, forwards, parity, and currency exposure
-- @totalfinance/fundamentals @ 0.0.1 — pre-1.0 preview; 4 entrypoints. TotalFinance typed fundamentals: the point-in-time FundamentalPeriod contract, availability rule, and raw data-edge record. Browser-safe.
-- @totalfinance/http @ 0.0.1 — pre-1.0 preview; 1 entrypoints. TotalFinance local HTTP server: loopback and read-only by default, with authenticated writes and registry-generated OpenAPI 3.1.
-- @totalfinance/math @ 0.0.1 — pre-1.0 preview; 16 entrypoints. TotalFinance math: distributions, root solvers, optimizers, interpolation, linear algebra, integration, statistics, and Monte Carlo. Zero runtime dependencies, ESM, per-feature deep entrypoints.
-- @totalfinance/mcp @ 0.0.1 — pre-1.0 preview; 1 entrypoints. TotalFinance MCP server: exposes the TotalFinance engine to AI agents via the Model Context Protocol. Read-only by default.
-- @totalfinance/options @ 0.0.1 — pre-1.0 preview; 15 entrypoints. TotalFinance options: contracts, pricing engines, Greeks, and implied volatility. Browser-safe, zero runtime dependencies.
-- @totalfinance/performance @ 0.0.1 — pre-1.0 preview; 12 entrypoints. TotalFinance performance metrics: returns, Sharpe/Sortino/Calmar, drawdowns. Browser-safe, light imports.
-- @totalfinance/portfolio @ 0.0.1 — pre-1.0 preview; 7 entrypoints. Durable portfolio management: the immutable economic-event ledger, pure event reduction, lots and multi-currency cash, valuation snapshots, and flow-aware performance inputs
-- @totalfinance/research @ 0.0.1 — pre-1.0 preview; 5 entrypoints. Point-in-time research primitives: universe screening, cross-sectional style factors, and event studies
-- @totalfinance/risk @ 0.0.1 — pre-1.0 preview; 8 entrypoints. TotalFinance risk & portfolio: VaR/CVaR (parametric, historical, Monte Carlo), portfolio risk decomposition, stress & scenario testing, factor/PCA exposure, and portfolio optimization (min-variance, max-Sharpe, mean-variance, risk parity, HRP, Kelly). Browser-safe.
-- @totalfinance/scenarios @ 0.0.1 — pre-1.0 preview; 2 entrypoints. Cross-domain scenario analysis with explicit targets, shared market state, full revaluation, Taylor attribution, reporting-currency aggregation, and durable replay
-- @totalfinance/strategy @ 0.0.1 — pre-1.0 preview; 4 entrypoints. TotalFinance options strategy & profit calculator: payoff, breakevens, mark-to-market, Greeks. Browser-safe.
-- @totalfinance/structure @ 0.0.1 — pre-1.0 preview; 3 entrypoints. TotalFinance options market structure: dealer-positioning estimates (GEX/DEX/vanna/charm), levels (walls, zero-gamma, max pain, pin risk), scenario maps, and options flow. All positioning is estimated and labeled.
-- @totalfinance/technical-analysis @ 0.0.1 — pre-1.0 preview; 32 entrypoints. TotalFinance technical analysis: aligned indicators with serializable streaming state. Browser-safe.
-- @totalfinance/valuation @ 0.0.1 — pre-1.0 preview; 4 entrypoints. TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe.
-- @totalfinance/volatility @ 0.0.1 — pre-1.0 preview; 28 entrypoints. TotalFinance volatility: implied-vol surfaces, skew/smile metrics, IV rank/percentile, and event-volatility (expected move, probability ITM/touch). Browser-safe.
-- @totalfinance/workflows @ 0.0.1 — pre-1.0 preview; 2 entrypoints. TotalFinance workflows: the protocol-neutral operation registry — one operation definition drives the SDK-facing runtime, the CLI, OpenAPI, and MCP. Read-only, provider-free, browser-safe.
-- totalfinance @ 0.0.1 — pre-1.0 preview; 21 entrypoints. TotalFinance umbrella: one install, namespace re-exports of the whole browser-first quant toolkit (options, vol, TA, strategy, risk, structure, backtest, fixed-income, performance, calendars).
+- @insiderfinance/totalfinance @ 0.1.0 — pre-1.0; component maturity varies (see stability policy); 192 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
+- @insiderfinance/totalfinance-mcp @ 0.1.0 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
 

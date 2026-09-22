@@ -20,8 +20,8 @@ higher level hides something you need.
 The kernel takes the inputs and returns the price. `normalCdf` beneath it is a plain function too.
 
 ```ts
-import { normalCdf } from '@totalfinance/math';
-import { blackScholesPrice } from '@totalfinance/options/black-scholes';
+import { normalCdf } from '@insiderfinance/totalfinance/math';
+import { blackScholesPrice } from '@insiderfinance/totalfinance/options/black-scholes';
 
 const contract = {
   type: 'call' as const,
@@ -43,7 +43,7 @@ The facade is the same number behind a flat call, and `.explain()` is the same n
 conventions it applied and the diagnostics it observed.
 
 ```ts
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 
 const facadePrice = blackScholes.call({
   spot: 100,
@@ -73,7 +73,7 @@ Greeks, the assumptions (exercise style, conventions, engine), and the diagnosti
 defaulted silently — an exercise style is required.
 
 ```ts
-import { engines, market, option } from '@totalfinance/options';
+import { engines, market, option } from '@insiderfinance/totalfinance/options';
 
 const analysis = option.price({
   contract: option.call({
@@ -106,13 +106,13 @@ comparable. Here a volatility smile around the same strike is calibrated and sav
 reproduces the report byte for byte and the replay reproduces the fit.
 
 ```ts
-import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
-import { calibrateSvi } from '@totalfinance/volatility';
+import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
+import { calibrateSvi } from '@insiderfinance/totalfinance/volatility';
 import {
   fittedModelArtifact,
   readFittedModel,
   replayFittedModel,
-} from '@totalfinance/volatility/artifacts';
+} from '@insiderfinance/totalfinance/volatility/artifacts';
 
 const k = [-0.3, -0.2, -0.1, -0.05, 0, 0.049, 0.1, 0.2, 0.3];
 const w = k.map((x) => 0.01 + 0.1 * (-0.3 * (x - 0.02) + Math.sqrt((x - 0.02) ** 2 + 0.1 ** 2)));
@@ -144,7 +144,7 @@ first contract is the one above, so `price[0]` is the raw price. Read or iterate
 only convert it when a downstream consumer specifically requires an ordinary array.
 
 ```ts
-import { blackScholesPriceMany } from '@totalfinance/options/batch';
+import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options/batch';
 
 const strikes = [105, 100, 95, 110, 90];
 // Columns are typed arrays; `type` is an Int8Array where a positive entry is a call.
@@ -172,7 +172,11 @@ teaching error — the form an agent, the CLI, the HTTP server, and the MCP adap
 registry runs it locally; nothing leaves the process.
 
 ```ts
-import { createOperationRegistry, defaultPacks, runOperation } from '@totalfinance/workflows';
+import {
+  createOperationRegistry,
+  defaultPacks,
+  runOperation,
+} from '@insiderfinance/totalfinance/workflows';
 
 const registry = createOperationRegistry({ packs: defaultPacks() });
 const operation = registry.get('totalfinance.option.price');

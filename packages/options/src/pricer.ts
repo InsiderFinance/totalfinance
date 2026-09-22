@@ -1,5 +1,5 @@
 /**
- * The Gate C reference adapter: `option.price` exposed through the `@totalfinance/core/pricing`
+ * The Gate C reference adapter: `option.price` exposed through the `@insiderfinance/totalfinance/core/pricing`
  * `Pricer` protocol (`docs/specs/gate-c-extension-contracts.md`).
  *
  * This file contains ZERO pricing mathematics — it is the existence proof that the protocol adds
@@ -116,7 +116,7 @@ export function optionContractPricer(
       // `deterministic` flag keeps meaning "closed-form vs seeded method" in the options
       // engine-contract suite).
       randomness: 'none',
-      // The options batch paths (`@totalfinance/options/batch`) are strike/vol-columnar over ONE
+      // The options batch paths (`@insiderfinance/totalfinance/options/batch`) are strike/vol-columnar over ONE
       // market, not instrument-columnar over one observation set; the batch adapter is specified
       // in the Gate C design doc and lands with a measured consumer. Claiming `batch: true` here
       // would be unverified capability marketing.

@@ -1,9 +1,9 @@
 /**
- * `@totalfinance/volatility` — implied-volatility surfaces, skew/smile metrics, IV rank/percentile, and
- * event-volatility analytics. Browser-safe; builds on `@totalfinance/options` IV solving and
- * `@totalfinance/math` interpolation.
+ * `@insiderfinance/totalfinance/volatility` — implied-volatility surfaces, skew/smile metrics, IV rank/percentile, and
+ * event-volatility analytics. Browser-safe; builds on `@insiderfinance/totalfinance/options` IV solving and
+ * `@insiderfinance/totalfinance/math` interpolation.
  *
- * Consumes a chain as `OptionQuote[]` from `@totalfinance/core` (re-use the canonical market-data type).
+ * Consumes a chain as `OptionQuote[]` from `@insiderfinance/totalfinance/core` (re-use the canonical market-data type).
  * Surfaces come in six flavours — non-parametric `raw`/`interpolated`/`smoothed`, parametric
  * `svi`/`sabr` (per expiry), and a globally-calibrated `heston` — plus static no-arbitrage diagnostics,
  * skew + term structure, IV-rank, and event-vol facades.
@@ -23,7 +23,7 @@ export type {
 } from './surface.js';
 
 // Parametric smile calibration (spec §10.1).
-// SVI evaluators/kernels live on '@totalfinance/volatility/svi' (C5 kernels-off-roots).
+// SVI evaluators/kernels live on '@insiderfinance/totalfinance/volatility/svi' (C5 kernels-off-roots).
 export { calibrateSvi } from './svi.js';
 export type {
   SVIParameters,
@@ -46,7 +46,7 @@ export type {
 export { stickyRegime } from './sticky-regime.js';
 export type { StickyRegimeInput, StickyRegime } from './sticky-regime.js';
 // SSVI — Gatheral–Jacquier arbitrage-free surface SVI (calendar-arb-free by construction).
-// SSVI evaluators live on '@totalfinance/volatility/ssvi' (C5 kernels-off-roots).
+// SSVI evaluators live on '@insiderfinance/totalfinance/volatility/ssvi' (C5 kernels-off-roots).
 export { calibrateSsvi } from './ssvi.js';
 export type {
   SSVIParameters,
@@ -58,7 +58,7 @@ export type {
   SSVICalibration,
 } from './ssvi.js';
 // eSSVI — SSVI extended with a per-maturity skew ρ(θ) (a strict superset of SSVI).
-// eSSVI evaluators live on '@totalfinance/volatility/essvi' (C5 kernels-off-roots).
+// eSSVI evaluators live on '@insiderfinance/totalfinance/volatility/essvi' (C5 kernels-off-roots).
 export { calibrateEssvi } from './essvi.js';
 export type {
   ESSVIParameters,
@@ -268,7 +268,7 @@ export type {
 // Vanna–volga — the FX/crypto smile constructed from ATM + 25Δ RR/BF (reprices the three pillars exactly),
 // its Castagna–Mercurio closed-form approximation, the risk-neutral density it implies, the 5-pillar
 // (ATM + 25Δ + 10Δ) exact-repricing smile, and the risk-neutral density that 5-pillar smile implies.
-// The evaluator/density kernels live on '@totalfinance/volatility/vanna-volga' (C5 kernels-off-roots).
+// The evaluator/density kernels live on '@insiderfinance/totalfinance/volatility/vanna-volga' (C5 kernels-off-roots).
 export { calibrateVannaVolga, calibrateVannaVolga5 } from './vanna-volga.js';
 export type {
   VannaVolgaInput,

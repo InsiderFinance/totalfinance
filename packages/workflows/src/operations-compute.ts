@@ -2,7 +2,7 @@ import { resolvedExpiry, ErrorCode } from '@totalfinance/core';
 /**
  * TotalFinance MCP tool definitions.
  *
- * Each tool calls the public `@totalfinance/options` API — no duplicated pricing math (spec §18.1) — and
+ * Each tool calls the public `@insiderfinance/totalfinance/options` API — no duplicated pricing math (spec §18.1) — and
  * derives its input JSON Schema from the same runtime schema facade used everywhere else.
  */
 
@@ -348,7 +348,7 @@ const impliedVolatilityTool = defineOperation({
 
 /**
  * Every registered indicator is dispatchable: both the `indicator` enum and the runtime dispatch
- * come from the `@totalfinance/technical-analysis` registry, so `technical_analysis.calculate` covers the full ~300-indicator surface
+ * come from the `@insiderfinance/totalfinance/technical-analysis` registry, so `technical_analysis.calculate` covers the full ~300-indicator surface
  * (spec DX5.1) instead of a hardcoded handful. Discover names + input kinds with `totalfinance.technical_analysis.list`.
  */
 const INDICATOR_NAMES: readonly string[] = ta.listIndicators().map((i) => i.name);

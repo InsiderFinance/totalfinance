@@ -1,21 +1,23 @@
 # Stability
 
-TotalFinance is published as an explicitly **pre-1.0 preview**. This file ships inside every package of
-the fixed group so the promise travels with the artifact. The version you installed says which
-series you are on (`0.1.0-preview.N`); the tiers below say what each surface promises within it.
+TotalFinance `0.1.0` is **pre-1.0 software**, not a 1.0 stability guarantee. Two public packages
+move together: `@insiderfinance/totalfinance` and optional `@insiderfinance/totalfinance-mcp`.
+This file ships in both artifacts. A local build or version number is not evidence of npm publication.
 
-| Tier              | What it covers                                                                                                                                                       | The promise                                                                                                                                                                                                                     |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **stable-by-law** | every public function, type, and result envelope of the twenty domain and platform packages and the `totalfinance` umbrella                                          | it passes the public-API laws and their gates (naming, signature, closed-door enforcement, generated contracts) at every commit; a change lands with a changeset entry. The semantic-versioning promise itself begins at `1.0`. |
-| **preview**       | the operation registry (`@totalfinance/workflows`) and the transports over it — the `totalfinance` CLI, `totalfinance-http` and its OpenAPI document, the MCP server | the wire ids, input and output schemas, exit codes, status codes, and error documents are held through the preview series; a change ships as a new preview minor with a changeset entry, never silently.                        |
-| **experimental**  | any export whose API report marks it `@experimental`                                                                                                                 | may change or disappear between previews without a deprecation cycle. At `0.1.0-preview.0` this list is empty; it is generated from the API reports, never authored by hand.                                                    |
+The main package contains components with different maturity. Combining them into one install
+does not promote preview transports or workflows to production-ready status.
 
-What every tier shares: results carry their `assumptions` and `diagnostics`; refusals are typed
-`QuantError`s with registered codes; nothing computes from data you did not pass in.
+| Tier              | What it covers                                                                                                         | The promise                                                                                                                                                                                |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **stable-by-law** | Domain calculations and the root's calculation namespaces                                                              | Public-API laws, typed errors, explicit units, validation and generated-contract gates apply. This is contract conformance, not a guarantee that names or shapes cannot change before 1.0. |
+| **preview**       | `@insiderfinance/totalfinance/workflows` (including `/local`), `/cli`, `/http`, and `@insiderfinance/totalfinance-mcp` | Wire IDs, schemas, exit/status codes and error documents are versioned contracts. Changes require release notes and a changeset; they are never silent.                                    |
+| **experimental**  | Exports explicitly tagged `@experimental` in their API reports                                                         | May change or disappear without a deprecation cycle. Inspect the generated API reports for the current list.                                                                               |
 
-Twenty-five packages move together: `@totalfinance/core`, `math`, `calendars`, `options`, `volatility`,
-`structure`, `technical-analysis`, `performance`, `risk`, `strategy`, `backtest`, `fixed-income`,
-`crypto`, `fundamentals`, `valuation`, `research`, `foreign-exchange`, `commodities`, `portfolio`,
-`scenarios`, the umbrella `totalfinance`, `@totalfinance/workflows`, `@totalfinance/cli`, `@totalfinance/http`, and
-`@totalfinance/mcp`. See `SECURITY.md` for how to report a problem and `CHANGELOG.md` in each package for
-what changed.
+Result envelopes preserve their `assumptions` and `diagnostics`; facade calls expose them through
+`.explain()`. Refusals are typed `QuantError`s with registered codes. Calculations use only
+caller-supplied data. No component grants brokerage access or live-trading authority.
+
+The 25 source workspaces are private build inputs, not separately installable npm products.
+Browser root/domain imports do not load Node-only transports or MCP. See `SECURITY.md` for
+private reporting and the release changelog for changes. The public semantic-versioning
+stability promise begins at 1.0, not at this first release.

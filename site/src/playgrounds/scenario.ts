@@ -1,4 +1,4 @@
-import { legs, strategy } from '@totalfinance/strategy';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
 import type { Playground } from '../types.js';
 
 export const scenarios: Playground = {
@@ -94,14 +94,14 @@ export const scenarios: Playground = {
       example: {
         description:
           'Returns scenario rows in value, plus assumptions and diagnostics. Each row names its underlying price, volatility shock and P&L. These three price scenarios use the same market and time advance as the chart, with no volatility shock.',
-        code: `import { legs, strategy } from '@totalfinance/strategy';\n\nconst market = ${JSON.stringify(market, null, 2)};\nconst position = strategy([\n  legs.call({ strike: 100, quantity: 1 }),\n  legs.call({ strike: 110, quantity: -1 }),\n], { premiums: 'model', market, multiplier: 100 });\nconst underlyingPrices = [90, 100, 110];\nconst result = position.scenarioTable({\n  prices: underlyingPrices,\n  volatilityShocks: [0],\n  daysForward: [${daysForward}],\n});\nconsole.log(result);`,
+        code: `import { legs, strategy } from '@insiderfinance/totalfinance/strategy';\n\nconst market = ${JSON.stringify(market, null, 2)};\nconst position = strategy([\n  legs.call({ strike: 100, quantity: 1 }),\n  legs.call({ strike: 110, quantity: -1 }),\n], { premiums: 'model', market, multiplier: 100 });\nconst underlyingPrices = [90, 100, 110];\nconst result = position.scenarioTable({\n  prices: underlyingPrices,\n  volatilityShocks: [0],\n  daysForward: [${daysForward}],\n});\nconsole.log(result);`,
         result: position.scenarioTable({
           prices: [90, 100, 110],
           volatilityShocks: [0],
           daysForward: [daysForward],
         }),
       },
-      code: `import { legs, strategy } from '@totalfinance/strategy';\n\nconst market = ${JSON.stringify(market, null, 2)};\nconst position = strategy([legs.call({ strike: 100, quantity: 1 }), legs.call({ strike: 110, quantity: -1 })], { premiums: 'model', market, multiplier: 100 });\nconst result = position.scenarioTable(${JSON.stringify(configuration, null, 2)});\nconsole.log(result);`,
+      code: `import { legs, strategy } from '@insiderfinance/totalfinance/strategy';\n\nconst market = ${JSON.stringify(market, null, 2)};\nconst position = strategy([legs.call({ strike: 100, quantity: 1 }), legs.call({ strike: 110, quantity: -1 })], { premiums: 'model', market, multiplier: 100 });\nconst result = position.scenarioTable(${JSON.stringify(configuration, null, 2)});\nconsole.log(result);`,
     };
   },
 };

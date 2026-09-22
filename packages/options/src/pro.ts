@@ -243,7 +243,7 @@ export function impliedVolatilityOption(
  *
  * @example
  * ```ts
- * import { market, option } from '@totalfinance/options';
+ * import { market, option } from '@insiderfinance/totalfinance/options';
  *
  * const contract = option.usEquityCall({ underlying: 'AAPL', strike: 200, expiry: '2026-09-18' });
  * const result = option.price({

@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/workflows",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance workflows: the protocol-neutral operation registry — one operation definition drives the SDK-facing runtime, the CLI, OpenAPI, and MCP. Read-only, provider-free, browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
@@ -67,13 +67,10 @@
     "@totalfinance/valuation": "workspace:*",
     "@totalfinance/volatility": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
   },
   "homepage": "https://github.com/InsiderFinance/totalfinance/tree/main/packages/workflows#readme",
-  "bugs": "https://github.com/InsiderFinance/totalfinance/issues"
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "private": true
 }

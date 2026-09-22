@@ -4,7 +4,7 @@ import { executeReadme } from '../../tools/readme-exec.js';
 
 /**
  * DX7.1 (guides) — a guide's headline example must run, not merely read well. Each guide named below
- * has its ```ts blocks extracted, bundled against the `@totalfinance/*` SOURCES, and executed; a retired
+ * has its ```ts blocks extracted, bundled against the `@insiderfinance/totalfinance/*` SOURCES, and executed; a retired
  * key or renamed field (the exact drift that shipped `premiums:` / `underlyingPrice:` in the strategy
  * guide) fails CI here instead of failing the reader who copies it.
  *

@@ -4,24 +4,24 @@
  * volatility surface, and event-vol decomposition. Executes in CI so the docs can't drift from the code.
  */
 
-import { resolvedExpiry } from '@totalfinance/core';
+import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
 import { describe, expect, it } from 'vitest';
-import { type OptionQuote, yearFraction } from '@totalfinance/core';
-import { type HestonParameters } from '@totalfinance/options';
-import { hestonImpliedVolatility } from '@totalfinance/options/heston';
-import { analyze, equityCurve } from '@totalfinance/performance';
+import { type OptionQuote, yearFraction } from '@insiderfinance/totalfinance/core';
+import { type HestonParameters } from '@insiderfinance/totalfinance/options';
+import { hestonImpliedVolatility } from '@insiderfinance/totalfinance/options/heston';
+import { analyze, equityCurve } from '@insiderfinance/totalfinance/performance';
 import {
   blackLitterman,
   concentration,
   conditionalValueAtRiskOptimize,
   minVariance,
-} from '@totalfinance/risk';
+} from '@insiderfinance/totalfinance/risk';
 import {
   atmTermStructure,
   eventVolatilityDecomposition,
   forwardVolatility,
   volatilitySurface,
-} from '@totalfinance/volatility';
+} from '@insiderfinance/totalfinance/volatility';
 
 describe('docs: benchmark-relative performance', () => {
   it('analyze adds alpha/beta/tracking/IR when a benchmark is supplied', () => {

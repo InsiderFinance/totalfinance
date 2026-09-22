@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/valuation/corporate` — corporate valuation (FC2): cost of capital, free cash flow,
+ * `@insiderfinance/totalfinance/valuation/corporate` — corporate valuation (FC2): cost of capital, free cash flow,
  * terminal value, the enterprise ⇄ equity bridge, the direct DCF and its deterministic and
  * probabilistic companions, and the equity and transaction analyses.
  */

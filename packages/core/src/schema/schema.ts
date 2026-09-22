@@ -2,7 +2,7 @@
  * TotalFinance schema facade — a tiny, zero-dependency runtime validator (spec §6).
  *
  * Design goals that drove the 0.0.1 schema decision (see docs/adr/schema-library.md):
- *   - zero runtime dependencies, so `@totalfinance/core` keeps its zero-dep guarantee;
+ *   - zero runtime dependencies, so `@insiderfinance/totalfinance/core` keeps its zero-dep guarantee;
  *   - native `toJSONSchema()` for MCP tools, docs, and adapters;
  *   - excellent TypeScript inference via `Infer<typeof schema>`;
  *   - errors map to `InputError` with stable codes;

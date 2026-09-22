@@ -4,13 +4,13 @@ TotalFinance gives an agent financial calculations, not permission to invent mar
 
 ## 1. Build the local server
 
-Until a public release is verified on the Versions page, use a source checkout. In the `totalfinance` directory, install with the pinned pnpm version and build:
+Until a public release is verified on the Versions page, use a source checkout. In the `@insiderfinance/totalfinance` directory, install with the pinned pnpm version and build:
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm build
-node packages/mcp/dist/bin.js --help
-node packages/mcp/dist/bin.js doctor
+node distribution/mcp/dist/bin.js --help
+node distribution/mcp/dist/bin.js doctor
 ```
 
 Node 22.13.0 or newer is required. Help and doctor exit normally. Once protocol mode begins, stdout is reserved for JSON-RPC; application logging belongs on stderr.
@@ -22,10 +22,10 @@ Use your client's local/stdio MCP configuration. Replace the two absolute paths 
 ```json
 {
   "mcpServers": {
-    "totalfinance": {
+    "@insiderfinance/totalfinance": {
       "command": "node",
       "args": [
-        "/absolute/path/to/totalfinance/packages/mcp/dist/bin.js",
+        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
         "--profile",
         "full",
         "--packs",

@@ -8,7 +8,7 @@ claim that an npm installation has been verified. Use the version page to check 
 ## Small input, direct answer
 
 ```ts
-import { blackScholes } from '@totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
 
 const price = blackScholes.price({
   type: 'call',
@@ -24,7 +24,7 @@ console.log(price); // About 2.3909 USD per share; a number, not a wrapper.
 For a series, supply the observations you actually have:
 
 ```ts
-import { sma } from '@totalfinance/technical-analysis';
+import { sma } from '@insiderfinance/totalfinance/technical-analysis';
 
 const closingPrices = [100, 102, 104, 106, 108];
 const averages = sma(closingPrices, { period: 3 });
@@ -89,15 +89,15 @@ Technical indicators have aligned warmup periods. Leading warmup values are not 
 
 ## Choose imports deliberately
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or
-`@totalfinance/<domain>`, as above, or supported feature subpaths such as `@totalfinance/math/normal`.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>`,
+as above, or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`.
 The umbrella keeps domain namespaces and the five flagship option exports (`blackScholes`, `option`,
 `market`, `engines`, `impliedVolatility`) for convenience.
 
-The tradeoff is bundler-dependent: `import { math } from 'totalfinance'` followed by
+The tradeoff is bundler-dependent: `import { math } from '@insiderfinance/totalfinance'` followed by
 `math.normalCdf(0)` retains the whole math namespace in esbuild
 ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup shakes this static use.
-Direct `import * as math from 'totalfinance/math'` with static member use also shakes. Dynamic
+Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes. Dynamic
 namespace access and registries retain the implementations they can reach.
 
 Installation size is not final bundle size, and plain Node ESM performs no automatic dead-code

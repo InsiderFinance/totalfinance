@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/performance/ratios` — distribution- and trade-level performance ratios (spec §15.1).
+ * `@insiderfinance/totalfinance/performance/ratios` — distribution- and trade-level performance ratios (spec §15.1).
  *
  * These read only a per-period return (or per-trade P&L) series: the Omega ratio, win rate, profit
  * factor, and expectancy. Zero-return periods are treated as neither wins nor losses. Each is a

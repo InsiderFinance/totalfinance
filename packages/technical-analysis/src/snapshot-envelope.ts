@@ -33,7 +33,7 @@ export function checkTechnicalAnalysisSnapshotVersion(snapshot: TechnicalAnalysi
   if (version > SNAPSHOT_SCHEMA_VERSION) {
     throw new InputError(
       `checkTechnicalAnalysisSnapshotVersion: TechnicalAnalysisSnapshot schema version ${version} is newer than this build supports (${SNAPSHOT_SCHEMA_VERSION}). ` +
-        `Upgrade @totalfinance/technical-analysis to restore it.`,
+        `Upgrade @insiderfinance/totalfinance to restore it.`,
       {
         code: ErrorCode.SnapshotUnsupportedVersion,
         context: { version, supported: SNAPSHOT_SCHEMA_VERSION, kind: snapshot.kind },

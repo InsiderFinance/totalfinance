@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 225,
+    "surfaces": 226,
     "byClass": {
       "current-runnable": 88,
-      "future-target": 44,
+      "future-target": 45,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4476,
+    "executableFences": 4461,
     "checkedUnderTruthfulness": 170,
-    "checkedUnderVocabulary": 44,
-    "shippedNamesWatched": 9460,
+    "checkedUnderVocabulary": 45,
+    "shippedNamesWatched": 9461,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -163,7 +163,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 5
+      "codeFences": 4
     },
     {
       "path": "docs/guides/levels.md",
@@ -282,7 +282,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4217
+      "codeFences": 4204
     },
     {
       "path": "docs/llms.txt",
@@ -296,7 +296,7 @@
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
-      "codeFences": 7
+      "codeFences": 6
     },
     {
       "path": "docs/milestones/phase-0.md",
@@ -1039,6 +1039,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/scoped-single-package-release.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/shared-scenario-runner.md",

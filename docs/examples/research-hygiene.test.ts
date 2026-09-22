@@ -9,7 +9,7 @@ import {
   deflatedSharpeRatio,
   purgedKFold,
   sharpeStatistics,
-} from '@totalfinance/risk/research';
+} from '@insiderfinance/totalfinance/risk/research';
 
 describe('docs: is the best backtest real, or the luckiest of many?', () => {
   it('deflates a selected strategy Sharpe by the number of trials', () => {

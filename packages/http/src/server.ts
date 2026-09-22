@@ -55,7 +55,7 @@ export interface LocalHttpServerInput {
   authenticationToken?: string;
   /** The trade lifecycle's stores (Decision 10). */
   stores?: { authorization?: AuthorizationStore; journal?: ExecutionJournalStore };
-  /** The job runner (`@totalfinance/workflows/local`'s or another implementation of the contract). */
+  /** The job runner (`@insiderfinance/totalfinance/workflows/local`'s or another implementation of the contract). */
   jobs?: JobRunner;
   host?: string;
   port?: number;

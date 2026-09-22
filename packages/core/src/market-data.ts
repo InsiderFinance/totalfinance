@@ -401,7 +401,7 @@ export interface OrderBook {
 /**
  * The RAW provider-fundamentals record — an explicitly raw/open DATA-EDGE artifact (FC0). A
  * vendor's untyped field bag survives ONLY here; compute functions never read `fields`. Typed
- * analysis attaches to `@totalfinance/fundamentals`' `FundamentalPeriod` declarations, and a data
+ * analysis attaches to `@insiderfinance/totalfinance/fundamentals`' `FundamentalPeriod` declarations, and a data
  * adapter's job is to map one of these raw records into them with the availability instant
  * carried honestly. (Relocation-by-rename of the former generic `Fundamentals`, pre-1.0, no
  * alias.)

@@ -16,6 +16,9 @@ This is the standalone TypeScript finance library, not the parent web applicatio
   `pnpm regen:check` on a clean tree. Do not weaken gates or hand-edit evidence to make it pass.
 - Format only changed files with the pinned local Prettier. Never run a repository-wide format
   write. Verify with `pnpm run ci` and the independent repeat required by the contributing guide.
-- The public name is TotalFinance. Packages are `totalfinance` and `@totalfinance/*`.
+- The public name is TotalFinance. Publish only `@insiderfinance/totalfinance` and the optional
+  `@insiderfinance/totalfinance-mcp`, from `distribution/*`. `packages/*` and their aliases are
+  private source/build workspaces. After a Changesets version bump, run `pnpm publication:update`
+  to synchronize source versions and derived export maps before building.
 - Never publish packages, change release versions, deploy the site, or enable live execution
   without explicit maintainer approval. Never add credentials or private application code.

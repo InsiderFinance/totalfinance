@@ -1306,7 +1306,7 @@ function requireCorrelationMatrix(matrix: number[][], size: number, functionName
     throw new InputError(
       `${functionName}: correlation is not positive definite, so it describes no possible joint ` +
         'distribution (some portfolio of these assets would have negative variance). Repair it with ' +
-        'nearestCorrelation / nearestPsd from @totalfinance/math, or reduce the number of assets.',
+        'nearestCorrelation / nearestPsd from @insiderfinance/totalfinance/math, or reduce the number of assets.',
       {
         code: ErrorCode.LinalgNotPositiveDefinite,
         context: { function: functionName, size },

@@ -484,7 +484,7 @@ export interface FiniteDifferenceEngineOptions {
  *
  * @example
  * ```ts
- * import { engines, market, option } from '@totalfinance/options';
+ * import { engines, market, option } from '@insiderfinance/totalfinance/options';
  *
  * const contract = option.usEquityCall({ underlying: 'AAPL', strike: 200, expiry: '2026-09-18' });
  * const mkt = market({ spot: 195, riskFreeRate: 0.045, volatility: 0.24, asOf: '2026-07-20T10:30:00-04:00' });

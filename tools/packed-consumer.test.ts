@@ -23,10 +23,23 @@ import type { ReleaseManifest } from './release/dry-run.js';
 import { playgrounds } from '../site/src/playgrounds/index.js';
 import { registerInstalledConsumerTests } from './bundle-size/consumer-tests.js';
 import { assertInstalledIndicatorMetadata } from './bundle-size/indicator-metadata-consumer.js';
+import {
+  assertInstalledPublicArtifacts,
+  assertPublicPackageDependencies,
+  type PublicDependencyMetadata,
+} from './bundle-size/public-artifacts.js';
+import { CONSUMER_BUNDLERS, CONSUMER_FIXTURES } from './bundle-size/consumer-fixtures.js';
+import { measureConsumer } from './bundle-size/consumer-measure.js';
+import {
+  MCP_PACKAGE_NAME,
+  PUBLIC_PACKAGE_NAME,
+  publicPackageDirectories,
+  toPublicSpecifier,
+} from './public-packages.js';
 
 /**
  * Alignment-spec P1.5 — the PACKED-consumer matrix. Workspace imports prove nothing about what
- * ships: this suite `pnpm pack`s every package, installs the tarballs into a real out-of-tree
+ * ships: this suite `pnpm pack`s exactly the two distribution packages, installs the tarballs into a real out-of-tree
  * consumer with npm, and exercises the published artifacts:
  *
  *   - Node ESM `import` of the umbrella and a scoped deep subpath;
@@ -49,13 +62,13 @@ const OPENAPI_MAX_BUFFER = 16 * 1024 * 1024;
  * the packed NodeNext/Bundler consumer. No casts/spreads may hide report-to-artifact assignability.
  */
 const DOGFOODING_PUBLIC_CONSUMER_TS = `
-import { resolvedExpiry, type OptionContract } from '@totalfinance/core';
+import { resolvedExpiry, type OptionContract } from '@insiderfinance/totalfinance/core';
 import {
   compareCalculationArtifacts, createAnalysisArtifact, readAnalysisArtifact,
   type CalculationArtifactComparison,
-} from '@totalfinance/core/artifacts';
-import { optionChainHealth, type OptionChainHealthReport } from '@totalfinance/options';
-import { exposureFromGreeks, type SuppliedExposureReport } from '@totalfinance/structure';
+} from '@insiderfinance/totalfinance/core/artifacts';
+import { optionChainHealth, type OptionChainHealthReport } from '@insiderfinance/totalfinance/options';
+import { exposureFromGreeks, type SuppliedExposureReport } from '@insiderfinance/totalfinance/structure';
 
 const asOf = Date.parse('2026-09-01T15:00:00Z');
 const contract: OptionContract = {
@@ -130,7 +143,7 @@ afterEach(async () => {
  * FC7 exit-gate row (slice 5): "Serialization/migration/replay works through packed browser,
  * Node, worker, and local-store fixtures without a database dependency." ONE ledger journey —
  * a deposit, a fill, a 4-for-1 split — is folded in every environment against the PACKED
- * `@totalfinance/portfolio`, and each prints the ledger's content hash so a reviewer can compare
+ * `@insiderfinance/totalfinance/portfolio`, and each prints the ledger's content hash so a reviewer can compare
  * them across environments (the last test asserts they agree). Plain JS (no numeric separators or
  * TS syntax) so the same text runs in a worker file, a browser bundle, and a Node script.
  */
@@ -199,17 +212,17 @@ const runPackedStockScenario = () => {
  * silent drift in any environment fails loudly, not by comparison alone.
  */
 const ARTIFACT_JOURNEY_JS = `
-import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
-import { calibrateSvi } from '@totalfinance/volatility';
-import { compareFittedModels, evaluateFittedModel, fittedModelArtifact, readFittedModel, replayFittedModel } from '@totalfinance/volatility/artifacts';
-import { curves } from '@totalfinance/fixed-income';
-import { compareFittedModels as compareCurveModels, evaluateFittedModel as evaluateCurveModel, fittedModelArtifact as curveArtifact, readFittedModel as readCurveModel, replayFittedModel as replayCurveModel } from '@totalfinance/fixed-income/artifacts';
-import { screenUniverse } from '@totalfinance/research';
-import { compareResearchRuns, readResearchRun, replayResearchRun, researchRunArtifact } from '@totalfinance/research/artifacts';
-import { crossSectionalBacktest } from '@totalfinance/backtest';
-import { backtestRunArtifact, compareBacktestRuns, readBacktestRun, replayBacktestRun } from '@totalfinance/backtest/artifacts';
-import { optionsBacktest } from '@totalfinance/backtest/options';
-import { portfolioBacktest } from '@totalfinance/backtest/portfolio';
+import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
+import { calibrateSvi } from '@insiderfinance/totalfinance/volatility';
+import { compareFittedModels, evaluateFittedModel, fittedModelArtifact, readFittedModel, replayFittedModel } from '@insiderfinance/totalfinance/volatility/artifacts';
+import { curves } from '@insiderfinance/totalfinance/fixed-income';
+import { compareFittedModels as compareCurveModels, evaluateFittedModel as evaluateCurveModel, fittedModelArtifact as curveArtifact, readFittedModel as readCurveModel, replayFittedModel as replayCurveModel } from '@insiderfinance/totalfinance/fixed-income/artifacts';
+import { screenUniverse } from '@insiderfinance/totalfinance/research';
+import { compareResearchRuns, readResearchRun, replayResearchRun, researchRunArtifact } from '@insiderfinance/totalfinance/research/artifacts';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
+import { backtestRunArtifact, compareBacktestRuns, readBacktestRun, replayBacktestRun } from '@insiderfinance/totalfinance/backtest/artifacts';
+import { optionsBacktest } from '@insiderfinance/totalfinance/backtest/options';
+import { portfolioBacktest } from '@insiderfinance/totalfinance/backtest/portfolio';
 
 const runPackedArtifactJourney = () => {
   // Volatility: an SVI smile.
@@ -429,15 +442,19 @@ beforeAll(() => {
 
   const deps: Record<string, string> = {};
   const artifacts: ReleaseManifest['packages'] = [];
-  for (const dir of readdirSync(PKG_DIR).sort()) {
-    const pkgPath = join(PKG_DIR, dir);
+  for (const { path: pkgPath, name } of publicPackageDirectories(ROOT)) {
+    const manifest = JSON.parse(
+      readFileSync(join(pkgPath, 'package.json'), 'utf8'),
+    ) as PublicDependencyMetadata;
+    assertPublicPackageDependencies(manifest, name, manifest.version);
     const out = sh('pnpm', ['pack', '--pack-destination', tarballDir], pkgPath).trim();
     const tgz = out.split('\n').at(-1)!.trim();
-    const name = dir === 'totalfinance' ? 'totalfinance' : `@totalfinance/${dir}`;
+    // Validate the actual tarball too, before npm can resolve any dependency from a registry.
+    const packedManifest = JSON.parse(
+      sh('tar', ['-xOf', tgz, 'package/package.json'], work),
+    ) as PublicDependencyMetadata;
+    assertPublicPackageDependencies(packedManifest, name, manifest.version);
     deps[name] = `file:${tgz}`;
-    const manifest = JSON.parse(readFileSync(join(pkgPath, 'package.json'), 'utf8')) as {
-      version: string;
-    };
     const bytes = readFileSync(tgz);
     artifacts.push({
       package: name,
@@ -447,13 +464,21 @@ beforeAll(() => {
       sha256: createHash('sha256').update(bytes).digest('hex'),
     });
   }
+  expect(artifacts.map((artifact) => artifact.package)).toEqual([
+    PUBLIC_PACKAGE_NAME,
+    MCP_PACKAGE_NAME,
+  ]);
+  expect(readdirSync(tarballDir).filter((file) => file.endsWith('.tgz'))).toHaveLength(2);
   const versions = new Set(artifacts.map((artifact) => artifact.version));
   if (versions.size !== 1)
-    throw new Error('Packed examples require the coherent fixed package group.');
+    throw new Error('Packed examples require matching main and MCP versions.');
+  expect([...versions]).toEqual(['0.1.0']);
+  const source = captureSmokeSource();
   releaseManifest = {
     version: artifacts[0]!.version,
-    commit: captureSmokeSource().sourceCommit,
-    packages: artifacts.sort((a, b) => a.package.localeCompare(b.package)),
+    commit: source.sourceCommit,
+    sourceDirty: source.sourceDirty,
+    packages: artifacts,
   };
   writeFileSync(
     join(tarballDir, 'RELEASE_HASHES.json'),
@@ -475,8 +500,8 @@ beforeAll(() => {
   );
 }, 240_000);
 
-// Stage 7A slice 4 (2026-09-03): the packed tree now carries 24 tarballs plus the consumer's installed
-// node_modules; removing it exceeded vitest's 10 s hook default under CI load. Bounded from the
+// The packed tree carries the two distribution tarballs plus the consumer's installed
+// node_modules; removal historically exceeded vitest's 10 s hook default under CI load. Bounded from the
 // measurement (a few seconds idle), not left to the default.
 afterAll(() => {
   if (work) {
@@ -803,18 +828,100 @@ process.exitCode = 7;`,
 });
 
 describe('packed consumer (P1.5) — the published artifacts, not the workspace', () => {
+  it('only the two public artifacts ship, with closed dependencies, declarations, maps and sources', () => {
+    const counts = assertInstalledPublicArtifacts(consumer, releaseManifest.version);
+    expect(counts.javascript).toBeGreaterThan(100);
+    expect(counts.declarations).toBe(counts.javascript);
+    expect(counts.maps).toBe(counts.javascript + counts.declarations);
+  });
+
+  it('private names, domain manifests and main/MCP internals are not public imports', () => {
+    const privateNames = readdirSync(PKG_DIR).map((dir) =>
+      dir === 'totalfinance' ? 'totalfinance' : `@totalfinance/${dir}`,
+    );
+    const script = `
+import assert from 'node:assert/strict';
+for (const specifier of ${JSON.stringify(privateNames)}) {
+  await assert.rejects(import(specifier), { code: 'ERR_MODULE_NOT_FOUND' });
+}
+for (const specifier of [
+  '@insiderfinance/totalfinance/core/package.json',
+  '@insiderfinance/totalfinance/technical-analysis/package.json',
+  '@insiderfinance/totalfinance/modules/core/dist/index.js',
+  '@insiderfinance/totalfinance/mcp',
+]) {
+  await assert.rejects(import(specifier), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
+}
+console.log('PRIVATE_BOUNDARIES_OK');
+`;
+    expect(sh('node', ['--input-type=module', '-e', script], consumer)).toContain(
+      'PRIVATE_BOUNDARIES_OK',
+    );
+  });
+
+  it('root, domain and deep imports share callable, constructor and error identities', () => {
+    const script = `
+import assert from 'node:assert/strict';
+import { blackScholes, core, options, technicalAnalysis } from '@insiderfinance/totalfinance';
+import { InputError, QuantError } from '@insiderfinance/totalfinance/core';
+import { blackScholes as domain } from '@insiderfinance/totalfinance/options';
+import { blackScholes as deep } from '@insiderfinance/totalfinance/options/black-scholes';
+import { rsi } from '@insiderfinance/totalfinance/technical-analysis/rsi';
+assert.equal(blackScholes, domain);
+assert.equal(blackScholes, deep);
+assert.equal(options.blackScholes, deep);
+assert.equal(technicalAnalysis.rsi, rsi);
+assert.equal(core.InputError, InputError);
+assert.equal(core.QuantError, QuantError);
+assert.throws(() => deep.call({}), error => error instanceof InputError && error instanceof QuantError && error instanceof core.InputError);
+console.log('MODULE_IDENTITY_OK');
+`;
+    expect(sh('node', ['--input-type=module', '-e', script], consumer)).toContain(
+      'MODULE_IDENTITY_OK',
+    );
+  });
+
+  for (const bundler of CONSUMER_BUNDLERS) {
+    it.each(['workflows/local', 'cli', 'http'])(
+      `${bundler}: explicit Node-only /%s is not silently browser-compatible`,
+      async (subpath) => {
+        const specifier = `${PUBLIC_PACKAGE_NAME}/${subpath}`;
+        await expect(
+          measureConsumer(
+            consumer,
+            {
+              ...CONSUMER_FIXTURES[0]!,
+              id: `node-only-${subpath.replace('/', '-')}`,
+              specifier,
+              source: `import * as nodeOnly from '${specifier}'; globalThis.consumerCall = () => Object.keys(nodeOnly);`,
+            },
+            bundler,
+          ),
+        ).rejects.toThrow(/node:|Node-only module/);
+      },
+      60_000,
+    );
+  }
+
   it.each(['nodenext', 'bundler'] as const)(
     'signed leg constructors and retired-name/required-quantity contracts survive packing under %s',
     (resolution) => {
       const dir = join(consumer, `signed-legs-${resolution}`);
       sh('mkdir', ['-p', dir], consumer);
-      const contracts = readFileSync(join(ROOT, 'packages/strategy/test/legs.compile.ts'), 'utf8');
+      const contracts = readFileSync(
+        join(ROOT, 'packages/strategy/test/legs.compile.ts'),
+        'utf8',
+      ).replace(
+        /(['"])(@totalfinance\/[^'"]+|totalfinance(?:\/[^'"]+)?)\1/g,
+        (_match, quote: string, specifier: string) => quote + toPublicSpecifier(specifier) + quote,
+      );
       writeFileSync(
         join(dir, 'consumer.mts'),
         contracts +
           `
-import { legs as umbrellaLegs } from 'totalfinance/strategy';
-import { InputError, ErrorCode } from '@totalfinance/core';
+import { strategy as umbrellaStrategy } from '@insiderfinance/totalfinance';
+import { InputError, ErrorCode } from '@insiderfinance/totalfinance/core';
+const umbrellaLegs = umbrellaStrategy.legs;
 if (Object.keys(legs).join(',') !== 'call,put,stock') throw new Error('Unexpected constructors');
 if (umbrellaLegs !== legs) throw new Error('Umbrella leg surface diverged');
 const position = strategy([
@@ -894,21 +1001,21 @@ console.log('SIGNED_LEGS_PACKED_OK');
     const [maj, min] = process.versions.node.split('.').map(Number);
     expect(maj! > 22 || (maj === 22 && min! >= 13)).toBe(true);
     const manifest = JSON.parse(
-      readFileSync(join(consumer, 'node_modules', 'totalfinance', 'package.json'), 'utf8'),
+      readFileSync(join(consumer, 'node_modules', PUBLIC_PACKAGE_NAME, 'package.json'), 'utf8'),
     ) as { engines?: { node?: string } };
     expect(manifest.engines?.node).toBe('>=22.13.0');
   });
 
   it('Node ESM: imports the umbrella and a deep scoped subpath and computes', () => {
     const script = `
-      import { blackScholes, technicalAnalysis } from 'totalfinance';
-      import { blackScholes as blackScholesDeep, blackScholesPrice } from '@totalfinance/options/black-scholes';
-      import { blackScholesPriceMany } from '@totalfinance/options/batch';
-      import { expectedMoveFromImpliedVolatility } from 'totalfinance/volatility';
+      import { blackScholes, technicalAnalysis } from '@insiderfinance/totalfinance';
+      import { blackScholes as blackScholesDeep, blackScholesPrice } from '@insiderfinance/totalfinance/options/black-scholes';
+      import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options/batch';
+      import { expectedMoveFromImpliedVolatility } from '@insiderfinance/totalfinance/volatility';
       const p = blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
       if (Math.abs(p - 0.8983963669668142) > 1e-12) throw new Error('umbrella price drifted: ' + p);
       if (!(expectedMoveFromImpliedVolatility({ spot: 100, impliedVolatility: 0.2, timeToExpiryYears: 0.25 }).oneSigma > 9))
-        throw new Error('totalfinance/volatility umbrella subpath broken');
+        throw new Error('@insiderfinance/totalfinance/volatility umbrella subpath broken');
       if (blackScholesDeep.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 }) !== p)
         throw new Error('deep entrypoint disagrees with the umbrella');
       const raw = blackScholesPrice({ type: 'call', spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, dividendYield: 0, volatility: 0.22 });
@@ -929,10 +1036,10 @@ console.log('SIGNED_LEGS_PACKED_OK');
 
   it('require(ESM) interop: the default condition serves CJS consumers on Node >= 22.13.0', () => {
     const script = `
-      const { blackScholes } = require('totalfinance');
+      const { blackScholes } = require('@insiderfinance/totalfinance');
       const p = blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
       if (Math.abs(p - 0.8983963669668142) > 1e-12) throw new Error('require price drifted: ' + p);
-      const { valueAtRisk } = require('@totalfinance/risk');
+      const { valueAtRisk } = require('@insiderfinance/totalfinance/risk');
       if (!Number.isFinite(valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]))) throw new Error('VaR not finite');
       console.log('REQUIRE_OK');
     `;
@@ -946,9 +1053,9 @@ console.log('SIGNED_LEGS_PACKED_OK');
     writeFileSync(
       join(dir, 'entry.mjs'),
       `
-import { blackScholes } from 'totalfinance';
-import { blackScholes as blackScholesDeep, blackScholesPrice } from '@totalfinance/options/black-scholes';
-import { blackScholesPriceMany } from '@totalfinance/options/batch';
+import { blackScholes } from '@insiderfinance/totalfinance';
+import { blackScholes as blackScholesDeep, blackScholesPrice } from '@insiderfinance/totalfinance/options/black-scholes';
+import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options/batch';
 const p = blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
 if (Math.abs(p - 0.8983963669668142) > 1e-12) throw new Error('bundled price drifted: ' + p);
 if (blackScholesDeep.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 }) !== p)
@@ -986,7 +1093,7 @@ console.log('BUNDLE_OK');
       join(dir, 'worker.mjs'),
       `
 import { parentPort } from 'node:worker_threads';
-import { createPortfolioLedger, portfolioLedgerContentHash } from '@totalfinance/portfolio';
+import { createPortfolioLedger, portfolioLedgerContentHash } from '@insiderfinance/totalfinance/portfolio';
 ${LEDGER_JOURNEY_JS}
 const ledger = createPortfolioLedger({ portfolioId: 'packed', baseCurrency: 'USD', events: JOURNEY });
 // ledger.toJSON() is a deeply frozen canonical tree; structured clone carries it across the thread.
@@ -1002,7 +1109,7 @@ parentPort.postMessage({
       join(dir, 'parent.mjs'),
       `
 import { Worker } from 'node:worker_threads';
-import { readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@totalfinance/portfolio';
+import { readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@insiderfinance/totalfinance/portfolio';
 const message = await new Promise((resolve, reject) => {
   const worker = new Worker(new URL('./worker.mjs', import.meta.url));
   worker.once('message', resolve);
@@ -1027,13 +1134,53 @@ console.log('WORKER_OK ' + hash + ' events=' + ledger.state.eventCount);
     recordJourneyHash('worker', out, 'WORKER_OK');
   }, 120_000);
 
+  it('the installed local runner finds its shipped worker by relative URL and preserves the SDK report', () => {
+    const dir = join(consumer, 'installed-job-worker');
+    sh('mkdir', ['-p', dir], consumer);
+    writeFileSync(
+      join(dir, 'run.mjs'),
+      `
+import assert from 'node:assert/strict';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { jsonSafe } from '@insiderfinance/totalfinance/workflows';
+import { createFileArtifactStore, createLocalJobRunner, registryForProfile } from '@insiderfinance/totalfinance/workflows/local';
+const registry = registryForProfile({ profile: 'full' });
+const directory = ${JSON.stringify(join(dir, 'store'))};
+const runner = createLocalJobRunner({ registry, directory, profile: 'full', clock: () => new Date().toISOString() });
+const id = 'totalfinance.backtest.environment_episode';
+const input = { episode: 'range-bound', policy: { baseline: 'buyAndHold' }, seed: 7 };
+assert.equal(registry.require(id).costClass, 'job');
+const expected = canonicalJsonOf(jsonSafe(registry.run({ id, input }).structured));
+let workers = 0;
+process.on('worker', () => workers++);
+const run = runner.submit({ id, input });
+assert.equal(run.record.state, 'running');
+const deadline = setTimeout(() => { void run.cancel(); }, 30000);
+try {
+  const done = await run.completion;
+  assert.equal(workers, 1, 'The installed operation must really spawn its shipped worker');
+  assert.equal(done.state, 'completed', JSON.stringify(done.error));
+  assert.equal(done.result.kind, 'report');
+  const report = createFileArtifactStore({ directory }).get(done.result.uri).value;
+  assert.equal(report.operation.id, id);
+  assert.equal(canonicalJsonOf(jsonSafe(report.structured)), expected);
+  assert.equal(runner.get(done.id).state, 'completed');
+} finally {
+  clearTimeout(deadline);
+}
+console.log('INSTALLED_RELATIVE_WORKER_OK');
+`,
+    );
+    expect(sh('node', [join(dir, 'run.mjs')], consumer)).toContain('INSTALLED_RELATIVE_WORKER_OK');
+  }, 120_000);
+
   it('FC7 browser fixture: an esbuild browser bundle round-trips the ledger inside a vm context with web globals only', () => {
     const dir = join(consumer, 'ledger-browser');
     sh('mkdir', ['-p', dir], consumer);
     writeFileSync(
       join(dir, 'entry.mjs'),
       `
-import { createPortfolioLedger, readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@totalfinance/portfolio';
+import { createPortfolioLedger, readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@insiderfinance/totalfinance/portfolio';
 ${LEDGER_JOURNEY_JS}
 // The browser law, proven from INSIDE the bundle: no Node globals exist here. Probed through
 // globalThis because esbuild rewrites a bare \`require\` reference in an ESM bundle into its
@@ -1095,7 +1242,7 @@ vm.runInContext(code, context, { filename: 'bundle.mjs' });
     writeFileSync(
       join(dir, 'store.mjs'),
       `
-import { createPortfolioLedger, readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@totalfinance/portfolio';
+import { createPortfolioLedger, readPortfolioLedgerSnapshot, portfolioLedgerContentHash } from '@insiderfinance/totalfinance/portfolio';
 ${LEDGER_JOURNEY_JS}
 // A localStorage-shaped key/value store: strings in, strings out, nothing else.
 const store = new Map();
@@ -1178,8 +1325,8 @@ console.log('STORE_OK ' + hashFirst + ' grown=' + hashGrown + ' events=' + resto
     writeFileSync(
       join(dir, 'node.mjs'),
       `
-import { runScenarios, scenarioTarget } from 'totalfinance/scenarios';
-import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
+import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
+import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@insiderfinance/totalfinance/core/artifacts';
 ${STOCK_SCENARIO_JS}
 console.log('SCENARIO_NODE ' + JSON.stringify(canonicalJsonOf(runPackedStockScenario())));
 `,
@@ -1191,8 +1338,8 @@ console.log('SCENARIO_NODE ' + JSON.stringify(canonicalJsonOf(runPackedStockScen
       join(dir, 'worker.mjs'),
       `
 import { parentPort } from 'node:worker_threads';
-import { runScenarios, scenarioTarget } from '@totalfinance/scenarios';
-import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
+import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
+import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@insiderfinance/totalfinance/core/artifacts';
 ${STOCK_SCENARIO_JS}
 const result = runPackedStockScenario();
 parentPort.postMessage({ result, canonicalBytes: canonicalJsonOf(result) });
@@ -1202,7 +1349,7 @@ parentPort.postMessage({ result, canonicalBytes: canonicalJsonOf(result) });
       join(dir, 'worker-parent.mjs'),
       `
 import { Worker } from 'node:worker_threads';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
 const message = await new Promise((resolve, reject) => {
   const worker = new Worker(new URL('./worker.mjs', import.meta.url));
   worker.once('message', resolve);
@@ -1220,8 +1367,8 @@ console.log('SCENARIO_WORKER ' + JSON.stringify(message.canonicalBytes));
     writeFileSync(
       join(dir, 'browser-entry.mjs'),
       `
-import { runScenarios, scenarioTarget } from 'totalfinance/scenarios';
-import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
+import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
+import { canonicalJsonOf, createMarketSnapshot, createScenarioSet } from '@insiderfinance/totalfinance/core/artifacts';
 ${STOCK_SCENARIO_JS}
 for (const name of ['process', 'require', 'Buffer', 'module']) {
   if (typeof globalThis[name] !== 'undefined') throw new Error(name + ' is defined inside the browser bundle');
@@ -1370,13 +1517,13 @@ console.log('ARTIFACTS_BROWSER ' + JSON.stringify(bytes));
       writeFileSync(
         join(dir, 'consumer.ts'),
         `
-import { blackScholes, technicalAnalysis } from 'totalfinance';
-import { type OptionMarket } from 'totalfinance/options';
-import { runScenarios, scenarioTarget, type ScenarioRunResult } from 'totalfinance/scenarios';
-import { createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
-import { blackScholes as blackScholesDeep, blackScholesPrice } from '@totalfinance/options/black-scholes';
-import { blackScholesPriceMany } from '@totalfinance/options/batch';
-import { estimateCovariance } from '@totalfinance/math';
+import { blackScholes, technicalAnalysis } from '@insiderfinance/totalfinance';
+import { type OptionMarket } from '@insiderfinance/totalfinance/options';
+import { runScenarios, scenarioTarget, type ScenarioRunResult } from '@insiderfinance/totalfinance/scenarios';
+import { createMarketSnapshot, createScenarioSet } from '@insiderfinance/totalfinance/core/artifacts';
+import { blackScholes as blackScholesDeep, blackScholesPrice } from '@insiderfinance/totalfinance/options/black-scholes';
+import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options/batch';
+import { estimateCovariance } from '@insiderfinance/totalfinance/math';
 
 const price: number = blackScholes.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
 const deep: number = blackScholesDeep.call({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22 });
@@ -1417,8 +1564,42 @@ export const ok: [number, number, number, number, number[], boolean, OptionMarke
             skipLibCheck: false,
             target: 'es2022',
           },
-          include: ['consumer.ts'],
+          include: ['consumer.ts', 'all-exports.mts'],
         }),
+      );
+      const specifiers = [PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME].flatMap((name) => {
+        const manifest = JSON.parse(
+          readFileSync(join(consumer, 'node_modules', name, 'package.json'), 'utf8'),
+        ) as {
+          exports: Record<string, unknown>;
+        };
+        return Object.keys(manifest.exports)
+          .filter((key) => key !== './package.json')
+          .map((key) => name + (key === '.' ? '' : key.slice(1)));
+      });
+      expect(specifiers.length).toBeGreaterThan(100);
+      writeFileSync(
+        join(dir, 'all-exports.mts'),
+        [
+          ...specifiers.map(
+            (specifier, index) =>
+              `import type * as Surface${index} from '${specifier}'; export type Export${index} = typeof Surface${index};`,
+          ),
+          ...[
+            'totalfinance',
+            '@totalfinance/core',
+            '@totalfinance/mcp',
+            '@insiderfinance/totalfinance/core/package.json',
+            '@insiderfinance/totalfinance/mcp',
+          ].map(
+            (specifier, index) =>
+              `// @ts-expect-error private packages and hidden subpaths must not resolve\nimport type * as Private${index} from '${specifier}';`,
+          ),
+          `import type * as Root from '@insiderfinance/totalfinance';`,
+          `// @ts-expect-error CLI is explicit and Node-only\ntype NoCLI = typeof Root.cli;`,
+          `// @ts-expect-error HTTP is explicit and Node-only\ntype NoHTTP = typeof Root.http;`,
+          `// @ts-expect-error MCP is a separate optional package\ntype NoMCP = typeof Root.mcp;`,
+        ].join('\n'),
       );
       sh(TSC, ['-p', dir], dir);
     },
@@ -1455,11 +1636,11 @@ export const ok: [number, number, number, number, number[], boolean, OptionMarke
    */
   it('3B.5: misuse journeys teach from the packed install, and the taught fix works in one round trip', () => {
     const script = `
-      import { blackScholes, option, market, engines } from 'totalfinance';
-      import { priceMany } from '@totalfinance/options';
-      import { unusualness } from 'totalfinance/structure';
-      import { rsi } from '@totalfinance/technical-analysis';
-      import { createTotalFinanceMcpServer } from '@totalfinance/mcp';
+      import { blackScholes, option, market, engines } from '@insiderfinance/totalfinance';
+      import { priceMany } from '@insiderfinance/totalfinance/options';
+      import { unusualness } from '@insiderfinance/totalfinance/structure';
+      import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
+      import { createTotalFinanceMcpServer } from '@insiderfinance/totalfinance-mcp';
       const results = [];
       const expectCode = (label, fn, code, messageIncludes) => {
         try {
@@ -1608,8 +1789,8 @@ export const ok: [number, number, number, number, number[], boolean, OptionMarke
     writeFileSync(
       join(dir, 'sdk.mjs'),
       `
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { createOperationRegistry, defaultPacks, jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { createOperationRegistry, defaultPacks, jsonSafe } from '@insiderfinance/totalfinance/workflows';
 const registry = createOperationRegistry({ packs: defaultPacks() });
 const result = registry.run({ id: 'totalfinance.option.price', input: ${JSON.stringify(price)} });
 console.log('SDK_OPERATIONS ' + registry.size);
@@ -1619,7 +1800,7 @@ console.log('SDK_STRUCTURED ' + canonicalJsonOf(jsonSafe(result.structured)));
     const sdk = sh('node', [join(dir, 'sdk.mjs')], consumer);
     const sdkStructured = /SDK_STRUCTURED (.*)/.exec(sdk)![1]!;
     const sdkOperations = Number(/SDK_OPERATIONS (\d+)/.exec(sdk)![1]);
-    const cli = join(consumer, 'node_modules', '@totalfinance', 'cli', 'dist', 'bin.js');
+    const cli = join(consumer, 'node_modules', '.bin', 'totalfinance');
     const store = join(dir, 'store');
     const list = JSON.parse(
       sh('node', [cli, 'operations', 'list', '--store', store], consumer),
@@ -1646,8 +1827,8 @@ console.log('SDK_STRUCTURED ' + canonicalJsonOf(jsonSafe(result.structured)));
       join(dir, 'canon.mjs'),
       `
 import { readFileSync } from 'node:fs';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { jsonSafe } from '@insiderfinance/totalfinance/workflows';
 console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync(process.argv[2], 'utf8')))));
 `,
     );
@@ -1664,12 +1845,12 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
     writeFileSync(
       join(dir, 'sdk.mjs'),
       `
-import { canonicalJsonOf, createMarketSnapshot } from '@totalfinance/core/artifacts';
-import { createPortfolioLedger } from '@totalfinance/portfolio';
+import { canonicalJsonOf, createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
+import { createPortfolioLedger } from '@insiderfinance/totalfinance/portfolio';
 import {
   createMemoryArtifactStore, createMemoryAuthorizationStore, createMemoryExecutionJournalStore,
   createOperationRegistry, defaultPacks, journeyPacks, jsonSafe, tradePack,
-} from '@totalfinance/workflows';
+} from '@insiderfinance/totalfinance/workflows';
 const T0 = Date.UTC(2026, 0, 5, 21), DAY = 86_400_000, NOW = T0 + 2 * DAY, CREATED = Date.parse('2026-09-06T12:00:00Z');
 const env = (eventId, at, event) => ({ eventId, schemaVersion: 1, eventType: event.eventType, sourceId: 'fixture', accountId: 'main', effectiveTimestampMs: at, recordedTimestampMs: at, event, provenance: {} });
 const ledger = createPortfolioLedger({ portfolioId: 'primary', baseCurrency: 'USD', events: [
@@ -1714,7 +1895,7 @@ console.log('TRADE_RECONCILED ' + JSON.stringify(reconciled));
     const sdkReceipt = /TRADE_SUBMIT (.*)/.exec(sdk)![1]!;
     writeFileSync(join(dir, 'submit.json'), submitInput);
     writeFileSync(join(dir, 'authorize.json'), authorizeInput);
-    const cli = join(consumer, 'node_modules', '@totalfinance', 'cli', 'dist', 'bin.js');
+    const cli = join(consumer, 'node_modules', '.bin', 'totalfinance');
     const store = join(dir, 'store');
     // An inline JSON grant is not authority: the execute-only caller must fail before approval.
     const unapproved = spawnSync(
@@ -1784,8 +1965,8 @@ console.log('TRADE_RECONCILED ' + JSON.stringify(reconciled));
       join(dir, 'canon.mjs'),
       `
 import { readFileSync } from 'node:fs';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { jsonSafe } from '@insiderfinance/totalfinance/workflows';
 const result = JSON.parse(readFileSync(process.argv[2], 'utf8'));
 console.log('CLI_RECEIPT ' + canonicalJsonOf(jsonSafe(result.structured.receipt)));
 `,
@@ -1887,8 +2068,8 @@ console.log('CLI_RECEIPT ' + canonicalJsonOf(jsonSafe(result.structured.receipt)
     writeFileSync(
       join(dir, 'sdk.mjs'),
       `
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { backtestPack, createOperationRegistry, defaultPacks, jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { backtestPack, createOperationRegistry, defaultPacks, jsonSafe } from '@insiderfinance/totalfinance/workflows';
 const registry = createOperationRegistry({ packs: [...defaultPacks(), backtestPack()] });
 const result = registry.run({ id: 'totalfinance.backtest.environment_episode', input: ${JSON.stringify(input)} });
 console.log('ENV_PASSES ' + result.structured.episode.operational.passes);
@@ -1898,7 +2079,7 @@ console.log('ENV_STRUCTURED ' + canonicalJsonOf(jsonSafe(result.structured)));
     const sdk = sh('node', [join(dir, 'sdk.mjs')], consumer);
     expect(/ENV_PASSES (\w+)/.exec(sdk)![1]).toBe('true');
     const sdkStructured = /ENV_STRUCTURED (.*)/.exec(sdk)![1]!;
-    const cli = join(consumer, 'node_modules', '@totalfinance', 'cli', 'dist', 'bin.js');
+    const cli = join(consumer, 'node_modules', '.bin', 'totalfinance');
     const store = join(dir, 'store');
     writeFileSync(
       join(dir, 'run.json'),
@@ -1922,8 +2103,8 @@ console.log('ENV_STRUCTURED ' + canonicalJsonOf(jsonSafe(result.structured)));
       join(dir, 'canon.mjs'),
       `
 import { readFileSync } from 'node:fs';
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { jsonSafe } from '@totalfinance/workflows';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { jsonSafe } from '@insiderfinance/totalfinance/workflows';
 console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync(process.argv[2], 'utf8')).structured)));
 `,
     );
@@ -1936,7 +2117,7 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
   it('Stage 7A: the packed totalfinance-http prints its OpenAPI document and serves one run identical to the SDK; the packed MCP server lists tools with annotations', () => {
     const dir = join(consumer, 'transports');
     sh('mkdir', ['-p', dir], consumer);
-    const http = join(consumer, 'node_modules', '@totalfinance', 'http', 'dist', 'bin.js');
+    const http = join(consumer, 'node_modules', '.bin', 'totalfinance-http');
     const document = JSON.parse(
       sh('node', [http, '--openapi', '--profile', 'full'], consumer, OPENAPI_MAX_BUFFER),
     ) as {
@@ -1948,12 +2129,12 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
     writeFileSync(
       join(dir, 'http-and-mcp.mjs'),
       `
-import { canonicalJsonOf } from '@totalfinance/core/artifacts';
-import { createLocalHttpServer } from '@totalfinance/http';
-import { createTotalFinanceMcpServer, defaultPacks as mcpDefaultPacks } from '@totalfinance/mcp';
+import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
+import { createLocalHttpServer } from '@insiderfinance/totalfinance/http';
+import { createTotalFinanceMcpServer, defaultPacks as mcpDefaultPacks } from '@insiderfinance/totalfinance-mcp';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { createOperationRegistry, defaultPacks, jsonSafe } from '@totalfinance/workflows';
+import { createOperationRegistry, defaultPacks, jsonSafe } from '@insiderfinance/totalfinance/workflows';
 const registry = createOperationRegistry({ packs: defaultPacks() });
 const price = { type: 'call', spot: 100, strike: 105, timeToExpiryYears: 0.25, riskFreeRate: 0.04, volatility: 0.2 };
 const expected = canonicalJsonOf(jsonSafe(registry.run({ id: 'totalfinance.option.price', input: price }).structured));
@@ -1974,27 +2155,60 @@ const priced = tools.find((t) => t.name === 'totalfinance_option_price');
 if (!priced || !priced.annotations || priced.annotations.readOnlyHint !== true) throw new Error('MCP tool annotations missing');
 const call = await client.callTool({ name: 'totalfinance_option_price', arguments: price });
 if (canonicalJsonOf(jsonSafe(call.structuredContent.structured)) !== expected) throw new Error('MCP structured drifted from the SDK');
+await client.close();
 console.log('TRANSPORTS_OK tools=' + tools.length);
 `,
     );
     const out = sh('node', [join(dir, 'http-and-mcp.mjs')], consumer);
     expect(out).toContain('TRANSPORTS_OK tools=23');
   }, 120_000);
+
+  it('the installed MCP executable serves stdio and reports the public release version', () => {
+    const binary = join(consumer, 'node_modules', '.bin', 'totalfinance-mcp');
+    expect(JSON.parse(sh('node', [binary, '--version'], consumer))['totalfinance-mcp']).toBe(
+      releaseManifest.version,
+    );
+    const script = `
+import assert from 'node:assert/strict';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+const client = new Client({ name: 'packed-stdio', version: '0' });
+const transport = new StdioClientTransport({ command: process.execPath, args: [${JSON.stringify(binary)}], cwd: process.cwd() });
+try {
+  await client.connect(transport);
+  const { tools } = await client.listTools();
+  const priceTool = tools.find(tool => tool.name === 'totalfinance_option_price');
+  assert.equal(priceTool.annotations.readOnlyHint, true);
+  const input = { type: 'call', spot: 100, strike: 105, timeToExpiryYears: 0.25, riskFreeRate: 0.04, volatility: 0.2 };
+  const result = await client.callTool({ name: priceTool.name, arguments: input });
+  assert.equal(result.isError ?? false, false);
+  assert.equal(result.structuredContent.structured.value, blackScholes.price(input));
+  console.log('MCP_STDIO_OK tools=' + tools.length);
+} finally {
+  await client.close();
+  await transport.close();
+}
+`;
+    expect(sh('node', ['--input-type=module', '-e', script], consumer)).toContain(
+      'MCP_STDIO_OK tools=23',
+    );
+  }, 120_000);
 });
 
 /** Separate tail fixture so sector integration does not overlap the primary dogfooding block. */
 const SECTOR_PUBLIC_CONSUMER_TS = `
-import { canonicalJsonOf, createAnalysisArtifact, readAnalysisArtifact } from '@totalfinance/core/artifacts';
+import { canonicalJsonOf, createAnalysisArtifact, readAnalysisArtifact } from '@insiderfinance/totalfinance/core/artifacts';
 import {
   sectorPerformance, sectorPerformanceSnapshot,
   type SectorPerformanceReport, type SectorPerformanceSnapshotInput,
   type SectorPerformanceSnapshotReport,
-} from '@totalfinance/performance';
+} from '@insiderfinance/totalfinance/performance';
 import {
   sectorPerformance as sectorPerformanceDeep, sectorPerformanceSnapshot as sectorPerformanceSnapshotDeep,
   type SectorPerformanceReport as DeepSectorReport,
   type SectorPerformanceSnapshotReport as DeepSnapshotReport,
-} from '@totalfinance/performance/sector-performance';
+} from '@insiderfinance/totalfinance/performance/sector-performance';
 
 // Same-period decimal returns do not establish dates, currency, a taxonomy or price/source lineage.
 const simpleInput = { members: [

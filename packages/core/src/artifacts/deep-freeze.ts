@@ -1,7 +1,7 @@
 /**
  * Recursive freeze for spine envelopes. `Object.freeze` is shallow — a "frozen" snapshot whose
  * nested observation could still be mutated would break hash stability the moment a caller edited
- * a row after hashing. Internal to `@totalfinance/core/artifacts`; envelopes are frozen on the
+ * a row after hashing. Internal to `@insiderfinance/totalfinance/core/artifacts`; envelopes are frozen on the
  * canonical COPY the constructors build, never on caller input.
  */
 export function deepFreeze<T>(value: T): T {

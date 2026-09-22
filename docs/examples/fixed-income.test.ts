@@ -19,7 +19,7 @@ import {
   vasicek,
   yieldMetrics,
   yieldToMaturity,
-} from '@totalfinance/fixed-income';
+} from '@insiderfinance/totalfinance/fixed-income';
 
 describe('docs: price a bond and read its risk', () => {
   it('a 5y 5% semiannual bond prices to par at a 5% yield and round-trips', () => {

@@ -8,3 +8,9 @@ docs-site/
 docs/api/
 .vitest/
 /release/
+/distribution/*/modules/
+/distribution/*/src/
+/distribution/*/etc/
+/distribution/*/README.md
+/distribution/*/LICENSE
+/distribution/*/STABILITY.md

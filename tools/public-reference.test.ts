@@ -1,12 +1,17 @@
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import * as profiles from '../packages/workflows/src/local/profiles.js';
 import { describeOperation } from '../packages/workflows/src/operation.js';
+import {
+  publicPackageDirectories,
+  PUBLIC_PACKAGE_NAME,
+  MCP_PACKAGE_NAME,
+} from './public-packages.js';
 import {
   buildPublicReference,
   buildReferenceEntries,
@@ -16,6 +21,7 @@ import {
   discoverReferenceSources,
   type PublicReference,
   type ReferenceSource,
+  publicDocumentationText,
 } from './public-reference.js';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
@@ -75,10 +81,8 @@ describe('complete public reference', () => {
 
   it('covers every package export-map entrypoint, independently of any package allowlist', () => {
     const expected: string[] = [];
-    for (const dir of readdirSync(resolve(ROOT, 'packages'))) {
-      const manifest = JSON.parse(
-        readFileSync(resolve(ROOT, 'packages', dir, 'package.json'), 'utf8'),
-      ) as {
+    for (const { path } of publicPackageDirectories(ROOT)) {
+      const manifest = JSON.parse(readFileSync(resolve(path, 'package.json'), 'utf8')) as {
         name: string;
         version: string;
         private?: boolean;
@@ -99,6 +103,12 @@ describe('complete public reference', () => {
       }
     }
     expect(reference.packages.flatMap((pkg) => pkg.entrypoints).sort()).toEqual(expected.sort());
+    expect(reference.packages.map((pkg) => pkg.name).sort()).toEqual(
+      [PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME].sort(),
+    );
+    expect(JSON.stringify(reference.packages)).not.toContain('@totalfinance/');
+    expect(reference.packages.every((pkg) => pkg.version === '0.1.0')).toBe(true);
+    expect(JSON.stringify(reference.entries)).not.toContain('@totalfinance/');
   });
 
   it('has exactly every checker export, including all type-only and subpath-only names', () => {
@@ -125,7 +135,7 @@ describe('complete public reference', () => {
 
   it('retains meaningful type declarations, inherited fields, and namespace companions', () => {
     const input = reference.entries.find(
-      (entry) => entry.id === '@totalfinance/options#BlackScholesInput',
+      (entry) => entry.id === '@insiderfinance/totalfinance/options#BlackScholesInput',
     )!;
     expect(input.signature).toContain('interface BlackScholesInput');
     expect(input.signature).toContain('timeToExpiryYears: number');
@@ -133,11 +143,11 @@ describe('complete public reference', () => {
       /decimal|continuous/i,
     );
     const typed = reference.entries.find(
-      (entry) => entry.id === '@totalfinance/options#BlackScholesTypedInput',
+      (entry) => entry.id === '@insiderfinance/totalfinance/options#BlackScholesTypedInput',
     )!;
     expect(typed.members.some((member) => member.name === 'spot')).toBe(true);
     const namespace = reference.entries.find(
-      (entry) => entry.id === '@totalfinance/options#blackScholes',
+      (entry) => entry.id === '@insiderfinance/totalfinance/options#blackScholes',
     )!;
     expect(namespace.members.some((member) => member.name === 'price.explain')).toBe(true);
     expect(
@@ -147,11 +157,72 @@ describe('complete public reference', () => {
     ).toBe(true);
     expect(namespace.examples.join('\n')).toContain('blackScholes.price');
     const position = reference.entries.find(
-      (entry) => entry.id === '@totalfinance/strategy#Position',
+      (entry) => entry.id === '@insiderfinance/totalfinance/strategy#Position',
     )!;
     expect(position.signature).toContain('class Position {');
     expect(position.signature).toContain('constructor(');
     expect(position.signature).not.toContain('class Position Position');
+  });
+
+  it('preserves the MCP protocol metadata key in the live public reference', () => {
+    const entry = reference.entries.find(
+      (candidate) => candidate.id === `${MCP_PACKAGE_NAME}#toolNameFor`,
+    )!;
+    expect(entry.description).toContain("_meta['totalfinance/operation'].id");
+    expect(entry.description).not.toContain('@insiderfinance/totalfinance/operation');
+  });
+
+  it('resolves every inline type import through a real public entrypoint and exported symbol', () => {
+    const sources = discoverReferenceSources();
+    const program = createReferenceProgram(sources);
+    const checker = program.getTypeChecker();
+    const modules = new Map(
+      sources.flatMap((source) =>
+        Object.entries(source.entrypoints).map(
+          ([name, path]) =>
+            [
+              name,
+              checker.getSymbolAtLocation(program.getSourceFile(resolve(ROOT, path))!)!,
+            ] as const,
+        ),
+      ),
+    );
+    const imports = new Set<string>();
+    for (const entry of reference.entries)
+      for (const text of [entry.signature, ...entry.members.map((member) => member.type)])
+        for (const match of text.matchAll(/\bimport\((["'])([^"']+)\1\)((?:\.[\w$]+)*)/g))
+          imports.add(JSON.stringify([match[2], match[3]]));
+    expect(imports.size).toBeGreaterThan(500);
+    for (const imported of imports) {
+      const [path, qualifier] = JSON.parse(imported) as [string, string];
+      let symbol = modules.get(path);
+      expect(symbol, `Nonpublic import: ${imported}`).toBeDefined();
+      for (const name of qualifier.split('.').filter(Boolean)) {
+        if (symbol!.flags & ts.SymbolFlags.Alias) symbol = checker.getAliasedSymbol(symbol!);
+        symbol = checker.getExportsOfModule(symbol!).find((candidate) => candidate.name === name);
+        expect(symbol, `Nonpublic qualifier: ${imported}`).toBeDefined();
+      }
+    }
+    expect(imports.has(JSON.stringify([`${PUBLIC_PACKAGE_NAME}/core`, '.Diagnostics']))).toBe(true);
+  }, 90_000);
+
+  it('keeps preview transport tiers separate from calculation conformance', () => {
+    for (const entrypoint of [
+      `${PUBLIC_PACKAGE_NAME}/workflows`,
+      `${PUBLIC_PACKAGE_NAME}/http`,
+      `${PUBLIC_PACKAGE_NAME}/cli`,
+      MCP_PACKAGE_NAME,
+    ]) {
+      const entries = reference.entries.filter((entry) => entry.entrypoint === entrypoint);
+      expect(entries.length).toBeGreaterThan(0);
+      expect(
+        entries.every((entry) => /preview|experimental|beta|alpha/.test(entry.stability)),
+      ).toBe(true);
+    }
+    expect(
+      reference.entries.find((entry) => entry.id === `${PUBLIC_PACKAGE_NAME}/options#blackScholes`)!
+        .stability,
+    ).toContain('stable-by-law (pre-1.0');
   });
 
   it('derives every operation, pack, profile and security field from the full registry', () => {
@@ -228,15 +299,35 @@ describe('complete public reference', () => {
 });
 
 /** Compiler-host fixtures: no package files or sibling-agent sources are created/modified. */
-function fixture(text: string) {
-  const path = resolve(ROOT, 'packages/reference-fixture/src/index.ts');
-  const options: ts.CompilerOptions = { strict: true, target: ts.ScriptTarget.ES2022 };
+function fixtureProject(text: string, dependencies: Record<string, string> = {}) {
+  const directory = resolve(ROOT, 'packages/reference-fixture/src');
+  const path = resolve(directory, 'index.ts');
+  const files = new Map(
+    Object.entries({ 'index.ts': text, ...dependencies }).map(([file, content]) => [
+      resolve(directory, file),
+      content,
+    ]),
+  );
+  const options: ts.CompilerOptions = {
+    strict: true,
+    target: ts.ScriptTarget.ES2022,
+    module: ts.ModuleKind.ESNext,
+    moduleResolution: ts.ModuleResolutionKind.Bundler,
+    noEmit: true,
+    baseUrl: ROOT,
+    paths: { '@fixture/new-package/future': [path] },
+  };
   const host = ts.createCompilerHost(options);
   const original = host.getSourceFile;
   host.getSourceFile = (file, languageVersion, onError, shouldCreate) =>
-    file === path
-      ? ts.createSourceFile(file, text, languageVersion, true)
+    files.has(file)
+      ? ts.createSourceFile(file, files.get(file)!, languageVersion, true)
       : original(file, languageVersion, onError, shouldCreate);
+  const originalExists = host.fileExists;
+  const originalDirectoryExists = host.directoryExists!;
+  host.fileExists = (file) => files.has(file) || originalExists(file);
+  host.directoryExists = (dir) =>
+    [...files.keys()].some((file) => dirname(file) === dir) || originalDirectoryExists(dir);
   const program = ts.createProgram([path], options, host);
   const source: ReferenceSource = {
     package: {
@@ -249,10 +340,181 @@ function fixture(text: string) {
     },
     entrypoints: { '@fixture/new-package/future': 'packages/reference-fixture/src/index.ts' },
   };
+  return { program, source, files };
+}
+
+function fixture(text: string, dependencies: Record<string, string> = {}) {
+  const { program, source } = fixtureProject(text, dependencies);
   return buildReferenceEntries(program, [source]);
 }
 
 describe('declaration and JSDoc regression fixtures', () => {
+  it('maps type aliases by symbol identity, including collisions and namespace-only exports', () => {
+    const entries = fixture(
+      `
+      export type { Original as PublicAlias } from './internal.js';
+      export type { Original as OtherAlias } from './other.js';
+      export * as nested from './nested.js';
+      export type Via = import('./internal.js').Original<string>;
+      export type OtherVia = import('./other.js').Original;
+      export type NestedVia = import('./nested.js').OnlyNested;
+    `,
+      {
+        'internal.ts': 'export interface Original<T> { value: T; }',
+        'other.ts': 'export interface Original { unrelated: boolean; }',
+        'nested.ts': 'export interface OnlyNested { nested: number; }',
+      },
+    );
+    expect(entries.find((entry) => entry.name === 'Via')!.signature).toContain(
+      "import('@fixture/new-package/future').PublicAlias<string>",
+    );
+    expect(entries.find((entry) => entry.name === 'OtherVia')!.signature).toContain(
+      "import('@fixture/new-package/future').OtherAlias",
+    );
+    expect(entries.find((entry) => entry.name === 'NestedVia')!.signature).toContain(
+      "import('@fixture/new-package/future').nested.OnlyNested",
+    );
+    expect(JSON.stringify(entries)).not.toMatch(/import\(["'](?:\.\/|.*packages\/)/);
+  });
+
+  it('inlines unexported generic shapes without inventing a public import or losing literal arguments', () => {
+    const dependencies = {
+      'internal.ts': `
+        import type { Public } from './public.js';
+        interface Base<T> { base: T; }
+        interface Detail { literal: 'declared'; count: 12; }
+        export interface Hidden<T, U = T> extends Base<T> {
+          readonly value?: T; defaulted: U; detail: Detail; public: Public;
+          imported?: import('./public.js').Public;
+        }
+      `,
+      'public.ts': 'export interface Public { published: boolean; }',
+    };
+    const entries = fixture(
+      `
+      export type { Public } from './public.js';
+      export type Via = import('./internal.js').Hidden<'argument'>;
+    `,
+      dependencies,
+    );
+    const signature = entries.find((entry) => entry.name === 'Via')!.signature;
+    expect(signature).toMatch(/readonly value\?: ['"]argument['"]/);
+    expect(signature).toMatch(/base: ['"]argument['"]/);
+    expect(signature).toMatch(/defaulted: ['"]argument['"]/);
+    expect(signature).toMatch(/literal: ['"]declared['"]/);
+    expect(signature).toContain('count: 12');
+    expect(signature).toContain("import('@fixture/new-package/future').Public");
+    expect(signature).not.toMatch(/Hidden|Detail|Base|packages\//);
+    const { program } = fixtureProject(
+      `
+      export type { Public } from './public.js';
+      ${signature}
+      const value: Via = { base: 'argument', defaulted: 'argument', detail: { literal: 'declared', count: 12 }, public: { published: true } };
+    `,
+      dependencies,
+    );
+    expect(
+      ts
+        .getPreEmitDiagnostics(program)
+        .map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')),
+    ).toEqual([]);
+  });
+
+  it('handles nested private generic arguments and refuses unrenderable private recursion', () => {
+    const dependencies = { 'internal.ts': 'export interface Hidden<T> { value: T; }' };
+    const entries = fixture(
+      `export type Via = import('./internal.js').Hidden<import('./internal.js').Hidden<42>>;`,
+      dependencies,
+    );
+    const signature = entries[0]!.signature;
+    expect(signature).toContain('value: 42');
+    const { program } = fixtureProject(
+      `${signature}\nconst value: Via = { value: { value: 42 } };`,
+      dependencies,
+    );
+    expect(
+      ts
+        .getPreEmitDiagnostics(program)
+        .map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')),
+    ).toEqual([]);
+    expect(() =>
+      fixture(`export type Via = import('./internal.js').Hidden;`, {
+        'internal.ts': 'export interface Hidden { next?: Hidden; }',
+      }),
+    ).toThrow('Non-public recursive documentation type: Hidden');
+    expect(() =>
+      fixture(`export type Via = import('./internal.js').Missing;`, dependencies),
+    ).toThrow('Unexported documentation import');
+  });
+
+  it('recovers scoped package prose parsed by TypeScript as a JSDoc tag', () => {
+    const entries = fixture(
+      '/** Calculation is delegated to @totalfinance/risk, never duplicated. */ export const example = 1;',
+    );
+    expect(entries[0]!.description).toContain(
+      '@insiderfinance/totalfinance/risk, never duplicated.',
+    );
+    expect(JSON.stringify(entries)).not.toContain('@totalfinance');
+  });
+  it('maps documentation imports but preserves transport protocol keys', () => {
+    expect(
+      publicDocumentationText(
+        "import { x } from 'totalfinance/math'; import { y } from '@totalfinance/options/black-scholes';",
+      ),
+    ).toBe(
+      "import { x } from '@insiderfinance/totalfinance/math'; import { y } from '@insiderfinance/totalfinance/options/black-scholes';",
+    );
+    const protocol =
+      "`totalfinance/operation` _meta['totalfinance/execution'] totalfinance://capabilities";
+    expect(publicDocumentationText(protocol)).toBe(protocol);
+  });
+  it('does not treat _meta operation keys as module imports alongside a legacy domain import', () => {
+    const source = [
+      "import { blackScholes } from 'totalfinance/options';",
+      "const operation = _meta['totalfinance/operation'].id;",
+    ].join('\n');
+    const expected = source.replace(
+      "from 'totalfinance/options'",
+      "from '@insiderfinance/totalfinance/options'",
+    );
+    expect(publicDocumentationText(source)).toBe(expected);
+    expect(publicDocumentationText(expected)).toBe(expected);
+  });
+
+  it('preserves the totalfinance executable and literal data while mapping explicit package contexts', () => {
+    const command = [
+      'behind the `totalfinance` command line',
+      'Run `totalfinance list` or `pnpm exec totalfinance list`.',
+      'The `totalfinance` field is the canonical indicator name.',
+      "const executable = 'totalfinance'; const vendor = 'totalfinance';",
+      "type Alias = { totalfinance: string }; type Field = 'totalfinance';",
+      "_meta['totalfinance/operation'].id; totalfinance://capabilities",
+    ].join('\n');
+    expect(publicDocumentationText(command)).toBe(command);
+    const source = [
+      command,
+      "import { math } from 'totalfinance';",
+      "export { math } from 'totalfinance';",
+      "const root = import( 'totalfinance' );",
+      "import 'totalfinance';",
+      "import { blackScholes } from 'totalfinance/options';",
+      'npm install totalfinance@0.1.0',
+      'pnpm add totalfinance',
+      'yarn add totalfinance',
+      'bun add totalfinance',
+      'The `totalfinance` package; the package `totalfinance`.',
+    ].join('\n');
+    const expected = source
+      .replaceAll("from 'totalfinance", "from '@insiderfinance/totalfinance")
+      .replace("import( 'totalfinance'", "import( '@insiderfinance/totalfinance'")
+      .replace("import 'totalfinance'", "import '@insiderfinance/totalfinance'")
+      .replace('install totalfinance', 'install @insiderfinance/totalfinance')
+      .replaceAll('add totalfinance', 'add @insiderfinance/totalfinance')
+      .replace('`totalfinance` package', '`@insiderfinance/totalfinance` package')
+      .replace('package `totalfinance`', 'package `@insiderfinance/totalfinance`');
+    expect(publicDocumentationText(source)).toBe(expected);
+    expect(publicDocumentationText(expected)).toBe(expected);
+  });
   it('includes alias RHS, type-only reexports, mapped/union types and overloads', () => {
     const entries = fixture(`
       export type Choice = 'call' | 'put';

@@ -6,14 +6,13 @@
  * (transport parity, the packed consumer, the readme snippets, the generated-docs inventory), this
  * audit asserts that gate is present and wired into the suite instead of running it twice — the
  * audit is a table of contents over the evidence, not a second copy of it. What it proves directly
- * is what no other gate reads: the published metadata of every package in the fixed group
+ * is what no other gate reads: the published metadata of the two distribution packages
  * (Decision 3), the stability statement that ships inside each of them (Decision 2), the community
  * and security files (Decision 5), and that the built artifacts carry the maps that make `src`
  * worth shipping.
  *
- * Fail-closed by construction: the fixed group is READ from `packages/*` (not listed here), so a
- * new package is audited the moment its directory exists, and every rule below is checked against
- * every member.
+ * Public distributions come from the shared release helper; private source packages are audited
+ * separately and must never become accidental npm products.
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
@@ -21,6 +20,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { readPackageDirectories } from './first-touch/sweep-roster.js';
+import {
+  PUBLIC_PACKAGE_NAME,
+  MCP_PACKAGE_NAME,
+  publicPackageDirectories,
+  toPublicSpecifier,
+} from './public-packages.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PKG_ROOT = join(ROOT, 'packages');
@@ -64,31 +69,25 @@ const PREVIEW_TIER = new Set([
   '@totalfinance/http',
   '@totalfinance/mcp',
 ]);
-const TRANSPORTS_WITH_BIN = new Set([
-  '@totalfinance/cli',
-  '@totalfinance/http',
-  '@totalfinance/mcp',
-]);
-const UMBRELLA = 'totalfinance';
-const REQUIRED_FILES = ['dist', 'src', 'etc', 'LICENSE', 'STABILITY.md', '!dist/.tsbuildinfo'];
+const TRANSPORTS_WITH_BIN = new Set([PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME]);
+const UMBRELLA = PUBLIC_PACKAGE_NAME;
 // Exact, reviewed public guide additions; never a wildcard that could ship internal planning.
 const PUBLIC_GUIDES: Readonly<Record<string, readonly string[]>> = {
-  '@totalfinance/structure': ['OPTION-FLOW-DRIFT.md'],
+  [PUBLIC_PACKAGE_NAME]: ['modules/structure/OPTION-FLOW-DRIFT.md'],
 };
 const NODE_FLOOR = '>=22.13.0';
-const PRE_TAG = 'preview';
 
-const members: Member[] = readPackageDirectories().map(({ dir }) => {
+const sourceMembers: Member[] = readPackageDirectories().map(({ dir }) => {
   const path = join(PKG_ROOT, dir);
   const manifest = JSON.parse(readFileSync(join(path, 'package.json'), 'utf8')) as Manifest;
   return { dir, path, manifest };
 });
+const members: Member[] = publicPackageDirectories(ROOT).map(({ dir, path }) => ({
+  dir,
+  path,
+  manifest: JSON.parse(readFileSync(join(path, 'package.json'), 'utf8')) as Manifest,
+}));
 const byName = new Map(members.map((m) => [m.manifest.name, m]));
-
-/** Every member's short domain word: the directory name (`@totalfinance/foreign-exchange` → `foreign-exchange`). */
-function domainWord(member: Member): string {
-  return member.dir;
-}
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const entry of readdirSync(dir)) {
@@ -99,31 +98,18 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-/** The English number words `STABILITY.md` may use for the group size, so the count is a claim the file makes. */
-const NUMBER_WORDS: Record<string, number> = {
-  twenty: 20,
-  'twenty-one': 21,
-  'twenty-two': 22,
-  'twenty-three': 23,
-  'twenty-four': 24,
-  'twenty-five': 25,
-  'twenty-six': 26,
-  'twenty-seven': 27,
-  'twenty-eight': 28,
-  'twenty-nine': 29,
-  thirty: 30,
-};
-
-describe('preview-surface audit — the fixed group is read from the filesystem (not vacuous)', () => {
-  it('finds the whole fixed group', () => {
-    expect(members.length).toBeGreaterThanOrEqual(25);
-    for (const name of ['@totalfinance/core', UMBRELLA, ...PREVIEW_TIER])
-      expect(byName.has(name)).toBe(true);
+describe('public-surface audit — two distributions, private source workspaces', () => {
+  it('finds exactly the two public artifacts and no publishable source workspace', () => {
+    expect([...byName.keys()]).toEqual([PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME]);
+    expect(sourceMembers.length).toBeGreaterThan(0);
+    for (const source of sourceMembers)
+      expect(source.manifest.private, source.manifest.name).toBe(true);
   });
 
   it('every member is publishable (not private) and shares one version', () => {
     const versions = new Set(members.map((m) => m.manifest.version));
     expect([...versions]).toHaveLength(1);
+    expect([...versions]).toEqual(['0.1.0']);
     for (const m of members) expect(m.manifest.private ?? false, m.manifest.name).toBe(false);
   });
 });
@@ -132,31 +118,40 @@ describe('FC9 row 6 — metadata (Decision 3), enumerated per package, fails on 
   it.each(members.map((m) => [m.manifest.name, m] as const))('%s', (_name, m) => {
     const p = m.manifest;
     expect(p.description?.trim().length ?? 0).toBeGreaterThan(0);
-    expect(p.keywords ?? []).toContain('totalfinance');
-    expect(p.keywords ?? []).toContain(domainWord(m));
+    expect(p.keywords ?? []).toContain('finance');
+    expect(p.keywords ?? []).toContain(m.dir === 'mcp' ? 'mcp' : 'options');
     expect(p.license).toBe('Apache-2.0');
     expect(existsSync(join(m.path, 'LICENSE'))).toBe(true);
     expect(p.repository?.type).toBe('git');
     expect(p.repository?.url).toBe(`git+${PUBLIC_REPOSITORY}.git`);
-    expect(p.repository?.directory).toBe(`packages/${m.dir}`);
+    expect(p.repository?.directory).toBe(`distribution/${m.dir}`);
     expect(p.homepage?.startsWith(PUBLIC_REPOSITORY)).toBe(true);
     const bugs = typeof p.bugs === 'string' ? p.bugs : p.bugs?.url;
     expect(bugs?.startsWith(PUBLIC_REPOSITORY)).toBe(true);
     expect(p.type).toBe('module');
     expect(p.sideEffects).toBe(false);
-    expect(p.main).toBe('./dist/index.js');
-    expect(p.module).toBe('./dist/index.js');
-    expect(p.types).toBe('./dist/index.d.ts');
-    expect(p.files).toEqual([
-      ...REQUIRED_FILES.slice(0, -1),
-      ...(PUBLIC_GUIDES[p.name] ?? []),
-      REQUIRED_FILES[REQUIRED_FILES.length - 1],
-    ]);
+    const root = m.dir === 'mcp' ? './dist' : './modules/totalfinance/dist';
+    expect(p.main).toBe(`${root}/index.js`);
+    expect(p.module).toBe(`${root}/index.js`);
+    expect(p.types).toBe(`${root}/index.d.ts`);
+    expect(p.files).toEqual(
+      m.dir === 'mcp'
+        ? ['dist', 'src', 'etc', 'LICENSE', 'STABILITY.md']
+        : ['modules', 'LICENSE', 'STABILITY.md'],
+    );
     expect(p.engines?.node).toBe(NODE_FLOOR);
     expect(p.publishConfig).toEqual({ access: 'public', provenance: true });
-    // dependencies: workspace protocol or a pinned third-party range; never a devDependency leaked in
+    if (m.dir === 'totalfinance') expect(p.dependencies ?? {}).toEqual({});
+    else {
+      expect(Object.keys(p.dependencies ?? {}).sort()).toEqual(
+        [PUBLIC_PACKAGE_NAME, '@modelcontextprotocol/sdk'].sort(),
+      );
+      expect(p.dependencies?.[PUBLIC_PACKAGE_NAME]).toBe('0.1.0');
+    }
+    // Public metadata may contain neither private aliases nor workspace protocols.
     for (const [dep, range] of Object.entries(p.dependencies ?? {})) {
-      expect(range === 'workspace:*' || /^[\^~]?\d/.test(range), `${dep}: ${range}`).toBe(true);
+      expect(/^[\^~]?\d/.test(range), `${dep}: ${range}`).toBe(true);
+      expect(dep).not.toMatch(/^@totalfinance\/|^totalfinance$/);
       expect(
         p.devDependencies ?? {},
         `${dep} is both a dependency and a devDependency`,
@@ -203,7 +198,7 @@ describe('FC9 row 6 — metadata (Decision 3), enumerated per package, fails on 
       const bin = m.manifest.bin ?? {};
       expect(Object.keys(bin).length, name).toBeGreaterThan(0);
       for (const [command, target] of Object.entries(bin)) {
-        expect(target.startsWith('./dist/'), `${name} ${command}`).toBe(true);
+        expect(target).toMatch(/^\.\/(?:modules\/(?:cli|http)\/)?dist\//);
         const built = join(m.path, target);
         expect(existsSync(built), `${name} ${command}: ${target} (run pnpm build)`).toBe(true);
         expect(
@@ -220,7 +215,7 @@ describe('FC9 row 6 — metadata (Decision 3), enumerated per package, fails on 
 
   it('every built .js has a .js.map and every .d.ts a .d.ts.map, and src ships so they resolve', () => {
     for (const m of members) {
-      const dist = join(m.path, 'dist');
+      const dist = join(m.path, m.dir === 'mcp' ? 'dist' : 'modules');
       expect(existsSync(dist), `${m.manifest.name}: dist missing (run pnpm build)`).toBe(true);
       const files = walk(dist);
       const set = new Set(files);
@@ -230,7 +225,10 @@ describe('FC9 row 6 — metadata (Decision 3), enumerated per package, fails on 
         if (f.endsWith('.d.ts') && !set.has(f.replace(/\.d\.ts$/, '.d.ts.map'))) missing.push(f);
       }
       expect(missing, m.manifest.name).toEqual([]);
-      expect(existsSync(join(m.path, 'src')), `${m.manifest.name}: src`).toBe(true);
+      if (m.dir === 'mcp') expect(existsSync(join(m.path, 'src'))).toBe(true);
+      else
+        for (const source of sourceMembers.filter((source) => source.dir !== 'mcp'))
+          expect(existsSync(join(m.path, 'modules', source.dir, 'src')), source.dir).toBe(true);
     }
   });
 });
@@ -241,15 +239,14 @@ describe('FC9 row 6 — the stability statement (Decision 2)', () => {
   it('STABILITY.md exists at the root, names the three tiers, and states the series', () => {
     for (const tier of ['stable-by-law', 'preview', 'experimental'])
       expect(rootStability).toContain(`**${tier}**`);
-    expect(rootStability).toContain('0.1.0-preview.N');
+    expect(rootStability).toContain('0.1.0');
+    expect(rootStability).not.toContain('0.1.0-preview.N');
   });
 
   it('its package count is the fixed group, and it names every member', () => {
-    const match = /\b(twenty(?:-[a-z]+)?|thirty)\b packages move together/i.exec(rootStability);
-    expect(match, 'STABILITY.md must state how many packages move together').not.toBeNull();
-    expect(NUMBER_WORDS[match![1]!.toLowerCase()]).toBe(members.length);
+    expect(rootStability).toMatch(/\b(?:two|2)\b/i);
     for (const m of members) {
-      const spelled = m.manifest.name === UMBRELLA ? '`totalfinance`' : `\`${m.manifest.name}\``;
+      const spelled = `\`${m.manifest.name}\``;
       const short = `\`${m.dir}\``;
       expect(
         rootStability.includes(spelled) || rootStability.includes(short),
@@ -272,10 +269,9 @@ describe('FC9 row 6 — the stability statement (Decision 2)', () => {
 
   it('the tier the statement assigns matches the package (transports and the registry are preview)', () => {
     const tiers = readFileSync(join(ROOT, 'docs', 'stability.md'), 'utf8');
-    for (const m of members) {
+    for (const m of sourceMembers.filter((source) => source.dir !== 'totalfinance')) {
       const expected = PREVIEW_TIER.has(m.manifest.name) ? 'preview' : 'stable-by-law';
-      const label =
-        m.manifest.name === UMBRELLA ? '`totalfinance` (umbrella)' : `\`${m.manifest.name}\``;
+      const label = `\`${toPublicSpecifier(m.manifest.name)}\``;
       const row = tiers.split('\n').find((line) => line.startsWith(`| ${label}`));
       expect(row, `${m.manifest.name}: no row in docs/stability.md`).toBeDefined();
       expect(
@@ -285,23 +281,14 @@ describe('FC9 row 6 — the stability statement (Decision 2)', () => {
     }
   });
 
-  it('changesets is in preview pre-mode over the whole fixed group', () => {
-    const pre = JSON.parse(readFileSync(join(ROOT, '.changeset', 'pre.json'), 'utf8')) as {
-      mode: string;
-      tag: string;
-      initialVersions: Record<string, string>;
-    };
-    expect(pre.mode).toBe('pre');
-    expect(pre.tag).toBe(PRE_TAG);
-    expect(Object.keys(pre.initialVersions).sort()).toEqual(
-      members.map((m) => m.manifest.name).sort(),
-    );
+  it('changesets targets the public pair without preview pre-mode', () => {
+    expect(existsSync(join(ROOT, '.changeset', 'pre.json'))).toBe(false);
     const config = JSON.parse(readFileSync(join(ROOT, '.changeset', 'config.json'), 'utf8')) as {
       fixed: string[][];
       baseBranch: string;
       access: string;
     };
-    expect(config.fixed).toEqual([['@totalfinance/*', 'totalfinance']]);
+    expect(config.fixed).toEqual([[PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME]]);
     expect(config.baseBranch).toBe('main');
     expect(config.access).toBe('public');
   });
@@ -316,17 +303,17 @@ describe('FC9 row 1 — discovery', () => {
         (m) => m[1]!,
       ),
     );
-    const domain = members
+    const domain = sourceMembers
       .map((m) => m.manifest.name)
-      .filter((name) => name !== UMBRELLA && !PREVIEW_TIER.has(name));
+      .filter((name) => name !== 'totalfinance' && !PREVIEW_TIER.has(name));
     expect([...namespaced].sort()).toEqual(domain.sort());
-    expect(domain.length).toBe(members.length - 1 - PREVIEW_TIER.size);
+    expect(domain.length).toBe(sourceMembers.length - 1 - PREVIEW_TIER.size);
   });
 
   it('every domain namespace is also an umbrella subpath, and every package has a README with a fenced example', () => {
     const umbrella = byName.get(UMBRELLA)!.manifest.exports ?? {};
-    for (const m of members) {
-      if (m.manifest.name === UMBRELLA || PREVIEW_TIER.has(m.manifest.name)) continue;
+    for (const m of sourceMembers) {
+      if (m.dir === 'totalfinance' || m.dir === 'mcp') continue;
       expect(umbrella, `totalfinance/${m.dir}`).toHaveProperty(`./${m.dir}`);
     }
     for (const m of members) {
@@ -379,9 +366,10 @@ describe('FC9 row 6 — community and security files (Decision 5) and rollback o
     },
   );
 
-  it('SECURITY.md supports the latest preview only and says how to report privately', () => {
+  it('SECURITY.md names the supported release and says how to report privately', () => {
     const text = readFileSync(join(ROOT, 'SECURITY.md'), 'utf8');
-    expect(text).toContain('0.1.0-preview.N');
+    expect(text).toContain('0.1.0');
+    expect(text).not.toContain('0.1.0-preview.N');
     expect(text).toContain('security/advisories/new');
   });
 
@@ -427,11 +415,12 @@ describe('FC9 row 6 — release plumbing (Decisions 6 and 9): the every-public-p
     expect(workflow).not.toMatch(/^on:\n\s+push:/m);
     expect(workflow).toContain('name: npm-publish');
     expect(workflow).toContain('id-token: write');
-    expect(workflow).toContain('pnpm release:publish --dir approved --tag preview');
+    expect(workflow).toContain('pnpm release:publish --dir release/approved --tag candidate');
+    expect(workflow).toContain('TOTALFINANCE_RELEASE_ENABLED');
     expect(workflow).not.toContain('pnpm -r');
     expect(workflow).toContain('--expect-version "$RELEASE_VERSION"');
-    expect(workflow).toContain('git tag -a "totalfinance-v$RELEASE_VERSION"');
-    expect(workflow).toContain('gh release create "totalfinance-v$RELEASE_VERSION"');
+    expect(workflow).toContain('tools/release/finalize-github-release.ts');
+    expect(workflow).toContain('--expect-version "$RELEASE_VERSION" --finalize');
     expect(workflow).toContain('pnpm release:smoke --version "$RELEASE_VERSION"');
   });
 
@@ -463,13 +452,11 @@ describe('FC9 row 6 — release plumbing (Decisions 6 and 9): the every-public-p
     expect(expected.mcp.tools).toBeGreaterThan(0);
   });
 
-  it('the local-registry config serves the @totalfinance scope from the rehearsal only (no uplink), and the release runbooks exist', () => {
+  it('the local-registry config serves the public scope from the rehearsal only (no uplink), and the release runbooks exist', () => {
     const config = readFileSync(join(ROOT, 'tools', 'release', 'verdaccio.yaml'), 'utf8');
-    const scope = config.slice(
-      config.indexOf("'@totalfinance/*':"),
-      config.indexOf("'totalfinance':"),
-    );
+    const scope = config.slice(config.indexOf("'@insiderfinance/*':"), config.indexOf("'**':"));
     expect(scope).not.toContain('proxy:');
+    expect(scope).toContain("'@insiderfinance/*':");
     expect(existsSync(join(ROOT, 'docs', 'runbooks', 'release.md'))).toBe(true);
   });
 });

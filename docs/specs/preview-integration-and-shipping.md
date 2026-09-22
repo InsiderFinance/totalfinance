@@ -441,3 +441,12 @@ maintainer and blocks only slice 4.
   source maps that resolve, and finds `SECURITY.md` where GitHub looks for it.
 - **The one open decision is named** (Decision 8) rather than assumed silently; slices 1–3 do not
   depend on it.
+
+## Current publication amendment — September 22, 2026
+
+The [scoped single-package 0.1.0 contract](./scoped-single-package-release.md) supersedes this
+document's original 25-package fixed group, unscoped installation paths, and Changesets pre-mode.
+Only `@insiderfinance/totalfinance` and optional `@insiderfinance/totalfinance-mcp` are published.
+Source modules remain private. All numerical, installed-consumer, transport, hosted-CI, hash approval,
+and separately approved website-deployment gates still apply. Use the current release runbook for
+commands; historical evidence above certifies only the revisions it names.

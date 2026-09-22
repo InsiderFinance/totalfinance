@@ -1,0 +1,1008 @@
+{
+  "name": "@insiderfinance/totalfinance",
+  "version": "0.1.0",
+  "description": "Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "modules",
+    "LICENSE",
+    "STABILITY.md"
+  ],
+  "keywords": [
+    "finance",
+    "options",
+    "quant",
+    "portfolio",
+    "risk",
+    "technical-analysis",
+    "backtesting",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsiderFinance/totalfinance.git",
+    "directory": "distribution/totalfinance"
+  },
+  "homepage": "https://github.com/InsiderFinance/totalfinance#readme",
+  "bugs": "https://github.com/InsiderFinance/totalfinance/issues",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "main": "./modules/totalfinance/dist/index.js",
+  "module": "./modules/totalfinance/dist/index.js",
+  "types": "./modules/totalfinance/dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./modules/totalfinance/dist/index.d.ts",
+      "import": "./modules/totalfinance/dist/index.js",
+      "default": "./modules/totalfinance/dist/index.js"
+    },
+    "./backtest": {
+      "types": "./modules/backtest/dist/index.d.ts",
+      "import": "./modules/backtest/dist/index.js",
+      "default": "./modules/backtest/dist/index.js"
+    },
+    "./backtest/vectorized": {
+      "types": "./modules/backtest/dist/vectorized.d.ts",
+      "import": "./modules/backtest/dist/vectorized.js",
+      "default": "./modules/backtest/dist/vectorized.js"
+    },
+    "./backtest/event-driven": {
+      "types": "./modules/backtest/dist/event-driven.d.ts",
+      "import": "./modules/backtest/dist/event-driven.js",
+      "default": "./modules/backtest/dist/event-driven.js"
+    },
+    "./backtest/costs": {
+      "types": "./modules/backtest/dist/costs.d.ts",
+      "import": "./modules/backtest/dist/costs.js",
+      "default": "./modules/backtest/dist/costs.js"
+    },
+    "./backtest/tearsheet": {
+      "types": "./modules/backtest/dist/tearsheet.d.ts",
+      "import": "./modules/backtest/dist/tearsheet.js",
+      "default": "./modules/backtest/dist/tearsheet.js"
+    },
+    "./backtest/options": {
+      "types": "./modules/backtest/dist/options/index.d.ts",
+      "import": "./modules/backtest/dist/options/index.js",
+      "default": "./modules/backtest/dist/options/index.js"
+    },
+    "./backtest/execution": {
+      "types": "./modules/backtest/dist/execution/index.d.ts",
+      "import": "./modules/backtest/dist/execution/index.js",
+      "default": "./modules/backtest/dist/execution/index.js"
+    },
+    "./backtest/cross-sectional": {
+      "types": "./modules/backtest/dist/cross-sectional/index.d.ts",
+      "import": "./modules/backtest/dist/cross-sectional/index.js",
+      "default": "./modules/backtest/dist/cross-sectional/index.js"
+    },
+    "./backtest/artifacts": {
+      "types": "./modules/backtest/dist/artifacts.d.ts",
+      "import": "./modules/backtest/dist/artifacts.js",
+      "default": "./modules/backtest/dist/artifacts.js"
+    },
+    "./backtest/portfolio": {
+      "types": "./modules/backtest/dist/portfolio/index.d.ts",
+      "import": "./modules/backtest/dist/portfolio/index.js",
+      "default": "./modules/backtest/dist/portfolio/index.js"
+    },
+    "./backtest/environment": {
+      "types": "./modules/backtest/dist/environment/index.d.ts",
+      "import": "./modules/backtest/dist/environment/index.js",
+      "default": "./modules/backtest/dist/environment/index.js"
+    },
+    "./backtest/paper": {
+      "types": "./modules/backtest/dist/paper/index.d.ts",
+      "import": "./modules/backtest/dist/paper/index.js",
+      "default": "./modules/backtest/dist/paper/index.js"
+    },
+    "./calendars": {
+      "types": "./modules/calendars/dist/index.d.ts",
+      "import": "./modules/calendars/dist/index.js",
+      "default": "./modules/calendars/dist/index.js"
+    },
+    "./calendars/nyse": {
+      "types": "./modules/calendars/dist/nyse.d.ts",
+      "import": "./modules/calendars/dist/nyse.js",
+      "default": "./modules/calendars/dist/nyse.js"
+    },
+    "./calendars/cboe": {
+      "types": "./modules/calendars/dist/cboe.d.ts",
+      "import": "./modules/calendars/dist/cboe.js",
+      "default": "./modules/calendars/dist/cboe.js"
+    },
+    "./calendars/crypto": {
+      "types": "./modules/calendars/dist/crypto.d.ts",
+      "import": "./modules/calendars/dist/crypto.js",
+      "default": "./modules/calendars/dist/crypto.js"
+    },
+    "./cli": {
+      "types": "./modules/cli/dist/index.d.ts",
+      "import": "./modules/cli/dist/index.js",
+      "default": "./modules/cli/dist/index.js"
+    },
+    "./commodities": {
+      "types": "./modules/commodities/dist/index.d.ts",
+      "import": "./modules/commodities/dist/index.js",
+      "default": "./modules/commodities/dist/index.js"
+    },
+    "./commodities/forwards": {
+      "types": "./modules/commodities/dist/forwards.d.ts",
+      "import": "./modules/commodities/dist/forwards.js",
+      "default": "./modules/commodities/dist/forwards.js"
+    },
+    "./commodities/term-structure": {
+      "types": "./modules/commodities/dist/term-structure.d.ts",
+      "import": "./modules/commodities/dist/term-structure.js",
+      "default": "./modules/commodities/dist/term-structure.js"
+    },
+    "./core": {
+      "types": "./modules/core/dist/index.d.ts",
+      "import": "./modules/core/dist/index.js",
+      "default": "./modules/core/dist/index.js"
+    },
+    "./core/schema": {
+      "types": "./modules/core/dist/schema/index.d.ts",
+      "import": "./modules/core/dist/schema/index.js",
+      "default": "./modules/core/dist/schema/index.js"
+    },
+    "./core/pricing": {
+      "types": "./modules/core/dist/pricing.d.ts",
+      "import": "./modules/core/dist/pricing.js",
+      "default": "./modules/core/dist/pricing.js"
+    },
+    "./core/artifacts": {
+      "types": "./modules/core/dist/artifacts/index.d.ts",
+      "import": "./modules/core/dist/artifacts/index.js",
+      "default": "./modules/core/dist/artifacts/index.js"
+    },
+    "./crypto": {
+      "types": "./modules/crypto/dist/index.d.ts",
+      "import": "./modules/crypto/dist/index.js",
+      "default": "./modules/crypto/dist/index.js"
+    },
+    "./crypto/carry": {
+      "types": "./modules/crypto/dist/carry.d.ts",
+      "import": "./modules/crypto/dist/carry.js",
+      "default": "./modules/crypto/dist/carry.js"
+    },
+    "./crypto/curve": {
+      "types": "./modules/crypto/dist/curve.d.ts",
+      "import": "./modules/crypto/dist/curve.js",
+      "default": "./modules/crypto/dist/curve.js"
+    },
+    "./crypto/inverse": {
+      "types": "./modules/crypto/dist/inverse.d.ts",
+      "import": "./modules/crypto/dist/inverse.js",
+      "default": "./modules/crypto/dist/inverse.js"
+    },
+    "./crypto/liquidation": {
+      "types": "./modules/crypto/dist/liquidation.d.ts",
+      "import": "./modules/crypto/dist/liquidation.js",
+      "default": "./modules/crypto/dist/liquidation.js"
+    },
+    "./fixed-income": {
+      "types": "./modules/fixed-income/dist/index.d.ts",
+      "import": "./modules/fixed-income/dist/index.js",
+      "default": "./modules/fixed-income/dist/index.js"
+    },
+    "./fixed-income/conventions": {
+      "types": "./modules/fixed-income/dist/conventions.d.ts",
+      "import": "./modules/fixed-income/dist/conventions.js",
+      "default": "./modules/fixed-income/dist/conventions.js"
+    },
+    "./fixed-income/curves": {
+      "types": "./modules/fixed-income/dist/curves.d.ts",
+      "import": "./modules/fixed-income/dist/curves.js",
+      "default": "./modules/fixed-income/dist/curves.js"
+    },
+    "./fixed-income/bonds": {
+      "types": "./modules/fixed-income/dist/bonds.d.ts",
+      "import": "./modules/fixed-income/dist/bonds.js",
+      "default": "./modules/fixed-income/dist/bonds.js"
+    },
+    "./fixed-income/rates": {
+      "types": "./modules/fixed-income/dist/rates.d.ts",
+      "import": "./modules/fixed-income/dist/rates.js",
+      "default": "./modules/fixed-income/dist/rates.js"
+    },
+    "./fixed-income/models": {
+      "types": "./modules/fixed-income/dist/models.d.ts",
+      "import": "./modules/fixed-income/dist/models.js",
+      "default": "./modules/fixed-income/dist/models.js"
+    },
+    "./fixed-income/credit": {
+      "types": "./modules/fixed-income/dist/credit.d.ts",
+      "import": "./modules/fixed-income/dist/credit.js",
+      "default": "./modules/fixed-income/dist/credit.js"
+    },
+    "./fixed-income/lattice": {
+      "types": "./modules/fixed-income/dist/lattice.d.ts",
+      "import": "./modules/fixed-income/dist/lattice.js",
+      "default": "./modules/fixed-income/dist/lattice.js"
+    },
+    "./fixed-income/convertible": {
+      "types": "./modules/fixed-income/dist/convertible.d.ts",
+      "import": "./modules/fixed-income/dist/convertible.js",
+      "default": "./modules/fixed-income/dist/convertible.js"
+    },
+    "./fixed-income/xva": {
+      "types": "./modules/fixed-income/dist/xva.d.ts",
+      "import": "./modules/fixed-income/dist/xva.js",
+      "default": "./modules/fixed-income/dist/xva.js"
+    },
+    "./fixed-income/cross-currency": {
+      "types": "./modules/fixed-income/dist/cross-currency.d.ts",
+      "import": "./modules/fixed-income/dist/cross-currency.js",
+      "default": "./modules/fixed-income/dist/cross-currency.js"
+    },
+    "./fixed-income/futures": {
+      "types": "./modules/fixed-income/dist/futures.d.ts",
+      "import": "./modules/fixed-income/dist/futures.js",
+      "default": "./modules/fixed-income/dist/futures.js"
+    },
+    "./fixed-income/inflation": {
+      "types": "./modules/fixed-income/dist/inflation.d.ts",
+      "import": "./modules/fixed-income/dist/inflation.js",
+      "default": "./modules/fixed-income/dist/inflation.js"
+    },
+    "./fixed-income/pricer": {
+      "types": "./modules/fixed-income/dist/pricer.d.ts",
+      "import": "./modules/fixed-income/dist/pricer.js",
+      "default": "./modules/fixed-income/dist/pricer.js"
+    },
+    "./fixed-income/artifacts": {
+      "types": "./modules/fixed-income/dist/artifacts.d.ts",
+      "import": "./modules/fixed-income/dist/artifacts.js",
+      "default": "./modules/fixed-income/dist/artifacts.js"
+    },
+    "./foreign-exchange": {
+      "types": "./modules/foreign-exchange/dist/index.d.ts",
+      "import": "./modules/foreign-exchange/dist/index.js",
+      "default": "./modules/foreign-exchange/dist/index.js"
+    },
+    "./foreign-exchange/spot": {
+      "types": "./modules/foreign-exchange/dist/spot.d.ts",
+      "import": "./modules/foreign-exchange/dist/spot.js",
+      "default": "./modules/foreign-exchange/dist/spot.js"
+    },
+    "./foreign-exchange/forwards": {
+      "types": "./modules/foreign-exchange/dist/forwards.d.ts",
+      "import": "./modules/foreign-exchange/dist/forwards.js",
+      "default": "./modules/foreign-exchange/dist/forwards.js"
+    },
+    "./foreign-exchange/risk": {
+      "types": "./modules/foreign-exchange/dist/exposure.d.ts",
+      "import": "./modules/foreign-exchange/dist/exposure.js",
+      "default": "./modules/foreign-exchange/dist/exposure.js"
+    },
+    "./fundamentals": {
+      "types": "./modules/fundamentals/dist/index.d.ts",
+      "import": "./modules/fundamentals/dist/index.js",
+      "default": "./modules/fundamentals/dist/index.js"
+    },
+    "./fundamentals/statements": {
+      "types": "./modules/fundamentals/dist/statements.d.ts",
+      "import": "./modules/fundamentals/dist/statements.js",
+      "default": "./modules/fundamentals/dist/statements.js"
+    },
+    "./fundamentals/ratios": {
+      "types": "./modules/fundamentals/dist/ratios.d.ts",
+      "import": "./modules/fundamentals/dist/ratios.js",
+      "default": "./modules/fundamentals/dist/ratios.js"
+    },
+    "./fundamentals/scores": {
+      "types": "./modules/fundamentals/dist/scores.d.ts",
+      "import": "./modules/fundamentals/dist/scores.js",
+      "default": "./modules/fundamentals/dist/scores.js"
+    },
+    "./http": {
+      "types": "./modules/http/dist/index.d.ts",
+      "import": "./modules/http/dist/index.js",
+      "default": "./modules/http/dist/index.js"
+    },
+    "./math": {
+      "types": "./modules/math/dist/index.d.ts",
+      "import": "./modules/math/dist/index.js",
+      "default": "./modules/math/dist/index.js"
+    },
+    "./math/normal": {
+      "types": "./modules/math/dist/normal.d.ts",
+      "import": "./modules/math/dist/normal.js",
+      "default": "./modules/math/dist/normal.js"
+    },
+    "./math/bivariate": {
+      "types": "./modules/math/dist/bivariate.d.ts",
+      "import": "./modules/math/dist/bivariate.js",
+      "default": "./modules/math/dist/bivariate.js"
+    },
+    "./math/statistics": {
+      "types": "./modules/math/dist/statistics.d.ts",
+      "import": "./modules/math/dist/statistics.js",
+      "default": "./modules/math/dist/statistics.js"
+    },
+    "./math/solvers": {
+      "types": "./modules/math/dist/solvers.d.ts",
+      "import": "./modules/math/dist/solvers.js",
+      "default": "./modules/math/dist/solvers.js"
+    },
+    "./math/optimize": {
+      "types": "./modules/math/dist/optimize.d.ts",
+      "import": "./modules/math/dist/optimize.js",
+      "default": "./modules/math/dist/optimize.js"
+    },
+    "./math/interpolation": {
+      "types": "./modules/math/dist/interpolation.d.ts",
+      "import": "./modules/math/dist/interpolation.js",
+      "default": "./modules/math/dist/interpolation.js"
+    },
+    "./math/linalg": {
+      "types": "./modules/math/dist/linalg.d.ts",
+      "import": "./modules/math/dist/linalg.js",
+      "default": "./modules/math/dist/linalg.js"
+    },
+    "./math/integration": {
+      "types": "./modules/math/dist/integration.d.ts",
+      "import": "./modules/math/dist/integration.js",
+      "default": "./modules/math/dist/integration.js"
+    },
+    "./math/random": {
+      "types": "./modules/math/dist/random.d.ts",
+      "import": "./modules/math/dist/random.js",
+      "default": "./modules/math/dist/random.js"
+    },
+    "./math/lowdiscrepancy": {
+      "types": "./modules/math/dist/lowdiscrepancy.d.ts",
+      "import": "./modules/math/dist/lowdiscrepancy.js",
+      "default": "./modules/math/dist/lowdiscrepancy.js"
+    },
+    "./math/montecarlo": {
+      "types": "./modules/math/dist/montecarlo.d.ts",
+      "import": "./modules/math/dist/montecarlo.js",
+      "default": "./modules/math/dist/montecarlo.js"
+    },
+    "./math/regression": {
+      "types": "./modules/math/dist/regression.d.ts",
+      "import": "./modules/math/dist/regression.js",
+      "default": "./modules/math/dist/regression.js"
+    },
+    "./math/timeseries": {
+      "types": "./modules/math/dist/timeseries.d.ts",
+      "import": "./modules/math/dist/timeseries.js",
+      "default": "./modules/math/dist/timeseries.js"
+    },
+    "./math/distributions": {
+      "types": "./modules/math/dist/distributions.d.ts",
+      "import": "./modules/math/dist/distributions.js",
+      "default": "./modules/math/dist/distributions.js"
+    },
+    "./math/filters": {
+      "types": "./modules/math/dist/filters.d.ts",
+      "import": "./modules/math/dist/filters.js",
+      "default": "./modules/math/dist/filters.js"
+    },
+    "./options": {
+      "types": "./modules/options/dist/index.d.ts",
+      "import": "./modules/options/dist/index.js",
+      "default": "./modules/options/dist/index.js"
+    },
+    "./options/black-scholes": {
+      "types": "./modules/options/dist/black-scholes.d.ts",
+      "import": "./modules/options/dist/black-scholes.js",
+      "default": "./modules/options/dist/black-scholes.js"
+    },
+    "./options/batch": {
+      "types": "./modules/options/dist/batch.d.ts",
+      "import": "./modules/options/dist/batch.js",
+      "default": "./modules/options/dist/batch.js"
+    },
+    "./options/black76": {
+      "types": "./modules/options/dist/black76.d.ts",
+      "import": "./modules/options/dist/black76.js",
+      "default": "./modules/options/dist/black76.js"
+    },
+    "./options/bachelier": {
+      "types": "./modules/options/dist/bachelier.d.ts",
+      "import": "./modules/options/dist/bachelier.js",
+      "default": "./modules/options/dist/bachelier.js"
+    },
+    "./options/monte-carlo": {
+      "types": "./modules/options/dist/monte-carlo.d.ts",
+      "import": "./modules/options/dist/monte-carlo.js",
+      "default": "./modules/options/dist/monte-carlo.js"
+    },
+    "./options/heston": {
+      "types": "./modules/options/dist/heston.d.ts",
+      "import": "./modules/options/dist/heston.js",
+      "default": "./modules/options/dist/heston.js"
+    },
+    "./options/sabr": {
+      "types": "./modules/options/dist/sabr.d.ts",
+      "import": "./modules/options/dist/sabr.js",
+      "default": "./modules/options/dist/sabr.js"
+    },
+    "./options/local-volatility": {
+      "types": "./modules/options/dist/local-volatility.d.ts",
+      "import": "./modules/options/dist/local-volatility.js",
+      "default": "./modules/options/dist/local-volatility.js"
+    },
+    "./options/exotics": {
+      "types": "./modules/options/dist/exotics.d.ts",
+      "import": "./modules/options/dist/exotics.js",
+      "default": "./modules/options/dist/exotics.js"
+    },
+    "./options/parity": {
+      "types": "./modules/options/dist/parity.d.ts",
+      "import": "./modules/options/dist/parity.js",
+      "default": "./modules/options/dist/parity.js"
+    },
+    "./options/schema": {
+      "types": "./modules/options/dist/schema.d.ts",
+      "import": "./modules/options/dist/schema.js",
+      "default": "./modules/options/dist/schema.js"
+    },
+    "./options/lattice": {
+      "types": "./modules/options/dist/lattice.d.ts",
+      "import": "./modules/options/dist/lattice.js",
+      "default": "./modules/options/dist/lattice.js"
+    },
+    "./options/payoff": {
+      "types": "./modules/options/dist/payoff.d.ts",
+      "import": "./modules/options/dist/payoff.js",
+      "default": "./modules/options/dist/payoff.js"
+    },
+    "./options/pricer": {
+      "types": "./modules/options/dist/pricer.d.ts",
+      "import": "./modules/options/dist/pricer.js",
+      "default": "./modules/options/dist/pricer.js"
+    },
+    "./performance": {
+      "types": "./modules/performance/dist/index.d.ts",
+      "import": "./modules/performance/dist/index.js",
+      "default": "./modules/performance/dist/index.js"
+    },
+    "./performance/sharpe": {
+      "types": "./modules/performance/dist/sharpe.d.ts",
+      "import": "./modules/performance/dist/sharpe.js",
+      "default": "./modules/performance/dist/sharpe.js"
+    },
+    "./performance/returns": {
+      "types": "./modules/performance/dist/returns.d.ts",
+      "import": "./modules/performance/dist/returns.js",
+      "default": "./modules/performance/dist/returns.js"
+    },
+    "./performance/drawdown": {
+      "types": "./modules/performance/dist/drawdown.d.ts",
+      "import": "./modules/performance/dist/drawdown.js",
+      "default": "./modules/performance/dist/drawdown.js"
+    },
+    "./performance/metrics": {
+      "types": "./modules/performance/dist/metrics.d.ts",
+      "import": "./modules/performance/dist/metrics.js",
+      "default": "./modules/performance/dist/metrics.js"
+    },
+    "./performance/analyze": {
+      "types": "./modules/performance/dist/analyze.d.ts",
+      "import": "./modules/performance/dist/analyze.js",
+      "default": "./modules/performance/dist/analyze.js"
+    },
+    "./performance/ratios": {
+      "types": "./modules/performance/dist/ratios.d.ts",
+      "import": "./modules/performance/dist/ratios.js",
+      "default": "./modules/performance/dist/ratios.js"
+    },
+    "./performance/relative": {
+      "types": "./modules/performance/dist/relative.d.ts",
+      "import": "./modules/performance/dist/relative.js",
+      "default": "./modules/performance/dist/relative.js"
+    },
+    "./performance/activity": {
+      "types": "./modules/performance/dist/activity.d.ts",
+      "import": "./modules/performance/dist/activity.js",
+      "default": "./modules/performance/dist/activity.js"
+    },
+    "./performance/rolling": {
+      "types": "./modules/performance/dist/rolling.d.ts",
+      "import": "./modules/performance/dist/rolling.js",
+      "default": "./modules/performance/dist/rolling.js"
+    },
+    "./performance/flow-aware": {
+      "types": "./modules/performance/dist/flow-aware.d.ts",
+      "import": "./modules/performance/dist/flow-aware.js",
+      "default": "./modules/performance/dist/flow-aware.js"
+    },
+    "./performance/sector-performance": {
+      "types": "./modules/performance/dist/sector-performance.d.ts",
+      "import": "./modules/performance/dist/sector-performance.js",
+      "default": "./modules/performance/dist/sector-performance.js"
+    },
+    "./portfolio": {
+      "types": "./modules/portfolio/dist/index.d.ts",
+      "import": "./modules/portfolio/dist/index.js",
+      "default": "./modules/portfolio/dist/index.js"
+    },
+    "./portfolio/events": {
+      "types": "./modules/portfolio/dist/events.d.ts",
+      "import": "./modules/portfolio/dist/events.js",
+      "default": "./modules/portfolio/dist/events.js"
+    },
+    "./portfolio/ledger": {
+      "types": "./modules/portfolio/dist/ledger.d.ts",
+      "import": "./modules/portfolio/dist/ledger.js",
+      "default": "./modules/portfolio/dist/ledger.js"
+    },
+    "./portfolio/performance": {
+      "types": "./modules/portfolio/dist/performance.d.ts",
+      "import": "./modules/portfolio/dist/performance.js",
+      "default": "./modules/portfolio/dist/performance.js"
+    },
+    "./portfolio/reconciliation": {
+      "types": "./modules/portfolio/dist/reconciliation.d.ts",
+      "import": "./modules/portfolio/dist/reconciliation.js",
+      "default": "./modules/portfolio/dist/reconciliation.js"
+    },
+    "./portfolio/policy": {
+      "types": "./modules/portfolio/dist/policy.d.ts",
+      "import": "./modules/portfolio/dist/policy.js",
+      "default": "./modules/portfolio/dist/policy.js"
+    },
+    "./portfolio/trade": {
+      "types": "./modules/portfolio/dist/trade/index.d.ts",
+      "import": "./modules/portfolio/dist/trade/index.js",
+      "default": "./modules/portfolio/dist/trade/index.js"
+    },
+    "./research": {
+      "types": "./modules/research/dist/index.d.ts",
+      "import": "./modules/research/dist/index.js",
+      "default": "./modules/research/dist/index.js"
+    },
+    "./research/screening": {
+      "types": "./modules/research/dist/screening.d.ts",
+      "import": "./modules/research/dist/screening.js",
+      "default": "./modules/research/dist/screening.js"
+    },
+    "./research/factors": {
+      "types": "./modules/research/dist/factors.d.ts",
+      "import": "./modules/research/dist/factors.js",
+      "default": "./modules/research/dist/factors.js"
+    },
+    "./research/events": {
+      "types": "./modules/research/dist/events.d.ts",
+      "import": "./modules/research/dist/events.js",
+      "default": "./modules/research/dist/events.js"
+    },
+    "./research/artifacts": {
+      "types": "./modules/research/dist/artifacts.d.ts",
+      "import": "./modules/research/dist/artifacts.js",
+      "default": "./modules/research/dist/artifacts.js"
+    },
+    "./risk": {
+      "types": "./modules/risk/dist/index.d.ts",
+      "import": "./modules/risk/dist/index.js",
+      "default": "./modules/risk/dist/index.js"
+    },
+    "./risk/value-at-risk": {
+      "types": "./modules/risk/dist/value-at-risk.d.ts",
+      "import": "./modules/risk/dist/value-at-risk.js",
+      "default": "./modules/risk/dist/value-at-risk.js"
+    },
+    "./risk/scenario": {
+      "types": "./modules/risk/dist/scenario.d.ts",
+      "import": "./modules/risk/dist/scenario.js",
+      "default": "./modules/risk/dist/scenario.js"
+    },
+    "./risk/factor": {
+      "types": "./modules/risk/dist/factor.d.ts",
+      "import": "./modules/risk/dist/factor.js",
+      "default": "./modules/risk/dist/factor.js"
+    },
+    "./risk/optimize": {
+      "types": "./modules/risk/dist/optimize.d.ts",
+      "import": "./modules/risk/dist/optimize.js",
+      "default": "./modules/risk/dist/optimize.js"
+    },
+    "./risk/research": {
+      "types": "./modules/risk/dist/research.d.ts",
+      "import": "./modules/risk/dist/research.js",
+      "default": "./modules/risk/dist/research.js"
+    },
+    "./risk/portfolio": {
+      "types": "./modules/risk/dist/portfolio.d.ts",
+      "import": "./modules/risk/dist/portfolio.js",
+      "default": "./modules/risk/dist/portfolio.js"
+    },
+    "./risk/sizing": {
+      "types": "./modules/risk/dist/sizing.d.ts",
+      "import": "./modules/risk/dist/sizing.js",
+      "default": "./modules/risk/dist/sizing.js"
+    },
+    "./scenarios": {
+      "types": "./modules/scenarios/dist/index.d.ts",
+      "import": "./modules/scenarios/dist/index.js",
+      "default": "./modules/scenarios/dist/index.js"
+    },
+    "./scenarios/portfolio": {
+      "types": "./modules/scenarios/dist/portfolio.d.ts",
+      "import": "./modules/scenarios/dist/portfolio.js",
+      "default": "./modules/scenarios/dist/portfolio.js"
+    },
+    "./strategy": {
+      "types": "./modules/strategy/dist/index.d.ts",
+      "import": "./modules/strategy/dist/index.js",
+      "default": "./modules/strategy/dist/index.js"
+    },
+    "./strategy/scanner": {
+      "types": "./modules/strategy/dist/scanner.d.ts",
+      "import": "./modules/strategy/dist/scanner.js",
+      "default": "./modules/strategy/dist/scanner.js"
+    },
+    "./strategy/probability": {
+      "types": "./modules/strategy/dist/probability.d.ts",
+      "import": "./modules/strategy/dist/probability.js",
+      "default": "./modules/strategy/dist/probability.js"
+    },
+    "./strategy/from-chain": {
+      "types": "./modules/strategy/dist/from-chain.d.ts",
+      "import": "./modules/strategy/dist/from-chain.js",
+      "default": "./modules/strategy/dist/from-chain.js"
+    },
+    "./structure": {
+      "types": "./modules/structure/dist/index.d.ts",
+      "import": "./modules/structure/dist/index.js",
+      "default": "./modules/structure/dist/index.js"
+    },
+    "./structure/exposure": {
+      "types": "./modules/structure/dist/exposure.d.ts",
+      "import": "./modules/structure/dist/exposure.js",
+      "default": "./modules/structure/dist/exposure.js"
+    },
+    "./structure/flow": {
+      "types": "./modules/structure/dist/flow.d.ts",
+      "import": "./modules/structure/dist/flow.js",
+      "default": "./modules/structure/dist/flow.js"
+    },
+    "./technical-analysis": {
+      "types": "./modules/technical-analysis/dist/index.d.ts",
+      "import": "./modules/technical-analysis/dist/index.js",
+      "default": "./modules/technical-analysis/dist/index.js"
+    },
+    "./technical-analysis/rsi": {
+      "types": "./modules/technical-analysis/dist/rsi.d.ts",
+      "import": "./modules/technical-analysis/dist/rsi.js",
+      "default": "./modules/technical-analysis/dist/rsi.js"
+    },
+    "./technical-analysis/moving-averages": {
+      "types": "./modules/technical-analysis/dist/moving-averages.d.ts",
+      "import": "./modules/technical-analysis/dist/moving-averages.js",
+      "default": "./modules/technical-analysis/dist/moving-averages.js"
+    },
+    "./technical-analysis/macd": {
+      "types": "./modules/technical-analysis/dist/macd.d.ts",
+      "import": "./modules/technical-analysis/dist/macd.js",
+      "default": "./modules/technical-analysis/dist/macd.js"
+    },
+    "./technical-analysis/bands": {
+      "types": "./modules/technical-analysis/dist/bands.d.ts",
+      "import": "./modules/technical-analysis/dist/bands.js",
+      "default": "./modules/technical-analysis/dist/bands.js"
+    },
+    "./technical-analysis/pipeline": {
+      "types": "./modules/technical-analysis/dist/pipeline.d.ts",
+      "import": "./modules/technical-analysis/dist/pipeline.js",
+      "default": "./modules/technical-analysis/dist/pipeline.js"
+    },
+    "./technical-analysis/bars": {
+      "types": "./modules/technical-analysis/dist/bars.d.ts",
+      "import": "./modules/technical-analysis/dist/bars.js",
+      "default": "./modules/technical-analysis/dist/bars.js"
+    },
+    "./technical-analysis/transforms": {
+      "types": "./modules/technical-analysis/dist/transforms.d.ts",
+      "import": "./modules/technical-analysis/dist/transforms.js",
+      "default": "./modules/technical-analysis/dist/transforms.js"
+    },
+    "./technical-analysis/resample": {
+      "types": "./modules/technical-analysis/dist/resample.d.ts",
+      "import": "./modules/technical-analysis/dist/resample.js",
+      "default": "./modules/technical-analysis/dist/resample.js"
+    },
+    "./technical-analysis/divergence": {
+      "types": "./modules/technical-analysis/dist/divergence.d.ts",
+      "import": "./modules/technical-analysis/dist/divergence.js",
+      "default": "./modules/technical-analysis/dist/divergence.js"
+    },
+    "./technical-analysis/oscillators": {
+      "types": "./modules/technical-analysis/dist/oscillators.d.ts",
+      "import": "./modules/technical-analysis/dist/oscillators.js",
+      "default": "./modules/technical-analysis/dist/oscillators.js"
+    },
+    "./technical-analysis/momentum": {
+      "types": "./modules/technical-analysis/dist/momentum.d.ts",
+      "import": "./modules/technical-analysis/dist/momentum.js",
+      "default": "./modules/technical-analysis/dist/momentum.js"
+    },
+    "./technical-analysis/overlap": {
+      "types": "./modules/technical-analysis/dist/overlap.d.ts",
+      "import": "./modules/technical-analysis/dist/overlap.js",
+      "default": "./modules/technical-analysis/dist/overlap.js"
+    },
+    "./technical-analysis/features": {
+      "types": "./modules/technical-analysis/dist/features.d.ts",
+      "import": "./modules/technical-analysis/dist/features.js",
+      "default": "./modules/technical-analysis/dist/features.js"
+    },
+    "./technical-analysis/aliases": {
+      "types": "./modules/technical-analysis/dist/aliases.d.ts",
+      "import": "./modules/technical-analysis/dist/aliases.js",
+      "default": "./modules/technical-analysis/dist/aliases.js"
+    },
+    "./technical-analysis/warmup": {
+      "types": "./modules/technical-analysis/dist/warmup.d.ts",
+      "import": "./modules/technical-analysis/dist/warmup.js",
+      "default": "./modules/technical-analysis/dist/warmup.js"
+    },
+    "./technical-analysis/math": {
+      "types": "./modules/technical-analysis/dist/math.d.ts",
+      "import": "./modules/technical-analysis/dist/math.js",
+      "default": "./modules/technical-analysis/dist/math.js"
+    },
+    "./technical-analysis/trend": {
+      "types": "./modules/technical-analysis/dist/trend.d.ts",
+      "import": "./modules/technical-analysis/dist/trend.js",
+      "default": "./modules/technical-analysis/dist/trend.js"
+    },
+    "./technical-analysis/volatility": {
+      "types": "./modules/technical-analysis/dist/volatility.d.ts",
+      "import": "./modules/technical-analysis/dist/volatility.js",
+      "default": "./modules/technical-analysis/dist/volatility.js"
+    },
+    "./technical-analysis/volume": {
+      "types": "./modules/technical-analysis/dist/volume.d.ts",
+      "import": "./modules/technical-analysis/dist/volume.js",
+      "default": "./modules/technical-analysis/dist/volume.js"
+    },
+    "./technical-analysis/microstructure": {
+      "types": "./modules/technical-analysis/dist/microstructure.d.ts",
+      "import": "./modules/technical-analysis/dist/microstructure.js",
+      "default": "./modules/technical-analysis/dist/microstructure.js"
+    },
+    "./technical-analysis/candle-talib": {
+      "types": "./modules/technical-analysis/dist/candle-talib.d.ts",
+      "import": "./modules/technical-analysis/dist/candle-talib.js",
+      "default": "./modules/technical-analysis/dist/candle-talib.js"
+    },
+    "./technical-analysis/candlesticks": {
+      "types": "./modules/technical-analysis/dist/candlesticks.d.ts",
+      "import": "./modules/technical-analysis/dist/candlesticks.js",
+      "default": "./modules/technical-analysis/dist/candlesticks.js"
+    },
+    "./technical-analysis/candle-aliases": {
+      "types": "./modules/technical-analysis/dist/candle-aliases.d.ts",
+      "import": "./modules/technical-analysis/dist/candle-aliases.js",
+      "default": "./modules/technical-analysis/dist/candle-aliases.js"
+    },
+    "./technical-analysis/cycle": {
+      "types": "./modules/technical-analysis/dist/cycle.d.ts",
+      "import": "./modules/technical-analysis/dist/cycle.js",
+      "default": "./modules/technical-analysis/dist/cycle.js"
+    },
+    "./technical-analysis/statistics": {
+      "types": "./modules/technical-analysis/dist/statistics.d.ts",
+      "import": "./modules/technical-analysis/dist/statistics.js",
+      "default": "./modules/technical-analysis/dist/statistics.js"
+    },
+    "./technical-analysis/chart-types": {
+      "types": "./modules/technical-analysis/dist/chart-types.d.ts",
+      "import": "./modules/technical-analysis/dist/chart-types.js",
+      "default": "./modules/technical-analysis/dist/chart-types.js"
+    },
+    "./technical-analysis/price-action": {
+      "types": "./modules/technical-analysis/dist/price-action.d.ts",
+      "import": "./modules/technical-analysis/dist/price-action.js",
+      "default": "./modules/technical-analysis/dist/price-action.js"
+    },
+    "./technical-analysis/signal": {
+      "types": "./modules/technical-analysis/dist/signal.d.ts",
+      "import": "./modules/technical-analysis/dist/signal.js",
+      "default": "./modules/technical-analysis/dist/signal.js"
+    },
+    "./technical-analysis/registry": {
+      "types": "./modules/technical-analysis/dist/registry.d.ts",
+      "import": "./modules/technical-analysis/dist/registry.js",
+      "default": "./modules/technical-analysis/dist/registry.js"
+    },
+    "./technical-analysis/series": {
+      "types": "./modules/technical-analysis/dist/series.d.ts",
+      "import": "./modules/technical-analysis/dist/series.js",
+      "default": "./modules/technical-analysis/dist/series.js"
+    },
+    "./technical-analysis/framework": {
+      "types": "./modules/technical-analysis/dist/framework.d.ts",
+      "import": "./modules/technical-analysis/dist/framework.js",
+      "default": "./modules/technical-analysis/dist/framework.js"
+    },
+    "./valuation": {
+      "types": "./modules/valuation/dist/index.d.ts",
+      "import": "./modules/valuation/dist/index.js",
+      "default": "./modules/valuation/dist/index.js"
+    },
+    "./valuation/cash-flows": {
+      "types": "./modules/valuation/dist/cash-flows.d.ts",
+      "import": "./modules/valuation/dist/cash-flows.js",
+      "default": "./modules/valuation/dist/cash-flows.js"
+    },
+    "./valuation/corporate": {
+      "types": "./modules/valuation/dist/corporate.d.ts",
+      "import": "./modules/valuation/dist/corporate.js",
+      "default": "./modules/valuation/dist/corporate.js"
+    },
+    "./valuation/forecasting": {
+      "types": "./modules/valuation/dist/forecasting.d.ts",
+      "import": "./modules/valuation/dist/forecasting.js",
+      "default": "./modules/valuation/dist/forecasting.js"
+    },
+    "./volatility": {
+      "types": "./modules/volatility/dist/index.d.ts",
+      "import": "./modules/volatility/dist/index.js",
+      "default": "./modules/volatility/dist/index.js"
+    },
+    "./volatility/surface": {
+      "types": "./modules/volatility/dist/surface.d.ts",
+      "import": "./modules/volatility/dist/surface.js",
+      "default": "./modules/volatility/dist/surface.js"
+    },
+    "./volatility/svi": {
+      "types": "./modules/volatility/dist/svi.d.ts",
+      "import": "./modules/volatility/dist/svi.js",
+      "default": "./modules/volatility/dist/svi.js"
+    },
+    "./volatility/sabr": {
+      "types": "./modules/volatility/dist/sabr.d.ts",
+      "import": "./modules/volatility/dist/sabr.js",
+      "default": "./modules/volatility/dist/sabr.js"
+    },
+    "./volatility/arbitrage": {
+      "types": "./modules/volatility/dist/arbitrage.d.ts",
+      "import": "./modules/volatility/dist/arbitrage.js",
+      "default": "./modules/volatility/dist/arbitrage.js"
+    },
+    "./volatility/skew": {
+      "types": "./modules/volatility/dist/skew.d.ts",
+      "import": "./modules/volatility/dist/skew.js",
+      "default": "./modules/volatility/dist/skew.js"
+    },
+    "./volatility/event": {
+      "types": "./modules/volatility/dist/event.d.ts",
+      "import": "./modules/volatility/dist/event.js",
+      "default": "./modules/volatility/dist/event.js"
+    },
+    "./volatility/term": {
+      "types": "./modules/volatility/dist/term.d.ts",
+      "import": "./modules/volatility/dist/term.js",
+      "default": "./modules/volatility/dist/term.js"
+    },
+    "./volatility/analytics": {
+      "types": "./modules/volatility/dist/analytics.d.ts",
+      "import": "./modules/volatility/dist/analytics.js",
+      "default": "./modules/volatility/dist/analytics.js"
+    },
+    "./volatility/metrics": {
+      "types": "./modules/volatility/dist/metrics.d.ts",
+      "import": "./modules/volatility/dist/metrics.js",
+      "default": "./modules/volatility/dist/metrics.js"
+    },
+    "./volatility/local-volatility": {
+      "types": "./modules/volatility/dist/local-volatility.d.ts",
+      "import": "./modules/volatility/dist/local-volatility.js",
+      "default": "./modules/volatility/dist/local-volatility.js"
+    },
+    "./volatility/heston-surface": {
+      "types": "./modules/volatility/dist/heston-surface.d.ts",
+      "import": "./modules/volatility/dist/heston-surface.js",
+      "default": "./modules/volatility/dist/heston-surface.js"
+    },
+    "./volatility/forecast": {
+      "types": "./modules/volatility/dist/forecast.d.ts",
+      "import": "./modules/volatility/dist/forecast.js",
+      "default": "./modules/volatility/dist/forecast.js"
+    },
+    "./volatility/earnings": {
+      "types": "./modules/volatility/dist/earnings.d.ts",
+      "import": "./modules/volatility/dist/earnings.js",
+      "default": "./modules/volatility/dist/earnings.js"
+    },
+    "./volatility/essvi": {
+      "types": "./modules/volatility/dist/essvi.d.ts",
+      "import": "./modules/volatility/dist/essvi.js",
+      "default": "./modules/volatility/dist/essvi.js"
+    },
+    "./volatility/estimate": {
+      "types": "./modules/volatility/dist/estimate.d.ts",
+      "import": "./modules/volatility/dist/estimate.js",
+      "default": "./modules/volatility/dist/estimate.js"
+    },
+    "./volatility/min-variance-delta": {
+      "types": "./modules/volatility/dist/min-variance-delta.d.ts",
+      "import": "./modules/volatility/dist/min-variance-delta.js",
+      "default": "./modules/volatility/dist/min-variance-delta.js"
+    },
+    "./volatility/risk-reversal": {
+      "types": "./modules/volatility/dist/risk-reversal.d.ts",
+      "import": "./modules/volatility/dist/risk-reversal.js",
+      "default": "./modules/volatility/dist/risk-reversal.js"
+    },
+    "./volatility/sabr-delta": {
+      "types": "./modules/volatility/dist/sabr-delta.d.ts",
+      "import": "./modules/volatility/dist/sabr-delta.js",
+      "default": "./modules/volatility/dist/sabr-delta.js"
+    },
+    "./volatility/ssvi": {
+      "types": "./modules/volatility/dist/ssvi.d.ts",
+      "import": "./modules/volatility/dist/ssvi.js",
+      "default": "./modules/volatility/dist/ssvi.js"
+    },
+    "./volatility/sticky-regime": {
+      "types": "./modules/volatility/dist/sticky-regime.d.ts",
+      "import": "./modules/volatility/dist/sticky-regime.js",
+      "default": "./modules/volatility/dist/sticky-regime.js"
+    },
+    "./volatility/surface-pca": {
+      "types": "./modules/volatility/dist/surface-pca.d.ts",
+      "import": "./modules/volatility/dist/surface-pca.js",
+      "default": "./modules/volatility/dist/surface-pca.js"
+    },
+    "./volatility/swaption-cube": {
+      "types": "./modules/volatility/dist/swaption-cube.d.ts",
+      "import": "./modules/volatility/dist/swaption-cube.js",
+      "default": "./modules/volatility/dist/swaption-cube.js"
+    },
+    "./volatility/tail-risk": {
+      "types": "./modules/volatility/dist/tail-risk.d.ts",
+      "import": "./modules/volatility/dist/tail-risk.js",
+      "default": "./modules/volatility/dist/tail-risk.js"
+    },
+    "./volatility/vanna-volga": {
+      "types": "./modules/volatility/dist/vanna-volga.d.ts",
+      "import": "./modules/volatility/dist/vanna-volga.js",
+      "default": "./modules/volatility/dist/vanna-volga.js"
+    },
+    "./volatility/variance-index": {
+      "types": "./modules/volatility/dist/variance-index.d.ts",
+      "import": "./modules/volatility/dist/variance-index.js",
+      "default": "./modules/volatility/dist/variance-index.js"
+    },
+    "./volatility/volatility-spot-beta": {
+      "types": "./modules/volatility/dist/volatility-spot-beta.d.ts",
+      "import": "./modules/volatility/dist/volatility-spot-beta.js",
+      "default": "./modules/volatility/dist/volatility-spot-beta.js"
+    },
+    "./volatility/artifacts": {
+      "types": "./modules/volatility/dist/artifacts.d.ts",
+      "import": "./modules/volatility/dist/artifacts.js",
+      "default": "./modules/volatility/dist/artifacts.js"
+    },
+    "./workflows": {
+      "types": "./modules/workflows/dist/index.d.ts",
+      "import": "./modules/workflows/dist/index.js",
+      "default": "./modules/workflows/dist/index.js"
+    },
+    "./workflows/local": {
+      "types": "./modules/workflows/dist/local/index.d.ts",
+      "import": "./modules/workflows/dist/local/index.js",
+      "default": "./modules/workflows/dist/local/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "totalfinance": "./modules/cli/dist/bin.js",
+    "totalfinance-http": "./modules/http/dist/bin.js"
+  },
+  "dependencies": {}
+}

@@ -3,9 +3,9 @@
  *
  * The declarative one-line path: a returns dataset, a universe history, one signal (a research
  * recipe, a score, a screen, or a direct callback), a rebalance schedule, and a portfolio
- * construction. Every decision at a rebalance session is a call into `@totalfinance/research`; every
- * quantity is `@totalfinance/portfolio`'s `allocatePortfolio`; every fill is a `NormalizedFill` folded
- * by the FC7 reducer; every performance number is `@totalfinance/performance`. The engine owns the
+ * construction. Every decision at a rebalance session is a call into `@insiderfinance/totalfinance/research`; every
+ * quantity is `@insiderfinance/totalfinance/portfolio`'s `allocatePortfolio`; every fill is a `NormalizedFill` folded
+ * by the FC7 reducer; every performance number is `@insiderfinance/totalfinance/performance`. The engine owns the
  * loop and nothing else.
  */
 

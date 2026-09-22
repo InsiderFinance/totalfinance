@@ -641,7 +641,7 @@ function evaluateModel(input: {
  *
  * @example
  * ```ts
- * import { option, optionChainHealth } from '@totalfinance/options';
+ * import { option, optionChainHealth } from '@insiderfinance/totalfinance/options';
  *
  * const contract = option.call({
  *   underlying: 'X', style: 'european', strike: 100,

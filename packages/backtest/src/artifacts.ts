@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/artifacts` — Stage 4.6's reproducible run artifacts (spec
+ * `@insiderfinance/totalfinance/backtest/artifacts` — Stage 4.6's reproducible run artifacts (spec
  * `docs/specs/portfolio-scale-backtesting.md`, Decision 8): a `crossSectionalBacktest` or
  * `crossSectionalBacktestGrid` result saved as an identified, immutable `AnalysisArtifact` with its
  * request (bulk row sets embedded or referenced by table handle, models by description), its run
@@ -9,8 +9,8 @@
  * must not pay for serialization.
  *
  * ```ts
- * import { crossSectionalBacktest } from '@totalfinance/backtest';
- * import { backtestRunArtifact, readBacktestRun, replayBacktestRun } from '@totalfinance/backtest/artifacts';
+ * import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
+ * import { backtestRunArtifact, readBacktestRun, replayBacktestRun } from '@insiderfinance/totalfinance/backtest/artifacts';
  *
  * const run = crossSectionalBacktest(request);
  * const artifact = backtestRunArtifact({ kind: 'cross-sectional', run, input: request, referenceRowSets: ['dataset.returns'] });

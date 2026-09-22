@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/environment` — the deterministic trading-agent environment (Stage 7B.1, AT4).
+ * `@insiderfinance/totalfinance/backtest/environment` — the deterministic trading-agent environment (Stage 7B.1, AT4).
  * `createTradingEnvironment` drives `portfolioBacktest`'s own loop from outside with the familiar
  * `reset` / `step` contract: the next-observation law, real open orders with cancel/replace and
  * idempotent retry, typed rejections that never throw, and a chained trace identity.

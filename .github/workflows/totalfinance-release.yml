@@ -1,35 +1,24 @@
-# TotalFinance release — the every-public-publish gate, hosted half (Stage 5A, Decision 6).
-#
-# Dispatched by hand with one input, the exact version being released. Three jobs:
-#
-#   verify   the whole landing standard on this commit (`pnpm run ci`), then the dry-run packs the
-#            fixed group and writes RELEASE_HASHES.json; the manifest is uploaded as the artifact a
-#            human approves. Refuses when the input version differs from the packages' version, or the
-#            release tag already exists.
-#   publish  gated by the `npm-publish` environment (required reviewers). Downloads the approved
-#            artifact, re-checks every tarball's sha256 against RELEASE_HASHES.json, and uploads those
-#            exact tarballs (`pnpm release:publish`; provenance attested by the OIDC token), then pushes
-#            the `totalfinance-v<version>` tag and creates the GitHub release with the changeset notes and
-#            the manifest attached. Nothing is re-packed after approval.
-#   smoke    installs the group from npmjs.org into a clean directory and runs the consumer journeys
-#            against the committed expectations. Blocks the announcement, not the publish.
-#
-# The library and all release tooling live at this standalone repository's root.
-
+# Disabled unless the maintainer explicitly enables TOTALFINANCE_RELEASE_ENABLED.
+# Approve exact artifacts -> publish main then MCP under candidate -> public registry smoke.
+# latest promotion is a separate authenticated maintainer command, never inferred from dispatch.
 name: TotalFinance release
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'The exact version being released (must equal every package version at this commit, e.g. 0.1.0-preview.0)'
+        description: 'Exact public distribution version at this commit (first release: 0.1.0)'
         required: true
         type: string
+      bootstrap:
+        description: 'Explicit first-publication bootstrap using the approval-environment NPM_BOOTSTRAP_TOKEN; no automatic fallback'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
-# Releases never overlap and are never cancelled by a later dispatch.
 concurrency:
   group: totalfinance-release
   cancel-in-progress: false
@@ -48,41 +37,30 @@ jobs:
           RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
         run: |
           if [ "$GITHUB_REF" != refs/heads/main ] || [ "$RELEASE_ENABLED" != true ]; then
-            echo "::error::Publishing is disabled. Configure npm ownership and npm-publish reviewers, then explicitly enable TOTALFINANCE_RELEASE_ENABLED and dispatch from main."; exit 2
+            echo "::error::Publishing is disabled. Verify ownership, trusted publishers and npm-publish reviewers before enabling TOTALFINANCE_RELEASE_ENABLED."; exit 2
           fi
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: package.json
-
-      # The release is built on the minimum supported Node: the floor the packages claim.
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.13.0'
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: refuse a version the tree does not carry, or a tag that already exists
+          node-version-file: .nvmrc
+      - name: require the exact distribution version and an unused release tag
         run: |
-          actual="$(node -p "require('./packages/core/package.json').version")"
-          if [ "$actual" != "$RELEASE_VERSION" ]; then
-            echo "::error::packages are at $actual, not $RELEASE_VERSION — run 'pnpm exec changeset version' and land it first"; exit 2
-          fi
+          node --input-type=module -e 'import fs from "node:fs"; const v = process.env.RELEASE_VERSION; if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(v)) throw Error("Invalid release version"); for (const dir of ["totalfinance", "mcp"]) { const p = JSON.parse(fs.readFileSync(`distribution/${dir}/package.json`)); if (p.version !== v) throw Error("Distribution version mismatch"); }'
           if git ls-remote --tags origin "refs/tags/totalfinance-v$RELEASE_VERSION" | grep -q .; then
-            echo "::error::tag totalfinance-v$RELEASE_VERSION already exists; a version is released once"; exit 2
+            echo "::error::Release tag already exists. Recover the original run; never repack an approved release."; exit 2
           fi
-
       - run: pnpm install --frozen-lockfile
-
-      - name: the landing standard, then the dry-run manifest
+      - name: landing standard, independent repeat, then approved-artifact manifest
         run: |
           pnpm run ci
+          pnpm api:check
+          pnpm test:coverage
           pnpm release:dry-run --skip-ci --expect-version "$RELEASE_VERSION"
-
       - uses: actions/upload-artifact@v4
         with:
           name: totalfinance-release-${{ inputs.version }}
@@ -91,94 +69,85 @@ jobs:
           retention-days: 30
 
   publish:
-    name: publish ${{ inputs.version }} (approval required)
+    name: candidate ${{ inputs.version }} (artifact approval required)
     needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # The approval gate. Configure the environment with required reviewers; the reviewer opens the
-    # `verify` artifact and approves THOSE hashes.
     environment:
       name: npm-publish
-      url: https://www.npmjs.com/package/totalfinance
+      url: https://www.npmjs.com/package/@insiderfinance/totalfinance
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+      # Node 24.21.0 is the current pinned LTS; npm OIDC requires >=11.5.1.
+      # No registry-url/token injection: npm uses the workflow's OIDC credentials.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.21.0'
+      - uses: actions/download-artifact@v4
+        with:
+          name: totalfinance-release-${{ inputs.version }}
+          path: release/approved/
+      - run: pnpm install --frozen-lockfile
+      - name: publish the approved candidate bytes with provenance, main before MCP
+        env:
+          TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
+          BOOTSTRAP: ${{ inputs.bootstrap }}
+          NODE_AUTH_TOKEN: ${{ inputs.bootstrap && secrets.NPM_BOOTSTRAP_TOKEN || '' }}
+        # --resume permits rerunning THIS failed job with THIS retained artifact. Existing
+        # versions are skipped only after their downloaded bytes match approval exactly.
+        run: |
+          auth=()
+          if [ "$BOOTSTRAP" = true ]; then auth+=(--bootstrap-token); fi
+          pnpm release:publish --dir release/approved --tag candidate --expect-version "$RELEASE_VERSION" --resume "${auth[@]}"
+
+  smoke:
+    name: public registry smoke ${{ inputs.version }}
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: package.json
-
+      # Consumer minimum is distinct from the publishing runtime.
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-          registry-url: 'https://registry.npmjs.org'
-
+      - run: pnpm install --frozen-lockfile
       - uses: actions/download-artifact@v4
         with:
           name: totalfinance-release-${{ inputs.version }}
-          path: approved/
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: publish the approved tarballs, unchanged, under the preview dist-tag with provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm release:publish --dir approved --tag preview
-
-      - name: tag the commit and create the GitHub release with the notes and the manifest
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "totalfinance-v$RELEASE_VERSION" -m "TotalFinance $RELEASE_VERSION"
-          git push origin "totalfinance-v$RELEASE_VERSION"
-          pnpm exec tsx tools/release/changelog-excerpt.ts "$RELEASE_VERSION" > release-notes.md
-          gh release create "totalfinance-v$RELEASE_VERSION" \
-            --title "TotalFinance $RELEASE_VERSION" \
-            --notes-file release-notes.md \
-            --prerelease \
-            approved/RELEASE_HASHES.json approved/*.tgz
-
-  smoke:
-    name: registry smoke ${{ inputs.version }}
-    needs: publish
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          package_json_file: package.json
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.13.0'
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - run: pnpm install --frozen-lockfile
-
-      # The registry can take a minute to serve a fresh version to every mirror; retry, bounded.
-      - name: install from npmjs.org and run the consumer journeys against the committed expectations
+          path: release/approved/
+      - name: match public tarball hashes and run clean installed consumer journeys
         run: |
           for attempt in 1 2 3 4 5; do
-            if pnpm release:smoke --version "$RELEASE_VERSION"; then exit 0; fi
-            echo "attempt $attempt failed; waiting 60s"; sleep 60
+            if pnpm release:smoke --version "$RELEASE_VERSION" --registry https://registry.npmjs.org --approved release/approved; then exit 0; fi
+            echo "attempt $attempt failed; waiting 30s"; sleep 30
           done
           exit 1
-
-      # Retain the actual installed-package/example evidence for the separately approved public
-      # documentation build. A smoke receipt does not itself publish a website or grant a release.
       - uses: actions/upload-artifact@v4
         with:
-          name: totalfinance-registry-smoke-${{ inputs.version }}
+          # Preserve every attempt's receipt; a new verifiedAt must not replace old evidence.
+          name: totalfinance-registry-smoke-${{ inputs.version }}-attempt-${{ github.run_attempt }}
           path: release/SMOKE_RECEIPT-${{ inputs.version }}.json
           if-no-files-found: error
+      - name: retain the candidate release and immutable evidence after public smoke
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
+        run: |
+          pnpm exec tsx tools/release/finalize-github-release.ts \
+            --dir release/approved --receipt "release/SMOKE_RECEIPT-$RELEASE_VERSION.json" \
+            --expect-version "$RELEASE_VERSION" --finalize
+          echo 'Latest is unchanged. Follow docs/runbooks/release.md for explicit promotion and separate website approval.'

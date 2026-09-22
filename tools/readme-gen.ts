@@ -13,6 +13,8 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALIAS_TABLE } from '../packages/technical-analysis/src/aliases.js';
 import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/local/profiles.js';
+import { MCP_PACKAGE_NAME, PUBLIC_PACKAGE_NAME, toPublicSpecifier } from './public-packages.js';
+import { publicDocumentationText } from './public-reference.js';
 
 const ROOT = new URL('../', import.meta.url);
 const SNIPPETS_PATH = fileURLToPath(new URL('docs/examples/readme-snippets.test.ts', ROOT));
@@ -27,6 +29,7 @@ interface PkgInfo {
   /** Directory under `packages/` (also the api-report basename). */
   dir: string;
   name: string;
+  version: string;
   description: string;
   entrypoints: string[];
   /** Total exports in the API report (runtime values + type-only exports). */
@@ -40,13 +43,19 @@ function gatherPackages(): PkgInfo[] {
   const dir = fileURLToPath(new URL('packages', ROOT));
   const out: PkgInfo[] = [];
   for (const pkg of readdirSync(dir).sort()) {
-    let manifest: { name?: string; description?: string; exports?: Record<string, unknown> };
+    let manifest: {
+      name?: string;
+      version?: string;
+      description?: string;
+      exports?: Record<string, unknown>;
+    };
     try {
       manifest = JSON.parse(readFileSync(`${dir}/${pkg}/package.json`, 'utf8'));
     } catch {
       continue;
     }
     if (!manifest.name) continue;
+    if (!manifest.version) throw new Error(`Missing package version: ${pkg}`);
     const entrypoints = Object.keys(manifest.exports ?? {})
       .filter((e) => e !== './package.json')
       .sort();
@@ -66,6 +75,7 @@ function gatherPackages(): PkgInfo[] {
     out.push({
       dir: pkg,
       name: manifest.name,
+      version: manifest.version,
       description: manifest.description ?? '',
       entrypoints,
       exportCount,
@@ -97,7 +107,7 @@ function extractSnippets(): Map<string, string> {
       continue;
     }
     if (/^\s*\/\/ readme:end\s*$/.test(line)) {
-      if (current) map.set(current, dedentAndUncomment(buf));
+      if (current) map.set(toPublicSpecifier(current), dedentAndUncomment(buf));
       collecting = false;
       current = null;
       continue;
@@ -142,7 +152,9 @@ function subpathSnippetsOf(
   snippets: Map<string, string>,
   pkg: PkgInfo,
 ): { specifier: string; snippet: string }[] {
-  const prefix = `${pkg.name}/`;
+  // Root examples belong to their domain READMEs, not to the umbrella a second time.
+  if (pkg.dir === 'totalfinance') return [];
+  const prefix = `${toPublicSpecifier(pkg.name)}/`;
   return [...snippets.entries()]
     .filter(([name]) => name.startsWith(prefix))
     .sort(([a], [b]) => a.localeCompare(b))
@@ -237,17 +249,17 @@ function buildReadme(
     `> ${pkg.description}`,
     '',
     // Absolute URLs: package READMEs render on npmjs.com, where relative repo links are dead.
-    `Part of **[TotalFinance](${REPO_URL}#readme)** — a zero-dependency, browser-safe TypeScript quant ` +
-      'toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` ' +
+    `Part of **[TotalFinance](${REPO_URL}#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. ` +
+      'The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` ' +
       'and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.',
     '',
     '## Install',
     '',
-    'Unpublished preview: this command describes the planned published experience, not a verified npm installation. ' +
+    `Source version ${pkg.version}: this command describes the planned published experience, not a verified npm installation. ` +
       `Until publication, use a [source checkout](${REPO_URL}#develop).`,
     '',
     '```sh',
-    `pnpm add ${pkg.name}`,
+    `pnpm add ${pkg.dir === 'mcp' ? MCP_PACKAGE_NAME : PUBLIC_PACKAGE_NAME}@${pkg.version}`,
     '```',
     '',
   ];
@@ -266,11 +278,12 @@ function buildReadme(
   lines.push(
     '## Imports and bundles',
     '',
-    'For portable browser tree shaking, use named imports from `totalfinance/<domain>` or ' +
-      '`@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. ' +
+    'For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` ' +
+      'or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. ' +
       'Use public exports, never private `dist` paths.',
     '',
-    'Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. ' +
+    'Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. ' +
+      'The main package has no runtime dependencies. MCP is a separate optional package. ' +
       'Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; ' +
       'indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.',
     '',
@@ -329,7 +342,7 @@ function buildReadme(
     '<!-- Generated by tools/readme-gen.ts from package.json + etc/*.api.md + ' +
       'docs/examples/readme-snippets.test.ts. Do not edit by hand; run `pnpm tsx tools/readme-gen.ts`. -->',
   );
-  return `${lines.join('\n')}\n`;
+  return `${publicDocumentationText(lines.join('\n'))}\n`;
 }
 
 /** Build every package README from the live sources (pure — deterministic given repo state). */
@@ -339,7 +352,7 @@ export function buildReadmes(): { dir: string; content: string }[] {
     dir: pkg.dir,
     content: buildReadme(
       pkg,
-      snippets.get(pkg.name),
+      snippets.get(toPublicSpecifier(pkg.name)),
       pkg.name === '@totalfinance/technical-analysis' ? taAliasSection() : '',
       subpathSnippetsOf(snippets, pkg),
     ),

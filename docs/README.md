@@ -1,11 +1,11 @@
 # TotalFinance Docs
 
-TotalFinance is an explicitly pre-1.0 preview: the published series is `0.1.0-preview.N` under the npm
-dist-tag `preview`, and [`STABILITY.md`](../STABILITY.md) ships in every package to say what each
-surface promises (see [Milestones](#milestones) below for how the library got here). The toolkit spans
-**twenty-five packages** — twenty independently installable `@totalfinance/*` domain and platform
-packages, the `totalfinance` umbrella, the `@totalfinance/workflows` operation registry, and the three
-transports over it (`@totalfinance/cli`, `@totalfinance/http`, `@totalfinance/mcp`). Together they provide option
+TotalFinance `0.1.0` is pre-1.0 software, not a 1.0 stability guarantee. Its two public packages are
+`@insiderfinance/totalfinance` (all domains, workflows, CLI and HTTP) and the optional
+`@insiderfinance/totalfinance-mcp`. The 25 source workspaces are private implementation details.
+[`STABILITY.md`](../STABILITY.md) ships in both artifacts: domain conformance does not promote
+preview workflows or transports to production-ready status. Publication still requires maintainer
+approval; a local checkout is not registry evidence. Together the public packages provide option
 pricing (European, American, exotic, stochastic volatility), implied-volatility surfaces, options
 market structure, **335 registered technical-analysis indicators** (every one batch +
 serializable-streaming), performance metrics, risk & portfolio analytics, an options profit
@@ -62,33 +62,34 @@ server.
 - [Stability tiers — the long form of the shipped `STABILITY.md`](./stability.md)
 - [Schema library ADR](./adr/schema-library.md)
 
-## Packages
+## Public packages and entry points
 
-These are the canonical post-normalization package identities.
+Domain paths are exports of the main package, not separate npm installs. MCP is the only optional
+separate package. Install `@insiderfinance/totalfinance@0.1.0` after verifying registry availability.
 
-| Package                            | What it gives you                                                                                                                        |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `totalfinance`                     | umbrella package: one install, namespace re-exports of every package below                                                               |
-| `@totalfinance/core`               | types, conventions, errors, dates/day-counts, OCC symbology, calendar engine, schema facade                                              |
-| `@totalfinance/math`               | distributions, solvers, optimizers, interpolation, linear algebra, integration, statistics, seeded RNG, Monte Carlo                      |
-| `@totalfinance/calendars`          | rules-based NYSE / CBOE / crypto trading calendars                                                                                       |
-| `@totalfinance/options`            | BSM / Black-76 / Bachelier, American & exotic engines, Heston / SABR / local-volatility, Monte-Carlo/QMC, Greeks, implied vol, batch API |
-| `@totalfinance/volatility`         | implied-vol surfaces with SVI/SABR/Heston calibration, static-arbitrage checks, skew/smile + term structure, IV rank, event vol          |
-| `@totalfinance/structure`          | dealer-positioning exposure (GEX/DEX/vanna/charm), walls, max pain, zero-gamma, scenario maps, options flow                              |
-| `@totalfinance/technical-analysis` | 335 registered technical indicators — every one batch **and** serializable-streaming — plus bars, candles, pipeline, signal DSL          |
-| `@totalfinance/performance`        | returns, Sharpe/Sortino/Calmar, benchmark-relative metrics, drawdowns, hit rate/expectancy, rolling metrics                              |
-| `@totalfinance/portfolio`          | event-derived multi-account ledger, lots/cash/lifecycle state, valuation, P&L, reconciliation, allocation, rebalancing, and monitoring   |
-| `@totalfinance/risk`               | VaR/CVaR, stress & scenario testing, factor/PCA exposure, portfolio optimization (min-var → Kelly/HRP), research hygiene                 |
-| `@totalfinance/strategy`           | options profit calculator: payoff, breakevens, mark-to-market, probability of profit, build-from-chain                                   |
-| `@totalfinance/backtest`           | vectorized research engine + event-driven simulator (broker, costs, slippage), walk-forward, tear sheets, honest assumptions             |
-| `@totalfinance/fixed-income`       | bonds + analytics, yield curves + bootstrapping, swaps/swaptions/caps/floors, short-rate models, CDS & credit curves                     |
-| `@totalfinance/crypto`             | crypto futures, perpetuals, options, carry, funding, basis, and cross-market arbitrage analytics                                         |
-| `@totalfinance/fundamentals`       | typed financial statements, accounting identities, point-in-time observations, and fundamental ratios                                    |
-| `@totalfinance/valuation`          | time-value-of-money, cash-flow solvers, loans, capital budgeting, DCF/reverse DCF, sensitivities, and comparables                        |
-| `@totalfinance/research`           | point-in-time screening/ranking, factor construction, neutralization, event studies, and research protocols                              |
-| `@totalfinance/foreign-exchange`   | FX spots/forwards/swaps, parity, carry, conversion, and coherent multi-currency analytics                                                |
-| `@totalfinance/commodities`        | commodity forwards, storage/convenience yield, term structures, carry, rolls, and spread analytics                                       |
-| `@totalfinance/mcp`                | read-only MCP server wrapping the same engines                                                                                           |
+| Package                                           | What it gives you                                                                                                                        |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `@insiderfinance/totalfinance`                    | umbrella package: one install, namespace re-exports of every package below                                                               |
+| `@insiderfinance/totalfinance/core`               | types, conventions, errors, dates/day-counts, OCC symbology, calendar engine, schema facade                                              |
+| `@insiderfinance/totalfinance/math`               | distributions, solvers, optimizers, interpolation, linear algebra, integration, statistics, seeded RNG, Monte Carlo                      |
+| `@insiderfinance/totalfinance/calendars`          | rules-based NYSE / CBOE / crypto trading calendars                                                                                       |
+| `@insiderfinance/totalfinance/options`            | BSM / Black-76 / Bachelier, American & exotic engines, Heston / SABR / local-volatility, Monte-Carlo/QMC, Greeks, implied vol, batch API |
+| `@insiderfinance/totalfinance/volatility`         | implied-vol surfaces with SVI/SABR/Heston calibration, static-arbitrage checks, skew/smile + term structure, IV rank, event vol          |
+| `@insiderfinance/totalfinance/structure`          | dealer-positioning exposure (GEX/DEX/vanna/charm), walls, max pain, zero-gamma, scenario maps, options flow                              |
+| `@insiderfinance/totalfinance/technical-analysis` | 335 registered technical indicators — every one batch **and** serializable-streaming — plus bars, candles, pipeline, signal DSL          |
+| `@insiderfinance/totalfinance/performance`        | returns, Sharpe/Sortino/Calmar, benchmark-relative metrics, drawdowns, hit rate/expectancy, rolling metrics                              |
+| `@insiderfinance/totalfinance/portfolio`          | event-derived multi-account ledger, lots/cash/lifecycle state, valuation, P&L, reconciliation, allocation, rebalancing, and monitoring   |
+| `@insiderfinance/totalfinance/risk`               | VaR/CVaR, stress & scenario testing, factor/PCA exposure, portfolio optimization (min-var → Kelly/HRP), research hygiene                 |
+| `@insiderfinance/totalfinance/strategy`           | options profit calculator: payoff, breakevens, mark-to-market, probability of profit, build-from-chain                                   |
+| `@insiderfinance/totalfinance/backtest`           | vectorized research engine + event-driven simulator (broker, costs, slippage), walk-forward, tear sheets, honest assumptions             |
+| `@insiderfinance/totalfinance/fixed-income`       | bonds + analytics, yield curves + bootstrapping, swaps/swaptions/caps/floors, short-rate models, CDS & credit curves                     |
+| `@insiderfinance/totalfinance/crypto`             | crypto futures, perpetuals, options, carry, funding, basis, and cross-market arbitrage analytics                                         |
+| `@insiderfinance/totalfinance/fundamentals`       | typed financial statements, accounting identities, point-in-time observations, and fundamental ratios                                    |
+| `@insiderfinance/totalfinance/valuation`          | time-value-of-money, cash-flow solvers, loans, capital budgeting, DCF/reverse DCF, sensitivities, and comparables                        |
+| `@insiderfinance/totalfinance/research`           | point-in-time screening/ranking, factor construction, neutralization, event studies, and research protocols                              |
+| `@insiderfinance/totalfinance/foreign-exchange`   | FX spots/forwards/swaps, parity, carry, conversion, and coherent multi-currency analytics                                                |
+| `@insiderfinance/totalfinance/commodities`        | commodity forwards, storage/convenience yield, term structures, carry, rolls, and spread analytics                                       |
+| `@insiderfinance/totalfinance-mcp`                | read-only MCP server wrapping the same engines                                                                                           |
 
 ## Runnable examples
 
@@ -117,7 +118,7 @@ Every documented snippet has an executed counterpart in
 
 ## Runbooks and policies
 
-- [Cutting a preview — the version bump, the dry-run manifest, the approval gate, the smoke](./runbooks/release.md)
+- [Cutting a release — the version bump, the dry-run manifest, the approval gate, the smoke](./runbooks/release.md)
 - [Release rollback — owner, dist-tag reversal, unpublish versus deprecate, the message template](./runbooks/release-rollback.md)
 - [Contributing — spec first, the laws, the regeneration chain, the landing standard](../CONTRIBUTING.md)
 - [Security policy — supported versions and private reporting](../SECURITY.md)
@@ -126,7 +127,7 @@ Every documented snippet has an executed counterpart in
 ## Milestones
 
 Development phases 0–6, the Phase 3A callable-shape correction, and Wave 6 are complete (the
-published version is the `0.1.0-preview.N` series; nothing was published before it). These pages are
+planned first public version is `0.1.0`; no npm publication is asserted here). These pages are
 historical implementation records. The
 [implementation order](./implementation-order.md) is the current work queue. Phase 3B, FC0–FC9,
 Platform Stages 4.1–4.7, Preview P1 (options marking truthfulness), and Stage 7A — the

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -110,7 +110,13 @@ describe('built public documentation', () => {
       packages: { package: string; entrypoints: string[] }[];
       exportPaths: { id: string; url: string }[];
     };
-    expect(coverage.packages).toHaveLength(readdirSync(join(ROOT, 'packages')).length);
+    expect(coverage.packages.map((pkg) => pkg.package).sort()).toEqual(
+      ['@insiderfinance/totalfinance', '@insiderfinance/totalfinance-mcp'].sort(),
+    );
+    expect(
+      coverage.exportPaths.every((entry) => entry.id.startsWith('@insiderfinance/totalfinance')),
+    ).toBe(true);
+    expect(version.version).toBe('0.1.0');
     const cache = new Map<string, string>();
     for (const exported of coverage.exportPaths) {
       const [url, anchor] = exported.url.split('#');

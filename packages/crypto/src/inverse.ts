@@ -5,7 +5,7 @@
  * `s·Q·(1/F₀ − 1/F)` is a non-linear function of price — its coin delta is `Q/F²` (not constant) and a long
  * inverse future is SHORT gamma in coin. That coin delta is exactly the instrument that hedges an inverse
  * *option*'s coin delta, so `inverseHedge` sizes the future/perp against any coin delta and reports the
- * residual convexity the delta hedge leaves behind. Depends only on `@totalfinance/core`.
+ * residual convexity the delta hedge leaves behind. Depends only on `@insiderfinance/totalfinance/core`.
  */
 
 import {

@@ -12,16 +12,16 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { CONVENTIONS_VERSION } from '@totalfinance/core';
+import { CONVENTIONS_VERSION } from '@insiderfinance/totalfinance/core';
 import {
   canonicalJsonOf,
   createAnalysisArtifact,
   fromCanonicalJson,
   readAnalysisArtifact,
-} from '@totalfinance/core/artifacts';
-import { timeWeightedReturn } from '@totalfinance/performance';
-import { eventStudy } from '@totalfinance/research';
-import { discountedCashFlow } from '@totalfinance/valuation';
+} from '@insiderfinance/totalfinance/core/artifacts';
+import { timeWeightedReturn } from '@insiderfinance/totalfinance/performance';
+import { eventStudy } from '@insiderfinance/totalfinance/research';
+import { discountedCashFlow } from '@insiderfinance/totalfinance/valuation';
 
 /** Save a real report, round-trip the artifact through canonical JSON, and verify its id. */
 function saveAndRestore(input: {
@@ -50,7 +50,7 @@ function saveAndRestore(input: {
 }
 
 describe('the artifact spine saves REAL Law-2 reports verbatim', () => {
-  it('saves a discountedCashFlow valuation report (@totalfinance/valuation)', () => {
+  it('saves a discountedCashFlow valuation report (@insiderfinance/totalfinance/valuation)', () => {
     const parameters = {
       valuationBasis: 'firm',
       valuationDate: '2026-12-31',
@@ -83,7 +83,7 @@ describe('the artifact spine saves REAL Law-2 reports verbatim', () => {
     expect(assumptions['discountRateSource']).toBe('user-supplied');
   });
 
-  it('saves an eventStudy report (@totalfinance/research)', () => {
+  it('saves an eventStudy report (@insiderfinance/totalfinance/research)', () => {
     const dates = Array.from({ length: 14 }, (_, i) => `2024-03-${String(i + 1).padStart(2, '0')}`);
     const returns = [
       0.01, 0.02, -0.01, 0.005, 0.015, -0.005, 0.0, 0.01, 0.02, -0.02, 0.03, 0.01, -0.01, 0.005,
@@ -121,7 +121,7 @@ describe('the artifact spine saves REAL Law-2 reports verbatim', () => {
     expect(events).toHaveLength(1);
   });
 
-  it('saves a timeWeightedReturn report (@totalfinance/performance)', () => {
+  it('saves a timeWeightedReturn report (@insiderfinance/totalfinance/performance)', () => {
     const parameters = {
       valuations: [
         { valuationDate: '2026-01-01', netAssetValue: 100 },

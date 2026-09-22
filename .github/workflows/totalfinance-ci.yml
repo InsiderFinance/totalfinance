@@ -79,7 +79,7 @@ jobs:
   # manifest, the tarballs are published into a Verdaccio started in this job, and the registry smoke
   # installs them back from that registry and runs the consumer journeys against the committed
   # expectations. It proves the publish tooling on every push, so the first time it meets npmjs.org is
-  # not the first time it runs. The @totalfinance scope has no uplink in the rehearsal config: a package the
+  # not the first time it runs. The @insiderfinance scope has no uplink in the rehearsal config: a package the
   # dry-run forgot cannot be filled in from the real registry.
   release-rehearsal:
     name: release rehearsal (local registry)
@@ -102,7 +102,7 @@ jobs:
 
       - run: pnpm build
 
-      - name: dry-run — pack the fixed group and write the hash manifest
+      - name: dry-run — pack the two public distributions and write the hash manifest
         run: pnpm release:dry-run --skip-ci
 
       - name: start a local registry
@@ -119,7 +119,7 @@ jobs:
         run: pnpm release:publish --registry http://localhost:4873
 
       - name: registry smoke — install from the local registry and run the consumer journeys
-        run: pnpm release:smoke --version "$(node -p "require('./packages/core/package.json').version")" --registry http://localhost:4873
+        run: pnpm release:smoke --version "$(node -p "require('./distribution/totalfinance/package.json').version")" --registry http://localhost:4873 --approved release
 
   # Clean-repository generation (Stage 4.7, FC9 Decision 9): the whole regeneration chain runs in its
   # lawful order on a clean checkout and the job fails if any generated artifact — the signature and

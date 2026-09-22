@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/calendars/cboe` — Cboe options trading calendar.
+ * `@insiderfinance/totalfinance/calendars/cboe` — Cboe options trading calendar.
  *
  * Cboe observes the same US market holiday schedule as NYSE; session hours are expressed in ET
  * (09:30–16:00) to match how equity-option hours are quoted. Both venues come from the one shared

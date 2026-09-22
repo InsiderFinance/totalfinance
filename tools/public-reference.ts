@@ -6,7 +6,7 @@
  * Regenerate TypeDoc's entrypoint config with `pnpm tsx tools/public-reference.ts --typedoc`.
  * `pnpm run docs` continues to consume typedoc.json; the test gates config drift.
  */
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
@@ -15,6 +15,13 @@ import {
   type OperationDescription,
 } from '../packages/workflows/src/operation.js';
 import { packsForProfile, REGISTRY_PROFILES } from '../packages/workflows/src/local/profiles.js';
+import {
+  PUBLIC_PACKAGE_NAME,
+  MCP_PACKAGE_NAME,
+  publicPackageDirectories,
+  publicSourcePaths,
+  toPublicSpecifier,
+} from './public-packages.js';
 
 export interface ReferencePackage {
   name: string;
@@ -113,20 +120,56 @@ function exportTarget(value: unknown): string | null {
 function packageStability(directory: string, version: string): string {
   const path = resolve(directory, 'STABILITY.md');
   const policy = existsSync(path) ? readFileSync(path, 'utf8') : '';
-  // The shared policy explicitly describes all packages as pre-1.0 preview. Do not turn
-  // "stable-by-law" (contract conformance) into a fabricated stable release or publication.
-  if (/pre-1\.0 preview/i.test(policy)) return 'pre-1.0 preview';
+  // One artifact includes several maturity tiers; contract conformance is not 1.0 stability.
+  if (/pre-1\.0/i.test(policy)) return 'pre-1.0; component maturity varies (see stability policy)';
   return version.startsWith('0.') ? 'pre-1.0; stability not declared' : 'not declared';
 }
 
-/** Discover all publishable workspace packages, including the umbrella and future packages. */
+function entrypointStability(entrypoint: string, fallback: string): string {
+  if (
+    entrypoint === MCP_PACKAGE_NAME ||
+    entrypoint.startsWith(`${MCP_PACKAGE_NAME}/`) ||
+    ['workflows', 'cli', 'http'].some(
+      (component) =>
+        entrypoint === `${PUBLIC_PACKAGE_NAME}/${component}` ||
+        entrypoint.startsWith(`${PUBLIC_PACKAGE_NAME}/${component}/`),
+    )
+  )
+    return 'preview (pre-1.0)';
+  if (entrypoint === PUBLIC_PACKAGE_NAME || entrypoint.startsWith(`${PUBLIC_PACKAGE_NAME}/`))
+    return 'stable-by-law (pre-1.0; not a 1.0 stability guarantee)';
+  return fallback;
+}
+
+/** Map package/import contexts, preserving executable names, protocol keys and literal data. */
+export function publicDocumentationText(text: string): string {
+  return text
+    .replace(/@totalfinance\/[a-z][a-z0-9/-]*/g, toPublicSpecifier)
+    .replace(
+      /(\b(?:from\s+|import\s*\(\s*|import\s+))([`'"])(totalfinance(?:\/[a-z][a-z0-9/-]*)?)\2/g,
+      (_, prefix: string, quote: string, specifier: string) =>
+        `${prefix}${quote}${toPublicSpecifier(specifier)}${quote}`,
+    )
+    .replace(
+      /(\b(?:npm|pnpm|yarn|bun)\s+(?:install|i|add)\s+(?:--?[\w-]+\s+)*)([`'"]?)totalfinance(?=@|[`'"\s]|$)/g,
+      (_, prefix: string, quote: string) => `${prefix}${quote}${PUBLIC_PACKAGE_NAME}`,
+    )
+    .replace(
+      /(\b(?:package|dependency|module)\s+)([`'"])totalfinance\2/g,
+      (_, prefix: string, quote: string) => `${prefix}${quote}${PUBLIC_PACKAGE_NAME}${quote}`,
+    )
+    .replace(
+      /([`'"])totalfinance\1(?=\s+(?:package|dependency|module)\b)/g,
+      (_, quote: string) => `${quote}${PUBLIC_PACKAGE_NAME}${quote}`,
+    );
+}
+
+/** Discover the two distribution export maps; declarations still come from original sources. */
 export function discoverReferenceSources(root = ROOT): ReferenceSource[] {
   const sources: ReferenceSource[] = [];
-  for (const dir of readdirSync(resolve(root, 'packages'), { withFileTypes: true })) {
-    if (!dir.isDirectory()) continue;
-    const directory = resolve(root, 'packages', dir.name);
+  const publicPaths = publicSourcePaths(root);
+  for (const { dir, path: directory } of publicPackageDirectories(root)) {
     const manifestPath = resolve(directory, 'package.json');
-    if (!existsSync(manifestPath)) continue;
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
       name: string;
       version: string;
@@ -134,12 +177,10 @@ export function discoverReferenceSources(root = ROOT): ReferenceSource[] {
       private?: boolean;
       exports?: unknown;
     };
-    if (manifest.private || manifest.exports === undefined) continue;
+    if (manifest.private || manifest.exports === undefined)
+      throw new Error(`Invalid public distribution: ${directory}`);
     if (!manifest.name || !manifest.version)
-      throw new Error(`Invalid package metadata: packages/${dir.name}`);
-    const config = configAt(resolve(directory, 'tsconfig.build.json'));
-    const { rootDir, outDir } = config.options;
-    if (!rootDir || !outDir) throw new Error(`Missing rootDir/outDir: ${manifest.name}`);
+      throw new Error(`Invalid package metadata: ${directory}`);
     const map = manifest.exports;
     const exportsMap: Record<string, unknown> =
       map && typeof map === 'object' && Object.keys(map).some((key) => key.startsWith('.'))
@@ -154,23 +195,23 @@ export function discoverReferenceSources(root = ROOT): ReferenceSource[] {
         // Fail closed: a new pattern must never silently vanish from a generated catalog.
         throw new Error(`Expand wildcard export before documenting: ${manifest.name} ${key}`);
       }
-      const output = resolve(directory, target);
-      const source = /\.d\.[cm]?ts$|\.[cm]?js$/.test(output)
-        ? resolve(rootDir, relative(outDir, output)).replace(/(?:\.d)?\.([cm]?)(?:ts|js)$/, '.$1ts')
-        : output;
+      const specifier = key === '.' ? manifest.name : `${manifest.name}/${key.slice(2)}`;
+      const sourcePaths = publicPaths[specifier];
+      if (sourcePaths?.length !== 1)
+        throw new Error(`Missing unambiguous public source: ${specifier}`);
+      const source = resolve(root, sourcePaths[0]!);
       const rel = posix(relative(root, source));
       if (rel.startsWith('../') || !existsSync(source)) {
         throw new Error(`Missing source for ${manifest.name} ${key}: ${rel}`);
       }
-      const specifier = key === '.' ? manifest.name : `${manifest.name}/${key.slice(2)}`;
       entrypoints[specifier] = rel;
     }
     sources.push({
       package: {
         name: manifest.name,
-        slug: dir.name,
+        slug: dir,
         version: manifest.version,
-        description: manifest.description ?? '',
+        description: publicDocumentationText(manifest.description ?? ''),
         stability: packageStability(directory, manifest.version),
         entrypoints: Object.keys(entrypoints).sort(compare),
       },
@@ -210,11 +251,23 @@ function jsdoc(
   checker: ts.TypeChecker,
   symbol: ts.Symbol,
 ): { description: string; tags: ReferenceEntry['tags'] } {
+  const tags = symbol.getJsDocTags(checker).map((tag) => ({
+    name: tag.name,
+    text: ts.displayPartsToString(tag.text),
+  }));
+  // TypeScript parses an unquoted scoped package in prose as a custom JSDoc tag.
+  // Reconstitute it before mapping; otherwise public output leaks "@totalfinance /risk".
+  const packageMentions = tags.filter(
+    (tag) => ['totalfinance', 'insiderfinance'].includes(tag.name) && tag.text.startsWith('/'),
+  );
   return {
-    description: ts.displayPartsToString(symbol.getDocumentationComment(checker)),
-    tags: symbol
-      .getJsDocTags(checker)
-      .map((tag) => ({ name: tag.name, text: ts.displayPartsToString(tag.text) })),
+    description: [
+      ts.displayPartsToString(symbol.getDocumentationComment(checker)),
+      ...packageMentions.map((tag) => publicDocumentationText(`@${tag.name}${tag.text}`)),
+    ]
+      .filter(Boolean)
+      .join(' '),
+    tags: tags.filter((tag) => !packageMentions.includes(tag)),
   };
 }
 
@@ -228,24 +281,268 @@ function publicProperty(symbol: ts.Symbol): boolean {
   );
 }
 
-/** Strip machine-specific checker import paths, preserving a useful module identity. */
-function portable(text: string, sources: ReferenceSource[], root: string): string {
-  return text
-    .replace(/import\(["']([^"']+)["']\)/g, (whole: string, path: string) => {
-      if (!isAbsolute(path)) return whole;
-      const rel = posix(relative(root, path));
-      const entry = sources
-        .flatMap((source) => Object.entries(source.entrypoints))
-        .find(
-          ([, file]) =>
-            file.replace(/\.(?:d\.)?[cm]?ts$/, '') === rel.replace(/\.(?:d\.)?[cm]?ts$/, ''),
+type PortableType = (text: string, location: ts.Node) => string;
+
+/** Resolve declaration identities through real public exports, never through guessed filenames. */
+function publicTypeRenderer(
+  program: ts.Program,
+  sources: ReferenceSource[],
+  root: string,
+): PortableType {
+  const checker = program.getTypeChecker();
+  const printer = ts.createPrinter({ removeComments: true });
+  const fileKey = (path: string): string => posix(path).replace(/(?:\.d)?\.[cm]?(?:ts|js)$/, '');
+  interface Route {
+    specifier: string;
+    name: string;
+    file: string;
+  }
+  const routes = new Map<ts.Symbol, Route[]>();
+  const modules = new Map<string, ts.Symbol>();
+  for (const file of program.getSourceFiles()) {
+    const module = checker.getSymbolAtLocation(file);
+    if (module) modules.set(fileKey(file.fileName), module);
+  }
+  function index(symbol: ts.Symbol, route: Route, ancestors: Set<ts.Symbol>): void {
+    const target = resolvedSymbol(checker, symbol);
+    routes.set(target, [...(routes.get(target) ?? []), route]);
+    if (!(target.flags & ts.SymbolFlags.Module) || ancestors.has(target)) return;
+    const next = new Set(ancestors).add(target);
+    for (const child of checker.getExportsOfModule(target))
+      index(
+        child,
+        { ...route, name: route.name ? `${route.name}.${child.name}` : child.name },
+        next,
+      );
+  }
+  for (const source of sources)
+    for (const [specifier, path] of Object.entries(source.entrypoints)) {
+      const file = resolve(root, path);
+      const module = modules.get(fileKey(file));
+      if (!module) throw new Error(`Unresolved public module: ${specifier}`);
+      modules.set(specifier, module);
+      index(module, { specifier, name: '', file }, new Set());
+    }
+  function routeFor(symbol: ts.Symbol): Route | undefined {
+    const target = resolvedSymbol(checker, symbol);
+    const origin = target.declarations?.[0]?.getSourceFile().fileName;
+    const workspace = origin && /^.*\/packages\/[^/]+\//.exec(posix(origin))?.[0];
+    return routes
+      .get(target)
+      ?.sort(
+        (a, b) =>
+          Number(!!workspace && !posix(a.file).startsWith(workspace)) -
+            Number(!!workspace && !posix(b.file).startsWith(workspace)) ||
+          a.name.split('.').length - b.name.split('.').length ||
+          a.specifier.length - b.specifier.length ||
+          compare(a.specifier, b.specifier) ||
+          compare(a.name, b.name),
+      )[0];
+  }
+  function importNode(route: Route, args?: readonly ts.TypeNode[]): ts.ImportTypeNode {
+    const names = route.name.split('.').filter(Boolean);
+    const qualifier = names.reduce<ts.EntityName | undefined>(
+      (left, name) =>
+        left ? ts.factory.createQualifiedName(left, name) : ts.factory.createIdentifier(name),
+      undefined,
+    );
+    return ts.factory.createImportTypeNode(
+      ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(route.specifier, true)),
+      undefined,
+      qualifier,
+      args,
+      !qualifier,
+    );
+  }
+
+  function importedSymbol(path: string, names: string[], owner: ts.SourceFile): ts.Symbol {
+    let symbol =
+      modules.get(toPublicSpecifier(path)) ??
+      modules.get(
+        fileKey(
+          isAbsolute(path)
+            ? path
+            : resolve(path.startsWith('.') ? dirname(owner.fileName) : root, path),
+        ),
+      );
+    if (!symbol) throw new Error(`Unresolved documentation import: ${path} in ${owner.fileName}`);
+    for (const name of names) {
+      symbol = checker
+        .getExportsOfModule(resolvedSymbol(checker, symbol))
+        .find((candidate) => candidate.name === name);
+      if (!symbol) throw new Error(`Unexported documentation import: ${path}#${names.join('.')}`);
+    }
+    return symbol;
+  }
+
+  const qualifierNames = (name: ts.EntityName | undefined): string[] =>
+    !name
+      ? []
+      : ts.isIdentifier(name)
+        ? [name.text]
+        : [...qualifierNames(name.left), name.right.text];
+
+  /** Non-exported helper types have no honest import. Render their actual declared shape instead. */
+  function inlineType(
+    symbol: ts.Symbol,
+    args: readonly ts.TypeNode[] | undefined,
+    ancestors = new Set<ts.Symbol>(),
+  ): ts.TypeNode {
+    const target = resolvedSymbol(checker, symbol);
+    const route = routeFor(target);
+    if (route) return importNode(route, args);
+    if (ancestors.has(target))
+      throw new Error(`Non-public recursive documentation type: ${target.name}`);
+    const declaration = target.declarations?.find(
+      (node): node is ts.InterfaceDeclaration | ts.TypeAliasDeclaration =>
+        ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node),
+    );
+    if (!declaration)
+      throw new Error(`No public export or structural declaration for type: ${target.name}`);
+    const next = new Set(ancestors).add(target);
+    const parameters = new Map<ts.Symbol, ts.TypeNode>();
+    const transform = (type: ts.TypeNode, seen = next): ts.TypeNode => {
+      const result = ts.transform<ts.TypeNode>(type, [
+        (context) => {
+          const visit: ts.Visitor = (node) => {
+            // Nodes come from different files (including parsed generic arguments). Fresh literal
+            // nodes prevent the printer from slicing their offsets out of the caller's source.
+            if (ts.isStringLiteral(node)) return ts.factory.createStringLiteral(node.text, true);
+            if (ts.isNumericLiteral(node)) return ts.factory.createNumericLiteral(node.text);
+            if (ts.isBigIntLiteral(node)) return ts.factory.createBigIntLiteral(node.text);
+            if (ts.isNoSubstitutionTemplateLiteral(node))
+              return ts.factory.createNoSubstitutionTemplateLiteral(node.text, node.rawText);
+            if (ts.isTemplateHead(node))
+              return ts.factory.createTemplateHead(node.text, node.rawText);
+            if (ts.isTemplateMiddle(node))
+              return ts.factory.createTemplateMiddle(node.text, node.rawText);
+            if (ts.isTemplateTail(node))
+              return ts.factory.createTemplateTail(node.text, node.rawText);
+            if (
+              ts.isImportTypeNode(node) &&
+              ts.isLiteralTypeNode(node.argument) &&
+              ts.isStringLiteral(node.argument.literal)
+            ) {
+              const identity = importedSymbol(
+                node.argument.literal.text,
+                qualifierNames(node.qualifier),
+                node.getSourceFile() ?? declaration.getSourceFile(),
+              );
+              const arguments_ = node.typeArguments?.map(
+                (argument) => ts.visitNode(argument, visit) as ts.TypeNode,
+              );
+              const route = routeFor(identity);
+              if (route) {
+                const imported = importNode(route, arguments_);
+                return ts.factory.updateImportTypeNode(
+                  imported,
+                  imported.argument,
+                  imported.attributes,
+                  imported.qualifier,
+                  imported.typeArguments,
+                  node.isTypeOf,
+                );
+              }
+              return inlineType(identity, arguments_, seen);
+            }
+            if (ts.isTypeReferenceNode(node)) {
+              const identity = checker.getSymbolAtLocation(node.typeName);
+              if (identity) {
+                const replacement = parameters.get(identity);
+                if (replacement) return replacement;
+                const resolved = resolvedSymbol(checker, identity);
+                const arguments_ = node.typeArguments?.map(
+                  (argument) => ts.visitNode(argument, visit) as ts.TypeNode,
+                );
+                if (routeFor(resolved)) return importNode(routeFor(resolved)!, arguments_);
+                if (
+                  resolved.declarations?.some((decl) =>
+                    posix(decl.getSourceFile().fileName).startsWith(
+                      posix(resolve(root, 'packages')) + '/',
+                    ),
+                  ) &&
+                  !(resolved.flags & ts.SymbolFlags.TypeParameter)
+                )
+                  return inlineType(resolved, arguments_, seen);
+              }
+            }
+            return ts.visitEachChild(node, visit, context);
+          };
+          return (node) => ts.visitNode(node, visit) as ts.TypeNode;
+        },
+      ]);
+      const transformed = result.transformed[0]!;
+      result.dispose();
+      return transformed;
+    };
+    for (const [index, parameter] of (declaration.typeParameters ?? []).entries()) {
+      const replacement = args?.[index] ?? parameter.default;
+      const identity = checker.getSymbolAtLocation(parameter.name);
+      if (!replacement || !identity)
+        throw new Error(
+          `Missing documentation type argument: ${target.name}.${parameter.name.text}`,
         );
-      if (entry) return `import('${entry[0]}')`;
-      const dependency = rel.split('/node_modules/').pop();
-      return `import('${rel.includes('/node_modules/') ? dependency : rel}')`;
-    })
-    .replace(/(__@\w+)@\d+/g, '$1')
-    .replace(/[\t ]+$/gm, '');
+      parameters.set(identity, transform(replacement, args?.[index] ? ancestors : next));
+    }
+    let shape = transform(
+      ts.isTypeAliasDeclaration(declaration)
+        ? declaration.type
+        : ts.factory.createTypeLiteralNode(declaration.members),
+    );
+    if (ts.isInterfaceDeclaration(declaration) && declaration.heritageClauses?.length) {
+      const inherited = declaration.heritageClauses.flatMap((clause) =>
+        clause.types.map((type) => {
+          const identity = checker.getSymbolAtLocation(type.expression);
+          if (!identity) throw new Error(`Unresolved documentation base type: ${type.getText()}`);
+          return inlineType(
+            identity,
+            type.typeArguments?.map((argument) => transform(argument)),
+            next,
+          );
+        }),
+      );
+      shape = ts.factory.createIntersectionTypeNode([...inherited, shape]);
+    }
+    return ts.factory.createParenthesizedType(shape);
+  }
+
+  function portable(text: string, location: ts.Node): string {
+    const owner = location.getSourceFile();
+    let cursor = 0;
+    let output = '';
+    for (const match of text.matchAll(/\bimport\((["'])([^"']+)\1\)((?:\.[\w$]+)*)/g)) {
+      if (match.index < cursor) continue;
+      const path = match[2]!;
+      const symbol = importedSymbol(path, match[3]!.split('.').filter(Boolean), owner);
+      const route = routeFor(symbol);
+      output += text.slice(cursor, match.index);
+      if (route) {
+        output += `import('${route.specifier}')${route.name ? `.${route.name}` : ''}`;
+        cursor = match.index + match[0].length;
+      } else {
+        // Parse the entire import type so generic arguments are replaced with its shape too.
+        const fragment = ts.createSourceFile(
+          owner.fileName,
+          `type T = ${text.slice(match.index)};`,
+          ts.ScriptTarget.Latest,
+          true,
+        );
+        let imported: ts.ImportTypeNode | undefined;
+        const find = (node: ts.Node): void => {
+          if (!imported && ts.isImportTypeNode(node)) imported = node;
+          if (!imported) ts.forEachChild(node, find);
+        };
+        find(fragment);
+        if (!imported) throw new Error(`Invalid documentation import type: ${match[0]}`);
+        const shape = inlineType(symbol, imported.typeArguments);
+        output += portable(printer.printNode(ts.EmitHint.Unspecified, shape, owner), location);
+        cursor = match.index + imported.end - imported.getStart(fragment);
+      }
+    }
+    output += text.slice(cursor);
+    return publicDocumentationText(output.replace(/(__@\w+)@\d+/g, '$1').replace(/[\t ]+$/gm, ''));
+  }
+  return portable;
 }
 
 function entryForSymbol(
@@ -253,7 +550,7 @@ function entryForSymbol(
   exported: ts.Symbol,
   source: ReferenceSource,
   entrypoint: string,
-  sources: ReferenceSource[],
+  portable: PortableType,
   root: string,
   publicTypes: Set<ts.Symbol>,
 ): ReferenceEntry {
@@ -268,9 +565,9 @@ function entryForSymbol(
     ? checker.getDeclaredTypeOfSymbol(symbol)
     : checker.getTypeOfSymbolAtLocation(symbol, declaration);
   const renderType = (type: ts.Type, at: ts.Node = declaration): string =>
-    portable(checker.typeToString(type, at, TYPE_FLAGS), sources, root);
+    portable(checker.typeToString(type, at, TYPE_FLAGS), at);
   const renderCall = (signature: ts.Signature): string =>
-    portable(checker.signatureToString(signature, declaration, TYPE_FLAGS), sources, root);
+    portable(checker.signatureToString(signature, declaration, TYPE_FLAGS), declaration);
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed, removeComments: false });
   let kind = 'value';
   let signature: string;
@@ -479,14 +776,18 @@ function entryForSymbol(
     entrypoint,
     name,
     kind,
-    signature: portable(signature, sources, root),
-    description: docs.description,
-    examples: docs.tags.filter((tag) => tag.name === 'example').map((tag) => tag.text),
-    tags: docs.tags,
-    members: members.sort((a, b) => compare(a.name, b.name)),
+    signature: portable(signature, declaration),
+    description: publicDocumentationText(docs.description),
+    examples: docs.tags
+      .filter((tag) => tag.name === 'example')
+      .map((tag) => publicDocumentationText(tag.text)),
+    tags: docs.tags.map((tag) => ({ ...tag, text: publicDocumentationText(tag.text) })),
+    members: members
+      .map((member) => ({ ...member, description: publicDocumentationText(member.description) }))
+      .sort((a, b) => compare(a.name, b.name)),
     stability:
       docs.tags.find((tag) => ['experimental', 'beta', 'alpha'].includes(tag.name))?.name ??
-      source.package.stability,
+      entrypointStability(entrypoint, source.package.stability),
   };
 }
 
@@ -528,6 +829,7 @@ export function buildReferenceEntries(
 ): ReferenceEntry[] {
   const checker = program.getTypeChecker();
   const entries: ReferenceEntry[] = [];
+  const portable = publicTypeRenderer(program, sources, root);
   const publicTypes = new Set<ts.Symbol>();
   for (const source of sources)
     for (const path of Object.values(source.entrypoints)) {
@@ -544,7 +846,7 @@ export function buildReferenceEntries(
       if (!module) throw new Error(`Unresolved public entrypoint: ${entrypoint}`);
       for (const symbol of checker.getExportsOfModule(module)) {
         entries.push(
-          entryForSymbol(checker, symbol, source, entrypoint, sources, root, publicTypes),
+          entryForSymbol(checker, symbol, source, entrypoint, portable, root, publicTypes),
         );
       }
     }

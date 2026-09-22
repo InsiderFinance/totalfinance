@@ -1,6 +1,6 @@
 # The local registry the release rehearsal publishes into (Stage 5A, Decision 9). Run from
 # the repository root: `pnpm dlx verdaccio@6 --config tools/release/verdaccio.yaml --listen 4873`.
-# The @totalfinance scope is served ONLY from what the rehearsal publishes (no uplink), so a package the
+# The @insiderfinance scope is served ONLY from what the rehearsal publishes (no uplink), so a package the
 # dry-run forgot cannot be silently filled in from npmjs.org; everything else proxies to npmjs so the
 # smoke's install resolves third-party dependencies.
 storage: ../../release/verdaccio-storage
@@ -12,6 +12,10 @@ uplinks:
   npmjs:
     url: https://registry.npmjs.org/
 packages:
+  '@insiderfinance/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
   '@totalfinance/*':
     access: $all
     publish: $authenticated

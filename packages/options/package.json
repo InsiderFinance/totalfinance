@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/options",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance options: contracts, pricing engines, Greeks, and implied volatility. Browser-safe, zero runtime dependencies.",
   "license": "Apache-2.0",
   "keywords": [
@@ -170,11 +170,8 @@
     "@totalfinance/core": "workspace:*",
     "@totalfinance/math": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "private": true
 }

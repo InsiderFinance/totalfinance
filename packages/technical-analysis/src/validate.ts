@@ -4,7 +4,7 @@
  * These run at the public boundary (the `makeIndicator` factory and the batch chart/price-action
  * functions), so a bad `period`, brick size, or threshold throws a typed `InputError` instead of
  * quietly returning an all-warmup `NaN` series or, worse, spinning a `while` loop forever. Restore
- * (`fromJSON`) is a trusted internal path and is not re-validated. Built on `@totalfinance/core`'s
+ * (`fromJSON`) is a trusted internal path and is not re-validated. Built on `@insiderfinance/totalfinance/core`'s
  * hot-path invariants so the deep entrypoints stay within bundle budget.
  */
 
@@ -161,7 +161,7 @@ export function requirePositive(
 
 /**
  * A volatility estimator's `annualization` is REQUIRED: TotalFinance never assumes the bar frequency, and
- * a per-bar σ silently fed to an annualized consumer (`@totalfinance/volatility`'s spread, premium and
+ * a per-bar σ silently fed to an annualized consumer (`@insiderfinance/totalfinance/volatility`'s spread, premium and
  * rank tools) is wrong by √252 on daily bars. `252` annualizes daily bars, `52` weekly, `12` monthly,
  * `1` reports the per-bar σ.
  */

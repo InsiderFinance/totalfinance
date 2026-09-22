@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/http` — the local HTTP transport over the TotalFinance operation registry (Stage 7A):
+ * `@insiderfinance/totalfinance/http` — the local HTTP transport over the TotalFinance operation registry (Stage 7A):
  * the OpenAPI 3.1 document generated from the registry, and the loopback read-only server behind
  * the `totalfinance-http` binary. It owns no schema and no compute.
  */

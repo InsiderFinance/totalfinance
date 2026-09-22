@@ -7,8 +7,8 @@
  * `docs/bundle-size.md` opens by calling bundle size "a public contract". It was not being treated as
  * one. Against the budgets CI actually enforced, the page published:
  *
- *   @totalfinance/math                    "< 14 KB"  enforced 33 KB   — a consumer would budget 2.4x low
- *   @totalfinance/options/black-scholes   "< 8 KB"   enforced 8.5 KB
+ *   @insiderfinance/totalfinance/math                    "< 14 KB"  enforced 33 KB   — a consumer would budget 2.4x low
+ *   @insiderfinance/totalfinance/options/black-scholes   "< 8 KB"   enforced 8.5 KB
  *   six entrypoints                   absent     including the umbrella, the largest number here
  *
  * and its measured column was staler still — `performance/sharpe` published at 0.9 KB measures
@@ -60,7 +60,11 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
     expect(page).toContain('## Whole-entrypoint ceilings');
     expect(page).toContain('not** the cost of importing one function');
     expect(page).toContain('https://github.com/evanw/esbuild/issues/1420');
-    expect(page).toContain("import { normalCdf } from 'totalfinance/math'");
+    expect(page).toContain("import { normalCdf } from '@insiderfinance/totalfinance/math'");
+    expect(page).toContain('exactly the two built distribution artifacts');
+    expect(page).toContain('@insiderfinance/totalfinance-mcp');
+    expect(page).toContain('main artifact has no runtime dependencies');
+    expect(page).not.toMatch(/`(?:@totalfinance\/|totalfinance(?:\/|`))/);
   });
 
   it('publishes both bundler budgets from the installed-consumer fixture record', () => {
@@ -88,15 +92,15 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
     expect([...rows.keys()].sort()).toEqual(declared);
     // 13 → 14 (FC3) → 15 (FC5) → 16 (FC6) → 17 (Gate B) → 18 (Gate C, 2026-08-20) → 19 (FC7,
     // 2026-09-01):
-    // @totalfinance/scenarios joins the 19 previously budgeted entrypoints → 21 (Stage 4.5 slice 3,
-    // 2026-09-02): @totalfinance/volatility/artifacts. → 22 (Stage 4.5 slice 4, 2026-09-03):
-    // @totalfinance/fixed-income/artifacts. → 23 (Stage 4.5 slice 5, 2026-09-03):
-    // @totalfinance/research/artifacts. → 24 (Stage 7A slice 1, 2026-09-03): @totalfinance/workflows. → 25
-    // (Stage 4.6 slice 3, 2026-09-04): @totalfinance/backtest/artifacts. → 26 (Stage 4.6 slice 5, 2026-09-04):
-    // @totalfinance/backtest/portfolio. → 27 (Stage 7B.1 slice 1, 2026-09-05):
-    // @totalfinance/backtest/environment. → 28 (Stage 7B.2 slice 1, 2026-09-05): @totalfinance/portfolio/trade.
-    // 28 → 29 (Stage 7B.2 slice 3, 2026-09-06): the @totalfinance/backtest/paper entrypoint joins the table.
-    // 29 → 30 (PR #336, 2026-09-07): @totalfinance/performance/sector-performance is independently budgeted.
+    // @insiderfinance/totalfinance/scenarios joins the 19 previously budgeted entrypoints → 21 (Stage 4.5 slice 3,
+    // 2026-09-02): @insiderfinance/totalfinance/volatility/artifacts. → 22 (Stage 4.5 slice 4, 2026-09-03):
+    // @insiderfinance/totalfinance/fixed-income/artifacts. → 23 (Stage 4.5 slice 5, 2026-09-03):
+    // @insiderfinance/totalfinance/research/artifacts. → 24 (Stage 7A slice 1, 2026-09-03): @insiderfinance/totalfinance/workflows. → 25
+    // (Stage 4.6 slice 3, 2026-09-04): @insiderfinance/totalfinance/backtest/artifacts. → 26 (Stage 4.6 slice 5, 2026-09-04):
+    // @insiderfinance/totalfinance/backtest/portfolio. → 27 (Stage 7B.1 slice 1, 2026-09-05):
+    // @insiderfinance/totalfinance/backtest/environment. → 28 (Stage 7B.2 slice 1, 2026-09-05): @insiderfinance/totalfinance/portfolio/trade.
+    // 28 → 29 (Stage 7B.2 slice 3, 2026-09-06): the @insiderfinance/totalfinance/backtest/paper entrypoint joins the table.
+    // 29 → 30 (PR #336, 2026-09-07): @insiderfinance/totalfinance/performance/sector-performance is independently budgeted.
 
     expect(declared.length).toBe(30);
   });
@@ -114,7 +118,7 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
     expect(
       wrong,
       `the page quotes a budget CI does not hold — this is the defect that published ` +
-        `\`@totalfinance/math\` at "< 14 KB" against a 33 KB budget:\n${wrong.join('\n')}`,
+        `\`@insiderfinance/totalfinance/math\` at "< 14 KB" against a 33 KB budget:\n${wrong.join('\n')}`,
     ).toEqual([]);
   });
 

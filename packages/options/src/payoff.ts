@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/options/payoff` — expiration payoff primitives.
+ * `@insiderfinance/totalfinance/options/payoff` — expiration payoff primitives.
  *
  * One deliberately small module (platform roadmap, "One small primitive gap is worth closing"): the
  * standalone vanilla intrinsic value. Its semantics are closed and not overloaded —
@@ -8,7 +8,7 @@
  * - it accepts no premium, quantity, multiplier, probability, volatility, or time — an unknown key
  *   teaches (Law 12) instead of being silently ignored;
  * - single-contract and multi-leg P&L stay where they live today: `Position.pnlAtExpiry` and
- *   `Position.payoff` in `@totalfinance/strategy`.
+ *   `Position.payoff` in `@insiderfinance/totalfinance/strategy`.
  */
 
 import {
@@ -47,7 +47,7 @@ const VANILLA_INTRINSIC_HINTS: Record<string, string> = {
  *
  * @example
  * ```ts
- * import { vanillaIntrinsic } from '@totalfinance/options/payoff';
+ * import { vanillaIntrinsic } from '@insiderfinance/totalfinance/options/payoff';
  *
  * vanillaIntrinsic({ type: 'call', underlyingPrice: 112, strike: 100 }); // 12
  * vanillaIntrinsic({ type: 'put', underlyingPrice: 88, strike: 100 }); // 12

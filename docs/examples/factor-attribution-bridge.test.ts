@@ -1,6 +1,6 @@
 /**
  * FC3 — the research ⇄ risk composition, proven structurally. The dependency graph deliberately
- * gives `@totalfinance/research` no edge to `@totalfinance/risk` (workflows compose the two), so the
+ * gives `@insiderfinance/totalfinance/research` no edge to `@insiderfinance/totalfinance/risk` (workflows compose the two), so the
  * bridge is a SHAPE contract: the factor spread returns research produces feed
  * `risk.factorAttribution`'s `FactorSeries` directly, with no adapter in between. This example is
  * that proof — if either side drifts, this file stops compiling or the reconstruction stops
@@ -8,9 +8,9 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { factorSpreadReturn } from '@totalfinance/research';
-import type { FactorEntry } from '@totalfinance/research';
-import { factorAttribution } from '@totalfinance/risk';
+import { factorSpreadReturn } from '@insiderfinance/totalfinance/research';
+import type { FactorEntry } from '@insiderfinance/totalfinance/research';
+import { factorAttribution } from '@insiderfinance/totalfinance/risk';
 
 const INSTRUMENTS = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF'] as const;
 

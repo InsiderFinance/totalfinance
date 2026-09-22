@@ -6,7 +6,7 @@ analytics beacon, or account sign-in is required. Publishing decisions still bel
 
 ## Build and preview
 
-From the `totalfinance` directory (Node ≥22.13, pinned pnpm):
+From the `@insiderfinance/totalfinance` directory (Node ≥22.13, pinned pnpm):
 
 ```sh
 pnpm install --frozen-lockfile
@@ -70,12 +70,15 @@ separate from packed proof; never exclude a new copy surface from the installed-
 authorized public npm release passes the registry smoke, import its retained receipt:
 
 ```sh
-pnpm site:record-release /absolute/path/to/smoke-receipt.json preview
+pnpm site:record-release /absolute/path/to/smoke-receipt.json stable
 pnpm site:build
 pnpm site:test
 ```
 
-Use `stable` only after the separate stable-cutover approval. The importer refuses a local tarball
+For `0.1.0`, `stable` denotes a version without a prerelease suffix in the evidence ledger,
+not a 1.0 API-stability guarantee; the public label remains **Pre-1.0 release**. Use `preview` for
+versions with a prerelease suffix. Import only after maintainer-authorized publication of both
+`@insiderfinance/totalfinance` and `@insiderfinance/totalfinance-mcp`. The importer refuses a local tarball
 rehearsal, dirty source, mismatched expectations, wrong version, or changed copied examples. The site
 also checks package-source equality with the receipt commit. Changed source stays labeled development
 even if someone forgot to bump the package version. This command does not publish or deploy anything.

@@ -1,7 +1,7 @@
 /**
  * Convertible bonds (spec §14.1, previously "later"). A convertible couples three risk factors —
  * equity, rates, and credit — so it is priced by backward induction on an **equity binomial lattice**
- * (`@totalfinance/options`) with a **reduced-form hazard** credit model: at each node the bond may default
+ * (`@insiderfinance/totalfinance/options`) with a **reduced-form hazard** credit model: at each node the bond may default
  * over the step (probability `1 − e^{−λ·dt}`, recovering `R·face`), and the holder optimally converts,
  * the issuer optimally calls, and the holder optionally puts.
  *

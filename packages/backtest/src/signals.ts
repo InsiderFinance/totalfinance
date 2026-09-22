@@ -23,8 +23,8 @@
  * @example An SMA-crossover **regime** position fed warmup-safely into the vectorized engine — long for
  * every bar the fast average is above the slow one:
  * ```ts
- * import { sma } from '@totalfinance/technical-analysis';
- * import { vectorized, gtSeries } from '@totalfinance/backtest';
+ * import { sma } from '@insiderfinance/totalfinance/technical-analysis';
+ * import { vectorized, gtSeries } from '@insiderfinance/totalfinance/backtest';
  *
  * const closes = candles.map((b) => b.close);
  * const fast = sma.explain(closes, { period: 10 }); // Computed: { value, assumptions, diagnostics }
@@ -49,7 +49,7 @@ import { ErrorCode, InputError, requireArgumentArray } from '@totalfinance/core'
  * leading bars that may be non-finite by design (an indicator's warmup); {@link vectorized} treats
  * a non-finite value at index `i < warmup` as a flat (position 0) bar instead of an error.
  *
- * Defined structurally in this package so `@totalfinance/backtest` need not depend on `@totalfinance/technical-analysis`.
+ * Defined structurally in this package so `@insiderfinance/totalfinance/backtest` need not depend on `@insiderfinance/totalfinance/technical-analysis`.
  */
 export interface SeriesSignal {
   /** Per-bar signal values, aligned to the price bars. */

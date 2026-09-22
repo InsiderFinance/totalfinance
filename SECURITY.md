@@ -1,19 +1,24 @@
 # Security policy
 
-TotalFinance computes from the data you pass in. It opens no network connection, reads no credential, and
-holds no provider key; the local HTTP and MCP servers bind to loopback unless you say otherwise, and
-every operation is read-only by construction (the registry refuses any operation that declares a side
-effect). A vulnerability is therefore almost always one of: a refusal that does not happen (an input a
+TotalFinance computes from the data you pass in. Compute entry points open no network connection and
+hold no provider key. The optional HTTP server binds to loopback by default; MCP uses stdio.
+Transports are read-only by default. Paper-execution and other write operations require explicit
+capabilities, stores and authorization; no live brokerage integration is supplied.
+A vulnerability may include a refusal that does not happen (an input a
 door should reject but does not), a resource bound that can be exceeded (input bytes, result bytes,
 JSON depth, a job that does not stop when cancelled), or a path a file-backed store follows that it
 should not. Those are exactly the reports we want.
 
 ## Supported versions
 
-| Version                                   | Supported                                               |
-| ----------------------------------------- | ------------------------------------------------------- |
-| the latest `0.1.0-preview.N` on `preview` | yes — fixes ship as the next preview of the whole group |
-| any earlier preview                       | no — upgrade; the group moves together                  |
+| Version                                  | Supported                                                            |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| `0.1.0`, once published                  | yes — fixes ship in a coordinated release of the two public packages |
+| earlier development or preview artifacts | no — use the current supported release                               |
+
+This policy covers `@insiderfinance/totalfinance` and `@insiderfinance/totalfinance-mcp`.
+Version 0.1.0 remains pre-1.0 software, with preview workflow and transport components.
+The version in a source checkout does not establish that a public npm release exists.
 
 ## Reporting a vulnerability
 
@@ -29,14 +34,14 @@ best report.
 - **Assessment within 10 business days**: confirmed, not a vulnerability (with the reasoning), or
   a request for more detail.
 - **A fix or a documented mitigation within 30 days** of confirmation for anything rated high or
-  critical, shipped as a new preview of the whole fixed group with a changeset entry that credits
+  critical, shipped as a new release of the public pair with a changeset entry that credits
   the reporter (unless they prefer otherwise), plus a GitHub security advisory.
 - **Coordinated disclosure**: we ask for 90 days from the report before public disclosure, or the
   release date of the fix, whichever comes first.
 
 ## Scope notes
 
-- The published packages carry `provenance` attestations; verify a tarball against
+- Authorized releases must carry `provenance` attestations; verify a tarball against
   `RELEASE_HASHES.json` on the release before trusting it.
 - The `totalfinance` CLI's default store lives under `~/.totalfinance/store`; a report that a store can be
   made to read or write outside its directory is in scope.

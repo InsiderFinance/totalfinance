@@ -1,7 +1,7 @@
 /**
  * Shared helpers for operation bodies: the row cap every series operation applies before compute,
  * and the composed object schema that lets an operation add knobs to a library input schema
- * without re-declaring it (moved from `@totalfinance/mcp` in Stage 7A — one home).
+ * without re-declaring it (moved from `@insiderfinance/totalfinance-mcp` in Stage 7A — one home).
  */
 
 import { InputError, ErrorCode } from '@totalfinance/core';
@@ -213,7 +213,7 @@ function requireSchema(functionName: string, field: string, value: unknown): voi
     typeof candidate.toJSONSchema !== 'function'
   ) {
     throw new InputError(
-      `${functionName}: ${field} must be a @totalfinance/core/schema Schema (safeParse + toJSONSchema). Received ${value === null ? 'null' : typeof value}.`,
+      `${functionName}: ${field} must be a @insiderfinance/totalfinance/core/schema Schema (safeParse + toJSONSchema). Received ${value === null ? 'null' : typeof value}.`,
       {
         code: value === undefined ? 'input.missing_field' : 'input.wrong_type',
         context: { function: functionName, field },

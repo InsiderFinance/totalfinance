@@ -100,7 +100,7 @@ export interface ProbabilityMonteCarloInput extends Omit<ProbabilityInput, 'vola
   volatility?: number;
   /**
    * Optional Dupire local-volatility function `σ_loc(level, t)` (e.g. from
-   * `@totalfinance/volatility`'s `surfaceLocalVolatility` or `@totalfinance/options`'s `dupireLocalVolatility`). When provided, the
+   * `@insiderfinance/totalfinance/volatility`'s `surfaceLocalVolatility` or `@insiderfinance/totalfinance/options`'s `dupireLocalVolatility`). When provided, the
    * simulation steps under local vol instead of a single lognormal σ, so probability-of-profit,
    * expected P&L, and probability-of-touch all reflect the volatility smile/skew — the smile-aware
    * multi-leg read. The function is evaluated at the price and time reached at each step.

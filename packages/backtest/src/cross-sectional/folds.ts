@@ -7,7 +7,7 @@
  * then run once on the held-out window, and only the held-out numbers are reported as the
  * strategy's. Both verbs compose `crossSectionalBacktestGrid` and `crossSectionalBacktest`
  * verbatim — a window is the engine's own `window`, cut at the dataset's session instants — and
- * `crossSectionalPurgedFolds` takes its folds from `@totalfinance/risk`'s `purgedKFold`, purge gap and
+ * `crossSectionalPurgedFolds` takes its folds from `@insiderfinance/totalfinance/risk`'s `purgedKFold`, purge gap and
  * embargo included, so a train segment never touches the sessions whose returns it would be
  * judged on.
  */
@@ -66,7 +66,7 @@ export interface OutOfSampleWindowRow {
   /** The held-out run of the chosen variation; `null` when nothing could be chosen. */
   testMetric: number | null;
   testMetrics: GridSummaryMetrics | null;
-  /** The chosen variation's held-out run id — replayable through `@totalfinance/backtest/artifacts`. */
+  /** The chosen variation's held-out run id — replayable through `@insiderfinance/totalfinance/backtest/artifacts`. */
   testRunId: string | null;
   /** The training sweep ids, one per contiguous training segment. */
   trainSweepIds: string[];

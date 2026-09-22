@@ -4,7 +4,7 @@
  * `futuresBasis` reads the carry off one dated future; `carryCurve` builds the whole term structure from a
  * spot + a set of futures: each expiry's implied carry (composing `futuresBasis` verbatim), the **forward
  * carry** the market prices between consecutive expiries, the curve **shape**, and the carry at any
- * interpolated tenor (log-linear in `ln F`, flat-forward beyond the ends). Deterministic; `@totalfinance/core`-only.
+ * interpolated tenor (log-linear in `ln F`, flat-forward beyond the ends). Deterministic; `@insiderfinance/totalfinance/core`-only.
  */
 
 import {

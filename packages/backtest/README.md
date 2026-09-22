@@ -1,21 +1,21 @@
-# @totalfinance/backtest
+# @insiderfinance/totalfinance/backtest
 
 > TotalFinance backtesting: a vectorized research engine and an event-driven execution simulator (broker, order types, margin/shorting, costs, corporate actions), walk-forward, tear sheets, and implementation-risk diagnostics. Browser-safe.
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/backtest
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { crossSectionalBacktest } from '@totalfinance/backtest';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
 const sessions = ['2026-01-02', '2026-01-09', '2026-01-16', '2026-01-23', '2026-02-06'];
 const close = (date: string) => Date.parse(`${date}T21:00:00Z`);
 const run = crossSectionalBacktest({
@@ -79,15 +79,15 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
 ## API
 
-`@totalfinance/backtest` exposes **35** runtime exports (**132** including types) across 12 entrypoints (`.`, `./artifacts`, `./costs`, `./cross-sectional`, `./environment`, `./event-driven`, `./execution`, `./options`, `./paper`, `./portfolio`, `./tearsheet`, `./vectorized`). See the generated [`etc/backtest.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/backtest/etc/backtest.api.md) for the full surface.
+`@insiderfinance/totalfinance/backtest` exposes **35** runtime exports (**132** including types) across 12 entrypoints (`.`, `./artifacts`, `./costs`, `./cross-sectional`, `./environment`, `./event-driven`, `./execution`, `./options`, `./paper`, `./portfolio`, `./tearsheet`, `./vectorized`). See the generated [`etc/backtest.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/backtest/etc/backtest.api.md) for the full surface.
 
 ## License
 

@@ -5,8 +5,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { scanStrategies, strategy } from '@totalfinance/strategy';
-import type { ScanQuoteRow } from '@totalfinance/strategy';
+import { scanStrategies, strategy } from '@insiderfinance/totalfinance/strategy';
+import type { ScanQuoteRow } from '@insiderfinance/totalfinance/strategy';
 
 const asOf = Date.UTC(2026, 0, 1);
 const expiry = '2026-04-02';

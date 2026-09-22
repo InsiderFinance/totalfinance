@@ -200,7 +200,7 @@ export const ErrorCode = {
   BacktestBookTooLarge: 'backtest.book_too_large',
   /** Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted. */
   BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action',
-  /** Stage 7A — the protocol-neutral operation runtime and registry (`@totalfinance/workflows`). */
+  /** Stage 7A — the protocol-neutral operation runtime and registry (`@insiderfinance/totalfinance/workflows`). */
   OperationUnknown: 'operation.unknown',
   OperationRegistrationRefused: 'operation.registration_refused',
   OperationInputTooLarge: 'operation.input_too_large',
@@ -273,7 +273,7 @@ export const ErrorCode = {
   ModelFellerConditionViolated: 'model.feller_condition_violated',
 
   // ── Gate C structural extension contracts (docs/specs/gate-c-extension-contracts.md) ────────
-  // The Pricer/requirements protocol in `@totalfinance/core/pricing` emits these; they are registered
+  // The Pricer/requirements protocol in `@insiderfinance/totalfinance/core/pricing` emits these; they are registered
   // here because core owns the registry (F15) and because the conformance kit BRANCHES on
   // `pricer.requirement_unsatisfied` — a third-party pricer must throw exactly this code for a
   // missing required observation, so the code is load-bearing public API from its first commit.
@@ -286,7 +286,7 @@ export const ErrorCode = {
   /** A pricer failed the behavioral conformance kit (`validatePricer`) against its own fixtures. */
   PricerNonconformant: 'pricer.nonconformant',
 
-  // ── Stage 4.4b shared cross-domain scenario runner (`@totalfinance/scenarios`) ────────────────
+  // ── Stage 4.4b shared cross-domain scenario runner (`@insiderfinance/totalfinance/scenarios`) ────────────────
   /** A scenario override or shock matched no used observation, Taylor factor, FX quote, or handler. */
   ScenarioInstructionUnmatched: 'scenario.instruction_unmatched',
   /** A target's bound pricer returned false from its one preflight `supports` call. */
@@ -294,7 +294,7 @@ export const ErrorCode = {
   /** One base/scenario valuation failed after the complete request and execution plan passed. */
   ScenarioCellFailed: 'scenario.cell_failed',
 
-  // ── Gate B artifact spine (`@totalfinance/core/artifacts`) ──────────────────────────────────────
+  // ── Gate B artifact spine (`@insiderfinance/totalfinance/core/artifacts`) ──────────────────────────────────────
   /** A value has no canonical JSON form (Date/Map/Set/typed array/class instance/bigint/function
    * — or the reserved `{ nonFinite }` wrapper supplied as literal data). The canonical serializer
    * refuses rather than guessing a meaning into every content hash. */
@@ -331,7 +331,7 @@ export const ErrorCode = {
    * closed-form fit has no search to start and a statistic has nothing to evaluate (Stage 4.5). */
   ArtifactOperationUnsupported: 'artifact.operation_unsupported',
 
-  // ── FC7 durable portfolio ledger (`@totalfinance/portfolio`) ────────────────────────────────────
+  // ── FC7 durable portfolio ledger (`@insiderfinance/totalfinance/portfolio`) ────────────────────────────────────
   /** A `(sourceId, eventId)` pair was replayed with a DIFFERENT event body. The duplicate boundary
    * makes replay idempotent for identical deliveries; a changed payload under the same identity is
    * a conflict that must be heard, never a silent overwrite or a silent no-op. */

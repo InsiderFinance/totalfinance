@@ -44,6 +44,7 @@ export default tseslint.config(
       'docs/api/**',
       'docs/**/*.md',
       'coverage/**',
+      'distribution/**',
     ],
   },
   js.configs.recommended,

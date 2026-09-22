@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { executeSnippet, extractTsBlocks, readmeAliasMap } from '../../tools/readme-exec.js';
+import { executeSnippet, extractTsBlocks } from '../../tools/readme-exec.js';
+import { fileURLToPath } from 'node:url';
+import { publicSourcePaths } from '../../tools/public-packages.js';
 
 const guideUrl = new URL('./imports-and-bundles.md', import.meta.url);
 const guide = readFileSync(guideUrl, 'utf8');
@@ -10,7 +12,7 @@ describe('public imports and bundles guidance', () => {
   it('distinguishes import forms, runtime services, and the three different size questions', () => {
     const text = normalized(guide);
     for (const advice of [
-      'named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`',
+      'named imports from `@insiderfinance/totalfinance/<domain>`',
       'Installation size',
       'Final bundle size',
       'Plain Node ESM loading',
@@ -37,20 +39,20 @@ describe('public imports and bundles guidance', () => {
   });
 
   it('uses only supported public entrypoints in its executable examples', () => {
-    const aliases = readmeAliasMap();
+    const aliases = publicSourcePaths(fileURLToPath(new URL('../../', import.meta.url)));
     const blocks = extractTsBlocks(guide);
-    expect(blocks).toHaveLength(5);
+    expect(blocks).toHaveLength(4);
     for (const block of blocks) {
       const specifier = /from '([^']+)'/.exec(block)![1]!;
       expect(aliases, specifier).toHaveProperty(specifier);
       expect(specifier).not.toContain('/dist/');
     }
     for (const specifier of [
-      '@totalfinance/technical-analysis/rsi',
-      '@totalfinance/options/black-scholes',
+      '@insiderfinance/totalfinance/technical-analysis/rsi',
+      '@insiderfinance/totalfinance/options/black-scholes',
     ])
       expect(aliases).toHaveProperty(specifier);
-    expect(aliases).not.toHaveProperty('totalfinance/math/normal');
+    expect(aliases).toHaveProperty('@insiderfinance/totalfinance/math/normal');
   });
 
   for (const [index, block] of extractTsBlocks(guide).entries()) {
@@ -69,12 +71,12 @@ describe('public imports and bundles guidance', () => {
       const text = normalized(markdown);
       const intro = extractTsBlocks(markdown)[0]!;
       for (const statement of [
-        "import { blackScholes } from 'totalfinance/options';",
-        "import { valueAtRisk } from 'totalfinance/risk';",
-        "import { rsi } from 'totalfinance/technical-analysis';",
+        "import { blackScholes } from '@insiderfinance/totalfinance/options';",
+        "import { valueAtRisk } from '@insiderfinance/totalfinance/risk';",
+        "import { rsi } from '@insiderfinance/totalfinance/technical-analysis';",
       ])
         expect(intro).toContain(statement);
-      expect(intro).not.toContain("from 'totalfinance';");
+      expect(intro).not.toContain("from '@insiderfinance/totalfinance';");
       expect(text).not.toContain('options API is re-exported flat');
       expect(text).not.toContain('leanest possible bundle, install only');
       for (const name of ['blackScholes', 'option', 'market', 'engines', 'impliedVolatility'])

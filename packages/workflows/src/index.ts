@@ -1,11 +1,11 @@
 /**
- * `@totalfinance/workflows` — the protocol-neutral operation registry (Stage 7A,
+ * `@insiderfinance/totalfinance/workflows` — the protocol-neutral operation registry (Stage 7A,
  * `docs/specs/local-operations-and-transports.md`). One operation definition drives the SDK-facing
  * runtime, the CLI, the OpenAPI document, and the MCP tools; no transport owns a second schema,
  * budget, seed rule, or effect classification. Read-only, provider-free, browser-safe.
  *
  * ```ts
- * import { createOperationRegistry, defaultPacks } from '@totalfinance/workflows';
+ * import { createOperationRegistry, defaultPacks } from '@insiderfinance/totalfinance/workflows';
  * const registry = createOperationRegistry({ packs: defaultPacks() });
  * const result = registry.run('totalfinance.option.price', { type: 'call', spot: 100, strike: 105, timeToExpiryYears: 0.25, riskFreeRate: 0.04, volatility: 0.2 });
  * ```

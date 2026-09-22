@@ -189,7 +189,7 @@ export interface BacktestResult {
   finalValue: number;
   /** Sum of |traded notional| ÷ average equity — a turnover proxy. */
   turnover: number;
-  /** Performance metrics of the equity curve (`@totalfinance/performance`). */
+  /** Performance metrics of the equity curve (`@insiderfinance/totalfinance/performance`). */
   performance: PerformanceSummary;
   /** The modelling assumptions this run made — capital, fills, costs, calendar, margin (dx §2.5). */
   assumptions: BacktestAssumptions;

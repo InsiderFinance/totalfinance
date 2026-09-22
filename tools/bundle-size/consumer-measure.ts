@@ -41,7 +41,7 @@ export async function measureConsumer(
     fixture.source +
       (verifyErrorTypes
         ? `
-import { InputError, QuantError } from '@totalfinance/core';
+import { InputError, QuantError } from '@insiderfinance/totalfinance/core';
 globalThis.consumerErrorType = (error) => error instanceof InputError && error instanceof QuantError;
 `
         : ''),
@@ -56,8 +56,13 @@ globalThis.consumerErrorType = (error) => error instanceof InputError && error i
     const id = relative(modules, absolute).split(sep).join('/');
     assert.match(
       id,
-      /^(?:@totalfinance\/[^/]+|totalfinance)\/dist\/.+\.js$/,
+      /^@insiderfinance\/totalfinance\/modules\/[^/]+\/dist\/.+\.js$/,
       `Not an installed TotalFinance dist module: ${id}`,
+    );
+    assert.doesNotMatch(
+      id,
+      /\/modules\/(?:(?:cli|http|mcp)\/|workflows\/dist\/local\/)/,
+      `Node-only module reached a browser consumer: ${id}`,
     );
     return id;
   };

@@ -11,7 +11,7 @@
  *
  * with total variance w(k, T) = σ_imp(K, T)²·T and log-moneyness k = ln(K / F_T), F_T = S₀·e^{(r−q)T}.
  *
- * `@totalfinance/options` never depends on `@totalfinance/volatility`, so the surface enters as a plain function
+ * `@insiderfinance/totalfinance/options` never depends on `@insiderfinance/totalfinance/volatility`, so the surface enters as a plain function
  * `(strike, t) ⇒ impliedVolatility` — pass a parametric fit, an interpolated grid, or a closed-form smile.
  *
  * A *flat* implied surface yields σ_loc ≡ σ, so local-volatility MC collapses to Black–Scholes — the anchor.

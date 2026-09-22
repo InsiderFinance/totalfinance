@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/options/black76` — the Black-76 model for options on forwards/futures (spec §9.3).
+ * `@insiderfinance/totalfinance/options/black76` — the Black-76 model for options on forwards/futures (spec §9.3).
  *
  * Black-76 prices an option on a forward price `F` with discounting at rate `r`. Greeks are taken
  * with respect to the forward. Like the BSM facade, each function returns a plain value and throws on

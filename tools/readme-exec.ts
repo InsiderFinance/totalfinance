@@ -13,6 +13,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { publicSourcePaths } from './public-packages.js';
 
 const ROOT = new URL('../', import.meta.url);
 
@@ -32,7 +33,12 @@ export function extractTsBlocks(markdown: string): string[] {
  */
 export function readmeAliasMap(): Record<string, string> {
   const dir = fileURLToPath(new URL('packages', ROOT));
-  const alias: Record<string, string> = {};
+  const alias: Record<string, string> = Object.fromEntries(
+    Object.entries(publicSourcePaths(fileURLToPath(ROOT))).map(([name, paths]) => [
+      name,
+      fileURLToPath(new URL(paths[0]!, ROOT)),
+    ]),
+  );
   for (const pkg of readdirSync(dir).sort()) {
     let manifest: { name?: string; exports?: Record<string, unknown> };
     try {

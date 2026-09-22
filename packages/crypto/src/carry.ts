@@ -12,7 +12,7 @@
  * The perp's annualized funding, the future's annualized basis, AND the options market's put-call-parity
  * forward are the SAME number in equilibrium — all equal the carry `r − q` — so their spreads, and the gap
  * to actual financing, are tradeable signals. All outputs are exact identities over the inputs;
- * browser-safe; depends only on `@totalfinance/core`.
+ * browser-safe; depends only on `@insiderfinance/totalfinance/core`.
  */
 
 import {

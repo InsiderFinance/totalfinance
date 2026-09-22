@@ -32,9 +32,9 @@ the same gates the maintainers use. This page is that process in one screen; the
 api:update → readme → llms → bundle:update → openapi:update → docs:update`. Check
   `summary.defective` is `0` after `enforcement:update`; a generated file is never edited by hand.
 - **Format only what you changed** with `pnpm exec prettier --write <files>`; never the whole repo.
-- **A changeset for every user-visible change:** `pnpm exec changeset` (the group is fixed, so one
-  entry names every package that moves). The repository is in `preview` pre-mode; versions bump only
-  in the release commit.
+- **A changeset for every user-visible change:** `pnpm exec changeset` (the fixed public group is
+  the main library and MCP). Versions bump only in the authorized release commit. There is no
+  Changesets pre-mode; pre-1.0 stability labeling is separate from npm version/tag selection.
 
 ## The landing standard
 
@@ -58,3 +58,14 @@ connectors, credentials, or network reads inside the library.
 
 Bugs and questions: GitHub issues on the TotalFinance repository. Security: never an issue — see
 [`SECURITY.md`](./SECURITY.md). Conduct: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
+
+## Publication layout (current)
+
+The first release is `@insiderfinance/totalfinance@0.1.0` plus optional
+`@insiderfinance/totalfinance-mcp@0.1.0`. The 25 `packages/*` workspaces are private source modules;
+only `distribution/*` is published. Their old internal aliases remain useful for source-level
+contracts, not user installs. The [single-package release contract](docs/specs/scoped-single-package-release.md)
+supersedes older fixed-group and preview-version instructions. Initial 0.1.0 metadata is already
+prepared: do not run `changeset version` again for that cut. For subsequent releases, after Changesets updates the
+two public versions, run `pnpm publication:update` and `pnpm install --no-frozen-lockfile`, then the
+full gates. `pnpm build` assembles the distributable modules; it refuses stale metadata.

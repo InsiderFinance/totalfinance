@@ -1,10 +1,10 @@
 /**
- * `@totalfinance/options/schema` — runtime schemas for option payloads (spec §6).
+ * `@insiderfinance/totalfinance/options/schema` — runtime schemas for option payloads (spec §6).
  *
- * Isolation guarantee: the hot path is the deep `@totalfinance/options/black-scholes` entrypoint, which
+ * Isolation guarantee: the hot path is the deep `@insiderfinance/totalfinance/options/black-scholes` entrypoint, which
  * does NOT import this module — the bundle-size test enforces that it carries no schema/validator
- * code. The aggregate `@totalfinance/options` index re-exports these schemas for convenience; bundlers
- * tree-shake them when unused, but a native-ESM `import { blackScholes } from '@totalfinance/options'` will still
+ * code. The aggregate `@insiderfinance/totalfinance/options` index re-exports these schemas for convenience; bundlers
+ * tree-shake them when unused, but a native-ESM `import { blackScholes } from '@insiderfinance/totalfinance/options'` will still
  * evaluate this module. That cost is trivial (plain descriptor objects, no work at load); anyone who
  * needs the guaranteed-lean footprint imports the deep entrypoint. MCP tools, adapters, and validated
  * wrappers use these; the compute path does not.
@@ -57,7 +57,7 @@ export const BlackScholesImpliedVolatilityInputSchema = schema.object({
   dividendYield: blackScholesShape.dividendYield,
 });
 
-/** Canonical `OptionContract` schema (defined in `@totalfinance/core/schema`, re-exported for convenience). */
+/** Canonical `OptionContract` schema (defined in `@insiderfinance/totalfinance/core/schema`, re-exported for convenience). */
 export { OptionContractSchema };
 
 /** Convenience namespace mirroring the spec's `schemas.OptionContract.parse(...)` usage. */

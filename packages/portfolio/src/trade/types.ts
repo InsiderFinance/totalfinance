@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/portfolio/trade` — the safe trade lifecycle's grammar (Stage 7B.2, AT5). Every stage
+ * `@insiderfinance/totalfinance/portfolio/trade` — the safe trade lifecycle's grammar (Stage 7B.2, AT5). Every stage
  * is an explicit, content-addressed artifact: an intent, the execution plan it normalizes to, the
  * preflight report with its structured policy decision, the authorization grant, the execution
  * journal, the receipt, and the reconciliation report. The compute here is pure and credential-free.

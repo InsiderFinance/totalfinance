@@ -1614,7 +1614,7 @@ function applyOne(
  *
  * @example
  * ```ts
- * import { applyPortfolioEvents } from '@totalfinance/portfolio';
+ * import { applyPortfolioEvents } from '@insiderfinance/totalfinance/portfolio';
  *
  * const state = applyPortfolioEvents({ portfolio: { baseCurrency: 'USD' }, events });
  * const next = applyPortfolioEvents({ previousState: state, events: moreEvents });

@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/core/artifacts` — the shared artifact spine (platform Gate B).
+ * `@insiderfinance/totalfinance/core/artifacts` — the shared artifact spine (platform Gate B).
  *
  * One grammar for the things every layer above compute wants to SAVE, SHARE, and REPLAY:
  *
@@ -10,14 +10,14 @@
  *   durable record with a content-hash identity, an inputs hash, a `createdFrom` lineage chain,
  *   and {@link TableHandle} references instead of inlined large tables;
  * - {@link createScenarioSet} / {@link readScenarioSet} — named shock/override definitions as pure
- *   data, in the same shock vocabulary `@totalfinance/risk` already prices;
+ *   data, in the same shock vocabulary `@insiderfinance/totalfinance/risk` already prices;
  * - {@link canonicalJsonOf} / {@link contentHash} — the canonical serialization and SHA-256
  *   identity everything above hashes with;
  * - {@link createArtifactMigrationRegistry} — the explicit, never-silent schema-migration policy
  *   every reader shares.
  *
- * This is a SEPARATE entrypoint on purpose, exactly like `@totalfinance/core/schema` (spec §6 hot-path
- * rule): compute entrypoints import `@totalfinance/core` and never this module, so serialization and
+ * This is a SEPARATE entrypoint on purpose, exactly like `@insiderfinance/totalfinance/core/schema` (spec §6 hot-path
+ * rule): compute entrypoints import `@insiderfinance/totalfinance/core` and never this module, so serialization and
  * hashing stay out of pricing bundles. Nothing here fetches, reads the clock, or touches storage —
  * the spine defines CONTAINERS; runners (Gate D) and stores (data plane) come later and consume it.
  *
@@ -29,7 +29,7 @@
 
 // Canonical JSON lives at the core root (a generic serialization utility, shared with the Gate C
 // conformance kit — moved out of `artifacts/` 2026-08-23); this barrel keeps re-exporting it so
-// the public `@totalfinance/core/artifacts` surface is unchanged by the move.
+// the public `@insiderfinance/totalfinance/core/artifacts` surface is unchanged by the move.
 export {
   CANONICAL_JSON_VERSION,
   canonicalJsonOf,

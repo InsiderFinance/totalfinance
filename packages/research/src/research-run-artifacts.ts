@@ -1,12 +1,12 @@
 /**
- * `@totalfinance/research/artifacts` — the four verbs of Stage 4.5 Decision 4 over the eleven FC3 run
+ * `@insiderfinance/totalfinance/research/artifacts` — the four verbs of Stage 4.5 Decision 4 over the eleven FC3 run
  * kinds, riding the Gate B spine and the shared fitted-model kit in core: `researchRunArtifact`,
  * `readResearchRun`, `replayResearchRun`, `compareResearchRuns`. A screen is not a model: there is
  * no evaluator, warm start, stability, or holdout here.
  *
  * A run is the direct operation's result, VERBATIM, plus the input that reproduces it — bulk row
  * sets embedded under the row limit or referenced by content-hashed table handles — an optional
- * statistical-hygiene block the caller attaches (computed by `@totalfinance/risk`, never here), and the
+ * statistical-hygiene block the caller attaches (computed by `@insiderfinance/totalfinance/risk`, never here), and the
  * versioned `FactorRecipe` the caller says produced the factor. Replay re-issues the operation with
  * the stored input (referenced rows re-verified by hash) and compares canonical bytes; a run whose
  * input carried a caller function is recorded as non-replayable and refuses replay by name.
@@ -96,7 +96,7 @@ export type ResearchRunReport<Kind extends ResearchRunKind = ResearchRunKind> = 
   inputs: Referenced<InputOf<Kind>>;
   /** Table references for every bulk row set that was not embedded (Gate B TableHandle). */
   referencedData: Record<string, TableHandle>;
-  /** Statistical-hygiene results the caller attached, verbatim — computed by @totalfinance/risk, never here. */
+  /** Statistical-hygiene results the caller attached, verbatim — computed by @insiderfinance/totalfinance/risk, never here. */
   hygiene: ResearchHygieneBlock | null;
   /** The versioned recipe the caller says produced the factor, when one did. */
   recipe: FactorRecipe | null;
@@ -131,7 +131,7 @@ export interface ResearchRunArtifactInput<Kind extends ResearchRunKind> {
   referenceRowSets?: readonly string[];
   /** Storage locators to stamp on the minted handles, keyed by row-set label. */
   locators?: Record<string, string>;
-  /** Up to six verbatim @totalfinance/risk results — validated structurally, stored verbatim, never recomputed. */
+  /** Up to six verbatim @insiderfinance/totalfinance/risk results — validated structurally, stored verbatim, never recomputed. */
   hygiene?: ResearchHygieneBlock;
   /** The versioned factor recipe that produced the factor, stored verbatim (covered by the artifact id). */
   recipe?: FactorRecipe;
@@ -951,7 +951,7 @@ export function readResearchRun(input: {
   if (artifact.artifactType !== RESEARCH_RUN_ARTIFACT_TYPE) {
     fail(
       functionName,
-      `the artifact's type is '${artifact.artifactType}', not '${RESEARCH_RUN_ARTIFACT_TYPE}' — this reader restores research runs only; ${artifact.artifactType.startsWith('volatility.') ? 'use @totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('fixed-income.') ? 'use @totalfinance/fixed-income/artifacts' : 'read it with the package that owns that type'}.`,
+      `the artifact's type is '${artifact.artifactType}', not '${RESEARCH_RUN_ARTIFACT_TYPE}' — this reader restores research runs only; ${artifact.artifactType.startsWith('volatility.') ? 'use @insiderfinance/totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('fixed-income.') ? 'use @insiderfinance/totalfinance/fixed-income/artifacts' : 'read it with the package that owns that type'}.`,
       ErrorCode.ArtifactFamilyMismatch,
       { artifactType: artifact.artifactType },
     );

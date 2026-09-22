@@ -19,7 +19,7 @@ import type { DiscreteDividend, OptionMarket } from './types.js';
  *
  * @example
  * ```ts
- * import { market, option } from '@totalfinance/options';
+ * import { market, option } from '@insiderfinance/totalfinance/options';
  *
  * const mkt = market({ spot: 195.3, riskFreeRate: 0.045, volatility: 0.24, dividendYield: 0.005, asOf: '2026-07-20T10:30:00-04:00' });
  * const contract = option.usEquityPut({ underlying: 'AAPL', strike: 190, expiry: '2026-09-18' });

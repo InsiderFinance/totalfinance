@@ -16,7 +16,7 @@ import {
  *   • **Walk-forward** and **purged & embargoed K-fold** splitters for leakage-free evaluation.
  *   • **Parameter-sweep diagnostics**, **train/test leakage** checks, and a **survivorship-bias** flag.
  *
- * Depends only on `@totalfinance/core` and `@totalfinance/math`.
+ * Depends only on `@insiderfinance/totalfinance/core` and `@insiderfinance/totalfinance/math`.
  */
 
 import {
@@ -910,7 +910,7 @@ function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): num
  * in-sample and an out-of-sample half: pick the IS-best configuration, then measure its OOS rank. PBO is
  * the fraction of splits where the IS winner lands **below the OOS median** — the probability that
  * picking the best backtest buys you a below-average live result. `≈ 0.5` means the selection is worthless
- * out of sample; `≈ 0` means a genuinely persistent edge. Depends only on `@totalfinance/core`/`math`.
+ * out of sample; `≈ 0` means a genuinely persistent edge. Depends only on `@insiderfinance/totalfinance/core`/`math`.
  */
 export function probabilityOfBacktestOverfitting(
   returns: number[][],

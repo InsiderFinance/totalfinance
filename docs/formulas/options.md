@@ -4,7 +4,7 @@ All three models are European closed-form. `Φ` is the standard normal CDF, `φ`
 reported in TotalFinance default units (theta per day, vega per 1% for BSM/Black-76, rho per 1%); the
 applied units are always echoed in `assumptions.units`.
 
-## Black–Scholes–Merton (`@totalfinance/options/black-scholes`)
+## Black–Scholes–Merton (`@insiderfinance/totalfinance/options/black-scholes`)
 
 Spot `S`, strike `K`, time `T` (years), rate `r`, dividend yield `q`, volatility `σ`.
 
@@ -28,7 +28,7 @@ rho   = K·T·e^{−rT}·Φ(d2)            (reported ÷100, per 1% of r)
 
 Reference: a 1-year ATM call with `S=K=100, r=5%, σ=20%, q=0` prices to **10.4506**.
 
-## Black-76 (`@totalfinance/options/black76`)
+## Black-76 (`@insiderfinance/totalfinance/options/black76`)
 
 Options on a forward/futures price `F`; discounting at `r`.
 
@@ -48,7 +48,7 @@ rho   = −T·price                      (÷100; F fixed, only discounting depen
 
 Put–call parity: `C − P = e^{−rT}·(F − K)`.
 
-## Bachelier / normal (`@totalfinance/options/bachelier`)
+## Bachelier / normal (`@insiderfinance/totalfinance/options/bachelier`)
 
 Arithmetic Brownian motion on the forward; `σ_N` is a **normal** vol in price units. Vega is reported
 per 1.00 of normal vol (`assumptions.units.vega = "perPoint"`).

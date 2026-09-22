@@ -8,18 +8,18 @@ import {
   dupireLocalVolatility,
   localVolatilityGrid,
   localVolatilityMonteCarloPrice,
-} from '@totalfinance/options/local-volatility';
-import { hestonImpliedVolatility, hestonPrice } from '@totalfinance/options/heston';
-import { sabrVolatility } from '@totalfinance/options/sabr';
+} from '@insiderfinance/totalfinance/options/local-volatility';
+import { hestonImpliedVolatility, hestonPrice } from '@insiderfinance/totalfinance/options/heston';
+import { sabrVolatility } from '@insiderfinance/totalfinance/options/sabr';
 import {
   asian,
   barrier,
   option,
   type ImpliedVolatilityFunction,
   type OptionMarket,
-} from '@totalfinance/options';
-import { monteCarloPrice } from '@totalfinance/options/monte-carlo';
-import { blackScholesPrice } from '@totalfinance/options/black-scholes';
+} from '@insiderfinance/totalfinance/options';
+import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carlo';
+import { blackScholesPrice } from '@insiderfinance/totalfinance/options/black-scholes';
 
 const asOf = Date.UTC(2026, 0, 1);
 

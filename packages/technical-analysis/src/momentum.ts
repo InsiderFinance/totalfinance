@@ -3,8 +3,8 @@
  *
  * Bundles RSI, MACD, the base momentum oscillators (`./oscillators`) and the extended
  * modern-momentum set (`./momentum-ext`). Consumers import one concept —
- * `@totalfinance/technical-analysis/momentum` — instead of the per-split modules. The per-indicator deep imports
- * (`@totalfinance/technical-analysis/rsi`, `@totalfinance/technical-analysis/macd`, `@totalfinance/technical-analysis/oscillators`) remain available
+ * `@insiderfinance/totalfinance/technical-analysis/momentum` — instead of the per-split modules. The per-indicator deep imports
+ * (`@insiderfinance/totalfinance/technical-analysis/rsi`, `@insiderfinance/totalfinance/technical-analysis/macd`, `@insiderfinance/totalfinance/technical-analysis/oscillators`) remain available
  * (design law #9).
  */
 export { rsi } from './rsi.js';

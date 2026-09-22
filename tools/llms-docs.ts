@@ -84,7 +84,7 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
     '',
     '## Imports and bundles',
     '',
-    'For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, ' +
+    'For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>`, ' +
       'or supported feature subpaths. Root namespace re-exports are convenient but bundler-dependent. ' +
       'Installation size, final bundle size, and plain Node ESM loading are different; Node does no automatic dead-code elimination.',
     '',
@@ -120,19 +120,19 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
 }
 
 function setup(reference: PublicReference): string[] {
-  const mcp = reference.packages.find((p) => p.name === '@totalfinance/mcp');
+  const mcp = reference.packages.find((p) => p.name === '@insiderfinance/totalfinance-mcp');
   if (!mcp) throw new Error('Agent documentation requires the MCP package metadata');
   return [
     '## Journey connect-agent',
     '',
     'Use Node at the floor declared by the installed package. In a built checkout (`pnpm build`), launch the stdio server:',
     '```sh',
-    'node packages/mcp/dist/bin.js --profile default',
-    'node packages/mcp/dist/bin.js doctor',
+    'node distribution/mcp/dist/bin.js --profile default',
+    'node distribution/mcp/dist/bin.js doctor',
     '```',
     '',
-    `This checkout declares @totalfinance/mcp ${mcp.version} (${mcp.stability}). After independently confirming availability of that exact release, ` +
-      `a client may use command \`npx\` with args \`["-y", "@totalfinance/mcp@${mcp.version}", "--profile", "default"]\`. ` +
+    `This checkout declares @insiderfinance/totalfinance-mcp ${mcp.version} (${mcp.stability}). After independently confirming availability of that exact release, ` +
+      `a client may use command \`npx\` with args \`["-y", "@insiderfinance/totalfinance-mcp@${mcp.version}", "--profile", "default"]\`. ` +
       'Do not assume the workspace version has been published. Stdout in server mode is JSON-RPC only.',
     '',
     'Published-package smoke: pending release. This build-time reference does not claim execution against published packages.',

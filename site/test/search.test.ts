@@ -9,7 +9,7 @@ function record(
   return {
     title,
     kind,
-    category: '@totalfinance/options',
+    category: '@insiderfinance/totalfinance/options',
     url: `/#${title}`,
     description: 'European option',
     keywords: '',
@@ -21,7 +21,7 @@ describe('search relevance contract', () => {
   const records = [
     record('BlackScholesPriceInput', 'interface'),
     record('blackScholesPriceMany'),
-    record('blackScholesPrice', 'function', { category: 'totalfinance' }),
+    record('blackScholesPrice', 'function', { category: '@insiderfinance/totalfinance' }),
     record('blackScholesPrice'),
     record('blackScholes', 'value'),
     record('Price a European call', 'task', { keywords: 'price-an-option' }),
@@ -39,7 +39,7 @@ describe('search relevance contract', () => {
       const matches = search(records, query);
       expect(matches[0]!.title).toBe('blackScholes');
       expect(matches[1]!.title).toBe('blackScholesPrice');
-      expect(matches[1]!.category).toBe('@totalfinance/options');
+      expect(matches[1]!.category).toBe('@insiderfinance/totalfinance/options');
       expect(matches.findIndex((row) => row.kind === 'interface')).toBeGreaterThan(3);
     },
   );
@@ -49,8 +49,8 @@ describe('search relevance contract', () => {
     (query) => {
       const matches = search(records, query);
       expect(matches.slice(0, 2).map((row) => row.category)).toEqual([
-        '@totalfinance/options',
-        'totalfinance',
+        '@insiderfinance/totalfinance/options',
+        '@insiderfinance/totalfinance',
       ]);
       expect(matches.slice(0, 2).every((row) => row.title === 'blackScholesPrice')).toBe(true);
     },

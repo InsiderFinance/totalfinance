@@ -1,21 +1,21 @@
-# @totalfinance/fixed-income
+# @insiderfinance/totalfinance/fixed-income
 
 > TotalFinance fixed income: bonds (fixed/zero/FRN/amortizing/inflation) with full analytics, yield curves + bootstrapping, rates derivatives (FRA/swap/OIS/swaption/cap/floor), short-rate models (Vasicek/CIR/Hull-White), and credit (CDS, hazard/survival curves). Browser-safe.
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/fixed-income
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import { bonds, priceFromYield } from '@totalfinance/fixed-income';
+import { bonds, priceFromYield } from '@insiderfinance/totalfinance/fixed-income';
 const bond = bonds.fixedRate({
   issueDate: '2026-01-01',
   maturityDate: '2031-01-01',
@@ -31,18 +31,18 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
-## Example — `@totalfinance/fixed-income/artifacts`
+## Example — `@insiderfinance/totalfinance/fixed-income/artifacts`
 
 ```ts
-import { curves, type BootstrapInstrument } from '@totalfinance/fixed-income';
-import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@totalfinance/fixed-income/artifacts';
-import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+import { curves, type BootstrapInstrument } from '@insiderfinance/totalfinance/fixed-income';
+import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@insiderfinance/totalfinance/fixed-income/artifacts';
+import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
 const instruments: BootstrapInstrument[] = [
   { type: 'deposit', maturity: '2026-07-01', rate: 0.03 },
   { type: 'swap', maturity: '2028-01-01', rate: 0.032, fixedFrequency: 'semiannual' },
@@ -80,7 +80,7 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## API
 
-`@totalfinance/fixed-income` exposes **57** runtime exports (**188** including types) across 15 entrypoints (`.`, `./artifacts`, `./bonds`, `./conventions`, `./convertible`, `./credit`, `./cross-currency`, `./curves`, `./futures`, `./inflation`, `./lattice`, `./models`, `./pricer`, `./rates`, `./xva`). See the generated [`etc/fixed-income.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/fixed-income/etc/fixed-income.api.md) for the full surface.
+`@insiderfinance/totalfinance/fixed-income` exposes **57** runtime exports (**188** including types) across 15 entrypoints (`.`, `./artifacts`, `./bonds`, `./conventions`, `./convertible`, `./credit`, `./cross-currency`, `./curves`, `./futures`, `./inflation`, `./lattice`, `./models`, `./pricer`, `./rates`, `./xva`). See the generated [`etc/fixed-income.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/fixed-income/etc/fixed-income.api.md) for the full surface.
 
 ## License
 

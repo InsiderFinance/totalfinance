@@ -2,7 +2,7 @@
  * `crossSectionalBacktestGrid` (Stage 4.6, FC8 Decision 4 — "the grid"): the cartesian product of
  * declarative variations over one `crossSectionalBacktest` request, run as independent single runs
  * of the same function with unchanged semantics, with the research-hygiene verdicts composed
- * verbatim from `@totalfinance/risk` — `researchProtocol` over the trial Sharpes,
+ * verbatim from `@insiderfinance/totalfinance/risk` — `researchProtocol` over the trial Sharpes,
  * `probabilityOfBacktestOverfitting` over the per-variation return matrix, `deflatedSharpeRatio` for
  * the best trial. The grid records the parent sweep hash and each child's run hash so one artifact
  * can hold the whole protocol without a second copy of any math.
@@ -528,7 +528,7 @@ export function crossSectionalBacktestGrid(
       best = { index: row.index, runId: row.runId, metric: selectionMetric, value };
   }
 
-  // ---- hygiene, verbatim from @totalfinance/risk --------------------------------------------------------
+  // ---- hygiene, verbatim from @insiderfinance/totalfinance/risk --------------------------------------------------------
   const skippedHygiene: GridDiagnostics['skippedHygiene'] = [];
   let protocol: ResearchVerdict | null = null;
   let deflated: DeflatedSharpeResult | null = null;

@@ -68,12 +68,7 @@ Exit codes
 class UsageError extends Error {}
 
 function readPackageVersion(): string {
-  try {
-    const text = readFileSync(new URL('../package.json', import.meta.url), 'utf8');
-    return (JSON.parse(text) as { version?: string }).version ?? '0.0.0';
-  } catch {
-    return '0.0.0';
-  }
+  return WORKFLOWS_VERSION;
 }
 
 function nodeMeetsFloor(version: string, floor: string): boolean {
@@ -456,7 +451,7 @@ function serve(
   globals: Globals,
   values: { http?: boolean; port?: string; host?: string; openapi?: boolean },
 ): CliExitCode {
-  // L6 packages never depend on each other: the server is @totalfinance/http's own binary. This is a
+  // L6 packages never depend on each other: the server is @insiderfinance/totalfinance/http's own binary. This is a
   // teaching, not a hidden dependency.
   const parts = ['totalfinance-http'];
   if (values.port !== undefined) parts.push('--port', values.port);
@@ -464,7 +459,7 @@ function serve(
   if (values.openapi) parts.push('--openapi');
   parts.push('--profile', globals.profile, '--store', globals.store);
   log(
-    `totalfinance does not serve HTTP itself; run the @totalfinance/http binary:\n  ${parts.join(' ')}`,
+    `totalfinance does not serve HTTP itself; run totalfinance-http (included in @insiderfinance/totalfinance):\n  ${parts.join(' ')}`,
   );
   return CLI_EXIT_CODES.usage;
 }

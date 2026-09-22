@@ -1,83 +1,153 @@
-# Runbook — rolling back a TotalFinance preview release
+# Runbook — partial-publish recovery and rollback
 
-**Owner:** the maintainer who approved the `npm-publish` environment for the release being rolled
-back. Approval and rollback are the same person by design: whoever said "these hashes may ship" owns
-taking them back. If that person is unavailable, the repository owner takes over and says so in the
-release thread before touching anything.
+**Owner:** the maintainer who approved the `npm-publish` environment for the affected artifact.
+If unavailable, the repository owner explicitly takes over in the release thread before acting.
+All commands below require separate maintainer authorization; they are not automatic remediation.
 
-The fixed group is twenty-five packages that publish together under one version and one dist-tag
-(`preview`). Every step below applies to **the whole group**; a rollback of one package alone is not a
-state this library is ever in.
+The complete public roster is `@insiderfinance/totalfinance` and
+`@insiderfinance/totalfinance-mcp`, at one exact version. Main has no runtime dependencies; MCP
+requires that exact main version. Uploads and dist-tag changes are **not atomic**. Candidate is
+publicly installable even before latest promotion. Never claim an all-or-nothing npm transaction.
 
-## 0. Decide, and say it first
+## 0. Freeze and communicate
 
-Post in the release thread (the GitHub release's discussion, or the issue that tracks the release)
-before acting, using the template at the bottom: what is wrong, which version is affected, what
-consumers should do now, and what the fix path is. A rollback without a message is a second incident.
+Stop announcement, promotion and website deployment. Record the exact commit, original workflow run,
+reviewer, approved `RELEASE_HASHES.json`, both tarballs, authentication mode, observed registry metadata,
+current dist-tags and the first failing command. Keep the original artifacts; do not overwrite them
+with another pack, delete evidence, rewrite Git history or reuse a version for changed bytes.
 
-## 1. Move the `preview` dist-tag back — always, and first
+Tell consumers whether main only, both candidates, or a partially promoted pair exists, what can be
+installed safely, and who owns recovery. A public 404 does not establish ownership. Authentication,
+registry availability and consumer failures have different remedies; identify which actually failed.
 
-Consumers who install `@totalfinance/*@preview` get whatever the tag points at, so this alone stops new
-installs of the bad version, for all twenty-five packages, in under a minute:
+## 1. Partial publication: main succeeded, MCP failed
+
+1. Leave `latest` unchanged. Main at `candidate` is already public; this is not a completed pair.
+2. Preserve the original approved artifact and checkout. Inspect the error and resolve only the
+   authorized npm rights, transient registry failure or publisher configuration. First-pair bootstrap
+   may still require the original short-lived token to create MCP; OIDC setup is per package.
+3. Rerun **the original failed publish job**, retaining its original artifact and environment approval.
+   The workflow's `--resume` revalidates both local tarballs first, reads registry metadata and
+   downloads already published main, and skips it **only if size/hash and package contract match**.
+   It then uploads the missing MCP tarball at the exact approved main dependency. An ambiguous
+   timeout is handled the same way: remote bytes determine whether an upload already succeeded.
+4. If remote main differs from approval, or MCP needs code/metadata changes, stop. Do not weaken
+   verification, republish main, rebuild MCP under the used number, or simply skip an error. Deprecate
+   the affected existing versions as appropriate and prepare a new coherent pair (for example 0.1.1)
+   through the complete release gates. Never fabricate a missing package solely to complete a roster.
+5. Run the public-registry smoke from the original run. Only after both exact artifacts pass may the
+   candidate release be recorded and the owner separately approve `latest` promotion.
+
+If both uploads succeeded but smoke, tagging or GitHub release creation failed, rerun only the failed
+job from the original run. Do not re-dispatch verify or rebuild approval artifacts. The smoke job is
+bounded/retryable and does not republish. If a registry mismatch or behavioral failure persists,
+proceed to rollback. Preserve an existing release/tag as incident evidence instead of deleting it.
+
+### GitHub finalization recovery
+
+The finalizer dereferences the remote tag to the approved commit, downloads and compares every
+existing evidence asset byte-for-byte, uploads only missing files, and publishes a draft only after
+the exact four-file roster is verified. It never overwrites assets, moves tags, or advances npm
+`latest`. A conflicting tag, duplicate/extra/incomplete asset, non-prerelease, or differing bytes
+stops recovery: preserve the state and have the release owner resolve the incident explicitly;
+do not delete evidence or use `--clobber`. A repeated smoke generates a new receipt timestamp. If
+the original receipt was already attached, retain it: a new receipt is not interchangeable bytes.
+Each smoke attempt is retained independently as
+`totalfinance-registry-smoke-<version>-attempt-<github.run_attempt>`; never overwrite an older artifact.
+If the release already has a receipt asset, use the exact receipt from the attempt that uploaded
+that asset, **not automatically the latest attempt**. Download it from that original successful
+smoke attempt's retained artifact (or the existing release asset) and preserve it separately as
+`release/original-SMOKE_RECEIPT-0.1.0.json`; keep the newer receipt too. If no receipt asset exists,
+use the chosen successful public-smoke attempt's unchanged receipt. Never edit `verifiedAt` to make
+files match. Retain the original approved pair and manifest. In a clean
+checkout of that exact commit, the following checks existing state without mutations; after separate
+owner approval, add `--finalize` to resume missing uploads/finalize the draft using those same files.
+The receipt is revalidated as clean, same-commit, matched public-registry evidence. Verify the final
+success message before continuing to promotion. Neither rebuilding nor rerunning all release jobs
+is recovery for an evidence conflict.
 
 ```sh
-PREV=0.1.0-preview.N-1   # the last good version of the group
-for p in $(pnpm -r --filter './packages/*' exec node -p "require('./package.json').name"); do
-  npm dist-tag add "$p@$PREV" preview
-done
-npm dist-tag ls @totalfinance/core    # verify: preview -> $PREV
+pnpm exec tsx tools/release/finalize-github-release.ts --dir release/approved --receipt release/original-SMOKE_RECEIPT-0.1.0.json --expect-version 0.1.0
+# Only after separate release-owner approval, repeat the same command with --finalize.
 ```
 
-Verify on a clean machine: `npm view @totalfinance/core dist-tags --json` must show `preview` at the
-previous version for every package (the smoke tool does this for all of them:
-`pnpm release:smoke -- --version $PREV`).
+## 2. Partial latest promotion
 
-## 2. Unpublish or deprecate the bad version
+`release:promote` validates **both** published versions and clean public-smoke evidence before the
+first tag mutation, updates main then MCP, and reads both tags back. A failure after the first update
+can still leave different latest versions.
 
-- **Inside 72 hours of publish and no dependents:** `npm unpublish <package>@<version>` for each
-  package of the group. npm refuses to unpublish a version that another published package depends on;
-  the group's internal dependencies make the order matter — unpublish the umbrella and the
-  transports first (`totalfinance`, `@totalfinance/cli`, `@totalfinance/http`, `@totalfinance/mcp`,
-  `@totalfinance/workflows`), then the domain packages, then `@totalfinance/math` and `@totalfinance/core` last.
-  An unpublished version number can never be reused: the fix ships as the next number.
-- **After 72 hours, or when unpublish is refused:** deprecate instead —
-  `npm deprecate "<package>@<version>" "Rolled back: <one line>. Use <package>@<prev> (dist-tag preview)."`
-  for every package. Deprecation warns on install; the dist-tag move from step 1 already stops new
-  installs.
+The owner chooses explicitly: finish promotion by rerunning the same command with the same approved
+artifacts/receipt and `--approve-latest`, or restore **both** latest tags to the recorded prior good
+pair. Do not use package version numbers alone as proof that the artifacts match. Retain before/after
+tag readback and the decision in the incident record.
 
-## 3. Remove the tag and the GitHub release
+## 3. Roll back discovery tags
+
+If a previous verified pair exists, restore its latest tag for both packages using an authorized npm
+login/2FA. Set `PREV` to an actual previously verified version, not a guessed predecessor:
 
 ```sh
-git push --delete origin totalfinance-v<version>     # the release tag
-gh release delete totalfinance-v<version> --yes     # the GitHub release and its attached hash manifest
+PREV=0.1.0
+npm dist-tag add "@insiderfinance/totalfinance@$PREV" latest --registry https://registry.npmjs.org
+npm dist-tag add "@insiderfinance/totalfinance-mcp@$PREV" latest --registry https://registry.npmjs.org
+npm view @insiderfinance/totalfinance dist-tags --json --registry https://registry.npmjs.org
+npm view @insiderfinance/totalfinance-mcp dist-tags --json --registry https://registry.npmjs.org
 ```
 
-Leave the release commit itself on the branch; history is not rewritten. The next release commit
-supersedes it.
+On the first release there is **no** previous good version. Explicitly remove any affected `latest`
+tag instead of pointing it at a fictitious version. Also remove `candidate` if it still targets the
+bad version, without disturbing a later healthy candidate. Inspect before mutation:
 
-## 4. Record it
+```sh
+npm dist-tag rm @insiderfinance/totalfinance latest --registry https://registry.npmjs.org
+npm dist-tag rm @insiderfinance/totalfinance-mcp latest --registry https://registry.npmjs.org
+# Remove each affected candidate tag only after checking its current target.
+npm dist-tag rm @insiderfinance/totalfinance candidate --registry https://registry.npmjs.org
+npm dist-tag rm @insiderfinance/totalfinance-mcp candidate --registry https://registry.npmjs.org
+```
 
-Add a `docs/evidence/release-rollback-<version>.md` note: the timeline, the reason, the exact commands
-run, and who ran them; link it from the release thread. The changeset for the fix names the rollback.
+Absent tags/packages are expected in a partial first release; record that explicitly. Tag removal
+does not make exact-version installs inaccessible. Smoke a restored pair from its original checkout,
+expectations and retained artifacts, not the newer broken checkout.
 
-If public documentation was deployed for the affected version, restore the last good verified static
-site artifact as the current site under the deployment owner's approval. Do not rebuild old-version
-pages from the broken or corrected current source, delete historical smoke evidence, or relabel a
-tarball rehearsal as a published release. Preserve version archives and announce the affected docs
-version alongside the package rollback. The site does not automatically follow npm dist-tag changes;
-verify the deployed current version explicitly. See [the site guide](../../site/README.md).
+## 4. Deprecate, or exceptionally unpublish
 
-## 5. Re-release
+Prefer clear deprecation of each **existing affected** version:
 
-The fix lands through the ordinary landing standard and a new `pnpm release:dry-run`; the workflow
-publishes `0.1.0-preview.N+1` (never the rolled-back number) under the same approval gate.
+```sh
+BAD=0.1.0
+npm deprecate "@insiderfinance/totalfinance@$BAD" "Withdrawn: <reason>. <verified replacement or do not use>." --registry https://registry.npmjs.org
+npm deprecate "@insiderfinance/totalfinance-mcp@$BAD" "Withdrawn: <reason>. <verified replacement or do not use>." --registry https://registry.npmjs.org
+```
+
+Unpublish is exceptional and requires checking the [current npm policy](https://docs.npmjs.com/policies/unpublish/),
+dependents and explicit owner approval. The 72-hour window is not unconditional permission; npm
+can refuse. If allowed and chosen, remove MCP first, then main (dependency order reversed). Never
+unpublish unrelated/private aliases. An unpublished version cannot be reused; ship a new number.
+
+Mark the GitHub release/title/notes withdrawn and link the incident. Keep the tag, release commit,
+manifest, original tarballs and receipts as immutable audit evidence; do not delete them to make a
+failed release look like it never happened.
+
+## 5. Documentation, record and corrected release
+
+If the affected website was deployed, the deployment owner separately approves restoring the last
+good verified static artifact (or truthful development/unavailable status if none exists). Do not
+rebuild historical pages from current source, relabel rehearsal receipts, or erase version archives.
+Npm tag changes do not update the website. Follow [the site guide](../../site/README.md).
+
+Record timeline, affected artifacts/versions/tags, hashes, exact commands/results, owner and consumer
+instructions in `docs/evidence/release-rollback-<version>.md`. A correction gets a new changeset naming
+both public packages, a new coherent version, the full landing standard, fresh artifacts and a new
+approval. The old version's approved bytes are never modified.
 
 ## Message template
 
-> **TotalFinance `<version>` has been rolled back.**
-> What happened: `<one sentence — what a consumer could observe>`.
-> Affected: every `@totalfinance/*` package and `totalfinance` at `<version>`.
-> What to do now: `npm install @totalfinance/<pkg>@preview` (the tag points at `<prev>` again); pin
-> `<prev>` if you pin.
-> Fix: `<issue link>`; the corrected release will be `<next version>`.
-> Owner: `<maintainer>`.
+> **TotalFinance `<version>` is `<partially published / candidate withdrawn / rolled back>`.**
+> Observed: `<main only / both packages / mismatched latest tags, with exact versions>`.
+> Impact: `<what a consumer could observe>`.
+> Action: `<pin verified pair / do not install affected versions; no replacement yet>`.
+> Recovery: `<resume original approved MCP upload / restore tags / new version and issue>`.
+> Website status: `<not deployed / restored artifact / separately approved recovery>`.
+> Owner and next update: `<maintainer, time>`.

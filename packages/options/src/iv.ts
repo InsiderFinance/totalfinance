@@ -225,7 +225,7 @@ function fail(
  *
  * @example
  * ```ts
- * import { impliedVolatility } from '@totalfinance/options';
+ * import { impliedVolatility } from '@insiderfinance/totalfinance/options';
  *
  * const solved = impliedVolatility({
  *   price: 2.31, spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, type: 'call',

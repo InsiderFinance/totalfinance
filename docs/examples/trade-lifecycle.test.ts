@@ -4,20 +4,20 @@
  * capabilities. Every number here is the guide's (`docs/guides/trade-lifecycle.md`).
  */
 import { describe, expect, it } from 'vitest';
-import { ErrorCode } from '@totalfinance/core';
-import { createMarketSnapshot } from '@totalfinance/core/artifacts';
+import { ErrorCode } from '@insiderfinance/totalfinance/core';
+import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
 import {
   applyPortfolioEvents,
   createPortfolioLedger,
   type PortfolioEventEnvelope,
-} from '@totalfinance/portfolio';
+} from '@insiderfinance/totalfinance/portfolio';
 import {
   createAuthorizationGrant,
   normalizeTradePlan,
   preflightTradePlan,
   reconcileExecution,
-} from '@totalfinance/portfolio/trade';
-import { createPaperBroker } from '@totalfinance/backtest/paper';
+} from '@insiderfinance/totalfinance/portfolio/trade';
+import { createPaperBroker } from '@insiderfinance/totalfinance/backtest/paper';
 import {
   createMemoryArtifactStore,
   createMemoryAuthorizationStore,
@@ -26,7 +26,7 @@ import {
   defaultPacks,
   journeyPacks,
   tradePack,
-} from '@totalfinance/workflows';
+} from '@insiderfinance/totalfinance/workflows';
 
 const T0 = Date.UTC(2026, 0, 5, 21);
 const DAY = 86_400_000;

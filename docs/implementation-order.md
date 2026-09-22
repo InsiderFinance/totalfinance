@@ -27,7 +27,18 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Preview launch queue (2026-09-07)
 
-**Current handoff (2026-09-21): bounded tree-shaking hardening COMPLETE (local) @ `d95634c`.**
+**Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**
+Follow [the publication contract](./specs/scoped-single-package-release.md) before the release
+rehearsal. Publish one self-contained library, `@insiderfinance/totalfinance`, plus optional
+`@insiderfinance/totalfinance-mcp`; the 25 source workspaces remain private. This supersedes older
+multi-package/unscoped-install/preview-version instructions, not financial API contracts or
+hosted/organization/website approval gates. Granular imports and tree-shaking remain required.
+Preparation may set 0.1.0 metadata; npm publication and website deployment are NOT authorized.
+After its verified closeout, follow the [release runbook](./runbooks/release.md), then the separately
+approved site deployment. Future WASM stays out of the first release and must preserve ordinary
+function calls after explicit one-time activation.
+
+**Previous handoff (2026-09-21): bounded tree-shaking hardening COMPLETE (local) @ `d95634c`.**
 The [installed-consumer bundle guarantees](./specs/tree-shaking-and-consumer-budgets.md) close TS1–TS5:
 reviewed wrapper/code-registry reductions, self-contained metadata for all 335 indicator names,
 installed esbuild/Rollup size/validation gates, and truthful import guidance. Public APIs are unchanged.

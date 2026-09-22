@@ -3,7 +3,7 @@
  *
  * Fits the three free SABR parameters `(α, ρ, ν)` — the backbone exponent `β` is fixed by the user
  * (0.5 for rates, ~1 for equities) since it is statistically hard to separate from `ρ` — to a single
- * expiry's market smile, using the Hagan implied-vol expansion from `@totalfinance/options`. The fit is a
+ * expiry's market smile, using the Hagan implied-vol expansion from `@insiderfinance/totalfinance/options`. The fit is a
  * Levenberg–Marquardt least-squares over a reparameterization that keeps `α > 0`, `ρ ∈ (−1, 1)`,
  * `ν > 0` at every step; `α` is seeded from the at-the-money vol.
  */

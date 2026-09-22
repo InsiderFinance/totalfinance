@@ -1,21 +1,21 @@
-# @totalfinance/technical-analysis
+# @insiderfinance/totalfinance/technical-analysis
 
 > TotalFinance technical analysis: aligned indicators with serializable streaming state. Browser-safe.
 
-Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a zero-dependency, browser-safe TypeScript quant toolkit. Deterministic by construction; on the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
+Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
 ## Install
 
-Unpublished preview: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @totalfinance/technical-analysis
+pnpm add @insiderfinance/totalfinance@0.1.0
 ```
 
 ## Example
 
 ```ts
-import * as ta from '@totalfinance/technical-analysis';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
 const closes = [
   44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61,
   46.28, 46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
@@ -28,9 +28,9 @@ _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot
 
 ## Imports and bundles
 
-For portable browser tree shaking, use named imports from `totalfinance/<domain>` or `@totalfinance/<domain>`, or supported feature subpaths such as `@totalfinance/math/normal`. Use public exports, never private `dist` paths.
+For portable browser tree shaking, use named imports from `@insiderfinance/totalfinance/<domain>` or supported feature subpaths such as `@insiderfinance/totalfinance/math/normal`. Use public exports, never private `dist` paths.
 
-Installation size is not final bundle size: scoped packages narrow the install; a bundler removes unused code. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
+Installation size is not final bundle size: one main package contains all domains; a bundler removes unused code. The main package has no runtime dependencies. MCP is a separate optional package. Plain Node ESM performs no automatic dead-code elimination. Facades include validation and `.explain()` services; indicators also carry streaming support, not just a bare formula. Type-only imports add no runtime code.
 
 See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/imports-and-bundles.md) for examples, namespace tradeoffs, and the generated measurement report.
 
@@ -53,7 +53,7 @@ Indicators are addressable by their TotalFinance name and by common TA-Lib / Tra
 
 ## API
 
-`@totalfinance/technical-analysis` exposes **398** runtime exports (**656** including types) across 32 entrypoints (`.`, `./aliases`, `./bands`, `./bars`, `./candle-aliases`, `./candle-talib`, `./candlesticks`, `./chart-types`, `./cycle`, `./divergence`, `./features`, `./framework`, `./macd`, `./math`, `./microstructure`, `./momentum`, `./moving-averages`, `./oscillators`, `./overlap`, `./pipeline`, `./price-action`, `./registry`, `./resample`, `./rsi`, `./series`, `./signal`, `./statistics`, `./transforms`, `./trend`, `./volatility`, `./volume`, `./warmup`). See the generated [`etc/technical-analysis.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/technical-analysis/etc/technical-analysis.api.md) for the full surface.
+`@insiderfinance/totalfinance/technical-analysis` exposes **398** runtime exports (**656** including types) across 32 entrypoints (`.`, `./aliases`, `./bands`, `./bars`, `./candle-aliases`, `./candle-talib`, `./candlesticks`, `./chart-types`, `./cycle`, `./divergence`, `./features`, `./framework`, `./macd`, `./math`, `./microstructure`, `./momentum`, `./moving-averages`, `./oscillators`, `./overlap`, `./pipeline`, `./price-action`, `./registry`, `./resample`, `./rsi`, `./series`, `./signal`, `./statistics`, `./transforms`, `./trend`, `./volatility`, `./volume`, `./warmup`). See the generated [`etc/technical-analysis.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/technical-analysis/etc/technical-analysis.api.md) for the full surface.
 
 ## License
 

@@ -5,7 +5,7 @@
  * `(v0, κ, θ, σ, ρ)` generates the *entire* surface — both the smile and its term structure. This
  * calibrates those five parameters to all surface IVs at once by least squares (Nelder–Mead over a
  * bound-enforcing reparameterization), pricing each target with the COS Heston engine from
- * `@totalfinance/options`.
+ * `@insiderfinance/totalfinance/options`.
  */
 
 import {

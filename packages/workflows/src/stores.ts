@@ -1,7 +1,7 @@
 /**
  * Handles, artifact stores, and job stores (Stage 7A Decision 5): explicit, store-scoped references
  * to stored data — never implicit session state. The memory stores here are pure and browser-safe;
- * `@totalfinance/cli` ships the file-backed ones over the same contracts.
+ * `@insiderfinance/totalfinance/cli` ships the file-backed ones over the same contracts.
  */
 
 import { ErrorCode, InputError, ensureKnownKeys, requireArgumentObject } from '@totalfinance/core';

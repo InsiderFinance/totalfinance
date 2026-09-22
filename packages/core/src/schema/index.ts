@@ -1,8 +1,8 @@
 /**
- * `@totalfinance/core/schema` — the runtime schema facade.
+ * `@insiderfinance/totalfinance/core/schema` — the runtime schema facade.
  *
  * This is a SEPARATE entrypoint on purpose (spec §6 hot-path rule). Compute entrypoints like
- * `@totalfinance/options/black-scholes` import `@totalfinance/core` (types + tiny guards) but never this
+ * `@insiderfinance/totalfinance/options/black-scholes` import `@insiderfinance/totalfinance/core` (types + tiny guards) but never this
  * module, so the validator code stays out of their bundles.
  */
 

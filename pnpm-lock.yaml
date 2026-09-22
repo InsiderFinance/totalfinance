@@ -14,6 +14,9 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.39.4
+      '@jridgewell/sourcemap-codec':
+        specifier: 1.5.5
+        version: 1.5.5
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.0
         version: 1.29.0(zod@4.4.3)
@@ -62,6 +65,17 @@ importers:
       vitest:
         specifier: ^3.0.0
         version: 3.2.6(@types/node@22.19.21)(tsx@4.22.4)(yaml@2.9.0)
+
+  distribution/mcp:
+    dependencies:
+      '@insiderfinance/totalfinance':
+        specifier: 0.1.0
+        version: link:../totalfinance
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.0
+        version: 1.29.0(zod@4.4.3)
+
+  distribution/totalfinance: {}
 
   packages/backtest:
     dependencies:

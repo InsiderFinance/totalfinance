@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/portfolio/events` — the FC7 economic-event grammar (Stage 4.4).
+ * `@insiderfinance/totalfinance/portfolio/events` — the FC7 economic-event grammar (Stage 4.4).
  *
  * Portfolio truth is EVENT-DERIVED (agent-native platform doc, Permanent law 1; spec decision
  * D16): positions, cash, cost basis, and realized P&L are a pure fold over immutable economic
@@ -1549,7 +1549,7 @@ export function requirePortfolioEventEnvelope(
   if (envelope.schemaVersion !== PORTFOLIO_EVENT_SCHEMA_VERSION) {
     const received = describeInputValue(envelope.schemaVersion);
     throw new InputError(
-      `${functionName}: ${label}.schemaVersion must be ${PORTFOLIO_EVENT_SCHEMA_VERSION} (this build's event grammar). Received ${received}. Older stored events restore through readPortfolioLedgerSnapshot with a registered migration; a newer version needs a newer @totalfinance/portfolio.\n  e.g. ${EXAMPLE_ENVELOPE}`,
+      `${functionName}: ${label}.schemaVersion must be ${PORTFOLIO_EVENT_SCHEMA_VERSION} (this build's event grammar). Received ${received}. Older stored events restore through readPortfolioLedgerSnapshot with a registered migration; a newer version needs a newer @insiderfinance/totalfinance release.\n  e.g. ${EXAMPLE_ENVELOPE}`,
       {
         code:
           typeof envelope.schemaVersion === 'number'

@@ -38,11 +38,11 @@ a thin adapter can implement Gymnasium later without moving any finance logic.
 ## A first episode
 
 ```ts
-import { isoDateToEpochMs, type Bar } from '@totalfinance/core';
+import { isoDateToEpochMs, type Bar } from '@insiderfinance/totalfinance/core';
 import {
   createTradingEnvironment,
   type TradingEnvironmentDefinition,
-} from '@totalfinance/backtest/environment';
+} from '@insiderfinance/totalfinance/backtest/environment';
 
 const day = (i: number): number => isoDateToEpochMs('2026-01-05') + i * 86_400_000 + 21 * 3_600_000;
 const bars = (symbol: string, closes: number[]): Bar[] =>
@@ -123,13 +123,13 @@ import {
   backtestRunArtifact,
   readBacktestRun,
   replayBacktestRun,
-} from '@totalfinance/backtest/artifacts';
+} from '@insiderfinance/totalfinance/backtest/artifacts';
 import {
   agentBaselines,
   environmentEpisode,
   runAgentBench,
   runEnvironmentEpisode,
-} from '@totalfinance/backtest/environment';
+} from '@insiderfinance/totalfinance/backtest/environment';
 
 const trending = environmentEpisode({ id: 'trending', seed: 7 });
 console.log(trending.sessions, trending.expectations[0]); // 120 'buy-and-hold beats hold-cash'

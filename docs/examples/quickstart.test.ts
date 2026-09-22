@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { engines, market, option } from '@totalfinance/options';
-import { blackScholes } from '@totalfinance/options/black-scholes';
-import { schemas } from '@totalfinance/options/schema';
+import { engines, market, option } from '@insiderfinance/totalfinance/options';
+import { blackScholes } from '@insiderfinance/totalfinance/options/black-scholes';
+import { schemas } from '@insiderfinance/totalfinance/options/schema';
 
 describe('documentation quickstart examples', () => {
   it('prices through the facade and explains assumptions', () => {

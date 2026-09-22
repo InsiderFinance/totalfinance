@@ -8,7 +8,7 @@
  * (tested), and the components telescope too within one currency; across currencies the split
  * between a component and foreign-exchange P&L is path-dependent (each step translates at its own
  * closing quote), which is disclosed rather than hidden. The
- * return index and drawdown are `@totalfinance/performance`'s `portfolioReturnIndex` and `underwater`
+ * return index and drawdown are `@insiderfinance/totalfinance/performance`'s `portfolioReturnIndex` and `underwater`
  * over the exact series `portfolioPerformanceInputs` emits (FC4 reuse), and exposure by group is
  * the mark's positions grouped by the same classification the P&L uses.
  */
@@ -139,7 +139,7 @@ const MARK_INSTANT =
   'external flows since the prior mark convert at THIS mark’s quotes (the P&L identity ' +
   'convention), while the FC4 series converts each flow at its own flow-date mark.';
 const INDEX_CONVENTION =
-  'indexValue is @totalfinance/performance portfolioReturnIndex over the FC4 series (base value 1, ' +
+  'indexValue is @insiderfinance/totalfinance/performance portfolioReturnIndex over the FC4 series (base value 1, ' +
   'geometric linking, flows at-flow-timestamp); drawdown is underwater() over that index — a ' +
   'flow-adjusted decline, so a withdrawal is never mistaken for a loss. One missing mark withholds ' +
   'the whole index with a reason rather than restarting it.';

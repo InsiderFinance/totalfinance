@@ -1,11 +1,11 @@
 /**
- * `@totalfinance/portfolio/ledger` — the immutable, reusable ledger artifact and its serialization
+ * `@insiderfinance/totalfinance/portfolio/ledger` — the immutable, reusable ledger artifact and its serialization
  * THROUGH the Gate B artifact spine (`docs/specs/gate-b-artifact-spine.md`), never a second
  * envelope invention:
  *
  * - the serialized form is a versioned envelope (`kind: 'totalfinance.portfolio-ledger'`,
  *   `schemaVersion`) whose canonical bytes and `sha256:` identity come from
- *   `@totalfinance/core/artifacts` (`canonicalJsonOf` / `contentHash`);
+ *   `@insiderfinance/totalfinance/core/artifacts` (`canonicalJsonOf` / `contentHash`);
  * - the envelope stores the EVENTS, never the derived state: a ledger IS a fold over its events
  *   (Permanent law 1), so `readPortfolioLedgerSnapshot` restores by RE-FOLDING — replay is the
  *   deserializer, and a state that could drift from its events cannot exist;
@@ -50,7 +50,7 @@ import {
   requireProvenanceShape,
 } from './internal.js';
 
-// Subpath completeness: `@totalfinance/portfolio/ledger` consumers can name the fold's contracts.
+// Subpath completeness: `@insiderfinance/totalfinance/portfolio/ledger` consumers can name the fold's contracts.
 export type { LotReliefPolicy, PortfolioState } from './state.js';
 export type { PortfolioEventEnvelope } from './events.js';
 
@@ -211,7 +211,7 @@ function buildLedger(
  *
  * @example
  * ```ts
- * import { createPortfolioLedger, readPortfolioLedgerSnapshot } from '@totalfinance/portfolio';
+ * import { createPortfolioLedger, readPortfolioLedgerSnapshot } from '@insiderfinance/totalfinance/portfolio';
  *
  * const ledger = createPortfolioLedger({ portfolioId: 'primary', baseCurrency: 'USD', events });
  * const nextLedger = ledger.apply(moreEvents); // NEW artifact; `ledger` is untouched
@@ -345,7 +345,7 @@ export function readPortfolioLedgerSnapshot(input: ReadPortfolioLedgerSnapshotIn
   }
   if (version > PORTFOLIO_LEDGER_SCHEMA_VERSION) {
     throw new InputError(
-      `${functionName}: snapshot schema version ${version} is newer than this build supports (${PORTFOLIO_LEDGER_SCHEMA_VERSION}). Upgrade @totalfinance/portfolio to restore it — restoring blind would misread economic state.`,
+      `${functionName}: snapshot schema version ${version} is newer than this build supports (${PORTFOLIO_LEDGER_SCHEMA_VERSION}). Upgrade @insiderfinance/totalfinance to restore it — restoring blind would misread economic state.`,
       {
         code: ErrorCode.SnapshotUnsupportedVersion,
         context: { version, supported: PORTFOLIO_LEDGER_SCHEMA_VERSION },

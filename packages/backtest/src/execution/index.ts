@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/execution` — pluggable execution reality (Stage 4.6, FC8 Decision 7).
+ * `@insiderfinance/totalfinance/backtest/execution` — pluggable execution reality (Stage 4.6, FC8 Decision 7).
  *
  * - {@link execution} — `simplified()` (the honest default; its label says exactly what it does)
  *   and `declared()` (every member the caller states, validated, under a label the caller signs).

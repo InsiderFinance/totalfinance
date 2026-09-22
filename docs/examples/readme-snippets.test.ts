@@ -1,60 +1,69 @@
-import { resolvedExpiry } from '@totalfinance/core';
-import { isPeriodAvailableAt } from '@totalfinance/fundamentals';
-import { internalRateOfReturn, netPresentValue } from '@totalfinance/valuation';
-import { screenUniverse, type ScreenUniverseInput } from '@totalfinance/research';
-import { convertCurrency, coveredInterestParityForward } from '@totalfinance/foreign-exchange';
-import { commodityForwardPrice, impliedConvenienceYield } from '@totalfinance/commodities';
-import { createPortfolioLedger, portfolioSnapshot } from '@totalfinance/portfolio';
-import { createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
+import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
+import { isPeriodAvailableAt } from '@insiderfinance/totalfinance/fundamentals';
+import { internalRateOfReturn, netPresentValue } from '@insiderfinance/totalfinance/valuation';
+import { screenUniverse, type ScreenUniverseInput } from '@insiderfinance/totalfinance/research';
+import {
+  convertCurrency,
+  coveredInterestParityForward,
+} from '@insiderfinance/totalfinance/foreign-exchange';
+import {
+  commodityForwardPrice,
+  impliedConvenienceYield,
+} from '@insiderfinance/totalfinance/commodities';
+import { createPortfolioLedger, portfolioSnapshot } from '@insiderfinance/totalfinance/portfolio';
+import {
+  createMarketSnapshot,
+  createScenarioSet,
+} from '@insiderfinance/totalfinance/core/artifacts';
 import { describe, expect, it } from 'vitest';
-import type { OptionQuote } from '@totalfinance/core';
-import { isoDateToEpochMs } from '@totalfinance/core';
-import { normalCdf } from '@totalfinance/math';
-import { NYSE } from '@totalfinance/calendars/nyse';
-import { sharpe } from '@totalfinance/performance';
-import { covariance, maxSharpe, valueAtRisk } from '@totalfinance/risk';
-import { crossSectionalBacktest } from '@totalfinance/backtest';
-import { blackScholes, option } from '@totalfinance/options';
-import { optionContractPricer } from '@totalfinance/options/pricer';
-import { runScenarios, scenarioTarget } from '@totalfinance/scenarios';
-import { expectedMoveFromImpliedVolatility } from '@totalfinance/volatility';
-import { exposure } from '@totalfinance/structure';
-import * as ta from '@totalfinance/technical-analysis';
-import { legs, strategy } from '@totalfinance/strategy';
-import { bonds, priceFromYield } from '@totalfinance/fixed-income';
-import { futuresBasis, perpetualFunding } from '@totalfinance/crypto';
-import { defaultTools } from '@totalfinance/mcp';
-import { createOperationRegistry, defaultPacks } from '@totalfinance/workflows';
-import { openApiDocument } from '@totalfinance/http';
+import type { OptionQuote } from '@insiderfinance/totalfinance/core';
+import { isoDateToEpochMs } from '@insiderfinance/totalfinance/core';
+import { normalCdf } from '@insiderfinance/totalfinance/math';
+import { NYSE } from '@insiderfinance/totalfinance/calendars/nyse';
+import { sharpe } from '@insiderfinance/totalfinance/performance';
+import { covariance, maxSharpe, valueAtRisk } from '@insiderfinance/totalfinance/risk';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
+import { blackScholes, option } from '@insiderfinance/totalfinance/options';
+import { optionContractPricer } from '@insiderfinance/totalfinance/options/pricer';
+import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
+import { expectedMoveFromImpliedVolatility } from '@insiderfinance/totalfinance/volatility';
+import { exposure } from '@insiderfinance/totalfinance/structure';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
+import { bonds, priceFromYield } from '@insiderfinance/totalfinance/fixed-income';
+import { futuresBasis, perpetualFunding } from '@insiderfinance/totalfinance/crypto';
+import { defaultTools } from '@insiderfinance/totalfinance-mcp';
+import { createOperationRegistry, defaultPacks } from '@insiderfinance/totalfinance/workflows';
+import { openApiDocument } from '@insiderfinance/totalfinance/http';
 import {
   createFileArtifactStore,
   createFileJobStore,
   registryForProfile,
   submitJob,
-} from '@totalfinance/cli';
-import { calibrateSvi } from '@totalfinance/volatility';
+} from '@insiderfinance/totalfinance/cli';
+import { calibrateSvi } from '@insiderfinance/totalfinance/volatility';
 import {
   compareFittedModels,
   evaluateFittedModel,
   fittedModelArtifact,
   readFittedModel,
   replayFittedModel,
-} from '@totalfinance/volatility/artifacts';
-import { curves, type BootstrapInstrument } from '@totalfinance/fixed-income';
+} from '@insiderfinance/totalfinance/volatility/artifacts';
+import { curves, type BootstrapInstrument } from '@insiderfinance/totalfinance/fixed-income';
 import {
   compareFittedModels as compareCurveModels,
   evaluateFittedModel as evaluateCurveModel,
   fittedModelArtifact as curveArtifact,
   readFittedModel as readCurveModel,
   replayFittedModel as replayCurveModel,
-} from '@totalfinance/fixed-income/artifacts';
+} from '@insiderfinance/totalfinance/fixed-income/artifacts';
 import {
   compareResearchRuns,
   readResearchRun,
   replayResearchRun,
   researchRunArtifact,
-} from '@totalfinance/research/artifacts';
-import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+} from '@insiderfinance/totalfinance/research/artifacts';
+import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
 
 /**
  * DX4.2 — the single source of truth for each package README's example.
@@ -68,17 +77,17 @@ import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts
  * scoped bindings is also guarded separately by `packages/totalfinance/test`.
  */
 describe('README examples (run in CI so the generated package READMEs can never rot)', () => {
-  it('@totalfinance/core', () => {
+  it('@insiderfinance/totalfinance/core', () => {
     // readme:begin
-    // import { isoDateToEpochMs } from '@totalfinance/core';
+    // import { isoDateToEpochMs } from '@insiderfinance/totalfinance/core';
     const ms = isoDateToEpochMs('2026-01-15'); // → UTC midnight, epoch ms
     // readme:end
     expect(ms).toBe(Date.UTC(2026, 0, 15));
   });
 
-  it('@totalfinance/valuation', () => {
+  it('@insiderfinance/totalfinance/valuation', () => {
     // readme:begin
-    // import { netPresentValue, internalRateOfReturn } from '@totalfinance/valuation';
+    // import { netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
     const cashFlows = [
       { amount: -1_000, timeYears: 0 },
       { amount: 600, timeYears: 1 },
@@ -92,9 +101,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(rate).toBeCloseTo(0.1307, 4);
   });
 
-  it('@totalfinance/research', () => {
+  it('@insiderfinance/totalfinance/research', () => {
     // readme:begin
-    // import { screenUniverse, type ScreenUniverseInput } from '@totalfinance/research';
+    // import { screenUniverse, type ScreenUniverseInput } from '@insiderfinance/totalfinance/research';
     const screen = screenUniverse({
       universeId: 'demo@2026-08-12',
       asOf: Date.UTC(2026, 7, 12, 20),
@@ -124,9 +133,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(screen.diagnostics.exclusionReasons['filtered-out']).toBe(1);
   });
 
-  it('@totalfinance/foreign-exchange', () => {
+  it('@insiderfinance/totalfinance/foreign-exchange', () => {
     // readme:begin
-    // import { convertCurrency, coveredInterestParityForward } from '@totalfinance/foreign-exchange';
+    // import { convertCurrency, coveredInterestParityForward } from '@insiderfinance/totalfinance/foreign-exchange';
     // EUR/USD 1.08: one euro costs 1.08 dollars — the pair always names its own direction.
     const spotRate = { baseCurrency: 'EUR', quoteCurrency: 'USD', quotePerBase: 1.08 };
     const conversion = convertCurrency({
@@ -147,10 +156,10 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(parity.forwardRate.quotePerBase).toBeCloseTo(1.08 * Math.exp(0.02 * 0.75), 12);
   });
 
-  it('@totalfinance/portfolio', () => {
+  it('@insiderfinance/totalfinance/portfolio', () => {
     // readme:begin
-    // import { createPortfolioLedger, portfolioSnapshot } from '@totalfinance/portfolio';
-    // import { createMarketSnapshot } from '@totalfinance/core/artifacts';
+    // import { createPortfolioLedger, portfolioSnapshot } from '@insiderfinance/totalfinance/portfolio';
+    // import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
     // Portfolio truth is a fold over immutable economic events: a deposit, then a fill.
     const instrumentId = 'AAPL';
     const ledger = createPortfolioLedger({
@@ -204,9 +213,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(heldQuantity).toBe(100);
   });
 
-  it('@totalfinance/commodities', () => {
+  it('@insiderfinance/totalfinance/commodities', () => {
     // readme:begin
-    // import { commodityForwardPrice, impliedConvenienceYield } from '@totalfinance/commodities';
+    // import { commodityForwardPrice, impliedConvenienceYield } from '@insiderfinance/totalfinance/commodities';
     // Cost of carry: forward = spot × e^((financing + storage − convenience) × t).
     const forwardPrice = commodityForwardPrice({
       spotPrice: 72,
@@ -230,9 +239,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(implied.impliedAnnualConvenienceYield).toBeCloseTo(0.01, 12);
   });
 
-  it('@totalfinance/fundamentals', () => {
+  it('@insiderfinance/totalfinance/fundamentals', () => {
     // readme:begin
-    // import { isPeriodAvailableAt } from '@totalfinance/fundamentals';
+    // import { isPeriodAvailableAt } from '@insiderfinance/totalfinance/fundamentals';
     const q1 = {
       periodEndDate: '2026-03-31',
       fiscalYear: 2026,
@@ -250,33 +259,33 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(visibleMay).toBe(true);
   });
 
-  it('@totalfinance/math', () => {
+  it('@insiderfinance/totalfinance/math', () => {
     // readme:begin
-    // import { normalCdf } from '@totalfinance/math';
+    // import { normalCdf } from '@insiderfinance/totalfinance/math';
     const p = normalCdf(0); // → 0.5 (standard normal CDF at 0)
     // readme:end
     expect(p).toBeCloseTo(0.5, 12);
   });
 
-  it('@totalfinance/calendars', () => {
+  it('@insiderfinance/totalfinance/calendars', () => {
     // readme:begin
-    // import { NYSE } from '@totalfinance/calendars/nyse';
+    // import { NYSE } from '@insiderfinance/totalfinance/calendars/nyse';
     const open = NYSE.isBusinessDay('2026-01-20'); // Tuesday after MLK Day
     // readme:end
     expect(typeof open).toBe('boolean');
   });
 
-  it('@totalfinance/performance', () => {
+  it('@insiderfinance/totalfinance/performance', () => {
     // readme:begin
-    // import { sharpe } from '@totalfinance/performance';
+    // import { sharpe } from '@insiderfinance/totalfinance/performance';
     const ratio = sharpe([0.012, -0.004, 0.021, 0.007, -0.003, 0.015]);
     // readme:end
     expect(Number.isFinite(ratio)).toBe(true);
   });
 
-  it('@totalfinance/risk', () => {
+  it('@insiderfinance/totalfinance/risk', () => {
     // readme:begin
-    // import { covariance, maxSharpe, valueAtRisk } from '@totalfinance/risk';
+    // import { covariance, maxSharpe, valueAtRisk } from '@insiderfinance/totalfinance/risk';
     const returns = [0.01, -0.02, 0.015, -0.05, 0.008, -0.01, 0.02, -0.03];
     const var95 = valueAtRisk(returns); // 95% historical VaR (positive loss magnitude)
 
@@ -302,9 +311,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(weights.reduce((a, b) => a + b, 0)).toBeCloseTo(1, 8);
   });
 
-  it('@totalfinance/backtest', () => {
+  it('@insiderfinance/totalfinance/backtest', () => {
     // readme:begin
-    // import { crossSectionalBacktest } from '@totalfinance/backtest';
+    // import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
     const sessions = ['2026-01-02', '2026-01-09', '2026-01-16', '2026-01-23', '2026-02-06'];
     const close = (date: string) => Date.parse(`${date}T21:00:00Z`);
     const run = crossSectionalBacktest({
@@ -368,9 +377,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(run.assumptions.execution.realism).toBe('simplified');
   });
 
-  it('@totalfinance/options', () => {
+  it('@insiderfinance/totalfinance/options', () => {
     // readme:begin
-    // import { blackScholes } from '@totalfinance/options';
+    // import { blackScholes } from '@insiderfinance/totalfinance/options';
     const price = blackScholes.call({
       spot: 100,
       strike: 105,
@@ -391,12 +400,12 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(explained.assumptions.dayCount).toBe('ACT/365F');
   });
 
-  it('@totalfinance/scenarios', () => {
+  it('@insiderfinance/totalfinance/scenarios', () => {
     // readme:begin
-    // import { createMarketSnapshot, createScenarioSet } from '@totalfinance/core/artifacts';
-    // import { option } from '@totalfinance/options';
-    // import { optionContractPricer } from '@totalfinance/options/pricer';
-    // import { runScenarios, scenarioTarget } from '@totalfinance/scenarios';
+    // import { createMarketSnapshot, createScenarioSet } from '@insiderfinance/totalfinance/core/artifacts';
+    // import { option } from '@insiderfinance/totalfinance/options';
+    // import { optionContractPricer } from '@insiderfinance/totalfinance/options/pricer';
+    // import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
     const aaplCall = option.usEquityCall({
       underlying: 'AAPL',
       strike: 105,
@@ -478,9 +487,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(callUp.localPnl).toBeGreaterThan(0);
   });
 
-  it('@totalfinance/volatility', () => {
+  it('@insiderfinance/totalfinance/volatility', () => {
     // readme:begin
-    // import { expectedMoveFromImpliedVolatility } from '@totalfinance/volatility';
+    // import { expectedMoveFromImpliedVolatility } from '@insiderfinance/totalfinance/volatility';
     const move = expectedMoveFromImpliedVolatility({
       spot: 100,
       impliedVolatility: 0.2,
@@ -490,10 +499,10 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(move.oneSigma).toBeGreaterThan(0);
   });
 
-  it('@totalfinance/structure', () => {
+  it('@insiderfinance/totalfinance/structure', () => {
     // readme:begin
-    // import { exposure } from '@totalfinance/structure';
-    // import { resolvedExpiry, type OptionQuote } from '@totalfinance/core';
+    // import { exposure } from '@insiderfinance/totalfinance/structure';
+    // import { resolvedExpiry, type OptionQuote } from '@insiderfinance/totalfinance/core';
     const chain: OptionQuote[] = [
       {
         contract: {
@@ -534,9 +543,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(Number.isFinite(net.gex)).toBe(true);
   });
 
-  it('@totalfinance/technical-analysis', () => {
+  it('@insiderfinance/totalfinance/technical-analysis', () => {
     // readme:begin
-    // import * as ta from '@totalfinance/technical-analysis';
+    // import * as ta from '@insiderfinance/totalfinance/technical-analysis';
     const closes = [
       44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61,
       46.28, 46.28, 46.0, 46.03, 46.41, 46.22, 45.64,
@@ -548,9 +557,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(rsi.value.at(-1)).toBeCloseTo(57.915, 2);
   });
 
-  it('@totalfinance/strategy', () => {
+  it('@insiderfinance/totalfinance/strategy', () => {
     // readme:begin
-    // import { strategy, legs } from '@totalfinance/strategy';
+    // import { strategy, legs } from '@insiderfinance/totalfinance/strategy';
     const spread = strategy([
       legs.call({ strike: 100, premium: 4.25, quantity: 1 }),
       legs.call({ strike: 110, premium: 1.4, quantity: -1 }),
@@ -560,9 +569,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(metrics.maxProfit).toBeGreaterThan(0);
   });
 
-  it('@totalfinance/crypto', () => {
+  it('@insiderfinance/totalfinance/crypto', () => {
     // readme:begin
-    // import { futuresBasis, perpetualFunding } from '@totalfinance/crypto';
+    // import { futuresBasis, perpetualFunding } from '@insiderfinance/totalfinance/crypto';
     const funding = perpetualFunding({
       markPrice: 68_250,
       indexPrice: 68_100,
@@ -589,9 +598,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(basis.assumptions.conventionsVersion).toBe('0.0.1');
   });
 
-  it('@totalfinance/fixed-income', () => {
+  it('@insiderfinance/totalfinance/fixed-income', () => {
     // readme:begin
-    // import { bonds, priceFromYield } from '@totalfinance/fixed-income';
+    // import { bonds, priceFromYield } from '@insiderfinance/totalfinance/fixed-income';
     const bond = bonds.fixedRate({
       issueDate: '2026-01-01',
       maturityDate: '2031-01-01',
@@ -605,17 +614,17 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(priced.cleanPrice).toBeCloseTo(100, 6);
   });
 
-  it('@totalfinance/mcp', () => {
+  it('@insiderfinance/totalfinance-mcp', () => {
     // readme:begin
-    // import { defaultTools } from '@totalfinance/mcp';
+    // import { defaultTools } from '@insiderfinance/totalfinance-mcp';
     const toolNames = defaultTools().map((t) => t.name); // the read-only compute tools
     // readme:end
     expect(toolNames).toContain('totalfinance_option_price'); // B1: dots become underscores on the wire
   });
 
-  it('@totalfinance/workflows', () => {
+  it('@insiderfinance/totalfinance/workflows', () => {
     // readme:begin
-    // import { createOperationRegistry, defaultPacks } from '@totalfinance/workflows';
+    // import { createOperationRegistry, defaultPacks } from '@insiderfinance/totalfinance/workflows';
     const registry = createOperationRegistry({ packs: defaultPacks() }); // the curated, effect-checked set
     const result = registry.run({
       id: 'totalfinance.option.price',
@@ -633,9 +642,9 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(result.structured['value']).toBeGreaterThan(0);
   });
 
-  it('@totalfinance/cli', () => {
+  it('@insiderfinance/totalfinance/cli', () => {
     // readme:begin
-    // import { createFileArtifactStore, createFileJobStore, registryForProfile, submitJob } from '@totalfinance/cli';
+    // import { createFileArtifactStore, createFileJobStore, registryForProfile, submitJob } from '@insiderfinance/totalfinance/cli';
     const directory = '/tmp/totalfinance-example-store'; // an ABSOLUTE path: the store directory jobs and handles share
     const run = submitJob({
       registry: registryForProfile({ profile: 'default' }),
@@ -662,10 +671,10 @@ describe('README examples (run in CI so the generated package READMEs can never 
     );
   });
 
-  it('@totalfinance/http', () => {
+  it('@insiderfinance/totalfinance/http', () => {
     // readme:begin
-    // import { openApiDocument } from '@totalfinance/http';
-    // import { createOperationRegistry, defaultPacks } from '@totalfinance/workflows';
+    // import { openApiDocument } from '@insiderfinance/totalfinance/http';
+    // import { createOperationRegistry, defaultPacks } from '@insiderfinance/totalfinance/workflows';
     const document = openApiDocument({
       registry: createOperationRegistry({ packs: defaultPacks() }),
     }); // OpenAPI 3.1, from the registry
@@ -679,8 +688,8 @@ describe('README examples (run in CI so the generated package READMEs can never 
     const { blackScholes } = await import('totalfinance/options');
     const { rsi } = await import('totalfinance/technical-analysis');
     // readme:begin
-    // import { blackScholes } from 'totalfinance/options';
-    // import { rsi } from 'totalfinance/technical-analysis';
+    // import { blackScholes } from '@insiderfinance/totalfinance/options';
+    // import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
     const price = blackScholes.call({
       spot: 100,
       strike: 105,
@@ -701,11 +710,11 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(momentum.value.at(-1)).toBeCloseTo(57.915, 2);
   });
 
-  it('@totalfinance/volatility/artifacts', () => {
+  it('@insiderfinance/totalfinance/volatility/artifacts', () => {
     // readme:begin
-    // import { calibrateSvi } from '@totalfinance/volatility';
-    // import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@totalfinance/volatility/artifacts';
-    // import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+    // import { calibrateSvi } from '@insiderfinance/totalfinance/volatility';
+    // import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@insiderfinance/totalfinance/volatility/artifacts';
+    // import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
     // A smile in total variance w(k) — here generated from known SVI parameters.
     const k = [-0.5, -0.35, -0.2, -0.1, -0.03, 0, 0.05, 0.12, 0.22, 0.35, 0.5];
     const w = k.map(
@@ -739,11 +748,11 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(comparison.sameCalibrationInput).toBe(false);
   });
 
-  it('@totalfinance/fixed-income/artifacts', () => {
+  it('@insiderfinance/totalfinance/fixed-income/artifacts', () => {
     // readme:begin
-    // import { curves, type BootstrapInstrument } from '@totalfinance/fixed-income';
-    // import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@totalfinance/fixed-income/artifacts';
-    // import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+    // import { curves, type BootstrapInstrument } from '@insiderfinance/totalfinance/fixed-income';
+    // import { fittedModelArtifact, readFittedModel, evaluateFittedModel, replayFittedModel, compareFittedModels } from '@insiderfinance/totalfinance/fixed-income/artifacts';
+    // import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
     const instruments: BootstrapInstrument[] = [
       { type: 'deposit', maturity: '2026-07-01', rate: 0.03 },
       { type: 'swap', maturity: '2028-01-01', rate: 0.032, fixedFrequency: 'semiannual' },
@@ -781,11 +790,11 @@ describe('README examples (run in CI so the generated package READMEs can never 
     expect(comparison.sameCalibrationInput).toBe(false);
   });
 
-  it('@totalfinance/research/artifacts', () => {
+  it('@insiderfinance/totalfinance/research/artifacts', () => {
     // readme:begin
-    // import { screenUniverse, type ScreenUniverseInput } from '@totalfinance/research';
-    // import { researchRunArtifact, readResearchRun, replayResearchRun, compareResearchRuns } from '@totalfinance/research/artifacts';
-    // import { canonicalJsonOf, fromCanonicalJson } from '@totalfinance/core/artifacts';
+    // import { screenUniverse, type ScreenUniverseInput } from '@insiderfinance/totalfinance/research';
+    // import { researchRunArtifact, readResearchRun, replayResearchRun, compareResearchRuns } from '@insiderfinance/totalfinance/research/artifacts';
+    // import { canonicalJsonOf, fromCanonicalJson } from '@insiderfinance/totalfinance/core/artifacts';
     const observations = [
       {
         instrumentId: 'AAA',

@@ -312,16 +312,24 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
   });
 
   it.each([
-    ['AAPL', '@totalfinance/core/artifacts#createMarketSnapshot', 'spots'],
-    ['AAPL', '@totalfinance/core/artifacts#createMarketSnapshot', 'volatilities'],
-    ['AAPL', '@totalfinance/portfolio#portfolioSnapshot', 'spots'],
-    ['AGG', '@totalfinance/portfolio#allocatePortfolio', 'prices'],
-    ['AGG', '@totalfinance/portfolio#proposePortfolioRebalance', 'spots'],
-    ['AGG', '@totalfinance/portfolio#proposePortfolioRebalance', 'instrumentClassification'],
-    ['SPY', '@totalfinance/portfolio#proposePortfolioRebalance', 'prices'],
-    ['SPY', '@totalfinance/portfolio#proposePortfolioRebalance', 'spots'],
-    ['SPY', '@totalfinance/portfolio#proposePortfolioRebalance', 'instrumentClassification'],
-    ['USD', '@totalfinance/core/artifacts#createMarketSnapshot', 'riskFreeRates'],
+    ['AAPL', '@insiderfinance/totalfinance/core/artifacts#createMarketSnapshot', 'spots'],
+    ['AAPL', '@insiderfinance/totalfinance/core/artifacts#createMarketSnapshot', 'volatilities'],
+    ['AAPL', '@insiderfinance/totalfinance/portfolio#portfolioSnapshot', 'spots'],
+    ['AGG', '@insiderfinance/totalfinance/portfolio#allocatePortfolio', 'prices'],
+    ['AGG', '@insiderfinance/totalfinance/portfolio#proposePortfolioRebalance', 'spots'],
+    [
+      'AGG',
+      '@insiderfinance/totalfinance/portfolio#proposePortfolioRebalance',
+      'instrumentClassification',
+    ],
+    ['SPY', '@insiderfinance/totalfinance/portfolio#proposePortfolioRebalance', 'prices'],
+    ['SPY', '@insiderfinance/totalfinance/portfolio#proposePortfolioRebalance', 'spots'],
+    [
+      'SPY',
+      '@insiderfinance/totalfinance/portfolio#proposePortfolioRebalance',
+      'instrumentClassification',
+    ],
+    ['USD', '@insiderfinance/totalfinance/core/artifacts#createMarketSnapshot', 'riskFreeRates'],
   ])(
     'limits generated %s data-key dispositions to their source dictionary',
     (name, sourceHeading, container) => {
@@ -335,7 +343,10 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
       expect(matchesDocumentedException({ ...input, path: 'docs/guides/mcp.md' })).toBe(false);
       expect(matchesDocumentedException({ ...input, owner: 'human' })).toBe(false);
       expect(
-        matchesDocumentedException({ ...input, sourceHeading: '@totalfinance/options#price' }),
+        matchesDocumentedException({
+          ...input,
+          sourceHeading: '@insiderfinance/totalfinance/options#price',
+        }),
       ).toBe(false);
       expect(
         matchesDocumentedException({
@@ -362,14 +373,14 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
     const input = {
       path: 'docs/llms-full.txt',
       owner: 'tools/llms-docs.ts',
-      sourceHeading: '@totalfinance/http#OpenApiDocument',
+      sourceHeading: '@insiderfinance/totalfinance/http#OpenApiDocument',
       identifier: { name: 'scheme', position: 'declaration' as const, line: "scheme: 'bearer';" },
     };
     expect(matchesDocumentedException(input)).toBe(true);
     expect(
       matchesDocumentedException({
         ...input,
-        sourceHeading: '@totalfinance/http#HttpServerOptions',
+        sourceHeading: '@insiderfinance/totalfinance/http#HttpServerOptions',
       }),
     ).toBe(false);
     expect(

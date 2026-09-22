@@ -73,9 +73,9 @@ export interface TaylorFactors {
 
 /** Raw per-unit derivatives in the exact units consumed by `taylorPnl`. */
 /**
- * Greeks for a Taylor target in TotalFinance's ONE unit system — the units `@totalfinance/options` reports
+ * Greeks for a Taylor target in TotalFinance's ONE unit system — the units `@insiderfinance/totalfinance/options` reports
  * (theta per calendar day, vega per volatility point, rho and phi per 1%, second-order terms in the
- * options package's conventions). See `@totalfinance/risk`'s `PositionGreeks`; the Taylor engine converts
+ * options package's conventions). See `@insiderfinance/totalfinance/risk`'s `PositionGreeks`; the Taylor engine converts
  * internally.
  */
 export interface TaylorSensitivities {
@@ -206,7 +206,7 @@ export interface ScenarioReadonlyRateCurve {
 /**
  * Named, tool-walkable readonly projection of core's existing `MarketObservation` union.
  *
- * The arm/value grammar remains owned by `@totalfinance/core/pricing`; this view references those
+ * The arm/value grammar remains owned by `@insiderfinance/totalfinance/core/pricing`; this view references those
  * source types directly and changes only mutability at the callback boundary.
  */
 export type ScenarioReadonlyMarketObservation =

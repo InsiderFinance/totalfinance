@@ -1,4 +1,4 @@
-import { legs, strategy } from '@totalfinance/strategy';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
 import type { Playground } from '../types.js';
 
 export const strategies: Playground = {
@@ -92,12 +92,12 @@ export const strategies: Playground = {
       example: {
         description:
           'Returns a payoff report with named summary fields and an ordinary points array. Each point has underlyingPrice and pnl; amounts include the 100-share multiplier and premiums. These five explicit prices sample the same position as the chart.',
-        code: `import { legs, strategy } from '@totalfinance/strategy';\n\nconst position = strategy([\n  legs.call({ strike: ${longStrike}, premium: ${longPremium}, quantity: 1 }),\n  legs.call({ strike: ${shortStrike}, premium: ${shortPremium}, quantity: -1 }),\n], { multiplier: 100 });\nconst underlyingPrices = ${JSON.stringify([longStrike * 0.8, longStrike * 0.9, longStrike, shortStrike, shortStrike * 1.2])};\nconst result = position.payoff({ prices: underlyingPrices });\nconsole.log(result);`,
+        code: `import { legs, strategy } from '@insiderfinance/totalfinance/strategy';\n\nconst position = strategy([\n  legs.call({ strike: ${longStrike}, premium: ${longPremium}, quantity: 1 }),\n  legs.call({ strike: ${shortStrike}, premium: ${shortPremium}, quantity: -1 }),\n], { multiplier: 100 });\nconst underlyingPrices = ${JSON.stringify([longStrike * 0.8, longStrike * 0.9, longStrike, shortStrike, shortStrike * 1.2])};\nconst result = position.payoff({ prices: underlyingPrices });\nconsole.log(result);`,
         result: position.payoff({
           prices: [longStrike * 0.8, longStrike * 0.9, longStrike, shortStrike, shortStrike * 1.2],
         }),
       },
-      code: `import { legs, strategy } from '@totalfinance/strategy';\n\nconst position = strategy([\n  legs.call({ strike: ${longStrike}, premium: ${longPremium}, quantity: 1 }),\n  legs.call({ strike: ${shortStrike}, premium: ${shortPremium}, quantity: -1 }),\n], { multiplier: 100 });\nconst result = position.payoff({ prices: { from: ${longStrike * 0.8}, to: ${shortStrike * 1.2}, steps: 101 } });\nconsole.log(result);`,
+      code: `import { legs, strategy } from '@insiderfinance/totalfinance/strategy';\n\nconst position = strategy([\n  legs.call({ strike: ${longStrike}, premium: ${longPremium}, quantity: 1 }),\n  legs.call({ strike: ${shortStrike}, premium: ${shortPremium}, quantity: -1 }),\n], { multiplier: 100 });\nconst result = position.payoff({ prices: { from: ${longStrike * 0.8}, to: ${shortStrike * 1.2}, steps: 101 } });\nconsole.log(result);`,
     };
   },
 };

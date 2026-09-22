@@ -15,7 +15,7 @@
  * is exact to solver tolerance, so the returned quantile is too.
  *
  * Every function is a pure deterministic mapping. Invalid arguments throw `InputError` with a stable
- * `code` (mirroring the rest of `@totalfinance/math`).
+ * `code` (mirroring the rest of `@insiderfinance/totalfinance/math`).
  */
 
 import { ConvergenceError, ErrorCode, InputError } from '@totalfinance/core';

@@ -182,8 +182,8 @@ export interface Scenario {
 const SCENARIO_KEYS = ['name', 'shocks'] as const;
 
 /**
- * A position's Greeks in TotalFinance's ONE unit system — the units `@totalfinance/options` and
- * `@totalfinance/strategy` report (`DEFAULT_GREEK_UNITS`), so a `blackScholesGreeks(...)` /
+ * A position's Greeks in TotalFinance's ONE unit system — the units `@insiderfinance/totalfinance/options` and
+ * `@insiderfinance/totalfinance/strategy` report (`DEFAULT_GREEK_UNITS`), so a `blackScholesGreeks(...)` /
  * `Position.value().greeks` object spreads straight in: `{ value, spot, ...greeks }`.
  *
  * Per unit of the position (per share of one contract when `Position.multiplier` scales it):

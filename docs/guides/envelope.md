@@ -15,7 +15,7 @@ grammar (alignment spec Law 2 — settled by both PR-303 reviews):
 After learning one domain you can predict every other: `probabilityInTheMoney({...})` is a facade (plain
 number, `.explain()` when the risk-neutral caveat matters); `calibrateSvi(...)` is an analysis
 (envelope always); a `VolatilitySurface` is an artifact; `blackScholesPrice({ type, spot, strike, timeToExpiryYears, riskFreeRate,
-dividendYield, volatility })` is a kernel behind `@totalfinance/options/black-scholes`.
+dividendYield, volatility })` is a kernel behind `@insiderfinance/totalfinance/options/black-scholes`.
 
 TotalFinance has one rule for the shape of every result, and it never varies:
 
@@ -47,7 +47,7 @@ TotalFinance has one rule for the shape of every result, and it never varies:
 serialized result is self-interpreting and MCP / serialization consumers treat all results the same
 way. (Warnings always live under `diagnostics.warnings` — never hoisted to a top-level `warnings`.)
 
-**Technical indicators fit the same envelope.** `@totalfinance/technical-analysis`'s `.explain()` returns the ordinary
+**Technical indicators fit the same envelope.** `@insiderfinance/totalfinance/technical-analysis`'s `.explain()` returns the ordinary
 `{ value, assumptions, diagnostics }` envelope too — there is no separate `SeriesResult` type. Its
 `value` is the aligned, NaN-padded series (each output lined up with its input bar), and the length of
 the leading NaN warmup is reported as `diagnostics.warmup` — the index of the first finite bar, exactly

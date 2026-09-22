@@ -1,5 +1,5 @@
 /**
- * @totalfinance/fundamentals — typed fundamental truth (FC0 foundation slice).
+ * @insiderfinance/totalfinance/fundamentals — typed fundamental truth (FC0 foundation slice).
  *
  * This first slice installs the FROZEN contracts the domain builds on: the point-in-time
  * {@link FundamentalPeriod}, its boundary guard, the availability rule, and the raw data-edge

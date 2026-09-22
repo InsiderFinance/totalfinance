@@ -1,5 +1,5 @@
 /**
- * The investment-policy grammar behind `@totalfinance/portfolio/policy` (FC7 slice 4, Stage 4.4): model
+ * The investment-policy grammar behind `@insiderfinance/totalfinance/portfolio/policy` (FC7 slice 4, Stage 4.4): model
  * portfolios with versioned strategic/tactical/glide-path targets and hierarchical sleeves, the
  * user-supplied `InvestmentPolicy`, and the ONE target-resolution law that `allocatePortfolio`,
  * `proposePortfolioRebalance`, and `monitorPortfolio` share. This module is INTERNAL: `policy.ts`
@@ -75,7 +75,7 @@ export interface AllocationTarget {
   /**
    * Target share of total portfolio risk (decimal). Carried on the artifact; this build's
    * portfolio-side calls act on WEIGHTS and report a risk-budget target as unresolved — turning a
-   * risk budget into weights needs a covariance, which lives on the risk side (`@totalfinance/risk`).
+   * risk budget into weights needs a covariance, which lives on the risk side (`@insiderfinance/totalfinance/risk`).
    */
   riskBudget?: number;
   /** Absolute drift band for this target (decimal of NAV); overrides the policy's `driftBand`. */
@@ -1129,7 +1129,7 @@ function modelContentHash(definition: ModelPortfolioDefinition): string {
  *
  * @example
  * ```ts
- * import { createModelPortfolio } from '@totalfinance/portfolio/policy';
+ * import { createModelPortfolio } from '@insiderfinance/totalfinance/portfolio/policy';
  *
  * const model = createModelPortfolio({
  *   modelId: 'balanced',
@@ -1687,7 +1687,7 @@ export function expandTargets(functionName: string, input: ExpandTargetsInput): 
       unresolved.push({
         key,
         group: target.group,
-        reason: `risk budget ${target.riskBudget} needs a covariance to become weights — resolve it on the risk side (@totalfinance/risk) and restate as weight targets.`,
+        reason: `risk budget ${target.riskBudget} needs a covariance to become weights — resolve it on the risk side (@insiderfinance/totalfinance/risk) and restate as weight targets.`,
       });
       continue;
     }

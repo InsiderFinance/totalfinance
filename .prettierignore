@@ -19,3 +19,9 @@ packages/http/etc/openapi.json
 docs/reference/fields.md
 docs/reference/fields/
 /release/
+distribution/*/modules/
+distribution/*/src/
+distribution/*/etc/
+distribution/*/README.md
+distribution/*/LICENSE
+distribution/*/STABILITY.md

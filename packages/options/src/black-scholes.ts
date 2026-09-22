@@ -1,8 +1,8 @@
 /**
- * `@totalfinance/options/black-scholes` — the Black–Scholes facade.
+ * `@insiderfinance/totalfinance/options/black-scholes` — the Black–Scholes facade.
  *
  * This is a HOT-PATH deep entrypoint (spec §6, §21.5). It imports only the BSM kernel, tiny core
- * invariants, and `@totalfinance/math` — never schema machinery or other engines. Public inputs
+ * invariants, and `@insiderfinance/totalfinance/math` — never schema machinery or other engines. Public inputs
  * retain their runtime guards. Whole-entrypoint and used-function budgets are tested separately;
  * see `docs/bundle-size.md` for current measurements and the supported import patterns.
  *
@@ -446,7 +446,7 @@ function impliedVolatilityFailure(reason: string | undefined): {
  *
  * @example
  * ```ts
- * import { blackScholes } from '@totalfinance/options';
+ * import { blackScholes } from '@insiderfinance/totalfinance/options';
  *
  * blackScholes.price({ spot: 100, strike: 105, timeToExpiryYears: 30 / 365, riskFreeRate: 0.045, volatility: 0.22, type: 'call' });
  * // → 0.898…  (plain number)

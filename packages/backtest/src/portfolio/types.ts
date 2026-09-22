@@ -1,7 +1,7 @@
 /**
- * `@totalfinance/backtest/portfolio` — types for `portfolioBacktest`, the ledger-backed multi-asset
+ * `@insiderfinance/totalfinance/backtest/portfolio` — types for `portfolioBacktest`, the ledger-backed multi-asset
  * simulator (Stage 4.6, FC8 Decision 6). Every fill, flow, lifecycle fact, and liquidation is a
- * portfolio event folded through `@totalfinance/portfolio`'s reducer; the equity at every mark is the
+ * portfolio event folded through `@insiderfinance/totalfinance/portfolio`'s reducer; the equity at every mark is the
  * ledger's net asset value.
  */
 

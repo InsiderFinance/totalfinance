@@ -3,7 +3,7 @@
  *
  * Core owns the *machinery* (the interface, roll/observance rules, holiday-rule generators, and the
  * `createRuleCalendar` factory) and two tiny calendars that need no holiday datasets (`alwaysOpen`,
- * `weekendsOnly`). Exchange-specific holiday *data* lives in `@totalfinance/calendars`, so core never
+ * `weekendsOnly`). Exchange-specific holiday *data* lives in `@insiderfinance/totalfinance/calendars`, so core never
  * bundles exchange datasets.
  */
 

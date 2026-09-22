@@ -8,7 +8,7 @@ import {
   backtestRunArtifact,
   readBacktestRun,
   replayBacktestRun,
-} from '@totalfinance/backtest/artifacts';
+} from '@insiderfinance/totalfinance/backtest/artifacts';
 import {
   ENVIRONMENT_EPISODE_IDS,
   agentBaselines,
@@ -16,7 +16,7 @@ import {
   runAgentBench,
   runEnvironmentEpisode,
   scoreAgentTranscript,
-} from '@totalfinance/backtest/environment';
+} from '@insiderfinance/totalfinance/backtest/environment';
 
 describe('the trading-environment journey', () => {
   it('benches every baseline over two episodes: operational conformance passes, strategy is reported apart', () => {

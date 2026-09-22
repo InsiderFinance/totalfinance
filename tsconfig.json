@@ -6,6 +6,353 @@
     "baseUrl": ".",
     "types": ["node"],
     "paths": {
+      "@insiderfinance/totalfinance/backtest": ["./packages/backtest/src/index.ts"],
+      "@insiderfinance/totalfinance/backtest/vectorized": ["./packages/backtest/src/vectorized.ts"],
+      "@insiderfinance/totalfinance/backtest/event-driven": [
+        "./packages/backtest/src/event-driven.ts"
+      ],
+      "@insiderfinance/totalfinance/backtest/costs": ["./packages/backtest/src/costs.ts"],
+      "@insiderfinance/totalfinance/backtest/tearsheet": ["./packages/backtest/src/tearsheet.ts"],
+      "@insiderfinance/totalfinance/backtest/options": ["./packages/backtest/src/options/index.ts"],
+      "@insiderfinance/totalfinance/backtest/execution": [
+        "./packages/backtest/src/execution/index.ts"
+      ],
+      "@insiderfinance/totalfinance/backtest/cross-sectional": [
+        "./packages/backtest/src/cross-sectional/index.ts"
+      ],
+      "@insiderfinance/totalfinance/backtest/artifacts": ["./packages/backtest/src/artifacts.ts"],
+      "@insiderfinance/totalfinance/backtest/portfolio": [
+        "./packages/backtest/src/portfolio/index.ts"
+      ],
+      "@insiderfinance/totalfinance/backtest/environment": [
+        "./packages/backtest/src/environment/index.ts"
+      ],
+      "@insiderfinance/totalfinance/backtest/paper": ["./packages/backtest/src/paper/index.ts"],
+      "@insiderfinance/totalfinance/calendars": ["./packages/calendars/src/index.ts"],
+      "@insiderfinance/totalfinance/calendars/nyse": ["./packages/calendars/src/nyse.ts"],
+      "@insiderfinance/totalfinance/calendars/cboe": ["./packages/calendars/src/cboe.ts"],
+      "@insiderfinance/totalfinance/calendars/crypto": ["./packages/calendars/src/crypto.ts"],
+      "@insiderfinance/totalfinance/cli": ["./packages/cli/src/index.ts"],
+      "@insiderfinance/totalfinance/commodities": ["./packages/commodities/src/index.ts"],
+      "@insiderfinance/totalfinance/commodities/forwards": [
+        "./packages/commodities/src/forwards.ts"
+      ],
+      "@insiderfinance/totalfinance/commodities/term-structure": [
+        "./packages/commodities/src/term-structure.ts"
+      ],
+      "@insiderfinance/totalfinance/core": ["./packages/core/src/index.ts"],
+      "@insiderfinance/totalfinance/core/schema": ["./packages/core/src/schema/index.ts"],
+      "@insiderfinance/totalfinance/core/pricing": ["./packages/core/src/pricing.ts"],
+      "@insiderfinance/totalfinance/core/artifacts": ["./packages/core/src/artifacts/index.ts"],
+      "@insiderfinance/totalfinance/crypto": ["./packages/crypto/src/index.ts"],
+      "@insiderfinance/totalfinance/crypto/carry": ["./packages/crypto/src/carry.ts"],
+      "@insiderfinance/totalfinance/crypto/curve": ["./packages/crypto/src/curve.ts"],
+      "@insiderfinance/totalfinance/crypto/inverse": ["./packages/crypto/src/inverse.ts"],
+      "@insiderfinance/totalfinance/crypto/liquidation": ["./packages/crypto/src/liquidation.ts"],
+      "@insiderfinance/totalfinance/fixed-income": ["./packages/fixed-income/src/index.ts"],
+      "@insiderfinance/totalfinance/fixed-income/conventions": [
+        "./packages/fixed-income/src/conventions.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/curves": ["./packages/fixed-income/src/curves.ts"],
+      "@insiderfinance/totalfinance/fixed-income/bonds": ["./packages/fixed-income/src/bonds.ts"],
+      "@insiderfinance/totalfinance/fixed-income/rates": ["./packages/fixed-income/src/rates.ts"],
+      "@insiderfinance/totalfinance/fixed-income/models": ["./packages/fixed-income/src/models.ts"],
+      "@insiderfinance/totalfinance/fixed-income/credit": ["./packages/fixed-income/src/credit.ts"],
+      "@insiderfinance/totalfinance/fixed-income/lattice": [
+        "./packages/fixed-income/src/lattice.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/convertible": [
+        "./packages/fixed-income/src/convertible.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/xva": ["./packages/fixed-income/src/xva.ts"],
+      "@insiderfinance/totalfinance/fixed-income/cross-currency": [
+        "./packages/fixed-income/src/cross-currency.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/futures": [
+        "./packages/fixed-income/src/futures.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/inflation": [
+        "./packages/fixed-income/src/inflation.ts"
+      ],
+      "@insiderfinance/totalfinance/fixed-income/pricer": ["./packages/fixed-income/src/pricer.ts"],
+      "@insiderfinance/totalfinance/fixed-income/artifacts": [
+        "./packages/fixed-income/src/artifacts.ts"
+      ],
+      "@insiderfinance/totalfinance/foreign-exchange": ["./packages/foreign-exchange/src/index.ts"],
+      "@insiderfinance/totalfinance/foreign-exchange/spot": [
+        "./packages/foreign-exchange/src/spot.ts"
+      ],
+      "@insiderfinance/totalfinance/foreign-exchange/forwards": [
+        "./packages/foreign-exchange/src/forwards.ts"
+      ],
+      "@insiderfinance/totalfinance/foreign-exchange/risk": [
+        "./packages/foreign-exchange/src/exposure.ts"
+      ],
+      "@insiderfinance/totalfinance/fundamentals": ["./packages/fundamentals/src/index.ts"],
+      "@insiderfinance/totalfinance/fundamentals/statements": [
+        "./packages/fundamentals/src/statements.ts"
+      ],
+      "@insiderfinance/totalfinance/fundamentals/ratios": ["./packages/fundamentals/src/ratios.ts"],
+      "@insiderfinance/totalfinance/fundamentals/scores": ["./packages/fundamentals/src/scores.ts"],
+      "@insiderfinance/totalfinance/http": ["./packages/http/src/index.ts"],
+      "@insiderfinance/totalfinance/math": ["./packages/math/src/index.ts"],
+      "@insiderfinance/totalfinance/math/normal": ["./packages/math/src/normal.ts"],
+      "@insiderfinance/totalfinance/math/bivariate": ["./packages/math/src/bivariate.ts"],
+      "@insiderfinance/totalfinance/math/statistics": ["./packages/math/src/statistics.ts"],
+      "@insiderfinance/totalfinance/math/solvers": ["./packages/math/src/solvers.ts"],
+      "@insiderfinance/totalfinance/math/optimize": ["./packages/math/src/optimize.ts"],
+      "@insiderfinance/totalfinance/math/interpolation": ["./packages/math/src/interpolation.ts"],
+      "@insiderfinance/totalfinance/math/linalg": ["./packages/math/src/linalg.ts"],
+      "@insiderfinance/totalfinance/math/integration": ["./packages/math/src/integration.ts"],
+      "@insiderfinance/totalfinance/math/random": ["./packages/math/src/random.ts"],
+      "@insiderfinance/totalfinance/math/lowdiscrepancy": ["./packages/math/src/lowdiscrepancy.ts"],
+      "@insiderfinance/totalfinance/math/montecarlo": ["./packages/math/src/montecarlo.ts"],
+      "@insiderfinance/totalfinance/math/regression": ["./packages/math/src/regression.ts"],
+      "@insiderfinance/totalfinance/math/timeseries": ["./packages/math/src/timeseries.ts"],
+      "@insiderfinance/totalfinance/math/distributions": ["./packages/math/src/distributions.ts"],
+      "@insiderfinance/totalfinance/math/filters": ["./packages/math/src/filters.ts"],
+      "@insiderfinance/totalfinance-mcp": ["./packages/mcp/src/index.ts"],
+      "@insiderfinance/totalfinance/options": ["./packages/options/src/index.ts"],
+      "@insiderfinance/totalfinance/options/black-scholes": [
+        "./packages/options/src/black-scholes.ts"
+      ],
+      "@insiderfinance/totalfinance/options/batch": ["./packages/options/src/batch.ts"],
+      "@insiderfinance/totalfinance/options/black76": ["./packages/options/src/black76.ts"],
+      "@insiderfinance/totalfinance/options/bachelier": ["./packages/options/src/bachelier.ts"],
+      "@insiderfinance/totalfinance/options/monte-carlo": ["./packages/options/src/monte-carlo.ts"],
+      "@insiderfinance/totalfinance/options/heston": ["./packages/options/src/heston.ts"],
+      "@insiderfinance/totalfinance/options/sabr": ["./packages/options/src/sabr.ts"],
+      "@insiderfinance/totalfinance/options/local-volatility": [
+        "./packages/options/src/local-volatility.ts"
+      ],
+      "@insiderfinance/totalfinance/options/exotics": ["./packages/options/src/exotics.ts"],
+      "@insiderfinance/totalfinance/options/parity": ["./packages/options/src/parity.ts"],
+      "@insiderfinance/totalfinance/options/schema": ["./packages/options/src/schema.ts"],
+      "@insiderfinance/totalfinance/options/lattice": ["./packages/options/src/lattice.ts"],
+      "@insiderfinance/totalfinance/options/payoff": ["./packages/options/src/payoff.ts"],
+      "@insiderfinance/totalfinance/options/pricer": ["./packages/options/src/pricer.ts"],
+      "@insiderfinance/totalfinance/performance": ["./packages/performance/src/index.ts"],
+      "@insiderfinance/totalfinance/performance/sharpe": ["./packages/performance/src/sharpe.ts"],
+      "@insiderfinance/totalfinance/performance/returns": ["./packages/performance/src/returns.ts"],
+      "@insiderfinance/totalfinance/performance/drawdown": [
+        "./packages/performance/src/drawdown.ts"
+      ],
+      "@insiderfinance/totalfinance/performance/metrics": ["./packages/performance/src/metrics.ts"],
+      "@insiderfinance/totalfinance/performance/analyze": ["./packages/performance/src/analyze.ts"],
+      "@insiderfinance/totalfinance/performance/ratios": ["./packages/performance/src/ratios.ts"],
+      "@insiderfinance/totalfinance/performance/relative": [
+        "./packages/performance/src/relative.ts"
+      ],
+      "@insiderfinance/totalfinance/performance/activity": [
+        "./packages/performance/src/activity.ts"
+      ],
+      "@insiderfinance/totalfinance/performance/rolling": ["./packages/performance/src/rolling.ts"],
+      "@insiderfinance/totalfinance/performance/flow-aware": [
+        "./packages/performance/src/flow-aware.ts"
+      ],
+      "@insiderfinance/totalfinance/performance/sector-performance": [
+        "./packages/performance/src/sector-performance.ts"
+      ],
+      "@insiderfinance/totalfinance/portfolio": ["./packages/portfolio/src/index.ts"],
+      "@insiderfinance/totalfinance/portfolio/events": ["./packages/portfolio/src/events.ts"],
+      "@insiderfinance/totalfinance/portfolio/ledger": ["./packages/portfolio/src/ledger.ts"],
+      "@insiderfinance/totalfinance/portfolio/performance": [
+        "./packages/portfolio/src/performance.ts"
+      ],
+      "@insiderfinance/totalfinance/portfolio/reconciliation": [
+        "./packages/portfolio/src/reconciliation.ts"
+      ],
+      "@insiderfinance/totalfinance/portfolio/policy": ["./packages/portfolio/src/policy.ts"],
+      "@insiderfinance/totalfinance/portfolio/trade": ["./packages/portfolio/src/trade/index.ts"],
+      "@insiderfinance/totalfinance/research": ["./packages/research/src/index.ts"],
+      "@insiderfinance/totalfinance/research/screening": ["./packages/research/src/screening.ts"],
+      "@insiderfinance/totalfinance/research/factors": ["./packages/research/src/factors.ts"],
+      "@insiderfinance/totalfinance/research/events": ["./packages/research/src/events.ts"],
+      "@insiderfinance/totalfinance/research/artifacts": ["./packages/research/src/artifacts.ts"],
+      "@insiderfinance/totalfinance/risk": ["./packages/risk/src/index.ts"],
+      "@insiderfinance/totalfinance/risk/value-at-risk": ["./packages/risk/src/value-at-risk.ts"],
+      "@insiderfinance/totalfinance/risk/scenario": ["./packages/risk/src/scenario.ts"],
+      "@insiderfinance/totalfinance/risk/factor": ["./packages/risk/src/factor.ts"],
+      "@insiderfinance/totalfinance/risk/optimize": ["./packages/risk/src/optimize.ts"],
+      "@insiderfinance/totalfinance/risk/research": ["./packages/risk/src/research.ts"],
+      "@insiderfinance/totalfinance/risk/portfolio": ["./packages/risk/src/portfolio.ts"],
+      "@insiderfinance/totalfinance/risk/sizing": ["./packages/risk/src/sizing.ts"],
+      "@insiderfinance/totalfinance/scenarios": ["./packages/scenarios/src/index.ts"],
+      "@insiderfinance/totalfinance/scenarios/portfolio": ["./packages/scenarios/src/portfolio.ts"],
+      "@insiderfinance/totalfinance/strategy": ["./packages/strategy/src/index.ts"],
+      "@insiderfinance/totalfinance/strategy/scanner": ["./packages/strategy/src/scanner.ts"],
+      "@insiderfinance/totalfinance/strategy/probability": [
+        "./packages/strategy/src/probability.ts"
+      ],
+      "@insiderfinance/totalfinance/strategy/from-chain": ["./packages/strategy/src/from-chain.ts"],
+      "@insiderfinance/totalfinance/structure": ["./packages/structure/src/index.ts"],
+      "@insiderfinance/totalfinance/structure/exposure": ["./packages/structure/src/exposure.ts"],
+      "@insiderfinance/totalfinance/structure/flow": ["./packages/structure/src/flow.ts"],
+      "@insiderfinance/totalfinance/technical-analysis": [
+        "./packages/technical-analysis/src/index.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/rsi": [
+        "./packages/technical-analysis/src/rsi.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/moving-averages": [
+        "./packages/technical-analysis/src/moving-averages.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/macd": [
+        "./packages/technical-analysis/src/macd.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/bands": [
+        "./packages/technical-analysis/src/bands.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/pipeline": [
+        "./packages/technical-analysis/src/pipeline.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/bars": [
+        "./packages/technical-analysis/src/bars.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/transforms": [
+        "./packages/technical-analysis/src/transforms.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/resample": [
+        "./packages/technical-analysis/src/resample.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/divergence": [
+        "./packages/technical-analysis/src/divergence.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/oscillators": [
+        "./packages/technical-analysis/src/oscillators.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/momentum": [
+        "./packages/technical-analysis/src/momentum.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/overlap": [
+        "./packages/technical-analysis/src/overlap.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/features": [
+        "./packages/technical-analysis/src/features.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/aliases": [
+        "./packages/technical-analysis/src/aliases.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/warmup": [
+        "./packages/technical-analysis/src/warmup.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/math": [
+        "./packages/technical-analysis/src/math.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/trend": [
+        "./packages/technical-analysis/src/trend.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/volatility": [
+        "./packages/technical-analysis/src/volatility.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/volume": [
+        "./packages/technical-analysis/src/volume.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/microstructure": [
+        "./packages/technical-analysis/src/microstructure.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/candle-talib": [
+        "./packages/technical-analysis/src/candle-talib.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/candlesticks": [
+        "./packages/technical-analysis/src/candlesticks.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/candle-aliases": [
+        "./packages/technical-analysis/src/candle-aliases.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/cycle": [
+        "./packages/technical-analysis/src/cycle.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/statistics": [
+        "./packages/technical-analysis/src/statistics.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/chart-types": [
+        "./packages/technical-analysis/src/chart-types.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/price-action": [
+        "./packages/technical-analysis/src/price-action.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/signal": [
+        "./packages/technical-analysis/src/signal.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/registry": [
+        "./packages/technical-analysis/src/registry.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/series": [
+        "./packages/technical-analysis/src/series.ts"
+      ],
+      "@insiderfinance/totalfinance/technical-analysis/framework": [
+        "./packages/technical-analysis/src/framework.ts"
+      ],
+      "@insiderfinance/totalfinance": ["./packages/totalfinance/src/index.ts"],
+      "@insiderfinance/totalfinance/valuation": ["./packages/valuation/src/index.ts"],
+      "@insiderfinance/totalfinance/valuation/cash-flows": [
+        "./packages/valuation/src/cash-flows.ts"
+      ],
+      "@insiderfinance/totalfinance/valuation/corporate": ["./packages/valuation/src/corporate.ts"],
+      "@insiderfinance/totalfinance/valuation/forecasting": [
+        "./packages/valuation/src/forecasting.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility": ["./packages/volatility/src/index.ts"],
+      "@insiderfinance/totalfinance/volatility/surface": ["./packages/volatility/src/surface.ts"],
+      "@insiderfinance/totalfinance/volatility/svi": ["./packages/volatility/src/svi.ts"],
+      "@insiderfinance/totalfinance/volatility/sabr": ["./packages/volatility/src/sabr.ts"],
+      "@insiderfinance/totalfinance/volatility/arbitrage": [
+        "./packages/volatility/src/arbitrage.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/skew": ["./packages/volatility/src/skew.ts"],
+      "@insiderfinance/totalfinance/volatility/event": ["./packages/volatility/src/event.ts"],
+      "@insiderfinance/totalfinance/volatility/term": ["./packages/volatility/src/term.ts"],
+      "@insiderfinance/totalfinance/volatility/analytics": [
+        "./packages/volatility/src/analytics.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/metrics": ["./packages/volatility/src/metrics.ts"],
+      "@insiderfinance/totalfinance/volatility/local-volatility": [
+        "./packages/volatility/src/local-volatility.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/heston-surface": [
+        "./packages/volatility/src/heston-surface.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/forecast": ["./packages/volatility/src/forecast.ts"],
+      "@insiderfinance/totalfinance/volatility/earnings": ["./packages/volatility/src/earnings.ts"],
+      "@insiderfinance/totalfinance/volatility/essvi": ["./packages/volatility/src/essvi.ts"],
+      "@insiderfinance/totalfinance/volatility/estimate": ["./packages/volatility/src/estimate.ts"],
+      "@insiderfinance/totalfinance/volatility/min-variance-delta": [
+        "./packages/volatility/src/min-variance-delta.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/risk-reversal": [
+        "./packages/volatility/src/risk-reversal.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/sabr-delta": [
+        "./packages/volatility/src/sabr-delta.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/ssvi": ["./packages/volatility/src/ssvi.ts"],
+      "@insiderfinance/totalfinance/volatility/sticky-regime": [
+        "./packages/volatility/src/sticky-regime.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/surface-pca": [
+        "./packages/volatility/src/surface-pca.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/swaption-cube": [
+        "./packages/volatility/src/swaption-cube.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/tail-risk": [
+        "./packages/volatility/src/tail-risk.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/vanna-volga": [
+        "./packages/volatility/src/vanna-volga.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/variance-index": [
+        "./packages/volatility/src/variance-index.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/volatility-spot-beta": [
+        "./packages/volatility/src/volatility-spot-beta.ts"
+      ],
+      "@insiderfinance/totalfinance/volatility/artifacts": [
+        "./packages/volatility/src/artifacts.ts"
+      ],
+      "@insiderfinance/totalfinance/workflows": ["./packages/workflows/src/index.ts"],
+      "@insiderfinance/totalfinance/workflows/local": ["./packages/workflows/src/local/index.ts"],
       "@totalfinance/core": ["./packages/core/src/index.ts"],
       "@totalfinance/core/*": ["./packages/core/src/*"],
       "@totalfinance/crypto": ["./packages/crypto/src/index.ts"],

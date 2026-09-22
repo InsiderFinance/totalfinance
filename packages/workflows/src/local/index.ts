@@ -1,8 +1,8 @@
 /**
- * `@totalfinance/workflows/local` — the node-only local runtime the transports compose (Stage 7A
+ * `@insiderfinance/totalfinance/workflows/local` — the node-only local runtime the transports compose (Stage 7A
  * Decisions 5–7): file-backed artifact and job stores, registry profiles, and the worker-terminated
  * job runner. The package root stays browser-safe; this subpath needs `node:fs` and
- * `node:worker_threads`. `@totalfinance/cli` and `@totalfinance/http` both build on it, so neither L6
+ * `node:worker_threads`. `@insiderfinance/totalfinance/cli` and `@insiderfinance/totalfinance/http` both build on it, so neither L6
  * transport depends on the other.
  */
 

@@ -1,9 +1,9 @@
 /**
- * `@totalfinance/performance/rolling` — rolling-window performance metrics (spec §15.1).
+ * `@insiderfinance/totalfinance/performance/rolling` — rolling-window performance metrics (spec §15.1).
  *
  * Each returns one value per input period, aligned to the input index: `out[i]` is the metric over the
  * trailing `window` periods ending at `i`, and the first `window − 1` entries are `NaN` (insufficient
- * history). This matches the `@totalfinance/math` rolling primitives these build on, so a windowed
+ * history). This matches the `@insiderfinance/totalfinance/math` rolling primitives these build on, so a windowed
  * Sharpe/vol lines up with the original series for plotting or merging.
  *
  * Each is a facade (dx §2.3): `.explain()` returns the `Computed` envelope with the resolved window

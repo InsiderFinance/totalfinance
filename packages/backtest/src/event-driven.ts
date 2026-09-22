@@ -54,7 +54,7 @@ import {
   tradeNotional,
 } from './types.js';
 
-/** A minimal streaming indicator (structurally compatible with `@totalfinance/technical-analysis` streams). */
+/** A minimal streaming indicator (structurally compatible with `@insiderfinance/totalfinance/technical-analysis` streams). */
 export interface Indicator<In, Out> {
   next(input: In): Out | null;
 }

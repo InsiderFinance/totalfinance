@@ -3,7 +3,7 @@
  *
  * Expiration payoff, breakevens, and max profit/loss are computed exactly from the piecewise-linear
  * payoff (kinks at strikes, asymptotic slopes for unbounded ends). Mark-to-market and Greeks route
- * through the BSM kernel in `@totalfinance/options` — no duplicate pricing math.
+ * through the BSM kernel in `@insiderfinance/totalfinance/options` — no duplicate pricing math.
  */
 
 import {
@@ -1225,7 +1225,7 @@ export class Position {
           volatility: legVolatility,
         });
         // Extended greeks (not just first-order): the second-order fields power the higher-order P&L
-        // attribution in `explainPositionPnl` (@totalfinance/risk) automatically. All are raw and scale
+        // attribution in `explainPositionPnl` (@insiderfinance/totalfinance/risk) automatically. All are raw and scale
         // linearly with position size; `lambda` (Δ·S/V) is dimensionless and passes through unscaled.
         const lg = blackScholesExtendedGreeks({
           type: leg.kind,

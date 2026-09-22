@@ -1,7 +1,7 @@
 /**
- * `@totalfinance/backtest/portfolio` — the ledger-backed multi-asset simulator (Stage 4.6, FC8
+ * `@insiderfinance/totalfinance/backtest/portfolio` — the ledger-backed multi-asset simulator (Stage 4.6, FC8
  * Decision 6). `portfolioBacktest` folds every fill, flow, lifecycle fact, and liquidation through
- * `@totalfinance/portfolio`'s reducer; the eight built-in instrument adapters (and a caller's own,
+ * `@insiderfinance/totalfinance/portfolio`'s reducer; the eight built-in instrument adapters (and a caller's own,
  * proven by `assertInstrumentAdapterConformance`) say how each kind marks, what lifecycle facts it
  * emits, and how its fills settle.
  */

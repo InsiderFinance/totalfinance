@@ -6,12 +6,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { isComputed, isQuantError, resolvedExpiry } from '@totalfinance/core';
-import * as backtest from '@totalfinance/backtest';
-import { bonds } from '@totalfinance/fixed-income';
-import { analyze, sharpe } from '@totalfinance/performance';
-import { valueAtRisk } from '@totalfinance/risk';
-import type { OptionQuote } from '@totalfinance/core';
+import { isComputed, isQuantError, resolvedExpiry } from '@insiderfinance/totalfinance/core';
+import * as backtest from '@insiderfinance/totalfinance/backtest';
+import { bonds } from '@insiderfinance/totalfinance/fixed-income';
+import { analyze, sharpe } from '@insiderfinance/totalfinance/performance';
+import { valueAtRisk } from '@insiderfinance/totalfinance/risk';
+import type { OptionQuote } from '@insiderfinance/totalfinance/core';
 import {
   bullCallSpread,
   classifyStrategy,
@@ -19,9 +19,9 @@ import {
   ironCondor,
   strategy,
   strategyFromChain,
-} from '@totalfinance/strategy';
-import { barsFromColumns, stoch } from '@totalfinance/technical-analysis';
-import * as ta from '@totalfinance/technical-analysis';
+} from '@insiderfinance/totalfinance/strategy';
+import { barsFromColumns, stoch } from '@insiderfinance/totalfinance/technical-analysis';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
 
 const closes = Array.from({ length: 60 }, (_, i) => 100 + Math.sin(i / 5) * 8);
 const prices = Array.from({ length: 60 }, (_, i) => 100 + i);

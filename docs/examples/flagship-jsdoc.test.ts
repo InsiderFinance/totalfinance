@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { blackScholes, engines, impliedVolatility, market, option } from '@totalfinance/options';
+import {
+  blackScholes,
+  engines,
+  impliedVolatility,
+  market,
+  option,
+} from '@insiderfinance/totalfinance/options';
 
 /**
  * C8 — the flagship `@example` blocks (bs, option, market, engines, impliedVolatility) EXECUTE

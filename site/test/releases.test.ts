@@ -7,7 +7,7 @@ import { verifiedReleaseFromReceipt } from '../record-release.js';
 import { restoreReleaseArchives } from '../archives.js';
 import type { SiteVersion } from '../version.js';
 
-const version = '0.1.0-preview.1';
+const version = '0.1.0';
 const makeReceipt = () =>
   createSmokeReceipt({
     source: { sourceCommit: 'a'.repeat(40), sourceDirty: false },
@@ -17,7 +17,7 @@ const makeReceipt = () =>
     evidence: {
       observation: {
         version,
-        packages: 25,
+        packages: 2,
         operations: 46,
         priceStructured: 'synthetic fixture',
         journey: 'synthetic fixture',
@@ -29,7 +29,10 @@ const makeReceipt = () =>
         cases: 1,
         caseIds: ['fixture-only'],
         sha256: 'd'.repeat(64),
-        packages: { '@totalfinance/options': version },
+        packages: {
+          '@insiderfinance/totalfinance': version,
+          '@insiderfinance/totalfinance-mcp': version,
+        },
         typecheck: {
           typescriptVersion: '5.9.3',
           modes: ['nodenext', 'bundler'],
@@ -43,9 +46,9 @@ const makeReceipt = () =>
 describe('release receipts and preserved documentation', () => {
   it('accepts only explicit, clean, matched public-registry receipts with coherent summaries', () => {
     const receipt = makeReceipt();
-    expect(verifiedReleaseFromReceipt(receipt, 'preview')).toMatchObject({
+    expect(verifiedReleaseFromReceipt(receipt, 'stable')).toMatchObject({
       version,
-      channel: 'preview',
+      channel: 'stable',
       sourceCommit: receipt.sourceCommit,
     });
     for (const invalid of [
@@ -57,23 +60,26 @@ describe('release receipts and preserved documentation', () => {
       { ...receipt, registry: 'http://localhost:4873/' },
       { ...receipt, origin: { kind: 'tarball-rehearsal' } },
     ])
-      expect(() => verifiedReleaseFromReceipt(invalid, 'preview')).toThrow();
-    expect(() => verifiedReleaseFromReceipt(receipt, 'stable')).toThrow();
+      expect(() => verifiedReleaseFromReceipt(invalid, 'stable')).toThrow();
+    expect(() => verifiedReleaseFromReceipt(receipt, 'preview')).toThrow();
   });
 
   it('copies original version assets and refuses missing, mismatched or symlinked archives', () => {
     const root = mkdtempSync(join(tmpdir(), 'totalfinance-docs-archives-'));
-    const release = verifiedReleaseFromReceipt(makeReceipt(), 'preview');
+    const release = verifiedReleaseFromReceipt(makeReceipt(), 'stable');
     const old: SiteVersion = {
       version,
-      label: `Preview · ${version}`,
-      channel: 'preview',
+      label: `Pre-1.0 release · ${version}`,
+      channel: 'stable',
       published: true,
       sourceMatchesRelease: true,
-      packageVersions: { totalfinance: version },
+      packageVersions: {
+        '@insiderfinance/totalfinance': version,
+        '@insiderfinance/totalfinance-mcp': version,
+      },
       releases: [release],
     };
-    const current: SiteVersion = { ...old, version: '0.1.0-preview.2' };
+    const current: SiteVersion = { ...old, version: '0.2.0' };
     const archives = join(root, 'archives');
     const source = join(archives, version);
     const out = join(root, 'dist');

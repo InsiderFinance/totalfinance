@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/volatility/artifacts` — the eight verbs of Stage 4.5 Decision 3 over the twelve
+ * `@insiderfinance/totalfinance/volatility/artifacts` — the eight verbs of Stage 4.5 Decision 3 over the twelve
  * volatility families (Decision 2), riding the Gate B spine verbatim:
  *
  * - `fittedModelArtifact` projects a direct calibrator's result into the fitted-model report and
@@ -789,7 +789,7 @@ export function readFittedModel(input: {
   if (artifact.artifactType !== VOLATILITY_FITTED_MODEL_ARTIFACT_TYPE) {
     fail(
       functionName,
-      `the artifact's type is '${artifact.artifactType}', not '${VOLATILITY_FITTED_MODEL_ARTIFACT_TYPE}' — this reader restores volatility fitted models only; ${artifact.artifactType.startsWith('fixed-income.') ? 'use @totalfinance/fixed-income/artifacts' : artifact.artifactType.startsWith('research.') ? 'use @totalfinance/research/artifacts' : 'read it with the package that owns that type'}.`,
+      `the artifact's type is '${artifact.artifactType}', not '${VOLATILITY_FITTED_MODEL_ARTIFACT_TYPE}' — this reader restores volatility fitted models only; ${artifact.artifactType.startsWith('fixed-income.') ? 'use @insiderfinance/totalfinance/fixed-income/artifacts' : artifact.artifactType.startsWith('research.') ? 'use @insiderfinance/totalfinance/research/artifacts' : 'read it with the package that owns that type'}.`,
       ErrorCode.ArtifactFamilyMismatch,
       { artifactType: artifact.artifactType },
     );

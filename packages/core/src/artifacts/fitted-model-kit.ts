@@ -14,8 +14,8 @@
  * - {@link flattenSummaryParameters} and {@link residualStatistics} — the summary's flat parameter
  *   view and the residual statistic every projection reports.
  *
- * Domain packages (`@totalfinance/volatility/artifacts`, `@totalfinance/fixed-income/artifacts`,
- * `@totalfinance/research/artifacts`) call these; none re-implements them.
+ * Domain packages (`@insiderfinance/totalfinance/volatility/artifacts`, `@insiderfinance/totalfinance/fixed-income/artifacts`,
+ * `@insiderfinance/totalfinance/research/artifacts`) call these; none re-implements them.
  */
 
 import { ErrorCode, InputError, isQuantError } from '../errors.js';

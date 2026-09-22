@@ -1,7 +1,8 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { siteExamplesSha256 } from '../tools/site-examples-smoke.js';
+import { PUBLIC_PACKAGE_NAME, publicPackageDirectories } from '../tools/public-packages.js';
 
 export interface VerifiedRelease {
   version: string;
@@ -25,13 +26,26 @@ export interface SiteVersion {
 export function sourceMatchesRelease(root: string, release: VerifiedRelease): boolean {
   try {
     // A version string alone is not evidence: a working checkout may already differ from npm.
-    execFileSync('git', ['diff', '--quiet', release.sourceCommit, '--', 'packages'], {
-      cwd: root,
-      stdio: 'pipe',
-    });
+    execFileSync(
+      'git',
+      [
+        'diff',
+        '--quiet',
+        release.sourceCommit,
+        '--',
+        'packages',
+        'distribution',
+        'tools/assemble-distribution.ts',
+        'tools/public-packages.ts',
+      ],
+      {
+        cwd: root,
+        stdio: 'pipe',
+      },
+    );
     const untracked = execFileSync(
       'git',
-      ['ls-files', '--others', '--exclude-standard', '--', 'packages'],
+      ['ls-files', '--others', '--exclude-standard', '--', 'packages', 'distribution'],
       { cwd: root, encoding: 'utf8' },
     );
     return untracked.trim() === '' && siteExamplesSha256() === release.examplesSha256;
@@ -42,15 +56,16 @@ export function sourceMatchesRelease(root: string, release: VerifiedRelease): bo
 
 export function readSiteVersion(root: string, verifySource = sourceMatchesRelease): SiteVersion {
   const packageVersions: Record<string, string> = {};
-  for (const directory of readdirSync(join(root, 'packages')).sort()) {
-    const manifest = JSON.parse(
-      readFileSync(join(root, 'packages', directory, 'package.json'), 'utf8'),
-    ) as { name: string; version: string };
+  for (const { path } of publicPackageDirectories(root)) {
+    const manifest = JSON.parse(readFileSync(join(path, 'package.json'), 'utf8')) as {
+      name: string;
+      version: string;
+    };
     packageVersions[manifest.name] = manifest.version;
   }
-  const version = packageVersions['totalfinance']!;
+  const version = packageVersions[PUBLIC_PACKAGE_NAME]!;
   if (!version || Object.values(packageVersions).some((candidate) => candidate !== version))
-    throw new Error('Site build requires the coherent fixed package group at one version.');
+    throw new Error('Site build requires both public distributions at one exact version.');
   const ledger = JSON.parse(readFileSync(join(root, 'site/releases.json'), 'utf8')) as {
     schemaVersion: number;
     releases: VerifiedRelease[];
@@ -96,7 +111,7 @@ export function readSiteVersion(root: string, verifySource = sourceMatchesReleas
   return {
     version,
     label: published
-      ? `${published.channel === 'stable' ? 'Stable' : 'Preview'} · ${version}`
+      ? `${published.channel === 'stable' ? (version.startsWith('0.') ? 'Pre-1.0 release' : 'Stable') : 'Preview'} · ${version}`
       : `Development · ${version} · ${recorded ? 'source differs from verified release' : 'unpublished'}`,
     channel: published?.channel ?? 'development',
     published: published !== undefined,

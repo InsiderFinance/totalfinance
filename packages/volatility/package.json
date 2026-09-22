@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/volatility",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance volatility: implied-vol surfaces, skew/smile metrics, IV rank/percentile, and event-volatility (expected move, probability ITM/touch). Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
@@ -187,10 +187,6 @@
     "@totalfinance/math": "workspace:*",
     "@totalfinance/options": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
   },
@@ -281,5 +277,6 @@
         "./package.json"
       ]
     }
-  }
+  },
+  "private": true
 }

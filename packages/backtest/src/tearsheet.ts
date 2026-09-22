@@ -40,7 +40,7 @@ export interface ReturnStatistics {
    * Fraction of non-zero return bars that were positive. `null` when the series has NO non-zero
    * bar — there is no win/loss population to take a fraction of, so the metric is undefined and is
    * disclosed via a `performance.undefined_metric` warning rather than reported as a `0` hit rate
-   * (which reads as "every bar lost"). Matches `@totalfinance/performance`'s `analyze().hitRate`.
+   * (which reads as "every bar lost"). Matches `@insiderfinance/totalfinance/performance`'s `analyze().hitRate`.
    */
   hitRate: number | null;
   /**
@@ -51,7 +51,7 @@ export interface ReturnStatistics {
   profitFactor: number | null;
   /**
    * Mean per-bar return. `null` on an EMPTY series (no bars to average), disclosed the same way —
-   * matches `@totalfinance/performance`'s `analyze().expectancy`, which never reports a fabricated `0`.
+   * matches `@insiderfinance/totalfinance/performance`'s `analyze().expectancy`, which never reports a fabricated `0`.
    */
   expectancy: number | null;
   averageWin: number;
@@ -165,7 +165,7 @@ function computeReturnStatistics(returns: ArrayLike<number>): {
   } else {
     profitFactor = 0;
   }
-  // Law 7 alignment with @totalfinance/performance: a metric with no population is `null` + a
+  // Law 7 alignment with @insiderfinance/totalfinance/performance: a metric with no population is `null` + a
   // disclosure, never a fabricated `0` (a `0` hit rate means "every non-zero bar lost", which is a
   // materially different — and false — claim about a flat or empty series).
   let hitRate: number | null;

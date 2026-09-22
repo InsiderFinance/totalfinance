@@ -1,6 +1,6 @@
 /**
  * Internal (not an entrypoint): the research run-kind table — one row per FC3 operation the
- * `@totalfinance/research/artifacts` verbs describe, save, replay, and compare (Stage 4.5 Decision 4).
+ * `@insiderfinance/totalfinance/research/artifacts` verbs describe, save, replay, and compare (Stage 4.5 Decision 4).
  *
  * A row names the direct operation to re-issue, the bulk row sets its input carries (each may be
  * embedded verbatim or referenced by table handle), the caller-callback fields that make a run

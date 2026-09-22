@@ -83,7 +83,7 @@ function installedRegistryReference(consumer: string): RegistryReference {
       '--input-type=module',
       '-e',
       `
-import { getIndicator, listIndicators } from '@totalfinance/technical-analysis/registry';
+import { getIndicator, listIndicators } from '@insiderfinance/totalfinance/technical-analysis/registry';
 import { serialize } from 'node:v8';
 const cases = ${JSON.stringify(TA_METADATA_CASES)};
 const explanations = Object.fromEntries(cases.map(({name, values, parameters}) => {
@@ -206,7 +206,9 @@ export function registerInstalledConsumerTests(consumer: () => string): void {
                   // A shared private file is legitimate, a retained catalog inside it is not.
                   // Installed contributions are 281–282 minified esbuild / 537 rendered Rollup B.
                   const descriptor = result.retainedModules.find(
-                    ({ id }) => id === '@totalfinance/technical-analysis/dist/builtin-metadata.js',
+                    ({ id }) =>
+                      id ===
+                      '@insiderfinance/totalfinance/modules/technical-analysis/dist/builtin-metadata.js',
                   );
                   expect(descriptor, evidence).toBeDefined();
                   expect(descriptor!.bytes, evidence).toBeLessThan(
@@ -249,9 +251,9 @@ export function registerInstalledConsumerTests(consumer: () => string): void {
                 );
                 expect(result.retainedModules.map(({ id }) => id)).toEqual(
                   expect.arrayContaining([
-                    '@totalfinance/math/dist/normal.js',
-                    '@totalfinance/math/dist/solvers.js',
-                    '@totalfinance/math/dist/random.js',
+                    '@insiderfinance/totalfinance/modules/math/dist/normal.js',
+                    '@insiderfinance/totalfinance/modules/math/dist/solvers.js',
+                    '@insiderfinance/totalfinance/modules/math/dist/random.js',
                   ]),
                 );
                 break;
@@ -262,7 +264,8 @@ export function registerInstalledConsumerTests(consumer: () => string): void {
             if (fixture.canary.startsWith('expert')) {
               if (fixture.canary === 'expert') {
                 const residue = result.retainedModules.find(
-                  ({ id }) => id === '@totalfinance/options/dist/black-scholes.js',
+                  ({ id }) =>
+                    id === '@insiderfinance/totalfinance/modules/options/dist/black-scholes.js',
                 );
                 expect(residue?.bytes ?? 0, evidence).toBeLessThan(256);
               }
@@ -497,13 +500,13 @@ export function registerInstalledConsumerTests(consumer: () => string): void {
             const fixture: ConsumerFixture = {
               ...CONSUMER_FIXTURES.find(({ id }) => id === 'rsi-feature')!,
               id: `ta-metadata-${entry.name}`,
-              specifier: `@totalfinance/technical-analysis/${entry.subpath}`,
-              source: `import { ${entry.name} as indicator } from '@totalfinance/technical-analysis/${entry.subpath}';
+              specifier: `@insiderfinance/totalfinance/technical-analysis/${entry.subpath}`,
+              source: `import { ${entry.name} as indicator } from '@insiderfinance/totalfinance/technical-analysis/${entry.subpath}';
 globalThis.consumerCall = (input) => indicator.explain(input.values, input.parameters);`,
             };
             const result = await measureConsumer(consumer(), fixture, bundler, true);
             expect(result.retainedModules.map(({ id }) => id)).not.toContain(
-              '@totalfinance/technical-analysis/dist/registry.js',
+              '@insiderfinance/totalfinance/modules/technical-analysis/dist/registry.js',
             );
             const context = consumerBrowser(result);
             expect(callConsumer(context, JSON.stringify(entry))).toMatchObject({

@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/artifacts` (Stage 4.6, FC8 Decision 8): reproducible run artifacts over the
+ * `@insiderfinance/totalfinance/backtest/artifacts` (Stage 4.6, FC8 Decision 8): reproducible run artifacts over the
  * Stage 4.5 grammar — an `AnalysisArtifact` of type `totalfinance.backtest-run` whose `result` is the
  * typed {@link BacktestRunReport}: the run verbatim, the request with bulk row sets embedded or
  * referenced by `TableHandle`, every execution and accounting model recorded by its description,
@@ -122,7 +122,7 @@ export interface BacktestRunArtifactLimits {
   embeddedRowLimit?: number;
 }
 
-/** The research-hygiene verdicts a caller attaches to a single run — verbatim `@totalfinance/risk` results. */
+/** The research-hygiene verdicts a caller attaches to a single run — verbatim `@insiderfinance/totalfinance/risk` results. */
 export interface BacktestHygieneBlock {
   researchProtocol?: Record<string, unknown>;
   deflatedSharpe?: Record<string, unknown>;
@@ -220,7 +220,7 @@ export interface BacktestRunArtifactInput<Kind extends BacktestRunKind> {
   referenceRowSets?: readonly string[];
   /** Storage locators to stamp on the minted handles, keyed by row-set label. */
   locators?: Record<string, string>;
-  /** Verbatim `@totalfinance/risk` verdicts for a single run; a grid carries its own and refuses this. */
+  /** Verbatim `@insiderfinance/totalfinance/risk` verdicts for a single run; a grid carries its own and refuses this. */
   hygiene?: BacktestHygieneBlock;
   snapshotHash?: string;
   libraryVersion?: string;
@@ -1247,7 +1247,7 @@ function requireHygieneBlock(
     if (typeof probe !== 'number' || !Number.isFinite(probe)) {
       fail(
         functionName,
-        `${field}.${key}.${required} must be the finite number the @totalfinance/risk verb reported — attach the verdict verbatim.`,
+        `${field}.${key}.${required} must be the finite number the @insiderfinance/totalfinance/risk verb reported — attach the verdict verbatim.`,
         ErrorCode.InputWrongType,
         { field: `${field}.${key}.${required}` },
       );
@@ -2187,7 +2187,7 @@ export function readBacktestRun(input: {
   if (artifact.artifactType !== BACKTEST_RUN_ARTIFACT_TYPE) {
     fail(
       functionName,
-      `the artifact's type is '${artifact.artifactType}', not '${BACKTEST_RUN_ARTIFACT_TYPE}' — this reader restores backtest runs only; ${artifact.artifactType.startsWith('research.') ? 'use @totalfinance/research/artifacts' : artifact.artifactType.startsWith('volatility.') ? 'use @totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('fixed-income.') ? 'use @totalfinance/fixed-income/artifacts' : 'read it with the package that owns that type'}.`,
+      `the artifact's type is '${artifact.artifactType}', not '${BACKTEST_RUN_ARTIFACT_TYPE}' — this reader restores backtest runs only; ${artifact.artifactType.startsWith('research.') ? 'use @insiderfinance/totalfinance/research/artifacts' : artifact.artifactType.startsWith('volatility.') ? 'use @insiderfinance/totalfinance/volatility/artifacts' : artifact.artifactType.startsWith('fixed-income.') ? 'use @insiderfinance/totalfinance/fixed-income/artifacts' : 'read it with the package that owns that type'}.`,
       ErrorCode.ArtifactFamilyMismatch,
       { artifactType: artifact.artifactType },
     );

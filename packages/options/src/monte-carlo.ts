@@ -9,7 +9,7 @@
  * it both validates the analytic engines and prices payoffs the closed form can't. Stochastic-vol and
  * exotic pricers reuse the same estimator with their own dynamics and payoffs.
  *
- *   import { monteCarloPrice } from '@totalfinance/options/monte-carlo';
+ *   import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carlo';
  *   monteCarloPrice({ contract: option.call({ ..., style: 'european' }), market, options: { paths: 100_000, seed: 7, method: 'sobol' } });
  */
 

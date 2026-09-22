@@ -44,6 +44,7 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { flaggedTokens } from './naming-inventory.js';
 import { generatedDocOwners } from '../generated-docs.js';
+import { toPublicSpecifier } from '../public-packages.js';
 
 /**
  * Generated path → owning generator, declared in `tools/generated-docs.ts`.
@@ -218,7 +219,7 @@ export function matchesDocumentedException(input: {
   if (!scope) return true;
   return (
     input.owner === scope.owner &&
-    scope.headings.includes(input.sourceHeading ?? '') &&
+    scope.headings.map(toPublicSpecifier).includes(input.sourceHeading ?? '') &&
     input.identifier.position === scope.position &&
     (scope.containers === undefined ||
       scope.containers.includes(input.identifier.container ?? '')) &&

@@ -415,7 +415,7 @@ function resolveSigns(c: ExposureConvention): {
         calls: 1,
         puts: -1,
         limitation:
-          'Trade-signed positioning requires per-trade aggressor data (use @totalfinance/structure flow); on an open-interest chain it falls back to calls +, puts −.',
+          'Trade-signed positioning requires per-trade aggressor data (use @insiderfinance/totalfinance/structure flow); on an open-interest chain it falls back to calls +, puts −.',
       };
     default:
       // The switch is EXHAUSTIVE to the compiler, so a runtime value outside the union fell off

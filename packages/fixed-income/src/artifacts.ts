@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/fixed-income/artifacts` — Stage 4.5's fitted-model artifacts for the curve bootstraps
+ * `@insiderfinance/totalfinance/fixed-income/artifacts` — Stage 4.5's fitted-model artifacts for the curve bootstraps
  * (spec `docs/specs/calibration-research-artifacts.md`, Decisions 1–3 and 5–9): discount,
  * projection, multi-curve, and hazard curves, stored as their data and restored exactly.
  *
@@ -7,8 +7,8 @@
  * spine, and a bundle that only bootstraps must not pay for serialization.
  *
  * ```ts
- * import { curves, rateCurveFromYieldCurve } from '@totalfinance/fixed-income';
- * import { fittedModelArtifact, readFittedModel, evaluateFittedModel } from '@totalfinance/fixed-income/artifacts';
+ * import { curves, rateCurveFromYieldCurve } from '@insiderfinance/totalfinance/fixed-income';
+ * import { fittedModelArtifact, readFittedModel, evaluateFittedModel } from '@insiderfinance/totalfinance/fixed-income/artifacts';
  *
  * const curve = curves.bootstrap(instruments, { referenceDate: '2026-01-01' });
  * const artifact = fittedModelArtifact({ family: 'discount-curve', fit: curve, calibration: { instruments, options: { referenceDate: '2026-01-01' } }, currency: 'USD' });

@@ -4,12 +4,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { NYSE } from '@totalfinance/calendars/nyse';
-import * as performance from '@totalfinance/performance';
-import { bachelier, black76, type OptionBatchColumns } from '@totalfinance/options';
-import { blackScholesPriceMany } from '@totalfinance/options/batch';
-import * as ta from '@totalfinance/technical-analysis';
-import { legs, strategy } from '@totalfinance/strategy';
+import { NYSE } from '@insiderfinance/totalfinance/calendars/nyse';
+import * as performance from '@insiderfinance/totalfinance/performance';
+import { bachelier, black76, type OptionBatchColumns } from '@insiderfinance/totalfinance/options';
+import { blackScholesPriceMany } from '@insiderfinance/totalfinance/options/batch';
+import * as ta from '@insiderfinance/totalfinance/technical-analysis';
+import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
 
 describe('docs: options profit calculator (browser-safe)', () => {
   it('builds a bull call spread and reads its risk profile', () => {

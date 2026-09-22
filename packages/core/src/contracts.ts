@@ -1,7 +1,7 @@
 /**
  * Canonical option contract types (spec §7.6).
  *
- * These are pure types (zero runtime cost). `@totalfinance/options` re-exports them and adds pricing
+ * These are pure types (zero runtime cost). `@insiderfinance/totalfinance/options` re-exports them and adds pricing
  * market types, builders, and engines. Quotes/trades/dividends and the rest of the market-data
  * contracts live in `market-data.ts`.
  */
@@ -13,7 +13,7 @@ export type OptionType = 'call' | 'put';
  * Exercise style of a LISTED equity/index option. `'bermudan'` was removed (alignment spec P3.4):
  * no vanilla engine supports it, and a representable-but-unpriceable state violates
  * valid-by-construction. Bermudan RATES exercise lives where it is actually priced —
- * `@totalfinance/fixed-income`'s `bermudanSwaption` with its explicit exercise-date schedule.
+ * `@insiderfinance/totalfinance/fixed-income`'s `bermudanSwaption` with its explicit exercise-date schedule.
  */
 export type OptionStyle = 'european' | 'american';
 export type Settlement = 'physical' | 'cash';

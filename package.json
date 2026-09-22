@@ -10,7 +10,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && tsx tools/assemble-distribution.ts",
+    "publication:update": "tsx tools/assemble-distribution.ts --update",
     "clean": "tsc -b tsconfig.build.json --clean",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
@@ -46,7 +47,8 @@
     "artifacts:update": "tsx tools/api-report/run.ts --write && pnpm signature:update && pnpm naming:update && pnpm contract:update && pnpm enforcement:update && tsx tools/readme-gen.ts && tsx tools/llms-docs.ts && tsx tools/public-reference.ts --typedoc && tsx tools/ta-registry-doc.ts && tsx tools/ta-compatibility-doc.ts && tsx tools/ta-warmup-doc.ts && tsx tools/ta-talib-coverage-doc.ts && pnpm bundle:update && pnpm docs:update && prettier --write tools/manifest/*.json",
     "release:dry-run": "tsx tools/release/dry-run.ts",
     "release:smoke": "tsx tools/release/registry-smoke.ts",
-    "release:publish": "tsx tools/release/publish-tarballs.ts"
+    "release:publish": "tsx tools/release/publish-tarballs.ts",
+    "release:promote": "tsx tools/release/promote-tarballs.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -54,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@jridgewell/sourcemap-codec": "1.5.5",
     "@changesets/cli": "^2.27.10",
     "@eslint/js": "^9.18.0",
     "@modelcontextprotocol/sdk": "^1.12.0",

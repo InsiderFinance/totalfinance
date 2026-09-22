@@ -5,17 +5,23 @@
  * clock, no seed. The guide `docs/guides/end-to-end.md` is this file in prose.
  */
 import { describe, expect, it } from 'vitest';
-import { canonicalJsonOf, createMarketSnapshot } from '@totalfinance/core/artifacts';
-import { analyzeFundamentals, type FinancialStatements } from '@totalfinance/fundamentals';
-import { discountedCashFlow, discountedCashFlowFromStatements } from '@totalfinance/valuation';
-import { scoreUniverse, type UniverseObservation } from '@totalfinance/research';
+import { canonicalJsonOf, createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
+import {
+  analyzeFundamentals,
+  type FinancialStatements,
+} from '@insiderfinance/totalfinance/fundamentals';
+import {
+  discountedCashFlow,
+  discountedCashFlowFromStatements,
+} from '@insiderfinance/totalfinance/valuation';
+import { scoreUniverse, type UniverseObservation } from '@insiderfinance/totalfinance/research';
 import {
   applyPortfolioEvents,
   proposePortfolioRebalance,
   type PortfolioEventEnvelope,
-} from '@totalfinance/portfolio';
-import { crossSectionalBacktest } from '@totalfinance/backtest';
-import { analyze } from '@totalfinance/performance';
+} from '@insiderfinance/totalfinance/portfolio';
+import { crossSectionalBacktest } from '@insiderfinance/totalfinance/backtest';
+import { analyze } from '@insiderfinance/totalfinance/performance';
 
 // ── 1. fundamentals: three companies, one fiscal year each, typed statements ─────────────────
 

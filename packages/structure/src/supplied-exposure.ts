@@ -344,8 +344,8 @@ function totals(
  *
  * @example
  * ```ts
- * import { resolvedExpiry } from '@totalfinance/core';
- * import { exposureFromGreeks } from '@totalfinance/structure';
+ * import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
+ * import { exposureFromGreeks } from '@insiderfinance/totalfinance/structure';
  * const timestampMs = Date.parse('2026-09-01T15:00:00Z');
  * const report = exposureFromGreeks({
  *   quotes: [{

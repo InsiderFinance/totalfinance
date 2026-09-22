@@ -1,6 +1,6 @@
 /**
- * `@totalfinance/performance` — return and performance metrics. Depends only on `@totalfinance/core` and
- * `@totalfinance/math`; importing `performance.sharpe` never drags in option pricing or other heavy
+ * `@insiderfinance/totalfinance/performance` — return and performance metrics. Depends only on `@insiderfinance/totalfinance/core` and
+ * `@insiderfinance/totalfinance/math`; importing `performance.sharpe` never drags in option pricing or other heavy
  * packages (spec §15.1).
  */
 
@@ -86,4 +86,4 @@ export type { ExposureResult } from './activity.js';
 
 // The eponymous `performance` namespace object was DELETED (P3.3): it duplicated the module's
 // own exports one level down (umbrella users saw `performance.performance`). Use the module namespace:
-// `import * as performance from '@totalfinance/performance'`.
+// `import * as performance from '@insiderfinance/totalfinance/performance'`.

@@ -1,11 +1,11 @@
 /**
  * Fixed-income market conventions (spec §14): day counts, business-day adjustment, and coupon
- * schedule generation. These are the shared primitives every other module in `@totalfinance/fixed-income`
+ * schedule generation. These are the shared primitives every other module in `@insiderfinance/totalfinance/fixed-income`
  * builds on (bonds, curves, rates derivatives, credit).
  *
  * Pure and clock-free (design law #5): every function operates on explicit ISO `YYYY-MM-DD` inputs or
  * an injected {@link Calendar}; none read the system clock. The day-count layer extends the three
- * conventions in `@totalfinance/core` (`ACT/365F`, `ACT/360`, `30/360`) with the two remaining standards
+ * conventions in `@insiderfinance/totalfinance/core` (`ACT/365F`, `ACT/360`, `30/360`) with the two remaining standards
  * fixed income needs — `ACT/ACT` (ISDA) and `30E/360` (Eurobond).
  */
 
@@ -34,12 +34,12 @@ const MS_PER_DAY = 86_400_000;
 const MAX_PAYMENT_LAG_DAYS = 260;
 
 /**
- * Day-count conventions supported by the fixed-income surface — the three from `@totalfinance/core` plus
+ * Day-count conventions supported by the fixed-income surface — the three from `@insiderfinance/totalfinance/core` plus
  * `ACT/ACT` (ISDA, calendar-year split) and `30E/360` (the Eurobond 30/360 variant).
  */
 export type FixedIncomeDayCount = CoreDayCount | 'ACT/ACT' | '30E/360';
 
-/** The day counts handled directly here (everything else delegates to `@totalfinance/core`). */
+/** The day counts handled directly here (everything else delegates to `@insiderfinance/totalfinance/core`). */
 const FI_DAY_COUNTS = new Set<FixedIncomeDayCount>([
   'ACT/365F',
   'ACT/360',
@@ -126,7 +126,7 @@ function thirtyE360(from: string, to: string): number {
 
 /**
  * Year fraction between two ISO dates under a fixed-income day-count convention. `ACT/ACT` and
- * `30E/360` are implemented here; the three core conventions delegate to `@totalfinance/core`.
+ * `30E/360` are implemented here; the three core conventions delegate to `@insiderfinance/totalfinance/core`.
  */
 export function yearFraction(
   from: string,

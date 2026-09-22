@@ -1154,7 +1154,7 @@ function cashOnlyState(state: PortfolioState): PortfolioState {
  *
  * @example
  * ```ts
- * import { monitorPortfolio } from '@totalfinance/portfolio/policy';
+ * import { monitorPortfolio } from '@insiderfinance/totalfinance/portfolio/policy';
  *
  * const first = monitorPortfolio({
  *   portfolio: ledger.state,

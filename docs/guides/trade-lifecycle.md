@@ -93,15 +93,18 @@ For registry/CLI/HTTP/MCP execution, use `totalfinance.trade.authorize` against 
 store that submission will use, as in the transport example below.
 
 ```ts
-import { createMarketSnapshot } from '@totalfinance/core/artifacts';
-import { applyPortfolioEvents, createPortfolioLedger } from '@totalfinance/portfolio';
+import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
+import {
+  applyPortfolioEvents,
+  createPortfolioLedger,
+} from '@insiderfinance/totalfinance/portfolio';
 import {
   createAuthorizationGrant,
   normalizeTradePlan,
   preflightTradePlan,
   reconcileExecution,
-} from '@totalfinance/portfolio/trade';
-import { createPaperBroker } from '@totalfinance/backtest/paper';
+} from '@insiderfinance/totalfinance/portfolio/trade';
+import { createPaperBroker } from '@insiderfinance/totalfinance/backtest/paper';
 
 const NOW = Date.UTC(2026, 0, 7, 21);
 const ledger = createPortfolioLedger({ portfolioId: 'primary', baseCurrency: 'USD', events });
@@ -220,7 +223,7 @@ import {
   defaultPacks,
   journeyPacks,
   tradePack,
-} from '@totalfinance/workflows';
+} from '@insiderfinance/totalfinance/workflows';
 
 const registry = createOperationRegistry({
   packs: [...defaultPacks(), ...journeyPacks(), tradePack()],

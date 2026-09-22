@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/technical-analysis/rsi` — Wilder's Relative Strength Index (spec §13.3).
+ * `@insiderfinance/totalfinance/technical-analysis/rsi` — Wilder's Relative Strength Index (spec §13.3).
  *
  * A lean deep entrypoint: the framework and RSI's own contract, never the discovery registry.
  */

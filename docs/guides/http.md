@@ -1,7 +1,7 @@
 # Local HTTP server
 
-`@totalfinance/http` ships `totalfinance-http`: a loopback, read-only-by-default HTTP server over the same
-operation registry every transport adapts (`@totalfinance/workflows`), and `openApiDocument`, the OpenAPI
+`@insiderfinance/totalfinance` ships `totalfinance-http` (embedded API at `/http`): a loopback, read-only-by-default HTTP server over the same
+operation registry every transport adapts (`@insiderfinance/totalfinance/workflows`), and `openApiDocument`, the OpenAPI
 3.1 document generated from that registry. The server owns no schema and no compute — every request body
 is the operation's own input schema, every success body is the `OperationResult`, and every error body is
 one `OperationError` (the same document the CLI prints and the MCP server returns).
@@ -9,13 +9,13 @@ one `OperationError` (the same document the CLI prints and the MCP server return
 ## Quickstart
 
 ```sh
-pnpm dlx @totalfinance/http --port 8787 --profile full --store ~/.totalfinance/store
+pnpm --package=@insiderfinance/totalfinance@0.1.0 dlx totalfinance-http --port 8787 --profile full --store ~/.totalfinance/store
 # In another terminal (no token needed for discovery or inline analytics):
 curl -s http://127.0.0.1:8787/operations | jq '.[].id'
 curl -s -X POST http://127.0.0.1:8787/operations/totalfinance.option.price/run \
   -H 'content-type: application/json' \
   -d '{"type":"call","spot":100,"strike":105,"timeToExpiryYears":0.25,"riskFreeRate":0.04,"volatility":0.2}'
-pnpm dlx @totalfinance/http --openapi > openapi.json
+pnpm --package=@insiderfinance/totalfinance@0.1.0 dlx totalfinance-http --openapi > openapi.json
 ```
 
 The server binds `127.0.0.1` by default. `localhost` and IPv6 `::1` / `[::1]` are also loopback;
@@ -45,7 +45,7 @@ one, then start a server with the default analytics capabilities and the three w
 
 ```sh
 node --input-type=module -e 'import { randomBytes } from "node:crypto"; import { writeFileSync } from "node:fs"; writeFileSync(".totalfinance-http-token", randomBytes(32).toString("hex"), { mode: 0o600, flag: "wx" });'
-pnpm dlx @totalfinance/http --profile full --token-file .totalfinance-http-token \
+pnpm --package=@insiderfinance/totalfinance@0.1.0 dlx totalfinance-http --profile full --token-file .totalfinance-http-token \
   --capability portfolio:read --capability analytics:run --capability trade:propose \
   --capability trade:approve --capability trade:paper --capability portfolio:write
 ```
@@ -136,18 +136,18 @@ those routes with a teaching instead of pretending. A token is additionally requ
 
 ## Status codes
 
-| Status | When                                                                                                                                             |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `200`  | success (`202` for an accepted job)                                                                                                              |
-| `400`  | the input was refused — an `input.*` code                                                                                                        |
-| `401`  | a configured mutation credential is missing or invalid (`operation.capability_missing`; `WWW-Authenticate: Bearer realm="totalfinance"`)         |
-| `403`  | Host/Origin refused (`input.wrong_shape`), missing server capability, or job mutations disabled without a token (`operation.capability_missing`) |
-| `404`  | unknown operation, job, handle, or route (`operation.unknown`, `operation.handle_unknown`)                                                       |
-| `409`  | the job was cancelled, or has no result yet (`operation.cancelled`)                                                                              |
-| `413`  | the body exceeds the wire byte budget (`operation.input_too_large`; default 65,536 bytes)                                                        |
-| `415`  | a JSON POST lacks `Content-Type: application/json` (`input.wrong_shape`)                                                                         |
-| `422`  | any other operation error (the compute's own typed refusal)                                                                                      |
-| `500`  | internal (`operation.internal`)                                                                                                                  |
+| Status | When                                                                                                                                                     |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `200`  | success (`202` for an accepted job)                                                                                                                      |
+| `400`  | the input was refused — an `input.*` code                                                                                                                |
+| `401`  | a configured mutation credential is missing or invalid (`operation.capability_missing`; `WWW-Authenticate: Bearer realm="@insiderfinance/totalfinance"`) |
+| `403`  | Host/Origin refused (`input.wrong_shape`), missing server capability, or job mutations disabled without a token (`operation.capability_missing`)         |
+| `404`  | unknown operation, job, handle, or route (`operation.unknown`, `operation.handle_unknown`)                                                               |
+| `409`  | the job was cancelled, or has no result yet (`operation.cancelled`)                                                                                      |
+| `413`  | the body exceeds the wire byte budget (`operation.input_too_large`; default 65,536 bytes)                                                                |
+| `415`  | a JSON POST lacks `Content-Type: application/json` (`input.wrong_shape`)                                                                                 |
+| `422`  | any other operation error (the compute's own typed refusal)                                                                                              |
+| `500`  | internal (`operation.internal`)                                                                                                                          |
 
 Every response carries `X-Request-Id` (yours, echoed, or a generated one) and the result's
 `trace.requestId` matches it.
@@ -171,8 +171,8 @@ ordinary operation failures; an error code alone cannot distinguish 401 from 403
 ## In process
 
 ```ts
-import { createLocalHttpServer } from '@totalfinance/http';
-import { createOperationRegistry, defaultPacks } from '@totalfinance/workflows';
+import { createLocalHttpServer } from '@insiderfinance/totalfinance/http';
+import { createOperationRegistry, defaultPacks } from '@insiderfinance/totalfinance/workflows';
 
 const local = createLocalHttpServer({
   registry: createOperationRegistry({ packs: defaultPacks() }),
@@ -184,19 +184,19 @@ await local.stop();
 ```
 
 Pass `artifacts` (a store) and `jobs` (a `JobRunner` — `createLocalJobRunner` from
-`@totalfinance/workflows/local`, or your own) to attach handles and jobs. Add `authenticationToken` to
+`@insiderfinance/totalfinance/workflows/local`, or your own) to attach handles and jobs. Add `authenticationToken` to
 enable job mutations. To enable approval in process:
 
 ```ts
 import { randomBytes } from 'node:crypto';
-import { createLocalHttpServer } from '@totalfinance/http';
+import { createLocalHttpServer } from '@insiderfinance/totalfinance/http';
 import {
   createOperationRegistry,
   defaultPacks,
   tradePack,
   createMemoryAuthorizationStore,
   DEFAULT_CAPABILITIES,
-} from '@totalfinance/workflows';
+} from '@insiderfinance/totalfinance/workflows';
 
 const authenticationToken = randomBytes(32).toString('hex'); // share privately with trusted clients
 const local = createLocalHttpServer({

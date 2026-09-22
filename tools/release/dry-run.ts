@@ -4,10 +4,10 @@
  * Runs the whole landing standard (`pnpm run ci`), packs every package of the fixed group into
  * `release/`, and writes `release/RELEASE_HASHES.json`: one `{ package, version, tarball, sha256,
  * bytes }` row per artifact plus the commit they were built from. A maintainer approves THOSE hashes
- * in the `npm-publish` environment, and the publish job re-packs and refuses if a single byte differs
+ * in the `npm-publish` environment, and the publish job
  * uploads exactly those tarballs (`tools/release/publish-tarballs.ts`) after re-checking their
- * hashes. Re-packing is NOT the check: `pnpm pack` rewrites `workspace:*` dependencies in an order
- * that is not stable across runs, so the approved artifacts are what ships, not a rebuild of them.
+ * hashes. Re-packing is NOT the approval check: upload the approved artifacts themselves,
+ * not a rebuild that happens to carry the same version number.
  *
  *   --skip-ci            the caller already ran `pnpm run ci` on this tree (the hosted verify job)
  *   --out <dir>          where the tarballs and manifest go (default `release/`, git-ignored)
@@ -17,31 +17,23 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { publicPackageDirectories } from '../public-packages.js';
+import {
+  inspectTarball,
+  releaseVersion,
+  sha256Of,
+  tarballName,
+  validatePackageMetadata,
+  type ReleaseArtifact,
+  type ReleaseManifest,
+} from './artifact-policy.js';
+export { sha256Of, type ReleaseArtifact, type ReleaseManifest } from './artifact-policy.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const PKG_DIR = join(ROOT, 'packages');
-
-export interface ReleaseArtifact {
-  package: string;
-  version: string;
-  tarball: string;
-  sha256: string;
-  bytes: number;
-}
-
-export interface ReleaseManifest {
-  /** The fixed-group version every artifact carries. */
-  version: string;
-  /** The commit the artifacts were packed from. */
-  commit: string;
-  /** Sorted by package name; the order is part of the manifest's identity. */
-  packages: ReleaseArtifact[];
-}
 
 function sh(cmd: string, args: string[], cwd: string, inherit = false): string {
   return execFileSync(cmd, args, {
@@ -57,29 +49,31 @@ function fail(message: string, code = 2): never {
   process.exit(code);
 }
 
-/** The fixed group, read from the filesystem — the same source the preview-surface audit uses. */
-export function readFixedGroup(): { dir: string; name: string; version: string }[] {
-  const out: { dir: string; name: string; version: string }[] = [];
-  for (const dir of readdirSync(PKG_DIR).sort()) {
-    let manifest: { name?: string; version?: string; private?: boolean };
-    try {
-      manifest = JSON.parse(
-        readFileSync(join(PKG_DIR, dir, 'package.json'), 'utf8'),
-      ) as typeof manifest;
-    } catch {
-      continue;
-    }
-    if (!manifest.name || !manifest.version) continue;
-    if (manifest.private)
-      fail(`${manifest.name} is private; the fixed group cannot contain a private package`);
-    out.push({ dir, name: manifest.name, version: manifest.version });
+/** `path` is absolute; callers must never resolve `dir` relative to packages/. */
+export function readFixedGroup(
+  root = ROOT,
+): { dir: string; name: string; path: string; version: string }[] {
+  const directories = readdirSync(join(root, 'distribution'))
+    .filter((dir) => existsSync(join(root, 'distribution', dir, 'package.json')))
+    .sort();
+  if (JSON.stringify(directories) !== JSON.stringify(['mcp', 'totalfinance']))
+    throw new Error('Distribution must contain exactly the main and MCP workspaces');
+  const group = publicPackageDirectories(root).map((pkg) => {
+    const manifest = JSON.parse(readFileSync(join(pkg.path, 'package.json'), 'utf8')) as {
+      version: unknown;
+    };
+    releaseVersion(manifest.version);
+    validatePackageMetadata(manifest, pkg.name, manifest.version);
+    return { ...pkg, version: manifest.version };
+  });
+  if (new Set(group.map((pkg) => pkg.version)).size !== 1)
+    throw new Error('The two public artifacts must have the same version');
+  for (const dir of readdirSync(join(root, 'packages'))) {
+    const path = join(root, 'packages', dir, 'package.json');
+    const pkg = JSON.parse(readFileSync(path, 'utf8')) as { private?: boolean };
+    if (pkg.private !== true) throw new Error(`Source workspace packages/${dir} must be private`);
   }
-  if (out.length === 0) fail('no packages found under packages/');
-  return out;
-}
-
-export function sha256Of(path: string): string {
-  return createHash('sha256').update(readFileSync(path)).digest('hex');
+  return group;
 }
 
 /** Pack the whole group into `out` and describe every artifact. */
@@ -88,22 +82,34 @@ export function packGroup(out: string, commit: string): ReleaseManifest {
   const versions = new Set(group.map((p) => p.version));
   if (versions.size !== 1)
     fail(`the fixed group carries ${versions.size} versions: ${[...versions].join(', ')}`);
-  rmSync(out, { recursive: true, force: true });
+  out = resolve(out);
   mkdirSync(out, { recursive: true });
+  if (readdirSync(out).some((file) => file.endsWith('.tgz') || file === 'RELEASE_HASHES.json'))
+    throw new Error(
+      'Output already contains release artifacts; use a fresh directory (never overwrite approved bytes)',
+    );
   const packages: ReleaseArtifact[] = [];
   for (const pkg of group) {
-    const printed = sh('pnpm', ['pack', '--pack-destination', out], join(PKG_DIR, pkg.dir)).trim();
-    const tarball = printed.split('\n').at(-1)!.trim();
-    packages.push({
+    sh('pnpm', ['pack', '--pack-destination', out, '--config.ignore-scripts=true'], pkg.path);
+    const tarball = join(out, tarballName(pkg.name, pkg.version));
+    const artifact = {
       package: pkg.name,
       version: pkg.version,
       tarball: basename(tarball),
       sha256: sha256Of(tarball),
       bytes: statSync(tarball).size,
-    });
+    };
+    inspectTarball(tarball, artifact);
+    packages.push(artifact);
   }
-  packages.sort((a, b) => a.package.localeCompare(b.package));
-  return { version: [...versions][0]!, commit, packages };
+  return {
+    version: [...versions][0]!,
+    commit,
+    sourceDirty:
+      sh('git', ['status', '--porcelain', '--untracked-files=all', '--', '.'], ROOT).trim().length >
+      0,
+    packages,
+  };
 }
 
 function main(): void {
@@ -141,6 +147,10 @@ function main(): void {
     sh('pnpm', ['run', 'ci'], ROOT, true);
   }
   const manifest = packGroup(out, commit);
+  if (sh('git', ['rev-parse', 'HEAD'], ROOT).trim() !== commit)
+    fail('HEAD changed during packing; discard this rehearsal and rerun from one commit');
+  if (!values['allow-dirty'] && manifest.sourceDirty !== false)
+    fail('Source changed during verification/packing; no approval manifest will be issued');
 
   const json = `${JSON.stringify(manifest, null, 2)}\n`;
   writeFileSync(join(out, 'RELEASE_HASHES.json'), json);

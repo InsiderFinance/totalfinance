@@ -31,7 +31,7 @@ export interface Diagnostics {
    */
   autoReason?: string;
   /**
-   * The structured engine-selection report (Gate C, `@totalfinance/core/pricing`): who was selected,
+   * The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
    * why, and — for automatic selection — every candidate considered with its verdict. This is the
    * machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
    * `selected.name` always agrees with `engine` when both are present.

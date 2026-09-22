@@ -105,30 +105,35 @@ function domainFixtures(
     calculation(
       canary,
       'feature',
-      `@totalfinance/${domain}/${feature}`,
+      `@insiderfinance/totalfinance/${domain}/${feature}`,
       `{ ${name} }`,
       name + suffix,
     ),
-    calculation(canary, 'scoped-root', `@totalfinance/${domain}`, `{ ${name} }`, name + suffix),
-    calculation(canary, 'umbrella-subpath', `totalfinance/${domain}`, `{ ${name} }`, name + suffix),
     calculation(
       canary,
-      'scoped-static-star',
-      `@totalfinance/${domain}`,
+      'domain',
+      `@insiderfinance/totalfinance/${domain}`,
+      `{ ${name} }`,
+      name + suffix,
+    ),
+    calculation(
+      canary,
+      'domain-static-star',
+      `@insiderfinance/totalfinance/${domain}`,
       '* as domain',
       `domain.${name}${suffix}`,
     ),
     calculation(
       canary,
-      'umbrella-static-star',
-      `totalfinance/${domain}`,
+      'feature-static-star',
+      `@insiderfinance/totalfinance/${domain}/${feature}`,
       '* as domain',
       `domain.${name}${suffix}`,
     ),
     calculation(
       canary,
       'root-namespace',
-      'totalfinance',
+      '@insiderfinance/totalfinance',
       `{ ${namespace} }`,
       `${namespace}.${name}${suffix}`,
       true,
@@ -140,58 +145,64 @@ export const CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
   ...domainFixtures('normal', 'math', 'normal', 'normalCdf', 'math'),
   ...domainFixtures('rsi', 'technical-analysis', 'rsi', 'rsi', 'technicalAnalysis'),
   ...domainFixtures('facade', 'options', 'black-scholes', 'blackScholes', 'options', '.call'),
-  calculation('facade', 'root-hoist', 'totalfinance', '{ blackScholes }', 'blackScholes.call'),
+  calculation(
+    'facade',
+    'root-hoist',
+    '@insiderfinance/totalfinance',
+    '{ blackScholes }',
+    'blackScholes.call',
+  ),
   calculation(
     'expert',
     'feature',
-    '@totalfinance/options/black-scholes',
+    '@insiderfinance/totalfinance/options/black-scholes',
     '{ blackScholesPrice }',
     'blackScholesPrice',
   ),
   calculation(
     'expert',
     'feature-static-star',
-    '@totalfinance/options/black-scholes',
+    '@insiderfinance/totalfinance/options/black-scholes',
     '* as model',
     'model.blackScholesPrice',
   ),
   calculation(
     'expert-black76',
     'feature',
-    '@totalfinance/options/black76',
+    '@insiderfinance/totalfinance/options/black76',
     '{ black76Price }',
     'black76Price',
   ),
   calculation(
     'expert-black76',
     'feature-static-star',
-    '@totalfinance/options/black76',
+    '@insiderfinance/totalfinance/options/black76',
     '* as model',
     'model.black76Price',
   ),
   calculation(
     'expert-bachelier',
     'feature',
-    '@totalfinance/options/bachelier',
+    '@insiderfinance/totalfinance/options/bachelier',
     '{ bachelierPrice }',
     'bachelierPrice',
   ),
   calculation(
     'expert-bachelier',
     'feature-static-star',
-    '@totalfinance/options/bachelier',
+    '@insiderfinance/totalfinance/options/bachelier',
     '* as model',
     'model.bachelierPrice',
   ),
   {
     id: 'unused-library',
     canary: 'unused',
-    specifier: 'totalfinance',
+    specifier: '@insiderfinance/totalfinance',
     style: 'unused',
-    source: `import * as unused from 'totalfinance';
-import 'totalfinance';
-import '@totalfinance/options/black-scholes';
-import '@totalfinance/technical-analysis/rsi';
+    source: `import * as unused from '@insiderfinance/totalfinance';
+import '@insiderfinance/totalfinance';
+import '@insiderfinance/totalfinance/options/black-scholes';
+import '@insiderfinance/totalfinance/technical-analysis/rsi';
 globalThis.consumerCall = () => 42;
 `,
     budgetKiB: { esbuild: 0.12, rollup: 0.12 },
@@ -201,9 +212,9 @@ globalThis.consumerCall = () => 42;
   {
     id: 'dynamic-math-namespace',
     canary: 'dynamic',
-    specifier: 'totalfinance/math',
+    specifier: '@insiderfinance/totalfinance/math',
     style: 'dynamic-and-enumeration',
-    source: `import * as domain from 'totalfinance/math';
+    source: `import * as domain from '@insiderfinance/totalfinance/math';
 globalThis.consumerCall = (input) => ({ value: domain[input.key](input.value), keys: Object.keys(domain).sort() });
 `,
     budgetKiB: { esbuild: 43, rollup: 43 },
@@ -273,14 +284,17 @@ export function allowedConsumerModule(
         : fixture.canary === 'facade'
           ? 'core|math|options'
           : 'core|math';
-    return new RegExp(`^(?:@totalfinance/(?:${domains})|totalfinance)/dist/`).test(id);
+    return new RegExp(
+      `^@insiderfinance/totalfinance/modules/(?:${domains}|totalfinance)/dist/`,
+    ).test(id);
   }
-  if (fixture.canary === 'normal') return id === '@totalfinance/math/dist/normal.js';
+  if (fixture.canary === 'normal')
+    return id === '@insiderfinance/totalfinance/modules/math/dist/normal.js';
   // Schema/transport/artifact infrastructure is never part of a lean calculation's error handling.
-  if (/^@totalfinance\/core\/dist\//.test(id))
+  if (/^@insiderfinance\/totalfinance\/modules\/core\/dist\//.test(id))
     return !/(?:schema|artifacts|serialization)/.test(id);
   if (fixture.canary === 'rsi') {
-    return /^@totalfinance\/technical-analysis\/dist\/(?:rsi|framework|validate|limits|snapshot-envelope|builtin-metadata|indicator-metadata)\.js$/.test(
+    return /^@insiderfinance\/totalfinance\/modules\/technical-analysis\/dist\/(?:rsi|framework|validate|limits|snapshot-envelope|builtin-metadata|indicator-metadata)\.js$/.test(
       id,
     );
   }
@@ -288,19 +302,24 @@ export function allowedConsumerModule(
     // esbuild can retain the model module's tiny key-array construction even when the entire
     // facade is eliminated. Tests cap that residue; forbidding the whole source file is false.
     return (
-      id === '@totalfinance/options/dist/bsm.js' ||
-      id === '@totalfinance/math/dist/normal.js' ||
-      id === '@totalfinance/options/dist/black-scholes.js'
+      id === '@insiderfinance/totalfinance/modules/options/dist/bsm.js' ||
+      id === '@insiderfinance/totalfinance/modules/math/dist/normal.js' ||
+      id === '@insiderfinance/totalfinance/modules/options/dist/black-scholes.js'
     );
   }
   if (fixture.canary === 'expert-black76' || fixture.canary === 'expert-bachelier') {
     const model = fixture.canary.slice('expert-'.length);
     return (
-      id === `@totalfinance/options/dist/${model}.js` || id === '@totalfinance/math/dist/normal.js'
+      id === `@insiderfinance/totalfinance/modules/options/dist/${model}.js` ||
+      id === '@insiderfinance/totalfinance/modules/math/dist/normal.js'
     );
   }
   return (
-    /^@totalfinance\/options\/dist\/(?:black-scholes|bsm|facade-util)\.js$/.test(id) ||
-    /^@totalfinance\/math\/dist\/(?:normal|solvers|resource-validation)\.js$/.test(id)
+    /^@insiderfinance\/totalfinance\/modules\/options\/dist\/(?:black-scholes|bsm|facade-util)\.js$/.test(
+      id,
+    ) ||
+    /^@insiderfinance\/totalfinance\/modules\/math\/dist\/(?:normal|solvers|resource-validation)\.js$/.test(
+      id,
+    )
   );
 }

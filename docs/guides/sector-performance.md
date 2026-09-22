@@ -7,7 +7,7 @@ explicit information cutoffs. Both are pure calculations: no API keys, network, 
 ## Start with same-period returns
 
 ```ts
-import { sectorPerformance } from '@totalfinance/performance/sector-performance';
+import { sectorPerformance } from '@insiderfinance/totalfinance/performance/sector-performance';
 
 const report = sectorPerformance({
   members: [
@@ -47,7 +47,7 @@ session-completion records and effective-dated classifications in production. A 
 table is input data, not a built-in exchange calendar.
 
 ```ts
-import { sectorPerformanceSnapshot } from '@totalfinance/performance/sector-performance';
+import { sectorPerformanceSnapshot } from '@insiderfinance/totalfinance/performance/sector-performance';
 
 const cutoff = Date.parse('2026-08-25T22:00:00Z');
 const previousCloseTime = Date.parse('2026-08-24T20:00:00Z');
@@ -123,7 +123,7 @@ from the included members, not from an implied fully covered universe.
 ## Contract and integration boundaries
 
 Both functions accept named request objects and return assumptions plus `diagnostics.warnings`.
-Their reports can be saved directly with `createAnalysisArtifact` from `@totalfinance/core/artifacts`.
+Their reports can be saved directly with `createAnalysisArtifact` from `@insiderfinance/totalfinance/core/artifacts`.
 The neutral `sector-performance-v1` calculation policy is stamped in results; callers do not pass
 a magic vendor policy string. This is a calculation-policy revision, not a second package version.
 

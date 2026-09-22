@@ -3,7 +3,7 @@
  * *derived* surface — the local volatility consistent with an observed implied-vol surface — not an
  * implied-vol parametrization. So it is exposed here as a derived `LocalVolatilitySurface` (with a fast
  * cached grid) built from any implied-vol function or a fitted {@link VolatilitySurface}, reusing the Dupire
- * engine in `@totalfinance/options`, rather than as a `VolatilitySurface` `model` (which would mis-type `.iv()`).
+ * engine in `@insiderfinance/totalfinance/options`, rather than as a `VolatilitySurface` `model` (which would mis-type `.iv()`).
  */
 
 import { ErrorCode, InputError, ensureKnownKeys, requireArgumentObject } from '@totalfinance/core';

@@ -1,7 +1,7 @@
 /**
- * `@totalfinance/cli` — the `totalfinance` command line (Stage 7A). The local runtime it drives — the file
+ * `@insiderfinance/totalfinance/cli` — the `totalfinance` command line (Stage 7A). The local runtime it drives — the file
  * stores, the registry profiles, the worker-terminated job runner — lives in
- * `@totalfinance/workflows/local` (so `@totalfinance/http` composes the same runtime without an L6 cross-edge)
+ * `@insiderfinance/totalfinance/workflows/local` (so `@insiderfinance/totalfinance/http` composes the same runtime without an L6 cross-edge)
  * and is re-exported here for the callers Decision 5 named. The CLI owns no schema and no compute.
  */
 

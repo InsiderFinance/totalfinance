@@ -14,7 +14,7 @@
 - `const OPERATION_BUDGETS`: Readonly<{ maxInputBytes: Readonly<{ transportDefault: 65536; maximum: 16777216; }>; inlineResultBytes: Readonly<{ default: 262144; maximum: 16777216; }>; }>
 - `const OPERATION_ID`: RegExp
 - `const RESOURCE_HANDLE_SCHEMA`: JSONSchema
-- `const WORKFLOWS_VERSION`: '0.0.1'
+- `const WORKFLOWS_VERSION`: '0.1.0'
 - `function analysisOperations`: () => TotalFinanceOperation[]
 - `function applyJobPatch`: (functionName: string, current: JobRecord, patch: unknown) => JobRecord
 - `function artifactPack`: () => OperationPack

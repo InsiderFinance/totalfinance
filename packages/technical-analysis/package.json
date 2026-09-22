@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/technical-analysis",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TotalFinance technical analysis: aligned indicators with serializable streaming state. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
@@ -205,11 +205,8 @@
   "dependencies": {
     "@totalfinance/core": "workspace:*"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "engines": {
     "node": ">=22.13.0"
-  }
+  },
+  "private": true
 }

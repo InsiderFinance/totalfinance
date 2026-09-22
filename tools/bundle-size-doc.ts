@@ -3,7 +3,7 @@
  * Run with `pnpm run bundle:update`.
  *
  * The published table used to be hand-kept beside a test that owned the real numbers, and it drifted
- * exactly as far as that arrangement allows: `@totalfinance/math` published at "< 14 KB" against a 33 KB
+ * exactly as far as that arrangement allows: `@insiderfinance/totalfinance/math` published at "< 14 KB" against a 33 KB
  * budget, `black-scholes` at "< 8 KB" against 8.5, and six budgeted entrypoints — including the
  * umbrella, the largest number in the library — missing from the page altogether.
  *
@@ -69,7 +69,8 @@ Sizes use 1024 bytes per KiB (the historical whole-entrypoint table labels these
 
 ## Small installed consumers
 
-These measurements pack the built packages, install them outside the workspace, and bundle a
+These measurements pack exactly the two built distribution artifacts,
+\`@insiderfinance/totalfinance\` and \`@insiderfinance/totalfinance-mcp\`, install them outside the workspace, and bundle a
 consumer that uses only the named calculation. No source aliases, forced side-effect overrides,
 or injected pure annotations are used. esbuild ${consumers[0]!.esbuild.bundlerVersion} and Rollup
 ${consumers[0]!.rollup.bundlerVersion} perform tree shaking; esbuild minifies Rollup's finished
@@ -77,21 +78,26 @@ output without rebundling. The fixtures expose a callable with runtime inputs so
 cannot replace the calculation. This is a local package-artifact measurement, not an npm publication
 receipt or a promise for every bundler version/configuration.
 
+The main artifact has no runtime dependencies. MCP is an optional, separate artifact; no MCP SDK,
+CLI, HTTP, or Node-only workflow module may enter these browser consumers. Private source
+workspaces are never installed. Dependency metadata is checked before installation, and retained
+module evidence comes from \`@insiderfinance/totalfinance/modules/<domain>/dist/\` inside the tarball.
+
 ${renderConsumerReport(consumers)}
 
 \`normal\` means \`normalCdf\`; \`rsi\` means the RSI indicator; \`facade\` means
 \`blackScholes.call\`; expert fixtures name their model's standalone price function.
 The source fixture record is \`tools/bundle-size/consumer-fixtures.ts\`. The installed-package
-matrix also checks scoped roots, umbrella domain subpaths, direct static namespace imports,
+matrix also checks domain subpaths, direct static domain and feature namespace imports,
 unused-library removal, dynamic-namespace retention, numerical outputs, and typed malformed-input
 refusals. Portable import spellings must stay within ${CONSUMER_IMPORT_TOLERANCE_BYTES} gzip bytes
 of their feature fixture and retain the same allowed implementation modules.
 
-Root namespace re-exports such as \`import { math } from 'totalfinance'\` can retain the whole
+Root namespace re-exports such as \`import { math } from '@insiderfinance/totalfinance'\` can retain the whole
 domain in esbuild ([upstream limitation](https://github.com/evanw/esbuild/issues/1420)); Rollup's
-corresponding fixtures must remain lean. Use \`import { normalCdf } from 'totalfinance/math'\`
-or \`import { normalCdf } from '@totalfinance/math/normal'\` for the portable small-bundle path.
-The direct hoist \`import { blackScholes } from 'totalfinance'\` is tested separately from
+corresponding fixtures must remain lean. Use \`import { normalCdf } from '@insiderfinance/totalfinance/math'\`
+or \`import { normalCdf } from '@insiderfinance/totalfinance/math/normal'\` for the portable small-bundle path.
+The direct hoist \`import { blackScholes } from '@insiderfinance/totalfinance'\` is tested separately from
 \`options.blackScholes\`. Dynamic property selection and enumeration legitimately retain more code.
 See [imports and bundles](./guides/imports-and-bundles.md) for installation, browser, and Node guidance.
 

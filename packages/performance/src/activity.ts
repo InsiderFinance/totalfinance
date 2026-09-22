@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/performance/activity` — portfolio-activity metrics (spec §15.1): turnover and exposure.
+ * `@insiderfinance/totalfinance/performance/activity` — portfolio-activity metrics (spec §15.1): turnover and exposure.
  *
  * Both read a time series of portfolio weight vectors — `weights[t][i]` is the weight of asset `i` at
  * rebalance `t` (negative = short, the row need not sum to 1 if the book runs net cash). These are the
@@ -48,7 +48,7 @@ function requireRectangular(weights: readonly ArrayLike<number>[], functionName:
  * turnover once and ~0 thereafter.
  *
  * NOTE: this is a **per-rebalance weight-change ratio** (unitless, in [0, 1] one-way), distinct from
- * `BacktestResult.turnover` in `@totalfinance/backtest`, which is a **traded-notional ÷ equity** ratio
+ * `BacktestResult.turnover` in `@insiderfinance/totalfinance/backtest`, which is a **traded-notional ÷ equity** ratio
  * accumulated over the run. Different definitions and units — do not compare the two directly.
  */
 function turnoverValue(weights: readonly ArrayLike<number>[]): number {

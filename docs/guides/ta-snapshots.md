@@ -1,11 +1,11 @@
 # Saving and restoring a streaming indicator
 
-Every indicator in `@totalfinance/technical-analysis` has a streaming form, and every streaming form is
+Every indicator in `@insiderfinance/totalfinance/technical-analysis` has a streaming form, and every streaming form is
 serializable. You feed it bars, save it, load it a week later, and keep feeding it — the output is
 identical to a stream that never stopped.
 
 ```ts
-import * as technicalAnalysis from '@totalfinance/technical-analysis';
+import * as technicalAnalysis from '@insiderfinance/totalfinance/technical-analysis';
 
 const stream = technicalAnalysis.rsi.stream({ period: 14 });
 for (const close of closesSoFar) stream.next(close);
@@ -54,7 +54,7 @@ without a major version — the envelope around them is the contract.
 Every one is an `InputError` carrying a `code` and a `context`, so a loader can branch:
 
 ```ts
-import { isQuantError } from '@totalfinance/core';
+import { isQuantError } from '@insiderfinance/totalfinance/core';
 
 try {
   return technicalAnalysis.rsi.fromJSON(stored);
@@ -118,7 +118,7 @@ import {
   readSnapshot,
   snapshotOf,
   type TechnicalAnalysisSnapshot,
-} from '@totalfinance/technical-analysis';
+} from '@insiderfinance/totalfinance/technical-analysis';
 
 class MyStream {
   toJSON(): TechnicalAnalysisSnapshot {

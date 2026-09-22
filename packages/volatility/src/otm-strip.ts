@@ -4,7 +4,7 @@
  * below the forward, calls above, averaged at the money) that both the DDKZ variance replication and the
  * Bakshi–Kapadia–Madan moment estimators integrate over. An expiry that can't be replicated (< 3 OTM
  * strikes, no strike carrying both a call and a put, no bracketing forward strike) is dropped with a
- * disclosed warning — never fabricated. Internal to `@totalfinance/volatility` (not part of the package surface).
+ * disclosed warning — never fabricated. Internal to `@insiderfinance/totalfinance/volatility` (not part of the package surface).
  */
 
 import {

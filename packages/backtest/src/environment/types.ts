@@ -1,5 +1,5 @@
 /**
- * `@totalfinance/backtest/environment` — the trading-agent environment's grammar (Stage 7B.1, AT4).
+ * `@insiderfinance/totalfinance/backtest/environment` — the trading-agent environment's grammar (Stage 7B.1, AT4).
  * An environment is `portfolioBacktest`'s loop driven from outside: the same accounting, execution
  * policy, lifecycle, marks, and margin, with the orders decided by a policy or an agent on the
  * previous instant's observation.

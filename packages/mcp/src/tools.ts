@@ -1,6 +1,6 @@
 /**
- * `@totalfinance/mcp` tools are ADAPTERS over the protocol-neutral operation registry
- * (`@totalfinance/workflows`, Stage 7A): every shipped tool's id, schema, output schema, stochastic
+ * `@insiderfinance/totalfinance-mcp` tools are ADAPTERS over the protocol-neutral operation registry
+ * (`@insiderfinance/totalfinance/workflows`, Stage 7A): every shipped tool's id, schema, output schema, stochastic
  * predicate, and body live in the registry; this module renders them as MCP tools and keeps the
  * pack functions that select them. `defineTool` remains for a caller's own custom tools.
  */
