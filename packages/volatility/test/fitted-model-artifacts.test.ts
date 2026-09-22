@@ -560,7 +560,7 @@ describe('read door refusals and report-level migration', () => {
       ErrorCode.ArtifactFamilyMismatch,
     );
     expect(() => readFittedModel({ artifact: foreign })).toThrow(
-      /@totalfinance\/research\/artifacts/,
+      /@insiderfinance\/totalfinance\/research\/artifacts/,
     );
     const tampered = persisted(artifact) as AnalysisArtifact & { result: Record<string, unknown> };
     (tampered.result as { modelVersion: number }).modelVersion = 1;

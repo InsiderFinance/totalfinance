@@ -806,7 +806,7 @@ describe('refusals and migration', () => {
       ErrorCode.ArtifactFamilyMismatch,
     );
     expect(() => readResearchRun({ artifact: foreign })).toThrow(
-      /@totalfinance\/volatility\/artifacts/,
+      /@insiderfinance\/totalfinance\/volatility\/artifacts/,
     );
     const tampered = persisted(artifact) as { result: Record<string, unknown> };
     tampered.result = { ...tampered.result, kind: 'rank' };

@@ -478,7 +478,7 @@ describe('refusals, referenced rows, and migration', () => {
       ErrorCode.ArtifactFamilyMismatch,
     );
     expect(() => readFittedModel({ artifact: foreign })).toThrow(
-      /@totalfinance\/volatility\/artifacts/,
+      /@insiderfinance\/totalfinance\/volatility\/artifacts/,
     );
     const tampered = persisted(artifact) as AnalysisArtifact & {
       result: { fit: { pillars: Array<{ zero: number }> } };
