@@ -62,6 +62,18 @@ local manifest under a different HEAD, even when the payload hashes match.
   Subsequent changes are release recovery checks and reviewed test expectations, not generators or
   calculation implementations. Full CI and independent coverage repeat: pending final recording.
 
+The final runs at `94b11c8` did not pass and are not release evidence: Node 22 passed 12,481/12,484
+tests and Node 24 passed 12,482/12,484. Both caught the newly added evidence document missing from the
+generated documentation inventory and a single trading-example test exhausting its 45-second budget;
+Node 22 additionally caught an overstrong cancellation assertion and worker RPC timeouts under
+concurrent full suites/regeneration. The inventory is regenerated, not hand-edited. The trading
+journey is split into independent cases with identical policies, parameters, seeds, computations
+and assertions. The MCP regressions now control both sides of actual worker persistence: early
+cancellation leaves no report; late cancellation stays terminal and refuses job-result reads, while
+already-persisted reports retain the documented ownership/profile visibility. No calculation or
+cancellation implementation was changed and no timeout or coverage gate was increased. These
+repairs require fresh complete verification before closeout; the earlier green subset is not a waiver.
+
 Verdaccio synthesizes `latest` for a first version even when the client requests `candidate`.
 Consequently its tag state is **not** public npm promotion evidence. The public path verifies tag
 readback separately; [npm documents explicit tag selection](https://docs.npmjs.com/adding-dist-tags-to-packages/).

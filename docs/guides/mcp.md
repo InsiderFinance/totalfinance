@@ -261,6 +261,9 @@ completion has fraction 1. This is not an invented calculation percentage. Await
 send ordinary MCP `notifications/progress` when the client requests progress. Standard MCP request
 cancellation stops an awaited worker; explicit job cancellation stops fetch-later work through the
 same runner. Cancelling a terminal job is idempotent.
+Cancellation does not undo reports already persisted. They retain the ownership/profile visibility
+described below, but a retained report is not a successful result for a cancelled job. Read the job's
+terminal state before treating its work as completed.
 
 Results retain `structured`, `assumptions`, `diagnostics`, `identity`, and artifact handles.
 The result resource returns the OperationResult directly; the result tool wraps it under `result`.

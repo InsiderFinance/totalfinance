@@ -78,6 +78,8 @@ currently inline `vectorized_run`); their deadlines remain post-hoc. For fetch-l
 4. `totalfinance.job.cancel` with `{ jobId }` cancels unfinished work through the existing worker runner.
    Terminal cancellation is idempotent. Failed jobs return their original `OperationError`;
    early result reads return `input.wrong_shape` with the actual state; only cancelled work returns `operation.cancelled`.
+   Cancellation stops outstanding work; it is not rollback or deletion of reports already persisted.
+   Those reports retain their normal ownership/profile visibility, but are not a successful job result.
 
 Job controls are absent without attachment. Reads/cancellation and job result resources are limited
 to the effective eligible operation set even if the supplied runner has a broader registry. The

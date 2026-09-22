@@ -1,7 +1,11 @@
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import { once } from 'node:events';
+import { Worker } from 'node:worker_threads';
+import { build } from 'esbuild';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { McpError } from '@modelcontextprotocol/sdk/types.js';
@@ -27,8 +31,107 @@ import { PARITY_FIXTURES } from '../../../tools/transport-parity/fixtures.js';
 const clients: Client[] = [];
 const directories: string[] = [];
 const runs: JobRun[] = [];
+const barrierReleases = new Set<() => Promise<void>>();
+const deliveryReleases = new Set<() => void>();
 const registry = registryForProfile({ profile: 'backtesting' });
 const operation = registry.require('totalfinance.backtest.options_run');
+let barrierDirectory: string;
+let barrierEntry: string;
+beforeAll(async () => {
+  barrierDirectory = mkdtempSync(join(tmpdir(), 'totalfinance-mcp-barrier-'));
+  barrierEntry = join(barrierDirectory, 'barrier.mjs');
+  await build({
+    entryPoints: [fileURLToPath(new URL('./fixtures/artifact-write-barrier.ts', import.meta.url))],
+    outfile: barrierEntry,
+    bundle: true,
+    platform: 'node',
+    format: 'esm',
+  });
+});
+afterAll(() => rmSync(barrierDirectory, { recursive: true, force: true }));
+
+async function holdArtifactWrites(directory: string): Promise<() => Promise<void>> {
+  const release = new SharedArrayBuffer(4);
+  const worker = new Worker(barrierEntry, { workerData: { directory, release } });
+  let workerError: Error | undefined;
+  worker.on('error', (error) => {
+    workerError = error;
+  });
+  const exited = new Promise<void>((resolve) => {
+    worker.once('exit', () => resolve());
+  });
+  let releasing: Promise<void> | undefined;
+  const releaseBarrier = () => {
+    releasing ??= (async () => {
+      Atomics.store(new Int32Array(release), 0, 1);
+      Atomics.notify(new Int32Array(release), 0);
+      try {
+        await exited;
+        if (workerError) throw workerError;
+      } finally {
+        barrierReleases.delete(releaseBarrier);
+      }
+    })();
+    return releasing;
+  };
+  barrierReleases.add(releaseBarrier);
+  try {
+    expect(
+      await Promise.race([
+        once(worker, 'message'),
+        exited.then(() => {
+          throw workerError ?? new Error('Artifact barrier exited before acquiring its lock');
+        }),
+      ]),
+    ).toEqual(['locked']);
+  } catch (error) {
+    await worker.terminate();
+    await releaseBarrier();
+    throw error;
+  }
+  return releaseBarrier;
+}
+
+/** Delay delivery, not computation: the real worker durably persists before cancellation. */
+function holdCompletionDelivery() {
+  const queued: (() => void)[] = [];
+  let restore: () => void = () => undefined;
+  let posted: () => void = () => undefined;
+  const persisted = new Promise<void>((resolve) => {
+    posted = resolve;
+  });
+  const capture = (worker: Worker) => {
+    const emit = worker.emit;
+    worker.emit = (event: string | symbol, ...args: unknown[]): boolean => {
+      if (event === 'message' || event === 'exit') {
+        // Node removes Worker listeners after exit, even when emit is intercepted. Snapshot
+        // the real once-wrappers now so delayed delivery still exercises the runner callbacks.
+        const listeners = worker.rawListeners(event);
+        queued.push(() => {
+          for (const listener of listeners) Reflect.apply(listener, worker, args);
+        });
+        if (event === 'message') posted();
+        return true;
+      }
+      return Reflect.apply(emit, worker, [event, ...args]) as boolean;
+    };
+    restore = () => {
+      worker.emit = emit;
+    };
+  };
+  process.once('worker', capture);
+  const release = () => {
+    deliveryReleases.delete(release);
+    process.off('worker', capture);
+    restore();
+    for (const deliver of queued.splice(0)) deliver();
+  };
+  deliveryReleases.add(release);
+  return {
+    persisted,
+    release,
+  };
+}
 function dataInput() {
   return PARITY_FIXTURES[operation.id]!();
 }
@@ -41,7 +144,7 @@ async function connect(options: McpServerOptions) {
   clients.push(client);
   return client;
 }
-function setup() {
+function setup(pollMs = 5) {
   const directory = mkdtempSync(join(tmpdir(), 'totalfinance-mcp-jobs-'));
   directories.push(directory);
   const local = createLocalJobRunner({
@@ -49,14 +152,19 @@ function setup() {
     profile: 'backtesting',
     directory,
     clock: () => new Date().toISOString(),
-    pollMs: 5,
+    pollMs,
   });
   const submit = vi.fn((submission: Parameters<JobRunner['submit']>[0]) => {
     const run = local.submit(submission);
     runs.push(run);
     return run;
   });
-  return { jobs: { ...local, submit }, artifacts: createFileArtifactStore({ directory }), submit };
+  return {
+    jobs: { ...local, submit },
+    artifacts: createFileArtifactStore({ directory }),
+    submit,
+    directory,
+  };
 }
 function record(id: string, operationId = operation.id): JobRecord {
   return {
@@ -84,12 +192,19 @@ function errorDocument(result: Awaited<ReturnType<Client['callTool']>>) {
   return JSON.parse((result.content as { text: string }[])[0]!.text);
 }
 afterEach(async () => {
-  await Promise.all(
-    runs.splice(0).map(async (run) => {
-      await run.cancel();
-      await run.completion;
-    }),
-  );
+  // Vitest timeouts do not unwind an async test's pending await/finally. Release interception
+  // first so worker termination can resolve even when an assertion or await failed.
+  for (const release of deliveryReleases) release();
+  try {
+    await Promise.all(
+      runs.splice(0).map(async (run) => {
+        await run.cancel();
+        await run.completion;
+      }),
+    );
+  } finally {
+    await Promise.all([...barrierReleases].map((release) => release()));
+  }
   await Promise.all(clients.splice(0).map((client) => client.close()));
   for (const directory of directories.splice(0))
     rmSync(directory, { recursive: true, force: true });
@@ -217,50 +332,110 @@ describe('optional worker jobs over stable MCP tools and resources', () => {
     expect(progress[0]!.message).toContain('lifecycle');
   });
   it('standard MCP request cancellation stops an awaited worker call', async () => {
-    const { jobs, artifacts } = setup();
+    const { jobs, artifacts, directory } = setup();
     const client = await connect({ profile: 'backtesting', jobs, artifacts });
-    const controller = new AbortController();
-    const pending = client.callTool(
-      { name: toolNameFor(operation.id), arguments: dataInput() },
-      undefined,
-      {
-        signal: controller.signal,
-        onprogress: () => controller.abort(),
-      },
-    );
-    await expect(pending).rejects.toBeDefined();
-    expect(runs).toHaveLength(1);
-    expect((await runs[0]!.completion).state).toBe('cancelled');
-    expect(artifacts.list()).toEqual([]);
+    const release = await holdArtifactWrites(directory);
+    try {
+      const controller = new AbortController();
+      const pending = client.callTool(
+        { name: toolNameFor(operation.id), arguments: dataInput() },
+        undefined,
+        {
+          signal: controller.signal,
+          onprogress: () => controller.abort(),
+        },
+      );
+      await expect(pending).rejects.toBeDefined();
+      expect(runs).toHaveLength(1);
+      expect((await runs[0]!.completion).state).toBe('cancelled');
+      expect(artifacts.list()).toEqual([]);
+    } finally {
+      await release();
+    }
   });
 
-  it('cancels an actual worker before completion and never exposes a result', async () => {
-    const { jobs, artifacts } = setup();
+  it('cancels an actual worker before persistence and never exposes a result', async () => {
+    const { jobs, artifacts, directory } = setup();
     const client = await connect({ profile: 'backtesting', jobs, artifacts });
-    const submitted = await client.callTool({
-      name: 'totalfinance_job_submit',
-      arguments: { id: operation.id, input: dataInput() },
-    });
-    const job = (submitted.structuredContent as unknown as { job: JobRecord }).job;
-    const cancel = await client.callTool({
-      name: 'totalfinance_job_cancel',
-      arguments: { jobId: job.id },
-    });
-    expect(cancel.structuredContent).toMatchObject({ job: { state: 'cancelled', result: null } });
-    expect((await runs.at(-1)!.completion).state).toBe('cancelled');
-    expect(
-      errorDocument(
-        await client.callTool({ name: 'totalfinance_job_result', arguments: { jobId: job.id } }),
-      ).code,
-    ).toBe('operation.cancelled');
-    await expect(
-      client.readResource({ uri: `totalfinance://jobs/${job.id}/result` }),
-    ).rejects.toBeInstanceOf(McpError);
-    expect(
-      (await client.callTool({ name: 'totalfinance_job_cancel', arguments: { jobId: job.id } }))
-        .structuredContent,
-    ).toMatchObject({ job: { state: 'cancelled' } });
-    expect(artifacts.list({ kind: 'report' })).toEqual([]);
+    const release = await holdArtifactWrites(directory);
+    try {
+      const submitted = await client.callTool({
+        name: 'totalfinance_job_submit',
+        arguments: { id: operation.id, input: dataInput() },
+      });
+      const job = (submitted.structuredContent as unknown as { job: JobRecord }).job;
+      const cancel = await client.callTool({
+        name: 'totalfinance_job_cancel',
+        arguments: { jobId: job.id },
+      });
+      expect(cancel.structuredContent).toMatchObject({ job: { state: 'cancelled', result: null } });
+      expect((await runs.at(-1)!.completion).state).toBe('cancelled');
+      expect(
+        errorDocument(
+          await client.callTool({ name: 'totalfinance_job_result', arguments: { jobId: job.id } }),
+        ).code,
+      ).toBe('operation.cancelled');
+      await expect(
+        client.readResource({ uri: `totalfinance://jobs/${job.id}/result` }),
+      ).rejects.toBeInstanceOf(McpError);
+      expect(
+        (await client.callTool({ name: 'totalfinance_job_cancel', arguments: { jobId: job.id } }))
+          .structuredContent,
+      ).toMatchObject({ job: { state: 'cancelled' } });
+      expect(artifacts.list({ kind: 'report' })).toEqual([]);
+    } finally {
+      await release();
+    }
+  });
+
+  it('keeps cancellation terminal after persistence and late delivery without erasing authorized reports', async () => {
+    // No cancellation poll can settle this fixture within the unchanged 45s test budget:
+    // terminal completion must come from delivery of the real worker's queued message/exit.
+    const { jobs, artifacts } = setup(60_000);
+    const client = await connect({ profile: 'backtesting', jobs, artifacts });
+    const delayed = holdCompletionDelivery();
+    try {
+      const submitted = await client.callTool({
+        name: 'totalfinance_job_submit',
+        arguments: { id: operation.id, input: dataInput() },
+      });
+      const job = (submitted.structuredContent as unknown as { job: JobRecord }).job;
+      await delayed.persisted;
+      const [report] = artifacts.list({ kind: 'report' });
+      expect(report).toBeDefined();
+      expect(report!.provenance['requestId']).toBe(job.id);
+      expect(jobs.get(job.id)).toMatchObject({ state: 'running', result: null });
+      expect(
+        (
+          await client.callTool({
+            name: 'totalfinance_job_cancel',
+            arguments: { jobId: job.id },
+          })
+        ).structuredContent,
+      ).toMatchObject({ job: { state: 'cancelled', result: null } });
+      delayed.release();
+      expect(await runs.at(-1)!.completion).toMatchObject({ state: 'cancelled', result: null });
+      expect(
+        errorDocument(
+          await client.callTool({
+            name: 'totalfinance_job_result',
+            arguments: { jobId: job.id },
+          }),
+        ).code,
+      ).toBe('operation.cancelled');
+      await expect(
+        client.readResource({ uri: `totalfinance://jobs/${job.id}/result` }),
+      ).rejects.toBeInstanceOf(McpError);
+      expect((await client.listResources()).resources.map(({ uri }) => uri)).toContain(report!.uri);
+      expect(await read(client, report!.uri)).toEqual(artifacts.get(report!.uri)!.value);
+      const disallowed = await connect({ profile: 'valuation', jobs, artifacts });
+      expect((await disallowed.listResources()).resources.map(({ uri }) => uri)).not.toContain(
+        report!.uri,
+      );
+      await expect(disallowed.readResource({ uri: report!.uri })).rejects.toBeInstanceOf(McpError);
+    } finally {
+      delayed.release();
+    }
   });
   it('reports worker schema/row-cap errors verbatim and propagates server budgets', async () => {
     const { jobs, artifacts, submit } = setup();

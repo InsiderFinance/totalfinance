@@ -694,7 +694,10 @@ next poll.
    diagnostics travel with the structured output), so `job result` and `artifacts get` read one thing.
 2. **Cross-process cancellation is store-mediated**: the runner polls the job store (`pollMs`,
    default 250 ms) and terminates its worker when another process has written `cancelled`; the
-   in-process `cancel()` terminates immediately. Both are real stops — the worker never posts a result.
+   in-process `cancel()` terminates immediately. Both stop outstanding work. A completion message
+   already queued before cancellation cannot change a cancelled job back to completed. Cancellation
+   does not roll back reports already persisted: their existing ownership/profile visibility still
+   applies, while job-result endpoints refuse the cancelled job.
 3. **The worker rebuilds the registry by profile** (`profile` + optional `packs` travel in
    `workerData`), so a job runs against exactly the set its submitter saw; no registry object crosses
    the thread boundary.

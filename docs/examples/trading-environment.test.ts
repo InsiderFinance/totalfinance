@@ -19,16 +19,24 @@ import {
 } from '@insiderfinance/totalfinance/backtest/environment';
 
 describe('the trading-environment journey', () => {
-  it('benches every baseline over two episodes: operational conformance passes, strategy is reported apart', () => {
-    const baselines = [
-      agentBaselines.holdCash(),
-      agentBaselines.buyAndHold(),
-      agentBaselines.periodicRebalance({ everySessions: 10 }),
-      agentBaselines.randomValidAction(7),
-      agentBaselines.riskParity({ lookback: 20 }),
-      agentBaselines.momentumCrossover({ fast: 5, slow: 20 }),
-    ];
-    for (const policy of baselines) {
+  // Independent policies get separate tests; each bench retains its episodes and RNG sequence.
+  it.each([
+    { name: 'hold-cash', createPolicy: () => agentBaselines.holdCash() },
+    { name: 'buy-and-hold', createPolicy: () => agentBaselines.buyAndHold() },
+    {
+      name: 'periodic-rebalance/10',
+      createPolicy: () => agentBaselines.periodicRebalance({ everySessions: 10 }),
+    },
+    { name: 'random-valid-action/7', createPolicy: () => agentBaselines.randomValidAction(7) },
+    { name: 'risk-parity/20', createPolicy: () => agentBaselines.riskParity({ lookback: 20 }) },
+    {
+      name: 'momentum-crossover/5-20',
+      createPolicy: () => agentBaselines.momentumCrossover({ fast: 5, slow: 20 }),
+    },
+  ])(
+    'benches $name over two episodes: operational conformance passes, strategy is reported apart',
+    ({ createPolicy }) => {
+      const policy = createPolicy();
       const report = runAgentBench({ policy, episodes: ['trending', 'range-bound'], seeds: [7] });
       expect({
         policy: policy.label,
@@ -48,8 +56,10 @@ describe('the trading-environment journey', () => {
         expect(episode.operational.reconciled).toBe(true);
         expect(Number.isFinite(episode.strategy.finalValue)).toBe(true);
       }
-    }
-    // the random baseline draws only from the mask: zero violations by construction
+    },
+  );
+
+  it('draws random baseline actions only from the mask: zero violations across seeds', () => {
     const random = runAgentBench({
       policy: agentBaselines.randomValidAction(3),
       episodes: ['range-bound'],
@@ -57,7 +67,9 @@ describe('the trading-environment journey', () => {
     });
     expect(random.operational.maskViolations).toBe(0);
     expect(random.strategy.violations).toBe(0);
-    // buy-and-hold beats hold-cash on the trend
+  });
+
+  it('buy-and-hold beats hold-cash on the trend while cash has zero turnover', () => {
     const held = runAgentBench({
       policy: agentBaselines.buyAndHold(),
       episodes: ['trending'],
