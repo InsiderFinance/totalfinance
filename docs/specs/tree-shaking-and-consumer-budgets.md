@@ -1,7 +1,9 @@
 # Tree shaking and installed-consumer budgets
 
-Status: authorized 2026-09-21; implementation in progress. This bounded pre-freeze repair follows
-the standalone migration and precedes the exact release rehearsal in `implementation-order.md`.
+Status: **COMPLETE (local) 2026-09-21**, tested source commit
+`d95634c3b65f50130d243c160cf9108822dd7095`. This bounded pre-freeze repair follows the standalone
+migration and precedes the exact release rehearsal in `implementation-order.md`. This closeout
+changes tracking documents only; it does not authorize a push, publication, or deployment.
 
 ## Outcome and constraints
 
@@ -52,7 +54,7 @@ dependencies, or require consumer-specific build plugins. No publication or depl
       metadata independent of registry import; preserve public and runtime parity.
 - [x] TS3: enforce size/boundary/import parity and misuse canaries against installed artifacts in CI.
 - [x] TS4: update public import guidance, generated bundle report, changeset and controlling queue.
-- [ ] TS5: pass full CI, independent coverage repeat, API check and byte-stable regeneration;
+- [x] TS5: pass full CI, independent coverage repeat, API check and byte-stable regeneration;
       reconcile all completion claims with the tested revision. Hosted release gates remain separate.
 
 Baseline (esbuild 0.25.12, packed runtime matching `7a505d4`): scoped normal CDF ~0.47 KiB versus
@@ -92,6 +94,11 @@ they are not final budgets or promises for every bundler version.
   94.13% statements, 83.88% branches, 96.96% functions, 94.70% lines.
 - The full packed-consumer file plus harness unit tests pass 234 tests on Node 22.23.2; the focused
   consumer matrix and harness pass 174 tests independently on minimum Node 22.13.0 and Node 24.21.0.
+- Independent full Node 24.21.0 coverage repeat exits 0: **559 files / 12,360 tests**, with the same
+  coverage percentages. It used a separate report directory. The standalone `pnpm api:check` also
+  exits 0 on the committed implementation, confirming all 25 reports independently of full CI.
+- `pnpm regen:check` exits 0 on canonical Node 22.23.2 in a fresh, clean checkout of the source
+  commit above: the entire regeneration chain is **byte-stable**, and `git status` remains clean.
 - Independent adversarial review found no additional defects. Old/new comparisons cover all 335
   names with two parameter sets and 280 inputs, including batch/explain, streams, snapshots,
   restoration and peek. All 51 existing technical-analysis declaration files are byte-identical.
@@ -103,6 +110,6 @@ they are not final budgets or promises for every bundler version.
   and esbuild. Their measured ceilings are recorded in `tools/bundle-size/budgets.ts`. The lean
   installed RSI canary stays below 9 KiB, and all three expert price kernels stay below 2.5 KiB.
 
-TS5 remains pending the independent full Node 24 coverage repeat and clean-checkout `regen:check`.
-The final closeout will record the tested source commit. Hosted release gates, exact versioned
-rehearsal, publication, and deployment remain separate and are not implied by these local results.
+All TS1–TS5 requirements are locally complete. Next: the remaining organization/website acceptance
+and exact versioned release rehearsal in `implementation-order.md`. Hosted release gates,
+publication, and deployment remain separate and are not implied by these local results.

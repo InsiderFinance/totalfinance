@@ -27,14 +27,16 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Preview launch queue (2026-09-07)
 
-**Current handoff (2026-09-21): bounded tree-shaking hardening IN PROGRESS.** The maintainer
-authorized [installed-consumer bundle guarantees](./specs/tree-shaking-and-consumer-budgets.md)
-after measuring bundler-dependent umbrella namespace retention and unused analytic facade overhead.
-Complete its TS1–TS5 checklist before the exact-release freeze/rehearsal. Preserve the existing
-public API and runtime validation, including registry-independent metadata for every built-in
-indicator; this is packaging hardening, not a new financial feature phase.
-Organization and website acceptance may proceed in parallel. Publication and deployment still
-require their separate approval gates.
+**Current handoff (2026-09-21): bounded tree-shaking hardening COMPLETE (local) @ `d95634c`.**
+The [installed-consumer bundle guarantees](./specs/tree-shaking-and-consumer-budgets.md) close TS1–TS5:
+reviewed wrapper/code-registry reductions, self-contained metadata for all 335 indicator names,
+installed esbuild/Rollup size/validation gates, and truthful import guidance. Public APIs are unchanged.
+Full Node 22 CI and independent Node 24 coverage each pass **559 files / 12,360 library tests**;
+the site passes 79 tests, all 25 API reports match, and fresh-checkout regeneration is byte-stable.
+**Next: remaining organization and website acceptance in steps 2–3, then the exact versioned
+release rehearsal in step 4.** No core implementation remains in this repair. Hosted checks,
+publication and deployment retain their separate approval gates; local verification is not a push
+or publication receipt.
 
 **Previous handoff (2026-09-21): standalone TotalFinance migration COMPLETE (local);
 latest hosted checks remain a release gate.** `InsiderFinance/totalfinance:main` is now the library's source of truth,
@@ -134,10 +136,11 @@ acceptance in step 3. This documentation repair does not reopen core implementat
    `36cbd5352`) and the September 21 composition/persistence closeout at `af0d7cd2a`. Both supported
    Node full gates and clean-tree regeneration pass; no implementation item remains in this repair.
    After step 4, contract changes require the published compatibility/versioning policy.
-   3c. **Tree-shaking and installed-consumer budgets — IN PROGRESS.** Follow
-   [`tree-shaking-and-consumer-budgets.md`](./specs/tree-shaking-and-consumer-budgets.md): preserve
-   API/validation, remove avoidable retained wrapper and registry code, prove portable imports in
-   esbuild/Rollup installed-package consumers, and document the namespace limitation honestly.
+   3c. **Tree-shaking and installed-consumer budgets — COMPLETE (local) @ `d95634c`.**
+   [`tree-shaking-and-consumer-budgets.md`](./specs/tree-shaking-and-consumer-budgets.md) records
+   TS1–TS5 acceptance: public API preservation, registry-independent indicator validation,
+   esbuild/Rollup installed-consumer gates, import guidance, full CI, independent coverage repeat,
+   API checks and clean-checkout byte-stable regeneration. No implementation item remains here.
 4. **Freeze and rehearse the exact release revision.** After the preceding source changes, review
    the fixed-group version bump to `0.1.0-preview.0`, regenerate evidence, run the full gates and
    release rehearsal on the committed release tree, and retain the artifact hashes. Use the

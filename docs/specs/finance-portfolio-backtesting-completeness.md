@@ -13,8 +13,10 @@
 > slice starts. Phase 3B and the original core-freeze program have closed; this specification retains
 > their compute contracts and the separate locally verified repair closeout.
 > **Current pre-release repair (2026-09-21):** [installed-consumer bundle guarantees](./tree-shaking-and-consumer-budgets.md)
-> are in progress in the standalone TotalFinance repository. This bounded import/validation repair
-> precedes the exact release rehearsal; it does not reopen FC0–FC9 or authorize publication.
+> are **COMPLETE (local) @ `d95634c`** in the standalone TotalFinance repository. Full Node 22 CI,
+> independent Node 24 coverage, API checks and clean-checkout regeneration pass. Next is the remaining
+> organization/website acceptance and exact release rehearsal owned by `implementation-order.md`;
+> this bounded import/validation repair does not reopen FC0–FC9 or authorize publication.
 > **Permanent API authority:** [`../library-alignment-spec.md`](../library-alignment-spec.md) and
 > [`../platform-completeness-roadmap.md`](../platform-completeness-roadmap.md). Every public API added
 > here must satisfy their naming, argument, result, runtime, layering, determinism, provenance, and
