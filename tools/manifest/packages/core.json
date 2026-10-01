@@ -753,6 +753,12 @@
       "role": "helper",
       "note": "trusted-tier utility (spec Law 7)"
     },
+    "requireSelection": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "note": "trusted-tier utility (spec Law 7): explicit, nonempty, dense, known, duplicate-free selection lists"
+    },
     "requireComparisonTolerance": {
       "kind": "function",
       "entrypoints": ["./artifacts"],

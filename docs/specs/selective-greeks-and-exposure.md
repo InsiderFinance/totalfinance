@@ -56,8 +56,9 @@ outputs and their mathematical dependencies.
    row kernel. A plan is resolved once per invocation (outside any row loop) from the requested
    outputs into dependency flags: `d2`, the rate discount, the normal density, the two cumulative
    normals (`N(±d1)`, `N(±d2)` with the existing call/put argument signs), gamma, `∂d1/∂T` and raw
-   vega. The row kernel computes only flagged intermediates and writes straight into output
-   storage — no per-row result objects. `blackScholesPriceUnchecked`, `blackScholesGreeks` and
+   vega. The kernel is one row loop over validated columns that computes only flagged
+   intermediates and writes straight into output storage — no per-row result objects and no
+   per-row allocation; the scalar methods run the same loop over a reused one-row view. `blackScholesPriceUnchecked`, `blackScholesGreeks` and
    `blackScholesExtendedGreeks` keep their public behavior; the formulas are not changed.
 2. **Bitwise parity.** Every kernel output uses the existing expression and operation order, so a
    selected value is `===` to the same value from `blackScholesPrice`, `blackScholesGreeks` or
@@ -84,6 +85,9 @@ outputs and their mathematical dependencies.
    selection (`BlackScholesOutput[]`) yields optional properties — the type never claims a value
    exists that was not requested. Unknown names and reading an unrequested property are compile
    errors. The same rule applies to the batch family, model exposure and supplied exposure.
+   `exposure` and `exposureFromGreeks` keep their released non-generic signature as the LAST
+   overload, so `Parameters<typeof …>` and `ReturnType<typeof …>` still name the released input,
+   profile and report types rather than the selective constraint.
 7. **One batch family.** `blackScholesEvaluateMany(columns, { outputs })` allocates and returns one
    `Float64Array` per selected output. `blackScholesEvaluateManyInto(columns, outputs)` writes into
    caller-supplied `Float64Array`s whose property names ARE the selection. Both live on the

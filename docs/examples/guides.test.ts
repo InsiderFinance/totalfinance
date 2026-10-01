@@ -31,6 +31,9 @@ describe('DX7.1 runnable guides execute against source', () => {
   it('levels.md — the six levels price the same contract and agree', async () => {
     await executeReadme(guide('levels.md'));
   });
+  it('selective-greeks-and-exposure.md — selected outputs and exposures equal the full calculation', async () => {
+    await executeReadme(guide('selective-greeks-and-exposure.md'));
+  });
   it('end-to-end.md — fundamentals to performance, reconciled at every step', async () => {
     await executeReadme(guide('end-to-end.md'));
   });
