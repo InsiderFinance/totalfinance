@@ -337,3 +337,80 @@ export function ensureKnownKeys(
     );
   }
 }
+
+/**
+ * Validate an explicit SELECTION list — `outputs: ['price', 'gamma']`, `metrics: ['gex']` — and
+ * return a dense copy in request order.
+ *
+ * A selection decides what is computed, so every malformed form teaches instead of being repaired:
+ * not an array (`input.wrong_type`), empty (`input.out_of_range` — an empty request computes
+ * nothing and would read as a successful empty answer), a sparse hole (`input.missing_field`), an
+ * unknown or non-string name (`input.invalid_enum`, with a did-you-mean), and a repeated name
+ * (`input.duplicate_entry`). A duplicate is never silently collapsed: it usually means the caller
+ * meant a different name.
+ */
+export function requireSelection<T extends string>(
+  functionName: string,
+  field: string,
+  value: unknown,
+  allowed: readonly T[],
+): T[] {
+  if (!Array.isArray(value)) {
+    const received = value === null ? 'null' : typeof value;
+    throw new InputError(
+      `${functionName}: ${field} must be an array of names (one or more of ${allowed.join(', ')}); got ${received}.`,
+      {
+        code: ValidationCode.InputWrongType,
+        context: { function: functionName, field, received },
+      },
+    );
+  }
+  if (value.length === 0) {
+    throw new InputError(
+      `${functionName}: ${field} must name at least one of ${allowed.join(', ')}; an empty selection computes nothing.`,
+      { code: ValidationCode.InputOutOfRange, context: { function: functionName, field } },
+    );
+  }
+  const selected: T[] = [];
+  for (let index = 0; index < value.length; index++) {
+    if (!Object.hasOwn(value, index)) {
+      throw new InputError(
+        `${functionName}: ${field}[${index}] is missing; pass a dense array, not a sparse hole.`,
+        {
+          code: ValidationCode.InputMissingField,
+          context: { function: functionName, field, index },
+        },
+      );
+    }
+    const name: unknown = value[index];
+    if (typeof name !== 'string' || !(allowed as readonly string[]).includes(name)) {
+      const suggestion = typeof name === 'string' ? nearestKey(name, allowed) : undefined;
+      throw new InputError(
+        `${functionName}: ${field}[${index}] must be one of ${allowed.join(', ')}; got ${
+          typeof name === 'string' ? `"${name}"` : describe(name as never)
+        }${suggestion !== undefined ? ` — did you mean "${suggestion}"?` : ''}.`,
+        {
+          code: ValidationCode.InputInvalidEnum,
+          context: {
+            function: functionName,
+            field,
+            index,
+            value: contextValue(name),
+            ...(suggestion !== undefined ? { suggestion } : {}),
+          },
+        },
+      );
+    }
+    if ((selected as readonly string[]).includes(name)) {
+      throw new InputError(
+        `${functionName}: ${field} names "${name}" more than once; request each entry once.`,
+        {
+          code: ValidationCode.InputDuplicateEntry,
+          context: { function: functionName, field, index, value: name },
+        },
+      );
+    }
+    selected.push(name as T);
+  }
+  return selected;
+}

@@ -211,6 +211,8 @@ export const ErrorCode = {
   OperationHandleUnknown: 'operation.handle_unknown',
   OperationHandleKindMismatch: 'operation.handle_kind_mismatch',
   InputLengthMismatch: ValidationCode.InputLengthMismatch,
+  /** A selection list names the same entry twice — a duplicate is never silently collapsed. */
+  InputDuplicateEntry: ValidationCode.InputDuplicateEntry,
   McpDeadlineExceeded: 'mcp.deadline_exceeded',
   McpInputTooLarge: 'mcp.input_too_large',
   McpInternalError: 'mcp.internal_error',

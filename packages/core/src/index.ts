@@ -163,6 +163,7 @@ export {
   requireArgumentObject,
   requireFiniteFields,
   ensureKnownKeys,
+  requireSelection,
   finiteOrNull,
 } from './invariants.js';
 
