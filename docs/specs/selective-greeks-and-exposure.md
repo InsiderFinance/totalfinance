@@ -150,12 +150,12 @@ outputs and their mathematical dependencies.
 
 ## Ordered checklist and exit evidence
 
-- [ ] SG1: record this plan, link it from `implementation-order.md`, and supersede the "no released
+- [x] SG1: record this plan, link it from `implementation-order.md`, and supersede the "no released
       consumers" statement.
-- [ ] SG2: expiry-validation formatter fix with a construction-count regression test.
-- [ ] SG3: kernel, named methods, `evaluate`, and the new error code; scalar parity, oracle and
+- [x] SG2: expiry-validation formatter fix with a construction-count regression test.
+- [x] SG3: kernel, named methods, `evaluate`, and the new error code; scalar parity, oracle and
       validation tests; literal/dynamic/compile-fail type tests.
-- [ ] SG4: batch family, routing of the existing batch APIs, buffer-safety and validate-before-write
+- [x] SG4: batch family, routing of the existing batch APIs, buffer-safety and validate-before-write
       tests, skipped-work tests.
 - [ ] SG5: selective model exposure, analyses, shortcuts; conservation, parity, roots, scenarios,
       shortcut-equivalence and skipped-work tests.

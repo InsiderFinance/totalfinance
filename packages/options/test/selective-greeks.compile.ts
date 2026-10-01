@@ -4,6 +4,13 @@
  * an error — an unused one fails the typecheck.
  */
 import {
+  blackScholesEvaluateMany,
+  blackScholesEvaluateManyInto,
+  type BlackScholesEvaluateManyResult,
+  type BlackScholesOutputBuffers,
+  type OptionBatchColumns,
+} from '@totalfinance/options/batch';
+import {
   blackScholes,
   type BlackScholesEvaluation,
   type BlackScholesOutput,
@@ -64,3 +71,39 @@ void narrowResult.price;
 
 // The result type is nameable for app state.
 export const typedEvaluation: BlackScholesEvaluation<readonly ['delta']> = { delta: 0.5 };
+
+// ---- batch family: the same selection rule, one Float64Array per output ----
+declare const columns: OptionBatchColumns;
+const many = blackScholesEvaluateMany(columns, { outputs: ['gamma', 'delta'] });
+export const manyGamma: Float64Array = many.gamma;
+export const manyDelta: Float64Array = many.delta;
+// @ts-expect-error price was not requested
+void many.price;
+const manyDynamic = blackScholesEvaluateMany(columns, { outputs: dynamic });
+export const manyMaybe: Float64Array | undefined = manyDynamic.vega;
+// @ts-expect-error a dynamic selection cannot claim vega was computed
+export const manyCertain: Float64Array = manyDynamic.vega;
+// @ts-expect-error unknown output name
+blackScholesEvaluateMany(columns, { outputs: ['gama'] });
+// @ts-expect-error an empty literal selection computes nothing
+blackScholesEvaluateMany(columns, { outputs: [] });
+// @ts-expect-error the selection is required
+blackScholesEvaluateMany(columns, {});
+// @ts-expect-error lambda stays on extendedGreeks
+blackScholesEvaluateMany(columns, { outputs: ['lambda'] });
+export const typedMany: BlackScholesEvaluateManyResult<readonly ['gamma']> = {
+  gamma: new Float64Array(0),
+};
+
+// The buffer object's property names ARE the selection.
+blackScholesEvaluateManyInto(columns, { gamma: new Float64Array(0) });
+blackScholesEvaluateManyInto(columns, { price: new Float64Array(0), color: new Float64Array(0) });
+// @ts-expect-error an output buffer must be a Float64Array, not a plain array
+blackScholesEvaluateManyInto(columns, { gamma: [0] });
+// @ts-expect-error an output buffer must be a Float64Array, not another typed array
+blackScholesEvaluateManyInto(columns, { gamma: new Float32Array(0) });
+// @ts-expect-error unknown output buffer name
+blackScholesEvaluateManyInto(columns, { gama: new Float64Array(0) });
+// A buffer set assembled at runtime is accepted; the runtime refuses an empty one.
+declare const assembled: BlackScholesOutputBuffers;
+blackScholesEvaluateManyInto(columns, assembled);
