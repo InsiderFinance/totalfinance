@@ -5,6 +5,7 @@
  */
 import {
   exposure,
+  exposureFromGreeks,
   gammaExposure,
   vannaExposure,
   type ContractExposure,
@@ -13,6 +14,12 @@ import {
   type ExposureShortcutInput,
   type ExposureTotals,
   type StrikeRow,
+  type SuppliedExposureInput,
+  type SuppliedExposureMarket,
+  type SuppliedExposureReport,
+  type SuppliedExposureMetric,
+  type SuppliedExposureQuote,
+  type SuppliedExposureTotals,
 } from '@totalfinance/structure';
 
 declare const input: ExposureShortcutInput;
@@ -68,3 +75,50 @@ export const maybeGamma: number | undefined = dynamic.contracts[0]!.gamma;
 exposure({ ...input, metrics: [] });
 // @ts-expect-error unknown metric
 exposure({ ...input, metrics: ['gamma'] });
+
+// ---- supplied Greeks: the same rule for GEX/DEX selection ----
+declare const supplied: SuppliedExposureInput;
+const report = exposureFromGreeks(supplied);
+export const releasedReport: SuppliedExposureReport = report;
+export const releasedTotals: SuppliedExposureTotals = report.aggregate;
+
+declare const quotes: SuppliedExposureQuote[];
+declare const market: SuppliedExposureMarket;
+const gexOnly = exposureFromGreeks({
+  quotes: [
+    { ...quotes[0]!, greeks: { gamma: 0.02, provenance: { source: 'feed', timestampMs: 0 } } },
+  ],
+  market,
+  config: {
+    gexConvention: { calls: 1, puts: -1 },
+    gammaUnit: 'per1PercentMove',
+    maximumObservationAgeMs: 60_000,
+  },
+  metrics: ['gex'],
+});
+export const suppliedGex: number = gexOnly.aggregate.gex;
+// @ts-expect-error DEX was not selected
+void gexOnly.aggregate.dex;
+// @ts-expect-error the DEX sign rides only with dex
+void gexOnly.contributions[0]!.dexSign;
+export const suppliedGammaUnit: string = gexOnly.assumptions.gammaUnit;
+// @ts-expect-error the DEX convention is not echoed for a GEX-only report
+void gexOnly.assumptions.dexConvention;
+
+exposureFromGreeks({
+  quotes,
+  market,
+  // @ts-expect-error a GEX report needs gexConvention and gammaUnit
+  config: { dexConvention: { calls: 1, puts: 1 }, maximumObservationAgeMs: 0 },
+  metrics: ['gex'],
+});
+// @ts-expect-error an empty literal selection computes nothing
+exposureFromGreeks({ ...supplied, metrics: [] });
+// @ts-expect-error vega is not a supplied-Greek exposure
+exposureFromGreeks({ ...supplied, metrics: ['vega'] });
+
+declare const suppliedChoice: SuppliedExposureMetric[];
+const dynamicSupplied = exposureFromGreeks({ ...supplied, metrics: suppliedChoice });
+export const maybeSuppliedGex: number | undefined = dynamicSupplied.aggregate.gex;
+// @ts-expect-error a dynamic selection cannot claim GEX was computed
+export const certainSuppliedGex: number = dynamicSupplied.aggregate.gex;

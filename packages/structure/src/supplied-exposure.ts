@@ -17,6 +17,7 @@ import {
   requireFiniteFields,
   resolveValuationAsOf,
   stableSum,
+  requireSelection,
   validateResolvedExpiry,
   warning,
   type OptionQuoteGreeks,
@@ -77,10 +78,62 @@ export interface SuppliedExposureMarket {
   asOf: number | string;
 }
 
-export interface SuppliedExposureInput {
-  quotes: readonly SuppliedExposureQuote[];
+/** The supplied-Greek exposures {@link exposureFromGreeks} can select. */
+export type SuppliedExposureMetric = 'gex' | 'dex';
+
+/**
+ * What a selection `S` requires of a metric's inputs: required when `metrics` is omitted or a literal
+ * selection names it, optional otherwise (an unselected metric's inputs are not read, and a dynamic
+ * selection's needs are only known at run time, where they are enforced).
+ */
+type RequiredFor<
+  M extends SuppliedExposureMetric,
+  S extends readonly SuppliedExposureMetric[] | undefined,
+  T,
+> = [S] extends [undefined]
+  ? T
+  : number extends NonNullable<S>['length']
+    ? Partial<T>
+    : M extends NonNullable<S>[number]
+      ? T
+      : Partial<T>;
+
+/**
+ * The supplied Greeks a selection reads: gamma for `gex`, delta for `dex`, provenance always. With
+ * `metrics` omitted this is {@link SuppliedExposureGreeks}.
+ */
+export type SuppliedExposureGreeksFor<S extends readonly SuppliedExposureMetric[] | undefined> =
+  Omit<OptionQuoteGreeks, 'delta' | 'gamma' | 'provenance'> & {
+    provenance: SuppliedExposureGreeks['provenance'];
+  } & RequiredFor<'gex', S, { gamma: number }> &
+    RequiredFor<'dex', S, { delta: number }>;
+
+/**
+ * The configuration a selection reads: `gexConvention` and `gammaUnit` for `gex`, `dexConvention`
+ * for `dex`. An unselected metric's fields may still be passed; they are shape-checked, not applied.
+ */
+export type SuppliedExposureConfigFor<S extends readonly SuppliedExposureMetric[] | undefined> = [
+  S,
+] extends [undefined]
+  ? SuppliedExposureConfig
+  : Omit<SuppliedExposureConfig, 'gexConvention' | 'dexConvention' | 'gammaUnit'> &
+      RequiredFor<'gex', S, Pick<SuppliedExposureConfig, 'gexConvention' | 'gammaUnit'>> &
+      RequiredFor<'dex', S, Pick<SuppliedExposureConfig, 'dexConvention'>>;
+
+export interface SuppliedExposureInput<
+  S extends readonly SuppliedExposureMetric[] | undefined = undefined,
+> {
+  quotes: readonly ([S] extends [undefined]
+    ? SuppliedExposureQuote
+    : Omit<SuppliedExposureQuote, 'greeks'> & { greeks?: SuppliedExposureGreeksFor<S> })[];
   market: SuppliedExposureMarket;
-  config: SuppliedExposureConfig;
+  config: SuppliedExposureConfigFor<S>;
+  /**
+   * `['gex']`, `['dex']` or both. Omit for today's report (both). A GEX-only report needs only
+   * supplied gamma, `gexConvention` and `gammaUnit`; a DEX-only report only supplied delta and
+   * `dexConvention`. The unselected metric's fields are absent from the report, never zero.
+   */
+  metrics?: S;
 }
 
 export type SuppliedExposureExclusion =
@@ -148,13 +201,94 @@ export type SuppliedExposureAssumptions = Assumptions<{
   aggregationPolicy: 'additive-input-rows-no-deduplication';
 }>;
 
-/** Plain JSON-safe analysis report, directly compatible with saved-analysis report grammar. */
-export type SuppliedExposureReport = {
-  contributions: SuppliedExposureContribution[];
-  aggregate: SuppliedExposureTotals;
-  byStrike: Array<SuppliedExposureTotals & { strike: number }>;
+type SuppliedGexTotal = 'gex' | 'grossGex' | 'callGex' | 'putGex';
+type SuppliedDexTotal = 'dex' | 'grossDex' | 'callDex' | 'putDex';
+
+/** A metric's fields: required when guaranteed (`G`), optional when possible (`P`), else absent. */
+type MetricFields<
+  M extends SuppliedExposureMetric,
+  G extends SuppliedExposureMetric,
+  P extends SuppliedExposureMetric,
+  T,
+> = M extends G ? T : M extends P ? Partial<T> : unknown;
+
+/** Totals of a report that computed `G` (and possibly `P`); with the defaults, {@link SuppliedExposureTotals}. */
+export type SuppliedExposureTotalsFor<
+  G extends SuppliedExposureMetric = SuppliedExposureMetric,
+  P extends SuppliedExposureMetric = G,
+> = Omit<SuppliedExposureTotals, SuppliedGexTotal | SuppliedDexTotal> &
+  MetricFields<'gex', G, P, Pick<SuppliedExposureTotals, SuppliedGexTotal>> &
+  MetricFields<'dex', G, P, Pick<SuppliedExposureTotals, SuppliedDexTotal>>;
+
+/**
+ * A contribution row of a report that computed `G` (and possibly `P`): the GEX sign and value only
+ * with `gex`, the DEX sign and value only with `dex`, and only the supplied Greeks that were read.
+ * With the defaults, {@link SuppliedExposureContribution}.
+ */
+export type SuppliedExposureContributionFor<
+  G extends SuppliedExposureMetric = SuppliedExposureMetric,
+  P extends SuppliedExposureMetric = G,
+> = Omit<SuppliedExposureContribution, 'greeks' | 'gexSign' | 'gex' | 'dexSign' | 'dex'> & {
+  greeks:
+    | ({ provenance: SuppliedExposureGreeks['provenance'] } & MetricFields<
+        'gex',
+        G,
+        P,
+        { gamma: number }
+      > &
+        MetricFields<'dex', G, P, { delta: number }>)
+    | null;
+} & MetricFields<'gex', G, P, Pick<SuppliedExposureContribution, 'gexSign' | 'gex'>> &
+  MetricFields<'dex', G, P, Pick<SuppliedExposureContribution, 'dexSign' | 'dex'>>;
+
+/**
+ * Assumptions of a report that computed `G` (and possibly `P`): the GEX unit and convention echoes
+ * only with `gex`, the DEX ones only with `dex`, plus `metrics` when a selection was passed.
+ */
+export type SuppliedExposureAssumptionsFor<
+  G extends SuppliedExposureMetric = SuppliedExposureMetric,
+  P extends SuppliedExposureMetric = G,
+> = Omit<
+  SuppliedExposureAssumptions,
+  | 'suppliedGammaUnit'
+  | 'gammaUnit'
+  | 'gexConvention'
+  | 'suppliedDeltaUnit'
+  | 'dexUnit'
+  | 'dexConvention'
+> &
+  MetricFields<
+    'gex',
+    G,
+    P,
+    Pick<SuppliedExposureAssumptions, 'suppliedGammaUnit' | 'gammaUnit' | 'gexConvention'>
+  > &
+  MetricFields<
+    'dex',
+    G,
+    P,
+    Pick<SuppliedExposureAssumptions, 'suppliedDeltaUnit' | 'dexUnit' | 'dexConvention'>
+  > & {
+    /** The selection as passed; present only when `metrics` was passed. */
+    metrics?: readonly SuppliedExposureMetric[];
+  };
+
+/**
+ * Plain JSON-safe analysis report, directly compatible with saved-analysis report grammar.
+ *
+ * `G`/`P` follow the `metrics` selection (guaranteed/possible metrics); both default to GEX and DEX,
+ * today's report. A GEX+DEX report requires BOTH supplied Greeks on every row that supplies Greeks,
+ * so the two metrics are always computed over the same included rows.
+ */
+export type SuppliedExposureReport<
+  G extends SuppliedExposureMetric = SuppliedExposureMetric,
+  P extends SuppliedExposureMetric = G,
+> = {
+  contributions: SuppliedExposureContributionFor<G, P>[];
+  aggregate: SuppliedExposureTotalsFor<G, P>;
+  byStrike: Array<SuppliedExposureTotalsFor<G, P> & { strike: number }>;
   /** Groups economically identical expiry instants, even when labels use different time zones. */
-  byExpiry: Array<SuppliedExposureTotals & { expiry: string; expiresAt: number }>;
+  byExpiry: Array<SuppliedExposureTotalsFor<G, P> & { expiry: string; expiresAt: number }>;
   coverage: {
     scope: 'suppliedQuotesOnly';
     status: 'emptyInput' | 'noEligibleQuotes' | 'partialInput' | 'allInputQuotesIncluded';
@@ -170,11 +304,26 @@ export type SuppliedExposureReport = {
     /** Counts overlap when a row has several reasons. */
     exclusionCounts: Record<SuppliedExposureExclusion, number>;
   };
-  assumptions: SuppliedExposureAssumptions;
+  assumptions: SuppliedExposureAssumptionsFor<G, P>;
   diagnostics: Diagnostics;
 };
 
+/** The metrics a selection guarantees: both when omitted, the names of a literal, none if dynamic. */
+export type GuaranteedSuppliedExposureMetrics<
+  S extends readonly SuppliedExposureMetric[] | undefined,
+> = [S] extends [undefined]
+  ? SuppliedExposureMetric
+  : number extends NonNullable<S>['length']
+    ? never
+    : NonNullable<S>[number];
+
+/** The metrics a selection may have computed. */
+export type PossibleSuppliedExposureMetrics<
+  S extends readonly SuppliedExposureMetric[] | undefined,
+> = undefined extends S ? SuppliedExposureMetric : NonNullable<S>[number];
+
 const FN = 'exposureFromGreeks';
+const SUPPLIED_METRICS: readonly SuppliedExposureMetric[] = ['gex', 'dex'];
 const MAX_QUOTES = 100_000;
 const MAX_TEXT_LENGTH = 512;
 const EXAMPLE =
@@ -285,22 +434,45 @@ function exposureProduct(factors: readonly number[], field: string): number {
   return finiteComputed(sign * magnitude, field);
 }
 
+/** A contribution row as built internally: a selective report leaves out the unselected metric's fields. */
+type ContributionRow = Omit<
+  SuppliedExposureContribution,
+  'greeks' | 'gexSign' | 'dexSign' | 'gex' | 'dex'
+> & {
+  greeks: Record<string, unknown> | null;
+  gexSign?: 1 | -1;
+  dexSign?: 1 | -1;
+  gex?: number | null;
+  dex?: number | null;
+};
+
 function totals(
-  rows: readonly SuppliedExposureContribution[],
+  rows: readonly ContributionRow[],
   path: string,
-): SuppliedExposureTotals {
+  wantGex: boolean,
+  wantDex: boolean,
+): Partial<SuppliedExposureTotals> & Pick<SuppliedExposureTotals, 'includedQuotes'> {
   const included = rows.filter((row) => row.included);
-  const sum = (select: (row: SuppliedExposureContribution) => number, field: string): number =>
+  const sum = (select: (row: ContributionRow) => number, field: string): number =>
     finiteComputed(stableSum(included.map(select)), `${path}.${field}`);
+  // Field order is the released report's; a selective report omits the unselected metric's totals.
   return {
-    gex: sum((r) => r.gex!, 'gex'),
-    dex: sum((r) => r.dex!, 'dex'),
-    grossGex: sum((r) => Math.abs(r.gex!), 'grossGex'),
-    grossDex: sum((r) => Math.abs(r.dex!), 'grossDex'),
-    callGex: sum((r) => (r.contract.type === 'call' ? r.gex! : 0), 'callGex'),
-    putGex: sum((r) => (r.contract.type === 'put' ? r.gex! : 0), 'putGex'),
-    callDex: sum((r) => (r.contract.type === 'call' ? r.dex! : 0), 'callDex'),
-    putDex: sum((r) => (r.contract.type === 'put' ? r.dex! : 0), 'putDex'),
+    ...(wantGex ? { gex: sum((r) => r.gex!, 'gex') } : {}),
+    ...(wantDex ? { dex: sum((r) => r.dex!, 'dex') } : {}),
+    ...(wantGex ? { grossGex: sum((r) => Math.abs(r.gex!), 'grossGex') } : {}),
+    ...(wantDex ? { grossDex: sum((r) => Math.abs(r.dex!), 'grossDex') } : {}),
+    ...(wantGex
+      ? {
+          callGex: sum((r) => (r.contract.type === 'call' ? r.gex! : 0), 'callGex'),
+          putGex: sum((r) => (r.contract.type === 'put' ? r.gex! : 0), 'putGex'),
+        }
+      : {}),
+    ...(wantDex
+      ? {
+          callDex: sum((r) => (r.contract.type === 'call' ? r.dex! : 0), 'callDex'),
+          putDex: sum((r) => (r.contract.type === 'put' ? r.dex! : 0), 'putDex'),
+        }
+      : {}),
     openInterest: sum((r) => r.openInterest!, 'openInterest'),
     callOpenInterest: sum(
       (r) => (r.contract.type === 'call' ? r.openInterest! : 0),
@@ -342,6 +514,13 @@ function totals(
  * No rate/dividend model is invented and fixed supplied Greeks cannot yield scenario repricing,
  * gamma flips, or model-driven hedging forecasts. Use exposure() for model-based scenarios.
  *
+ * `metrics` selects GEX, DEX or both (omitted: both, exactly as before). `['gex']` reads only supplied
+ * gamma, `gexConvention` and `gammaUnit` — a row's delta may be absent — and `['dex']` only supplied
+ * delta and `dexConvention`. The unselected metric's contribution sign and value, totals, units and
+ * convention echoes are absent from the report (never zero), and `assumptions.metrics` echoes the
+ * selection. A GEX+DEX report requires both supplied Greeks on every row that supplies Greeks, so the
+ * two metrics always cover the same included rows. Modeled Greeks are never substituted.
+ *
  * @example
  * ```ts
  * import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
@@ -362,10 +541,33 @@ function totals(
  * console.assert(report.aggregate.dex === -40000);
  * ```
  */
-export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposureReport {
+export function exposureFromGreeks<
+  const S extends readonly SuppliedExposureMetric[] | undefined = undefined,
+>(
+  request: SuppliedExposureInput<S> &
+    ([S] extends [readonly []]
+      ? { metrics: readonly [SuppliedExposureMetric, ...SuppliedExposureMetric[]] }
+      : unknown),
+): SuppliedExposureReport<
+  GuaranteedSuppliedExposureMetrics<S>,
+  PossibleSuppliedExposureMetrics<S>
+> {
+  // One loose view of the request: which fields are required depends on the selection, checked below.
+  const input = request as unknown as {
+    quotes: readonly SuppliedExposureQuote[];
+    market: SuppliedExposureMarket;
+    config: Partial<SuppliedExposureConfig>;
+    metrics?: unknown;
+  };
   requireArgumentObject(FN, 'input', input);
-  ensureKnownKeys(FN, 'input', input, ['quotes', 'market', 'config']);
+  ensureKnownKeys(FN, 'input', input, ['quotes', 'market', 'config', 'metrics']);
   const { quotes, market, config } = input;
+  const selection =
+    input.metrics === undefined
+      ? undefined
+      : requireSelection(FN, 'metrics', input.metrics, SUPPLIED_METRICS);
+  const wantGex = selection === undefined || selection.includes('gex');
+  const wantDex = selection === undefined || selection.includes('dex');
   if (!Array.isArray(quotes))
     fail('quotes', 'must be a dense array of OptionQuote observations.', ErrorCode.InputWrongType);
   if (quotes.length > MAX_QUOTES)
@@ -379,11 +581,22 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
     'maximumObservationAgeMs',
     'defaultMultiplier',
   ]);
-  const gexConvention = convention(config.gexConvention, 'config.gexConvention');
-  const dexConvention = convention(config.dexConvention, 'config.dexConvention');
-  ensureEnum(config.gammaUnit, ['per1PercentMove', 'perPoint'], 'config.gammaUnit', FN);
+  // A selected metric's controls are required; an unselected one's may be present and are still
+  // shape-checked (the config is closed), but they are neither applied nor echoed.
+  const gexConvention =
+    wantGex || config.gexConvention !== undefined
+      ? convention(config.gexConvention!, 'config.gexConvention')
+      : undefined;
+  const dexConvention =
+    wantDex || config.dexConvention !== undefined
+      ? convention(config.dexConvention!, 'config.dexConvention')
+      : undefined;
+  if (wantGex || config.gammaUnit !== undefined) {
+    ensureEnum(config.gammaUnit, ['per1PercentMove', 'perPoint'], 'config.gammaUnit', FN);
+  }
   finiteFields(config, ['maximumObservationAgeMs'], 'config');
-  ensureNonNegative(config.maximumObservationAgeMs, 'config.maximumObservationAgeMs', FN);
+  const maximumObservationAgeMs = config.maximumObservationAgeMs!;
+  ensureNonNegative(maximumObservationAgeMs, 'config.maximumObservationAgeMs', FN);
   if (config.defaultMultiplier !== undefined) {
     finiteFields(config, ['defaultMultiplier'], 'config');
     ensurePositive(config.defaultMultiplier, 'config.defaultMultiplier', FN);
@@ -397,9 +610,11 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
   const asOf = resolveValuationAsOf(market.asOf, FN);
   timestamp(asOf, 'market.asOf');
   const ageStatus = (observed: number): 'future' | 'stale' | null =>
-    observed > asOf ? 'future' : asOf - observed > config.maximumObservationAgeMs ? 'stale' : null;
+    observed > asOf ? 'future' : asOf - observed > maximumObservationAgeMs ? 'stale' : null;
   const marketStatus = ageStatus(market.timestampMs);
-  const contributions: SuppliedExposureContribution[] = [];
+  const contributions: ContributionRow[] = [];
+  // Only the supplied Greeks the selection reads are required, validated and copied.
+  const suppliedGreeks = [...(wantDex ? ['delta'] : []), ...(wantGex ? ['gamma'] : [])];
   const seenContracts = new Map<string, boolean>();
   let duplicateContractQuotes = 0;
   let duplicateIncludedContractQuotes = 0;
@@ -462,17 +677,19 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       if (!Number.isSafeInteger(quote.openInterest) || quote.openInterest < 0)
         fail(`${path}.openInterest`, 'must be a nonnegative safe integer number of contracts.');
     }
-    let greeks: SuppliedExposureGreeks | null = null;
+    let greeks:
+      | (Record<string, unknown> & { provenance: SuppliedExposureGreeks['provenance'] })
+      | null = null;
     if (quote.greeks !== undefined) {
-      finiteFields(quote.greeks, ['delta', 'gamma'], `${path}.greeks`);
+      finiteFields(quote.greeks, suppliedGreeks, `${path}.greeks`);
       requireArgumentObject(FN, `${path}.greeks.provenance`, quote.greeks.provenance);
       const provenance = quote.greeks.provenance!;
       finiteFields(provenance, ['timestampMs'], `${path}.greeks.provenance`);
       timestamp(provenance.timestampMs, `${path}.greeks.provenance.timestampMs`);
       textField(provenance.source, `${path}.greeks.provenance.source`);
       greeks = {
-        delta: quote.greeks.delta,
-        gamma: quote.greeks.gamma,
+        ...(wantDex ? { delta: quote.greeks.delta } : {}),
+        ...(wantGex ? { gamma: quote.greeks.gamma } : {}),
         provenance: {
           source: provenance.source,
           timestampMs: provenance.timestampMs!,
@@ -503,16 +720,24 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
     if (included && previouslyIncluded === true) duplicateIncludedContractQuotes++;
     seenContracts.set(identity, included || previouslyIncluded === true);
     const side = contract.type === 'call' ? 'calls' : 'puts';
-    const gexSign = gexConvention[side];
-    const dexSign = dexConvention[side];
+    const gexSign = wantGex ? gexConvention![side] : undefined;
+    const dexSign = wantDex ? dexConvention![side] : undefined;
     let gex: number | null = null;
     let dex: number | null = null;
-    if (included) {
-      const gammaFactors = [greeks!.gamma, quote.openInterest!, multiplier, gexSign, market.spot];
+    if (included && wantGex) {
+      const gammaFactors = [
+        greeks!['gamma'] as number,
+        quote.openInterest!,
+        multiplier,
+        gexSign!,
+        market.spot,
+      ];
       if (config.gammaUnit === 'per1PercentMove') gammaFactors.push(market.spot, 0.01);
       gex = exposureProduct(gammaFactors, `${path}.gex`);
+    }
+    if (included && wantDex) {
       dex = exposureProduct(
-        [greeks!.delta, quote.openInterest!, multiplier, dexSign, market.spot],
+        [greeks!['delta'] as number, quote.openInterest!, multiplier, dexSign!, market.spot],
         `${path}.dex`,
       );
     }
@@ -534,12 +759,12 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       openInterest: quote.openInterest ?? null,
       multiplier,
       multiplierSource: contract.multiplier === undefined ? 'config.defaultMultiplier' : 'contract',
-      gexSign,
-      dexSign,
+      ...(wantGex ? { gexSign: gexSign! } : {}),
+      ...(wantDex ? { dexSign: dexSign! } : {}),
       included,
       exclusionReasons,
-      gex,
-      dex,
+      ...(wantGex ? { gex } : {}),
+      ...(wantDex ? { dex } : {}),
     });
   }
   contributions.sort(
@@ -549,8 +774,8 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       (a.contract.type === b.contract.type ? 0 : a.contract.type === 'call' ? -1 : 1) ||
       a.inputIndex - b.inputIndex,
   );
-  const strikes = new Map<number, SuppliedExposureContribution[]>();
-  const expiries = new Map<number, SuppliedExposureContribution[]>();
+  const strikes = new Map<number, ContributionRow[]>();
+  const expiries = new Map<number, ContributionRow[]>();
   for (const row of contributions) {
     for (const [groups, key] of [
       [strikes, row.contract.strike],
@@ -561,12 +786,14 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       else groups.set(key, [row]);
     }
   }
-  const aggregate = totals(contributions, 'aggregate');
+  const aggregate = totals(contributions, 'aggregate', wantGex, wantDex);
   const excludedQuotes = quotes.length - aggregate.includedQuotes;
   const warnings = [
     warning(
       WarningCode.ModelLimitation,
-      'Positioning is estimated from supplied signed delta/gamma, open interest and independent GEX/DEX signs, not actual dealer books. Signed Greeks are used unchanged before position signs. No Greeks are recomputed and no scenario repricing is available.',
+      wantGex && wantDex
+        ? 'Positioning is estimated from supplied signed delta/gamma, open interest and independent GEX/DEX signs, not actual dealer books. Signed Greeks are used unchanged before position signs. No Greeks are recomputed and no scenario repricing is available.'
+        : `Positioning is estimated from supplied signed ${wantGex ? 'gamma' : 'delta'}, open interest and an independent ${wantGex ? 'GEX' : 'DEX'} sign, not actual dealer books. Signed Greeks are used unchanged before position signs. No Greeks are recomputed and no scenario repricing is available.`,
       'info',
     ),
     warning(
@@ -609,18 +836,21 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
         'warn',
       ),
     );
-  const report: SuppliedExposureReport = {
+  const report = {
     contributions,
     aggregate,
     byStrike: [...strikes.entries()]
       .sort(([a], [b]) => a - b)
-      .map(([strike, rows]) => ({ strike, ...totals(rows, `byStrike[${strike}]`) })),
+      .map(([strike, rows]) => ({
+        strike,
+        ...totals(rows, `byStrike[${strike}]`, wantGex, wantDex),
+      })),
     byExpiry: [...expiries.entries()]
       .sort(([a], [b]) => a - b)
       .map(([expiresAt, rows]) => ({
         expiry: new Date(expiresAt).toISOString(),
         expiresAt,
-        ...totals(rows, `byExpiry[${expiresAt}]`),
+        ...totals(rows, `byExpiry[${expiresAt}]`, wantGex, wantDex),
       })),
     coverage: {
       scope: 'suppliedQuotesOnly',
@@ -640,19 +870,20 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       duplicateIncludedContractQuotes,
       exclusionCounts,
     },
+    // Field order is the released report's; only the selected metrics' units and conventions are echoed.
     assumptions: {
       conventionsVersion: CONVENTIONS_VERSION,
       asOf,
       greekSource: 'supplied',
-      suppliedDeltaUnit: 'priceDeltaPerUnderlyingUnit',
-      suppliedGammaUnit: 'deltaPerSpotPoint',
+      ...(wantDex ? { suppliedDeltaUnit: 'priceDeltaPerUnderlyingUnit' as const } : {}),
+      ...(wantGex ? { suppliedGammaUnit: 'deltaPerSpotPoint' as const } : {}),
       suppliedGreekSignPolicy: 'signed-as-provided',
       currencyPolicy: 'caller-aligned-single-currency-no-fx-conversion',
-      gammaUnit: config.gammaUnit,
-      dexUnit: 'dollarDelta',
-      gexConvention,
-      dexConvention,
-      maximumObservationAgeMs: config.maximumObservationAgeMs,
+      ...(wantGex ? { gammaUnit: config.gammaUnit! } : {}),
+      ...(wantDex ? { dexUnit: 'dollarDelta' as const } : {}),
+      ...(wantGex ? { gexConvention: gexConvention! } : {}),
+      ...(wantDex ? { dexConvention: dexConvention! } : {}),
+      maximumObservationAgeMs,
       defaultMultiplier: config.defaultMultiplier ?? null,
       market: {
         underlying: market.underlying,
@@ -663,9 +894,13 @@ export function exposureFromGreeks(input: SuppliedExposureInput): SuppliedExposu
       },
       scenarioRepricing: 'unavailable',
       aggregationPolicy: 'additive-input-rows-no-deduplication',
+      ...(selection === undefined ? {} : { metrics: selection }),
     },
     diagnostics: { method: 'supplied-greek-accounting', warnings },
   };
   assertFiniteValue(FN, report);
-  return report;
+  return report as unknown as SuppliedExposureReport<
+    GuaranteedSuppliedExposureMetrics<S>,
+    PossibleSuppliedExposureMetrics<S>
+  >;
 }

@@ -11,7 +11,8 @@
  *       /tmp/tf010/node_modules/@insiderfinance/totalfinance/modules/structure/dist/index.js
  *
  * Output (committed, so CI needs no network):
- *   packages/structure/test/golden/exposure-0.1.0.json
+ *   packages/structure/test/golden/exposure-0.1.0.json            model exposure()
+ *   packages/structure/test/golden/supplied-exposure-0.1.0.json   exposureFromGreeks()
  *
  * The chain is synthetic and deterministic: five expiries around a Monday snapshot (0DTE, a
  * mid-week, the June monthly OPEX, July and September), a 13-strike ladder of calls and puts, a
@@ -22,7 +23,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import console from 'node:console';
 import process from 'node:process';
 import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { URL, fileURLToPath, pathToFileURL } from 'node:url';
 
 const entry = process.argv[2];
 if (!entry) {
@@ -31,7 +32,9 @@ if (!entry) {
   );
   process.exit(2);
 }
-const { exposure } = await import(pathToFileURL(entry).href);
+const structureUrl = pathToFileURL(entry);
+const { exposure, exposureFromGreeks } = await import(structureUrl.href);
+const { resolvedExpiry } = await import(new URL('../../core/dist/index.js', structureUrl).href);
 
 // Deterministic LCG (Numerical Recipes constants) — no Math.random.
 let state = 20261001;
@@ -173,3 +176,119 @@ writeFileSync(
   ) + '\n',
 );
 console.log(`wrote ${out} (${entries.length} cases, ${quotes.length} quotes each)`);
+
+// ---- exposureFromGreeks: supplied-Greek accounting ----
+// Every exclusion path, duplicates, the multiplier fallback and zero open interest, at one snapshot.
+const asOfMs = Date.parse('2026-09-01T15:00:00Z');
+const supplied = [];
+const SUPPLIED_EXPIRIES = ['2026-08-28', '2026-09-04', '2026-09-18', '2026-10-16'];
+let row = 0;
+for (const expiry of SUPPLIED_EXPIRIES) {
+  for (const strike of [95, 100, 105]) {
+    for (const type of ['call', 'put']) {
+      const delta = type === 'call' ? 0.5 + (100 - strike) / 40 : -0.5 + (100 - strike) / 40;
+      const gamma = 0.01 + next() * 0.04;
+      const quote = {
+        contract: {
+          underlying: 'SPY',
+          type,
+          style: 'american',
+          strike,
+          expiry,
+          ...resolvedExpiry(expiry),
+          ...(row % 7 === 3 ? {} : { multiplier: 100 }),
+        },
+        source: 'chain-feed',
+        timestampMs: asOfMs - 1000,
+        openInterest: row % 11 === 5 ? 0 : Math.floor(next() * 5000),
+        greeks: {
+          delta,
+          gamma,
+          provenance: { source: 'greek-feed', timestampMs: asOfMs - 500, model: 'vendor' },
+        },
+      };
+      if (row % 9 === 4) delete quote.greeks; // missingGreeks
+      if (row % 13 === 6) delete quote.openInterest; // missingOpenInterest
+      if (row % 10 === 7) quote.timestampMs = asOfMs - 120_000; // staleQuote
+      if (row % 17 === 8 && quote.greeks) quote.greeks.provenance.timestampMs = asOfMs + 1; // futureGreeks
+      supplied.push(quote);
+      row++;
+    }
+  }
+}
+supplied.push({ ...supplied[14], source: 'second-feed' }); // a repeated identity
+
+const SUPPLIED_CASES = [
+  {
+    name: 'per1PercentMove, dealer-style signs, default multiplier',
+    input: {
+      quotes: supplied,
+      market: {
+        underlying: 'SPY',
+        spot: 100.25,
+        source: 'spot-feed',
+        timestampMs: asOfMs - 200,
+        asOf: asOfMs,
+      },
+      config: {
+        gexConvention: { calls: 1, puts: -1 },
+        dexConvention: { calls: 1, puts: 1 },
+        gammaUnit: 'per1PercentMove',
+        maximumObservationAgeMs: 60_000,
+        defaultMultiplier: 10,
+      },
+    },
+  },
+  {
+    name: 'perPoint, inverted signs',
+    input: {
+      quotes: supplied,
+      market: {
+        underlying: 'SPY',
+        spot: 99.5,
+        source: 'spot-feed',
+        timestampMs: asOfMs,
+        asOf: '2026-09-01T11:00:00-04:00',
+      },
+      config: {
+        gexConvention: { calls: -1, puts: 1 },
+        dexConvention: { calls: -1, puts: -1 },
+        gammaUnit: 'perPoint',
+        maximumObservationAgeMs: 90_000,
+        defaultMultiplier: 100,
+      },
+    },
+  },
+];
+const suppliedOut = join(
+  here,
+  '..',
+  '..',
+  'packages',
+  'structure',
+  'test',
+  'golden',
+  'supplied-exposure-0.1.0.json',
+);
+writeFileSync(
+  suppliedOut,
+  JSON.stringify(
+    {
+      meta: {
+        generator: 'tools/golden/capture-exposure-baseline.mjs',
+        reference: '@insiderfinance/totalfinance@0.1.0 (published), structure exposureFromGreeks()',
+        node: process.version,
+      },
+      entries: SUPPLIED_CASES.map(({ name, input }) => ({
+        name,
+        input,
+        expected: exposureFromGreeks(input),
+      })),
+    },
+    null,
+    1,
+  ) + '\n',
+);
+console.log(
+  `wrote ${suppliedOut} (${SUPPLIED_CASES.length} cases, ${supplied.length} quotes each)`,
+);

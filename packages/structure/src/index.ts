@@ -35,6 +35,14 @@ export type {
   SuppliedExposureTotals,
   SuppliedExposureAssumptions,
   SuppliedExposureReport,
+  SuppliedExposureMetric,
+  SuppliedExposureGreeksFor,
+  SuppliedExposureConfigFor,
+  SuppliedExposureTotalsFor,
+  SuppliedExposureContributionFor,
+  SuppliedExposureAssumptionsFor,
+  GuaranteedSuppliedExposureMetrics,
+  PossibleSuppliedExposureMetrics,
 } from './supplied-exposure.js';
 export type {
   ExposureConvention,

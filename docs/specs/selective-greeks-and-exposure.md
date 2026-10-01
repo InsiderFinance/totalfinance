@@ -170,7 +170,7 @@ outputs and their mathematical dependencies.
       tests, skipped-work tests.
 - [x] SG5: selective model exposure, analyses, shortcuts; conservation, parity, roots, scenarios,
       shortcut-equivalence and skipped-work tests.
-- [ ] SG6: supplied-exposure selection with requirement and report-shape tests.
+- [x] SG6: supplied-exposure selection with requirement and report-shape tests.
 - [ ] SG7: manifests, first-touch fixtures, naming/signature/contract curation, bundle budgets from
       measurements, packed-consumer coverage, docs and examples; regenerate in lawful order.
 - [ ] SG8: Node and browser benchmarks before/after; record workload, environment, timing and
