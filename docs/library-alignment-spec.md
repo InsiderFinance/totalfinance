@@ -96,9 +96,12 @@ diagnostics }`.
    user code. Built-ins pass the shared behavioral contract suite; custom engines opt into explicit
    `validateOptionPricingEngine(engine, probes)` verification with caller-supplied probes for every
    claimed exercise style.
-9. **No pre-release compatibility clutter.** There are no released consumers; renames delete
-   the old name. Adapters (`barsFrom(...)`) over input aliases. Post-1.0, aliases exist only
-   via the manifest with a deliberate migration path.
+9. **No pre-release compatibility clutter.** Before 0.1.0 there were no released consumers, so
+   renames deleted the old name. Adapters (`barsFrom(...)`) over input aliases. Post-1.0, aliases
+   exist only via the manifest with a deliberate migration path. **Superseded in part
+   (2026-10-01):** 0.1.0 is published, so the "no released consumers" premise no longer holds.
+   Existing supported calls and conventions are preserved; changes are additive or documented
+   corrections ([selective Greeks and exposure](./specs/selective-greeks-and-exposure.md)).
 10. **ESM-first, honestly stated.** One ESM build + `default` condition; `require(ESM)`
     described as interop, not a CommonJS build; compatibility proven by packed-tarball
     fixtures on supported runtimes, not workspace imports.

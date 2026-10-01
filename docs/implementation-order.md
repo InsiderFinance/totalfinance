@@ -25,6 +25,15 @@ PR #336 is integrated into PR #303 at merge commit `fc46353b` (2026-09-08), pres
 search repair at `cec30b61`. The maintainer explicitly authorized this integration while hosted
 checks remained red; that decision does not waive the hosted matrix for release.
 
+**Post-0.1.0 amendment (2026-10-01): selective Greeks and exposure — in progress.** Follow
+[`selective-greeks-and-exposure.md`](./specs/selective-greeks-and-exposure.md): one Black–Scholes
+evaluation kernel that computes only requested outputs, named single-Greek methods,
+`blackScholes.evaluate`, the `blackScholesEvaluateMany`/`Into` batch family, selective
+`exposure(...)` with nine named exposure shortcuts, GEX/DEX selection for `exposureFromGreeks`, and
+the per-call expiry-formatter fix (InsiderFinance/totalfinance#1). 0.1.0 is published: statements
+elsewhere that there are no released consumers no longer apply, and existing supported calls are
+preserved. No version bump, publication, MCP expansion or deployment is authorized by it.
+
 ### Preview launch queue (2026-09-07)
 
 **Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**
