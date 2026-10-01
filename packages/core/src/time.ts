@@ -42,6 +42,24 @@ export type InterestCompounding =
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
+ * The offset formatter, built ONCE per module and only on first use (InsiderFinance/totalfinance#1).
+ *
+ * Constructing an `Intl.DateTimeFormat` costs tens of microseconds, and this probe runs once per
+ * date-labelled expiry a contract validates — so building one per call made validating a chain cost
+ * ~30 µs a row. A formatter is immutable and reusable. It is created lazily, not at import, so
+ * importing the module stays side-effect free for bundlers.
+ */
+let newYorkOffsetFormatter: Intl.DateTimeFormat | undefined;
+
+/**
+ * Resolved offsets per UTC wall-clock probe. An offset only depends on the probe, there are a few
+ * hundred distinct probes a year, and the map is cleared if a long-running process walks an unusual
+ * number of them, so it can never grow without bound. Failures are never cached.
+ */
+const newYorkOffsetCache = new Map<number, number>();
+const NEW_YORK_OFFSET_CACHE_LIMIT = 20_000;
+
+/**
  * The America/New_York UTC offset (minutes east of UTC) in force at a given UTC wall-clock probe —
  * DST-aware via `Intl`. Throws rather than silently assuming EST (wrong by an hour half the year).
  */
@@ -52,11 +70,15 @@ function newYorkOffsetMinutes(
   hour: number,
   functionName: string,
 ): number {
-  const tzName = new Intl.DateTimeFormat('en-US', {
+  const probe = Date.UTC(year, month - 1, day, hour);
+  const cached = newYorkOffsetCache.get(probe);
+  if (cached !== undefined) return cached;
+  newYorkOffsetFormatter ??= new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/New_York',
     timeZoneName: 'longOffset',
-  })
-    .formatToParts(new Date(Date.UTC(year, month - 1, day, hour)))
+  });
+  const tzName = newYorkOffsetFormatter
+    .formatToParts(new Date(probe))
     .find((p) => p.type === 'timeZoneName')?.value;
   const m = tzName?.match(/GMT([+-])(\d{1,2})(?::?(\d{2}))?/);
   if (!m) {
@@ -65,7 +87,10 @@ function newYorkOffsetMinutes(
       { code: ErrorCode.TimeTimezoneResolutionFailed, context: { year, month, day, tzName } },
     );
   }
-  return (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3] ?? 0));
+  const minutes = (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3] ?? 0));
+  if (newYorkOffsetCache.size >= NEW_YORK_OFFSET_CACHE_LIMIT) newYorkOffsetCache.clear();
+  newYorkOffsetCache.set(probe, minutes);
+  return minutes;
 }
 
 /** `"-04:00"` / `"-05:00"`: the New York offset label for a calendar date, for teaching examples. */
