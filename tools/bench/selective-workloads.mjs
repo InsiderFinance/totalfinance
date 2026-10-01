@@ -297,12 +297,16 @@ export function createBench({ blackScholes, batch, structure, resolvedExpiry }, 
     };
   }
 
-  /** Run every workload for the side this library version supports; `heapUsed` enables allocation. */
-  function run(heapUsed) {
+  /**
+   * Run the workloads (all, or the ids in `only`) for the side this library version supports;
+   * `heapUsed` enables the allocation estimate.
+   */
+  function run(heapUsed, only) {
     // A 0.1.0 install has no selective APIs and runs `before`; this branch runs `after`.
     const side = has.evaluateMany ? 'after' : 'before';
     const results = [];
     for (const workload of WORKLOADS) {
+      if (only !== undefined && !only.includes(workload.id)) continue;
       const fn = workload[side];
       const state = workload.setup ? workload.setup() : undefined;
       results.push({

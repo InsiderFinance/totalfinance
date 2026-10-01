@@ -829,8 +829,40 @@ export class ExposureProfile<
     const rows: Readonly<Record<string, unknown>>[] = new Array<Readonly<Record<string, unknown>>>(
       n,
     );
+    const full = selection === undefined;
+    const metric = (name: ExposureMetric) => this.#baseMetrics.get(name)!;
+    // The full profile builds each row as ONE literal in the released field order, which keeps the
+    // row a compact object; a selection adds only its own fields.
+    const [gex, dex, vega, vanna, charm, theta, vomma, speed, color] = full
+      ? ALL_METRICS.map(metric)
+      : [];
     for (let i = 0; i < n; i++) {
       const c = resolved[i]!;
+      const sign = c.type === 'call' ? signs.calls : signs.puts;
+      if (full) {
+        rows[i] = Object.freeze({
+          expiry: c.expiry,
+          strike: c.strike,
+          type: c.type,
+          timeToExpiryYears: c.timeToExpiryYears,
+          impliedVolatility: c.impliedVolatility,
+          openInterest: c.oi,
+          multiplier: c.mult,
+          sign,
+          gamma: gamma![i]!,
+          delta: delta![i]!,
+          gex: gex![i]!,
+          dex: dex![i]!,
+          vega: vega![i]!,
+          vanna: vanna![i]!,
+          charm: charm![i]!,
+          theta: theta![i]!,
+          vomma: vomma![i]!,
+          speed: speed![i]!,
+          color: color![i]!,
+        });
+        continue;
+      }
       const row: Record<string, unknown> = {
         expiry: c.expiry,
         strike: c.strike,
@@ -839,7 +871,7 @@ export class ExposureProfile<
         impliedVolatility: c.impliedVolatility,
         openInterest: c.oi,
         multiplier: c.mult,
-        sign: c.type === 'call' ? signs.calls : signs.puts,
+        sign,
       };
       if (gamma !== undefined) row['gamma'] = gamma[i];
       if (delta !== undefined) row['delta'] = delta[i];

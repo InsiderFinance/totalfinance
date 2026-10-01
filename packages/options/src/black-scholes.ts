@@ -290,7 +290,7 @@ function evaluatePlan(
   q: number,
   plan: BlackScholesPlan,
 ): Float64Array {
-  return evaluateBlackScholesScalarUnchecked(plan, kernelInput(input, q));
+  return evaluateBlackScholesScalarUnchecked(plan, input, q);
 }
 
 function closedFormEnvelope<T>(input: BlackScholesTypedInput, q: number, value: T): Computed<T> {

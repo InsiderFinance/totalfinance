@@ -19,6 +19,9 @@
  * a 256 MB semi-space so they do not trigger a scavenge — an estimate of bytes allocated per call,
  * not retained.
  *
+ * Allocation is recorded from one process per workload (`BENCH_ONLY=<id>`), because a long run's
+ * earlier workloads change what the optimizer has done by the time later ones are measured.
+ *
  * The workloads live in `selective-workloads.mjs`, shared with the browser runner
  * (`selective-browser.mjs`), so Node and browser numbers time identical code.
  */
@@ -50,7 +53,12 @@ const report = createBench(
   { blackScholes, batch, structure, resolvedExpiry },
   () => performance.now(),
   process.env['BENCH_RUNS'] === undefined ? undefined : Number(process.env['BENCH_RUNS']),
-).run(() => process.memoryUsage().heapUsed);
+).run(
+  () => process.memoryUsage().heapUsed,
+  // BENCH_ONLY=id,id runs a subset — one workload per process isolates its allocation from the
+  // optimization state earlier workloads leave behind.
+  process.env['BENCH_ONLY']?.split(','),
+);
 console.log(
   JSON.stringify(
     {

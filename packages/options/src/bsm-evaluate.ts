@@ -243,14 +243,16 @@ let scalarRow:
     }
   | undefined;
 
-/** One validated Black–Scholes row: the kernel input with the dividend yield resolved. */
+/**
+ * One validated Black–Scholes row, as the scalar methods already hold it (their typed input). The
+ * dividend yield is passed separately, resolved, so no row object is built per call.
+ */
 export interface BlackScholesScalarRow {
   readonly type: 'call' | 'put';
   readonly spot: number;
   readonly strike: number;
   readonly timeToExpiryYears: number;
   readonly riskFreeRate: number;
-  readonly dividendYield: number;
   readonly volatility: number;
 }
 
@@ -263,6 +265,7 @@ export interface BlackScholesScalarRow {
 export function evaluateBlackScholesScalarUnchecked(
   plan: BlackScholesPlan,
   row: BlackScholesScalarRow,
+  dividendYield: number,
 ): Float64Array {
   if (scalarRow === undefined) {
     const values = new Float64Array(BLACK_SCHOLES_OUTPUT_SLOTS);
@@ -289,7 +292,7 @@ export function evaluateBlackScholesScalarUnchecked(
   columns.riskFreeRate[0] = row.riskFreeRate;
   columns.volatility[0] = row.volatility;
   columns.type[0] = row.type === 'call' ? 1 : -1;
-  columns.dividendYield[0] = row.dividendYield;
+  columns.dividendYield[0] = dividendYield;
   evaluateBlackScholesRowsUnchecked(plan, columns, 1, targets);
   return values;
 }
