@@ -32,7 +32,7 @@ import {
   type BlackScholesOutput,
   type BlackScholesOutputSelection,
   type BlackScholesPlan,
-  evaluateBlackScholesUnchecked,
+  evaluateBlackScholesRowsUnchecked,
   resolveBlackScholesPlan,
 } from './bsm-evaluate.js';
 import { type OptionPricingEngine, engines, requireEngine } from './engines.js';
@@ -182,23 +182,46 @@ function requireBatchColumnShapes(
 function requireBatchRowValues(cols: OptionBatchColumns, n: number, functionName: string): void {
   const { spot, strike, timeToExpiryYears, volatility, riskFreeRate, type, dividendYield } = cols;
   for (let i = 0; i < n; i++) {
-    requirePositiveRow(spot[i]!, 'spot', i, functionName);
-    requirePositiveRow(strike[i]!, 'strike', i, functionName);
-    requirePositiveRow(timeToExpiryYears[i]!, 'timeToExpiryYears', i, functionName);
-    requirePositiveRow(volatility[i]!, 'volatility', i, functionName);
-    requireFiniteRow(riskFreeRate[i]!, 'riskFreeRate', i, functionName);
-    if (dividendYield !== undefined) {
-      requireFiniteRow(dividendYield[i]!, 'dividendYield', i, functionName);
+    const S = spot[i]!;
+    const K = strike[i]!;
+    const T = timeToExpiryYears[i]!;
+    const sigma = volatility[i]!;
+    const r = riskFreeRate[i]!;
+    const q = dividendYield === undefined ? 0 : dividendYield[i]!;
+    const kind = type[i]!;
+    // Fast path: one inline test per row, no calls, so no number is boxed on a valid row
+    // (`x > 0 && x < Infinity` is "positive and finite"; NaN fails both).
+    if (
+      S > 0 &&
+      S < Infinity &&
+      K > 0 &&
+      K < Infinity &&
+      T > 0 &&
+      T < Infinity &&
+      sigma > 0 &&
+      sigma < Infinity &&
+      Number.isFinite(r) &&
+      Number.isFinite(q) &&
+      Number.isFinite(kind)
+    ) {
+      continue;
     }
-    requireFiniteRow(type[i]!, 'type', i, functionName);
+    // A failing row re-runs the precise checks in order, so the typed error names the first bad field.
+    requirePositiveRow(S, 'spot', i, functionName);
+    requirePositiveRow(K, 'strike', i, functionName);
+    requirePositiveRow(T, 'timeToExpiryYears', i, functionName);
+    requirePositiveRow(sigma, 'volatility', i, functionName);
+    requireFiniteRow(r, 'riskFreeRate', i, functionName);
+    if (dividendYield !== undefined) requireFiniteRow(q, 'dividendYield', i, functionName);
+    requireFiniteRow(kind, 'type', i, functionName);
   }
 }
 
 /**
- * THE columnar Black–Scholes loop every batch path shares. `targets[k]` receives the plan's k-th
- * requested output for rows `[0, rows)`; nothing past `rows` is touched. The caller has validated
- * every column, value and target, so each row runs the unchecked kernel — no per-row validation,
- * no per-row objects, one 11-slot scratch row per call (spec 3B.1b; selective Greeks decision 1).
+ * The columnar Black–Scholes evaluation every batch path shares: `targets[k]` receives the plan's
+ * k-th requested output for rows `[0, rows)`; nothing past `rows` is touched. The caller has
+ * validated every column, value and target, so the kernel's row loop runs without per-row
+ * validation or per-row objects (spec 3B.1b; selective Greeks decision 1).
  *
  * Row `i`'s inputs are all read before any of its outputs is written, which is what keeps
  * `blackScholesPriceManyInto`'s exact in-place aliasing correct.
@@ -209,24 +232,9 @@ function evaluateColumns(
   rows: number,
   targets: readonly Float64Array[],
 ): void {
-  const { spot, strike, timeToExpiryYears, riskFreeRate, volatility, type, dividendYield } = cols;
-  const slots = plan.slots;
-  const count = slots.length;
-  const scratch = new Float64Array(BLACK_SCHOLES_OUTPUT_SLOTS);
-  for (let i = 0; i < rows; i++) {
-    evaluateBlackScholesUnchecked(
-      plan,
-      type[i]! > 0,
-      spot[i]!,
-      strike[i]!,
-      timeToExpiryYears[i]!,
-      riskFreeRate[i]!,
-      dividendYield === undefined ? 0 : dividendYield[i]!,
-      volatility[i]!,
-      scratch,
-    );
-    for (let k = 0; k < count; k++) targets[k]![i] = scratch[slots[k]!]!;
-  }
+  const bySlot = new Array<Float64Array | undefined>(BLACK_SCHOLES_OUTPUT_SLOTS);
+  for (let k = 0; k < plan.slots.length; k++) bySlot[plan.slots[k]!] = targets[k];
+  evaluateBlackScholesRowsUnchecked(plan, cols, rows, bySlot);
 }
 
 /** Byte range `[start, end)` the first `rows` elements of a typed array occupy, or none for a plain array. */

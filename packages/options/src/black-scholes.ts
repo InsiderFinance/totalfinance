@@ -30,11 +30,10 @@ import {
 } from '@totalfinance/core';
 import {
   BLACK_SCHOLES_OUTPUTS,
-  BLACK_SCHOLES_OUTPUT_SLOTS,
   type BlackScholesOutput,
   type BlackScholesOutputSelection,
   type BlackScholesPlan,
-  evaluateBlackScholesUnchecked,
+  evaluateBlackScholesScalarUnchecked,
   resolveBlackScholesPlan,
 } from './bsm-evaluate.js';
 import {
@@ -282,25 +281,16 @@ const greeks = /* @__PURE__ */ facade(
 
 // ---- one Greek, or a selected set (selective Greeks spec, decisions 4–6) ----
 
-/** Evaluate a validated typed input through a resolved plan into a fresh scratch row. */
+/**
+ * Evaluate a validated typed input through a resolved plan. The returned slots are the kernel's
+ * reused scalar outputs: read them before the next evaluation.
+ */
 function evaluatePlan(
   input: BlackScholesTypedInput,
   q: number,
   plan: BlackScholesPlan,
 ): Float64Array {
-  const scratch = new Float64Array(BLACK_SCHOLES_OUTPUT_SLOTS);
-  evaluateBlackScholesUnchecked(
-    plan,
-    input.type === 'call',
-    input.spot,
-    input.strike,
-    input.timeToExpiryYears,
-    input.riskFreeRate,
-    q,
-    input.volatility,
-    scratch,
-  );
-  return scratch;
+  return evaluateBlackScholesScalarUnchecked(plan, kernelInput(input, q));
 }
 
 function closedFormEnvelope<T>(input: BlackScholesTypedInput, q: number, value: T): Computed<T> {
@@ -317,17 +307,19 @@ function closedFormEnvelope<T>(input: BlackScholesTypedInput, q: number, value: 
 
 /**
  * One named Greek: the facade validation, then a ONE-output plan — `blackScholes.gamma` evaluates
- * the normal density and no cumulative normal. The plan is resolved per call (eleven flag checks),
- * which keeps these members tree-shakeable data instead of module-level computation.
+ * the normal density and no cumulative normal. The plan is resolved on the first call and reused,
+ * so module evaluation does no computation and later calls resolve nothing.
  */
 function singleGreek(
   output: Exclude<BlackScholesOutput, 'price'>,
 ): Facade<BlackScholesTypedInput, number> {
   const functionName = `blackScholes.${output}`;
   const slot = BLACK_SCHOLES_OUTPUTS.indexOf(output);
+  let plan: BlackScholesPlan | undefined;
   const compute = (input: BlackScholesTypedInput): { q: number; value: number } => {
     const q = validateCore(input, functionName);
-    return { q, value: evaluatePlan(input, q, resolveBlackScholesPlan([output]))[slot]! };
+    plan ??= resolveBlackScholesPlan([output]);
+    return { q, value: evaluatePlan(input, q, plan)[slot]! };
   };
   return facade(
     functionName,

@@ -548,10 +548,13 @@ export function exposureFromGreeks<
     ([S] extends [readonly []]
       ? { metrics: readonly [SuppliedExposureMetric, ...SuppliedExposureMetric[]] }
       : unknown),
-): SuppliedExposureReport<
-  GuaranteedSuppliedExposureMetrics<S>,
-  PossibleSuppliedExposureMetrics<S>
-> {
+): SuppliedExposureReport<GuaranteedSuppliedExposureMetrics<S>, PossibleSuppliedExposureMetrics<S>>;
+/**
+ * The released signature, kept LAST so `Parameters<typeof exposureFromGreeks>` and
+ * `ReturnType<typeof exposureFromGreeks>` still name today's input and report.
+ */
+export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport;
+export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport {
   // One loose view of the request: which fields are required depends on the selection, checked below.
   const input = request as unknown as {
     quotes: readonly SuppliedExposureQuote[];
@@ -899,8 +902,5 @@ export function exposureFromGreeks<
     diagnostics: { method: 'supplied-greek-accounting', warnings },
   };
   assertFiniteValue(FN, report);
-  return report as unknown as SuppliedExposureReport<
-    GuaranteedSuppliedExposureMetrics<S>,
-    PossibleSuppliedExposureMetrics<S>
-  >;
+  return report as unknown as SuppliedExposureReport;
 }

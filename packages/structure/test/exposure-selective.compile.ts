@@ -122,3 +122,15 @@ const dynamicSupplied = exposureFromGreeks({ ...supplied, metrics: suppliedChoic
 export const maybeSuppliedGex: number | undefined = dynamicSupplied.aggregate.gex;
 // @ts-expect-error a dynamic selection cannot claim GEX was computed
 export const certainSuppliedGex: number = dynamicSupplied.aggregate.gex;
+
+// ---- the released signatures still name the released types (overload order) ----
+type ReleasedExposureInput = Parameters<typeof exposure>[0];
+declare const releasedInput: ReleasedExposureInput;
+export const releasedProfile: ExposureProfile = exposure(releasedInput);
+export const releasedReturn: ExposureProfile = null as unknown as ReturnType<typeof exposure>;
+type ReleasedSuppliedInput = Parameters<typeof exposureFromGreeks>[0];
+declare const releasedSupplied: ReleasedSuppliedInput;
+export const releasedSuppliedReport: SuppliedExposureReport = exposureFromGreeks(releasedSupplied);
+export const releasedSuppliedReturn: SuppliedExposureReport = null as unknown as ReturnType<
+  typeof exposureFromGreeks
+>;

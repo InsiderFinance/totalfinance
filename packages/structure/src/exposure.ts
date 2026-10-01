@@ -569,6 +569,8 @@ export class ExposureProfile<
   readonly #baseGreeks = new Map<'gamma' | 'delta', Float64Array>();
   /** Reused output storage for repeated evaluations (atSpot, the zero-gamma sweep, scenarios). */
   readonly #scratch = new Map<BlackScholesOutput, Float64Array>();
+  /** Reused per-contract metric values for the same repeated evaluations (created on first use). */
+  #metricScratch: Float64Array | undefined;
   #strikeGroups: { strikes: number[]; members: number[][] } | undefined;
 
   constructor(request: ExposureInput) {
@@ -1017,15 +1019,35 @@ export class ExposureProfile<
     const read = this.#evaluateAt(S, outputs);
     const rows = this.resolved.length;
     const result: { gex?: number; dex?: number } = {};
-    if (wantGex) result.gex = accumulateMetric('gex', read, this.#weight, S, this.gammaUnit, rows);
-    if (wantDex) result.dex = accumulateMetric('dex', read, this.#weight, S, this.gammaUnit, rows);
+    const values = this.#metricValues();
+    if (wantGex) {
+      result.gex = accumulateMetric('gex', read, this.#weight, S, this.gammaUnit, rows, values);
+    }
+    if (wantDex) {
+      result.dex = accumulateMetric('dex', read, this.#weight, S, this.gammaUnit, rows, values);
+    }
     return result as AtSpotExposure<G, P>;
   }
 
   /** Net signed GEX recomputed with spot shifted to `S` — gamma ALONE is evaluated (IV/T/OI fixed). */
   private netGexAtSpot(S: number): number {
     const read = this.#evaluateAt(S, ['gamma']);
-    return accumulateMetric('gex', read, this.#weight, S, this.gammaUnit, this.resolved.length);
+    const rows = this.resolved.length;
+    return accumulateMetric(
+      'gex',
+      read,
+      this.#weight,
+      S,
+      this.gammaUnit,
+      rows,
+      this.#metricValues(),
+    );
+  }
+
+  /** Scratch per-contract metric values for evaluations whose rows are summed, not kept. */
+  #metricValues(): Float64Array {
+    this.#metricScratch ??= new Float64Array(this.resolved.length);
+    return this.#metricScratch;
   }
 
   /**
@@ -1472,8 +1494,17 @@ export class ExposureProfile<
           }
           const read = this.#evaluateAt(S, outputs, slice.columns);
           const totals: Partial<ExposureTotals> = {};
+          const values = this.#metricValues();
           for (const m of unique) {
-            totals[m] = accumulateMetric(m, read, slice.weight, S, this.gammaUnit, slice.rows);
+            totals[m] = accumulateMetric(
+              m,
+              read,
+              slice.weight,
+              S,
+              this.gammaUnit,
+              slice.rows,
+              values,
+            );
           }
           evaluations += slice.rows;
           const cell: Record<string, number> = {
@@ -1530,7 +1561,8 @@ export class ExposureProfile<
 
 /**
  * One exposure metric over `rows` contracts at spot `S`, from the Black–Scholes outputs `read`
- * supplies: returns the sum (from 0, in contract order) and, with `into`, the per-contract values.
+ * supplies: writes the per-contract values to `into` and returns their sum (from 0, in contract
+ * order — the order the released aggregate summed its rows in).
  *
  * These are the released formulas, operation for operation, so a selected metric equals the same
  * metric from the full profile bit for bit:
@@ -1539,7 +1571,8 @@ export class ExposureProfile<
  *   vanna vanna·w·S·0.01                                    charm −(charm·w·S)/365
  *   vomma vomma·w·0.0001                                    color −(color·w·S²·0.01)/365
  *   speed the change in gex for a +1% spot move, in the gex unit (both terms of d(GEX)/dS)
- * with `w = openInterest · multiplier · sign`.
+ * with `w = openInterest · multiplier · sign`. Plain loops over typed arrays, with no closure
+ * holding a running total, so the hot paths (atSpot, the zero-gamma sweep) allocate nothing per row.
  */
 function accumulateMetric(
   metric: ExposureMetric,
@@ -1548,53 +1581,48 @@ function accumulateMetric(
   S: number,
   gammaUnit: GammaUnit,
   rows: number,
-  into?: Float64Array,
+  into: Float64Array,
 ): number {
-  let total = 0;
-  const put = (i: number, value: number): void => {
-    if (into !== undefined) into[i] = value;
-    total += value;
-  };
   switch (metric) {
     case 'gex': {
       const gamma = read('gamma');
       if (gammaUnit === 'per1PercentMove') {
-        for (let i = 0; i < rows; i++) put(i, gamma[i]! * weight[i]! * S * S * 0.01);
+        for (let i = 0; i < rows; i++) into[i] = gamma[i]! * weight[i]! * S * S * 0.01;
       } else {
-        for (let i = 0; i < rows; i++) put(i, gamma[i]! * weight[i]! * S); // dollar-delta change per 1-point move
+        for (let i = 0; i < rows; i++) into[i] = gamma[i]! * weight[i]! * S; // dollar-delta change per 1-point move
       }
       break;
     }
     case 'dex': {
       const delta = read('delta');
-      for (let i = 0; i < rows; i++) put(i, delta[i]! * weight[i]! * S); // dollar delta
+      for (let i = 0; i < rows; i++) into[i] = delta[i]! * weight[i]! * S; // dollar delta
       break;
     }
     case 'vega': {
       const vega = read('vega');
-      for (let i = 0; i < rows; i++) put(i, vega[i]! * weight[i]!); // vega is per 1% already
+      for (let i = 0; i < rows; i++) into[i] = vega[i]! * weight[i]!; // vega is per 1% already
       break;
     }
     case 'theta': {
       const theta = read('theta');
-      for (let i = 0; i < rows; i++) put(i, theta[i]! * weight[i]!); // dollar decay per day
+      for (let i = 0; i < rows; i++) into[i] = theta[i]! * weight[i]!; // dollar decay per day
       break;
     }
     case 'vanna': {
       const vanna = read('vanna');
-      for (let i = 0; i < rows; i++) put(i, vanna[i]! * weight[i]! * S * 0.01); // dollar-delta per 1% vol
+      for (let i = 0; i < rows; i++) into[i] = vanna[i]! * weight[i]! * S * 0.01; // dollar-delta per 1% vol
       break;
     }
     case 'charm': {
       // charm/color come from the pricer as ∂/∂T (per added year of time-to-expiry). Negate so the
       // exposure is per calendar day ELAPSED (T falls as a day passes), matching the passage of time.
       const charm = read('charm');
-      for (let i = 0; i < rows; i++) put(i, -(charm[i]! * weight[i]! * S) / 365);
+      for (let i = 0; i < rows; i++) into[i] = -(charm[i]! * weight[i]! * S) / 365;
       break;
     }
     case 'vomma': {
       const vomma = read('vomma');
-      for (let i = 0; i < rows; i++) put(i, vomma[i]! * weight[i]! * 0.0001); // Δ(vega exposure) per +1% vol
+      for (let i = 0; i < rows; i++) into[i] = vomma[i]! * weight[i]! * 0.0001; // Δ(vega exposure) per +1% vol
       break;
     }
     case 'speed': {
@@ -1609,19 +1637,22 @@ function accumulateMetric(
       const spotStep = S * 0.01;
       if (gammaUnit === 'per1PercentMove') {
         for (let i = 0; i < rows; i++) {
-          put(i, (speed[i]! * S + 2 * gamma[i]!) * weight[i]! * S * 0.01 * spotStep);
+          into[i] = (speed[i]! * S + 2 * gamma[i]!) * weight[i]! * S * 0.01 * spotStep;
         }
       } else {
-        for (let i = 0; i < rows; i++) put(i, (speed[i]! * S + gamma[i]!) * weight[i]! * spotStep); // d/dS[Γ·w·S]·ΔS
+        for (let i = 0; i < rows; i++)
+          into[i] = (speed[i]! * S + gamma[i]!) * weight[i]! * spotStep; // d/dS[Γ·w·S]·ΔS
       }
       break;
     }
     case 'color': {
       const color = read('color');
-      for (let i = 0; i < rows; i++) put(i, -(color[i]! * weight[i]! * S * S * 0.01) / 365); // change in GEX per day elapsed
+      for (let i = 0; i < rows; i++) into[i] = -(color[i]! * weight[i]! * S * S * 0.01) / 365; // change in GEX per day elapsed
       break;
     }
   }
+  let total = 0;
+  for (let i = 0; i < rows; i++) total += into[i]!;
   return total;
 }
 
@@ -1739,11 +1770,14 @@ export function exposure<const S extends readonly ExposureMetric[] | undefined =
     ([S] extends [readonly []]
       ? { metrics: readonly [ExposureMetric, ...ExposureMetric[]] }
       : unknown),
-): ExposureProfile<GuaranteedExposureMetrics<S>, PossibleExposureMetrics<S>> {
-  return new ExposureProfile(input as ExposureInput) as unknown as ExposureProfile<
-    GuaranteedExposureMetrics<S>,
-    PossibleExposureMetrics<S>
-  >;
+): ExposureProfile<GuaranteedExposureMetrics<S>, PossibleExposureMetrics<S>>;
+/**
+ * The released signature, kept LAST so `Parameters<typeof exposure>` and `ReturnType<typeof
+ * exposure>` still name the full-profile input and result rather than the selective constraint.
+ */
+export function exposure(input: ExposureInput): ExposureProfile;
+export function exposure(input: ExposureInput): ExposureProfile {
+  return new ExposureProfile(input);
 }
 
 /** The single-metric shortcuts share the selective implementation; they never build a full profile. */
