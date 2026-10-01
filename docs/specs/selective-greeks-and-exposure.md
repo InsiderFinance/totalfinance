@@ -102,15 +102,21 @@ outputs and their mathematical dependencies.
    column and its partial-overlap rejection. **Correction (documented):** it previously validated
    shapes only and silently produced `NaN` for non-finite or non-positive inputs; it now validates
    per-row values before writing, exactly as `blackScholesPriceMany` always has.
-10. **Owned snapshots.** Mutable caller arrays are re-validated on every call. Internal snapshots the
-    library owns (the resolved contracts inside an `ExposureProfile`) are validated once at
-    construction; their scenario inputs (spot, volatility shock, time advance) are validated per
-    call. No calculator object is required of scalar users.
+10. **Owned snapshots.** Mutable caller arrays are re-validated on every call. The resolved contracts
+    inside an `ExposureProfile` are an owned snapshot: their option type and strike are checked once
+    at construction (an invalid row fails with the error 0.1.0 raised for it), and every evaluation
+    — base metrics, `atSpot`, the zero-gamma sweep, scenarios — goes through the public
+    `blackScholesEvaluateManyInto` on owned columns, so changing scenario inputs (spot, volatility
+    shock, time advance) are validated per call. A cross-package unchecked path would need a
+    non-public entrypoint, which this amendment does not add; SG8 records the validation share of
+    the per-call cost. No calculator object is required of scalar users.
 11. **Selective model exposure.** `exposure({ quotes, market, config, metrics? })`. Omitting `metrics`
     preserves the existing full profile exactly: same values, fields and assumptions. A selection
     computes only the selected metrics and their Black–Scholes dependencies (`gex`→gamma,
     `dex`→delta, `vega`→vega, `theta`→theta, `vanna`→vanna, `charm`→charm, `vomma`→vomma,
-    `speed`→speed and gamma, `color`→color), in one kernel pass, and echoes `assumptions.metrics`.
+    `speed`→speed and gamma, `color`→color), in one kernel pass, and echoes `assumptions.metrics`
+    as requested. A full profile is checked against a golden captured from the published 0.1.0
+    package (`tools/golden/capture-exposure-baseline.mjs`), not against the code this change rewrote.
     Per-contract rows and the aggregate carry exactly the selected metrics. Uncomputed metrics are
     absent, never zero. A row carries the raw `gamma` only when `gex` is selected and the raw
     `delta` only when `dex` is selected. `byStrike`/`byExpiry` default to the selection and refuse
@@ -140,7 +146,12 @@ outputs and their mathematical dependencies.
 15. **Financial meaning is frozen.** No change to pricing model, exercise handling, dividends, rates,
     valuation instants, expiry conventions, day counts, Greek units, time direction, multipliers,
     position signs, exposure units, missing-data treatment, or the open-interest-estimate meaning
-    of model exposure. The only behavior correction is decision 9's input validation.
+    of model exposure. The behavior corrections are decision 9's input validation and three
+    exposure cases that returned meaningless values: a negative `minTimeToExpiry` admitted expired
+    contracts and turned every exposure into `NaN` (contracts at or past expiry are now always
+    skipped and counted); an unknown metric name passed to `byStrike`, `byExpiry` or `scenarioMap`
+    returned `undefined` values (now `input.invalid_enum`); and a view asked for a metric the profile
+    did not compute is refused rather than read.
 16. **Expiry validation cost (#1).** The America/New_York offset formatter is built once per module
     (lazily) instead of once per call. Results are byte-identical; a test asserts that repeated
     validations construct no further formatters.
@@ -157,7 +168,7 @@ outputs and their mathematical dependencies.
       validation tests; literal/dynamic/compile-fail type tests.
 - [x] SG4: batch family, routing of the existing batch APIs, buffer-safety and validate-before-write
       tests, skipped-work tests.
-- [ ] SG5: selective model exposure, analyses, shortcuts; conservation, parity, roots, scenarios,
+- [x] SG5: selective model exposure, analyses, shortcuts; conservation, parity, roots, scenarios,
       shortcut-equivalence and skipped-work tests.
 - [ ] SG6: supplied-exposure selection with requirement and report-shape tests.
 - [ ] SG7: manifests, first-touch fixtures, naming/signature/contract curation, bundle budgets from

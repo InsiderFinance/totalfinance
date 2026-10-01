@@ -9,7 +9,19 @@
  * books. Consumes the canonical `OptionQuote[]` / `OptionTrade[]` from `@insiderfinance/totalfinance/core`.
  */
 
-export { exposure, ExposureProfile } from './exposure.js';
+export {
+  exposure,
+  ExposureProfile,
+  gammaExposure,
+  deltaExposure,
+  vegaExposure,
+  thetaExposure,
+  vannaExposure,
+  charmExposure,
+  vommaExposure,
+  speedExposure,
+  colorExposure,
+} from './exposure.js';
 export { exposureFromGreeks } from './supplied-exposure.js';
 export type {
   SuppliedExposureGreeks,
@@ -28,10 +40,17 @@ export type {
   ExposureConvention,
   ExposureMarket,
   ExposureConfig,
+  ExposureInput,
+  ExposureShortcutInput,
   ExposureMetric,
+  GuaranteedExposureMetrics,
+  PossibleExposureMetrics,
   GammaUnit,
   ContractExposure,
+  ContractExposureRow,
   ExposureTotals,
+  ExposureAggregate,
+  AtSpotExposure,
   GexSplit,
   StrikeRow,
   ExpiryRow,
