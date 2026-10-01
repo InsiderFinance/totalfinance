@@ -50,8 +50,9 @@ const vanna = vannaExposure(input);
 export const vannaTotal: number = vanna.aggregate.vanna;
 // @ts-expect-error the raw gamma rides only with gex
 void vanna.contracts[0]!.gamma;
-// @ts-expect-error atSpot re-evaluates gex/dex, and this profile computed neither
-vanna.atSpot(6500);
+// atSpot re-evaluates gex/dex: on a profile that computed neither it returns nothing typed and
+// refuses at run time (input.invalid_enum) rather than inventing a value.
+export const vannaAtSpot: Record<never, never> = vanna.atSpot(6500);
 // Analyses compute their own dependencies, so they are available on every profile.
 export const vannaWall: number | null = vanna.levels().vannaWall;
 

@@ -541,6 +541,12 @@ function totals(
  * console.assert(report.aggregate.dex === -40000);
  * ```
  */
+export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport;
+/**
+ * A GEX or DEX selection: only the selected metric's inputs are read and required, and the report
+ * carries only its fields. The released signature is declared first (the contract tooling and
+ * readers see) and last (the one `Parameters`/`ReturnType` name), with this one between them.
+ */
 export function exposureFromGreeks<
   const S extends readonly SuppliedExposureMetric[] | undefined = undefined,
 >(
@@ -549,10 +555,7 @@ export function exposureFromGreeks<
       ? { metrics: readonly [SuppliedExposureMetric, ...SuppliedExposureMetric[]] }
       : unknown),
 ): SuppliedExposureReport<GuaranteedSuppliedExposureMetrics<S>, PossibleSuppliedExposureMetrics<S>>;
-/**
- * The released signature, kept LAST so `Parameters<typeof exposureFromGreeks>` and
- * `ReturnType<typeof exposureFromGreeks>` still name today's input and report.
- */
+/** The released signature again, last, for `Parameters`/`ReturnType` (see above). */
 export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport;
 export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport {
   // One loose view of the request: which fields are required depends on the selection, checked below.

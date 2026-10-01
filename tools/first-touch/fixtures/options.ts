@@ -290,6 +290,11 @@ export const OPTIONS_FIXTURES: Record<string, FixtureThunk> = {
   'options.blackScholes.evaluate': () => [
     { ...BS_INPUT(), type: 'call', outputs: ['price', 'delta', 'gamma'] },
   ],
+  // The selection is a typed list of DISTINCT names; a synthesized one can repeat a name, which the
+  // contract rightly refuses (input.duplicate_entry), so `.explain` gets its own valid call.
+  'options.blackScholes.evaluate.explain': () => [
+    { ...BS_INPUT(), type: 'put', outputs: ['vanna', 'price'] },
+  ],
   'options.blackScholes.impliedVolatility': () => [
     { type: 'call', price: 9, spot: 105, strike: 100, timeToExpiryYears: 0.5, riskFreeRate: 0.04 },
   ],

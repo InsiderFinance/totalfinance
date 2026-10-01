@@ -175,7 +175,7 @@ describe('atSpot re-evaluates only the selected gex/dex', () => {
 
   it('a profile that selected neither gex nor dex refuses', () => {
     const profile = exposure({ ...input, metrics: ['vanna'] as ExposureMetric[] });
-    const error = caught(() => (profile.atSpot as (spot: number) => unknown)(6500));
+    const error = caught(() => profile.atSpot(6500));
     expect(error.code).toBe(ErrorCode.InputInvalidEnum);
     expect(error.message).toMatch(/computed neither/);
   });

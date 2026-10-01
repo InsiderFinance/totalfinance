@@ -991,8 +991,8 @@ export class ExposureProfile<
    * A selective profile re-evaluates only what it selected: a {@link gammaExposure} profile returns
    * `{ gex }` and computes gamma alone. A profile that selected neither `gex` nor `dex` refuses.
    */
-  atSpot(spot: [Extract<P, 'gex' | 'dex'>] extends [never] ? never : number): AtSpotExposure<G, P> {
-    const S = spot as number;
+  atSpot(spot: number): AtSpotExposure<G, P> {
+    const S = spot;
     // The per-tick path takes a LIVE price straight off a feed, so it is exactly where a NaN/0/−50
     // print arrives. Unguarded, the kernel turns it into a NaN gamma and the dashboard renders a NaN
     // (or a mirror-image negative-spot) exposure with nothing saying so.
@@ -1761,20 +1761,23 @@ export interface ExposureInput<
  * selection types the result precisely (`exposure({ …, metrics: ['gex'] }).aggregate.gex` is a
  * `number`, `.dex` does not exist); a selection held in a variable types its metrics as optional.
  *
+ * The released signature is declared first (the contract tooling and readers see) and last (the one
+ * `Parameters<typeof exposure>` and `ReturnType<typeof exposure>` name), with the selective
+ * signature between them for calls that pass `metrics`.
+ *
  * @example
  * const profile = exposure({ quotes, market, config: { convention: 'dealerShortGamma' }, metrics: ['gex', 'dex'] });
  * profile.aggregate.gex;
  */
+export function exposure(input: ExposureInput): ExposureProfile;
+/** A selection: only the listed metrics are computed, and the result is typed to them. */
 export function exposure<const S extends readonly ExposureMetric[] | undefined = undefined>(
   input: ExposureInput<S> &
     ([S] extends [readonly []]
       ? { metrics: readonly [ExposureMetric, ...ExposureMetric[]] }
       : unknown),
 ): ExposureProfile<GuaranteedExposureMetrics<S>, PossibleExposureMetrics<S>>;
-/**
- * The released signature, kept LAST so `Parameters<typeof exposure>` and `ReturnType<typeof
- * exposure>` still name the full-profile input and result rather than the selective constraint.
- */
+/** The released signature again, last, for `Parameters`/`ReturnType` (see above). */
 export function exposure(input: ExposureInput): ExposureProfile;
 export function exposure(input: ExposureInput): ExposureProfile {
   return new ExposureProfile(input);
