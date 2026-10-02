@@ -30,3 +30,7 @@ Compute only the Black–Scholes outputs and exposures you ask for.
   unknown metric names passed to `byStrike`, `byExpiry` or `scenarioMap` are typed errors.
 - New error code `input.duplicate_entry` for a selection that names an entry twice.
 - No MCP, HTTP or CLI operation changes; the MCP package versions with the library (fixed group).
+- Type note: `exposure` and `exposureFromGreeks` are generic over their selection, so
+  `Parameters<typeof …>` and `ReturnType<typeof …>` describe the general (dynamic-selection) form.
+  Name `ExposureInput`/`ExposureProfile` and `SuppliedExposureInput`/`SuppliedExposureReport`
+  directly for the full-profile types; their shapes are unchanged.

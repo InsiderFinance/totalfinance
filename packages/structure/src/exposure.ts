@@ -1090,7 +1090,7 @@ export class ExposureProfile<
    * `callGex + putGex` equals the row's net `gex` and `callOpenInterest + putOpenInterest` the strike's total OI (WS4.5).
    * A metric this profile did not compute is refused, not reported as zero.
    */
-  byStrike<M extends P = Extract<G, P>>(metrics?: readonly M[]): StrikeRow<M>[] {
+  byStrike<M extends ExposureMetric = G>(metrics?: readonly M[]): StrikeRow<M>[] {
     const chosen = this.viewMetrics('exposure.byStrike', metrics);
     const { strikes, members } = this.groupsByStrike();
     const columns = chosen.map((m) => this.#baseMetrics.get(m)!);
@@ -1111,7 +1111,7 @@ export class ExposureProfile<
    * Chart-ready by-expiry profile (one row per expiry), narrowed to `metrics` — by default this
    * profile's own metrics. A metric this profile did not compute is refused.
    */
-  byExpiry<M extends P = Extract<G, P>>(metrics?: readonly M[]): ExpiryRow<M>[] {
+  byExpiry<M extends ExposureMetric = G>(metrics?: readonly M[]): ExpiryRow<M>[] {
     const chosen = this.viewMetrics('exposure.byExpiry', metrics);
     const byE = new Map<string, number[]>();
     for (let i = 0; i < this.resolved.length; i++) {
@@ -1792,27 +1792,20 @@ export interface ExposureInput<
  * Omit `metrics` for the full profile. Pass `metrics` to compute only some exposures — a literal
  * selection types the result precisely (`exposure({ …, metrics: ['gex'] }).aggregate.gex` is a
  * `number`, `.dex` does not exist); a selection held in a variable types its metrics as optional.
- *
- * The released signature is declared first (the contract tooling and readers see) and last (the one
- * `Parameters<typeof exposure>` and `ReturnType<typeof exposure>` name), with the selective
- * signature between them for calls that pass `metrics`.
+ * Name the full profile's types as `ExposureInput` and `ExposureProfile`: `Parameters<typeof
+ * exposure>` and `ReturnType<typeof exposure>` see the selection's general (dynamic) form.
  *
  * @example
  * const profile = exposure({ quotes, market, config: { convention: 'dealerShortGamma' }, metrics: ['gex', 'dex'] });
  * profile.aggregate.gex;
  */
-export function exposure(input: ExposureInput): ExposureProfile;
-/** A selection: only the listed metrics are computed, and the result is typed to them. */
 export function exposure<const S extends readonly ExposureMetric[] | undefined = undefined>(
-  input: ExposureInput<S> &
-    ([S] extends [readonly []]
-      ? { metrics: readonly [ExposureMetric, ...ExposureMetric[]] }
-      : unknown),
-): ExposureProfile<GuaranteedExposureMetrics<S>, PossibleExposureMetrics<S>>;
-/** The released signature again, last, for `Parameters`/`ReturnType` (see above). */
-export function exposure(input: ExposureInput): ExposureProfile;
-export function exposure(input: ExposureInput): ExposureProfile {
-  return new ExposureProfile(input);
+  input: ExposureInput<S>,
+): ExposureProfile<GuaranteedExposureMetrics<S>, PossibleExposureMetrics<S>> {
+  return new ExposureProfile(input as ExposureInput) as unknown as ExposureProfile<
+    GuaranteedExposureMetrics<S>,
+    PossibleExposureMetrics<S>
+  >;
 }
 
 /** The single-metric shortcuts share the selective implementation; they never build a full profile. */

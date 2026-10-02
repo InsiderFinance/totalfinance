@@ -53,8 +53,8 @@ blackScholes.evaluate({ ...input, outputs: ['price', 'gama'] });
 blackScholes.evaluate({ ...input, outputs: ['lambda'] });
 // @ts-expect-error the selection is required
 blackScholes.evaluate(input);
-// @ts-expect-error an empty literal selection computes nothing
-blackScholes.evaluate({ ...input, outputs: [] });
+// An empty selection type-checks (no conditional parameter types on the public surface) and is
+// refused at run time with input.out_of_range (selective-greeks.test.ts).
 
 // ---- dynamic selections: honest optional properties ----
 declare const dynamic: BlackScholesOutput[];
@@ -85,8 +85,6 @@ export const manyMaybe: Float64Array | undefined = manyDynamic.vega;
 export const manyCertain: Float64Array = manyDynamic.vega;
 // @ts-expect-error unknown output name
 blackScholesEvaluateMany(columns, { outputs: ['gama'] });
-// @ts-expect-error an empty literal selection computes nothing
-blackScholesEvaluateMany(columns, { outputs: [] });
 // @ts-expect-error the selection is required
 blackScholesEvaluateMany(columns, {});
 // @ts-expect-error lambda stays on extendedGreeks

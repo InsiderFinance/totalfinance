@@ -68,14 +68,16 @@ import {
   type CalculationArtifactComparison,
 } from '@insiderfinance/totalfinance/core/artifacts';
 import { optionChainHealth, type OptionChainHealthReport } from '@insiderfinance/totalfinance/options';
-import { exposureFromGreeks, type SuppliedExposureReport } from '@insiderfinance/totalfinance/structure';
+import {
+  exposureFromGreeks, type SuppliedExposureInput, type SuppliedExposureReport,
+} from '@insiderfinance/totalfinance/structure';
 
 const asOf = Date.parse('2026-09-01T15:00:00Z');
 const contract: OptionContract = {
   underlying: 'TEST', type: 'put', style: 'american', strike: 100,
   expiry: '2026-09-18', ...resolvedExpiry('2026-09-18'), multiplier: 100,
 };
-const exposureInput: Parameters<typeof exposureFromGreeks>[0] = {
+const exposureInput: SuppliedExposureInput = {
   quotes: [{ contract, timestampMs: asOf, source: 'synthetic-chain', openInterest: 10,
     greeks: { delta: -0.4, gamma: 0.02, provenance: { source: 'synthetic-greeks', timestampMs: asOf } } }],
   market: { underlying: 'TEST', spot: 100, asOf, source: 'synthetic-spot', timestampMs: asOf },

@@ -85,9 +85,16 @@ outputs and their mathematical dependencies.
    selection (`BlackScholesOutput[]`) yields optional properties — the type never claims a value
    exists that was not requested. Unknown names and reading an unrequested property are compile
    errors. The same rule applies to the batch family, model exposure and supplied exposure.
-   `exposure` and `exposureFromGreeks` keep their released non-generic signature as the LAST
-   overload, so `Parameters<typeof …>` and `ReturnType<typeof …>` still name the released input,
-   profile and report types rather than the selective constraint.
+   Every public signature stays single and free of conditional parameter types: the public
+   contract tooling (signature, union, intersection and probe inventories) walks one declaration
+   per callable, and the alignment spec rules out overloads before 1.0. Consequently an empty
+   selection, a view asking for a metric its profile did not compute, and the per-selection input
+   requirements of `exposureFromGreeks` are refused at run time with typed errors rather than at
+   compile time, and `Parameters<typeof exposure>` / `ReturnType<typeof exposure>` (likewise for
+   `exposureFromGreeks`) describe the selection's general, dynamic form; a caller names the released
+   types directly (`ExposureInput`, `ExposureProfile`, `SuppliedExposureInput`,
+   `SuppliedExposureReport`), which keep their released shapes. `exposureFromGreeks` takes
+   `SuppliedExposureRequest`, which `SuppliedExposureInput` satisfies.
 7. **One batch family.** `blackScholesEvaluateMany(columns, { outputs })` allocates and returns one
    `Float64Array` per selected output. `blackScholesEvaluateManyInto(columns, outputs)` writes into
    caller-supplied `Float64Array`s whose property names ARE the selection. Both live on the

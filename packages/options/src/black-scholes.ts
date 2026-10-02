@@ -356,20 +356,16 @@ export interface BlackScholesEvaluateInput<
 export type BlackScholesEvaluation<O extends BlackScholesOutputSelection> =
   number extends O['length'] ? { [K in O[number]]?: number } : { [K in O[number]]: number };
 
-/** `blackScholes.evaluate` — a selected calculation with its `.explain` companion. */
+/**
+ * `blackScholes.evaluate` — a selected calculation with its `.explain` companion. An empty
+ * selection is refused at run time (`input.out_of_range`).
+ */
 export interface BlackScholesEvaluateFacade {
-  /** An empty literal selection (`outputs: []`) is a compile error as well as a runtime one. */
   <const O extends BlackScholesOutputSelection>(
-    input: BlackScholesEvaluateInput<O> &
-      (O extends readonly []
-        ? { outputs: readonly [BlackScholesOutput, ...BlackScholesOutput[]] }
-        : unknown),
+    input: BlackScholesEvaluateInput<O>,
   ): BlackScholesEvaluation<O>;
   explain<const O extends BlackScholesOutputSelection>(
-    input: BlackScholesEvaluateInput<O> &
-      (O extends readonly []
-        ? { outputs: readonly [BlackScholesOutput, ...BlackScholesOutput[]] }
-        : unknown),
+    input: BlackScholesEvaluateInput<O>,
   ): Computed<BlackScholesEvaluation<O>>;
 }
 

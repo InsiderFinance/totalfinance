@@ -82,52 +82,59 @@ export interface SuppliedExposureMarket {
 export type SuppliedExposureMetric = 'gex' | 'dex';
 
 /**
- * What a selection `S` requires of a metric's inputs: required when `metrics` is omitted or a literal
- * selection names it, optional otherwise (an unselected metric's inputs are not read, and a dynamic
- * selection's needs are only known at run time, where they are enforced).
+ * The supplied Greeks `exposureFromGreeks` accepts on a quote. Which ones are required depends on
+ * `metrics`: both without a selection (exactly {@link SuppliedExposureGreeks}), gamma for `['gex']`,
+ * delta for `['dex']` — checked per row at run time with a typed `input.missing_field`.
  */
-type RequiredFor<
-  M extends SuppliedExposureMetric,
-  S extends readonly SuppliedExposureMetric[] | undefined,
-  T,
-> = [S] extends [undefined]
-  ? T
-  : number extends NonNullable<S>['length']
-    ? Partial<T>
-    : M extends NonNullable<S>[number]
-      ? T
-      : Partial<T>;
+export interface SuppliedExposureRequestGreeks extends Omit<
+  OptionQuoteGreeks,
+  'delta' | 'gamma' | 'provenance'
+> {
+  /** Signed price delta per underlying unit. Required unless `metrics` is `['gex']`. */
+  delta?: number;
+  /** Signed change in delta per ONE spot-price point. Required unless `metrics` is `['dex']`. */
+  gamma?: number;
+  provenance: SuppliedExposureGreeks['provenance'];
+}
+
+/** A quote as `exposureFromGreeks` accepts it: {@link SuppliedExposureQuote} with selectable Greeks. */
+export interface SuppliedExposureRequestQuote extends Omit<SuppliedExposureQuote, 'greeks'> {
+  /** Omit when unavailable. Missing Greeks exclude the row; they are never recomputed. */
+  greeks?: SuppliedExposureRequestGreeks;
+}
 
 /**
- * The supplied Greeks a selection reads: gamma for `gex`, delta for `dex`, provenance always. With
- * `metrics` omitted this is {@link SuppliedExposureGreeks}.
+ * The configuration `exposureFromGreeks` accepts. A selected metric's controls are required (checked
+ * at run time): `gexConvention` and `gammaUnit` for GEX, `dexConvention` for DEX, all three without a
+ * selection, exactly as {@link SuppliedExposureConfig} declares. An unselected metric's controls may
+ * be passed; they are shape-checked, not applied.
  */
-export type SuppliedExposureGreeksFor<S extends readonly SuppliedExposureMetric[] | undefined> =
-  Omit<OptionQuoteGreeks, 'delta' | 'gamma' | 'provenance'> & {
-    provenance: SuppliedExposureGreeks['provenance'];
-  } & RequiredFor<'gex', S, { gamma: number }> &
-    RequiredFor<'dex', S, { delta: number }>;
+export interface SuppliedExposureRequestConfig extends Omit<
+  SuppliedExposureConfig,
+  'gexConvention' | 'dexConvention' | 'gammaUnit'
+> {
+  gexConvention?: SuppliedExposurePositionConvention;
+  dexConvention?: SuppliedExposurePositionConvention;
+  gammaUnit?: GammaUnit;
+}
+
+/** The input of today's (both-metric) report, as released. */
+export interface SuppliedExposureInput {
+  quotes: readonly SuppliedExposureQuote[];
+  market: SuppliedExposureMarket;
+  config: SuppliedExposureConfig;
+}
 
 /**
- * The configuration a selection reads: `gexConvention` and `gammaUnit` for `gex`, `dexConvention`
- * for `dex`. An unselected metric's fields may still be passed; they are shape-checked, not applied.
+ * What `exposureFromGreeks` accepts: {@link SuppliedExposureInput} (which it always accepts) widened
+ * so a GEX-only or DEX-only selection can omit the other metric's Greek and controls.
  */
-export type SuppliedExposureConfigFor<S extends readonly SuppliedExposureMetric[] | undefined> = [
-  S,
-] extends [undefined]
-  ? SuppliedExposureConfig
-  : Omit<SuppliedExposureConfig, 'gexConvention' | 'dexConvention' | 'gammaUnit'> &
-      RequiredFor<'gex', S, Pick<SuppliedExposureConfig, 'gexConvention' | 'gammaUnit'>> &
-      RequiredFor<'dex', S, Pick<SuppliedExposureConfig, 'dexConvention'>>;
-
-export interface SuppliedExposureInput<
+export interface SuppliedExposureRequest<
   S extends readonly SuppliedExposureMetric[] | undefined = undefined,
 > {
-  quotes: readonly ([S] extends [undefined]
-    ? SuppliedExposureQuote
-    : Omit<SuppliedExposureQuote, 'greeks'> & { greeks?: SuppliedExposureGreeksFor<S> })[];
+  quotes: readonly SuppliedExposureRequestQuote[];
   market: SuppliedExposureMarket;
-  config: SuppliedExposureConfigFor<S>;
+  config: SuppliedExposureRequestConfig;
   /**
    * `['gex']`, `['dex']` or both. Omit for today's report (both). A GEX-only report needs only
    * supplied gamma, `gexConvention` and `gammaUnit`; a DEX-only report only supplied delta and
@@ -519,7 +526,9 @@ function totals(
  * delta and `dexConvention`. The unselected metric's contribution sign and value, totals, units and
  * convention echoes are absent from the report (never zero), and `assumptions.metrics` echoes the
  * selection. A GEX+DEX report requires both supplied Greeks on every row that supplies Greeks, so the
- * two metrics always cover the same included rows. Modeled Greeks are never substituted.
+ * two metrics always cover the same included rows. Modeled Greeks are never substituted. Name the
+ * report as `SuppliedExposureReport` and its input as `SuppliedExposureInput`: `Parameters<typeof
+ * exposureFromGreeks>` and `ReturnType<…>` see the selection's general (dynamic) form.
  *
  * @example
  * ```ts
@@ -541,23 +550,14 @@ function totals(
  * console.assert(report.aggregate.dex === -40000);
  * ```
  */
-export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport;
-/**
- * A GEX or DEX selection: only the selected metric's inputs are read and required, and the report
- * carries only its fields. The released signature is declared first (the contract tooling and
- * readers see) and last (the one `Parameters`/`ReturnType` name), with this one between them.
- */
 export function exposureFromGreeks<
   const S extends readonly SuppliedExposureMetric[] | undefined = undefined,
 >(
-  request: SuppliedExposureInput<S> &
-    ([S] extends [readonly []]
-      ? { metrics: readonly [SuppliedExposureMetric, ...SuppliedExposureMetric[]] }
-      : unknown),
-): SuppliedExposureReport<GuaranteedSuppliedExposureMetrics<S>, PossibleSuppliedExposureMetrics<S>>;
-/** The released signature again, last, for `Parameters`/`ReturnType` (see above). */
-export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport;
-export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExposureReport {
+  request: SuppliedExposureRequest<S>,
+): SuppliedExposureReport<
+  GuaranteedSuppliedExposureMetrics<S>,
+  PossibleSuppliedExposureMetrics<S>
+> {
   // One loose view of the request: which fields are required depends on the selection, checked below.
   const input = request as unknown as {
     quotes: readonly SuppliedExposureQuote[];
@@ -905,5 +905,8 @@ export function exposureFromGreeks(request: SuppliedExposureInput): SuppliedExpo
     diagnostics: { method: 'supplied-greek-accounting', warnings },
   };
   assertFiniteValue(FN, report);
-  return report as unknown as SuppliedExposureReport;
+  return report as unknown as SuppliedExposureReport<
+    GuaranteedSuppliedExposureMetrics<S>,
+    PossibleSuppliedExposureMetrics<S>
+  >;
 }

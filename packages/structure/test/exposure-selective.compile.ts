@@ -14,6 +14,7 @@ import {
   type ExposureShortcutInput,
   type ExposureTotals,
   type StrikeRow,
+  type ExposureInput,
   type SuppliedExposureInput,
   type SuppliedExposureMarket,
   type SuppliedExposureReport,
@@ -43,8 +44,8 @@ export const gdDelta: number = gd.contracts[0]!.delta;
 export const gdAtSpot: { gex: number; dex: number } = gd.atSpot(6500);
 export const gdStrikeGex: number = gd.byStrike()[0]!.gex;
 export const gdStrikeCallGex: number = gd.byStrike()[0]!.callGex;
-// @ts-expect-error a view cannot ask for a metric the profile did not compute
-gd.byStrike(['vega']);
+// A view asking for a metric the profile did not compute type-checks and is refused at run time
+// (input.invalid_enum, exposure-selective.test.ts); the DEFAULT view is typed to the selection.
 
 const vanna = vannaExposure(input);
 export const vannaTotal: number = vanna.aggregate.vanna;
@@ -72,8 +73,6 @@ export const certainGex: number = dynamic.aggregate.gex;
 export const maybeGamma: number | undefined = dynamic.contracts[0]!.gamma;
 
 // ---- malformed selections ----
-// @ts-expect-error an empty literal selection computes nothing
-exposure({ ...input, metrics: [] });
 // @ts-expect-error unknown metric
 exposure({ ...input, metrics: ['gamma'] });
 
@@ -106,15 +105,8 @@ export const suppliedGammaUnit: string = gexOnly.assumptions.gammaUnit;
 // @ts-expect-error the DEX convention is not echoed for a GEX-only report
 void gexOnly.assumptions.dexConvention;
 
-exposureFromGreeks({
-  quotes,
-  market,
-  // @ts-expect-error a GEX report needs gexConvention and gammaUnit
-  config: { dexConvention: { calls: 1, puts: 1 }, maximumObservationAgeMs: 0 },
-  metrics: ['gex'],
-});
-// @ts-expect-error an empty literal selection computes nothing
-exposureFromGreeks({ ...supplied, metrics: [] });
+// Which Greeks and controls a selection requires is checked per row at run time (typed
+// input.missing_field, supplied-exposure-selective.test.ts); the request type lets either be absent.
 // @ts-expect-error vega is not a supplied-Greek exposure
 exposureFromGreeks({ ...supplied, metrics: ['vega'] });
 
@@ -124,14 +116,10 @@ export const maybeSuppliedGex: number | undefined = dynamicSupplied.aggregate.ge
 // @ts-expect-error a dynamic selection cannot claim GEX was computed
 export const certainSuppliedGex: number = dynamicSupplied.aggregate.gex;
 
-// ---- the released signatures still name the released types (overload order) ----
-type ReleasedExposureInput = Parameters<typeof exposure>[0];
-declare const releasedInput: ReleasedExposureInput;
+// ---- released callers name the released types and get the released results ----
+declare const releasedInput: ExposureInput;
 export const releasedProfile: ExposureProfile = exposure(releasedInput);
-export const releasedReturn: ExposureProfile = null as unknown as ReturnType<typeof exposure>;
-type ReleasedSuppliedInput = Parameters<typeof exposureFromGreeks>[0];
-declare const releasedSupplied: ReleasedSuppliedInput;
+declare const releasedSupplied: SuppliedExposureInput;
 export const releasedSuppliedReport: SuppliedExposureReport = exposureFromGreeks(releasedSupplied);
-export const releasedSuppliedReturn: SuppliedExposureReport = null as unknown as ReturnType<
-  typeof exposureFromGreeks
->;
+// A released input's fields keep their released (required) types.
+export const releasedConvention: 1 | -1 = releasedSupplied.config.dexConvention.calls;

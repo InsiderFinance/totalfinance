@@ -462,10 +462,7 @@ void OUTPUT_BUFFERS_ARE_TOTAL;
  */
 export function blackScholesEvaluateMany<const O extends BlackScholesOutputSelection>(
   columns: OptionBatchColumns,
-  options: BlackScholesEvaluateManyOptions<O> &
-    (O extends readonly []
-      ? { outputs: readonly [BlackScholesOutput, ...BlackScholesOutput[]] }
-      : unknown),
+  options: BlackScholesEvaluateManyOptions<O>,
 ): BlackScholesEvaluateManyResult<O> {
   const functionName = 'blackScholesEvaluateMany';
   const n = requireBatchColumnShapes(functionName, 'columns', columns);

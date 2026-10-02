@@ -171,6 +171,13 @@ export const CORE_ARTIFACTS_FIXTURES: Record<string, FixtureThunk> = {
     },
   ],
   'core.requireFittedModelSummary': () => ['deepSweepProbe', 'summary', fittedModelSummary()],
+  // A selection list and the names it may hold (selective Greeks and exposure).
+  'core.requireSelection': () => [
+    'deepSweepProbe',
+    'outputs',
+    ['gamma', 'delta'],
+    ['delta', 'gamma', 'vega'],
+  ],
   'core.requireRateCurveData': () => [
     'deepSweepProbe',
     'curve',
