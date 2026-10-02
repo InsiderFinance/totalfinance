@@ -563,7 +563,7 @@ export class ExposureProfile<
   readonly #weight: Float64Array;
   /** Per-contract metric values at the profile's spot: the selection at construction, others on demand. */
   readonly #baseMetrics = new Map<ExposureMetric, Float64Array>();
-  /** The summed {@link #baseMetrics} columns (each summed once, in contract order). */
+  /** The summed per-contract base metric columns (each summed once, in contract order). */
   readonly #baseTotals = new Map<ExposureMetric, number>();
   /** Raw per-contract gamma/delta at the profile's spot (rows, pin risk), cached once computed. */
   readonly #baseGreeks = new Map<'gamma' | 'delta', Float64Array>();
@@ -819,7 +819,7 @@ export class ExposureProfile<
 
     // ONE kernel pass computes every selected metric's Black–Scholes outputs (a full profile: nine
     // outputs for the nine metrics; `['gex']`: gamma alone). No level search or scenario runs here.
-    this.#ensureBase(selected);
+    this.ensureBase(selected);
     const gamma = selected.includes('gex') ? this.#baseGreeks.get('gamma')! : undefined;
     const delta = selected.includes('dex') ? this.#baseGreeks.get('delta')! : undefined;
     const columns = selected.map((m) => this.#baseMetrics.get(m)!);
@@ -931,7 +931,7 @@ export class ExposureProfile<
    * selection; `levels()`/`netDrift()` call it for what they read (decision 12). Values are those a
    * full profile computes — same inputs, same kernel, same expressions, same summation order.
    */
-  #ensureBase(
+  private ensureBase(
     metrics: readonly ExposureMetric[],
     greeks: readonly ('gamma' | 'delta')[] = [],
   ): void {
@@ -977,14 +977,14 @@ export class ExposureProfile<
   }
 
   /** A base column, computing it (and only it) if this profile has not yet. */
-  #base(metric: ExposureMetric): Float64Array {
-    this.#ensureBase([metric]);
+  private baseColumn(metric: ExposureMetric): Float64Array {
+    this.ensureBase([metric]);
     return this.#baseMetrics.get(metric)!;
   }
 
   /** The aggregate of one metric at the profile's spot — `aggregate[metric]` when it was selected. */
-  #total(metric: ExposureMetric): number {
-    this.#ensureBase([metric]);
+  private totalOf(metric: ExposureMetric): number {
+    this.ensureBase([metric]);
     return this.#baseTotals.get(metric)!;
   }
 
@@ -992,7 +992,7 @@ export class ExposureProfile<
    * Evaluate `outputs` for the snapshot (or a time-advanced slice of it) at spot `S` into reused
    * scratch storage. The returned columns are valid until the next evaluation.
    */
-  #evaluateAt(
+  private evaluateAt(
     S: number,
     outputs: readonly BlackScholesOutput[],
     columns: OptionBatchColumns = this.#columns,
@@ -1048,10 +1048,10 @@ export class ExposureProfile<
     const outputs: BlackScholesOutput[] = [];
     if (wantGex) outputs.push('gamma');
     if (wantDex) outputs.push('delta');
-    const read = this.#evaluateAt(S, outputs);
+    const read = this.evaluateAt(S, outputs);
     const rows = this.resolved.length;
     const result: { gex?: number; dex?: number } = {};
-    const values = this.#metricValues();
+    const values = this.metricValues();
     if (wantGex) {
       result.gex = accumulateMetric('gex', read, this.#weight, S, this.gammaUnit, rows, values);
     }
@@ -1063,7 +1063,7 @@ export class ExposureProfile<
 
   /** Net signed GEX recomputed with spot shifted to `S` — gamma ALONE is evaluated (IV/T/OI fixed). */
   private netGexAtSpot(S: number): number {
-    const read = this.#evaluateAt(S, ['gamma']);
+    const read = this.evaluateAt(S, ['gamma']);
     const rows = this.resolved.length;
     return accumulateMetric(
       'gex',
@@ -1072,12 +1072,12 @@ export class ExposureProfile<
       S,
       this.gammaUnit,
       rows,
-      this.#metricValues(),
+      this.metricValues(),
     );
   }
 
   /** Scratch per-contract metric values for evaluations whose rows are summed, not kept. */
-  #metricValues(): Float64Array {
+  private metricValues(): Float64Array {
     this.#metricScratch ??= new Float64Array(this.resolved.length);
     return this.#metricScratch;
   }
@@ -1091,8 +1091,8 @@ export class ExposureProfile<
    * A metric this profile did not compute is refused, not reported as zero.
    */
   byStrike<M extends P = Extract<G, P>>(metrics?: readonly M[]): StrikeRow<M>[] {
-    const chosen = this.#viewMetrics('exposure.byStrike', metrics);
-    const { strikes, members } = this.#groupsByStrike();
+    const chosen = this.viewMetrics('exposure.byStrike', metrics);
+    const { strikes, members } = this.groupsByStrike();
     const columns = chosen.map((m) => this.#baseMetrics.get(m)!);
     const wantGexSplit = chosen.includes('gex');
     const gex = wantGexSplit ? this.#baseMetrics.get('gex')! : undefined;
@@ -1112,7 +1112,7 @@ export class ExposureProfile<
    * profile's own metrics. A metric this profile did not compute is refused.
    */
   byExpiry<M extends P = Extract<G, P>>(metrics?: readonly M[]): ExpiryRow<M>[] {
-    const chosen = this.#viewMetrics('exposure.byExpiry', metrics);
+    const chosen = this.viewMetrics('exposure.byExpiry', metrics);
     const byE = new Map<string, number[]>();
     for (let i = 0; i < this.resolved.length; i++) {
       const expiry = this.resolved[i]!.expiry;
@@ -1133,7 +1133,7 @@ export class ExposureProfile<
    * Resolve a view's metric list: this profile's selection by default; otherwise every name must be
    * a known metric that this profile computed (a view never reads a value that was not computed).
    */
-  #viewMetrics(
+  private viewMetrics(
     functionName: string,
     metrics: readonly ExposureMetric[] | undefined,
   ): ExposureMetric[] {
@@ -1170,7 +1170,7 @@ export class ExposureProfile<
   }
 
   /** Contract indices grouped by strike (contract order within a strike), strikes ascending. */
-  #groupsByStrike(): { strikes: number[]; members: number[][] } {
+  private groupsByStrike(): { strikes: number[]; members: number[][] } {
     if (this.#strikeGroups === undefined) {
       const byK = new Map<number, number[]>();
       for (let i = 0; i < this.resolved.length; i++) {
@@ -1219,7 +1219,7 @@ export class ExposureProfile<
       };
     }
     const pinBand = options.pinRiskBand ?? 0.005;
-    this.#ensureBase(['gex', 'vanna', 'charm'], ['gamma']);
+    this.ensureBase(['gex', 'vanna', 'charm'], ['gamma']);
     const gex = this.#baseMetrics.get('gex')!;
 
     // Call/put walls: aggregate the SIGNED per-contract GEX per strike across ALL expiries, per side,
@@ -1279,7 +1279,7 @@ export class ExposureProfile<
 
     // Per-strike sums across expiries, strikes ascending; the first strike wins a tie (as the
     // by-strike `reduce` always did).
-    const { strikes, members } = this.#groupsByStrike();
+    const { strikes, members } = this.groupsByStrike();
     const vanna = this.#baseMetrics.get('vanna')!;
     const charm = this.#baseMetrics.get('charm')!;
     const gexByStrike = members.map((indices) => sumAt(gex, indices));
@@ -1324,7 +1324,7 @@ export class ExposureProfile<
       }
     }
     if (soonest === null) return null;
-    const gex = this.#base('gex');
+    const gex = this.baseColumn('gex');
     const gexByStrike = new Map<number, number>();
     for (let i = 0; i < this.resolved.length; i++) {
       const c = this.resolved[i]!;
@@ -1359,8 +1359,8 @@ export class ExposureProfile<
       zeroGamma,
       distanceToZeroGamma,
       bias,
-      charmFlowPerDay: this.#total('charm'),
-      vannaFlowPerVolatilityPoint: this.#total('vanna'),
+      charmFlowPerDay: this.totalOf('charm'),
+      vannaFlowPerVolatilityPoint: this.totalOf('vanna'),
     };
   }
 
@@ -1453,7 +1453,7 @@ export class ExposureProfile<
 
   /** Pin risk: nearest high-gamma·OI strike to spot, flagged when spot is within `band` of it. */
   private pinRisk(band: number): { strike: number; atRisk: boolean } | null {
-    this.#ensureBase([], ['gamma']);
+    this.ensureBase([], ['gamma']);
     const gamma = this.#baseGreeks.get('gamma')!;
     let best: number | null = null;
     let bestScore = -Infinity;
@@ -1512,7 +1512,7 @@ export class ExposureProfile<
     const unique = ALL_METRICS.filter((m) => (metrics as readonly ExposureMetric[]).includes(m));
     const outputs = [...new Set(unique.flatMap((m) => METRIC_OUTPUTS[m]))];
     // Contracts still alive after each time advance — built once per advance, not once per cell.
-    const slices = timeAdvances.map((step) => this.#advancedSlice(step));
+    const slices = timeAdvances.map((step) => this.advancedSlice(step));
 
     const cells: Array<ScenarioCell<M>> = [];
     let evaluations = 0;
@@ -1524,9 +1524,9 @@ export class ExposureProfile<
           for (let i = 0; i < slice.rows; i++) {
             volatility[i] = Math.max(1e-4, slice.baseVolatility[i]! + dv);
           }
-          const read = this.#evaluateAt(S, outputs, slice.columns);
+          const read = this.evaluateAt(S, outputs, slice.columns);
           const totals: Partial<ExposureTotals> = {};
-          const values = this.#metricValues();
+          const values = this.metricValues();
           for (const m of unique) {
             totals[m] = accumulateMetric(
               m,
@@ -1556,7 +1556,7 @@ export class ExposureProfile<
    * The snapshot advanced by `step` years: contracts whose time-to-expiry stays positive, with their
    * shortened times, in contract order. Volatility is a scratch column the scenario fills per shock.
    */
-  #advancedSlice(step: number): {
+  private advancedSlice(step: number): {
     rows: number;
     columns: OptionBatchColumns;
     baseVolatility: Float64Array;
