@@ -417,6 +417,67 @@ describe('batch validation is a public boundary (decision 8)', () => {
     }
   });
 
+  it('a non-number in a LATER row is refused before anything is written, by every batch path', () => {
+    // Review of #3: the per-row fast path compared values, and comparisons coerce ("100" > 0,
+    // true > 0 and 100n > 0 are all true). A plain-array column [100, 100n] passed validation,
+    // wrote row 0, then threw an untyped TypeError from the kernel on row 1. Every value must now be
+    // a number before the loop runs, and nothing caller-controlled (valueOf) is ever invoked.
+    let valueOfCalls = 0;
+    const withValueOf = {
+      valueOf: () => {
+        valueOfCalls++;
+        return 100;
+      },
+    };
+    const values: Array<[unknown, string]> = [
+      ['100', '"100" (string)'],
+      [100n, '100n (bigint)'],
+      [true, 'true (boolean)'],
+      [null, 'null'],
+      [undefined, 'undefined'],
+      [withValueOf, 'Object'],
+    ];
+    const positive = ['spot', 'strike', 'timeToExpiryYears', 'volatility'] as const;
+    const finite = ['riskFreeRate', 'dividendYield', 'type'] as const;
+    const last = 4;
+    for (const field of [...positive, ...finite]) {
+      const code = (positive as readonly string[]).includes(field)
+        ? ErrorCode.InputOutOfRange
+        : ErrorCode.InputNotFinite;
+      for (const [value, described] of values) {
+        const column: unknown[] = Array.from(chain()[field]!);
+        column[last] = value;
+        const columns = { ...chain(), [field]: column } as unknown as OptionBatchColumns;
+        const gamma = sentinel(5);
+        const delta = sentinel(5);
+        const out = sentinel(5);
+        const runs: Array<[string, () => unknown]> = [
+          [
+            'blackScholesEvaluateMany',
+            () => blackScholesEvaluateMany(columns, { outputs: ['gamma'] }),
+          ],
+          [
+            'blackScholesEvaluateManyInto',
+            () => blackScholesEvaluateManyInto(columns, { gamma, delta }),
+          ],
+          ['blackScholesPriceMany', () => blackScholesPriceMany(columns)],
+          ['blackScholesPriceMany', () => blackScholesPriceMany(columns, { greeks: true })],
+          ['blackScholesPriceManyInto', () => blackScholesPriceManyInto(columns, out)],
+        ];
+        for (const [name, run] of runs) {
+          const error = caught(run);
+          expect(error.code, `${name} ${field} ${described}`).toBe(code);
+          expect(error.message).toContain(`${name}: ${field} at row ${last}`);
+          expect(error.message).toContain(`got ${described}.`);
+          expect(error.context).toEqual({ row: last, field, value: described });
+          expect(() => JSON.stringify(error.context)).not.toThrow();
+        }
+        for (const buffer of [gamma, delta, out]) expect(buffer).toEqual(sentinel(5));
+      }
+    }
+    expect(valueOfCalls).toBe(0);
+  });
+
   it('options and selection: closed, explicit, nonempty, dense, known, duplicate-free', () => {
     const columns = chain();
     const evaluate = (options: unknown) =>

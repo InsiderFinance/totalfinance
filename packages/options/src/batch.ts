@@ -80,21 +80,39 @@ function requireEqualLengths(
 }
 
 function requirePositiveRow(value: number, field: string, row: number, functionName: string): void {
-  if (!(value > 0) || !Number.isFinite(value)) {
+  if (!Number.isFinite(value) || !(value > 0)) {
     throw new InputError(
-      `${functionName}: ${field} at row ${row} must be a positive finite number, got ${value}.`,
-      { code: ErrorCode.InputOutOfRange, context: { row, field, value } },
+      `${functionName}: ${field} at row ${row} must be a positive finite number, got ${rowValue(value)}.`,
+      { code: ErrorCode.InputOutOfRange, context: { row, field, value: rowContext(value) } },
     );
   }
 }
 
 function requireFiniteRow(value: number, field: string, row: number, functionName: string): void {
   if (!Number.isFinite(value)) {
-    throw new InputError(`${functionName}: ${field} at row ${row} must be finite, got ${value}.`, {
-      code: ErrorCode.InputNotFinite,
-      context: { row, field, value },
-    });
+    throw new InputError(
+      `${functionName}: ${field} at row ${row} must be finite, got ${rowValue(value)}.`,
+      { code: ErrorCode.InputNotFinite, context: { row, field, value: rowContext(value) } },
+    );
   }
+}
+
+/**
+ * A row value as an error names it. Columns are typed arrays, but plain arrays reach the boundary at
+ * run time too: a non-number names its type, so `"100" (string)` and `100n (bigint)` read as the
+ * mistakes they are rather than as plausible numbers.
+ */
+function rowValue(value: unknown): string {
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'string') return `${JSON.stringify(value)} (string)`;
+  if (typeof value === 'bigint') return `${value}n (bigint)`;
+  if (typeof value === 'boolean') return `${value ? 'true' : 'false'} (boolean)`;
+  return describeReceived(value);
+}
+
+/** Error context keeps a number as a number; anything else as its description (a BigInt cannot be JSON). */
+function rowContext(value: unknown): number | string {
+  return typeof value === 'number' ? value : rowValue(value);
 }
 
 /**
@@ -189,15 +207,22 @@ function requireBatchRowValues(cols: OptionBatchColumns, n: number, functionName
     const r = riskFreeRate[i]!;
     const q = dividendYield === undefined ? 0 : dividendYield[i]!;
     const kind = type[i]!;
-    // Fast path: one inline test per row, no calls, so no number is boxed on a valid row
-    // (`x > 0 && x < Infinity` is "positive and finite"; NaN fails both).
+    // Fast path: one inline test per row, no calls, so no number is boxed on a valid row.
+    // `typeof x === 'number' && x > 0 && x < Infinity` is "a positive finite number": the typeof
+    // test comes first because the comparisons alone coerce — "100", true and 100n all compare
+    // greater than 0 — and a plain-array column could otherwise carry one past validation into the
+    // kernel. NaN fails the comparisons. Number.isFinite never coerces.
     if (
+      typeof S === 'number' &&
       S > 0 &&
       S < Infinity &&
+      typeof K === 'number' &&
       K > 0 &&
       K < Infinity &&
+      typeof T === 'number' &&
       T > 0 &&
       T < Infinity &&
+      typeof sigma === 'number' &&
       sigma > 0 &&
       sigma < Infinity &&
       Number.isFinite(r) &&
