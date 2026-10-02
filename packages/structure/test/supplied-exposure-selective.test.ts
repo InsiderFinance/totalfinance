@@ -10,6 +10,10 @@ import golden from './golden/supplied-exposure-0.1.0.json';
  * (tools/golden/capture-exposure-baseline.mjs). Omitting `metrics` must reproduce it exactly; a
  * selection must equal it with the unselected metric's fields removed — same included rows, same
  * values — while reading (and requiring) only the selected metric's inputs.
+ *
+ * One file serves every platform: unlike the model golden (exposure-released-parity.test.ts), this
+ * report is arithmetic on supplied Greeks, and its capture is byte-identical on darwin-arm64,
+ * darwin-x64, linux-arm64 and linux-x64.
  */
 
 type Json = Record<string, unknown>;

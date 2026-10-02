@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type * as BatchModule from '@totalfinance/options/batch';
 import type * as BlackScholesModule from '@totalfinance/options/black-scholes';
 import type { ExposureShortcutInput } from '@totalfinance/structure';
-import golden from './golden/exposure-0.1.0.json';
+import golden from './golden/exposure-0.1.0.inputs.json';
 
 /**
  * Unrequested exposure work is SKIPPED, not discarded (selective Greeks and exposure spec,

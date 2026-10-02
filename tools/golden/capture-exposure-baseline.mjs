@@ -7,19 +7,39 @@
  * Reproduce (the output must not change — it pins a released version):
  *
  *     npm install --prefix /tmp/tf010 @insiderfinance/totalfinance@0.1.0
- *     node tools/golden/capture-exposure-baseline.mjs \
- *       /tmp/tf010/node_modules/@insiderfinance/totalfinance/modules/structure/dist/index.js
+ *     STRUCTURE=/tmp/tf010/node_modules/@insiderfinance/totalfinance/modules/structure/dist/index.js
+ *     node tools/golden/capture-exposure-baseline.mjs "$STRUCTURE"
  *
  * Output (committed, so CI needs no network):
- *   packages/structure/test/golden/exposure-0.1.0.json            model exposure()
- *   packages/structure/test/golden/supplied-exposure-0.1.0.json   exposureFromGreeks()
+ *   packages/structure/test/golden/exposure-0.1.0.inputs.json               model exposure() cases
+ *   packages/structure/test/golden/exposure-0.1.0.<platform>-<arch>.json    their 0.1.0 results here
+ *   packages/structure/test/golden/supplied-exposure-0.1.0.json            exposureFromGreeks()
+ *
+ * MODEL RESULTS ARE PER PLATFORM. V8's transcendental functions (Math.exp, log, pow, sin, …) can
+ * differ in the last bit between its builds: darwin-arm64, linux-arm64 and x64 (Linux and macOS
+ * alike) each return a few different last bits on these cases. 0.1.0 is not reproducible across
+ * them bit for bit, so exact parity is checked against what 0.1.0 returns on the SAME platform.
+ * The result is stable across Node 22.13–26 and across official and Homebrew builds. Each
+ * platform is captured from the committed inputs (read back below, so every platform prices
+ * identical quotes). From an Apple-silicon Mac, all four:
+ *
+ *     node tools/golden/capture-exposure-baseline.mjs "$STRUCTURE"              # darwin-arm64
+ *     arch -x86_64 node-v22.23.2-darwin-x64/bin/node \
+ *       tools/golden/capture-exposure-baseline.mjs "$STRUCTURE"                 # darwin-x64
+ *     for p in amd64 arm64; do                                                  # linux-x64, -arm64
+ *       docker run --rm --platform linux/$p -v "$PWD:/repo" -v /tmp/tf010:/tmp/tf010:ro -w /repo \
+ *         node:22-bookworm-slim node tools/golden/capture-exposure-baseline.mjs "$STRUCTURE"
+ *     done
+ *
+ * The supplied-Greek report is arithmetic on supplied Greeks and is byte-identical on all four,
+ * so it is one file.
  *
  * The chain is synthetic and deterministic: five expiries around a Monday snapshot (0DTE, a
  * mid-week, the June monthly OPEX, July and September), a 13-strike ladder of calls and puts, a
  * smile, pseudo-random open interest, quotes that need the IV fallback from bid/ask, and rows the
  * profile must skip (zero open interest, an expired expiry, no usable IV or price).
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import console from 'node:console';
 import process from 'node:process';
 import { dirname, join } from 'node:path';
@@ -113,11 +133,49 @@ const CASES = [
   },
 ];
 
+const here = dirname(fileURLToPath(import.meta.url));
+const goldenDirectory = join(here, '..', '..', 'packages', 'structure', 'test', 'golden');
+mkdirSync(goldenDirectory, { recursive: true });
+const writeGolden = (name, document) =>
+  writeFileSync(
+    join(goldenDirectory, name),
+    JSON.stringify(
+      document,
+      // -0, NaN and ±Infinity do not survive JSON; they are written as strings and revived by the test.
+      (_key, value) =>
+        typeof value === 'number' && (!Number.isFinite(value) || Object.is(value, -0))
+          ? String(Object.is(value, -0) ? '-0' : value)
+          : value,
+      1,
+    ) + '\n',
+  );
+
+// The cases are generated once and then committed. A capture on another platform reads them back
+// instead of regenerating them (the generator calls Math.log), so every platform prices identical
+// quotes — the same JSON the test feeds to the code under test.
+const inputsFile = 'exposure-0.1.0.inputs.json';
+if (existsSync(join(goldenDirectory, inputsFile))) {
+  const committed = JSON.parse(readFileSync(join(goldenDirectory, inputsFile), 'utf8')).entries;
+  for (const testCase of CASES) {
+    const match = committed.find((entry) => entry.name === testCase.name);
+    if (!match) throw new Error(`${inputsFile} has no case named ${testCase.name}`);
+    testCase.input = match.input;
+  }
+} else {
+  writeGolden(inputsFile, {
+    meta: {
+      generator: 'tools/golden/capture-exposure-baseline.mjs',
+      purpose: 'the model exposure() cases; their 0.1.0 results are per platform',
+    },
+    entries: CASES,
+  });
+}
+
+const platform = `${process.platform}-${process.arch}`;
 const entries = CASES.map(({ name, input }) => {
   const profile = exposure(input);
   return {
     name,
-    input,
     expected: {
       spot: profile.spot,
       contracts: profile.contracts,
@@ -144,38 +202,17 @@ const entries = CASES.map(({ name, input }) => {
   };
 });
 
-const here = dirname(fileURLToPath(import.meta.url));
-const out = join(
-  here,
-  '..',
-  '..',
-  'packages',
-  'structure',
-  'test',
-  'golden',
-  'exposure-0.1.0.json',
-);
-mkdirSync(dirname(out), { recursive: true });
-writeFileSync(
-  out,
-  JSON.stringify(
-    {
-      // -0, NaN and ±Infinity do not survive JSON; they are written as strings and revived by the test.
-      meta: {
-        generator: 'tools/golden/capture-exposure-baseline.mjs',
-        reference: '@insiderfinance/totalfinance@0.1.0 (published), structure exposure()',
-        node: process.version,
-      },
-      entries,
-    },
-    (_key, value) =>
-      typeof value === 'number' && (!Number.isFinite(value) || Object.is(value, -0))
-        ? String(Object.is(value, -0) ? '-0' : value)
-        : value,
-    1,
-  ) + '\n',
-);
-console.log(`wrote ${out} (${entries.length} cases, ${quotes.length} quotes each)`);
+const platformFile = `exposure-0.1.0.${platform}.json`;
+writeGolden(platformFile, {
+  meta: {
+    generator: 'tools/golden/capture-exposure-baseline.mjs',
+    reference: '@insiderfinance/totalfinance@0.1.0 (published), structure exposure()',
+    platform,
+    node: process.version,
+  },
+  entries,
+});
+console.log(`wrote ${platformFile} (${entries.length} cases, ${quotes.length} quotes each)`);
 
 // ---- exposureFromGreeks: supplied-Greek accounting ----
 // Every exclusion path, duplicates, the multiplier fallback and zero open interest, at one snapshot.

@@ -1,0 +1,4156 @@
+{
+ "meta": {
+  "generator": "tools/golden/capture-exposure-baseline.mjs",
+  "purpose": "the model exposure() cases; their 0.1.0 results are per platform"
+ },
+ "entries": [
+  {
+   "name": "dealerShortGamma per1PercentMove",
+   "input": {
+    "quotes": [
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1744,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1178,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 343,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2268,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6300,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 517,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1277,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1671,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 699,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1432,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2203,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3165,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1871,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 373,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 61,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2954,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1558,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 748,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3077,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3954,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 60,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2953,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3322,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3106,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2629,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2505,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3135,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3642,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3799,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6250,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 787,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2916,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2799,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 823,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1351,
+      "underlyingPrice": 6500,
+      "bid": 186.2,
+      "ask": 193.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1994,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 436,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2389,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1701,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1242,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2978,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3810,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3509,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6550,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1136,
+      "underlyingPrice": 6500,
+      "bid": 88.2,
+      "ask": 91.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6600,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 2127,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6600,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 873,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1188,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1948,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 790,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6700,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3540,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1770,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1745,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3639,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3680,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2022,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 899,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2765,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 21,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1734,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2790,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1839,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 523,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1127,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1381,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3244,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6450,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3336,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3304,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6500,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3366,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3588,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2550,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3695,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1566,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 60,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6650,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1920,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1425,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1275,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3048,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 743,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 550,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2224,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3467,
+      "underlyingPrice": 6500,
+      "bid": 333.2,
+      "ask": 346.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1087,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2082,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3867,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 234,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2560,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 769,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2677,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2320,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3795,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1535,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3121,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 823,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2844,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3546,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1020,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3503,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1677,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 817,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2982,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1204,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 960,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1313,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2574,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 613,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6800,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 310,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3473,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2950,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6250,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 2786,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 204,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2101,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 600,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3884,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2742,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 553,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6400,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1915,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3551,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1442,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3165,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1260,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3372,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3261,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2856,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2238,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2859,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3017,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3844,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 828,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1381,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3422,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 417,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2094,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3502,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2890,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1684,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3148,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2143,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2320,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1257,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 53,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3013,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3043,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3799,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1352,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2752,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6500,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1112,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1368,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3920,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2213,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6600,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 128,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1496,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6650,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3813,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6700,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1336,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1791,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1958,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3815,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3023,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2360,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     }
+    ],
+    "market": {
+     "spot": 6500,
+     "riskFreeRate": 0.043,
+     "dividendYield": 0.013,
+     "asOf": "2026-06-15T14:30:00-04:00"
+    },
+    "config": {
+     "convention": "dealerShortGamma"
+    }
+   }
+  },
+  {
+   "name": "callsPositivePutsNegative perPoint, spot from quotes",
+   "input": {
+    "quotes": [
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1744,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1178,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 343,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2268,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6300,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 517,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1277,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1671,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 699,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1432,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2203,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3165,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1871,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 373,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 61,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2954,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1558,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 748,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3077,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3954,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 60,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2953,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3322,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3106,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2629,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2505,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-12",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3135,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3642,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3799,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6250,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 787,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2916,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2799,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 823,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1351,
+      "underlyingPrice": 6500,
+      "bid": 186.2,
+      "ask": 193.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1994,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 436,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2389,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1701,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1242,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2978,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3810,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3509,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6550,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1136,
+      "underlyingPrice": 6500,
+      "bid": 88.2,
+      "ask": 91.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6600,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 2127,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6600,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 873,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1188,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1948,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 790,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6700,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3540,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1770,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1745,
+      "underlyingPrice": 6500,
+      "bid": 284.2,
+      "ask": 295.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3639,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-15",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3680,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2022,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 899,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2765,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 21,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1734,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2790,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1839,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 523,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1127,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1381,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3244,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6450,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3336,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3304,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6500,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3366,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3588,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2550,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3695,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1566,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 60,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6650,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1920,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1425,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1275,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3048,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 743,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 550,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-17",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2224,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3467,
+      "underlyingPrice": 6500,
+      "bid": 333.2,
+      "ask": 346.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1087,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2082,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3867,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 234,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2560,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 769,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2677,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2320,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3795,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1535,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3121,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 823,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2844,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3546,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1020,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3503,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1677,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 817,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2982,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1204,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 960,
+      "underlyingPrice": 6500,
+      "bid": 235.2,
+      "ask": 244.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1313,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2574,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 613,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-06-19",
+       "strike": 6800,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 310,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3473,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2950,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6250,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 2786,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 204,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2101,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 600,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3884,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2742,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 553,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6400,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1915,
+      "underlyingPrice": 6500,
+      "bid": 39.2,
+      "ask": 40.8
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3551,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1442,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3165,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6500,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1260,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3372,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3261,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2856,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6600,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2238,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2859,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6650,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3017,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6700,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3844,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 828,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1381,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3422,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 417,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-07-17",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2094,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6200,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3502,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6200,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2890,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1796644788750694
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6250,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1684,
+      "underlyingPrice": 6500
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6250,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3148,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1758808196800012
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6300,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2143,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6300,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2320,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.17230580029210288
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6350,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1257,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6350,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 53,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16893471656679812
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6400,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3013,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6400,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3043,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16576299700778663
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6450,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3799,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6450,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1352,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16278619812709566
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6500,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2752,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6500,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1112,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.16
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6550,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1368,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6550,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3920,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1574002020052515
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6600,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2213,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6600,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 128,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15498271874159425
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6650,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1496,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6650,
+       "type": "put",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 3813,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15274357611204398
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6700,
+       "type": "call",
+       "style": "european",
+       "multiplier": 50
+      },
+      "ts": 1781548200000,
+      "openInterest": 1336,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6700,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1791,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.15067890756788255
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6750,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 1958,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6750,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3815,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1487849505047575
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6800,
+       "type": "call",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 3023,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     },
+     {
+      "contract": {
+       "underlying": "SPX",
+       "expiry": "2026-09-18",
+       "strike": 6800,
+       "type": "put",
+       "style": "european"
+      },
+      "ts": 1781548200000,
+      "openInterest": 2360,
+      "underlyingPrice": 6500,
+      "impliedVolatility": 0.1470580428036943
+     }
+    ],
+    "market": {
+     "riskFreeRate": 0.043,
+     "asOf": "2026-06-15T14:30:00-04:00"
+    },
+    "config": {
+     "convention": "callsPositivePutsNegative",
+     "gammaUnit": "perPoint",
+     "priceSource": "mid"
+    }
+   }
+  }
+ ]
+}

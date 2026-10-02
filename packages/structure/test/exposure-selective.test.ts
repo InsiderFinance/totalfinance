@@ -15,7 +15,7 @@ import {
   type ExposureShortcutInput,
 } from '@totalfinance/structure';
 import * as exposureEntry from '@totalfinance/structure/exposure';
-import golden from './golden/exposure-0.1.0.json';
+import golden from './golden/exposure-0.1.0.inputs.json';
 
 /**
  * Selective model exposure (selective Greeks and exposure spec, decisions 11–13).

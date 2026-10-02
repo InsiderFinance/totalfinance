@@ -130,6 +130,11 @@ outputs and their mathematical dependencies.
     `speed`→speed and gamma, `color`→color), in one kernel pass, and echoes `assumptions.metrics`
     as requested. A full profile is checked against a golden captured from the published 0.1.0
     package (`tools/golden/capture-exposure-baseline.mjs`), not against the code this change rewrote.
+    The check is exact against the same platform. V8's transcendental functions differ in the last
+    bit between its darwin-arm64, linux-arm64 and x64 builds, so 0.1.0 itself returns a few
+    different last bits on each (at most 8 values in the golden, under 4e-16 relative). One golden
+    per platform keeps every comparison exact, and a guard holds the four committed platforms to
+    1e-15 of one another.
     Per-contract rows and the aggregate carry exactly the selected metrics. Uncomputed metrics are
     absent, never zero. A row carries the raw `gamma` only when `gex` is selected and the raw
     `delta` only when `dex` is selected. `byStrike`/`byExpiry` default to the selection and refuse
@@ -289,3 +294,18 @@ before this run rather than waived:
 
 The SG8 timings were taken before those two changes. Neither touches a row loop or a kernel: the
 guard is two `typeof` checks per selection, once per call.
+
+**Hosted CI (Node 22.13, 24, 26 on linux-x64) then failed the 0.1.0 parity test on 8 values**, all
+of them inside scenario maps and gamma flips. Cause: the golden had been captured on darwin-arm64,
+and 0.1.0 itself returns different last bits there than on x64. V8's `Math.exp`, `log`, `pow`,
+`sin`, `cos`, `atan`, `expm1`, `log1p` and `tanh` differ between those builds; `sqrt`, `cbrt` and
+`hypot` agree. Capturing 0.1.0 and this branch on four platforms showed:
+
+- this branch equals 0.1.0 byte for byte on each of them: darwin-arm64, darwin-x64 (Rosetta), and
+  linux-x64 and linux-arm64 (Docker);
+- 0.1.0 differs between platforms in at most 8 values, under 4e-16 relative;
+- each platform's result is the same under Node 22.13, 22.23, 24 and 26, and under official and
+  Homebrew builds.
+
+The model golden is therefore one file per platform, captured from one committed set of inputs.
+The supplied-Greek golden is byte-identical on all four and stays one file.
