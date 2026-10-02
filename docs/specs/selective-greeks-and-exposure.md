@@ -272,13 +272,13 @@ page.
 
 ### SG9 — gates, 2026-10-01
 
-On a clean tree at `23628e1`, Node 22.23.2, Apple M4, in order:
+On a clean tree at `cd1d3f3`, Node 22.23.2, Apple M4, in order:
 
 | Gate                                                                                                                       | Result                                                                                                 |
 | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `pnpm run ci` (format check, lint, typecheck, site typecheck, build, site build, site tests, `test:coverage`, `api:check`) | pass: 574 test files, 12,664 tests; statements 94.18%, branches 84.02%, functions 96.99%, lines 94.74% |
+| `pnpm run ci` (format check, lint, typecheck, site typecheck, build, site build, site tests, `test:coverage`, `api:check`) | pass: 574 test files, 12,667 tests; statements 94.18%, branches 84.02%, functions 96.99%, lines 94.74% |
 | `pnpm api:check`                                                                                                           | pass: all 25 API reports up to date                                                                    |
-| `pnpm test:coverage`, a second run                                                                                         | pass: the same 12,664 tests and the same coverage to the statement                                     |
+| `pnpm test:coverage`, a second run                                                                                         | pass: the same 12,667 tests and the same coverage to the statement                                     |
 | `pnpm regen:check`                                                                                                         | pass: the regeneration chain is byte-stable                                                            |
 
 The enforcement artifact records 5,370 candidates: 2,482 enforced, 2,701 partial, 0 defective,
@@ -308,4 +308,6 @@ and 0.1.0 itself returns different last bits there than on x64. V8's `Math.exp`,
   Homebrew builds.
 
 The model golden is therefore one file per platform, captured from one committed set of inputs.
-The supplied-Greek golden is byte-identical on all four and stays one file.
+The supplied-Greek golden is byte-identical on all four and stays one file. The gates above were
+re-run after this change. Hosted CI passes at `cd1d3f3`: the linux-x64 matrix (Node 22.13, 24, 26),
+clean-repository generation and the local-registry release rehearsal.
