@@ -2823,12 +2823,12 @@
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
     "candidates": 5370,
-    "enforced": 2479,
+    "enforced": 2482,
     "defective": 0,
     "partial": 2701,
-    "unmeasured": 190,
+    "unmeasured": 187,
     "unmeasuredByReason": {
-      "no-input": 51,
+      "no-input": 48,
       "baseline-rejected": 56,
       "external-callback-contract": 53,
       "incomplete-baseline": 20,
@@ -2852,12 +2852,12 @@
     "mutationsExecuted": {
       "unknown-key": 2738,
       "null-when-nonnullable": 26219,
-      "omit-required": 13287,
-      "wrong-type": 16943,
+      "omit-required": 13286,
+      "wrong-type": 16945,
       "non-finite": 9375,
-      "optional-wrong-type": 8034,
+      "optional-wrong-type": 8036,
       "invalid-literal": 1948,
-      "empty-series": 912,
+      "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
@@ -2865,12 +2865,12 @@
     "mutationsCovered": {
       "unknown-key": 6510,
       "null-when-nonnullable": 65902,
-      "omit-required": 33891,
-      "wrong-type": 43315,
+      "omit-required": 33888,
+      "wrong-type": 43321,
       "non-finite": 24455,
-      "optional-wrong-type": 19173,
+      "optional-wrong-type": 19179,
       "invalid-literal": 4994,
-      "empty-series": 2408,
+      "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
       "ragged-matrix": 204
@@ -2890,10 +2890,10 @@
     "receiverGroupingGaps": 76,
     "alternatives": {
       "total": 13081,
-      "enforced": 3854,
+      "enforced": 3857,
       "partial": 2517,
       "defective": 0,
-      "unmeasured": 6710,
+      "unmeasured": 6707,
       "truncated": 0
     },
     "staticFalsePositives": 0,
@@ -16307,9 +16307,19 @@
       "id": "@totalfinance/core:requireSelection",
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
-      "verdict": "unmeasured",
-      "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
     },
     {
       "id": "@totalfinance/core:requireWorkLimit",
@@ -71856,7 +71866,7 @@
         "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "mutationsCovered": {
@@ -71864,7 +71874,7 @@
         "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "undecided": [
@@ -71956,18 +71966,18 @@
       "mutationsExecuted": {
         "unknown-key": 1,
         "null-when-nonnullable": 18,
-        "omit-required": 16,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
       "mutationsCovered": {
         "unknown-key": 1,
         "null-when-nonnullable": 18,
-        "omit-required": 16,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -71983,9 +71993,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
@@ -122422,7 +122433,7 @@
         "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "alternatives": [
@@ -140293,11 +140304,16 @@
       "id": "totalfinance:core.requireSelection",
       "package": "totalfinance",
       "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
-      "verdict": "unmeasured",
+      "verdict": "enforced",
       "measurementSource": "@totalfinance/core:requireSelection",
       "inheritedFrom": "@totalfinance/core:requireSelection",
-      "guardReachability": "ambiguous",
-      "unmeasuredReason": "no-input"
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
     },
     {
       "id": "totalfinance:core.selectQuotePrice",
@@ -153956,9 +153972,9 @@
       "mutationsCovered": {
         "unknown-key": 1,
         "null-when-nonnullable": 18,
-        "omit-required": 16,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -153973,9 +153989,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
@@ -211103,11 +211120,16 @@
       "id": "totalfinance:requireSelection",
       "package": "totalfinance",
       "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
-      "verdict": "unmeasured",
+      "verdict": "enforced",
       "measurementSource": "@totalfinance/core:requireSelection",
       "inheritedFrom": "@totalfinance/core:requireSelection",
-      "guardReachability": "ambiguous",
-      "unmeasuredReason": "no-input"
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
     },
     {
       "id": "totalfinance:requireUniverseHistory",
@@ -227442,7 +227464,7 @@
         "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "alternatives": [
@@ -227529,9 +227551,9 @@
       "mutationsCovered": {
         "unknown-key": 1,
         "null-when-nonnullable": 18,
-        "omit-required": 16,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -227546,9 +227568,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
