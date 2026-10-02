@@ -71325,7 +71325,7 @@
       "implementation": "packages/structure/dist/exposure.d.ts#ExposureProfile.byExpiry",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "guardReachability": "delegated"
     },
     {
       "id": "@totalfinance/structure:ExposureProfile#byStrike",
@@ -71333,7 +71333,7 @@
       "implementation": "packages/structure/dist/exposure.d.ts#ExposureProfile.byStrike",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "guardReachability": "delegated"
     },
     {
       "id": "@totalfinance/structure:ExposureProfile#levels",
