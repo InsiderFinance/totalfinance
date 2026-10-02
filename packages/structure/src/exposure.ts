@@ -206,8 +206,9 @@ export interface ExposureTotals {
    */
   speed: number;
   /**
-   * Color exposure: signed change in GEX as ONE calendar day ELAPSES (`−∂GEX/∂T` per day), so a
-   * positive value means dealer gamma exposure grows as time passes.
+   * Color exposure: signed change in GEX as ONE calendar day ELAPSES (`−∂GEX/∂T` per day), in the
+   * same unit as `gex` (`gammaUnit`), so a positive value means dealer gamma exposure grows as time
+   * passes. Per 1% move it is `−color·OI·mult·sign·S²·0.01/365`; per point, `−color·OI·mult·sign·S/365`.
    */
   color: number;
 }
@@ -1601,7 +1602,7 @@ export class ExposureProfile<
  *   gex   Γ·w·S²·0.01 (per 1% move) or Γ·w·S (per point)     dex   Δ·w·S
  *   vega  vega%·w                                           theta θ/day·w
  *   vanna vanna·w·S·0.01                                    charm −(charm·w·S)/365
- *   vomma vomma·w·0.0001                                    color −(color·w·S²·0.01)/365
+ *   vomma vomma·w·0.0001                                    color −(color·w·S²·0.01)/365 or −(color·w·S)/365
  *   speed the change in gex for a +1% spot move, in the gex unit (both terms of d(GEX)/dS)
  * with `w = openInterest · multiplier · sign`. Plain loops over typed arrays, with no closure
  * holding a running total, so the hot paths (atSpot, the zero-gamma sweep) allocate nothing per row.
@@ -1678,8 +1679,16 @@ function accumulateMetric(
       break;
     }
     case 'color': {
+      // color is ∂Γ/∂T, and the gex factor (S²·0.01 per 1% move, S per point) does not depend on T,
+      // so the change in GEX per day elapsed is −color·w·(that factor)/365 — in this profile's own
+      // gammaUnit, like gex and speed. CORRECTION (selective Greeks spec, decision 18): 0.1.0 used
+      // the per-1%-move factor under `perPoint` too, which overstated it by spot·0.01.
       const color = read('color');
-      for (let i = 0; i < rows; i++) into[i] = -(color[i]! * weight[i]! * S * S * 0.01) / 365; // change in GEX per day elapsed
+      if (gammaUnit === 'per1PercentMove') {
+        for (let i = 0; i < rows; i++) into[i] = -(color[i]! * weight[i]! * S * S * 0.01) / 365;
+      } else {
+        for (let i = 0; i < rows; i++) into[i] = -(color[i]! * weight[i]! * S) / 365;
+      }
       break;
     }
   }
@@ -1898,8 +1907,9 @@ export function speedExposure(input: ExposureShortcutInput): ExposureProfile<'sp
 }
 
 /**
- * Color exposure alone — the signed change in GEX as ONE calendar day elapses (`−∂GEX/∂T` per day).
- * A higher-order exposure. Equivalent to `exposure({ ...input, metrics: ['color'] })`.
+ * Color exposure alone — the signed change in GEX as ONE calendar day elapses (`−∂GEX/∂T` per day),
+ * in the profile's `gammaUnit`. A higher-order exposure. Equivalent to
+ * `exposure({ ...input, metrics: ['color'] })`.
  */
 export function colorExposure(input: ExposureShortcutInput): ExposureProfile<'color'> {
   return singleMetricExposure('colorExposure', 'color', input);

@@ -18,6 +18,8 @@ import inputs from './golden/exposure-0.1.0.inputs.json';
  * different last bits on each (at most 8 values here, under 4e-16 relative). One golden per
  * platform keeps the comparison exact everywhere: `exposure-0.1.0.inputs.json` holds the cases and
  * `exposure-0.1.0.<platform>-<arch>.json` what 0.1.0 returned for them on that platform.
+ *
+ * One documented correction is not parity: per-point color exposure (see `withReleasedColor`).
  */
 
 const PLATFORM = `${process.platform}-${process.arch}`;
@@ -59,6 +61,45 @@ const ALL: ExposureMetric[] = [
   'color',
 ];
 
+/**
+ * DOCUMENTED CORRECTION (spec decision 18). Under `gammaUnit: 'perPoint'`, 0.1.0 scaled color
+ * exposure by the per-1%-move factor S²·0.01 instead of the per-point S, overstating it by S·0.01.
+ * For such a profile each color value must equal 0.1.0's divided by S·0.01 — S being the profile
+ * spot, or a scenario cell's own spot — to rounding (the worst case is 7e-15 relative). Every other
+ * value is still compared exactly: this returns `actual` with its checked color values replaced by
+ * the released ones, for the caller's `toStrictEqual`. `corrected` counts the replacements.
+ */
+function withReleasedColor(
+  actual: unknown,
+  released: unknown,
+  spot: number,
+  corrected: { count: number },
+): unknown {
+  if (Array.isArray(actual)) {
+    return actual.map((item, index) =>
+      withReleasedColor(item, (released as unknown[] | undefined)?.[index], spot, corrected),
+    );
+  }
+  if (actual === null || typeof actual !== 'object') return actual;
+  const current = actual as Record<string, unknown>;
+  const before = (released ?? {}) as Record<string, unknown>;
+  const cellSpot = typeof current['spot'] === 'number' ? current['spot'] : spot;
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(current)) {
+    const value = current[key];
+    const releasedValue = before[key];
+    if (key === 'color' && typeof value === 'number' && typeof releasedValue === 'number') {
+      const expectedValue = releasedValue / (cellSpot * 0.01);
+      expect(Math.abs(value - expectedValue)).toBeLessThanOrEqual(1e-13 * Math.abs(expectedValue));
+      corrected.count++;
+      result[key] = releasedValue;
+    } else {
+      result[key] = withReleasedColor(value, releasedValue, cellSpot, corrected);
+    }
+  }
+  return result;
+}
+
 describe('exposure() without metrics reproduces the published 0.1.0 results exactly', () => {
   const file = `exposure-0.1.0.${PLATFORM}.json`;
   if (!existsSync(new URL(file, GOLDEN_DIRECTORY))) {
@@ -84,14 +125,20 @@ describe('exposure() without metrics reproduces the published 0.1.0 results exac
       const input = entry.input as unknown as ExposureInput;
       const expected = revive(golden.entries[index]!.expected) as Record<string, unknown>;
       const profile = exposure(input);
+      const corrected = { count: 0 };
+      /** `actual` as 0.1.0 would have returned it: the color correction checked and undone. */
+      const released = (actual: unknown, key: string): unknown =>
+        input.config.gammaUnit === 'perPoint'
+          ? withReleasedColor(actual, expected[key], profile.spot, corrected)
+          : actual;
 
       it('contracts, aggregate, assumptions and diagnostics', () => {
         expect(profile.spot).toBe(expected['spot']);
-        expect(profile.contracts).toStrictEqual(expected['contracts']);
+        expect(released(profile.contracts, 'contracts')).toStrictEqual(expected['contracts']);
         expect(Object.keys(profile.contracts[0]!)).toEqual(
           Object.keys((expected['contracts'] as object[])[0]!),
         );
-        expect(profile.aggregate).toStrictEqual(expected['aggregate']);
+        expect(released(profile.aggregate, 'aggregate')).toStrictEqual(expected['aggregate']);
         expect(Object.keys(profile.aggregate)).toEqual(
           Object.keys(expected['aggregate'] as object),
         );
@@ -106,10 +153,10 @@ describe('exposure() without metrics reproduces the published 0.1.0 results exac
       });
 
       it('by-strike and by-expiry views', () => {
-        expect(profile.byStrike()).toStrictEqual(expected['byStrike']);
+        expect(released(profile.byStrike(), 'byStrike')).toStrictEqual(expected['byStrike']);
         expect(profile.byStrike(['gex'])).toStrictEqual(expected['byStrikeGex']);
         expect(profile.byStrike(['vanna', 'charm'])).toStrictEqual(expected['byStrikeVannaCharm']);
-        expect(profile.byExpiry()).toStrictEqual(expected['byExpiry']);
+        expect(released(profile.byExpiry(), 'byExpiry')).toStrictEqual(expected['byExpiry']);
       });
 
       it('per-tick atSpot', () => {
@@ -121,18 +168,33 @@ describe('exposure() without metrics reproduces the published 0.1.0 results exac
       });
 
       it('scenario maps', () => {
-        expect(profile.scenarioMap()).toStrictEqual(expected['scenarioDefault']);
+        expect(released(profile.scenarioMap(), 'scenarioDefault')).toStrictEqual(
+          expected['scenarioDefault'],
+        );
         expect(
-          profile.scenarioMap({
-            spot: { from: 6300, to: 6700, steps: 5 },
-            volatilityShock: [-0.05, 0, 0.05],
-            timeAdvance: [0, 1 / 365, 3 / 365],
-            metrics: ALL,
-          }),
+          released(
+            profile.scenarioMap({
+              spot: { from: 6300, to: 6700, steps: 5 },
+              volatilityShock: [-0.05, 0, 0.05],
+              timeAdvance: [0, 1 / 365, 3 / 365],
+              metrics: ALL,
+            }),
+            'scenarioFull',
+          ),
         ).toStrictEqual(expected['scenarioFull']);
         expect(profile.scenarioMap({ spot: [6400, 6450, 6500], metrics: ['gex'] })).toStrictEqual(
           expected['scenarioGammaOnly'],
         );
+      });
+
+      it('the color correction applies to perPoint profiles only, and to every color value there', () => {
+        // Runs after the views above (Vitest runs a file's tests in order), so `corrected` holds
+        // every color value those comparisons checked.
+        if (input.config.gammaUnit === 'perPoint') {
+          expect(corrected.count).toBeGreaterThan(150);
+        } else {
+          expect(corrected.count).toBe(0);
+        }
       });
     });
   }
