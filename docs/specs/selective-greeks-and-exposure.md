@@ -188,7 +188,7 @@ outputs and their mathematical dependencies.
       measurements, packed-consumer coverage, docs and examples; regenerate in lawful order.
 - [x] SG8: Node and browser benchmarks before/after; record workload, environment, timing and
       allocation behavior.
-- [ ] SG9: full CI, a second coverage run, `api:check`, byte-stable `regen:check`; record evidence.
+- [x] SG9: full CI, a second coverage run, `api:check`, byte-stable `regen:check`; record evidence.
 
 ## Verification record
 
@@ -265,6 +265,27 @@ Reproduce: `npm install --prefix /tmp/tf010 @insiderfinance/totalfinance@0.1.0`,
 <package root>` per workload, and `node tools/bench/selective-browser.mjs <package root> <dir>` for a
 page.
 
-### SG9 — gates
+### SG9 — gates, 2026-10-01
 
-To be completed with the landing run.
+On a clean tree at `23628e1`, Node 22.23.2, Apple M4, in order:
+
+| Gate                                                                                                                       | Result                                                                                                 |
+| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `pnpm run ci` (format check, lint, typecheck, site typecheck, build, site build, site tests, `test:coverage`, `api:check`) | pass: 574 test files, 12,664 tests; statements 94.18%, branches 84.02%, functions 96.99%, lines 94.74% |
+| `pnpm api:check`                                                                                                           | pass: all 25 API reports up to date                                                                    |
+| `pnpm test:coverage`, a second run                                                                                         | pass: the same 12,664 tests and the same coverage to the statement                                     |
+| `pnpm regen:check`                                                                                                         | pass: the regeneration chain is byte-stable                                                            |
+
+The enforcement artifact records 5,370 candidates: 2,482 enforced, 2,701 partial, 0 defective,
+187 unmeasured (the ratchet's bound). The first landing attempt found two things, both fixed
+before this run rather than waived:
+
+- **`requireSelection` measured defective.** Its new first-touch fixture made the helper
+  measurable, and the mutation probes showed it accepted an omitted or wrong-typed
+  `functionName`/`field`. It now refuses a missing or blank label (`input.wrong_type`) and is
+  enforced on all three spellings.
+- **The `workflows` bundle was 120 B over its line.** That label guard adds 302 B there. The line
+  moved 501.75 → 502 KB, with the final measurements recorded in each affected rationale.
+
+The SG8 timings were taken before those two changes. Neither touches a row loop or a kernel: the
+guard is two `typeof` checks per selection, once per call.
