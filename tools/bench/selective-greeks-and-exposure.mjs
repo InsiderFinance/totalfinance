@@ -14,10 +14,10 @@
  *
  * A workload whose API does not exist in the measured version reports `null` (before has no
  * selective APIs, so its gamma-only paths are what a 0.1.0 consumer had to do instead: the full
- * Greeks call or batch). Timing is the median of `RUNS` timed iterations after `WARMUP` untimed
- * ones. Allocation is the mean heap growth of five steady-state iterations after a forced GC, with
- * a 256 MB semi-space so they do not trigger a scavenge — an estimate of bytes allocated per call,
- * not retained.
+ * Greeks call or batch). Timing is the median of 25 timed iterations after a warm-up of at least
+ * five iterations and 500 ms. Allocation is the mean heap growth of five steady-state iterations
+ * after a forced GC, with a 256 MB semi-space so they do not trigger a scavenge — an estimate of
+ * bytes allocated per call, not retained.
  *
  * Allocation is recorded from one process per workload (`BENCH_ONLY=<id>`), because a long run's
  * earlier workloads change what the optimizer has done by the time later ones are measured.

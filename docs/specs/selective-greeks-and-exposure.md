@@ -175,12 +175,87 @@ outputs and their mathematical dependencies.
 - [x] SG5: selective model exposure, analyses, shortcuts; conservation, parity, roots, scenarios,
       shortcut-equivalence and skipped-work tests.
 - [x] SG6: supplied-exposure selection with requirement and report-shape tests.
-- [ ] SG7: manifests, first-touch fixtures, naming/signature/contract curation, bundle budgets from
+- [x] SG7: manifests, first-touch fixtures, naming/signature/contract curation, bundle budgets from
       measurements, packed-consumer coverage, docs and examples; regenerate in lawful order.
-- [ ] SG8: Node and browser benchmarks before/after; record workload, environment, timing and
+- [x] SG8: Node and browser benchmarks before/after; record workload, environment, timing and
       allocation behavior.
 - [ ] SG9: full CI, a second coverage run, `api:check`, byte-stable `regen:check`; record evidence.
 
 ## Verification record
 
-To be completed at SG9.
+### SG8 — performance, 2026-10-01
+
+**Workload.** One synthetic index chain: 30 weekly expiries × 130 strikes × call/put = 7,800
+contracts, a smile, varying open interest, spot 6,500, r = 4.3%, q = 1.3%; the GEX sweep re-evaluates
+it at 73 spot levels (±12%). Scalar calls use one 3-month call. Harness:
+`tools/bench/selective-workloads.mjs`, run by `selective-greeks-and-exposure.mjs` (Node) and
+`selective-browser.mjs` (a self-contained page).
+
+**Before / after.** "Before" is the PUBLISHED `@insiderfinance/totalfinance@0.1.0` (npm install into
+a temp directory); "after" is this branch's assembled `distribution/totalfinance` at the commit that
+records this section. Where 0.1.0 has no selective API, "before" is what a 0.1.0 consumer had to do
+instead: `blackScholes.greeks(x).gamma`, `blackScholesPriceMany(…, { greeks: true })`, the full
+`exposure()`.
+
+**Method.** Node 22.23.2 (`.nvmrc`), Apple M4 (10 cores, 32 GB), macOS 26.3, `--expose-gc
+--max-semi-space-size=256`. Each workload runs in its own process (`BENCH_ONLY=<id>`); warm-up is at
+least five iterations and 500 ms, then the median of 25 timed iterations. Three rounds alternate
+before and after; the table shows the median of the three medians (the rounds agreed within 6% except
+one 0.1.0 `levels()` outlier). Another session's `next-server` and a Time Machine backup each used
+about one core during the runs; the harness is single-threaded.
+
+| Workload (Node, median ms)                                                      |  0.1.0 | this change | Faster |
+| ------------------------------------------------------------------------------- | -----: | ----------: | -----: |
+| Scalar gamma × 100,000 (`blackScholes.gamma` vs `.greeks().gamma`)              |   44.1 |        17.1 |   2.6× |
+| Batch gamma, 7,800 rows (`blackScholesEvaluateMany` vs `PriceMany` + Greeks)    |   1.41 |       0.215 |   6.6× |
+| Batch delta + gamma                                                             |   1.42 |       0.384 |   3.7× |
+| Batch price + gamma                                                             |   1.39 |       0.559 |   2.5× |
+| Batch price + five Greeks (`blackScholesPriceMany(…, { greeks: true })` itself) |   1.39 |       0.693 |   2.0× |
+| Batch gamma into a reused buffer (`blackScholesEvaluateManyInto`)               |      — |       0.216 |      — |
+| 73-level GEX sweep over 7,800 contracts (columnar)                              |  102.5 |        16.0 |   6.4× |
+| `exposure()` construction, full profile                                         |  240.3 |        14.1 |  17.1× |
+| `gammaExposure()` construction (0.1.0: full `exposure()`)                       |  240.4 |        13.2 |  18.2× |
+| 73 `atSpot` updates (0.1.0: gex + dex; `gammaExposure`: gex only)               |   69.8 |        16.7 |   4.2× |
+| `levels()` (zero-gamma sweep, walls, pin risk) on a full profile                | 1297.1 |       117.9 |  11.0× |
+| `exposureFromGreeks`, 7,800 supplied quotes (expiry-formatter fix, #1)          |  269.7 |        42.9 |   6.3× |
+
+**Browser.** The same workloads in headless Chromium 148.0.7778.96 (Playwright), two alternating
+rounds, median of medians. `performance.now()` resolution is 0.1 ms in the page, so sub-millisecond
+rows are coarse.
+
+| Workload (Chromium, median ms) |  0.1.0 | this change | Faster |
+| ------------------------------ | -----: | ----------: | -----: |
+| Scalar gamma × 100,000         |   42.5 |        17.3 |   2.5× |
+| Batch gamma, 7,800 rows        |   1.45 |        0.25 |   5.8× |
+| Batch delta + gamma            |   1.45 |        0.40 |   3.6× |
+| Batch price + gamma            |   1.40 |        0.60 |   2.3× |
+| Batch price + five Greeks      |   1.40 |        0.80 |   1.7× |
+| Batch gamma, reused buffer     |      — |        0.25 |      — |
+| 73-level GEX sweep             |  106.5 |        20.2 |   5.3× |
+| `exposure()` construction      |  275.1 |        15.2 |  18.0× |
+| `gammaExposure()` construction |  269.2 |        14.5 |  18.6× |
+| 73 `atSpot` updates            |   73.7 |        22.4 |   3.3× |
+| `levels()`                     | 1479.4 |       119.4 |  12.4× |
+| `exposureFromGreeks`           |  304.4 |        42.0 |   7.3× |
+
+**Allocation.** Heap growth per call, measured at 780, 7,800 and 78,000 rows after at least 300 calls
+and one second of warm-up (so the fixed and per-row parts separate): the gamma batch into a reused
+buffer allocates **0 bytes per row** and 5.6 KB per call (validation and plan); `atSpot` on a
+`gammaExposure` profile **0 bytes per contract** and 5.9 KB per call; `blackScholesPriceMany` with
+Greeks 2.8 bytes per row and 27 KB per call plus its six result arrays. Before the row loop became one
+kernel loop and the batch validation an inline test, the gamma batch boxed ~177 bytes per row
+(commit "Make the selective row loop allocation-free…"). The same method gave non-monotonic readings
+for 0.1.0 (its per-row validating calls are partly removed by escape analysis, and typed-array
+backing stores sit outside the measured heap), so no 0.1.0 per-row figure is claimed. A full profile
+keeps its snapshot and per-metric columns for its analyses: about 1.13 MB of typed arrays for 7,800
+contracts (145 bytes per contract), 1.32 MB once `atSpot` has run; a one-metric profile keeps the
+snapshot and its own columns only.
+
+Reproduce: `npm install --prefix /tmp/tf010 @insiderfinance/totalfinance@0.1.0`, `pnpm build`, then
+`BENCH_ONLY=<id> node --expose-gc --max-semi-space-size=256 tools/bench/selective-greeks-and-exposure.mjs
+<package root>` per workload, and `node tools/bench/selective-browser.mjs <package root> <dir>` for a
+page.
+
+### SG9 — gates
+
+To be completed with the landing run.

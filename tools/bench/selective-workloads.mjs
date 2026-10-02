@@ -4,7 +4,10 @@
  * identical code. `lib` is one installed `@insiderfinance/totalfinance` version's modules.
  */
 export function createBench({ blackScholes, batch, structure, resolvedExpiry }, now, runs = 25) {
+  // Warm up by count AND time, so a sub-millisecond workload reaches optimized code before it is
+  // timed or its allocation is read (35 calls of 0.24 ms still ran partly unoptimized).
   const WARMUP = 5;
+  const WARMUP_MS = 500;
   const RUNS = runs;
   const SPOT = 6500;
 
@@ -273,7 +276,8 @@ export function createBench({ blackScholes, batch, structure, resolvedExpiry }, 
   }
 
   function measure(run, state, heapUsed) {
-    for (let i = 0; i < WARMUP; i++) run(state);
+    const warmStart = now();
+    for (let i = 0; i < WARMUP || now() - warmStart < WARMUP_MS; i++) run(state);
     const times = [];
     for (let i = 0; i < RUNS; i++) {
       const start = now();
@@ -319,7 +323,7 @@ export function createBench({ blackScholes, batch, structure, resolvedExpiry }, 
     }
     return {
       side,
-      method: { warmup: WARMUP, runs: RUNS, statistic: 'median' },
+      method: { warmup: `${WARMUP} runs and ${WARMUP_MS} ms`, runs: RUNS, statistic: 'median' },
       workload: {
         rows: ROWS,
         expiries: EXPIRY_COUNT,
