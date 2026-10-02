@@ -72,6 +72,30 @@ export const maybeGex: number | undefined = dynamic.aggregate.gex;
 export const certainGex: number = dynamic.aggregate.gex;
 export const maybeGamma: number | undefined = dynamic.contracts[0]!.gamma;
 
+// ---- selections the type cannot pin down: only what every possibility holds is required ----
+declare const condition: boolean;
+const conditionalMetrics = condition ? (['gex'] as const) : (['dex'] as const);
+const conditional = exposure({ ...input, metrics: conditionalMetrics });
+export const conditionalMaybeGex: number | undefined = conditional.aggregate.gex;
+// @ts-expect-error gex is undefined on the dex branch
+export const conditionalGex: number = conditional.aggregate.gex;
+// @ts-expect-error nor is the row's raw gamma guaranteed
+export const conditionalRowGamma: number = conditional.contracts[0]!.gamma;
+// @ts-expect-error nor a by-strike gex column
+export const conditionalStrikeGex: number = conditional.byStrike()[0]!.gex;
+// @ts-expect-error vanna is in neither branch
+void conditional.aggregate.vanna;
+const sharedMetrics = condition ? (['gex', 'vanna'] as const) : (['vanna'] as const);
+const sharedProfile = exposure({ ...input, metrics: sharedMetrics });
+export const sharedVanna: number = sharedProfile.aggregate.vanna;
+// @ts-expect-error gex is only on one branch
+export const sharedGex: number = sharedProfile.aggregate.gex;
+declare const whichMetric: 'gex' | 'dex';
+const unionMetric = exposure({ ...input, metrics: [whichMetric] });
+export const unionMaybeDex: number | undefined = unionMetric.aggregate.dex;
+// @ts-expect-error the element may be gex
+export const unionDex: number = unionMetric.aggregate.dex;
+
 // ---- malformed selections ----
 // @ts-expect-error unknown metric
 exposure({ ...input, metrics: ['gamma'] });
@@ -109,6 +133,17 @@ void gexOnly.assumptions.dexConvention;
 // input.missing_field, supplied-exposure-selective.test.ts); the request type lets either be absent.
 // @ts-expect-error vega is not a supplied-Greek exposure
 exposureFromGreeks({ ...supplied, metrics: ['vega'] });
+
+const suppliedConditional = exposureFromGreeks({
+  ...supplied,
+  metrics: condition ? (['gex'] as const) : (['dex'] as const),
+});
+export const suppliedMaybeGex: number | undefined = suppliedConditional.aggregate.gex;
+// @ts-expect-error GEX is undefined on the DEX branch
+export const suppliedConditionalGex: number = suppliedConditional.aggregate.gex;
+const suppliedUnion = exposureFromGreeks({ ...supplied, metrics: [whichMetric] });
+// @ts-expect-error the element may be gex
+export const suppliedUnionDex: number = suppliedUnion.aggregate.dex;
 
 declare const suppliedChoice: SuppliedExposureMetric[];
 const dynamicSupplied = exposureFromGreeks({ ...supplied, metrics: suppliedChoice });

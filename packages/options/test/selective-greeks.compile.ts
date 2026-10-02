@@ -69,6 +69,43 @@ export const maybeDelta: number | undefined = narrowResult.delta;
 // @ts-expect-error price is outside the dynamic union
 void narrowResult.price;
 
+// ---- selections the type cannot pin down: only what every possibility holds is required ----
+// Review of #3: a conditional between two fixed tuples used to type BOTH names as required, so
+// `result.gamma` read as a number on the branch that computed delta. A fixed-length tuple is not
+// necessarily a fixed selection.
+declare const condition: boolean;
+const conditional = condition ? (['gamma'] as const) : (['delta'] as const);
+const conditionalResult = blackScholes.evaluate({ ...input, outputs: conditional });
+export const conditionalMaybeGamma: number | undefined = conditionalResult.gamma;
+export const conditionalMaybeDelta: number | undefined = conditionalResult.delta;
+// @ts-expect-error gamma is undefined on the delta branch
+export const conditionalGamma: number = conditionalResult.gamma;
+// @ts-expect-error vega is in neither branch
+void conditionalResult.vega;
+
+// A name every branch selects stays required; the others are optional.
+const shared = condition ? (['price', 'gamma'] as const) : (['delta', 'price'] as const);
+const sharedResult = blackScholes.evaluate({ ...input, outputs: shared });
+export const sharedPrice: number = sharedResult.price;
+// @ts-expect-error gamma is only on one branch
+export const sharedGamma: number = sharedResult.gamma;
+
+// An element that is itself a union holds one of its members, and the type cannot say which.
+declare const which: 'gamma' | 'delta';
+const unionElement = blackScholes.evaluate({ ...input, outputs: [which] });
+export const unionMaybeGamma: number | undefined = unionElement.gamma;
+// @ts-expect-error the element may be delta
+export const unionGamma: number = unionElement.gamma;
+const mixedElement = blackScholes.evaluate({ ...input, outputs: ['price', which] });
+export const mixedPrice: number = mixedElement.price;
+// @ts-expect-error the second element may be gamma
+export const mixedDelta: number = mixedElement.delta;
+// @ts-expect-error the same rule on .explain
+export const explainedGamma: number = blackScholes.evaluate.explain({
+  ...input,
+  outputs: conditional,
+}).value.gamma;
+
 // The result type is nameable for app state.
 export const typedEvaluation: BlackScholesEvaluation<readonly ['delta']> = { delta: 0.5 };
 
@@ -89,6 +126,14 @@ blackScholesEvaluateMany(columns, { outputs: ['gama'] });
 blackScholesEvaluateMany(columns, {});
 // @ts-expect-error lambda stays on extendedGreeks
 blackScholesEvaluateMany(columns, { outputs: ['lambda'] });
+const manyConditional = blackScholesEvaluateMany(columns, { outputs: conditional });
+export const manyMaybeGamma: Float64Array | undefined = manyConditional.gamma;
+// @ts-expect-error gamma is undefined on the delta branch
+export const manyConditionalGamma: Float64Array = manyConditional.gamma;
+const manyUnion = blackScholesEvaluateMany(columns, { outputs: ['price', which] });
+export const manyUnionPrice: Float64Array = manyUnion.price;
+// @ts-expect-error the second element may be delta
+export const manyUnionGamma: Float64Array = manyUnion.gamma;
 export const typedMany: BlackScholesEvaluateManyResult<readonly ['gamma']> = {
   gamma: new Float64Array(0),
 };

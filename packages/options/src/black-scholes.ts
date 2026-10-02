@@ -27,6 +27,7 @@ import {
   requireFiniteFields,
   requireSelection,
   warning,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
 import {
   BLACK_SCHOLES_OUTPUTS,
@@ -349,12 +350,15 @@ export interface BlackScholesEvaluateInput<
 }
 
 /**
- * The result of a selected evaluation. A literal selection gives exactly those required numbers; a
- * dynamic selection (`BlackScholesOutput[]`) gives optional properties, because the type cannot
- * know which outputs were requested and never claims one exists that was not.
+ * The result of a selected evaluation. The outputs the selection is certain to contain are required
+ * numbers; any other output it might contain is optional ({@link GuaranteedSelection}). So a
+ * literal `['price', 'gamma']` gives exactly those two required, while a dynamic selection
+ * (`BlackScholesOutput[]`), a conditional (`c ? ['gamma'] : ['delta']`) or a union-valued element
+ * gives optional properties: the type never claims a value exists that was not requested.
  */
-export type BlackScholesEvaluation<O extends BlackScholesOutputSelection> =
-  number extends O['length'] ? { [K in O[number]]?: number } : { [K in O[number]]: number };
+export type BlackScholesEvaluation<O extends BlackScholesOutputSelection> = {
+  [K in GuaranteedSelection<O>]: number;
+} & { [K in Exclude<O[number], GuaranteedSelection<O>>]?: number };
 
 /**
  * `blackScholes.evaluate` — a selected calculation with its `.explain` companion. An empty

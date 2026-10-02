@@ -339,6 +339,37 @@ export function ensureKnownKeys(
 }
 
 /**
+ * The names a selection of type `S` is CERTAIN to contain — the names a result may promise as
+ * required. Every other name in `S[number]` was only possibly selected, so a result types it as
+ * optional.
+ *
+ * A name is guaranteed when every possible value of `S` holds it as a whole element:
+ * - `readonly ['price', 'gamma']` guarantees `'price' | 'gamma'`;
+ * - a union of selections guarantees only what all of them share:
+ *   `readonly ['gamma'] | readonly ['delta']` (a conditional) guarantees nothing, and
+ *   `readonly ['price', 'gamma'] | readonly ['price']` guarantees `'price'`;
+ * - an element that is itself a union guarantees none of its members: `readonly ['gamma' | 'delta']`
+ *   holds one of the two, and the type cannot say which;
+ * - a list without a fixed length (`BlackScholesOutput[]`) guarantees nothing.
+ *
+ * `S extends unknown` distributes over the members of `S`, giving one verdict per possible
+ * selection; a name is kept only when no member says `false`.
+ */
+export type GuaranteedSelection<S extends readonly string[]> = {
+  [K in S[number]]: false extends (
+    S extends unknown
+      ? number extends S['length']
+        ? false
+        : K extends { [I in keyof S]: [S[I]] extends [K] ? K : never }[number]
+          ? true
+          : false
+      : never
+  )
+    ? never
+    : K;
+}[S[number]];
+
+/**
  * Validate an explicit SELECTION list — `outputs: ['price', 'gamma']`, `metrics: ['gex']` — and
  * return a dense copy in request order.
  *

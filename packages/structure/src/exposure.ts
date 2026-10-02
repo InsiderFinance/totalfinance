@@ -37,6 +37,7 @@ import {
   requireArgumentArray,
   requireArgumentObject,
   requireSelection,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
 import { impliedVolatility } from '@totalfinance/options';
 import {
@@ -96,17 +97,16 @@ const METRIC_OUTPUTS: Readonly<Record<ExposureMetric, readonly BlackScholesOutpu
 
 /**
  * The metrics an `exposure()` call is GUARANTEED to have computed: every metric when `metrics` is
- * omitted, exactly the names of a literal selection, and none for a selection whose contents the
- * type cannot know (`ExposureMetric[]`).
+ * omitted, otherwise the names the selection is certain to contain ({@link GuaranteedSelection}) —
+ * exactly the names of a literal selection, and none for a selection whose contents the type cannot
+ * know (`ExposureMetric[]`, a conditional between selections, a union-valued element).
  */
 export type GuaranteedExposureMetrics<S extends readonly ExposureMetric[] | undefined> = [
   S,
 ] extends [undefined]
   ? ExposureMetric
   : [S] extends [readonly ExposureMetric[]]
-    ? number extends NonNullable<S>['length']
-      ? never
-      : NonNullable<S>[number]
+    ? GuaranteedSelection<NonNullable<S>>
     : never;
 
 /** The metrics an `exposure()` call MAY have computed: every metric unless a selection narrows them. */

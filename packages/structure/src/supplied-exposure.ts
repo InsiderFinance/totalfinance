@@ -21,6 +21,7 @@ import {
   validateResolvedExpiry,
   warning,
   type OptionQuoteGreeks,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
 import type { GammaUnit } from '@totalfinance/structure/exposure';
 
@@ -315,14 +316,18 @@ export type SuppliedExposureReport<
   diagnostics: Diagnostics;
 };
 
-/** The metrics a selection guarantees: both when omitted, the names of a literal, none if dynamic. */
+/**
+ * The metrics a selection guarantees: both when omitted, otherwise the names the selection is certain
+ * to contain ({@link GuaranteedSelection}) — none for a dynamic selection, a conditional between
+ * selections or a union-valued element.
+ */
 export type GuaranteedSuppliedExposureMetrics<
   S extends readonly SuppliedExposureMetric[] | undefined,
 > = [S] extends [undefined]
   ? SuppliedExposureMetric
-  : number extends NonNullable<S>['length']
-    ? never
-    : NonNullable<S>[number];
+  : [S] extends [readonly SuppliedExposureMetric[]]
+    ? GuaranteedSelection<NonNullable<S>>
+    : never;
 
 /** The metrics a selection may have computed. */
 export type PossibleSuppliedExposureMetrics<

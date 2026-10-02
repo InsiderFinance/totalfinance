@@ -24,6 +24,7 @@ import {
   requireArgumentArray,
   requireArgumentObject,
   requireSelection,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
 import { blackScholesImpliedVolatility, type ImpliedVolatilityReason } from './bsm.js';
 import {
@@ -424,14 +425,14 @@ export interface BlackScholesEvaluateManyOptions<
 }
 
 /**
- * One `Float64Array` (one value per row) for each selected output. A literal selection gives exactly
- * those required columns; a dynamic selection (`BlackScholesOutput[]`) gives optional ones, because
- * the type cannot know which outputs were requested and never claims one exists that was not.
+ * One `Float64Array` (one value per row) for each selected output. The outputs the selection is
+ * certain to contain are required columns; any other output it might contain is optional
+ * ({@link GuaranteedSelection}): a literal selection gives exactly its columns, while a dynamic
+ * selection, a conditional between selections or a union-valued element gives optional ones.
  */
-export type BlackScholesEvaluateManyResult<O extends BlackScholesOutputSelection> =
-  number extends O['length']
-    ? { [K in O[number]]?: Float64Array }
-    : { [K in O[number]]: Float64Array };
+export type BlackScholesEvaluateManyResult<O extends BlackScholesOutputSelection> = {
+  [K in GuaranteedSelection<O>]: Float64Array;
+} & { [K in Exclude<O[number], GuaranteedSelection<O>>]?: Float64Array };
 
 /**
  * Caller-owned output storage for {@link blackScholesEvaluateManyInto}: the property names ARE the

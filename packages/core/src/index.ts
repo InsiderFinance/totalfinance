@@ -174,7 +174,7 @@ export {
  * a caller must supply an object of a type they cannot name. The nameability inventory caught it as
  * `unreachable` ("no package exports it") the moment the argument stopped being optional.
  */
-export type { RequireFiniteFieldsOptions } from './invariants.js';
+export type { GuaranteedSelection, RequireFiniteFieldsOptions } from './invariants.js';
 export { validateClosedRequest } from './validation.js';
 export type {
   ClosedRequestSpecification,
