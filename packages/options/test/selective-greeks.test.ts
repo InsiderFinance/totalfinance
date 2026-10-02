@@ -289,6 +289,75 @@ describe('blackScholes.evaluate', () => {
   });
 });
 
+describe('re-entrant input: a getter that evaluates Black–Scholes itself', () => {
+  // Review of #3: the scalar methods evaluate through one shared one-row view, and used to write each
+  // field into it as they read it. A getter on a later field that ran another evaluation overwrote
+  // the fields already written: gamma came out 0.00000687418 instead of 0.0187620173. Every field is
+  // now read before the view is touched, so a nested evaluation cannot leak into the outer one.
+  const base = {
+    type: 'call' as const,
+    spot: 100,
+    strike: 105,
+    timeToExpiryYears: 0.5,
+    riskFreeRate: 0.04,
+    volatility: 0.3,
+    dividendYield: 0.01,
+  };
+  // As different as a valid input can be, so any leak shows in the outer value.
+  const nested = {
+    type: 'put' as const,
+    spot: 6500,
+    strike: 4000,
+    timeToExpiryYears: 2,
+    riskFreeRate: 0.09,
+    volatility: 1.2,
+  };
+  const fields = Object.keys(base) as Array<keyof typeof base>;
+
+  /** `base`, except reading `field` first runs every nested evaluation in `nestedRuns`. */
+  function reentrant(field: keyof typeof base): typeof base {
+    const input = { ...base };
+    Object.defineProperty(input, field, {
+      enumerable: true,
+      get: () => {
+        blackScholes.gamma(nested);
+        blackScholes.price(nested);
+        blackScholes.evaluate({ ...nested, outputs: ['price', 'delta', 'gamma', 'color'] });
+        return base[field];
+      },
+    });
+    return input;
+  }
+
+  it('every named Greek and its .explain equal the plain-input value on every field', () => {
+    for (const name of ['delta', 'gamma', 'theta', 'vega', 'rho'] as const) {
+      const expected = blackScholes[name](base);
+      expect(expected).toBe(blackScholesGreeks(base)[name]);
+      for (const field of fields) {
+        expect(blackScholes[name](reentrant(field)), `${name} via ${field}`).toBe(expected);
+        expect(blackScholes[name].explain(reentrant(field)).value).toBe(expected);
+      }
+    }
+  });
+
+  it('blackScholes.evaluate and its .explain equal the plain-input values on every field', () => {
+    const outputs = [...OUTPUTS];
+    const expected = blackScholes.evaluate({ ...base, outputs });
+    for (const field of fields) {
+      expect(blackScholes.evaluate({ ...reentrant(field), outputs }), field).toStrictEqual(
+        expected,
+      );
+      expect(blackScholes.evaluate.explain({ ...reentrant(field), outputs }).value).toStrictEqual(
+        expected,
+      );
+    }
+  });
+
+  it('the review’s shape: gamma through a re-entrant strike getter', () => {
+    expect(blackScholes.gamma(reentrant('strike'))).toBeCloseTo(blackScholesGreeks(base).gamma, 15);
+  });
+});
+
 describe('independent mpmath references (50 digits; Greeks by numerical differentiation)', () => {
   /**
    * The tolerance is the double-precision floor, not a fitting knob: relative 2e-9, plus an

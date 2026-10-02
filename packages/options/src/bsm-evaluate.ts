@@ -261,12 +261,24 @@ export interface BlackScholesScalarRow {
  * reused one-row view and the requested outputs land in a reused 11-slot array, which is returned
  * and is valid until the next scalar evaluation (callers read it immediately). The view is created
  * on the first call and reused after.
+ *
+ * RE-ENTRANCY. The row is the caller's input object, and reading one of its fields can run caller
+ * code (a getter, a proxy) that itself evaluates Black–Scholes through this same view. So every
+ * field is read into a local FIRST, and the shared view is written only after the last caller-
+ * controlled read: a nested evaluation finishes, and its writes are overwritten, before this one
+ * touches the view. From the first write to the returned values, no caller code runs.
  */
 export function evaluateBlackScholesScalarUnchecked(
   plan: BlackScholesPlan,
   row: BlackScholesScalarRow,
   dividendYield: number,
 ): Float64Array {
+  const spot = row.spot;
+  const strike = row.strike;
+  const timeToExpiryYears = row.timeToExpiryYears;
+  const riskFreeRate = row.riskFreeRate;
+  const volatility = row.volatility;
+  const call = row.type === 'call';
   if (scalarRow === undefined) {
     const values = new Float64Array(BLACK_SCHOLES_OUTPUT_SLOTS);
     scalarRow = {
@@ -286,12 +298,12 @@ export function evaluateBlackScholesScalarUnchecked(
     };
   }
   const { columns, values, targets } = scalarRow;
-  columns.spot[0] = row.spot;
-  columns.strike[0] = row.strike;
-  columns.timeToExpiryYears[0] = row.timeToExpiryYears;
-  columns.riskFreeRate[0] = row.riskFreeRate;
-  columns.volatility[0] = row.volatility;
-  columns.type[0] = row.type === 'call' ? 1 : -1;
+  columns.spot[0] = spot;
+  columns.strike[0] = strike;
+  columns.timeToExpiryYears[0] = timeToExpiryYears;
+  columns.riskFreeRate[0] = riskFreeRate;
+  columns.volatility[0] = volatility;
+  columns.type[0] = call ? 1 : -1;
   columns.dividendYield[0] = dividendYield;
   evaluateBlackScholesRowsUnchecked(plan, columns, 1, targets);
   return values;
