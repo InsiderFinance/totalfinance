@@ -27,12 +27,21 @@ Compute only the Black–Scholes outputs and exposures you ask for.
   delta); omitting `metrics` keeps the existing report.
 - Validating a date-labelled US-equity expiry no longer constructs an `Intl.DateTimeFormat` per call.
 - Corrections: a negative `minTimeToExpiry` no longer admits expired contracts as `NaN` exposure;
-  unknown metric names passed to `byStrike`, `byExpiry` or `scenarioMap` are typed errors.
+  unknown metric names passed to `byStrike`, `byExpiry` or `scenarioMap` are typed errors; and color
+  exposure under `gammaUnit: 'perPoint'` now uses the per-point GEX scale (`S`, not `S²·0.01`), so it
+  matches the change in the profile's own per-point GEX as a day elapses. It was `spot·0.01` times
+  too large; the default `per1PercentMove` values are unchanged. The `totalfinance.structure.exposures`
+  operation reports the corrected value too.
+- A batch row value must be a number: a plain-array column holding `"100"`, `true` or `100n` is
+  refused with a typed error naming the column and row, before anything is written.
 - New error code `input.duplicate_entry` for a selection that names an entry twice, and the core
   helper behind every selection, `requireSelection(functionName, field, value, allowed)`: it
   returns a dense copy in request order and refuses a non-array, an empty list, a sparse hole, an
   unknown name (with a suggestion) and a repeat.
 - No MCP, HTTP or CLI operation changes; the MCP package versions with the library (fixed group).
+- Selection result types promise only what is certain: a name is required only when every possible
+  selection holds it (core's `GuaranteedSelection`), so `c ? ['gamma'] : ['delta']` or a
+  union-valued element gives optional properties.
 - Type note: `exposure` and `exposureFromGreeks` are generic over their selection, so
   `Parameters<typeof …>` and `ReturnType<typeof …>` describe the general (dynamic-selection) form.
   Name `ExposureInput`/`ExposureProfile` and `SuppliedExposureInput`/`SuppliedExposureReport`

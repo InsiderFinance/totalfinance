@@ -58,8 +58,14 @@ outputs and their mathematical dependencies.
    normals (`N(±d1)`, `N(±d2)` with the existing call/put argument signs), gamma, `∂d1/∂T` and raw
    vega. The kernel is one row loop over validated columns that computes only flagged
    intermediates and writes straight into output storage — no per-row result objects and no
-   per-row allocation; the scalar methods run the same loop over a reused one-row view. `blackScholesPriceUnchecked`, `blackScholesGreeks` and
-   `blackScholesExtendedGreeks` keep their public behavior; the formulas are not changed.
+   per-row allocation; the scalar methods run the same loop over a reused one-row view. They read
+   every input field before writing the view, so an input getter that itself evaluates
+   Black–Scholes cannot overwrite the outer call's inputs (a review finding on #3).
+   `blackScholesPriceUnchecked`, `blackScholesGreeks` and `blackScholesExtendedGreeks` keep their
+   public behavior; the formulas are not changed. They keep their own expressions beside the kernel,
+   so exact property tests (`selective-greeks.test.ts`, `batch-evaluate.test.ts`) hold the two
+   equal bit for bit: a change to either that the other does not mirror fails CI. Routing them
+   through the kernel is a separate behavior-preserving refactor, not part of this change.
 2. **Bitwise parity.** Every kernel output uses the existing expression and operation order, so a
    selected value is `===` to the same value from `blackScholesPrice`, `blackScholesGreeks` or
    `blackScholesExtendedGreeks` on the same input. Parity is tested exactly, not to a tolerance.
@@ -85,8 +91,13 @@ outputs and their mathematical dependencies.
 6. **Honest selection types.** A literal selection (`outputs: ['price', 'gamma']`, inferred through
    a `const` type parameter) yields required properties for exactly those names. A dynamic
    selection (`BlackScholesOutput[]`) yields optional properties — the type never claims a value
-   exists that was not requested. Unknown names and reading an unrequested property are compile
-   errors. The same rule applies to the batch family, model exposure and supplied exposure.
+   exists that was not requested. The rule is core's `GuaranteedSelection`: a name is required only
+   when every possible value of the selection holds it as a whole element. So a conditional between
+   fixed tuples (`c ? ['gamma'] : ['delta']`) requires only the names both branches share, and an
+   element typed as a union (`[which]` with `which: 'gamma' | 'delta'`) guarantees none of its
+   members. Before review, a fixed length was taken as a fixed selection, and `result.gamma` typed as
+   `number` on the branch that computed delta. Unknown names and reading an unrequested property are
+   compile errors. The same rule applies to the batch family, model exposure and supplied exposure.
    Every public signature stays single and free of conditional parameter types: the public
    contract tooling (signature, union, intersection and probe inventories) walks one declaration
    per callable, and the alignment spec rules out overloads before 1.0. Consequently an empty
@@ -104,7 +115,9 @@ outputs and their mathematical dependencies.
    family is added.
 8. **Batch validation is a public boundary.** Both new functions validate the columns object (closed
    keys), every consumed column (array or typed array, exact row count), every consumed value
-   (positive finite spot/strike/time/volatility, finite rate and dividend yield, finite type), the
+   (positive finite spot/strike/time/volatility, finite rate and dividend yield, finite type — each
+   of type `number`: a plain-array column holding `"100"`, `true` or `100n` is refused by name and
+   row, since a comparison alone would coerce it), the
    options/output object (closed keys), and every output buffer (a `Float64Array` with capacity ≥
    rows). Everything is validated before the first write, so a rejected request never partially
    updates an output. Elements past the row count are left untouched. Output buffers may not
@@ -169,13 +182,23 @@ outputs and their mathematical dependencies.
     contracts and turned every exposure into `NaN` (contracts at or past expiry are now always
     skipped and counted); an unknown metric name passed to `byStrike`, `byExpiry` or `scenarioMap`
     returned `undefined` values (now `input.invalid_enum`); and a view asked for a metric the profile
-    did not compute is refused rather than read.
+    did not compute is refused rather than read. One correction changes a reported number:
+    per-point color exposure (decision 18).
 16. **Expiry validation cost (#1).** The America/New_York offset formatter is built once per module
     (lazily) instead of once per call. Results are byte-identical; a test asserts that repeated
     validations construct no further formatters.
 17. **No transport expansion.** No MCP/HTTP/CLI operation, manifest `mcpTools` entry, or OpenAPI
     surface is added. The existing `totalfinance.structure.exposures` operation keeps its full-profile
-    behavior.
+    behavior, including decision 18's correction when it is asked for `gammaUnit: 'perPoint'`.
+18. **Color exposure follows `gammaUnit` (a correction).** Color exposure is the change in GEX as a
+    calendar day elapses, so it carries GEX's own scale: `S²·0.01` per 1% move, `S` per point.
+    Color is `∂Γ/∂T` and that factor does not depend on `T`. 0.1.0 used the per-1%-move factor in
+    both units, so per-point color was overstated by `S·0.01` (twice the finite difference at spot
+    200, found in review). The default `per1PercentMove` values are unchanged bit for bit.
+    `exposure-color-unit.test.ts` checks both units against a central finite difference of the
+    profile's own `gex` over the valuation instant. The 0.1.0 parity test states the correction:
+    each per-point color value equals 0.1.0's divided by `S·0.01` (to 7e-15), and every other value
+    is still exact.
 
 ## Ordered checklist and exit evidence
 

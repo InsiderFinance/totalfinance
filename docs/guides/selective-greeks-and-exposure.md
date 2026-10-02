@@ -57,7 +57,9 @@ if (selected.price !== blackScholes.price(option)) throw new Error('same price, 
 
 A literal list types the result exactly: `selected.vega` is a compile error because vega was not
 requested. A list held in a variable (`BlackScholesOutput[]`) types every output as optional, since
-the compiler cannot know which ones it holds. An empty, repeated or misspelled entry is refused with
+the compiler cannot know which ones it holds. The same goes for a choice between lists: with
+`c ? ['gamma'] : ['delta']`, both are optional, and only a name every branch requests stays
+required. An empty, repeated or misspelled entry is refused with
 a typed error (`input.out_of_range`, `input.duplicate_entry`, `input.invalid_enum` with a
 did-you-mean).
 
@@ -160,8 +162,9 @@ The rest of the exposure family follows the same pattern, one descriptive functi
 `vegaExposure` and `thetaExposure` (dollar value per 1% of volatility and per calendar day), then
 the higher-order `vannaExposure` (dollar delta per +1% volatility), `charmExposure` (dollar delta as
 a day elapses), `vommaExposure` (vega exposure per +1% volatility), `speedExposure` (the change in
-GEX for a +1% spot move, in the GEX unit) and `colorExposure` (the change in GEX as a day elapses).
-Each is the corresponding one-metric `exposure(...)` selection; combinations belong in `metrics`.
+GEX for a +1% spot move, in the GEX unit) and `colorExposure` (the change in GEX as a day elapses,
+also in the GEX unit). Each is the corresponding one-metric `exposure(...)` selection; combinations
+belong in `metrics`.
 
 ```ts
 import { charmExposure, vannaExposure } from '@insiderfinance/totalfinance/structure';
