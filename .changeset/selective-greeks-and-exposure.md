@@ -1,6 +1,6 @@
 ---
-'@insiderfinance/totalfinance': minor
-'@insiderfinance/totalfinance-mcp': minor
+'@insiderfinance/totalfinance': patch
+'@insiderfinance/totalfinance-mcp': patch
 ---
 
 Compute only the Black–Scholes outputs and exposures you ask for.
