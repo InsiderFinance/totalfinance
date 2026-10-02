@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42254,
+    "identities": 42256,
     "unresolved": 0,
     "byDisposition": {
       "canonical-term": 3784,
-      "explicit": 38308,
+      "explicit": 38310,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
       "code-string": 273,
       "enum-member": 273,
-      "export": 7287,
+      "export": 7289,
       "field": 22387,
       "literal-value": 4470,
       "mcp-field": 1520,
@@ -27,7 +27,7 @@
       "@totalfinance/calendars": 158,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3145,
+      "@totalfinance/core": 3146,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
@@ -47,7 +47,7 @@
       "@totalfinance/valuation": 1005,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3135
+      "totalfinance": 3136
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -47749,6 +47749,14 @@
     {
       "id": "@totalfinance/core|export|GreekUnits",
       "name": "GreekUnits",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|GuaranteedSelection",
+      "name": "GuaranteedSelection",
       "kind": "export",
       "position": "module",
       "entrypoints": ["."],
@@ -291267,6 +291275,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|GuaranteedSelection",
+      "name": "GuaranteedSelection",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./core"],
       "disposition": "explicit"
     },
     {
