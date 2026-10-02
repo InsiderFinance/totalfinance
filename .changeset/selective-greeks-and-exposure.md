@@ -9,8 +9,8 @@ Compute only the Black–Scholes outputs and exposures you ask for.
   `blackScholes.evaluate({ ...input, outputs })` returns exactly the selected outputs, typed
   precisely for literal selections. Values are bit-identical to `blackScholes.greeks`,
   `blackScholes.price` and `blackScholes.extendedGreeks`; gamma alone evaluates no cumulative normal.
-- `blackScholesEvaluateMany(columns, { outputs })` and `blackScholesEvaluateManyInto(columns,
-{ gamma: buffer })` on `@insiderfinance/totalfinance/options/batch` run a selection over columnar
+- `blackScholesEvaluateMany(columns, { outputs })` and
+  `blackScholesEvaluateManyInto(columns, { gamma: buffer })` on `@insiderfinance/totalfinance/options/batch` run a selection over columnar
   chains. The `Into` form validates columns, row values and buffers before its first write, never
   touches elements past the row count, and refuses overlapping storage.
 - `blackScholesPriceMany` with `greeks: true` is now a single pass (no per-row validating Greek
@@ -28,7 +28,10 @@ Compute only the Black–Scholes outputs and exposures you ask for.
 - Validating a date-labelled US-equity expiry no longer constructs an `Intl.DateTimeFormat` per call.
 - Corrections: a negative `minTimeToExpiry` no longer admits expired contracts as `NaN` exposure;
   unknown metric names passed to `byStrike`, `byExpiry` or `scenarioMap` are typed errors.
-- New error code `input.duplicate_entry` for a selection that names an entry twice.
+- New error code `input.duplicate_entry` for a selection that names an entry twice, and the core
+  helper behind every selection, `requireSelection(functionName, field, value, allowed)`: it
+  returns a dense copy in request order and refuses a non-array, an empty list, a sparse hole, an
+  unknown name (with a suggestion) and a repeat.
 - No MCP, HTTP or CLI operation changes; the MCP package versions with the library (fixed group).
 - Type note: `exposure` and `exposureFromGreeks` are generic over their selection, so
   `Parameters<typeof …>` and `ReturnType<typeof …>` describe the general (dynamic-selection) form.

@@ -79,7 +79,9 @@ outputs and their mathematical dependencies.
    `input.missing_field`; unknown name or non-string → `input.invalid_enum` (with the allowed
    names); a repeated name → the new `input.duplicate_entry`. The result object carries exactly
    the selected keys in request order. `.explain` returns `Computed<…>` with the same envelope as
-   `.greeks.explain`.
+   `.greeks.explain`. Every selection (`outputs`, `metrics`) goes through one public core helper,
+   `requireSelection(functionName, field, value, allowed)`, which also refuses a missing or blank
+   `functionName`/`field` label (`input.wrong_type`) so its errors always name the caller.
 6. **Honest selection types.** A literal selection (`outputs: ['price', 'gamma']`, inferred through
    a `const` type parameter) yields required properties for exactly those names. A dynamic
    selection (`BlackScholesOutput[]`) yields optional properties — the type never claims a value

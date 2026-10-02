@@ -348,6 +348,9 @@ export function ensureKnownKeys(
  * unknown or non-string name (`input.invalid_enum`, with a did-you-mean), and a repeated name
  * (`input.duplicate_entry`). A duplicate is never silently collapsed: it usually means the caller
  * meant a different name.
+ *
+ * `functionName` and `field` name the caller's boundary in every one of those errors, so they are
+ * checked first: a missing label would otherwise surface as `undefined: undefined must be …`.
  */
 export function requireSelection<T extends string>(
   functionName: string,
@@ -355,6 +358,8 @@ export function requireSelection<T extends string>(
   value: unknown,
   allowed: readonly T[],
 ): T[] {
+  requireSelectionLabel('functionName', functionName);
+  requireSelectionLabel('field', field);
   if (!Array.isArray(value)) {
     const received = value === null ? 'null' : typeof value;
     throw new InputError(
@@ -388,7 +393,7 @@ export function requireSelection<T extends string>(
       throw new InputError(
         `${functionName}: ${field}[${index}] must be one of ${allowed.join(', ')}; got ${
           typeof name === 'string' ? `"${name}"` : describe(name as never)
-        }${suggestion !== undefined ? ` — did you mean "${suggestion}"?` : ''}.`,
+        }${suggestion !== undefined ? ` — did you mean "${suggestion}"?` : '.'}`,
         {
           code: ValidationCode.InputInvalidEnum,
           context: {
@@ -413,4 +418,18 @@ export function requireSelection<T extends string>(
     selected.push(name as T);
   }
   return selected;
+}
+
+/** Throw unless a `requireSelection` label argument is a non-empty string. */
+function requireSelectionLabel(name: string, label: unknown): void {
+  if (typeof label !== 'string' || label.length === 0) {
+    const received = label === null ? 'null' : label === '' ? "''" : typeof label;
+    throw new InputError(
+      `requireSelection: ${name} must be a non-empty string (it names the caller's boundary in every error); got ${received}.`,
+      {
+        code: ValidationCode.InputWrongType,
+        context: { function: 'requireSelection', field: name, received },
+      },
+    );
+  }
 }

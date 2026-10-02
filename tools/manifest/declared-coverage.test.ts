@@ -1170,6 +1170,17 @@ describe('an OPTIONAL ARGUMENT is gated like an optional field', () => {
         '@totalfinance/structure:ExposureProfile.constructor :: arg0.config.convention:calls=-1 & arg0.market.asOf#0 :: arg0.config.convention~1azcy3x:calls=-1 :: arg0.config.convention~1azcy3x:calls=1',
         '@totalfinance/structure:exposure :: arg0.config.convention:calls=-1 & arg0.market.asOf#0 :: arg0.config.convention~1azcy3x:calls=-1 :: arg0.config.convention~1azcy3x:calls=1',
         'totalfinance/structure:exposure :: arg0.config.convention:calls=-1 & arg0.market.asOf#0 :: arg0.config.convention~1azcy3x:calls=-1 :: arg0.config.convention~1azcy3x:calls=1',
+        // Selective exposure (2026-10-01): the nine single-metric shortcuts take `exposure`'s input
+        // without `metrics`, so each inherits the numeric-domain `convention:calls=-1` residual above —
+        // the same shape digest, under each of the three spellings that export them.
+        ...['charm', 'color', 'delta', 'gamma', 'speed', 'theta', 'vanna', 'vega', 'vomma'].flatMap(
+          (greek) =>
+            ['@totalfinance/structure:', 'totalfinance:', 'totalfinance:structure.'].map(
+              (spelling) =>
+                `${spelling}${greek}Exposure :: arg0.config.convention:calls=-1 & arg0.market.asOf#0 :: ` +
+                'arg0.config.convention~1azcy3x:calls=-1 :: arg0.config.convention~1azcy3x:calls=1',
+            ),
+        ),
         'totalfinance:backtest.vectorized :: arg0.rebalance:absent & arg0.signal#0 & arg0.signal#0#1 :: arg0.signal#0~16c4nu4#1 :: arg0.signal#0~16c4nu4#0',
         'totalfinance:backtest.vectorized :: arg0.rebalance:absent & arg0.signal#0 & arg0.signal#0#2 :: arg0.signal#0~16c4nu4#2 :: arg0.signal#0~16c4nu4#0',
         'totalfinance:impliedVolatilityOption :: arg0.engine:present & arg0.engine:present.price.greeks:absent & arg0.market.asOf#0 :: arg0.engine!gate:present :: arg0.engine!gate:absent',
