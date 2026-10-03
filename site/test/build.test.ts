@@ -116,7 +116,10 @@ describe('built public documentation', () => {
     expect(
       coverage.exportPaths.every((entry) => entry.id.startsWith('@insiderfinance/totalfinance')),
     ).toBe(true);
-    expect(version.version).toBe('0.1.0');
+    const publishedPackage = JSON.parse(
+      readFileSync(join(ROOT, 'distribution/totalfinance/package.json'), 'utf8'),
+    ) as { version: string };
+    expect(version.version).toBe(publishedPackage.version);
     const cache = new Map<string, string>();
     for (const exported of coverage.exportPaths) {
       const [url, anchor] = exported.url.split('#');
