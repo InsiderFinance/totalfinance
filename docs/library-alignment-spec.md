@@ -724,27 +724,27 @@ Published per the 3B.6 exit checklist; every number below is quoted from the com
 artifacts (`public-contracts.json`, `public-enforcement.json`, `public-naming.json`) and each is bound by an executable
 gate — a manual checkbox cannot waive drift.
 
-**Surface:** 7,791 public paths / 2,663 implementations / 1,546 input contracts / 1,898 result
-contracts / 378 validator identities. **Enforcement:** 2,441 enforced · 2,674 partial (every open
-dimension named) · 0 defective · 187 unmeasured (each with a recorded reason) of 5,302 measured
+**Surface:** 7,794 public paths / 2,664 implementations / 1,548 input contracts / 1,900 result
+contracts / 378 validator identities. **Enforcement:** 2,444 enforced · 2,674 partial (every open
+dimension named) · 0 defective · 187 unmeasured (each with a recorded reason) of 5,305 measured
 candidates. **Ledgers:** helper quant-answers 0 of an initial 36 (all 27 H-decisions implemented);
 34 positional pairs retained with per-entry rationale, 0 migrated; unnameable parameter contracts 8
 (all foreign, none unreachable, as recorded by the current contract inventory);
-naming identities 41,983 with 0 unresolved. These live counts include the September MCP experience
+naming identities 42,149 with 0 unresolved. These live counts include the September MCP experience
 surface, the public `optionFlowDrift` and `observedSkew` APIs, the September 9 signed-leg
 simplification (six direction-specific helpers replaced by three instrument-first constructors),
 the September 16 valuation-instant law (the strict `resolveValuationAsOf` door, the shared US session
 table and market-day boundary, and the stamped market-snapshot `asOfConvention`) and the September
 18 assumptions-and-units repairs (one Greek unit system, required volatility scale, leg-volatility
 premiums, the position's own horizon, agent-boundary assumptions, contract multipliers that never
-default, and the options grammar corrections);
+default, and the options grammar corrections), plus the September 25 disclosed-holdings comparison;
 the separate review repairs are locally verified complete on `dccfce53` plus the repair changes.
 Stage 5A/5B remain maintainer-held; neither these counts nor local verification authorize publication
 or claim hosted-matrix success. The additional unmeasured
 row is the caller-implemented `ExecutionJournalStore#transact` interface, not lost measurement of
 an existing implementation; its memory/file implementations have their own focused evidence.
 
-Package-by-package measured records (total · enforced · partial · unmeasured): MCP 3·1·2·0 backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 51·29·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 97·96·0·1 http 3·0·3·0 math 89·30·51·8 options 174·149·18·7 performance 64·19·44·1 portfolio 31·6·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 14·2·5·7 technical-analysis 1,287·575·687·25 valuation 50·41·9·0 volatility 107·69·20·18 workflows 32·8·13·11 and the umbrella 2,893·1,243·1,598·52. These totals reconcile exactly to 5,302 candidates; umbrella aliases inherit
+Package-by-package measured records (total · enforced · partial · unmeasured): MCP 3·1·2·0 backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 51·29·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 97·96·0·1 http 3·0·3·0 math 89·30·51·8 options 174·149·18·7 performance 64·19·44·1 portfolio 32·7·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 14·2·5·7 technical-analysis 1,287·575·687·25 valuation 50·41·9·0 volatility 107·69·20·18 workflows 32·8·13·11 and the umbrella 2,895·1,245·1,598·52. These totals reconcile exactly to 5,305 candidates; umbrella aliases inherit
 evidence only when their implementation identity and input policy match.
 
 Ownership closes by reconciliation, not erasure: statically-unattributed object contracts are

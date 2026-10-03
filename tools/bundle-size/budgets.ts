@@ -47,7 +47,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
-    budgetKB: 11.75,
+    budgetKB: 11.875,
     intent: 'all model exports; runtime guards included, schema/JSON-Schema machinery excluded',
     forbidden: [
       {
@@ -60,6 +60,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       },
     ],
     rationale:
+      '11.75 → 11.875 KB (disclosed-holdings warning registration, 2026-09-25): isolated Node 22.23.2/esbuild 0.25.12 measurements against 009f223 are 12,029 → 12,058 B gzip (+29 B), with an identical retained-module set. The one new public WarningCode member grows the shared catalog; no holdings or schema implementation enters pricing. The installed expert kernel remains 2,321 B. All forbidden-dependency and installed-consumer canaries stay unchanged; headroom is 102 B. ' +
       '8 KB → 8.5 KB in Phase 3B.N2. The stable diagnostic codes this entrypoint carries became ' +
       'self-describing (`vol.surface_extrapolated` → `volatility.surface_extrapolated`, plus the ' +
       'matching enum members), which costs ~25 B gzip. The budget’s real content — no schema or ' +
@@ -518,12 +519,32 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
+    specifier: '@insiderfinance/totalfinance/portfolio/disclosed-holdings',
+    entry: 'packages/portfolio/src/disclosed-holdings.ts',
+    budgetKB: 10.5,
+    intent:
+      'exact disclosed quantity/value changes, complete-universe weights and concentration; no ledger or provider integration',
+    forbidden: [
+      {
+        needle: 'toJSONSchema',
+        why: 'the pure disclosure calculator must not pull schema/JSON-Schema machinery',
+      },
+      {
+        needle: '__TOTALFINANCE_SCHEMA_FACADE__',
+        why: 'the runtime schema facade stays at its own entrypoint',
+      },
+    ],
+    rationale:
+      'Initial disclosed-holdings surface (2026-09-25): measured 10,510 B gzip with Node 22.23.2/esbuild 0.25.12; 242 B headroom. The dedicated import retains only its exact-decimal/boundary/calculation modules and shared core helpers. It does not retain portfolio ledger, provider, artifact or schema implementations.',
+  },
+  {
     specifier: '@insiderfinance/totalfinance/portfolio',
     entry: 'packages/portfolio/src/index.ts',
-    budgetKB: 104,
+    budgetKB: 108.125,
     intent:
-      'the FC7 event-derived ledger: events grammar, pure reducer, spine serialization, valuation, FC4 seam',
+      'the FC7 event-derived ledger and independent disclosed-holdings comparison; events, reducer, serialization, valuation, FC4 seam',
     rationale:
+      '104 → 108.125 KB (disclosed holdings, 2026-09-25): isolated 009f223/current measurements are 106,352 → 110,554 B gzip (+4,202 B), with Node 22.23.2/esbuild 0.25.12. The only newly retained modules are disclosed-holdings, its boundary and its private exact-decimal arithmetic; no dependency family is added. The named domain export adds the requested API; its dedicated 10.5 KB subpath is independently capped. Headroom is 166 B. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21): 102 -> 104 KB, measured 103.1 KB. Combos on the trade grammar, the core order vocabulary, and the option terms spelled as type. ' +
       '101 → 102 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): a rebalance leaves a non-held OCC option target unresolved with the reason instead of sizing it at a share multiplier (the core OCC grammar predicate, without the session calendar), and every plan row carries the contract multiplier its estimate applied; measured 103,759 B, 335 B over the 101 KB line. ' +
       'FC7 first slice (Stage 4.4, 2026-08-28): the closed economic-event grammar with per-variant ' +
@@ -598,10 +619,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 681.25,
+    budgetKB: 685.375,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      '681.25 → 685.375 KB (disclosed holdings, 2026-09-25): isolated 009f223/current measurements are 697,450 → 701,659 B gzip (+4,209 B), with Node 22.23.2/esbuild 0.25.12. The all-exports umbrella gains only the three disclosed-holdings runtime modules and registered diagnostic metadata; the retained source families are unchanged. Narrow installed-consumer budgets and structural checks remain intact; headroom is 165 B. ' +
       '680 → 681.25 KB (installed-consumer correctness repair, 2026-09-21): measured 697,387 B with Node 22.23.2/esbuild 0.25.12. Built-in TA contracts are now shared named declarations bound by every leaf, so the all-exports umbrella includes their construction code. This protects narrow-import correctness without relying on discovery side effects; separate installed-function budgets enforce lean imports and document the esbuild root-namespace limitation. ' +
       'Pre-publish interface repairs B and C (2026-09-21): 674 -> 680 KB, measured 677.8 KB. Combos and one order vocabulary, chainGreeks and usEquityOption, the unified portfolio VaR door, and every code as a registry member. ' +
       'Pre-publish interface repairs (2026-09-18, assumptions and units): 672 → 674 KB, measured 689,089 B. One engine-inversion kernel with style-aware bounds (the American door, a European contract with a named engine, and the chain-health report share it), the chain-health American rows and dividend disclosure, the OCC grammar predicate and its refusals in the plan, paper broker and rebalance, the required annualization and risk-free rate, and the display-unit Greek kernel in risk; every other entrypoint stays inside its own line after the grammar/calendar split. ' +

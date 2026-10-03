@@ -98,6 +98,7 @@
     "packages/performance/src/rolling.ts",
     "packages/performance/src/sector-performance.ts",
     "packages/performance/src/sharpe.ts",
+    "packages/portfolio/src/disclosed-holdings.ts",
     "packages/portfolio/src/events.ts",
     "packages/portfolio/src/index.ts",
     "packages/portfolio/src/ledger.ts",

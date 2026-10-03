@@ -79,7 +79,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/portfolio` exposes **40** runtime exports (**229** including types) across 7 entrypoints (`.`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
+`@insiderfinance/totalfinance/portfolio` exposes **41** runtime exports (**240** including types) across 8 entrypoints (`.`, `./disclosed-holdings`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
 
 ## License
 

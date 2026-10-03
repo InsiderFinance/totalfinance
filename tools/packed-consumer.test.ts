@@ -2331,3 +2331,80 @@ describe('packed sector public exports and report honesty', () => {
     120_000,
   );
 });
+
+const DISCLOSED_HOLDINGS_PUBLIC_TS = `
+import { portfolio } from '@insiderfinance/totalfinance';
+import { compareDisclosedHoldings as domain } from '@insiderfinance/totalfinance/portfolio';
+import { compareDisclosedHoldings, type CompareDisclosedHoldingsInput } from '@insiderfinance/totalfinance/portfolio/disclosed-holdings';
+import { canonicalJsonOf, createAnalysisArtifact, readAnalysisArtifact } from '@insiderfinance/totalfinance/core/artifacts';
+const row = { holdingId: 'h', issuerId: 'i', securityId: 's', classId: 'c', mappingStatus: 'mapped' as const, instrumentType: 'common_stock', quantity: '9007199254740993', quantityUnit: 'SH', reportedValue: '25', valueCurrency: 'USD', valueScale: '1000', putCall: 'none' as const, investmentDiscretion: 'SOLE', otherManagerIds: [], evidenceIds: ['e'], reviewReasons: [] };
+const baseline = { managerId: 'm', periodEnd: '2026-03-31', reportIds: ['before'], evidenceIds: ['e'], reportComplete: true, mappingComplete: true, comparisonEligible: true, reviewReasons: [], holdings: [row] };
+const current = { ...baseline, periodEnd: '2026-06-30', reportIds: ['after'], holdings: [{ ...row, quantity: '9007199254740995', reportedValue: '28000', valueScale: '1' }] };
+const input: CompareDisclosedHoldingsInput = { baseline, current, comparisonMode: 'reported-period-change', policy: { supportedProfile: 'common-stock-shares-v1', discretionPolicy: 'sole-without-other-managers', ratioDecimalPlaces: 12 } };
+const result = compareDisclosedHoldings(input);
+if (result.changes[0]!.quantityDifference !== '2' || result.changes[0]!.valueDifference !== '3000') throw new Error('exact disclosure arithmetic');
+if (canonicalJsonOf(result) !== canonicalJsonOf(domain(input)) || canonicalJsonOf(result) !== canonicalJsonOf(portfolio.compareDisclosedHoldings(input))) throw new Error('import identity');
+const artifact = createAnalysisArtifact({ artifactType: 'portfolio.disclosed-holdings', producedBy: { operation: 'compareDisclosedHoldings' }, inputs: { parameters: input }, result });
+if (readAnalysisArtifact({ artifact }).artifact.id !== artifact.id) throw new Error('artifact mismatch');
+console.log('DISCLOSED_HOLDINGS_PUBLIC_OK');
+`;
+
+describe('packed disclosed holdings imports and exact decimals', () => {
+  it.each(['nodenext', 'bundler'] as const)(
+    'compiles and runs exact disclosure reports with %s resolution',
+    (resolution) => {
+      const dir = join(consumer, `disclosed-holdings-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(join(dir, 'consumer.mts'), DISCLOSED_HOLDINGS_PUBLIC_TS);
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'DISCLOSED_HOLDINGS_PUBLIC_OK',
+      );
+    },
+    120_000,
+  );
+
+  it('executes the actual public guide example against installed packages', () => {
+    const guide = readFileSync(join(ROOT, 'docs/guides/disclosed-holdings.md'), 'utf8');
+    const example = [...guide.matchAll(/```ts\n([\s\S]*?)```/g)]
+      .map((match) => match[1])
+      .join('\n');
+    const dir = join(consumer, 'disclosed-holdings-guide');
+    sh('mkdir', ['-p', dir], consumer);
+    writeFileSync(join(dir, 'consumer.mts'), example + '\nconsole.log("DISCLOSURE_GUIDE_OK");');
+    writeFileSync(
+      join(dir, 'tsconfig.json'),
+      JSON.stringify({
+        compilerOptions: {
+          module: 'nodenext',
+          moduleResolution: 'nodenext',
+          strict: true,
+          noUncheckedIndexedAccess: true,
+          target: 'es2022',
+          outDir: './compiled',
+        },
+        include: ['consumer.mts'],
+      }),
+    );
+    sh(TSC, ['-p', dir], dir);
+    expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+      'DISCLOSURE_GUIDE_OK',
+    );
+  }, 120_000);
+});

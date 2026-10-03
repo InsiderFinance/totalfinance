@@ -52,6 +52,9 @@ export default defineConfig({
         './packages/foreign-exchange/src/exposure.ts',
       ),
       '@totalfinance/foreign-exchange': fromRoot('./packages/foreign-exchange/src/index.ts'),
+      '@totalfinance/portfolio/disclosed-holdings': fromRoot(
+        './packages/portfolio/src/disclosed-holdings.ts',
+      ),
       '@totalfinance/portfolio/events': fromRoot('./packages/portfolio/src/events.ts'),
       '@totalfinance/portfolio/ledger': fromRoot('./packages/portfolio/src/ledger.ts'),
       '@totalfinance/portfolio/performance': fromRoot('./packages/portfolio/src/performance.ts'),

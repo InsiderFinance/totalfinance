@@ -46,6 +46,10 @@ const LEDGER = new Map<string, string>([
     'same condition also requires Number.isSafeInteger before accepting the seed',
   ],
   [
+    'packages/portfolio/src/disclosed-holdings.ts#compareDisclosedHoldings:Number.isInteger(decimalPlaces)',
+    'exact-decimal ratio precision is bounded to [0, 18] in the same condition before any decimal exponentiation',
+  ],
+  [
     'packages/strategy/src/classify.ts#anonymous:Number.isInteger(q)',
     'detects integral leg quantities before a GCD over the already-sized leg array',
   ],

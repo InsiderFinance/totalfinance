@@ -27,6 +27,16 @@
 > [`options-backtest.md`](./options-backtest.md) remains normative for the current implementation and
 > this specification owns its portfolio-grade completion requirements.
 
+## Bounded disclosed-holdings addition (2026-09-25)
+
+The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
+**DH1–DH5 locally verified complete** on disposable verification commit
+`79a48493869a3609af2e51b6f9fb11b694aad3d2` plus reviewed documentary/inventory/bundle overlays
+and the prose-only tracker closeout. Full CI and an independent full coverage repeat each passed
+567 files / 12,598 tests; the linked contract records exact source, regeneration, installed-tarball
+and retained-attempt evidence. It compares selected disclosure snapshots and does not reopen FC7
+economic-ledger semantics. Publication and hosted CI remain separate gates.
+
 ## How this document becomes library code
 
 This file deliberately combines a specification and an execution tracker. The two roles are distinct:

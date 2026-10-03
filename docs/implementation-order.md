@@ -25,6 +25,18 @@ PR #336 is integrated into PR #303 at merge commit `fc46353b` (2026-09-08), pres
 search repair at `cec30b61`. The maintainer explicitly authorized this integration while hosted
 checks remained red; that decision does not waive the hosted matrix for release.
 
+### Bounded consumer-requested addition (2026-09-25)
+
+The FMP rebuild consumer authorizes the independent provider-free
+[disclosed holdings comparison](./specs/disclosed-holdings.md). Execute DH1–DH5 in that spec after
+contract review, while retaining the release queue's separate approval gates. This adds a direct
+portfolio analysis API; it does not reopen the economic ledger or authorize publication. Status:
+**DH1–DH5 locally verified complete** on disposable verification commit `79a48493869a3609af2e51b6f9fb11b694aad3d2`
+plus reviewed documentary/inventory/bundle overlays and the prose-only tracker closeout. Full CI
+and the independent full coverage repeat each passed 567 files / 12,598 tests; the linked spec
+records exact source, regeneration, tarball and retained-attempt evidence. The consumer owns acquisition,
+report/mapping selection, evidence pins and its separately versioned offline Node handoff.
+
 ### Preview launch queue (2026-09-07)
 
 **Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**
@@ -303,8 +315,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-41,983 public naming identities are walked and 0 are unresolved; 38,051 are `explicit`,
-3,770 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+42,149 public naming identities are walked and 0 are unresolved; 38,189 are `explicit`,
+3,798 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;
