@@ -27,6 +27,18 @@
 > [`options-backtest.md`](./options-backtest.md) remains normative for the current implementation and
 > this specification owns its portfolio-grade completion requirements.
 
+## Bounded disclosed-holdings addition (2026-09-25)
+
+The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
+**DH1–DH7 implementation and review verification complete (2026-10-02) @
+`69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** Typed scales and reason codes, structured policy reporting,
+and current-main integration are included. Local full CI and an independent hosted Node 22.13.0
+full-coverage repeat each passed 577 files / 12,788 tests plus 80 site tests; separate API checks
+and clean regeneration pass. The linked spec records exact receipts and preserves the original
+September evidence. Final-head hosted checks remain mandatory before PR #4 merges; publication
+is separate. This compares selected disclosure snapshots and does not reopen FC7 economic-ledger
+semantics. Do not restart completed DH1–DH7 work.
+
 ## How this document becomes library code
 
 This file deliberately combines a specification and an execution tracker. The two roles are distinct:

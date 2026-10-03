@@ -1,33 +1,33 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42256,
+    "identities": 42477,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3784,
-      "explicit": 38310,
+      "canonical-term": 3812,
+      "explicit": 38503,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
-      "code-string": 273,
-      "enum-member": 273,
-      "export": 7289,
-      "field": 22387,
-      "literal-value": 4470,
+      "code-string": 274,
+      "enum-member": 274,
+      "export": 7319,
+      "field": 22498,
+      "literal-value": 4546,
       "mcp-field": 1520,
       "mcp-tool": 55,
       "method": 1688,
       "package": 25,
-      "parameter": 4088,
-      "subpath": 188
+      "parameter": 4089,
+      "subpath": 189
     },
     "byPackage": {
       "@totalfinance/backtest": 5069,
       "@totalfinance/calendars": 158,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3146,
+      "@totalfinance/core": 3149,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
@@ -37,7 +37,7 @@
       "@totalfinance/mcp": 493,
       "@totalfinance/options": 2718,
       "@totalfinance/performance": 716,
-      "@totalfinance/portfolio": 2275,
+      "@totalfinance/portfolio": 2478,
       "@totalfinance/research": 1392,
       "@totalfinance/risk": 1886,
       "@totalfinance/scenarios": 1375,
@@ -47,7 +47,7 @@
       "@totalfinance/valuation": 1005,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3136
+      "totalfinance": 3151
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -44076,6 +44076,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|code-string|portfolio.disclosed_holdings_review",
+      "name": "portfolio.disclosed_holdings_review",
+      "kind": "code-string",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|code-string|portfolio.duplicate_event_conflict",
       "name": "portfolio.duplicate_event_conflict",
       "kind": "code-string",
@@ -46273,6 +46280,13 @@
     {
       "id": "@totalfinance/core|enum-member|WarningCode.PerformanceUndefinedMetric",
       "name": "PerformanceUndefinedMetric",
+      "kind": "enum-member",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|enum-member|WarningCode.PortfolioDisclosedHoldingsReview",
+      "name": "PortfolioDisclosedHoldingsReview",
       "kind": "enum-member",
       "position": "serialized",
       "disposition": "explicit"
@@ -59673,6 +59687,13 @@
     {
       "id": "@totalfinance/core|literal-value|WarningCode:performance.undefined_metric",
       "name": "performance.undefined_metric",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|WarningCode:portfolio.disclosed_holdings_review",
+      "name": "portfolio.disclosed_holdings_review",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -128250,6 +128271,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|export|compareDisclosedHoldings",
+      "name": "compareDisclosedHoldings",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|CompareDisclosedHoldingsInput",
+      "name": "CompareDisclosedHoldingsInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|export|ContractMultiplierChangeEvent",
       "name": "ContractMultiplierChangeEvent",
       "kind": "export",
@@ -128359,6 +128396,110 @@
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./events"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHolding",
+      "name": "DisclosedHolding",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingChange",
+      "name": "DisclosedHoldingChange",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingChangeReason",
+      "name": "DisclosedHoldingChangeReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingReason",
+      "name": "DisclosedHoldingReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingResult",
+      "name": "DisclosedHoldingResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsConcentration",
+      "name": "DisclosedHoldingsConcentration",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsConcentrationReason",
+      "name": "DisclosedHoldingsConcentrationReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsPolicy",
+      "name": "DisclosedHoldingsPolicy",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsReport",
+      "name": "DisclosedHoldingsReport",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsSnapshot",
+      "name": "DisclosedHoldingsSnapshot",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsSnapshotReason",
+      "name": "DisclosedHoldingsSnapshotReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsSnapshotReport",
+      "name": "DisclosedHoldingsSnapshotReport",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedPositionResult",
+      "name": "DisclosedPositionResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
       "disposition": "explicit"
     },
     {
@@ -131707,6 +131848,34 @@
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
     {
+      "id": "@totalfinance/portfolio|field|CompareDisclosedHoldingsInput.baseline",
+      "name": "baseline",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|CompareDisclosedHoldingsInput.comparisonMode",
+      "name": "comparisonMode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|CompareDisclosedHoldingsInput.current",
+      "name": "current",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|CompareDisclosedHoldingsInput.policy",
+      "name": "policy",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|field|ContractMultiplierChangeEvent.contractMultiplierAfter",
       "name": "contractMultiplierAfter",
       "kind": "field",
@@ -132057,6 +132226,783 @@
       "name": "settlementPricePerUnit",
       "kind": "field",
       "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.classId",
+      "name": "classId",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.evidenceIds",
+      "name": "evidenceIds",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.holdingId",
+      "name": "holdingId",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.instrumentType",
+      "name": "instrumentType",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.investmentDiscretion",
+      "name": "investmentDiscretion",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.issuerId",
+      "name": "issuerId",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.mappingStatus",
+      "name": "mappingStatus",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.otherManagerIds",
+      "name": "otherManagerIds",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.putCall",
+      "name": "putCall",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.quantity",
+      "name": "quantity",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.quantityUnit",
+      "name": "quantityUnit",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.reportedValue",
+      "name": "reportedValue",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.reviewReasons",
+      "name": "reviewReasons",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.securityId",
+      "name": "securityId",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.valueCurrency",
+      "name": "valueCurrency",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHolding.valueScale",
+      "name": "valueScale",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.baselineHoldingIds",
+      "name": "baselineHoldingIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.baselineQuantity",
+      "name": "baselineQuantity",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.baselineReportedValue",
+      "name": "baselineReportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.classId",
+      "name": "classId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.classification",
+      "name": "classification",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.currentHoldingIds",
+      "name": "currentHoldingIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.currentQuantity",
+      "name": "currentQuantity",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.currentReportedValue",
+      "name": "currentReportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.issuerId",
+      "name": "issuerId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.quantityDifference",
+      "name": "quantityDifference",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.reasons",
+      "name": "reasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.securityId",
+      "name": "securityId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.valueCurrency",
+      "name": "valueCurrency",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingChange.valueDifference",
+      "name": "valueDifference",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.classId",
+      "name": "classId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.evidenceIds",
+      "name": "evidenceIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.holdingId",
+      "name": "holdingId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.instrumentType",
+      "name": "instrumentType",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.investmentDiscretion",
+      "name": "investmentDiscretion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.issuerId",
+      "name": "issuerId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.mappingStatus",
+      "name": "mappingStatus",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.normalizedReportedValue",
+      "name": "normalizedReportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.otherManagerIds",
+      "name": "otherManagerIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.putCall",
+      "name": "putCall",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.quantity",
+      "name": "quantity",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.quantityUnit",
+      "name": "quantityUnit",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.reasons",
+      "name": "reasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.reportedValue",
+      "name": "reportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.reviewReasons",
+      "name": "reviewReasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.securityId",
+      "name": "securityId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.status",
+      "name": "status",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.valueCurrency",
+      "name": "valueCurrency",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingResult.valueScale",
+      "name": "valueScale",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.denominatorReportedValue",
+      "name": "denominatorReportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.herfindahlIndex",
+      "name": "herfindahlIndex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.largestWeight",
+      "name": "largestWeight",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.reasons",
+      "name": "reasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.status",
+      "name": "status",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsConcentration.valueCurrency",
+      "name": "valueCurrency",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsPolicy.discretionPolicy",
+      "name": "discretionPolicy",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsPolicy.ratioDecimalPlaces",
+      "name": "ratioDecimalPlaces",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsPolicy.supportedProfile",
+      "name": "supportedProfile",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions",
+      "name": "assumptions",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.changes",
+      "name": "changes",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.denominator",
+      "name": "denominator",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.discretion",
+      "name": "discretion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.policy",
+      "name": "policy",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.profile",
+      "name": "profile",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.rounding",
+      "name": "rounding",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.baseline",
+      "name": "baseline",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.changes",
+      "name": "changes",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.comparisonMode",
+      "name": "comparisonMode",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.current",
+      "name": "current",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics",
+      "name": "diagnostics",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics.baselineHoldingCount",
+      "name": "baselineHoldingCount",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics.changeCount",
+      "name": "changeCount",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics.currentHoldingCount",
+      "name": "currentHoldingCount",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics.status",
+      "name": "status",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.diagnostics.warnings",
+      "name": "warnings",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.policyVersion",
+      "name": "policyVersion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.comparisonEligible",
+      "name": "comparisonEligible",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.evidenceIds",
+      "name": "evidenceIds",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.holdings",
+      "name": "holdings",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.managerId",
+      "name": "managerId",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.mappingComplete",
+      "name": "mappingComplete",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.periodEnd",
+      "name": "periodEnd",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.reportComplete",
+      "name": "reportComplete",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.reportIds",
+      "name": "reportIds",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshot.reviewReasons",
+      "name": "reviewReasons",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.comparisonEligible",
+      "name": "comparisonEligible",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.concentration",
+      "name": "concentration",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.evidenceIds",
+      "name": "evidenceIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.holdings",
+      "name": "holdings",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.managerId",
+      "name": "managerId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.mappingComplete",
+      "name": "mappingComplete",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.periodEnd",
+      "name": "periodEnd",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.positions",
+      "name": "positions",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.reportComplete",
+      "name": "reportComplete",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.reportIds",
+      "name": "reportIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsSnapshotReport.reviewReasons",
+      "name": "reviewReasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.classId",
+      "name": "classId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.evidenceIds",
+      "name": "evidenceIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.holdingIds",
+      "name": "holdingIds",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Plural of id, an ordinary public word."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.issuerId",
+      "name": "issuerId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.quantity",
+      "name": "quantity",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.reasons",
+      "name": "reasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.reportedValue",
+      "name": "reportedValue",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.securityId",
+      "name": "securityId",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.status",
+      "name": "status",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.valueCurrency",
+      "name": "valueCurrency",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedPositionResult.weight",
+      "name": "weight",
+      "kind": "field",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -141016,6 +141962,20 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|literal-value|CompareDisclosedHoldingsInput.comparisonMode:reported-period-change",
+      "name": "reported-period-change",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|CompareDisclosedHoldingsInput.comparisonMode:same-period-revision",
+      "name": "same-period-revision",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|literal-value|ContractMultiplierChangeEvent.eventType:derivative.multiplier-change",
       "name": "derivative.multiplier-change",
       "kind": "literal-value",
@@ -141167,6 +142127,517 @@
     {
       "id": "@totalfinance/portfolio|literal-value|DerivativeSettlement.kind:physical",
       "name": "physical",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.mappingStatus:mapped",
+      "name": "mapped",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.mappingStatus:unresolved",
+      "name": "unresolved",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.putCall:call",
+      "name": "call",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.putCall:none",
+      "name": "none",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.putCall:put",
+      "name": "put",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.valueScale:1",
+      "name": "1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.valueScale:1000",
+      "name": "1000",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:newly_disclosed",
+      "name": "newly_disclosed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:no_longer_disclosed",
+      "name": "no_longer_disclosed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:still_disclosed",
+      "name": "still_disclosed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:unknown",
+      "name": "unknown",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_comparison_ineligible",
+      "name": "baseline_comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_holdings_require_review",
+      "name": "baseline_holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_mapping_incomplete",
+      "name": "baseline_mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_mixed_currencies",
+      "name": "baseline_mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_report_incomplete",
+      "name": "baseline_report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_source_snapshot_review",
+      "name": "baseline_source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:conflicting_security_identity",
+      "name": "conflicting_security_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:currency_mismatch",
+      "name": "currency_mismatch",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_comparison_ineligible",
+      "name": "current_comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_holdings_require_review",
+      "name": "current_holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_mapping_incomplete",
+      "name": "current_mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_mixed_currencies",
+      "name": "current_mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_report_incomplete",
+      "name": "current_report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_source_snapshot_review",
+      "name": "current_source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:duplicate_security_class",
+      "name": "duplicate_security_class",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:option_position",
+      "name": "option_position",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:source_row_review",
+      "name": "source_row_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unresolved_identity",
+      "name": "unresolved_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_discretion",
+      "name": "unsupported_discretion",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_instrument_type",
+      "name": "unsupported_instrument_type",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_quantity_unit",
+      "name": "unsupported_quantity_unit",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:conflicting_security_identity",
+      "name": "conflicting_security_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:duplicate_security_class",
+      "name": "duplicate_security_class",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:option_position",
+      "name": "option_position",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:source_row_review",
+      "name": "source_row_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unresolved_identity",
+      "name": "unresolved_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_discretion",
+      "name": "unsupported_discretion",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_instrument_type",
+      "name": "unsupported_instrument_type",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_quantity_unit",
+      "name": "unsupported_quantity_unit",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.mappingStatus:mapped",
+      "name": "mapped",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.mappingStatus:unresolved",
+      "name": "unresolved",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.putCall:call",
+      "name": "call",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.putCall:none",
+      "name": "none",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.putCall:put",
+      "name": "put",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.status:review",
+      "name": "review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.status:supported",
+      "name": "supported",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.valueScale:1",
+      "name": "1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.valueScale:1000",
+      "name": "1000",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentration.status:available",
+      "name": "available",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentration.status:review",
+      "name": "review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:comparison_ineligible",
+      "name": "comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:holdings_require_review",
+      "name": "holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:mapping_incomplete",
+      "name": "mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:mixed_currencies",
+      "name": "mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:report_incomplete",
+      "name": "report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:source_snapshot_review",
+      "name": "source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:zero_denominator",
+      "name": "zero_denominator",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsPolicy.discretionPolicy:sole-without-other-managers",
+      "name": "sole-without-other-managers",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsPolicy.supportedProfile:common-stock-shares-v1",
+      "name": "common-stock-shares-v1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.comparisonMode:reported-period-change",
+      "name": "reported-period-change",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.comparisonMode:same-period-revision",
+      "name": "same-period-revision",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.diagnostics.status:complete",
+      "name": "complete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.diagnostics.status:review",
+      "name": "review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.policyVersion:disclosed-holdings-v1",
+      "name": "disclosed-holdings-v1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:comparison_ineligible",
+      "name": "comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:holdings_require_review",
+      "name": "holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:mapping_incomplete",
+      "name": "mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:mixed_currencies",
+      "name": "mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:report_incomplete",
+      "name": "report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:source_snapshot_review",
+      "name": "source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedPositionResult.status:review",
+      "name": "review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedPositionResult.status:supported",
+      "name": "supported",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -143896,6 +145367,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|parameter|compareDisclosedHoldings(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|parameter|createAuthorizationGrant(input)",
       "name": "input",
       "kind": "parameter",
@@ -144405,6 +145883,13 @@
       "name": "input",
       "kind": "parameter",
       "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|subpath|./disclosed-holdings",
+      "name": "disclosed-holdings",
+      "kind": "subpath",
+      "position": "module",
       "disposition": "explicit"
     },
     {
@@ -269188,8 +270673,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.0",
-      "name": "0.1.0",
+      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.1",
+      "name": "0.1.1",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -285827,6 +287312,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|compareDisclosedHoldings",
+      "name": "compareDisclosedHoldings",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|CompareDisclosedHoldingsInput",
+      "name": "CompareDisclosedHoldingsInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|compareEngines",
       "name": "compareEngines",
       "kind": "export",
@@ -287705,6 +289206,110 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHolding",
+      "name": "DisclosedHolding",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingChange",
+      "name": "DisclosedHoldingChange",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingChangeReason",
+      "name": "DisclosedHoldingChangeReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingReason",
+      "name": "DisclosedHoldingReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingResult",
+      "name": "DisclosedHoldingResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsConcentration",
+      "name": "DisclosedHoldingsConcentration",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsConcentrationReason",
+      "name": "DisclosedHoldingsConcentrationReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsPolicy",
+      "name": "DisclosedHoldingsPolicy",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsReport",
+      "name": "DisclosedHoldingsReport",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsSnapshot",
+      "name": "DisclosedHoldingsSnapshot",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsSnapshotReason",
+      "name": "DisclosedHoldingsSnapshotReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsSnapshotReport",
+      "name": "DisclosedHoldingsSnapshotReport",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedPositionResult",
+      "name": "DisclosedPositionResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
       "disposition": "explicit"
     },
     {

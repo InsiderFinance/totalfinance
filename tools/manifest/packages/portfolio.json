@@ -34,6 +34,13 @@
       "role": "constant",
       "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): the grant artifact's schema version"
     },
+    "compareDisclosedHoldings": {
+      "kind": "function",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "Supplied disclosed holdings, exact decimal reported differences, complete-universe presence/weights/concentration; no trades or ownership inference."
+    },
     "createAuthorizationGrant": {
       "kind": "function",
       "entrypoints": [".", "./trade"],

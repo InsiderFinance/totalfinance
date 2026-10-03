@@ -62,7 +62,12 @@
       "import": "./dist/trade/index.js",
       "default": "./dist/trade/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./disclosed-holdings": {
+      "types": "./dist/disclosed-holdings.d.ts",
+      "import": "./dist/disclosed-holdings.js",
+      "default": "./dist/disclosed-holdings.js"
+    }
   },
   "files": [
     "dist",

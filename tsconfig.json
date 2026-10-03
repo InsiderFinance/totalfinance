@@ -164,6 +164,9 @@
       ],
       "@insiderfinance/totalfinance/portfolio/policy": ["./packages/portfolio/src/policy.ts"],
       "@insiderfinance/totalfinance/portfolio/trade": ["./packages/portfolio/src/trade/index.ts"],
+      "@insiderfinance/totalfinance/portfolio/disclosed-holdings": [
+        "./packages/portfolio/src/disclosed-holdings.ts"
+      ],
       "@insiderfinance/totalfinance/research": ["./packages/research/src/index.ts"],
       "@insiderfinance/totalfinance/research/screening": ["./packages/research/src/screening.ts"],
       "@insiderfinance/totalfinance/research/factors": ["./packages/research/src/factors.ts"],

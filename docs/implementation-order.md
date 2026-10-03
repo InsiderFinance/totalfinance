@@ -25,14 +25,30 @@ PR #336 is integrated into PR #303 at merge commit `fc46353b` (2026-09-08), pres
 search repair at `cec30b61`. The maintainer explicitly authorized this integration while hosted
 checks remained red; that decision does not waive the hosted matrix for release.
 
-**Post-0.1.0 amendment (2026-10-01): selective Greeks and exposure — in progress.** Follow
+### Bounded consumer-requested addition (2026-09-25)
+
+The FMP rebuild consumer authorizes the independent provider-free
+[disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review
+verification complete (2026-10-02) @ `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** This includes
+literal value scales, typed review codes, structured policy reporting and integration with current
+main. Local full CI and an independent hosted Node 22.13.0 full-coverage repeat each passed
+577 files / 12,788 tests plus 80 site tests; separate API checks and clean regeneration pass.
+The linked spec preserves the original September evidence and records the October receipts.
+The final PR #4 head must pass its hosted checks before the authorized merge. Publication remains
+separate: this adds a direct portfolio analysis API, not an economic-ledger change or release.
+The consumer owns acquisition, report/mapping selection, evidence pins and its separately versioned
+offline Node handoff. Do not restart DH1–DH7.
+
+**Post-0.1.0 amendment (2026-10-01): selective Greeks and exposure — merged in PR #3.** Follow
 [`selective-greeks-and-exposure.md`](./specs/selective-greeks-and-exposure.md): one Black–Scholes
 evaluation kernel that computes only requested outputs, named single-Greek methods,
 `blackScholes.evaluate`, the `blackScholesEvaluateMany`/`Into` batch family, selective
 `exposure(...)` with nine named exposure shortcuts, GEX/DEX selection for `exposureFromGreeks`, and
 the per-call expiry-formatter fix (InsiderFinance/totalfinance#1). 0.1.0 is published: statements
 elsewhere that there are no released consumers no longer apply, and existing supported calls are
-preserved. No version bump, publication, MCP expansion or deployment is authorized by it.
+preserved. Main now includes the 0.1.1 release metadata at `b1edf16`; this holdings integration
+preserves it without bumping or publishing another version. MCP expansion and deployment remain
+separate work.
 
 ### Preview launch queue (2026-09-07)
 
@@ -312,8 +328,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,256 public naming identities are walked and 0 are unresolved; 38,310 are `explicit`,
-3,784 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+42,477 public naming identities are walked and 0 are unresolved; 38,503 are `explicit`,
+3,812 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

@@ -5,7 +5,7 @@
 > the permanent gates—including declaration-derived branch/resource coverage—without reopening the
 > phase. Stage 4 APIs must enter these ratchets in their first commit. The body below is the historical
 > execution and evidence record, not an active queue. Live counters were refreshed for the
-> [signed-leg simplification](./signed-leg-constructors.md) on 2026-09-09; this does not reopen 3B.
+> [disclosed-holdings comparison](./disclosed-holdings.md) on 2026-09-25; this does not reopen 3B.
 >
 > Review rounds RV14 and RV17-RV31 raised findings against measurement validity. Each was
 > independently reproduced before being fixed, and each fix carries the reproduction in its own
@@ -51,7 +51,7 @@
 > measured (R7/R12), and MCP contracts are canonical JSON Schema rather than field names (R8)) — but
 > those were different conditions, and clearing them is not this claim.
 >
-> Measured, from `public-enforcement.json`: **enforced 2,482 · partial 2,701 · defective 0 · unmeasured 187** of 5,370 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
+> Measured, from `public-enforcement.json`: **enforced 2,485 · partial 2,701 · defective 0 · unmeasured 187** of 5,373 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
 > `no-input` 48 `external-callback-contract` 53 `callback-input-required` 4
 > `async-result-unobserved` 6 `incomplete-baseline` 20
 > — and each reason is documented with what it
@@ -69,7 +69,7 @@
 > (`contract-conformance.test.ts`); the September 9 source revision is checked locally on Node 26.5.0.
 > Earlier Node 22.13/24/26 evidence does not certify this revision's still-required hosted matrix.
 >
-> The current artifact has 13,081 alternatives (6,707 unmeasured) and 76 receiver-grouping gaps.
+> The current artifact has 13,084 alternatives (6,707 unmeasured) and 76 receiver-grouping gaps.
 > September R08 adds one genuine external-callback interface, `ExecutionJournalStore#transact`.
 > The ratchet retains 185 for all other identities and allows only this named residual; tests of
 > the memory/file implementations are not presented as proof of arbitrary caller-supplied stores.
@@ -188,8 +188,8 @@ method bag. An unconstrained callback result such as `Array<any>` gets the one u
 structural baseline, `[]`; this restored direct measurement of `register` instead of hiding a
 process-global defective boundary behind `callback-input-required`.
 
-The generated surface is now **7,860 public paths / 2,682 implementations / 1,551 input contracts /
-1,924 result contracts / 384 validator identities**. The measured population is **5,370** records.
+The generated surface is now **7,863 public paths / 2,683 implementations / 1,553 input contracts /
+1,926 result contracts / 384 validator identities**. The measured population is **5,373** records.
 The exact residual branch list shrank by four: three recursive `register` mismatches disappeared and
 the MCP safe-parse projection stopped masquerading as a caller-selectable branch. Every remaining
 entry is still an exact built-versus-named identity and fails both when a new mismatch appears and
@@ -1146,12 +1146,12 @@ resolved it. `summary.mutationsExecuted` now reports what the harness actually R
 
 | mutation                | executed | covered |
 | ----------------------- | -------: | ------: |
-| `omit-required`         |   13,286 |  33,888 |
-| `wrong-type`            |   16,945 |  43,321 |
-| `non-finite`            |    9,375 |  24,455 |
-| `invalid-literal`       |    1,948 |   4,994 |
-| `unknown-key`           |    2,738 |   6,510 |
-| `null-when-nonnullable` |   26,219 |  65,902 |
+| `omit-required`         |   13,311 |  33,963 |
+| `wrong-type`            |   16,970 |  43,396 |
+| `non-finite`            |    9,376 |  24,458 |
+| `invalid-literal`       |    1,951 |   5,003 |
+| `unknown-key`           |    2,739 |   6,513 |
+| `null-when-nonnullable` |   26,244 |  65,977 |
 
 **EXECUTED and COVERED are different facts, and the table this replaces mixed them.** `executed` is
 what physically ran; `covered` is what a path may claim, directly or attributed from an alias twin.
@@ -1366,14 +1366,14 @@ or a rationale for an API decision.
 
 ### 3B.0 — Post-Wave-6 baseline and inventory design
 
-- [x] Verify Phase 3B.N is closed: 42,256 naming identities, 0 unresolved, gated in CI; the packed
+- [x] Verify Phase 3B.N is closed: 42,477 naming identities, 0 unresolved, gated in CI; the packed
       consumer proves the final package/MCP names and every removed alias has executable evidence.
 - [x] Build every public declaration and regenerate runtime/signature manifests after all Wave 6
       and naming-normalization checkboxes are closed.
 - [x] Generate the initial contract-identity graph and report path, implementation, input-contract,
       result-contract, and validator counts separately — `tools/manifest/contract-inventory.ts` →
-      `public-contracts.json`: 7,860 paths / 2,682 implementations / 1,551 input
-      contracts / 1,924 result contracts / 384 validator identities (refreshed after the 2026-08-02
+      `public-contracts.json`: 7,863 paths / 2,683 implementations / 1,553 input
+      contracts / 1,926 result contracts / 384 validator identities (refreshed after the 2026-08-02
       defect-fix wave, which added validators and two fixed-income deep entrypoints, again after
       3B.1a's snapshot reader, and again when intersections were recognized as objects — 996 → 1,034
       input contracts, none of them new API: a parameter typed `A & B` had been filed `other`, so its

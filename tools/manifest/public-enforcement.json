@@ -2822,8 +2822,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5370,
-    "enforced": 2482,
+    "candidates": 5373,
+    "enforced": 2485,
     "defective": 0,
     "partial": 2701,
     "unmeasured": 187,
@@ -2850,26 +2850,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2738,
-      "null-when-nonnullable": 26219,
-      "omit-required": 13286,
-      "wrong-type": 16945,
-      "non-finite": 9375,
+      "unknown-key": 2739,
+      "null-when-nonnullable": 26244,
+      "omit-required": 13311,
+      "wrong-type": 16970,
+      "non-finite": 9376,
       "optional-wrong-type": 8036,
-      "invalid-literal": 1948,
+      "invalid-literal": 1951,
       "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6510,
-      "null-when-nonnullable": 65902,
-      "omit-required": 33888,
-      "wrong-type": 43321,
-      "non-finite": 24455,
+      "unknown-key": 6513,
+      "null-when-nonnullable": 65977,
+      "omit-required": 33963,
+      "wrong-type": 43396,
+      "non-finite": 24458,
       "optional-wrong-type": 19179,
-      "invalid-literal": 4994,
+      "invalid-literal": 5003,
       "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
@@ -2877,7 +2877,7 @@
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3028,
+    "inherited": 3030,
     "fromSynthesizedInput": 1971,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
@@ -2889,8 +2889,8 @@
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13081,
-      "enforced": 3857,
+      "total": 13084,
+      "enforced": 3860,
       "partial": 2517,
       "defective": 0,
       "unmeasured": 6707,
@@ -51486,6 +51486,30 @@
         "unmeasured": 73
       },
       "fixtureSource": "@totalfinance/portfolio:applyPortfolioEvents"
+    },
+    {
+      "id": "@totalfinance/portfolio:compareDisclosedHoldings",
+      "package": "@totalfinance/portfolio",
+      "implementation": "packages/portfolio/dist/disclosed-holdings.d.ts#compareDisclosedHoldings",
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldings"
     },
     {
       "id": "@totalfinance/portfolio:createAuthorizationGrant",
@@ -139253,6 +139277,24 @@
       "fixtureSource": "@totalfinance/valuation:comparableCompanyValuation"
     },
     {
+      "id": "totalfinance:compareDisclosedHoldings",
+      "package": "totalfinance",
+      "implementation": "packages/portfolio/dist/disclosed-holdings.d.ts#compareDisclosedHoldings",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/portfolio:compareDisclosedHoldings",
+      "inheritedFrom": "@totalfinance/portfolio:compareDisclosedHoldings",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldings"
+    },
+    {
       "id": "totalfinance:compareEngines",
       "package": "totalfinance",
       "implementation": "packages/options/dist/engines.d.ts#compareEngines",
@@ -194774,6 +194816,24 @@
         "unmeasured": 73
       },
       "fixtureSource": "@totalfinance/portfolio:applyPortfolioEvents"
+    },
+    {
+      "id": "totalfinance:portfolio.compareDisclosedHoldings",
+      "package": "totalfinance",
+      "implementation": "packages/portfolio/dist/disclosed-holdings.d.ts#compareDisclosedHoldings",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/portfolio:compareDisclosedHoldings",
+      "inheritedFrom": "@totalfinance/portfolio:compareDisclosedHoldings",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldings"
     },
     {
       "id": "totalfinance:portfolio.createAuthorizationGrant",

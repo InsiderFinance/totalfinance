@@ -102,7 +102,8 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
     // 28 → 29 (Stage 7B.2 slice 3, 2026-09-06): the @insiderfinance/totalfinance/backtest/paper entrypoint joins the table.
     // 29 → 30 (PR #336, 2026-09-07): @insiderfinance/totalfinance/performance/sector-performance is independently budgeted.
 
-    expect(declared.length).toBe(30);
+    // The independently capped disclosed-holdings subpath adds one entrypoint (2026-09-25).
+    expect(declared.length).toBe(31);
   });
 
   it('publishes the budget CI enforces, exactly', () => {

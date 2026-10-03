@@ -95,6 +95,8 @@ export function warning(
  * code string, so no string is duplicated across the two registries (WS2.9).
  */
 export const WarningCode = {
+  /** Supplied disclosed holdings do not support some changes, weights or concentration. */
+  PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review',
   DataLockedMarket: 'data.locked_market',
   DataZeroBidAsk: 'data.zero_bid_ask',
   SurfaceExtrapolated: 'volatility.surface_extrapolated',

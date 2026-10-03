@@ -293,3 +293,6 @@ export type {
   TradePolicy,
   VerifyAuthorizationGrantInput,
 } from './trade/index.js';
+
+export { compareDisclosedHoldings } from './disclosed-holdings.js';
+export type * from './disclosed-holdings-types.js';

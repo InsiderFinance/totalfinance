@@ -558,6 +558,11 @@
       "import": "./modules/portfolio/dist/trade/index.js",
       "default": "./modules/portfolio/dist/trade/index.js"
     },
+    "./portfolio/disclosed-holdings": {
+      "types": "./modules/portfolio/dist/disclosed-holdings.d.ts",
+      "import": "./modules/portfolio/dist/disclosed-holdings.js",
+      "default": "./modules/portfolio/dist/disclosed-holdings.js"
+    },
     "./research": {
       "types": "./modules/research/dist/index.d.ts",
       "import": "./modules/research/dist/index.js",

@@ -21,6 +21,8 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import ts from 'typescript';
+import { literalDomain } from './contract-fields.js';
 import { baselineGap, unionSites, type SynthesisParameter } from './contract-synthesis.js';
 
 const numeric = (name: string) => ({
@@ -705,17 +707,40 @@ describe('the published literal domain', () => {
 
   it('keeps each admitted value in its OWN primitive', () => {
     /**
-     * `1` and `'1'` are different admissions. Serialising a domain as text made a numeric domain and
-     * a stringly one indistinguishable — to the membership test, to the fingerprint, and to the probe
-     * choosing a value outside it.
+     * Numeric-looking strings are legitimate declarations (disclosed-holdings valueScale is
+     * '1' | '1000'). Rejecting every such string falsely convicted a correct inventory. Exercise
+     * actual checker types in both directions instead: stringification AND numeric coercion fail.
+     * union-checker-parity.test.ts independently proves exact typed-domain parity for every public
+     * declaration; this is the focused producer regression, not a spelling-based exception list.
      */
-    const stringified = domains.filter((entry) =>
-      entry.values.some((value) => typeof value === 'string' && /^-?\d+(\.\d+)?$/.test(value)),
+    const file = 'literal-domain-fixture.ts';
+    const source = ts.createSourceFile(
+      file,
+      "type Numeric = 1 | 1000; type Text = '1' | '1000'; type Mixed = 1 | '1';",
+      ts.ScriptTarget.ESNext,
+      true,
     );
-    expect(
-      stringified.map((entry) => entry.record).slice(0, 5),
-      'a numeric domain is being published as strings',
-    ).toEqual([]);
+    const options: ts.CompilerOptions = { strict: true, noLib: true, types: [] };
+    const host = ts.createCompilerHost(options);
+    host.getSourceFile = (name) => (name === file ? source : undefined);
+    const checker = ts.createProgram([file], options, host).getTypeChecker();
+    const actual = new Map<string, unknown>();
+    source.forEachChild((node) => {
+      if (ts.isTypeAliasDeclaration(node))
+        actual.set(node.name.text, literalDomain(checker.getTypeAtLocation(node)));
+    });
+    expect(actual.get('Numeric')).toEqual([1, 1000]);
+    expect(actual.get('Text')).toEqual(['1', '1000']);
+    expect(actual.get('Mixed')).toEqual([1, '1']);
+  });
+
+  it('publishes the real disclosed-holdings scale as strings, never numeric multipliers', () => {
+    const scales = domains.filter(
+      (entry) =>
+        entry.record.endsWith(':compareDisclosedHoldings') && entry.values.includes('1000'),
+    );
+    expect(scales.length).toBeGreaterThan(0);
+    for (const scale of scales) expect(scale.values).toEqual(['1', '1000']);
   });
 
   it('never publishes an empty domain — absence is how "open type" is said', () => {
