@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/risk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance risk & portfolio: VaR/CVaR (parametric, historical, Monte Carlo), portfolio risk decomposition, stress & scenario testing, factor/PCA exposure, and portfolio optimization (min-variance, max-Sharpe, mean-variance, risk parity, HRP, Kelly). Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [

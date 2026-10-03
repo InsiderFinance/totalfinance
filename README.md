@@ -12,16 +12,17 @@ Start with the [public developer workbench](./site/README.md): task guides, runn
 searchable API reference, and the agent handbook. Its source is checked in under `site/`;
 the preview instructions work from any checkout of this branch. Public hosting is not yet enabled.
 
-**Status: pre-release, not yet published to npm.** The first release has **two packages**:
-`@insiderfinance/totalfinance@0.1.0` includes every domain, workflows, CLI and HTTP;
-`@insiderfinance/totalfinance-mcp@0.1.0` is the optional MCP server. The main package has no runtime
+**Status: pre-1.0, published to npm as `@insiderfinance/totalfinance`** (the optional MCP package
+is not yet published). The release has **two packages**:
+`@insiderfinance/totalfinance@0.1.1` includes every domain, workflows, CLI and HTTP;
+`@insiderfinance/totalfinance-mcp@0.1.1` is the optional MCP server. The main package has no runtime
 dependencies; MCP depends on the exact main version and the MCP SDK. Calculations run locally;
 paper execution requires explicit capabilities and is not live trading.
 
-The planned first release is `0.1.0`: pre-1.0 software, not a 1.0 stability guarantee.
-[`STABILITY.md`](./STABILITY.md) explains each surface's guarantees. Until publication, use the
-[source-checkout instructions](#develop); npm install commands below describe the forthcoming
-published experience. This repository is the canonical source home. What's inside:
+The current release is `0.1.1`: pre-1.0 software, not a 1.0 stability guarantee.
+[`STABILITY.md`](./STABILITY.md) explains each surface's guarantees. Install the main package from
+npm as below, or use the [source-checkout instructions](#develop). This repository is the canonical
+source home. What's inside:
 
 - **Options & volatility** — option pricing (Black–Scholes–Merton, Black-76, Bachelier) with first-
   and higher-order Greeks and a multi-method implied-vol suite; American/exotic engines
@@ -68,7 +69,7 @@ Everything under one install: use the `@insiderfinance/totalfinance` umbrella, t
 domain subpaths for portable browser tree shaking:
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.0
+pnpm add @insiderfinance/totalfinance@0.1.1
 ```
 
 ```ts
@@ -106,7 +107,7 @@ workspace.
 Add the optional MCP server when an agent needs it (after publication):
 
 ```sh
-pnpm add @insiderfinance/totalfinance-mcp@0.1.0
+pnpm add @insiderfinance/totalfinance-mcp@0.1.1
 ```
 
 Named imports from `@insiderfinance/totalfinance/<domain>` and supported feature subpaths work too. Installation
@@ -176,7 +177,7 @@ result.diagnostics;
 read-only tools (option pricing/Greeks/IV, strategy analysis, vol surfaces and expected move,
 GEX/flow, any of the 335 TA indicators, performance, VaR, portfolio optimization, calendars,
 crypto funding/carry, bond analytics).
-The checked-in `0.1.0` package is an unpublished pre-1.0 release candidate. From a checkout with dependencies installed,
+The checked-in `0.1.1` package is pre-1.0 software. From a checkout with dependencies installed,
 build and run the local binary (Node ≥22.13); no npm publication is implied:
 
 ```sh

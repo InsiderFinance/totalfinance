@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/structure",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance options market structure: dealer-positioning estimates (GEX/DEX/vanna/charm), levels (walls, zero-gamma, max pain, pin risk), scenario maps, and options flow. All positioning is estimated and labeled.",
   "license": "Apache-2.0",
   "keywords": [

@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/portfolio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Durable portfolio management: the immutable economic-event ledger, pure event reduction, lots and multi-currency cash, valuation snapshots, and flow-aware performance inputs",
   "license": "Apache-2.0",
   "keywords": [

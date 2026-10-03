@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/fixed-income",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance fixed income: bonds (fixed/zero/FRN/amortizing/inflation) with full analytics, yield curves + bootstrapping, rates derivatives (FRA/swap/OIS/swaption/cap/floor), short-rate models (Vasicek/CIR/Hull-White), and credit (CDS, hazard/survival curves). Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [

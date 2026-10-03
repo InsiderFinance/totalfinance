@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/math",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance math: distributions, root solvers, optimizers, interpolation, linear algebra, integration, statistics, and Monte Carlo. Zero runtime dependencies, ESM, per-feature deep entrypoints.",
   "license": "Apache-2.0",
   "keywords": [

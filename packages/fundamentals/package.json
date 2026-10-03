@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/fundamentals",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance typed fundamentals: the point-in-time FundamentalPeriod contract, availability rule, and raw data-edge record. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
