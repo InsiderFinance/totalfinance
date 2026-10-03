@@ -393,3 +393,10 @@ Batch timing after the row-value check (3 alternating rounds, median of each, 7,
 
 The gamma paths are unchanged. Price + five Greeks reads 3–8% above SG8, within this run's ±5%
 spread, while the 0.1.0 control ran about 2% faster than in SG8.
+
+**Second review, of `de4125d`:** the findings above are confirmed fixed, with no merge blockers.
+One test gap remained: the `evaluate` re-entrancy test spread its input
+(`{ ...reentrant(field), outputs }`), which read the getter during the spread and handed the
+library a plain copy. The getter-bearing object now goes to the library as it is, and every call
+asserts the library read through the getter. All three re-entrancy tests fail on the
+write-as-you-read view; before this change the `evaluate` one did not.

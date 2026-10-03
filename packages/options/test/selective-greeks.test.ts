@@ -314,19 +314,35 @@ describe('re-entrant input: a getter that evaluates Black–Scholes itself', () 
   };
   const fields = Object.keys(base) as Array<keyof typeof base>;
 
-  /** `base`, except reading `field` first runs every nested evaluation in `nestedRuns`. */
-  function reentrant(field: keyof typeof base): typeof base {
-    const input = { ...base };
-    Object.defineProperty(input, field, {
+  /** Reads of a re-entrant field, so each test proves the library read THROUGH the getter. */
+  let reentrantReads = 0;
+
+  /**
+   * A copy of `input` (`base` by default) whose `field` is a getter that runs nested evaluations
+   * first. Pass the returned object to the library as it is: spreading it would read the getter
+   * during the spread and hand the library a plain copy (the gap a second review caught).
+   */
+  function reentrant<T extends typeof base>(field: keyof typeof base, input?: T): T {
+    const copy = { ...(input ?? base) } as T;
+    Object.defineProperty(copy, field, {
       enumerable: true,
       get: () => {
+        reentrantReads += 1;
         blackScholes.gamma(nested);
         blackScholes.price(nested);
         blackScholes.evaluate({ ...nested, outputs: ['price', 'delta', 'gamma', 'color'] });
         return base[field];
       },
     });
-    return input;
+    return copy;
+  }
+
+  /** Run `call`, then require that it read the re-entrant getter at least once. */
+  function throughGetter<R>(call: () => R): R {
+    const before = reentrantReads;
+    const result = call();
+    expect(reentrantReads, 'the library never read the re-entrant getter').toBeGreaterThan(before);
+    return result;
   }
 
   it('every named Greek and its .explain equal the plain-input value on every field', () => {
@@ -334,8 +350,13 @@ describe('re-entrant input: a getter that evaluates Black–Scholes itself', () 
       const expected = blackScholes[name](base);
       expect(expected).toBe(blackScholesGreeks(base)[name]);
       for (const field of fields) {
-        expect(blackScholes[name](reentrant(field)), `${name} via ${field}`).toBe(expected);
-        expect(blackScholes[name].explain(reentrant(field)).value).toBe(expected);
+        expect(
+          throughGetter(() => blackScholes[name](reentrant(field))),
+          `${name} via ${field}`,
+        ).toBe(expected);
+        expect(throughGetter(() => blackScholes[name].explain(reentrant(field))).value).toBe(
+          expected,
+        );
       }
     }
   });
@@ -344,17 +365,23 @@ describe('re-entrant input: a getter that evaluates Black–Scholes itself', () 
     const outputs = [...OUTPUTS];
     const expected = blackScholes.evaluate({ ...base, outputs });
     for (const field of fields) {
-      expect(blackScholes.evaluate({ ...reentrant(field), outputs }), field).toStrictEqual(
-        expected,
-      );
-      expect(blackScholes.evaluate.explain({ ...reentrant(field), outputs }).value).toStrictEqual(
-        expected,
-      );
+      // The getter-bearing object goes to the library as it is, with `outputs` already on it.
+      expect(
+        throughGetter(() => blackScholes.evaluate(reentrant(field, { ...base, outputs }))),
+        field,
+      ).toStrictEqual(expected);
+      expect(
+        throughGetter(() => blackScholes.evaluate.explain(reentrant(field, { ...base, outputs })))
+          .value,
+      ).toStrictEqual(expected);
     }
   });
 
   it('the review’s shape: gamma through a re-entrant strike getter', () => {
-    expect(blackScholes.gamma(reentrant('strike'))).toBeCloseTo(blackScholesGreeks(base).gamma, 15);
+    expect(throughGetter(() => blackScholes.gamma(reentrant('strike')))).toBeCloseTo(
+      blackScholesGreeks(base).gamma,
+      15,
+    );
   });
 });
 
