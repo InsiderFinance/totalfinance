@@ -28,15 +28,16 @@ checks remained red; that decision does not waive the hosted matrix for release.
 ### Bounded consumer-requested addition (2026-09-25)
 
 The FMP rebuild consumer authorizes the independent provider-free
-[disclosed holdings comparison](./specs/disclosed-holdings.md). DH1–DH5 are the original completed
-scope below; the current PR #4 review is DH6–DH7 (typed contracts, policy echo and current-main
-integration), pending final verification. Retain the release queue's separate approval gates. This adds a direct
-portfolio analysis API; it does not reopen the economic ledger or authorize publication. Status:
-**DH1–DH5 locally verified complete** on disposable verification commit `79a48493869a3609af2e51b6f9fb11b694aad3d2`
-plus reviewed documentary/inventory/bundle overlays and the prose-only tracker closeout. Full CI
-and the independent full coverage repeat each passed 567 files / 12,598 tests; the linked spec
-records exact source, regeneration, tarball and retained-attempt evidence. The consumer owns acquisition,
-report/mapping selection, evidence pins and its separately versioned offline Node handoff.
+[disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review
+verification complete (2026-10-02) @ `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** This includes
+literal value scales, typed review codes, structured policy reporting and integration with current
+main. Local full CI and an independent hosted Node 22.13.0 full-coverage repeat each passed
+577 files / 12,788 tests plus 80 site tests; separate API checks and clean regeneration pass.
+The linked spec preserves the original September evidence and records the October receipts.
+The final PR #4 head must pass its hosted checks before the authorized merge. Publication remains
+separate: this adds a direct portfolio analysis API, not an economic-ledger change or release.
+The consumer owns acquisition, report/mapping selection, evidence pins and its separately versioned
+offline Node handoff. Do not restart DH1–DH7.
 
 **Post-0.1.0 amendment (2026-10-01): selective Greeks and exposure — merged in PR #3.** Follow
 [`selective-greeks-and-exposure.md`](./specs/selective-greeks-and-exposure.md): one Black–Scholes

@@ -1,7 +1,8 @@
 # Disclosed holdings comparison
 
-Status: DH1–DH5 locally verified complete, September 25, 2026; DH6–DH7 review hardening and
-integration with main in progress, October 2, 2026. This bounded consumer-requested
+Status: DH1–DH7 implementation and review verification complete, October 2, 2026, at
+`69b9ef92094f16b5f4fa881229b586ecb1c3f67e`. The final PR head's hosted checks remain the merge gate.
+This bounded consumer-requested
 compute addition follows the FMP rebuild's SEC-125 handoff; it does not authorize release,
 publication, deployment, or reopening the existing portfolio ledger. The library alignment laws
 remain controlling. API semantics are settled here; the FMP repository owns provider facts and order.
@@ -114,12 +115,15 @@ ratioDecimalPlaces: number }`. Ratio precision is an integer 0–18. The profile
       repeat; artifact regeneration stability; retain exact source/tarball verification evidence.
       Synchronize this spec, implementation order and completeness tracker truthfully. Local
       completion is not a published npm release or hosted CI claim.
-- [ ] DH6: literal value-scale types, typed reason codes and structured policy echo; compile-fail
+- [x] DH6: literal value-scale types, typed reason codes and structured policy echo; compile-fail
       contracts and runtime copy/serialization tests, public guide, API and generated inventories.
-- [ ] DH7: integrate current main (including selective Greeks/exposure and the 0.1.1 release
+- [x] DH7: integrate current main (including selective Greeks/exposure and the 0.1.1 release
       metadata), preserve both features' consumer tests, regenerate combined artifacts, run full
       CI, separate API check, independent coverage repeat and clean-commit regeneration, then
-      synchronize these trackers and merge PR #4 only after hosted checks pass. No npm publication.
+      synchronize these trackers. No npm publication.
+
+**Landing gate:** the maintainer authorized merging PR #4 only after its final head's hosted checks
+pass. The verified source below does not waive that gate for this documentation-only closeout.
 
 The separately versioned offline Python/Node operator pins this reviewed artifact and all input
 receipts. It contains no copy of these formulas. FMP integration acceptance is recorded in that
@@ -127,6 +131,44 @@ repository's SPEC; this library's completion does not itself activate any API.
 
 Pre-code review accepted by independent holdings semantics reviewer September 25. Zero/empty
 denominators withhold ratios without invalidating justified absence inference.
+
+## October PR #4 review closeout
+
+Verified implementation: `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`. It includes the original PR
+(`2d1c727`), current main's selective Greeks/exposure and 0.1.1 metadata (`b1edf16`), and DH6–DH7.
+The closeout changes only the three tracking documents; it does not bump versions or publish npm.
+
+The review preserves the original financial semantics and exact-decimal arithmetic. Its API repairs
+make `valueScale` a truthful literal union, expose finite library reason-code types while retaining
+free-form source review text, and echo a detached structured policy at `assumptions.policy`.
+Compile-only contracts run both in the workspace and against installed tarballs; the guide is executed.
+
+- Full local `pnpm run ci` passed on Node 22.23.2 / pnpm 10.32.0: **577 files / 12,788 tests**,
+  plus **80 site tests**. Format, lint, both typechecks, library/site builds and all 25 API reports
+  passed. Coverage: **94.21% statements / 84.10% branches / 97.01% functions / 94.76% lines**.
+- The independent hosted Node 22.13.0 full-CI run repeated **577 files / 12,788 tests** and
+  **80 site tests**, passing the unchanged coverage floors (functions 97.02% on that runner).
+  [Exact hosted receipt](https://github.com/InsiderFinance/totalfinance/actions/runs/37094990799/job/111122988462).
+  This is an actual second `pnpm test:coverage` execution within full CI, not a focused-test substitute.
+- Standalone `pnpm api:check` passed all 25 reports. Clean-commit `pnpm regen:check` passed with
+  byte-identical artifacts locally and in the
+  [hosted generation job](https://github.com/InsiderFinance/totalfinance/actions/runs/37094990799/job/111122988317).
+  The [isolated-registry release rehearsal](https://github.com/InsiderFinance/totalfinance/actions/runs/37094990799/job/111122988479)
+  also passed; this is not publication to npmjs.org.
+- Focused holdings tests: **103 passing**. Both holdings and selective-Greeks packed consumer
+  journeys pass under strict NodeNext and Bundler resolution; the complete installed-consumer suite
+  passes **216 tests**. Artifact serialization accepts the full typed report without a cast.
+- The combined generated inventory has **7,863 public paths**, **42,477 naming identities with
+  zero unresolved**, and **zero defective enforcement records**. All three holdings aliases are
+  enforced. Narrow-import structural checks remain unchanged; measured bundle allowances are in
+  `tools/bundle-size/budgets.ts`, not untracked exceptions.
+
+Retained failed attempts found two integration/test defects, both repaired before the green runs:
+the site's build test pinned the old 0.1.0 version instead of the distribution manifest, and an
+inventory test incorrectly rejected every numeric-looking string literal. The replacement test
+uses actual checker types to distinguish `1` from `'1'`, including a mixed domain; the independent
+checker-to-artifact parity gate still covers every public declaration. No coverage floor, runtime
+refusal, or packaging guarantee was weakened. No further code blocker was found in this review.
 
 ## Original September verification and source record (historical)
 
