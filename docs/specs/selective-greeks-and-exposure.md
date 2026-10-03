@@ -334,3 +334,62 @@ The model golden is therefore one file per platform, captured from one committed
 The supplied-Greek golden is byte-identical on all four and stays one file. The gates above were
 re-run after this change. Hosted CI passes at `cd1d3f3`: the linux-x64 matrix (Node 22.13, 24, 26),
 clean-repository generation and the local-registry release rehearsal.
+
+### Review of `59d460a`, 2026-10-02
+
+A review requested changes before merging. Each finding is fixed in its own commit, with a test
+that fails on the code before it:
+
+- **Batch row values were coerced** (decision 8). The fast path compared values, and `"100" > 0`,
+  `true > 0` and `100n > 0` are all true: `[100, 100n]` wrote row 0, then threw an untyped
+  `TypeError`. Every value must now be a `number` first. The test puts each non-number kind in the
+  last row of each column, through all four batch paths.
+- **Conditional selections over-promised** (decision 6): core's `GuaranteedSelection`.
+- **Nested scalar calls corrupted inputs** (decision 1): every field is read before the shared
+  view is written.
+- **Per-point color exposure** (decision 18): inherited from 0.1.0 and corrected.
+- **The scalar Black–Scholes formulas still sit beside the kernel** (the review's caveat). Exact
+  property tests hold the two equal, so any drift fails CI; folding them together is a separate
+  refactor.
+
+**The hosted `Timeout calling "onTaskUpdate"`** (every test passing) was reproduced locally and
+measured with a per-worker event-loop probe. A worker sends a progress RPC as each test starts and
+has 60 s to read the reply. Tests that hold the worker synchronously longer than that fail the run,
+because Node runs the overdue timeout before it reads the reply. Coverage runs are about twice as
+slow hosted, and several suites blocked for 18–43 s locally. The worst was the declared-coverage
+sweep, which yielded every 25 records and stopped keeping up once records got heavier (this
+branch's 27 shortcut records among them). The fix is test infrastructure only, with no assertion,
+fixture or tolerance changed:
+
+- `tools/test-support/cooperative-yield.ts` yields on time, every 500 ms. Its first call waits
+  25 ms so the test-start reply is read before heavy work.
+- A `setupFiles` hook yields after every test.
+- The long suites use the helper, and the release-CLI receipt test spawns its child
+  asynchronously.
+
+The longest local block fell from 43 s to 29 s: one Crank–Nicolson pricing under coverage that no
+yield can split, and that the settle leaves with no RPC in flight.
+
+Gates re-run on a clean tree at `84a25b5`:
+
+- `pnpm run ci` passes: 575 files, 12,677 tests; statements 94.18%, branches 84.02%, functions
+  96.99%, lines 94.74%.
+- `api:check` passes (25 reports).
+- A second `test:coverage` passes, with the same tests and coverage and no runner error.
+- `regen:check` is byte-stable.
+- Enforcement still records 0 defective of 5,370 candidates.
+
+Hosted CI passes at `84a25b5`: the linux-x64 matrix (Node 22.13, 24, 26), clean-repository
+generation and the local-registry release rehearsal. Node 26 had failed with the runner timeout
+on the two commits before.
+
+Batch timing after the row-value check (3 alternating rounds, median of each, 7,800 rows):
+
+| Workload                   |  0.1.0 (control) |      this branch | SG8 record |
+| -------------------------- | ---------------: | ---------------: | ---------: |
+| Batch gamma                | 1.356 – 1.375 ms | 0.215 – 0.216 ms |   0.215 ms |
+| Batch gamma, reused buffer |                — | 0.212 – 0.216 ms |   0.216 ms |
+| Price + five Greeks        | 1.352 – 1.376 ms | 0.714 – 0.748 ms |   0.693 ms |
+
+The gamma paths are unchanged. Price + five Greeks reads 3–8% above SG8, within this run's ±5%
+spread, while the 0.1.0 control ran about 2% faster than in SG8.
