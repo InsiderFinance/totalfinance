@@ -25,8 +25,18 @@ import {
   plausibilityWarnings,
   ensureKnownKeys,
   requireFiniteFields,
+  requireSelection,
   warning,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
+import {
+  BLACK_SCHOLES_OUTPUTS,
+  type BlackScholesOutput,
+  type BlackScholesOutputSelection,
+  type BlackScholesPlan,
+  evaluateBlackScholesScalarUnchecked,
+  resolveBlackScholesPlan,
+} from './bsm-evaluate.js';
 import {
   blackScholesExtendedGreeks,
   blackScholesGreeks,
@@ -63,6 +73,7 @@ const BSM_KEYS = [
 ] as const;
 const BSM_TYPED_KEYS = [...BSM_KEYS, 'type'] as const;
 const BSM_IV_KEYS = [...BSM_TYPED_KEYS, 'price'] as const;
+const BSM_EVALUATE_KEYS = [...BSM_TYPED_KEYS, 'outputs'] as const;
 
 /** The numeric legs the facade REQUIRES (`dividendYield` is optional and defaults to 0). */
 const BSM_REQUIRED_NUMERIC = [
@@ -96,9 +107,13 @@ const BSM_FACADE_HINTS: Record<string, string> = {
   timeToExpiryYears: 'in years — 0.25 is three months, not 90',
 };
 
-function validateCore(input: BlackScholesTypedInput, functionName: string): number {
+function validateCore(
+  input: BlackScholesTypedInput,
+  functionName: string,
+  allowedKeys: readonly string[] = BSM_TYPED_KEYS,
+): number {
   // Law 12: an unknown field (a `divYield` typo, a stray `sigma`) teaches instead of being ignored.
-  ensureKnownKeys(functionName, 'input', input, BSM_TYPED_KEYS);
+  ensureKnownKeys(functionName, 'input', input, allowedKeys);
   // A meaning-changing field is never coerced (design law #4): `type: 'Call'` must teach, not
   // silently price the other leg.
   ensureEnum(input.type, OPTION_TYPES, 'type', functionName);
@@ -264,6 +279,124 @@ const greeks = /* @__PURE__ */ facade(
     };
   },
 );
+
+// ---- one Greek, or a selected set (selective Greeks spec, decisions 4–6) ----
+
+/**
+ * Evaluate a validated typed input through a resolved plan. The returned slots are the kernel's
+ * reused scalar outputs: read them before the next evaluation.
+ */
+function evaluatePlan(
+  input: BlackScholesTypedInput,
+  q: number,
+  plan: BlackScholesPlan,
+): Float64Array {
+  return evaluateBlackScholesScalarUnchecked(plan, input, q);
+}
+
+function closedFormEnvelope<T>(input: BlackScholesTypedInput, q: number, value: T): Computed<T> {
+  return {
+    value,
+    assumptions: assumptions(input.timeToExpiryYears, q),
+    diagnostics: closedForm({
+      volatility: input.volatility,
+      timeToExpiryYears: input.timeToExpiryYears,
+      riskFreeRate: input.riskFreeRate,
+    }),
+  };
+}
+
+/**
+ * One named Greek: the facade validation, then a ONE-output plan — `blackScholes.gamma` evaluates
+ * the normal density and no cumulative normal. The plan is resolved on the first call and reused,
+ * so module evaluation does no computation and later calls resolve nothing.
+ */
+function singleGreek(
+  output: Exclude<BlackScholesOutput, 'price'>,
+): Facade<BlackScholesTypedInput, number> {
+  const functionName = `blackScholes.${output}`;
+  const slot = BLACK_SCHOLES_OUTPUTS.indexOf(output);
+  let plan: BlackScholesPlan | undefined;
+  const compute = (input: BlackScholesTypedInput): { q: number; value: number } => {
+    const q = validateCore(input, functionName);
+    plan ??= resolveBlackScholesPlan([output]);
+    return { q, value: evaluatePlan(input, q, plan)[slot]! };
+  };
+  return facade(
+    functionName,
+    (input: BlackScholesTypedInput): number => compute(input).value,
+    (input: BlackScholesTypedInput): Computed<number> => {
+      const { q, value } = compute(input);
+      return closedFormEnvelope(input, q, value);
+    },
+  );
+}
+
+const delta = /* @__PURE__ */ singleGreek('delta');
+const gamma = /* @__PURE__ */ singleGreek('gamma');
+const theta = /* @__PURE__ */ singleGreek('theta');
+const vega = /* @__PURE__ */ singleGreek('vega');
+const rho = /* @__PURE__ */ singleGreek('rho');
+
+/**
+ * Input for {@link blackScholes}.evaluate: the typed Black–Scholes input plus the outputs to compute.
+ * `outputs` is required, nonempty, dense and duplicate-free.
+ */
+export interface BlackScholesEvaluateInput<
+  O extends BlackScholesOutputSelection = BlackScholesOutputSelection,
+> extends BlackScholesTypedInput {
+  /** The outputs to compute, e.g. `['price', 'delta', 'gamma']`. Only these appear in the result. */
+  outputs: O;
+}
+
+/**
+ * The result of a selected evaluation. The outputs the selection is certain to contain are required
+ * numbers; any other output it might contain is optional ({@link GuaranteedSelection}). So a
+ * literal `['price', 'gamma']` gives exactly those two required, while a dynamic selection
+ * (`BlackScholesOutput[]`), a conditional (`c ? ['gamma'] : ['delta']`) or a union-valued element
+ * gives optional properties: the type never claims a value exists that was not requested.
+ */
+export type BlackScholesEvaluation<O extends BlackScholesOutputSelection> = {
+  [K in GuaranteedSelection<O>]: number;
+} & { [K in Exclude<O[number], GuaranteedSelection<O>>]?: number };
+
+/**
+ * `blackScholes.evaluate` — a selected calculation with its `.explain` companion. An empty
+ * selection is refused at run time (`input.out_of_range`).
+ */
+export interface BlackScholesEvaluateFacade {
+  <const O extends BlackScholesOutputSelection>(
+    input: BlackScholesEvaluateInput<O>,
+  ): BlackScholesEvaluation<O>;
+  explain<const O extends BlackScholesOutputSelection>(
+    input: BlackScholesEvaluateInput<O>,
+  ): Computed<BlackScholesEvaluation<O>>;
+}
+
+function evaluateSelected(input: BlackScholesEvaluateInput, functionName: string) {
+  const q = validateCore(input, functionName, BSM_EVALUATE_KEYS);
+  const outputs = requireSelection(functionName, 'outputs', input.outputs, BLACK_SCHOLES_OUTPUTS);
+  const plan = resolveBlackScholesPlan(outputs);
+  const scratch = evaluatePlan(input, q, plan);
+  const value: Partial<Record<BlackScholesOutput, number>> = {};
+  for (let index = 0; index < outputs.length; index++) {
+    value[outputs[index]!] = scratch[plan.slots[index]!]!;
+  }
+  return { q, value };
+}
+
+const evaluate = /* @__PURE__ */ facade(
+  'blackScholes.evaluate',
+  (input: BlackScholesEvaluateInput) => evaluateSelected(input, 'blackScholes.evaluate').value,
+  (input: BlackScholesEvaluateInput) => {
+    const { q, value } = evaluateSelected(input, 'blackScholes.evaluate');
+    const envelope = closedFormEnvelope(input, q, value);
+    // A selected price of exactly 0 is an underflow, disclosed as on `.price.explain` (Law 4).
+    return value.price === undefined
+      ? envelope
+      : { ...envelope, diagnostics: withUnderflowDisclosure(envelope.diagnostics, value.price) };
+  },
+) as unknown as BlackScholesEvaluateFacade;
 
 // ---- higher-order greeks ----
 
@@ -461,8 +594,24 @@ export const blackScholes: {
   call: Facade<BlackScholesInput, number>;
   put: Facade<BlackScholesInput, number>;
   price: Facade<BlackScholesTypedInput, number>;
+  /** Delta alone (per share per 1.00 of spot). Computes no other Greek. */
+  delta: Facade<BlackScholesTypedInput, number>;
+  /** Gamma alone (per 1.00 of spot). Evaluates the normal density and no cumulative normal. */
+  gamma: Facade<BlackScholesTypedInput, number>;
+  /** Theta alone, per calendar day. */
+  theta: Facade<BlackScholesTypedInput, number>;
+  /** Vega alone, per 1 volatility point (0.01). */
+  vega: Facade<BlackScholesTypedInput, number>;
+  /** Rho alone, per 1% of the risk-free rate. */
+  rho: Facade<BlackScholesTypedInput, number>;
   greeks: Facade<BlackScholesTypedInput, Greeks>;
   extendedGreeks: Facade<BlackScholesTypedInput, ExtendedGreeks>;
+  /**
+   * Several selected outputs from one shared evaluation —
+   * `evaluate({ ...input, outputs: ['price', 'delta', 'gamma'] })`. Only the requested outputs and
+   * their dependencies are computed, and only they appear in the result.
+   */
+  evaluate: BlackScholesEvaluateFacade;
   impliedVolatility: Facade<
     BlackScholesImpliedVolatilityInput,
     number,
@@ -473,8 +622,14 @@ export const blackScholes: {
   call,
   put,
   price,
+  delta,
+  gamma,
+  theta,
+  vega,
+  rho,
   greeks,
   extendedGreeks,
+  evaluate,
   impliedVolatility: impliedVolatilityFacadePair(
     'blackScholes.impliedVolatility',
     impliedVolatilityExplain,
@@ -492,6 +647,7 @@ export {
   blackScholesImpliedVolatility,
   blackScholesPriceBounds,
 } from './bsm.js';
+export type { BlackScholesOutput, BlackScholesOutputSelection } from './bsm-evaluate.js';
 export type {
   BlackScholesKernelInput,
   BlackScholesPriceBoundsInput,

@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -68,14 +68,16 @@ import {
   type CalculationArtifactComparison,
 } from '@insiderfinance/totalfinance/core/artifacts';
 import { optionChainHealth, type OptionChainHealthReport } from '@insiderfinance/totalfinance/options';
-import { exposureFromGreeks, type SuppliedExposureReport } from '@insiderfinance/totalfinance/structure';
+import {
+  exposureFromGreeks, type SuppliedExposureInput, type SuppliedExposureReport,
+} from '@insiderfinance/totalfinance/structure';
 
 const asOf = Date.parse('2026-09-01T15:00:00Z');
 const contract: OptionContract = {
   underlying: 'TEST', type: 'put', style: 'american', strike: 100,
   expiry: '2026-09-18', ...resolvedExpiry('2026-09-18'), multiplier: 100,
 };
-const exposureInput: Parameters<typeof exposureFromGreeks>[0] = {
+const exposureInput: SuppliedExposureInput = {
   quotes: [{ contract, timestampMs: asOf, source: 'synthetic-chain', openInterest: 10,
     greeks: { delta: -0.4, gamma: 0.02, provenance: { source: 'synthetic-greeks', timestampMs: asOf } } }],
   market: { underlying: 'TEST', spot: 100, asOf, source: 'synthetic-spot', timestampMs: asOf },
@@ -434,6 +436,53 @@ function sh(cmd: string, args: string[], cwd: string, maxBuffer = 1024 * 1024): 
   return result.stdout;
 }
 
+/**
+ * `sh` without blocking the worker, for a child that runs long enough to starve its progress RPC:
+ * `spawnSync` holds the event loop for the child's whole life, so the release CLI (13 s locally,
+ * 22 s hosted) counted against Vitest's 60 s `onTaskUpdate` timeout like a synchronous loop would
+ * (tools/test-support/cooperative-yield.ts). Same stdio, buffer limit and failure report as `sh`.
+ */
+function shAsync(
+  cmd: string,
+  args: string[],
+  cwd: string,
+  maxBuffer = 1024 * 1024,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    let error: Error | undefined;
+    child.stdout.setEncoding('utf8').on('data', (chunk: string) => {
+      stdout += chunk;
+      if (stdout.length + stderr.length > maxBuffer && error === undefined) {
+        error = new Error(`stdout/stderr exceeded maxBuffer (${maxBuffer} bytes)`);
+        child.kill();
+      }
+    });
+    child.stderr.setEncoding('utf8').on('data', (chunk: string) => {
+      stderr += chunk;
+    });
+    child.on('error', (spawnError) => {
+      error ??= spawnError;
+    });
+    child.on('close', (status, signal) => {
+      if (error === undefined && status === 0) {
+        resolve(stdout);
+        return;
+      }
+      reject(
+        new Error(
+          `${cmd} ${args.join(' ')} failed in ${cwd}:\n` +
+            `error: ${error === undefined ? 'none' : String(error)}\n` +
+            `status: ${status}; signal: ${signal ?? 'none'}; maxBuffer: ${maxBuffer} bytes\n` +
+            `stderr: ${outputExcerpt(stderr)}\nstdout: ${outputExcerpt(stdout)}`,
+        ),
+      );
+    });
+  });
+}
+
 beforeAll(() => {
   work = mkdtempSync(join(tmpdir(), 'totalfinance-packed-'));
   tarballDir = join(work, 'tarballs');
@@ -707,9 +756,9 @@ describe('site copy buttons against installed tarballs and release receipts', ()
     expect(registryReceipt).not.toHaveProperty('published');
   });
 
-  it('the release CLI retains a tarball receipt after cleaning its temporary installed consumer', () => {
+  it('the release CLI retains a tarball receipt after cleaning its temporary installed consumer', async () => {
     const path = join(work, 'retained-smoke.json');
-    const output = sh(
+    const output = await shAsync(
       process.execPath,
       [
         '--import',
@@ -2326,6 +2375,123 @@ describe('packed sector public exports and report honesty', () => {
       sh(TSC, ['-p', dir], dir);
       expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
         'SECTOR_PUBLIC_OK periodReturn=0.03 dailyReturn=0.03 included=2 artifacts=4 simpleAuditMetadata=absent',
+      );
+    },
+    120_000,
+  );
+});
+
+/**
+ * Selective Greeks and exposure (docs/specs/selective-greeks-and-exposure.md) from the installed
+ * tarball: every named entry point resolves from its public specifier, selected values equal the
+ * full calculation's, and a shortcut is the same function from both structure entrypoints.
+ */
+const SELECTIVE_PUBLIC_CONSUMER_TS = `
+import { InputError, ErrorCode, resolvedExpiry } from '@insiderfinance/totalfinance/core';
+import { blackScholes } from '@insiderfinance/totalfinance/options/black-scholes';
+import {
+  blackScholesEvaluateMany, blackScholesEvaluateManyInto, blackScholesPriceMany,
+} from '@insiderfinance/totalfinance/options/batch';
+import {
+  colorExposure, exposure, exposureFromGreeks, gammaExposure,
+} from '@insiderfinance/totalfinance/structure';
+import { gammaExposure as gammaFromSubpath } from '@insiderfinance/totalfinance/structure/exposure';
+
+const option = { type: 'call' as const, spot: 100, strike: 105, timeToExpiryYears: 0.25, riskFreeRate: 0.04, volatility: 0.2 };
+const greeks = blackScholes.greeks(option);
+if (blackScholes.gamma(option) !== greeks.gamma || blackScholes.rho(option) !== greeks.rho)
+  throw new Error('named Greeks drifted from blackScholes.greeks');
+const selected = blackScholes.evaluate({ ...option, outputs: ['price', 'gamma'] });
+if (Object.keys(selected).join() !== 'price,gamma' || selected.price !== blackScholes.price(option))
+  throw new Error('evaluate returned something other than the selection');
+
+const columns = {
+  spot: Float64Array.of(100, 100), strike: Float64Array.of(105, 95), volatility: Float64Array.of(0.2, 0.25),
+  riskFreeRate: Float64Array.of(0.04, 0.04), timeToExpiryYears: Float64Array.of(0.25, 0.25), type: Int8Array.of(1, -1),
+};
+const many = blackScholesEvaluateMany(columns, { outputs: ['gamma', 'delta'] });
+const priced = blackScholesPriceMany(columns, { greeks: true });
+if (many.gamma[0] !== greeks.gamma || many.delta[1] !== priced.delta![1])
+  throw new Error('the batch family disagrees with itself');
+const reused = new Float64Array(4).fill(-1);
+blackScholesEvaluateManyInto(columns, { gamma: reused });
+if (reused[1] !== many.gamma[1] || reused[2] !== -1) throw new Error('Into wrote outside rows [0, n)');
+let refused: unknown;
+try { blackScholesEvaluateManyInto(columns, { gamma: columns.spot }); } catch (error) { refused = error; }
+if (!(refused instanceof InputError) || refused.code !== ErrorCode.InputWrongShape)
+  throw new Error('an output aliasing an input column was not refused');
+
+const asOf = Date.parse('2026-06-15T18:30:00Z');
+const quotes = [95, 100, 105].flatMap((strike) => (['call', 'put'] as const).map((type) => ({
+  contract: { underlying: 'SPX', type, style: 'european' as const, strike, expiry: '2026-07-17', ...resolvedExpiry('2026-07-17'), multiplier: 100 },
+  timestampMs: asOf, impliedVolatility: 0.2, openInterest: 1000,
+})));
+const chain = { quotes, market: { spot: 100, riskFreeRate: 0.04, asOf }, config: { convention: 'dealerShortGamma' as const } };
+const full = exposure(chain);
+const gex = gammaExposure(chain);
+if (gammaFromSubpath !== gammaExposure) throw new Error('structure and structure/exposure export different shortcuts');
+if (gex.aggregate.gex !== full.aggregate.gex || 'dex' in gex.aggregate)
+  throw new Error('gammaExposure is not the gex selection');
+if (gex.atSpot(101).gex !== full.atSpot(101).gex) throw new Error('per-tick GEX drifted');
+if (colorExposure(chain).aggregate.color !== full.aggregate.color) throw new Error('color exposure drifted');
+const both = exposure({ ...chain, metrics: ['gex', 'dex'] });
+if (both.aggregate.dex !== full.aggregate.dex || both.assumptions.metrics?.join() !== 'gex,dex')
+  throw new Error('a combined selection lost a metric or its echo');
+
+const supplied = exposureFromGreeks({
+  quotes: quotes.map((quote) => ({ ...quote, source: 'chain-feed', greeks: { gamma: 0.02, provenance: { source: 'greek-feed', timestampMs: asOf } } })),
+  market: { underlying: 'SPX', spot: 100, source: 'spot-feed', timestampMs: asOf, asOf },
+  config: { gexConvention: { calls: 1, puts: -1 }, gammaUnit: 'perPoint', maximumObservationAgeMs: 0 },
+  metrics: ['gex'],
+});
+if ('dex' in supplied.aggregate || supplied.coverage.includedQuotes !== 6)
+  throw new Error('a GEX-only supplied report required delta or reported DEX');
+console.log('SELECTIVE_PUBLIC_OK gamma=' + gex.aggregate.gex.toFixed(2) + ' outputs=' + Object.keys(selected).join('+'));
+`;
+
+describe('packed selective Greeks and exposure', () => {
+  it.each(['nodenext', 'bundler'] as const)(
+    'the type contract and the selected results survive packing under moduleResolution: %s',
+    (resolution) => {
+      const dir = join(consumer, `selective-public-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      // The source compile contracts, rewritten to public specifiers: every @ts-expect-error must
+      // still be an error against the PACKED declarations, and every literal selection still exact.
+      const publicSource = (path: string): string =>
+        readFileSync(join(ROOT, path), 'utf8').replace(
+          /(['"])(@totalfinance\/[^'"]+)\1/g,
+          (_match, quote: string, specifier: string) =>
+            quote + toPublicSpecifier(specifier) + quote,
+        );
+      writeFileSync(
+        join(dir, 'greeks-contract.mts'),
+        publicSource('packages/options/test/selective-greeks.compile.ts'),
+      );
+      writeFileSync(
+        join(dir, 'exposure-contract.mts'),
+        publicSource('packages/structure/test/exposure-selective.compile.ts'),
+      );
+      writeFileSync(join(dir, 'consumer.mts'), SELECTIVE_PUBLIC_CONSUMER_TS);
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['greeks-contract.mts', 'exposure-contract.mts', 'consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      // Only the runtime journey executes; the contracts are compile-only (they declare inputs).
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toMatch(
+        /SELECTIVE_PUBLIC_OK gamma=-\d+\.\d\d outputs=price\+gamma/,
       );
     },
     120_000,

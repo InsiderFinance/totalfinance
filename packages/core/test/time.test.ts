@@ -30,7 +30,7 @@ describe('usEquityCloseUtcMs (16:00 America/New_York, DST-aware)', () => {
     expect(usEquityCloseUtcMs(2026, 11, 1)).toBe(Date.UTC(2026, 10, 1, 21)); // EST on fall-back day
   });
 
-  it('throws (never silently assumes EST) when Intl cannot resolve the offset', () => {
+  it('throws (never silently assumes EST) when Intl cannot resolve the offset', async () => {
     const original = Intl;
     vi.stubGlobal('Intl', {
       ...Intl,
@@ -42,9 +42,48 @@ describe('usEquityCloseUtcMs (16:00 America/New_York, DST-aware)', () => {
       },
     });
     try {
-      expect(() => usEquityCloseUtcMs(2026, 7, 15)).toThrow(/resolve|timezone/i);
+      // A FRESH module: the offset formatter and resolved offsets are cached per module (#1), so the
+      // module already loaded above would answer from its cache without consulting this Intl.
+      vi.resetModules();
+      const fresh = await import('../src/time.js');
+      expect(() => fresh.usEquityCloseUtcMs(2026, 7, 15)).toThrow(/resolve|timezone/i);
+      // A failed resolution is never cached: the next call asks Intl again and fails again.
+      expect(() => fresh.usEquityCloseUtcMs(2026, 7, 15)).toThrow(/resolve|timezone/i);
     } finally {
       vi.stubGlobal('Intl', original);
+    }
+  });
+
+  it('builds the offset formatter once per module, not once per call (#1)', async () => {
+    const Original = Intl.DateTimeFormat;
+    let constructed = 0;
+    class Counting extends Original {
+      constructor(...args: ConstructorParameters<typeof Intl.DateTimeFormat>) {
+        super(...args);
+        constructed++;
+      }
+    }
+    vi.stubGlobal('Intl', { ...Intl, DateTimeFormat: Counting });
+    try {
+      vi.resetModules();
+      const fresh = await import('../src/time.js');
+      constructed = 0; // import-time formatters (the market-date parts) are not the per-call cost
+      const labels = Array.from({ length: 500 }, (_, i) =>
+        new Date(Date.UTC(2026, 0, 2 + i * 3)).toISOString().slice(0, 10),
+      );
+      for (let pass = 0; pass < 3; pass++) {
+        for (const label of labels) fresh.optionExpiryToMs(label);
+      }
+      // 1,500 resolutions across ~4 years of dates (both DST regimes and the early closes):
+      // at most the one lazily built offset formatter.
+      expect(constructed).toBeLessThanOrEqual(1);
+      // Byte-identical results to the module loaded at the top of this file.
+      for (const label of labels)
+        expect(fresh.optionExpiryToMs(label)).toBe(optionExpiryToMs(label));
+      expect(fresh.usEquityCloseUtcMs(2026, 11, 27)).toBe(Date.UTC(2026, 10, 27, 18)); // 13:00 EST
+      expect(fresh.usEquityCloseUtcMs(2026, 3, 8)).toBe(Date.UTC(2026, 2, 8, 20)); // EDT
+    } finally {
+      vi.unstubAllGlobals();
     }
   });
 });

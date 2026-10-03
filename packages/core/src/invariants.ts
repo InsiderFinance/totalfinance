@@ -337,3 +337,130 @@ export function ensureKnownKeys(
     );
   }
 }
+
+/**
+ * The names a selection of type `S` is CERTAIN to contain — the names a result may promise as
+ * required. Every other name in `S[number]` was only possibly selected, so a result types it as
+ * optional.
+ *
+ * A name is guaranteed when every possible value of `S` holds it as a whole element:
+ * - `readonly ['price', 'gamma']` guarantees `'price' | 'gamma'`;
+ * - a union of selections guarantees only what all of them share:
+ *   `readonly ['gamma'] | readonly ['delta']` (a conditional) guarantees nothing, and
+ *   `readonly ['price', 'gamma'] | readonly ['price']` guarantees `'price'`;
+ * - an element that is itself a union guarantees none of its members: `readonly ['gamma' | 'delta']`
+ *   holds one of the two, and the type cannot say which;
+ * - a list without a fixed length (`BlackScholesOutput[]`) guarantees nothing.
+ *
+ * `S extends unknown` distributes over the members of `S`, giving one verdict per possible
+ * selection; a name is kept only when no member says `false`.
+ */
+export type GuaranteedSelection<S extends readonly string[]> = {
+  [K in S[number]]: false extends (
+    S extends unknown
+      ? number extends S['length']
+        ? false
+        : K extends { [I in keyof S]: [S[I]] extends [K] ? K : never }[number]
+          ? true
+          : false
+      : never
+  )
+    ? never
+    : K;
+}[S[number]];
+
+/**
+ * Validate an explicit SELECTION list — `outputs: ['price', 'gamma']`, `metrics: ['gex']` — and
+ * return a dense copy in request order.
+ *
+ * A selection decides what is computed, so every malformed form teaches instead of being repaired:
+ * not an array (`input.wrong_type`), empty (`input.out_of_range` — an empty request computes
+ * nothing and would read as a successful empty answer), a sparse hole (`input.missing_field`), an
+ * unknown or non-string name (`input.invalid_enum`, with a did-you-mean), and a repeated name
+ * (`input.duplicate_entry`). A duplicate is never silently collapsed: it usually means the caller
+ * meant a different name.
+ *
+ * `functionName` and `field` name the caller's boundary in every one of those errors, so they are
+ * checked first: a missing label would otherwise surface as `undefined: undefined must be …`.
+ */
+export function requireSelection<T extends string>(
+  functionName: string,
+  field: string,
+  value: unknown,
+  allowed: readonly T[],
+): T[] {
+  requireSelectionLabel('functionName', functionName);
+  requireSelectionLabel('field', field);
+  if (!Array.isArray(value)) {
+    const received = value === null ? 'null' : typeof value;
+    throw new InputError(
+      `${functionName}: ${field} must be an array of names (one or more of ${allowed.join(', ')}); got ${received}.`,
+      {
+        code: ValidationCode.InputWrongType,
+        context: { function: functionName, field, received },
+      },
+    );
+  }
+  if (value.length === 0) {
+    throw new InputError(
+      `${functionName}: ${field} must name at least one of ${allowed.join(', ')}; an empty selection computes nothing.`,
+      { code: ValidationCode.InputOutOfRange, context: { function: functionName, field } },
+    );
+  }
+  const selected: T[] = [];
+  for (let index = 0; index < value.length; index++) {
+    if (!Object.hasOwn(value, index)) {
+      throw new InputError(
+        `${functionName}: ${field}[${index}] is missing; pass a dense array, not a sparse hole.`,
+        {
+          code: ValidationCode.InputMissingField,
+          context: { function: functionName, field, index },
+        },
+      );
+    }
+    const name: unknown = value[index];
+    if (typeof name !== 'string' || !(allowed as readonly string[]).includes(name)) {
+      const suggestion = typeof name === 'string' ? nearestKey(name, allowed) : undefined;
+      throw new InputError(
+        `${functionName}: ${field}[${index}] must be one of ${allowed.join(', ')}; got ${
+          typeof name === 'string' ? `"${name}"` : describe(name as never)
+        }${suggestion !== undefined ? ` — did you mean "${suggestion}"?` : '.'}`,
+        {
+          code: ValidationCode.InputInvalidEnum,
+          context: {
+            function: functionName,
+            field,
+            index,
+            value: contextValue(name),
+            ...(suggestion !== undefined ? { suggestion } : {}),
+          },
+        },
+      );
+    }
+    if ((selected as readonly string[]).includes(name)) {
+      throw new InputError(
+        `${functionName}: ${field} names "${name}" more than once; request each entry once.`,
+        {
+          code: ValidationCode.InputDuplicateEntry,
+          context: { function: functionName, field, index, value: name },
+        },
+      );
+    }
+    selected.push(name as T);
+  }
+  return selected;
+}
+
+/** Throw unless a `requireSelection` label argument is a non-empty string. */
+function requireSelectionLabel(name: string, label: unknown): void {
+  if (typeof label !== 'string' || label.length === 0) {
+    const received = label === null ? 'null' : label === '' ? "''" : typeof label;
+    throw new InputError(
+      `requireSelection: ${name} must be a non-empty string (it names the caller's boundary in every error); got ${received}.`,
+      {
+        code: ValidationCode.InputWrongType,
+        context: { function: 'requireSelection', field: name, received },
+      },
+    );
+  }
+}

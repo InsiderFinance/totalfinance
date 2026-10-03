@@ -3,10 +3,31 @@
   "domain": "structure",
   "tier": "facade",
   "exports": {
+    "charmExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['charm'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
+    "colorExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['color'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
     "deltaAdjustedPremium": {
       "kind": "function",
       "entrypoints": [".", "./flow"],
       "role": "helper"
+    },
+    "deltaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['dex'] }) from the same selective implementation; direct SDK only (no MCP tool)"
     },
     "exposure": {
       "kind": "function",
@@ -40,6 +61,13 @@
       "entrypoints": [".", "./flow"],
       "role": "artifact"
     },
+    "gammaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['gex'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
     "optionFlowDrift": {
       "kind": "function",
       "entrypoints": ["."],
@@ -47,12 +75,47 @@
       "shape": "envelope",
       "note": "Session-aware observed option-premium drift, not modeled dealer hedging drift; classification coverage bounds are not statistical confidence intervals."
     },
+    "speedExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['speed'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
+    "thetaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['theta'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
     "unusualness": {
       "kind": "function",
       "entrypoints": [".", "./flow"],
       "role": "analysis",
       "shape": "report",
       "note": "report missing assumptions/diagnostics — on the analysis-grammar debt ledger (C4)"
+    },
+    "vannaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['vanna'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
+    "vegaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['vega'] }) from the same selective implementation; direct SDK only (no MCP tool)"
+    },
+    "vommaExposure": {
+      "kind": "function",
+      "entrypoints": [".", "./exposure"],
+      "role": "analysis",
+      "shape": "report",
+      "note": "single-metric shortcut: exposure({ metrics: ['vomma'] }) from the same selective implementation; direct SDK only (no MCP tool)"
     }
   }
 }

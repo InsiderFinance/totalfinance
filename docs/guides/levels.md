@@ -165,6 +165,11 @@ if (batch.delta === undefined || batch.delta.length !== strikes.length)
   throw new Error('greeks were requested');
 ```
 
+When only some outputs matter — gamma alone for a spot sweep, price and delta for a hedge —
+`blackScholesEvaluateMany(columns, { outputs: ['gamma'] })` on the same entrypoint computes just
+those, with the same values bit for bit, and `blackScholesEvaluateManyInto` writes them into storage
+you reuse. [Compute only what you need](./selective-greeks-and-exposure.md) walks through both.
+
 ## Workflow
 
 An operation is the same call with a JSON schema, an effect class, a budget, a seed policy, and a

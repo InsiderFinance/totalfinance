@@ -3,10 +3,14 @@
  *
  * Two shapes:
  *   - rows: `priceMany({ contracts, market, engine })` → `PriceResult[]` (rich, convenient).
- *   - columns: struct-of-arrays `Float64Array` kernels (`blackScholesPriceMany`, `blackScholesPriceManyInto`) for hot
- *     loops, with a buffer-writing `*Into` variant for zero-allocation reuse.
+ *   - columns: struct-of-arrays `Float64Array` kernels for hot loops — `blackScholesEvaluateMany`
+ *     for any selection of outputs, `blackScholesPriceMany` for price (optionally with the five
+ *     first-order Greeks) — each with a buffer-writing `*Into` variant for zero-allocation reuse.
  *
- * Batch output is defined to match scalar output exactly (same kernel), which the tests assert.
+ * Every columnar Black–Scholes path runs the ONE selective kernel (`bsm-evaluate.ts`): the plan is
+ * resolved once per call, only the requested outputs and their dependencies are computed per row,
+ * and values are written straight into the output columns. Batch output is defined to match scalar
+ * output exactly (same expressions), which the tests assert bit for bit.
  */
 
 import {
@@ -19,15 +23,21 @@ import {
   ensureKnownKeys,
   requireArgumentArray,
   requireArgumentObject,
+  requireSelection,
+  type GuaranteedSelection,
 } from '@totalfinance/core';
+import { blackScholesImpliedVolatility, type ImpliedVolatilityReason } from './bsm.js';
 import {
-  blackScholesGreeks,
-  blackScholesImpliedVolatility,
-  type ImpliedVolatilityReason,
-  blackScholesPriceUnchecked,
-} from './bsm.js';
+  BLACK_SCHOLES_OUTPUTS,
+  BLACK_SCHOLES_OUTPUT_SLOTS,
+  type BlackScholesOutput,
+  type BlackScholesOutputSelection,
+  type BlackScholesPlan,
+  evaluateBlackScholesRowsUnchecked,
+  resolveBlackScholesPlan,
+} from './bsm-evaluate.js';
 import { type OptionPricingEngine, engines, requireEngine } from './engines.js';
-import type { Greeks, OptionMarket, PriceResult } from './types.js';
+import type { OptionMarket, PriceResult } from './types.js';
 
 /** Reject mismatched columnar shapes — a short column would silently produce `NaN`/dropped rows. */
 function requireEqualLengths(
@@ -48,6 +58,16 @@ function requireEqualLengths(
         },
       );
     }
+    // A string has a numeric `length` too; a column is an array or a typed array, nothing else.
+    if (!Array.isArray(arr) && !(ArrayBuffer.isView(arr) && !(arr instanceof DataView))) {
+      throw new InputError(
+        `${functionName}: column "${name}" must be a Float64Array/Int8Array (or a number array) of ${n} rows; got ${typeof arr}.`,
+        {
+          code: ErrorCode.InputWrongType,
+          context: { column: name, received: typeof arr },
+        },
+      );
+    }
     if (arr.length !== n) {
       throw new InputError(
         `${functionName}: column "${name}" has length ${arr.length}, but the row count is ${n}; all columns must match.`,
@@ -61,21 +81,39 @@ function requireEqualLengths(
 }
 
 function requirePositiveRow(value: number, field: string, row: number, functionName: string): void {
-  if (!(value > 0) || !Number.isFinite(value)) {
+  if (!Number.isFinite(value) || !(value > 0)) {
     throw new InputError(
-      `${functionName}: ${field} at row ${row} must be a positive finite number, got ${value}.`,
-      { code: ErrorCode.InputOutOfRange, context: { row, field, value } },
+      `${functionName}: ${field} at row ${row} must be a positive finite number, got ${rowValue(value)}.`,
+      { code: ErrorCode.InputOutOfRange, context: { row, field, value: rowContext(value) } },
     );
   }
 }
 
 function requireFiniteRow(value: number, field: string, row: number, functionName: string): void {
   if (!Number.isFinite(value)) {
-    throw new InputError(`${functionName}: ${field} at row ${row} must be finite, got ${value}.`, {
-      code: ErrorCode.InputNotFinite,
-      context: { row, field, value },
-    });
+    throw new InputError(
+      `${functionName}: ${field} at row ${row} must be finite, got ${rowValue(value)}.`,
+      { code: ErrorCode.InputNotFinite, context: { row, field, value: rowContext(value) } },
+    );
   }
+}
+
+/**
+ * A row value as an error names it. Columns are typed arrays, but plain arrays reach the boundary at
+ * run time too: a non-number names its type, so `"100" (string)` and `100n (bigint)` read as the
+ * mistakes they are rather than as plausible numbers.
+ */
+function rowValue(value: unknown): string {
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'string') return `${JSON.stringify(value)} (string)`;
+  if (typeof value === 'bigint') return `${value}n (bigint)`;
+  if (typeof value === 'boolean') return `${value ? 'true' : 'false'} (boolean)`;
+  return describeReceived(value);
+}
+
+/** Error context keeps a number as a number; anything else as its description (a BigInt cannot be JSON). */
+function rowContext(value: unknown): number | string {
+  return typeof value === 'number' ? value : rowValue(value);
 }
 
 /**
@@ -129,6 +167,130 @@ function rowCount(cols: OptionBatchColumns): number {
 }
 
 /**
+ * The column SHAPE half of the batch boundary: a closed columns object whose every column is an
+ * array of exactly the row count. Returns the row count.
+ */
+function requireBatchColumnShapes(
+  functionName: string,
+  field: string,
+  cols: OptionBatchColumns,
+): number {
+  requireArgumentObject(functionName, field, cols);
+  ensureKnownKeys(functionName, field, cols, BATCH_COLUMN_KEYS);
+  requireArgumentArray(functionName, `${field}.spot`, (cols as { spot?: unknown }).spot);
+  const n = rowCount(cols);
+  // Column shapes first: the per-row value loop reads every column, so a missing column must teach
+  // its name here rather than crash on `undefined[i]`.
+  const entries: Array<[string, { length: number }]> = [
+    ['strike', cols.strike],
+    ['volatility', cols.volatility],
+    ['riskFreeRate', cols.riskFreeRate],
+    ['timeToExpiryYears', cols.timeToExpiryYears],
+    ['type', cols.type],
+  ];
+  if (cols.dividendYield !== undefined) entries.push(['dividendYield', cols.dividendYield]);
+  requireEqualLengths(n, entries, functionName);
+  return n;
+}
+
+/**
+ * The VALUE half of the batch boundary: every value the kernel consumes is usable — positive finite
+ * spot, strike, time and volatility; finite rate, dividend yield and type. One flat pass over the
+ * columns, before anything is allocated or written (selective Greeks spec, decision 8).
+ */
+function requireBatchRowValues(cols: OptionBatchColumns, n: number, functionName: string): void {
+  const { spot, strike, timeToExpiryYears, volatility, riskFreeRate, type, dividendYield } = cols;
+  for (let i = 0; i < n; i++) {
+    const S = spot[i]!;
+    const K = strike[i]!;
+    const T = timeToExpiryYears[i]!;
+    const sigma = volatility[i]!;
+    const r = riskFreeRate[i]!;
+    const q = dividendYield === undefined ? 0 : dividendYield[i]!;
+    const kind = type[i]!;
+    // Fast path: one inline test per row, no calls, so no number is boxed on a valid row.
+    // `typeof x === 'number' && x > 0 && x < Infinity` is "a positive finite number": the typeof
+    // test comes first because the comparisons alone coerce — "100", true and 100n all compare
+    // greater than 0 — and a plain-array column could otherwise carry one past validation into the
+    // kernel. NaN fails the comparisons. Number.isFinite never coerces.
+    if (
+      typeof S === 'number' &&
+      S > 0 &&
+      S < Infinity &&
+      typeof K === 'number' &&
+      K > 0 &&
+      K < Infinity &&
+      typeof T === 'number' &&
+      T > 0 &&
+      T < Infinity &&
+      typeof sigma === 'number' &&
+      sigma > 0 &&
+      sigma < Infinity &&
+      Number.isFinite(r) &&
+      Number.isFinite(q) &&
+      Number.isFinite(kind)
+    ) {
+      continue;
+    }
+    // A failing row re-runs the precise checks in order, so the typed error names the first bad field.
+    requirePositiveRow(S, 'spot', i, functionName);
+    requirePositiveRow(K, 'strike', i, functionName);
+    requirePositiveRow(T, 'timeToExpiryYears', i, functionName);
+    requirePositiveRow(sigma, 'volatility', i, functionName);
+    requireFiniteRow(r, 'riskFreeRate', i, functionName);
+    if (dividendYield !== undefined) requireFiniteRow(q, 'dividendYield', i, functionName);
+    requireFiniteRow(kind, 'type', i, functionName);
+  }
+}
+
+/**
+ * The columnar Black–Scholes evaluation every batch path shares: `targets[k]` receives the plan's
+ * k-th requested output for rows `[0, rows)`; nothing past `rows` is touched. The caller has
+ * validated every column, value and target, so the kernel's row loop runs without per-row
+ * validation or per-row objects (spec 3B.1b; selective Greeks decision 1).
+ *
+ * Row `i`'s inputs are all read before any of its outputs is written, which is what keeps
+ * `blackScholesPriceManyInto`'s exact in-place aliasing correct.
+ */
+function evaluateColumns(
+  plan: BlackScholesPlan,
+  cols: OptionBatchColumns,
+  rows: number,
+  targets: readonly Float64Array[],
+): void {
+  const bySlot = new Array<Float64Array | undefined>(BLACK_SCHOLES_OUTPUT_SLOTS);
+  for (let k = 0; k < plan.slots.length; k++) bySlot[plan.slots[k]!] = targets[k];
+  evaluateBlackScholesRowsUnchecked(plan, cols, rows, bySlot);
+}
+
+/** Byte range `[start, end)` the first `rows` elements of a typed array occupy, or none for a plain array. */
+function byteRange(
+  view: ArrayLike<number>,
+  rows: number,
+): { buffer: ArrayBufferLike; start: number; end: number } | undefined {
+  if (!ArrayBuffer.isView(view)) return undefined;
+  const typed = view as unknown as Float64Array | Int8Array;
+  return {
+    buffer: typed.buffer,
+    start: typed.byteOffset,
+    end: typed.byteOffset + rows * typed.BYTES_PER_ELEMENT,
+  };
+}
+
+function presentColumns(cols: OptionBatchColumns): Array<[string, Float64Array | Int8Array]> {
+  const columns: Array<[string, Float64Array | Int8Array]> = [
+    ['spot', cols.spot],
+    ['strike', cols.strike],
+    ['volatility', cols.volatility],
+    ['riskFreeRate', cols.riskFreeRate],
+    ['timeToExpiryYears', cols.timeToExpiryYears],
+    ['type', cols.type],
+  ];
+  if (cols.dividendYield !== undefined) columns.push(['dividendYield', cols.dividendYield]);
+  return columns;
+}
+
+/**
  * Reject an `out` buffer that PARTIALLY overlaps an input column (defect-fix wave, finding 5).
  *
  * The loop reads row `i` of every column and then writes `out[i]`, so writing over memory a LATER
@@ -145,16 +307,7 @@ function requireNonOverlappingOut(
 ): void {
   const outStart = out.byteOffset;
   const outEnd = outStart + rows * Float64Array.BYTES_PER_ELEMENT;
-  const columns: Array<[string, Float64Array | Int8Array]> = [
-    ['spot', cols.spot],
-    ['strike', cols.strike],
-    ['volatility', cols.volatility],
-    ['riskFreeRate', cols.riskFreeRate],
-    ['timeToExpiryYears', cols.timeToExpiryYears],
-    ['type', cols.type],
-  ];
-  if (cols.dividendYield !== undefined) columns.push(['dividendYield', cols.dividendYield]);
-  for (const [name, column] of columns) {
+  for (const [name, column] of presentColumns(cols)) {
     if (column.buffer !== out.buffer) continue;
     // Exact alias: same start, same element type, same length — the documented in-place fast path.
     if (
@@ -191,31 +344,15 @@ function requireNonOverlappingOut(
 /**
  * Write BSM prices for `cols` into the provided `out` buffer (no allocation).
  *
- * TRUSTED FAST PATH: this validates column/buffer SHAPES but NOT per-row values — it assumes finite,
- * positive `spot/strike/t/vol` and finite `rate/q`. For validated input use {@link blackScholesPriceMany}.
+ * Validates the columns (closed keys, exact row counts) and every row's values — positive finite
+ * spot, strike, time and volatility; finite rate, dividend yield and type — before writing anything,
+ * exactly as {@link blackScholesPriceMany} does. Elements of `out` past the row count are untouched.
  *
  * `out` may alias an input column EXACTLY (in-place pricing); a partial overlap is rejected.
  */
 export function blackScholesPriceManyInto(cols: OptionBatchColumns, out: Float64Array): void {
-  requireArgumentObject('blackScholesPriceManyInto', 'cols', cols);
-  ensureKnownKeys('blackScholesPriceManyInto', 'cols', cols, BATCH_COLUMN_KEYS);
-  requireArgumentObject('blackScholesPriceManyInto', 'cols', cols);
-  requireArgumentArray(
-    'blackScholesPriceManyInto',
-    'cols.spot',
-    (cols as { spot?: unknown }).spot as never,
-  );
+  const n = requireBatchColumnShapes('blackScholesPriceManyInto', 'cols', cols);
   requireArgumentArray('blackScholesPriceManyInto', 'out', out);
-  const n = rowCount(cols);
-  const entries: Array<[string, { length: number }]> = [
-    ['strike', cols.strike],
-    ['volatility', cols.volatility],
-    ['riskFreeRate', cols.riskFreeRate],
-    ['timeToExpiryYears', cols.timeToExpiryYears],
-    ['type', cols.type],
-  ];
-  if (cols.dividendYield !== undefined) entries.push(['dividendYield', cols.dividendYield]);
-  requireEqualLengths(n, entries, 'blackScholesPriceManyInto');
   if (out.length < n) {
     throw new InputError(
       `blackScholesPriceManyInto: out buffer length ${out.length} is smaller than the row count ${n}; rows would be dropped.`,
@@ -223,25 +360,22 @@ export function blackScholesPriceManyInto(cols: OptionBatchColumns, out: Float64
     );
   }
   requireNonOverlappingOut(cols, out, n, 'blackScholesPriceManyInto');
-  // The UNCHECKED kernel on purpose: every column was shape- and length-checked above, so routing
-  // 100,000 rows through the validating facade would re-check the same six field names per row and
-  // buy nothing. Spec 3B.1b: runtime safety may cost at the scalar boundary, never per row inside an
-  // already-validated columnar loop.
-  for (let i = 0; i < n; i++) {
-    const q = cols.dividendYield !== undefined ? cols.dividendYield[i]! : 0;
-    out[i] = blackScholesPriceUnchecked({
-      type: typeAt(cols.type, i),
-      spot: cols.spot[i]!,
-      strike: cols.strike[i]!,
-      timeToExpiryYears: cols.timeToExpiryYears[i]!,
-      riskFreeRate: cols.riskFreeRate[i]!,
-      dividendYield: q,
-      volatility: cols.volatility[i]!,
-    });
-  }
+  // Selective Greeks spec, decision 9 (a documented correction): this path used to validate shapes
+  // only and price NaN for a non-positive or non-finite row. A reusable buffer is storage, not a
+  // licence to skip input validation — the values are checked here, in one flat pass, before the
+  // first write, so a rejected call never leaves `out` half-updated.
+  requireBatchRowValues(cols, n, 'blackScholesPriceManyInto');
+  evaluateColumns(resolveBlackScholesPlan(['price']), cols, n, [out]);
 }
 
-/** BSM batch pricing over columnar input. Pass `{ greeks: true }` to also fill Greek columns. */
+/**
+ * BSM batch pricing over columnar input. Pass `{ greeks: true }` to also fill the five first-order
+ * Greek columns (theta per calendar day, vega and rho per 1%), computed in the SAME pass as price so
+ * `d1`, `d2`, the discounts and the distribution terms are evaluated once per row.
+ *
+ * For any other selection — gamma alone, price and gamma, the higher-order Greeks — use
+ * {@link blackScholesEvaluateMany}.
+ */
 export function blackScholesPriceMany(
   cols: OptionBatchColumns,
   options: { greeks?: boolean } = {},
@@ -256,62 +390,246 @@ export function blackScholesPriceMany(
       { code: ErrorCode.InputWrongType, context: { greeks: options.greeks } },
     );
   }
-  requireArgumentArray(
-    'blackScholesPriceMany',
-    'cols.spot',
-    (cols as { spot?: unknown }).spot as never,
-  );
-  const n = rowCount(cols);
-  // Column shapes first: the per-row value loop below reads every column, so a missing column must
-  // teach its name here rather than crash on `undefined[i]`.
-  {
-    const entries: Array<[string, { length: number }]> = [
-      ['strike', cols.strike],
-      ['volatility', cols.volatility],
-      ['riskFreeRate', cols.riskFreeRate],
-      ['timeToExpiryYears', cols.timeToExpiryYears],
-      ['type', cols.type],
-    ];
-    if (cols.dividendYield !== undefined) entries.push(['dividendYield', cols.dividendYield]);
-    requireEqualLengths(n, entries, 'blackScholesPriceMany');
-  }
-  for (let i = 0; i < n; i++) {
-    requirePositiveRow(cols.spot[i]!, 'spot', i, 'blackScholesPriceMany');
-    requirePositiveRow(cols.strike[i]!, 'strike', i, 'blackScholesPriceMany');
-    requirePositiveRow(cols.timeToExpiryYears[i]!, 'timeToExpiryYears', i, 'blackScholesPriceMany');
-    requirePositiveRow(cols.volatility[i]!, 'volatility', i, 'blackScholesPriceMany');
-    requireFiniteRow(cols.riskFreeRate[i]!, 'riskFreeRate', i, 'blackScholesPriceMany');
-    if (cols.dividendYield)
-      requireFiniteRow(cols.dividendYield[i]!, 'dividendYield', i, 'blackScholesPriceMany');
-  }
+  const n = requireBatchColumnShapes('blackScholesPriceMany', 'cols', cols);
+  requireBatchRowValues(cols, n, 'blackScholesPriceMany');
   const price = new Float64Array(n);
-  blackScholesPriceManyInto(cols, price);
-  if (!options.greeks) return { price };
-
+  if (!options.greeks) {
+    evaluateColumns(resolveBlackScholesPlan(['price']), cols, n, [price]);
+    return { price };
+  }
   const delta = new Float64Array(n);
   const gamma = new Float64Array(n);
   const theta = new Float64Array(n);
   const vega = new Float64Array(n);
   const rho = new Float64Array(n);
-  for (let i = 0; i < n; i++) {
-    const q = cols.dividendYield !== undefined ? cols.dividendYield[i]! : 0;
-    const g: Greeks = blackScholesGreeks({
-      type: typeAt(cols.type, i),
-      spot: cols.spot[i]!,
-      strike: cols.strike[i]!,
-      timeToExpiryYears: cols.timeToExpiryYears[i]!,
-      riskFreeRate: cols.riskFreeRate[i]!,
-      dividendYield: q,
-      volatility: cols.volatility[i]!,
-    });
-    delta[i] = g.delta;
-    gamma[i] = g.gamma;
-    theta[i] = g.theta;
-    vega[i] = g.vega;
-    rho[i] = g.rho;
-  }
+  evaluateColumns(
+    resolveBlackScholesPlan(['price', 'delta', 'gamma', 'theta', 'vega', 'rho']),
+    cols,
+    n,
+    [price, delta, gamma, theta, vega, rho],
+  );
   return { price, delta, gamma, theta, vega, rho };
 }
+
+// ---- selective batch evaluation (selective Greeks spec, decisions 6–8) ----
+
+/** Options for {@link blackScholesEvaluateMany}. */
+export interface BlackScholesEvaluateManyOptions<
+  O extends BlackScholesOutputSelection = BlackScholesOutputSelection,
+> {
+  /**
+   * The outputs to compute, e.g. `['gamma']` or `['price', 'delta']`. Required, nonempty, dense and
+   * duplicate-free; only these are computed and returned.
+   */
+  outputs: O;
+}
+
+/**
+ * One `Float64Array` (one value per row) for each selected output. The outputs the selection is
+ * certain to contain are required columns; any other output it might contain is optional
+ * ({@link GuaranteedSelection}): a literal selection gives exactly its columns, while a dynamic
+ * selection, a conditional between selections or a union-valued element gives optional ones.
+ */
+export type BlackScholesEvaluateManyResult<O extends BlackScholesOutputSelection> = {
+  [K in GuaranteedSelection<O>]: Float64Array;
+} & { [K in Exclude<O[number], GuaranteedSelection<O>>]?: Float64Array };
+
+/**
+ * Caller-owned output storage for {@link blackScholesEvaluateManyInto}: the property names ARE the
+ * selection. Each buffer is a `Float64Array` with at least one element per row; only elements
+ * `[0, rows)` are written.
+ */
+export interface BlackScholesOutputBuffers {
+  /** Option value. */
+  price?: Float64Array;
+  /** ∂V/∂S. */
+  delta?: Float64Array;
+  /** ∂²V/∂S². */
+  gamma?: Float64Array;
+  /** Value change per calendar day elapsed. */
+  theta?: Float64Array;
+  /** Value change per 1% (0.01) volatility move. */
+  vega?: Float64Array;
+  /** Value change per 1% (0.01) rate move. */
+  rho?: Float64Array;
+  /** ∂Δ/∂σ, per 1.00 σ. */
+  vanna?: Float64Array;
+  /** ∂Δ/∂T, per added year of time-to-expiry. */
+  charm?: Float64Array;
+  /** ∂²V/∂σ², per 1.00 σ². */
+  vomma?: Float64Array;
+  /** ∂Γ/∂S. */
+  speed?: Float64Array;
+  /** ∂Γ/∂T, per added year of time-to-expiry. */
+  color?: Float64Array;
+}
+
+type OutputBuffersAreTotal = [
+  Exclude<BlackScholesOutput, keyof BlackScholesOutputBuffers>,
+  Exclude<keyof BlackScholesOutputBuffers, BlackScholesOutput>,
+] extends [never, never]
+  ? true
+  : never;
+const OUTPUT_BUFFERS_ARE_TOTAL: OutputBuffersAreTotal = true;
+void OUTPUT_BUFFERS_ARE_TOTAL;
+
+/**
+ * Black–Scholes–Merton outputs for every row of a columnar batch, computing ONLY the selected
+ * outputs and their dependencies — `{ outputs: ['gamma'] }` evaluates no cumulative normal.
+ *
+ * Validates the columns (closed keys, exact row counts), every row's values (positive finite spot,
+ * strike, time and volatility; finite rate, dividend yield and type) and the selection, then
+ * allocates one `Float64Array` per selected output. Values are bit-identical to the scalar
+ * `blackScholes` functions on the same row. Units: theta per calendar day, vega and rho per 1%,
+ * higher-order Greeks in the raw units of `blackScholes.extendedGreeks`.
+ *
+ * @example
+ * const { gamma } = blackScholesEvaluateMany(columns, { outputs: ['gamma'] });
+ */
+export function blackScholesEvaluateMany<const O extends BlackScholesOutputSelection>(
+  columns: OptionBatchColumns,
+  options: BlackScholesEvaluateManyOptions<O>,
+): BlackScholesEvaluateManyResult<O> {
+  const functionName = 'blackScholesEvaluateMany';
+  const n = requireBatchColumnShapes(functionName, 'columns', columns);
+  requireBatchRowValues(columns, n, functionName);
+  requireArgumentObject(functionName, 'options', options);
+  ensureKnownKeys(functionName, 'options', options, ['outputs']);
+  const outputs = requireSelection(
+    functionName,
+    'options.outputs',
+    (options as { outputs?: unknown }).outputs,
+    BLACK_SCHOLES_OUTPUTS,
+  );
+  const plan = resolveBlackScholesPlan(outputs);
+  const targets = outputs.map(() => new Float64Array(n));
+  evaluateColumns(plan, columns, n, targets);
+  const result: Partial<Record<BlackScholesOutput, Float64Array>> = {};
+  for (let k = 0; k < outputs.length; k++) result[outputs[k]!] = targets[k]!;
+  return result as BlackScholesEvaluateManyResult<O>;
+}
+
+function describeReceived(value: unknown): string {
+  if (value === null) return 'null';
+  if (typeof value !== 'object') return typeof value;
+  const name = (value as { constructor?: { name?: unknown } }).constructor?.name;
+  return typeof name === 'string' && name !== '' ? name : 'object';
+}
+
+/**
+ * Write the selected Black–Scholes–Merton outputs for every row into caller-owned buffers — the
+ * zero-allocation form of {@link blackScholesEvaluateMany} for hot loops that reuse storage. The
+ * property names of `outputs` are the selection: `{ gamma: buffer }` computes gamma only.
+ *
+ * Reusable storage is not unchecked input. Before anything is written this validates the columns
+ * and every row's values exactly as {@link blackScholesEvaluateMany} does, and every buffer: a
+ * `Float64Array` (not a plain array or another typed array) with at least one element per row. No
+ * buffer may overlap an input column or another output buffer in memory — not even an exact alias —
+ * because a write would then change values that are still to be read or returned. A rejected call
+ * writes nothing; a successful one writes elements `[0, rows)` of each buffer and leaves the rest
+ * untouched. An `undefined` entry is treated as omitted.
+ *
+ * @example
+ * const gamma = new Float64Array(capacity);
+ * blackScholesEvaluateManyInto(columns, { gamma });
+ */
+export function blackScholesEvaluateManyInto(
+  columns: OptionBatchColumns,
+  outputs: BlackScholesOutputBuffers,
+): void {
+  const functionName = 'blackScholesEvaluateManyInto';
+  const n = requireBatchColumnShapes(functionName, 'columns', columns);
+  requireArgumentObject(functionName, 'outputs', outputs);
+  ensureKnownKeys(functionName, 'outputs', outputs, BLACK_SCHOLES_OUTPUTS);
+  const selected: BlackScholesOutput[] = [];
+  const targets: Float64Array[] = [];
+  for (const name of Object.keys(outputs) as BlackScholesOutput[]) {
+    const buffer: unknown = outputs[name];
+    if (buffer === undefined) continue;
+    if (!(buffer instanceof Float64Array)) {
+      throw new InputError(
+        `${functionName}: outputs.${name} must be a Float64Array with at least ${n} elements (reusable output storage); got ${describeReceived(buffer)}.`,
+        {
+          code: ErrorCode.InputWrongType,
+          context: { function: functionName, output: name, received: describeReceived(buffer) },
+        },
+      );
+    }
+    if (buffer.length < n) {
+      throw new InputError(
+        `${functionName}: outputs.${name} has length ${buffer.length}, smaller than the row count ${n}; rows would be dropped.`,
+        {
+          code: ErrorCode.InputOutOfRange,
+          context: { function: functionName, output: name, length: buffer.length, rows: n },
+        },
+      );
+    }
+    selected.push(name);
+    targets.push(buffer);
+  }
+  if (selected.length === 0) {
+    throw new InputError(
+      `${functionName}: outputs must name at least one output buffer, e.g. { gamma: new Float64Array(${n}) }. Allowed outputs: ${BLACK_SCHOLES_OUTPUTS.join(', ')}.`,
+      { code: ErrorCode.InputOutOfRange, context: { function: functionName, field: 'outputs' } },
+    );
+  }
+  requireDisjointOutputs(columns, selected, targets, n, functionName);
+  requireBatchRowValues(columns, n, functionName);
+  evaluateColumns(resolveBlackScholesPlan(selected), columns, n, targets);
+}
+
+/**
+ * Selective Greeks spec, decision 8: an output buffer may share memory with neither an input column
+ * nor another output. Unlike `blackScholesPriceManyInto`'s single `out`, exact aliasing is refused
+ * too — overwriting the spot column with gamma, or writing delta and gamma into one buffer, returns
+ * the caller something other than what they asked for.
+ */
+function requireDisjointOutputs(
+  cols: OptionBatchColumns,
+  names: readonly BlackScholesOutput[],
+  buffers: readonly Float64Array[],
+  rows: number,
+  functionName: string,
+): void {
+  const columns = presentColumns(cols);
+  for (let k = 0; k < buffers.length; k++) {
+    const buffer = buffers[k]!;
+    const out = byteRange(buffer, rows)!;
+    for (const [column, values] of columns) {
+      const input = byteRange(values, rows);
+      if (input === undefined || input.buffer !== out.buffer) continue;
+      if (input.start < out.end && out.start < input.end) {
+        throw new InputError(
+          `${functionName}: outputs.${names[k]} overlaps input column "${column}" in the same ArrayBuffer ` +
+            `(output bytes [${out.start}, ${out.end}) vs "${column}" bytes [${input.start}, ${input.end})). ` +
+            'Writing it would overwrite inputs the batch still reads; give each output its own storage.',
+          {
+            code: ErrorCode.InputWrongShape,
+            context: { function: functionName, output: names[k], column, rows },
+          },
+        );
+      }
+    }
+    for (let j = 0; j < k; j++) {
+      const other = buffers[j]!;
+      const prior = byteRange(other, rows)!;
+      if (
+        other === buffer ||
+        (prior.buffer === out.buffer && prior.start < out.end && out.start < prior.end)
+      ) {
+        throw new InputError(
+          `${functionName}: outputs.${names[j]} and outputs.${names[k]} share memory; each output needs its own buffer, or one would overwrite the other.`,
+          {
+            code: ErrorCode.InputWrongShape,
+            context: { function: functionName, output: names[k], overlapsOutput: names[j], rows },
+          },
+        );
+      }
+    }
+  }
+}
+
+export type { BlackScholesOutput, BlackScholesOutputSelection } from './bsm-evaluate.js';
 
 /** Columnar input for batch implied-volatility inversion (an option chain). `type`: 1 = call, ≤ 0 = put. */
 export interface OptionImpliedVolatilityBatchColumns {

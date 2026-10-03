@@ -16,6 +16,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { cooperativeYield } from '../../../tools/test-support/cooperative-yield.js';
 import { PostconditionError } from '@totalfinance/core';
 import {
   engines,
@@ -625,8 +626,12 @@ describe('cross-engine agreement at stress parameters (European vs Black–Schol
     }
   }
 
-  it('the American panel agrees with a 3001-step Leisen–Reimer reference or is flagged', () => {
+  it('the American panel agrees with a 3001-step Leisen–Reimer reference or is flagged', async () => {
+    // 31 s locally and 56 s hosted, all synchronous: yield on time between pricings so the worker's
+    // progress RPC is answered (tools/test-support/cooperative-yield.ts).
+    const relax = cooperativeYield();
     for (const stress of STRESS) {
+      await relax();
       const contract = contractAt({
         type: 'put',
         style: 'american',
@@ -645,6 +650,7 @@ describe('cross-engine agreement at stress parameters (European vs Black–Schol
         .price({ contract, market: mkt, options: { greeks: false } }).value;
       expect(reference).toBeGreaterThan(0);
       for (const { label, engine } of PANEL()) {
+        await relax();
         let priced;
         try {
           priced = engine.price({ contract, market: mkt, options: { greeks: false } });

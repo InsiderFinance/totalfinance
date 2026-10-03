@@ -215,8 +215,11 @@ export type { OptionBuilderInput, InstrumentBuilderInput } from './contract.js';
 
 // Batch pricing (spec §9.6).
 export { priceMany } from './batch.js';
-// Batch kernels blackScholesPriceMany/blackScholesPriceManyInto/blackScholesImpliedVolatilityMany: `@insiderfinance/totalfinance/options/black-scholes`.
+// Columnar batch kernels (blackScholesEvaluateMany/blackScholesEvaluateManyInto, blackScholesPriceMany/blackScholesPriceManyInto, blackScholesImpliedVolatilityMany): `@insiderfinance/totalfinance/options/batch`.
 export type {
+  BlackScholesEvaluateManyOptions,
+  BlackScholesEvaluateManyResult,
+  BlackScholesOutputBuffers,
   OptionBatchColumns,
   OptionBatchResult,
   OptionImpliedVolatilityBatchColumns,
@@ -297,6 +300,13 @@ export type {
   BlackScholesImpliedVolatilityOptions,
   ImpliedVolatilityReason,
 } from './bsm.js';
+// Selective evaluation (`blackScholes.evaluate`, `blackScholesEvaluateMany`): the output names and result shapes.
+export type {
+  BlackScholesEvaluateInput,
+  BlackScholesEvaluation,
+  BlackScholesOutput,
+  BlackScholesOutputSelection,
+} from './black-scholes.js';
 
 export type {
   Greeks,

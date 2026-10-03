@@ -31,7 +31,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/core` exposes **88** runtime exports (**150** including types) across 4 entrypoints (`.`, `./artifacts`, `./pricing`, `./schema`). See the generated [`etc/core.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/core/etc/core.api.md) for the full surface.
+`@insiderfinance/totalfinance/core` exposes **89** runtime exports (**152** including types) across 4 entrypoints (`.`, `./artifacts`, `./pricing`, `./schema`). See the generated [`etc/core.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/core/etc/core.api.md) for the full surface.
 
 ## License
 

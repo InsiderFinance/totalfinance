@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 227,
+    "surfaces": 229,
     "byClass": {
-      "current-runnable": 88,
-      "future-target": 46,
+      "current-runnable": 89,
+      "future-target": 47,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4461,
-    "checkedUnderTruthfulness": 170,
-    "checkedUnderVocabulary": 46,
-    "shippedNamesWatched": 9461,
+    "executableFences": 4505,
+    "checkedUnderTruthfulness": 171,
+    "checkedUnderVocabulary": 47,
+    "shippedNamesWatched": 9503,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -194,6 +194,13 @@
       "codeFences": 2
     },
     {
+      "path": "docs/guides/selective-greeks-and-exposure.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 7
+    },
+    {
       "path": "docs/guides/strategies.md",
       "class": "current-runnable",
       "owner": "human",
@@ -289,7 +296,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4204
+      "codeFences": 4241
     },
     {
       "path": "docs/llms.txt",
@@ -1049,6 +1056,13 @@
     },
     {
       "path": "docs/specs/scoped-single-package-release.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/selective-greeks-and-exposure.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

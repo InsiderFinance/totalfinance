@@ -1412,23 +1412,24 @@ Four things that would make the zero false again are now gated (an undeclared pa
 **Reopened by RV7 and re-closed at 0 — but this zero is not the old zero.** The gate that first reported an empty queue was measuring "no token the denylist recognized". Corrected (it now sees through numeric suffixes, embedded single letters and short truncations) the queue was 199. Burning it down took four batches: the volatility bracket and two-asset spread, the skew desk vocabulary and candle bodies, the Bollinger/Keltner/multiplier families, and finally 66 individually-reasoned NAME entries for published notation (VaR/CVaR, R², p-value, %K/%D, Senkou spans, %B, greeks partials, Gatheral's g, SSVI's w, G2++, z-score, k-fold). Every allowlisted name carries a written rationale, and a gate now fails if any is blank. 94 retired forms are covered by executable removal fixtures (see the table row below).
 
 Regenerate with `pnpm naming:update`; `pnpm run ci` fails on any drift from the committed baseline.
-The live counts below include the 2026-09-09 [signed-leg simplification](./signed-leg-constructors.md)
-and the standalone TotalFinance namespace migration. The canonical brand token reclassifies 116
+The live counts below include the 2026-09-09 [signed-leg simplification](./signed-leg-constructors.md),
+the standalone TotalFinance namespace migration and the 2026-10-01
+[selective Greeks and exposure APIs](./selective-greeks-and-exposure.md). The canonical brand token reclassifies 116
 identities without adding or removing a public identity; the historical naming phase stays closed.
 
 | Final measure                                            |      Count |
 | -------------------------------------------------------- | ---------: |
-| Public naming identities walked                          |     41,983 |
+| Public naming identities walked                          |     42,256 |
 | **Unresolved (the migration queue)**                     |      **0** |
-| `explicit`                                               |     38,051 |
-| `canonical-term` (allowlisted, each with a rationale)    |      3,770 |
+| `explicit`                                               |     38,310 |
+| `canonical-term` (allowlisted, each with a rationale)    |      3,784 |
 | `scoped-symbol` (approved notation inside a named scope) |        159 |
 | `opaque-state` (round-trip payload interiors)            |          3 |
 | Retired forms with executable removal evidence           | 115 of 115 |
 | Packages, including the umbrella                         |         25 |
 
-Identity kinds walked: 22,263 fields, 7,218 exports, 4,064 parameters, 4,425 string-literal values, 1,681 methods, 1,520 MCP schema
-fields, 272 stable codes, 272 enum members, 188 subpaths, 55 MCP tools, 25 packages. The MCP schema
+Identity kinds walked: 22,387 fields, 7,289 exports, 4,088 parameters, 4,470 string-literal values, 1,688 methods, 1,520 MCP schema
+fields, 273 stable codes, 273 enum members, 188 subpaths, 55 MCP tools, 25 packages. The MCP schema
 fields and the array-element and method-signature walks were added during N7 after the inventory was
 found to be reporting zero unresolved over an incomplete traversal — 18,077 identities became 19,209
 without a single name changing, which is the reason the count is quoted with the walk that produced

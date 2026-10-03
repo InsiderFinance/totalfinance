@@ -18,6 +18,8 @@ export const InputUnknownField = 'input.unknown_field';
 export const InputWrongType = 'input.wrong_type';
 export const InputWrongShape = 'input.wrong_shape';
 export const InputLengthMismatch = 'input.length_mismatch';
+/** A selection list names the same entry twice (e.g. `outputs: ['gamma', 'gamma']`). */
+export const InputDuplicateEntry = 'input.duplicate_entry';
 export const PostconditionNonFinite = 'postcondition.non_finite_result';
 export const InputSuspiciousCouponRate = 'input.suspicious_coupon_rate';
 export const InputSuspiciousYield = 'input.suspicious_yield';

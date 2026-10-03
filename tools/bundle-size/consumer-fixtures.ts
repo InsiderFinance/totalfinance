@@ -44,10 +44,14 @@ const NAMESPACE_REASON =
 // Its 9 KiB ceiling leaves 343 B above the largest installed sample, paying for real defaults,
 // closed-key validation and convention disclosures, not unrelated indicator metadata.
 // Leave small, explicit headroom without admitting the old 11.7 KiB kernels.
+// Selective Greeks (2026-10-01): the facade namespace gained delta, gamma, theta, vega, rho and
+// evaluate (each with .explain) and their shared kernel (bsm-evaluate.js). Installed Node 22.23.2
+// measurements 13783–13787 B esbuild / 9356 B Rollup; a namespace object cannot shed members, so
+// a blackScholes.call consumer pays for them. 12 → 13.75 KiB esbuild, 8 → 9.5 KiB Rollup.
 const leanBudgets = {
   normal: 0.6,
   rsi: 9,
-  facade: 12,
+  facade: 13.75,
   expert: 2.5,
   'expert-black76': 2.5,
   'expert-bachelier': 2.5,
@@ -85,7 +89,7 @@ function calculation(
       esbuild: rootNamespace
         ? coarseBudgets[canary as keyof typeof coarseBudgets]
         : leanBudgets[canary],
-      rollup: canary === 'facade' ? 8 : leanBudgets[canary],
+      rollup: canary === 'facade' ? 9.5 : leanBudgets[canary],
     },
     ...(style === 'feature' ? {} : { parityWith: `${canary}-feature` }),
     ...(rootNamespace ? { rootNamespace: true } : {}),
@@ -314,8 +318,9 @@ export function allowedConsumerModule(
       id === '@insiderfinance/totalfinance/modules/math/dist/normal.js'
     );
   }
+  // The facade namespace carries its selective members (delta…rho, evaluate) and their one kernel.
   return (
-    /^@insiderfinance\/totalfinance\/modules\/options\/dist\/(?:black-scholes|bsm|facade-util)\.js$/.test(
+    /^@insiderfinance\/totalfinance\/modules\/options\/dist\/(?:black-scholes|bsm|bsm-evaluate|facade-util)\.js$/.test(
       id,
     ) ||
     /^@insiderfinance\/totalfinance\/modules\/math\/dist\/(?:normal|solvers|resource-validation)\.js$/.test(
