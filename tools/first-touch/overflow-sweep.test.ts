@@ -35,6 +35,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { cooperativeYield } from '../test-support/cooperative-yield.js';
 import { isQuantError } from '@totalfinance/core';
 import { allFixtures } from './fixtures.js';
 import { isResourceCoordinate } from './count-semantics.js';
@@ -576,9 +577,11 @@ describe('Law 7 overflow mutant (one coordinate at a time, typed refusals only)'
     ).toEqual([]);
   });
 
-  it('every single-coordinate magnitude mutation either teaches (typed) or stays deeply finite', () => {
+  it('every single-coordinate magnitude mutation either teaches (typed) or stays deeply finite', async () => {
     const violations = new Set<string>();
     const staleLedger = new Set(OVERFLOW_LEDGER);
+    // 24 s locally and ~53 s hosted, all synchronous: yield on time (tools/test-support).
+    const relax = cooperativeYield();
     for (const { key, fn, fixture } of targets) {
       const baseline = fixture();
       const coordinates = numericCoordinates(baseline).filter(
@@ -586,6 +589,7 @@ describe('Law 7 overflow mutant (one coordinate at a time, typed refusals only)'
       );
       let convicted = false;
       for (const coordinate of coordinates) {
+        await relax();
         for (const variant of VARIANTS) {
           let result: unknown;
           try {

@@ -23,6 +23,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { cooperativeYield } from '../test-support/cooperative-yield.js';
 import {
   declaredSites,
   enumerateVariants,
@@ -108,10 +109,11 @@ interface SweptVariant {
   gaps: { named: string; built: string | null }[];
 }
 const sweepCache = new Map<string, SweptVariant[]>();
-function sweepRecord(
+async function sweepRecord(
   record: (typeof contracts.contracts)[number],
   fixturedKeys: ReadonlySet<string>,
-): SweptVariant[] {
+  relax: () => Promise<void>,
+): Promise<SweptVariant[]> {
   const parameters = record.signatures?.[0]?.parameters ?? [];
   const fields = record.fields ?? [];
   const declarationKey = JSON.stringify([parameters, fields]);
@@ -133,12 +135,22 @@ function sweepRecord(
   resetSynthesisIdentities();
   const variants = enumerateVariants(parameters, fields).variants;
   const fixturedSet = new Set(fixturedIds);
-  const swept: SweptVariant[] = variants.map((variant) => {
-    if (fixturedSet.has(variant.id))
-      return { id: variant.id, fixtured: true, built: false, gaps: [] };
+  const swept: SweptVariant[] = [];
+  for (const variant of variants) {
+    // One record can carry hundreds of variants (the portfolio lifecycle grammar); yield between
+    // them so a single heavy declaration cannot hold the worker either. Synthesis state is reset per
+    // derivation above, and nothing else runs on this worker meanwhile, so the derivation is the same.
+    await relax();
+    if (fixturedSet.has(variant.id)) {
+      swept.push({ id: variant.id, fixtured: true, built: false, gaps: [] });
+      continue;
+    }
     const args = synthesizeArguments(parameters, fields, 0, undefined, variant.selection);
-    if (args === null) return { id: variant.id, fixtured: false, built: false, gaps: [] };
-    return {
+    if (args === null) {
+      swept.push({ id: variant.id, fixtured: false, built: false, gaps: [] });
+      continue;
+    }
+    swept.push({
       id: variant.id,
       fixtured: false,
       built: true,
@@ -146,8 +158,8 @@ function sweepRecord(
         named: gap.named,
         built: gap.built ?? null,
       })),
-    };
-  });
+    });
+  }
   sweepCache.set(key, swept);
   return swept;
 }
@@ -181,13 +193,16 @@ describe('the declaration is the source of truth for what must be measured', () 
   // siblings, from the measurement — not a blank cheque.
   it(
     'reaches every union node the declaration offers, for every public contract',
-    () => {
+    async () => {
       /**
        * The gate the review asked for: expected sites versus reached sites. A contract whose
        * enumeration reaches fewer nodes than it declares is measuring a subset and reporting a whole.
        */
       const short: string[] = [];
+      // 18 s locally and 45 s hosted, all synchronous: yield on time (tools/test-support).
+      const relax = cooperativeYield();
       for (const record of contracts.contracts) {
+        await relax();
         const parameters = record.signatures?.[0]?.parameters ?? [];
         const declared = everyDeclaredSite(parameters);
         if (declared.size === 0) continue;
@@ -355,13 +370,13 @@ describe('a variant must REALIZE the branch it names', () => {
       const unrealized: { recordId: string; variantId: string; detail: string }[] = [];
       let checked = 0;
       let fixtured = 0;
-      let recordsSwept = 0;
+      // This CPU-heavy derivation can otherwise starve Vitest's worker heartbeat for more than a
+      // minute and turn a passing release gate into an unhandled RPC timeout. It used to yield every
+      // 25 records, which held the worker 43 s locally (about twice that hosted) once records got
+      // heavier; it yields on time now, between records and between a record's variants.
+      const relax = cooperativeYield();
       for (const record of contracts.contracts) {
-        // This CPU-heavy derivation can otherwise starve Vitest's worker heartbeat for more than a
-        // minute and turn a passing release gate into an unhandled RPC timeout.
-        if (++recordsSwept % 25 === 0) {
-          await new Promise<void>((resolve) => setImmediate(resolve));
-        }
+        await relax();
         /**
          * A CLEAN IDENTITY COUNTER PER RECORD — the same rule the generator follows, and this sweep
          * did not.
@@ -373,7 +388,7 @@ describe('a variant must REALIZE the branch it names', () => {
          * failed after `variant-measurement.test.ts` — and the residual allowlist below was therefore
          * only ever valid for one execution order. `sweepRecord` resets before every derivation.
          */
-        for (const swept of sweepRecord(record, measuredFromFixture)) {
+        for (const swept of await sweepRecord(record, measuredFromFixture, relax)) {
           if (swept.fixtured) {
             fixtured += 1;
             continue;
@@ -541,16 +556,14 @@ describe('an OPTIONAL ARGUMENT is gated like an optional field', () => {
         }
       }
       const seen = new Set<string>();
-      let recordsSwept = 0;
+      // A whole-library derivation is CPU-heavy and otherwise monopolizes the Vitest worker for
+      // roughly two minutes. Yield on time so the reporter's `onTaskUpdate` heartbeat can run; a
+      // logically passing gate that exits with an RPC timeout is not a usable release gate.
+      const relax = cooperativeYield();
       for (const record of contracts.contracts) {
-        // A whole-library derivation is CPU-heavy and otherwise monopolizes the Vitest worker for
-        // roughly two minutes. Yield periodically so the reporter's `onTaskUpdate` heartbeat can
-        // run; a logically passing gate that exits with an RPC timeout is not a usable release gate.
-        if (++recordsSwept % 25 === 0) {
-          await new Promise<void>((resolve) => setImmediate(resolve));
-        }
+        await relax();
         // One derivation per declaration, identity counter reset per derivation — see `sweepRecord`.
-        for (const swept of sweepRecord(record, fromFixture)) {
+        for (const swept of await sweepRecord(record, fromFixture, relax)) {
           if (swept.fixtured || !swept.built) continue;
           for (const gap of swept.gaps) {
             /**

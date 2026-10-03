@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -436,6 +436,53 @@ function sh(cmd: string, args: string[], cwd: string, maxBuffer = 1024 * 1024): 
   return result.stdout;
 }
 
+/**
+ * `sh` without blocking the worker, for a child that runs long enough to starve its progress RPC:
+ * `spawnSync` holds the event loop for the child's whole life, so the release CLI (13 s locally,
+ * 22 s hosted) counted against Vitest's 60 s `onTaskUpdate` timeout like a synchronous loop would
+ * (tools/test-support/cooperative-yield.ts). Same stdio, buffer limit and failure report as `sh`.
+ */
+function shAsync(
+  cmd: string,
+  args: string[],
+  cwd: string,
+  maxBuffer = 1024 * 1024,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, { cwd, stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    let error: Error | undefined;
+    child.stdout.setEncoding('utf8').on('data', (chunk: string) => {
+      stdout += chunk;
+      if (stdout.length + stderr.length > maxBuffer && error === undefined) {
+        error = new Error(`stdout/stderr exceeded maxBuffer (${maxBuffer} bytes)`);
+        child.kill();
+      }
+    });
+    child.stderr.setEncoding('utf8').on('data', (chunk: string) => {
+      stderr += chunk;
+    });
+    child.on('error', (spawnError) => {
+      error ??= spawnError;
+    });
+    child.on('close', (status, signal) => {
+      if (error === undefined && status === 0) {
+        resolve(stdout);
+        return;
+      }
+      reject(
+        new Error(
+          `${cmd} ${args.join(' ')} failed in ${cwd}:\n` +
+            `error: ${error === undefined ? 'none' : String(error)}\n` +
+            `status: ${status}; signal: ${signal ?? 'none'}; maxBuffer: ${maxBuffer} bytes\n` +
+            `stderr: ${outputExcerpt(stderr)}\nstdout: ${outputExcerpt(stdout)}`,
+        ),
+      );
+    });
+  });
+}
+
 beforeAll(() => {
   work = mkdtempSync(join(tmpdir(), 'totalfinance-packed-'));
   tarballDir = join(work, 'tarballs');
@@ -709,9 +756,9 @@ describe('site copy buttons against installed tarballs and release receipts', ()
     expect(registryReceipt).not.toHaveProperty('published');
   });
 
-  it('the release CLI retains a tarball receipt after cleaning its temporary installed consumer', () => {
+  it('the release CLI retains a tarball receipt after cleaning its temporary installed consumer', async () => {
     const path = join(work, 'retained-smoke.json');
-    const output = sh(
+    const output = await shAsync(
       process.execPath,
       [
         '--import',
