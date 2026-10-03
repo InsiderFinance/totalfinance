@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/valuation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [

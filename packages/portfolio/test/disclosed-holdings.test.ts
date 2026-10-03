@@ -20,6 +20,34 @@ const inputWith = (before: ReturnType<typeof holding>[], after: ReturnType<typeo
 });
 
 describe('supplied disclosed holdings', () => {
+  it.each([0, 6, 18])('echoes a detached, structured policy at precision %s', (precision) => {
+    const input = disclosedInput();
+    input.policy.ratioDecimalPlaces = precision;
+    const report = compareDisclosedHoldings(input);
+    expect(report.assumptions.policy).toEqual(input.policy);
+    expect(report.assumptions.policy).not.toBe(input.policy);
+    expect(report.assumptions.rounding).toContain(`to ${precision} decimal places`);
+    input.policy.ratioDecimalPlaces = precision === 0 ? 18 : 0;
+    expect(report.assumptions.policy.ratioDecimalPlaces).toBe(precision);
+    report.assumptions.policy.ratioDecimalPlaces = 9;
+    expect(input.policy.ratioDecimalPlaces).not.toBe(9);
+  });
+
+  it('separates typed library reason codes from original caller review text', () => {
+    const input = disclosedInput();
+    input.baseline.reviewReasons = ['Awaiting provider correction'];
+    input.current.holdings[0]!.reviewReasons = ['Ambiguous share class in source'];
+    const report = compareDisclosedHoldings(input);
+    expect(report.baseline.reviewReasons).toEqual(['Awaiting provider correction']);
+    expect(report.current.holdings[0]!.reviewReasons).toEqual(['Ambiguous share class in source']);
+    expect(report.current.holdings[0]!.reasons).toEqual(['source_row_review']);
+    expect(report.changes[0]!.reasons).toEqual([
+      'baseline_source_snapshot_review',
+      'current_holdings_require_review',
+      'source_row_review',
+    ]);
+  });
+
   it('uses one root/domain/granular calculation with hand-computed changes and concentration', () => {
     const input = inputWith(
       [holding('A', '10', '100'), holding('B', '20', '300')],

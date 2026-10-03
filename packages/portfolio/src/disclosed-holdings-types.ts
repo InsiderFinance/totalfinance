@@ -15,7 +15,7 @@ export interface DisclosedHolding {
   reportedValue: string;
   valueCurrency: string;
   /** Explicit multiplier, exactly '1' or '1000'. */
-  valueScale: string;
+  valueScale: '1' | '1000';
   putCall: 'none' | 'put' | 'call';
   investmentDiscretion: string;
   otherManagerIds: readonly string[];
@@ -39,12 +39,44 @@ export interface DisclosedHoldingsSnapshot {
   [key: string]: unknown;
 }
 
-export interface DisclosedHoldingsPolicy {
+export type DisclosedHoldingsPolicy = {
   supportedProfile: 'common-stock-shares-v1';
   discretionPolicy: 'sole-without-other-managers';
   /** Ratios rounded once, half away from zero, to this many decimal places (0–18). */
   ratioDecimalPlaces: number;
-}
+};
+
+/** Library-generated row/position review codes; source reviewReasons remain free-form. */
+export type DisclosedHoldingReason =
+  | 'unresolved_identity'
+  | 'unsupported_instrument_type'
+  | 'unsupported_quantity_unit'
+  | 'option_position'
+  | 'unsupported_discretion'
+  | 'source_row_review'
+  | 'duplicate_security_class'
+  | 'conflicting_security_identity';
+
+/** Reasons the supplied universe cannot establish absence or comparable whole-universe totals. */
+export type DisclosedHoldingsSnapshotReason =
+  | 'report_incomplete'
+  | 'mapping_incomplete'
+  | 'comparison_ineligible'
+  | 'source_snapshot_review'
+  | 'holdings_require_review'
+  | 'mixed_currencies';
+
+/** Zero totals additionally withhold ratios, but do not invalidate otherwise justified absence. */
+export type DisclosedHoldingsConcentrationReason =
+  | DisclosedHoldingsSnapshotReason
+  | 'zero_denominator';
+
+/** Snapshot eligibility codes identify the side; row and currency codes describe the pair. */
+export type DisclosedHoldingChangeReason =
+  | DisclosedHoldingReason
+  | `baseline_${DisclosedHoldingsSnapshotReason}`
+  | `current_${DisclosedHoldingsSnapshotReason}`
+  | 'currency_mismatch';
 
 export interface CompareDisclosedHoldingsInput {
   baseline: DisclosedHoldingsSnapshot;
@@ -64,7 +96,7 @@ export type DisclosedHoldingResult = {
   quantityUnit: string;
   reportedValue: string;
   valueCurrency: string;
-  valueScale: string;
+  valueScale: '1' | '1000';
   putCall: 'none' | 'put' | 'call';
   investmentDiscretion: string;
   otherManagerIds: string[];
@@ -72,7 +104,7 @@ export type DisclosedHoldingResult = {
   reviewReasons: string[];
   normalizedReportedValue: string;
   status: 'supported' | 'review';
-  reasons: string[];
+  reasons: DisclosedHoldingReason[];
 };
 
 export type DisclosedPositionResult = {
@@ -86,7 +118,7 @@ export type DisclosedPositionResult = {
   valueCurrency: string | null;
   weight: string | null;
   status: 'supported' | 'review';
-  reasons: string[];
+  reasons: DisclosedHoldingReason[];
 };
 
 export type DisclosedHoldingsConcentration = {
@@ -97,7 +129,7 @@ export type DisclosedHoldingsConcentration = {
   largestWeight: string | null;
   /** Sum of squared unrounded reported-value weights, not a percentage. */
   herfindahlIndex: string | null;
-  reasons: string[];
+  reasons: DisclosedHoldingsConcentrationReason[];
 };
 
 export type DisclosedHoldingsSnapshotReport = {
@@ -128,7 +160,7 @@ export type DisclosedHoldingChange = {
   currentReportedValue: string | null;
   valueDifference: string | null;
   valueCurrency: string | null;
-  reasons: string[];
+  reasons: DisclosedHoldingChangeReason[];
 };
 
 /** Rich JSON-safe report directly accepted by createAnalysisArtifact. */
@@ -139,6 +171,8 @@ export type DisclosedHoldingsReport = {
   current: DisclosedHoldingsSnapshotReport;
   changes: DisclosedHoldingChange[];
   assumptions: {
+    /** Validated policy used for this report, copied independently of the caller's request. */
+    policy: DisclosedHoldingsPolicy;
     profile: string;
     discretion: string;
     denominator: string;

@@ -26,8 +26,11 @@ import {
 import type {
   CompareDisclosedHoldingsInput,
   DisclosedHoldingChange,
+  DisclosedHoldingChangeReason,
+  DisclosedHoldingReason,
   DisclosedHoldingsReport,
   DisclosedHoldingsSnapshotReport,
+  DisclosedHoldingsSnapshotReason,
   DisclosedPositionResult,
 } from './disclosed-holdings-types.js';
 export type * from './disclosed-holdings-types.js';
@@ -41,11 +44,14 @@ const orderPosition = (
 ): number =>
   compareText(left.securityId, right.securityId) || compareText(left.classId, right.classId);
 
-function prepare(report: DisclosedHoldingsSnapshotReport, decimalPlaces: number): string[] {
+function prepare(
+  report: DisclosedHoldingsSnapshotReport,
+  decimalPlaces: number,
+): DisclosedHoldingsSnapshotReason[] {
   const groups = new Map<string, DisclosedHoldingsSnapshotReport['holdings']>();
   const identity = new Map<string, Set<string>>();
   for (const row of report.holdings) {
-    const reasons: string[] = [];
+    const reasons: DisclosedHoldingReason[] = [];
     if (
       row.mappingStatus !== 'mapped' ||
       row.issuerId === null ||
@@ -96,7 +102,7 @@ function prepare(report: DisclosedHoldingsSnapshotReport, decimalPlaces: number)
     row.status = row.reasons.length === 0 ? 'supported' : 'review';
   }
   report.positions.sort(orderPosition);
-  const reasons: string[] = [];
+  const reasons: DisclosedHoldingsSnapshotReason[] = [];
   if (!report.reportComplete) reasons.push('report_incomplete');
   if (!report.mappingComplete) reasons.push('mapping_incomplete');
   if (!report.comparisonEligible) reasons.push('comparison_ineligible');
@@ -148,8 +154,8 @@ function prepare(report: DisclosedHoldingsSnapshotReport, decimalPlaces: number)
 function changes(input: {
   baseline: DisclosedHoldingsSnapshotReport;
   current: DisclosedHoldingsSnapshotReport;
-  baselineReasons: string[];
-  currentReasons: string[];
+  baselineReasons: DisclosedHoldingsSnapshotReason[];
+  currentReasons: DisclosedHoldingsSnapshotReason[];
 }): DisclosedHoldingChange[] {
   const baseline = new Map(input.baseline.positions.map((row) => [keyOf(row), row]));
   const current = new Map(input.current.positions.map((row) => [keyOf(row), row]));
@@ -165,9 +171,9 @@ function changes(input: {
     const before = baseline.get(key);
     const after = current.get(key);
     const position = (after ?? before)!;
-    const reasons = [
-      ...input.baselineReasons.map((reason) => `baseline_${reason}`),
-      ...input.currentReasons.map((reason) => `current_${reason}`),
+    const reasons: DisclosedHoldingChangeReason[] = [
+      ...input.baselineReasons.map((reason) => `baseline_${reason}` as const),
+      ...input.currentReasons.map((reason) => `current_${reason}` as const),
       ...(before?.reasons ?? []),
       ...(after?.reasons ?? []),
     ];
@@ -244,12 +250,16 @@ export function compareDisclosedHoldings(
     'discretionPolicy',
     'ratioDecimalPlaces',
   ]);
-  enumeration(own(policy, 'supportedProfile', 'input.policy'), 'input.policy.supportedProfile', [
-    'common-stock-shares-v1',
-  ]);
-  enumeration(own(policy, 'discretionPolicy', 'input.policy'), 'input.policy.discretionPolicy', [
-    'sole-without-other-managers',
-  ]);
+  const supportedProfile = enumeration(
+    own(policy, 'supportedProfile', 'input.policy'),
+    'input.policy.supportedProfile',
+    ['common-stock-shares-v1'],
+  );
+  const discretionPolicy = enumeration(
+    own(policy, 'discretionPolicy', 'input.policy'),
+    'input.policy.discretionPolicy',
+    ['sole-without-other-managers'],
+  );
   const decimalPlaces = own(policy, 'ratioDecimalPlaces', 'input.policy');
   if (typeof decimalPlaces !== 'number')
     fail('input.policy.ratioDecimalPlaces', 'must be an integer from 0 through 18.');
@@ -313,6 +323,7 @@ export function compareDisclosedHoldings(
     current,
     changes: differences,
     assumptions: {
+      policy: { supportedProfile, discretionPolicy, ratioDecimalPlaces: decimalPlaces },
       profile:
         'Resolved common_stock, SH quantities, no put/call. Every supplied row remains visible; unsupported rows are never silently filtered.',
       discretion:

@@ -1,6 +1,7 @@
 # Disclosed holdings comparison
 
-Status: DH1–DH5 locally verified complete, September 25, 2026. This bounded consumer-requested
+Status: DH1–DH5 locally verified complete, September 25, 2026; DH6–DH7 review hardening and
+integration with main in progress, October 2, 2026. This bounded consumer-requested
 compute addition follows the FMP rebuild's SEC-125 handoff; it does not authorize release,
 publication, deployment, or reopening the existing portfolio ledger. The library alignment laws
 remain controlling. API semantics are settled here; the FMP repository owns provider facts and order.
@@ -88,6 +89,12 @@ ratioDecimalPlaces: number }`. Ratio precision is an integer 0–18. The profile
     concentration. Every null calculated field has row/snapshot/change reasons. Root diagnostics
     report complete/review status plus baseline/current row and change counts. The report itself is
     directly assignable to `createAnalysisArtifact({ result })` and serializes without casts.
+12. Public types describe the runtime domains: `valueScale` is `'1' | '1000'`, and library-generated
+    `reasons` use exported finite code unions for holdings, snapshot eligibility, concentration and
+    changes. Caller-supplied `reviewReasons` remain free-form strings. `assumptions.policy` echoes a
+    detached, structured copy of all three validated policy fields; consumers never parse prose to
+    recover precision or supported-profile choices. This does not introduce defaults, presets,
+    alternate calling forms, or a change to the disclosed-holdings-v1 financial semantics.
 
 ## Ordered slices and exit gate
 
@@ -107,6 +114,12 @@ ratioDecimalPlaces: number }`. Ratio precision is an integer 0–18. The profile
       repeat; artifact regeneration stability; retain exact source/tarball verification evidence.
       Synchronize this spec, implementation order and completeness tracker truthfully. Local
       completion is not a published npm release or hosted CI claim.
+- [ ] DH6: literal value-scale types, typed reason codes and structured policy echo; compile-fail
+      contracts and runtime copy/serialization tests, public guide, API and generated inventories.
+- [ ] DH7: integrate current main (including selective Greeks/exposure and the 0.1.1 release
+      metadata), preserve both features' consumer tests, regenerate combined artifacts, run full
+      CI, separate API check, independent coverage repeat and clean-commit regeneration, then
+      synchronize these trackers and merge PR #4 only after hosted checks pass. No npm publication.
 
 The separately versioned offline Python/Node operator pins this reviewed artifact and all input
 receipts. It contains no copy of these formulas. FMP integration acceptance is recorded in that
@@ -115,7 +128,7 @@ repository's SPEC; this library's completion does not itself activate any API.
 Pre-code review accepted by independent holdings semantics reviewer September 25. Zero/empty
 denominators withhold ratios without invalidating justified absence inference.
 
-## Local verification and source record
+## Original September verification and source record (historical)
 
 DH1–DH5 are complete on disposable verification commit
 `79a48493869a3609af2e51b6f9fb11b694aad3d2`, based on

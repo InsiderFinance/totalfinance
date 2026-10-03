@@ -168,6 +168,7 @@ export const SIGNATURE_POLICIES: Readonly<Record<string, SignaturePolicy>> = {
       '@totalfinance/core:requireArgumentArray',
       '@totalfinance/core:requireArgumentObject',
       '@totalfinance/core:requireFiniteFields',
+      '@totalfinance/core:requireSelection',
       '@totalfinance/core:seriesFacade',
       '@totalfinance/core:validate',
       '@totalfinance/core:validateClosedRequest',

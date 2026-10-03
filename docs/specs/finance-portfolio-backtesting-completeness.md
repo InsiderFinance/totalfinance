@@ -29,6 +29,9 @@
 
 ## Bounded disclosed-holdings addition (2026-09-25)
 
+Current PR #4 review: DH6–DH7 typed-contract/policy hardening and current-main integration are in
+progress; verification and merge are pending. The original DH1–DH5 record follows as history.
+
 The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
 **DH1–DH5 locally verified complete** on disposable verification commit
 `79a48493869a3609af2e51b6f9fb11b694aad3d2` plus reviewed documentary/inventory/bundle overlays

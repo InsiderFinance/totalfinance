@@ -69,6 +69,8 @@ if (report.changes[0]!.quantityDifference !== '10')
   throw new Error('unexpected quantity difference');
 if (report.changes[0]!.valueDifference !== '3000') throw new Error('unexpected value difference');
 if (report.current.positions[0]!.weight !== '1') throw new Error('unexpected weight');
+if (report.assumptions.policy.ratioDecimalPlaces !== 12)
+  throw new Error('unexpected policy precision');
 ```
 
 All financial amounts are exact decimal strings. The API multiplies reported values by their
@@ -76,6 +78,16 @@ explicit source scale (`1` or `1000`) before calculation. It preserves the origi
 the normalized amounts. Ratios are decimal fractions, rounded once half away from zero at the
 requested precision; `0.25` means 25%. Concentration includes the largest position weight and
 Herfindahl index, calculated from unrounded values.
+
+Read `report.assumptions.policy` for the exact selected profile, discretion rule and ratio
+precision; the adjacent prose explains their meaning. `valueScale` accepts only the string literals
+`'1'` and `'1000'` in TypeScript as well as at runtime.
+
+Library-generated `reasons` are typed codes, so editors autocomplete values such as
+`'unresolved_identity'`, `'zero_denominator'` or `'baseline_report_incomplete'`. A change's
+snapshot-level reasons identify the affected side (`baseline_` / `current_`). Caller-provided
+`reviewReasons` remain separate, free-form source explanations. Use the codes for application
+logic; do not parse warning messages or assumptions prose.
 
 The denominator is all supplied reported holdings in a complete supported universe. This version
 supports mapped common stock with share quantities, no option side, and sole discretion without

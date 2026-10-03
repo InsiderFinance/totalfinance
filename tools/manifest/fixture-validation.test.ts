@@ -179,8 +179,11 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // the contract it joined no longer exist.
     // 1294 → 1295 (2026-09-21, pre-publish repairs B and C): `options.chainGreeks` joins its
     // contract; `usEquityOption` and `portfolioVaR` replace the retired doors' fixtures one for one.
-    // 1295 → 1296: exact-decimal disclosed-holdings comparison joins its public contract.
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1296);
+    // 1295 → 1314 (selective Greeks and exposure, 2026-10-01): blackScholes.delta/gamma/theta/vega/rho,
+    // blackScholes.evaluate and its .explain, blackScholesEvaluateMany/Into, the nine exposure
+    // shortcuts and core's requireSelection join their contracts with first-touch fixtures.
+    // 1314 → 1315: exact-decimal disclosed-holdings comparison joins its public contract.
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1315);
   });
 
   it('every matched fixture can be BUILT', () => {

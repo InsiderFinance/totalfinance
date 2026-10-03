@@ -17,7 +17,7 @@ export function compareText(left: string, right: string): number {
     if (difference !== 0) return difference < 0 ? -1 : 1;
   }
 }
-export const sortedUnique = (values: readonly string[]): string[] =>
+export const sortedUnique = <T extends string>(values: readonly T[]): T[] =>
   [...new Set(values)].sort(compareText);
 
 export function fail(

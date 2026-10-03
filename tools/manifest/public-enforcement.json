@@ -2822,10 +2822,10 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5305,
-    "enforced": 2444,
+    "candidates": 5373,
+    "enforced": 2485,
     "defective": 0,
-    "partial": 2674,
+    "partial": 2701,
     "unmeasured": 187,
     "unmeasuredByReason": {
       "no-input": 48,
@@ -2850,50 +2850,50 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2714,
-      "null-when-nonnullable": 26021,
-      "omit-required": 13171,
-      "wrong-type": 16809,
-      "non-finite": 9282,
-      "optional-wrong-type": 7973,
-      "invalid-literal": 1939,
-      "empty-series": 912,
+      "unknown-key": 2739,
+      "null-when-nonnullable": 26244,
+      "omit-required": 13311,
+      "wrong-type": 16970,
+      "non-finite": 9376,
+      "optional-wrong-type": 8036,
+      "invalid-literal": 1951,
+      "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6446,
-      "null-when-nonnullable": 65362,
-      "omit-required": 33569,
-      "wrong-type": 42943,
-      "non-finite": 24176,
-      "optional-wrong-type": 19012,
-      "invalid-literal": 4967,
-      "empty-series": 2408,
+      "unknown-key": 6513,
+      "null-when-nonnullable": 65977,
+      "omit-required": 33963,
+      "wrong-type": 43396,
+      "non-finite": 24458,
+      "optional-wrong-type": 19179,
+      "invalid-literal": 5003,
+      "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
       "ragged-matrix": 204
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 2986,
-    "fromSynthesizedInput": 1956,
+    "inherited": 3030,
+    "fromSynthesizedInput": 1971,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
       "external-callback-contract": 250,
-      "branch-not-realized": 601,
-      "baseline-rejected": 3307,
+      "branch-not-realized": 628,
+      "baseline-rejected": 3442,
       "incomplete-baseline": 491,
       "callback-input-required": 21
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 12854,
-      "enforced": 3792,
+      "total": 13084,
+      "enforced": 3860,
       "partial": 2517,
       "defective": 0,
-      "unmeasured": 6545,
+      "unmeasured": 6707,
       "truncated": 0
     },
     "staticFalsePositives": 0,
@@ -16302,6 +16302,24 @@
         "unmeasured": 6
       },
       "fixtureSource": "@totalfinance/core:requireObservationValue"
+    },
+    {
+      "id": "@totalfinance/core:requireSelection",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
     },
     {
       "id": "@totalfinance/core:requireWorkLimit",
@@ -42566,6 +42584,104 @@
       "synthesized": true
     },
     {
+      "id": "@totalfinance/options:blackScholes.delta",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.delta",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.delta"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.delta.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.evaluate",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.evaluate",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.evaluate.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#BlackScholesEvaluateFacade.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate.explain"
+    },
+    {
       "id": "@totalfinance/options:blackScholes.extendedGreeks",
       "package": "@totalfinance/options",
       "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.extendedGreeks",
@@ -42591,6 +42707,56 @@
     },
     {
       "id": "@totalfinance/options:blackScholes.extendedGreeks.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.gamma",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.gamma",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.gamma"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.gamma.explain",
       "package": "@totalfinance/options",
       "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
       "verdict": "enforced",
@@ -42812,6 +42978,200 @@
         "non-finite": 5
       },
       "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.rho",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.rho",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.rho"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.rho.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.theta",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.theta",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.theta"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.theta.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.vega",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.vega",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.vega"
+    },
+    {
+      "id": "@totalfinance/options:blackScholes.vega.explain",
+      "package": "@totalfinance/options",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/options:blackScholesEvaluateMany",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/batch.d.ts#blackScholesEvaluateMany",
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 8,
+        "optional-wrong-type": 1,
+        "omit-required": 7,
+        "wrong-type": 7
+      },
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 8,
+        "optional-wrong-type": 1,
+        "omit-required": 7,
+        "wrong-type": 7
+      },
+      "fixtureSource": "@totalfinance/options:blackScholesEvaluateMany"
+    },
+    {
+      "id": "@totalfinance/options:blackScholesEvaluateManyInto",
+      "package": "@totalfinance/options",
+      "implementation": "packages/options/dist/batch.d.ts#blackScholesEvaluateManyInto",
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 18,
+        "optional-wrong-type": 10,
+        "omit-required": 6,
+        "wrong-type": 8
+      },
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 18,
+        "optional-wrong-type": 10,
+        "omit-required": 6,
+        "wrong-type": 8
+      },
+      "fixtureSource": "@totalfinance/options:blackScholesEvaluateManyInto"
     },
     {
       "id": "@totalfinance/options:blackScholesExtendedGreeks",
@@ -70999,7 +71359,7 @@
       "implementation": "packages/structure/dist/exposure.d.ts#ExposureProfile.byExpiry",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "guardReachability": "delegated"
     },
     {
       "id": "@totalfinance/structure:ExposureProfile#byStrike",
@@ -71007,7 +71367,7 @@
       "implementation": "packages/structure/dist/exposure.d.ts#ExposureProfile.byStrike",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "guardReachability": "delegated"
     },
     {
       "id": "@totalfinance/structure:ExposureProfile#levels",
@@ -71074,7 +71434,7 @@
       ],
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 12,
+        "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 10,
         "non-finite": 5,
@@ -71083,7 +71443,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 12,
+        "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 10,
         "non-finite": 5,
@@ -71189,6 +71549,210 @@
       "guardReachability": "direct"
     },
     {
+      "id": "@totalfinance/structure:charmExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#charmExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:charmExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "charmExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:charmExposure"
+    },
+    {
+      "id": "@totalfinance/structure:colorExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#colorExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:colorExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "colorExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:colorExposure"
+    },
+    {
       "id": "@totalfinance/structure:deltaAdjustedPremium",
       "package": "@totalfinance/structure",
       "implementation": "packages/structure/dist/flow.d.ts#deltaAdjustedPremium",
@@ -71214,11 +71778,11 @@
       ]
     },
     {
-      "id": "@totalfinance/structure:exposure",
+      "id": "@totalfinance/structure:deltaExposure",
       "package": "@totalfinance/structure",
-      "implementation": "packages/structure/dist/exposure.d.ts#exposure",
+      "implementation": "packages/structure/dist/exposure.d.ts#deltaExposure",
       "verdict": "partial",
-      "guardReachability": "none",
+      "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 1,
         "null-when-nonnullable": 12,
@@ -71233,6 +71797,108 @@
         "omit-required": 6,
         "wrong-type": 7,
         "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:deltaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "deltaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:deltaExposure"
+    },
+    {
+      "id": "@totalfinance/structure:exposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#exposure",
+      "verdict": "partial",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 13,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 6,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 13,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "undecided": [
@@ -71323,19 +71989,19 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
-        "omit-required": 16,
+        "null-when-nonnullable": 18,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
-        "omit-required": 16,
+        "null-when-nonnullable": 18,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -71351,9 +72017,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
@@ -71402,6 +72069,108 @@
       "fixtureSource": "@totalfinance/structure:flow"
     },
     {
+      "id": "@totalfinance/structure:gammaExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#gammaExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:gammaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "gammaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:gammaExposure"
+    },
+    {
       "id": "@totalfinance/structure:optionFlowDrift",
       "package": "@totalfinance/structure",
       "implementation": "packages/structure/dist/option-flow-drift.d.ts#optionFlowDrift",
@@ -71428,6 +72197,210 @@
       "fixtureSource": "@totalfinance/structure:optionFlowDrift"
     },
     {
+      "id": "@totalfinance/structure:speedExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#speedExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:speedExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "speedExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:speedExposure"
+    },
+    {
+      "id": "@totalfinance/structure:thetaExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#thetaExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:thetaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "thetaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:thetaExposure"
+    },
+    {
       "id": "@totalfinance/structure:unusualness",
       "package": "@totalfinance/structure",
       "implementation": "packages/structure/dist/flow.d.ts#unusualness",
@@ -71450,6 +72423,312 @@
         "non-finite-element": 1
       },
       "fixtureSource": "@totalfinance/structure:unusualness"
+    },
+    {
+      "id": "@totalfinance/structure:vannaExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#vannaExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vannaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vannaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vannaExposure"
+    },
+    {
+      "id": "@totalfinance/structure:vegaExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#vegaExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vegaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vegaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vegaExposure"
+    },
+    {
+      "id": "@totalfinance/structure:vommaExposure",
+      "package": "@totalfinance/structure",
+      "implementation": "packages/structure/dist/exposure.d.ts#vommaExposure",
+      "verdict": "partial",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vommaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vommaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vommaExposure"
     },
     {
       "id": "@totalfinance/technical-analysis:AdLineStream.fromJSON",
@@ -121175,10 +122454,10 @@
       ],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 12,
+        "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "alternatives": [
@@ -130386,6 +131665,79 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:blackScholes.delta",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.delta",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.delta",
+      "inheritedFrom": "@totalfinance/options:blackScholes.delta",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.delta"
+    },
+    {
+      "id": "totalfinance:blackScholes.delta.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.delta.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.delta.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:blackScholes.evaluate",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.evaluate",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.evaluate",
+      "inheritedFrom": "@totalfinance/options:blackScholes.evaluate",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate"
+    },
+    {
+      "id": "totalfinance:blackScholes.evaluate.explain",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#BlackScholesEvaluateFacade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.evaluate.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.evaluate.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate.explain"
+    },
+    {
       "id": "totalfinance:blackScholes.extendedGreeks",
       "package": "totalfinance",
       "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.extendedGreeks",
@@ -130410,6 +131762,43 @@
       "verdict": "enforced",
       "measurementSource": "@totalfinance/options:blackScholes.extendedGreeks.explain",
       "inheritedFrom": "@totalfinance/options:blackScholes.extendedGreeks.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:blackScholes.gamma",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.gamma",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.gamma",
+      "inheritedFrom": "@totalfinance/options:blackScholes.gamma",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.gamma"
+    },
+    {
+      "id": "totalfinance:blackScholes.gamma.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.gamma.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.gamma.explain",
       "guardReachability": "none",
       "mutationsCovered": {
         "unknown-key": 1,
@@ -130566,6 +131955,117 @@
         "omit-required": 5,
         "wrong-type": 5,
         "non-finite": 5
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:blackScholes.rho",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.rho",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.rho",
+      "inheritedFrom": "@totalfinance/options:blackScholes.rho",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.rho"
+    },
+    {
+      "id": "totalfinance:blackScholes.rho.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.rho.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.rho.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:blackScholes.theta",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.theta",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.theta",
+      "inheritedFrom": "@totalfinance/options:blackScholes.theta",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.theta"
+    },
+    {
+      "id": "totalfinance:blackScholes.theta.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.theta.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.theta.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:blackScholes.vega",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.vega",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.vega",
+      "inheritedFrom": "@totalfinance/options:blackScholes.vega",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.vega"
+    },
+    {
+      "id": "totalfinance:blackScholes.vega.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.vega.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.vega.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
       },
       "synthesized": true
     },
@@ -135953,6 +137453,102 @@
       "fixtureSource": "@totalfinance/technical-analysis:channel"
     },
     {
+      "id": "totalfinance:charmExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#charmExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:charmExposure",
+      "inheritedFrom": "@totalfinance/structure:charmExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:charmExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "charmExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:charmExposure"
+    },
+    {
       "id": "totalfinance:checkBlackScholesNoArbitrage",
       "package": "totalfinance",
       "implementation": "packages/options/dist/arbitrage.d.ts#checkBlackScholesNoArbitrage",
@@ -136954,6 +138550,102 @@
       "inputPolicies": {
         "0": "open"
       }
+    },
+    {
+      "id": "totalfinance:colorExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#colorExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:colorExposure",
+      "inheritedFrom": "@totalfinance/structure:colorExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:colorExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "colorExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:colorExposure"
     },
     {
       "id": "totalfinance:columnsFromBars",
@@ -138649,6 +140341,21 @@
         "defective": 0,
         "unmeasured": 2
       }
+    },
+    {
+      "id": "totalfinance:core.requireSelection",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/core:requireSelection",
+      "inheritedFrom": "@totalfinance/core:requireSelection",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
     },
     {
       "id": "totalfinance:core.selectQuotePrice",
@@ -147424,6 +149131,102 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:deltaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#deltaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:deltaExposure",
+      "inheritedFrom": "@totalfinance/structure:deltaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:deltaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "deltaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:deltaExposure"
+    },
+    {
       "id": "totalfinance:dema",
       "package": "totalfinance",
       "implementation": "packages/technical-analysis/dist/moving-averages.d.ts#dema",
@@ -152210,10 +154013,10 @@
       "undecided": ["alternative arg0.market.asOf#0 (unmeasured: baseline-rejected)"],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
-        "omit-required": 16,
+        "null-when-nonnullable": 18,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -152228,9 +154031,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
@@ -172023,6 +173827,102 @@
       }
     },
     {
+      "id": "totalfinance:gammaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#gammaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:gammaExposure",
+      "inheritedFrom": "@totalfinance/structure:gammaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:gammaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "gammaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:gammaExposure"
+    },
+    {
       "id": "totalfinance:gannHighLowActivator",
       "package": "totalfinance",
       "implementation": "packages/technical-analysis/dist/overlap-ext.d.ts#gannHighLowActivator",
@@ -185866,6 +187766,79 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:options.blackScholes.delta",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.delta",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.delta",
+      "inheritedFrom": "@totalfinance/options:blackScholes.delta",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.delta"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.delta.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.delta.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.delta.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:options.blackScholes.evaluate",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.evaluate",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.evaluate",
+      "inheritedFrom": "@totalfinance/options:blackScholes.evaluate",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.evaluate.explain",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#BlackScholesEvaluateFacade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.evaluate.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.evaluate.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 8,
+        "wrong-type": 8,
+        "non-finite": 6,
+        "omit-required": 7,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.evaluate.explain"
+    },
+    {
       "id": "totalfinance:options.blackScholes.extendedGreeks",
       "package": "totalfinance",
       "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.extendedGreeks",
@@ -185890,6 +187863,43 @@
       "verdict": "enforced",
       "measurementSource": "@totalfinance/options:blackScholes.extendedGreeks.explain",
       "inheritedFrom": "@totalfinance/options:blackScholes.extendedGreeks.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:options.blackScholes.gamma",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.gamma",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.gamma",
+      "inheritedFrom": "@totalfinance/options:blackScholes.gamma",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.gamma"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.gamma.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.gamma.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.gamma.explain",
       "guardReachability": "none",
       "mutationsCovered": {
         "unknown-key": 1,
@@ -186046,6 +188056,117 @@
         "omit-required": 5,
         "wrong-type": 5,
         "non-finite": 5
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:options.blackScholes.rho",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.rho",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.rho",
+      "inheritedFrom": "@totalfinance/options:blackScholes.rho",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.rho"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.rho.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.rho.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.rho.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:options.blackScholes.theta",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.theta",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.theta",
+      "inheritedFrom": "@totalfinance/options:blackScholes.theta",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.theta"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.theta.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.theta.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.theta.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:options.blackScholes.vega",
+      "package": "totalfinance",
+      "implementation": "packages/options/dist/black-scholes.d.ts#blackScholes.vega",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.vega",
+      "inheritedFrom": "@totalfinance/options:blackScholes.vega",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "wrong-type": 7,
+        "non-finite": 6,
+        "omit-required": 6,
+        "invalid-literal": 1
+      },
+      "fixtureSource": "@totalfinance/options:blackScholes.vega"
+    },
+    {
+      "id": "totalfinance:options.blackScholes.vega.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/options:blackScholes.vega.explain",
+      "inheritedFrom": "@totalfinance/options:blackScholes.vega.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 7,
+        "optional-wrong-type": 1,
+        "omit-required": 6,
+        "wrong-type": 6,
+        "non-finite": 5,
+        "invalid-literal": 1
       },
       "synthesized": true
     },
@@ -209056,6 +211177,21 @@
       "fixtureSource": "@totalfinance/research:requireScreenFilter"
     },
     {
+      "id": "totalfinance:requireSelection",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/invariants.d.ts#requireSelection",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/core:requireSelection",
+      "inheritedFrom": "@totalfinance/core:requireSelection",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "omit-required": 2,
+        "wrong-type": 2,
+        "empty-series": 2
+      },
+      "fixtureSource": "@totalfinance/core:requireSelection"
+    },
+    {
       "id": "totalfinance:requireUniverseHistory",
       "package": "totalfinance",
       "implementation": "packages/research/dist/universe.d.ts#requireUniverseHistory",
@@ -217241,6 +219377,102 @@
       "fixtureSource": "@totalfinance/risk:spectralRisk"
     },
     {
+      "id": "totalfinance:speedExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#speedExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:speedExposure",
+      "inheritedFrom": "@totalfinance/structure:speedExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:speedExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "speedExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:speedExposure"
+    },
+    {
       "id": "totalfinance:spotForwardHedgedProfitAndLoss",
       "package": "totalfinance",
       "implementation": "packages/foreign-exchange/dist/exposure.d.ts#spotForwardHedgedProfitAndLoss",
@@ -224961,6 +227193,198 @@
       "fixtureSource": "@totalfinance/strategy:strip"
     },
     {
+      "id": "totalfinance:structure.charmExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#charmExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:charmExposure",
+      "inheritedFrom": "@totalfinance/structure:charmExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:charmExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "charmExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "charmExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:charmExposure"
+    },
+    {
+      "id": "totalfinance:structure.colorExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#colorExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:colorExposure",
+      "inheritedFrom": "@totalfinance/structure:colorExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:colorExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "colorExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "colorExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:colorExposure"
+    },
+    {
       "id": "totalfinance:structure.deltaAdjustedPremium",
       "package": "totalfinance",
       "implementation": "packages/structure/dist/flow.d.ts#deltaAdjustedPremium",
@@ -224984,6 +227408,102 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:structure.deltaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#deltaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:deltaExposure",
+      "inheritedFrom": "@totalfinance/structure:deltaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:deltaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "deltaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "deltaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:deltaExposure"
+    },
+    {
       "id": "totalfinance:structure.exposure",
       "package": "totalfinance",
       "implementation": "packages/structure/dist/exposure.d.ts#exposure",
@@ -225001,10 +227521,10 @@
       ],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 12,
+        "null-when-nonnullable": 13,
         "omit-required": 6,
         "wrong-type": 7,
-        "optional-wrong-type": 5,
+        "optional-wrong-type": 6,
         "non-finite": 3
       },
       "alternatives": [
@@ -225090,10 +227610,10 @@
       "undecided": ["alternative arg0.market.asOf#0 (unmeasured: baseline-rejected)"],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
-        "omit-required": 16,
+        "null-when-nonnullable": 18,
+        "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 1,
+        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -225108,9 +227628,10 @@
           "verdict": "unmeasured",
           "unmeasuredReason": "baseline-rejected",
           "rejection": {
-            "code": "time.valuation_instant_required",
+            "code": "input.wrong_type",
             "typed": true,
-            "message": "exposureFromGreeks: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned d"
+            "field": "config.gexConvention",
+            "message": "exposureFromGreeks: config.gexConvention must be an object of named fields, got undefined."
           }
         }
       ],
@@ -225150,6 +227671,102 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:structure.gammaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#gammaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:gammaExposure",
+      "inheritedFrom": "@totalfinance/structure:gammaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:gammaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "gammaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "gammaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:gammaExposure"
+    },
+    {
       "id": "totalfinance:structure.optionFlowDrift",
       "package": "totalfinance",
       "implementation": "packages/structure/dist/option-flow-drift.d.ts#optionFlowDrift",
@@ -225169,6 +227786,198 @@
       "fixtureSource": "@totalfinance/structure:optionFlowDrift"
     },
     {
+      "id": "totalfinance:structure.speedExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#speedExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:speedExposure",
+      "inheritedFrom": "@totalfinance/structure:speedExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:speedExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "speedExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "speedExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:speedExposure"
+    },
+    {
+      "id": "totalfinance:structure.thetaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#thetaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:thetaExposure",
+      "inheritedFrom": "@totalfinance/structure:thetaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:thetaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "thetaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:thetaExposure"
+    },
+    {
       "id": "totalfinance:structure.unusualness",
       "package": "totalfinance",
       "implementation": "packages/structure/dist/flow.d.ts#unusualness",
@@ -225185,6 +227994,294 @@
         "non-finite-element": 1
       },
       "fixtureSource": "@totalfinance/structure:unusualness"
+    },
+    {
+      "id": "totalfinance:structure.vannaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vannaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vannaExposure",
+      "inheritedFrom": "@totalfinance/structure:vannaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vannaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vannaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vannaExposure"
+    },
+    {
+      "id": "totalfinance:structure.vegaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vegaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vegaExposure",
+      "inheritedFrom": "@totalfinance/structure:vegaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vegaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vegaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vegaExposure"
+    },
+    {
+      "id": "totalfinance:structure.vommaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vommaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vommaExposure",
+      "inheritedFrom": "@totalfinance/structure:vommaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vommaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vommaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vommaExposure"
     },
     {
       "id": "totalfinance:sub",
@@ -254739,6 +257836,102 @@
       "fixtureSource": "@totalfinance/valuation:terminalValue"
     },
     {
+      "id": "totalfinance:thetaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#thetaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:thetaExposure",
+      "inheritedFrom": "@totalfinance/structure:thetaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:thetaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "thetaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "thetaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:thetaExposure"
+    },
+    {
       "id": "totalfinance:tickBars",
       "package": "totalfinance",
       "implementation": "packages/technical-analysis/dist/chart-types.d.ts#tickBars",
@@ -258783,6 +261976,102 @@
       "fixtureSource": "@totalfinance/options:vanillaIntrinsic"
     },
     {
+      "id": "totalfinance:vannaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vannaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vannaExposure",
+      "inheritedFrom": "@totalfinance/structure:vannaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vannaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vannaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vannaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vannaExposure"
+    },
+    {
       "id": "totalfinance:varianceIndex",
       "package": "totalfinance",
       "implementation": "packages/volatility/dist/variance-index.d.ts#varianceIndex",
@@ -259040,6 +262329,102 @@
         "unmeasured": 2
       },
       "fixtureSource": "@totalfinance/backtest:vectorized"
+    },
+    {
+      "id": "totalfinance:vegaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vegaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vegaExposure",
+      "inheritedFrom": "@totalfinance/structure:vegaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vegaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vegaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned datetim"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vegaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vegaExposure"
     },
     {
       "id": "totalfinance:verifyAuthorizationGrant",
@@ -261267,6 +264652,102 @@
         "non-finite": 3
       },
       "fixtureSource": "@totalfinance/technical-analysis:volumeWeightedMacd"
+    },
+    {
+      "id": "totalfinance:vommaExposure",
+      "package": "totalfinance",
+      "implementation": "packages/structure/dist/exposure.d.ts#vommaExposure",
+      "verdict": "partial",
+      "measurementSource": "@totalfinance/structure:vommaExposure",
+      "inheritedFrom": "@totalfinance/structure:vommaExposure",
+      "guardReachability": "delegated",
+      "undecided": [
+        "alternative arg0.config.convention#0 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention#2 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=1 & arg0.market.asOf#0 (unmeasured: baseline-rejected)",
+        "alternative arg0.config.convention:calls=-1 & arg0.market.asOf#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.config.convention#0 & arg0.market.asOf#1 (unmeasured: baseline-rejected)"
+      ],
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 12,
+        "omit-required": 6,
+        "wrong-type": 7,
+        "optional-wrong-type": 5,
+        "non-finite": 3
+      },
+      "alternatives": [
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#1",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/structure:vommaExposure"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention#2 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "time.valuation_instant_required",
+            "typed": true,
+            "message": "vommaExposure: asOf \"2024-06-03\" is a date with no time of day, and a valuation instant needs one — a same-day option's value depends on it. Pass a zoned dateti"
+          }
+        },
+        {
+          "id": "arg0.config.convention:calls=-1 & arg0.market.asOf#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "branch-not-realized"
+        },
+        {
+          "id": "arg0.config.convention#0 & arg0.market.asOf#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "spot",
+            "message": "vommaExposure: spot is required (pass market.spot or quotes with underlyingPrice)."
+          }
+        }
+      ],
+      "alternativeSummary": {
+        "total": 7,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 6
+      },
+      "fixtureSource": "@totalfinance/structure:vommaExposure"
     },
     {
       "id": "totalfinance:vortex",

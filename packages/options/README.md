@@ -6,10 +6,10 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.1: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.0
+pnpm add @insiderfinance/totalfinance@0.1.1
 ```
 
 ## Example
@@ -30,6 +30,15 @@ const explained = blackScholes.call.explain({
   riskFreeRate: 0.045,
   volatility: 0.22,
 });
+// One Greek, computed alone (gamma evaluates no cumulative normal); several with .evaluate.
+const gamma = blackScholes.gamma({
+  type: 'call',
+  spot: 100,
+  strike: 105,
+  timeToExpiryYears: 30 / 365,
+  riskFreeRate: 0.045,
+  volatility: 0.22,
+});
 ```
 
 _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot rot._
@@ -44,7 +53,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/options` exposes **62** runtime exports (**223** including types) across 15 entrypoints (`.`, `./bachelier`, `./batch`, `./black-scholes`, `./black76`, `./exotics`, `./heston`, `./lattice`, `./local-volatility`, `./monte-carlo`, `./parity`, `./payoff`, `./pricer`, `./sabr`, `./schema`). See the generated [`etc/options.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/options/etc/options.api.md) for the full surface.
+`@insiderfinance/totalfinance/options` exposes **62** runtime exports (**230** including types) across 15 entrypoints (`.`, `./bachelier`, `./batch`, `./black-scholes`, `./black76`, `./exotics`, `./heston`, `./lattice`, `./local-volatility`, `./monte-carlo`, `./parity`, `./payoff`, `./pricer`, `./sabr`, `./schema`). See the generated [`etc/options.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/options/etc/options.api.md) for the full surface.
 
 ## License
 

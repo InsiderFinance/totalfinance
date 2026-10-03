@@ -69,7 +69,7 @@ importers:
   distribution/mcp:
     dependencies:
       '@insiderfinance/totalfinance':
-        specifier: 0.1.0
+        specifier: 0.1.1
         version: link:../totalfinance
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.0

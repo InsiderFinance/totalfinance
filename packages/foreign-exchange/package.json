@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/foreign-exchange",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Foreign-exchange foundations: pairs, conversion, forwards, parity, and currency exposure",
   "license": "Apache-2.0",
   "keywords": [

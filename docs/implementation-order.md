@@ -28,14 +28,26 @@ checks remained red; that decision does not waive the hosted matrix for release.
 ### Bounded consumer-requested addition (2026-09-25)
 
 The FMP rebuild consumer authorizes the independent provider-free
-[disclosed holdings comparison](./specs/disclosed-holdings.md). Execute DH1–DH5 in that spec after
-contract review, while retaining the release queue's separate approval gates. This adds a direct
+[disclosed holdings comparison](./specs/disclosed-holdings.md). DH1–DH5 are the original completed
+scope below; the current PR #4 review is DH6–DH7 (typed contracts, policy echo and current-main
+integration), pending final verification. Retain the release queue's separate approval gates. This adds a direct
 portfolio analysis API; it does not reopen the economic ledger or authorize publication. Status:
 **DH1–DH5 locally verified complete** on disposable verification commit `79a48493869a3609af2e51b6f9fb11b694aad3d2`
 plus reviewed documentary/inventory/bundle overlays and the prose-only tracker closeout. Full CI
 and the independent full coverage repeat each passed 567 files / 12,598 tests; the linked spec
 records exact source, regeneration, tarball and retained-attempt evidence. The consumer owns acquisition,
 report/mapping selection, evidence pins and its separately versioned offline Node handoff.
+
+**Post-0.1.0 amendment (2026-10-01): selective Greeks and exposure — merged in PR #3.** Follow
+[`selective-greeks-and-exposure.md`](./specs/selective-greeks-and-exposure.md): one Black–Scholes
+evaluation kernel that computes only requested outputs, named single-Greek methods,
+`blackScholes.evaluate`, the `blackScholesEvaluateMany`/`Into` batch family, selective
+`exposure(...)` with nine named exposure shortcuts, GEX/DEX selection for `exposureFromGreeks`, and
+the per-call expiry-formatter fix (InsiderFinance/totalfinance#1). 0.1.0 is published: statements
+elsewhere that there are no released consumers no longer apply, and existing supported calls are
+preserved. Main now includes the 0.1.1 release metadata at `b1edf16`; this holdings integration
+preserves it without bumping or publishing another version. MCP expansion and deployment remain
+separate work.
 
 ### Preview launch queue (2026-09-07)
 
@@ -315,8 +327,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,149 public naming identities are walked and 0 are unresolved; 38,189 are `explicit`,
-3,798 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+42,477 public naming identities are walked and 0 are unresolved; 38,503 are `explicit`,
+3,812 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

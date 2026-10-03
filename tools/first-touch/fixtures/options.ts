@@ -281,6 +281,20 @@ export const OPTIONS_FIXTURES: Record<string, FixtureThunk> = {
   'options.blackScholes.price': () => [{ ...BS_INPUT(), type: 'call' }],
   'options.blackScholes.greeks': () => [{ ...BS_INPUT(), type: 'call' }],
   'options.blackScholes.extendedGreeks': () => [{ ...BS_INPUT(), type: 'call' }],
+  // Selective evaluation: one named output each, or an explicit `outputs` selection.
+  'options.blackScholes.delta': () => [{ ...BS_INPUT(), type: 'call' }],
+  'options.blackScholes.gamma': () => [{ ...BS_INPUT(), type: 'call' }],
+  'options.blackScholes.theta': () => [{ ...BS_INPUT(), type: 'put' }],
+  'options.blackScholes.vega': () => [{ ...BS_INPUT(), type: 'call' }],
+  'options.blackScholes.rho': () => [{ ...BS_INPUT(), type: 'put' }],
+  'options.blackScholes.evaluate': () => [
+    { ...BS_INPUT(), type: 'call', outputs: ['price', 'delta', 'gamma'] },
+  ],
+  // The selection is a typed list of DISTINCT names; a synthesized one can repeat a name, which the
+  // contract rightly refuses (input.duplicate_entry), so `.explain` gets its own valid call.
+  'options.blackScholes.evaluate.explain': () => [
+    { ...BS_INPUT(), type: 'put', outputs: ['vanna', 'price'] },
+  ],
   'options.blackScholes.impliedVolatility': () => [
     { type: 'call', price: 9, spot: 105, strike: 100, timeToExpiryYears: 0.5, riskFreeRate: 0.04 },
   ],
@@ -806,6 +820,11 @@ export const OPTIONS_FIXTURES: Record<string, FixtureThunk> = {
     { contracts: [CONTRACT()], market: MARKET(), engine: engines.blackScholesMerton() },
   ],
   'options.blackScholesPriceManyInto': () => [BATCH_COLS(), new Float64Array(3)],
+  'options.blackScholesEvaluateMany': () => [BATCH_COLS(), { outputs: ['gamma', 'delta'] }],
+  'options.blackScholesEvaluateManyInto': () => [
+    BATCH_COLS(),
+    { gamma: new Float64Array(3), price: new Float64Array(4) },
+  ],
 
   // Quote price-source selection
   'options.selectQuotePrice': () => [

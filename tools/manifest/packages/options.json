@@ -238,11 +238,32 @@
       "hasExplain": true,
       "role": "facade"
     },
+    "blackScholes.delta": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "one Black–Scholes output; evaluates only what delta needs (selective Greeks spec, decision 4)"
+    },
+    "blackScholes.evaluate": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "explicit output selection; computes only the selected outputs and their dependencies (selective Greeks spec, decision 5)"
+    },
     "blackScholes.extendedGreeks": {
       "kind": "function",
       "entrypoints": ["."],
       "hasExplain": true,
       "role": "facade"
+    },
+    "blackScholes.gamma": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "one Black–Scholes output; evaluates only what gamma needs (selective Greeks spec, decision 4)"
     },
     "blackScholes.greeks": {
       "kind": "function",
@@ -269,6 +290,27 @@
       "entrypoints": ["."],
       "hasExplain": true,
       "role": "facade"
+    },
+    "blackScholes.rho": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "one Black–Scholes output; evaluates only what rho needs (selective Greeks spec, decision 4)"
+    },
+    "blackScholes.theta": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "one Black–Scholes output; evaluates only what theta needs (selective Greeks spec, decision 4)"
+    },
+    "blackScholes.vega": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "hasExplain": true,
+      "role": "facade",
+      "note": "one Black–Scholes output; evaluates only what vega needs (selective Greeks spec, decision 4)"
     },
     "blackScholesExtendedGreeks": {
       "kind": "function",
@@ -335,6 +377,18 @@
       "entrypoints": ["./batch"],
       "role": "kernel",
       "note": "expert model kernel (subpath entrypoints)"
+    },
+    "blackScholesEvaluateMany": {
+      "kind": "function",
+      "entrypoints": ["./batch"],
+      "role": "kernel",
+      "note": "selective columnar kernel: one Float64Array per selected output (selective Greeks spec, decision 7)"
+    },
+    "blackScholesEvaluateManyInto": {
+      "kind": "function",
+      "entrypoints": ["./batch"],
+      "role": "kernel",
+      "note": "advanced: writes selected outputs into caller-owned Float64Arrays; validates everything before the first write (selective Greeks spec, decision 8)"
     },
     "blackScholesShape": {
       "kind": "object",

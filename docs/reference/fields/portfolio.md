@@ -231,7 +231,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `DisclosedHoldingsSnapshot` | `holdings[].reviewReasons` | array | array |  |  |  |
 | `DisclosedHoldingsSnapshot` | `holdings[].securityId` | string |  |  | yes | unitless by name |
 | `DisclosedHoldingsSnapshot` | `holdings[].valueCurrency` | string |  |  |  | ISO-4217 currency code |
-| `DisclosedHoldingsSnapshot` | `holdings[].valueScale` | string |  |  |  | unitless by name |
+| `DisclosedHoldingsSnapshot` | `holdings[].valueScale` | enum | "1" \\| "1000" |  |  |  |
 | `DisclosedHoldingsSnapshot` | `managerId` | string |  |  |  | unitless by name |
 | `DisclosedHoldingsSnapshot` | `mappingComplete` | boolean |  |  |  |  |
 | `DisclosedHoldingsSnapshot` | `periodEnd` | string |  |  |  | unitless by name |

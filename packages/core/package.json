@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance core: types, conventions, errors, diagnostics, assumptions, and a zero-dependency schema facade.",
   "license": "Apache-2.0",
   "keywords": [

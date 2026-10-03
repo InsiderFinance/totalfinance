@@ -199,5 +199,69 @@ export const MISC_FIXTURES: Record<string, FixtureThunk> = {
       config: { convention: 'dealerShortGamma' },
     },
   ],
+  // The nine single-metric shortcuts: the same chain, each its own one-metric selection.
+  'structure.gammaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.deltaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.vegaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.thetaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.vannaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.charmExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.vommaExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.speedExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
+  'structure.colorExposure': () => [
+    {
+      quotes: exposureChain(),
+      market: { riskFreeRate: 0.03, asOf: AS_OF, spot: 100 },
+      config: { convention: 'dealerShortGamma' },
+    },
+  ],
   'structure.unusualness': () => [200, [50, 60, 55, 40, 70, 65, 45, 58, 62, 51]],
 };

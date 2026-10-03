@@ -1,0 +1,3283 @@
+{
+ "meta": {
+  "generator": "tools/golden/capture-exposure-baseline.mjs",
+  "reference": "@insiderfinance/totalfinance@0.1.0 (published), structure exposureFromGreeks()",
+  "node": "v22.23.2"
+ },
+ "entries": [
+  {
+   "name": "per1PercentMove, dealer-style signs, default multiplier",
+   "input": {
+    "quotes": [
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4146,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.011353048905730247,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 449,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.04419858166947961,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4037,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.0335402549430728,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 3032,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.034940337222069504,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 262
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 0,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.02979548858478665,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.02507931091822684,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "openInterest": 3414,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.047159584788605574,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1272,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.025162235917523503,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274800001,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4392,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03467271185480058,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2398,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.01996734187938273,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1690,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.01672795186750591,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 312,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.04542115201242268,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1629
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2155,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4964,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03815301078371704,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 0,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.047017140956595545,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "openInterest": 1693,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.015993496105074882,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 368,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.010715347323566675,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.026957085542380813,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 49,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.033547733407467605,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1204,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.018108475506305694,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2293
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2638,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.043395696468651296,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "second-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2155,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     }
+    ],
+    "market": {
+     "underlying": "SPY",
+     "spot": 100.25,
+     "source": "spot-feed",
+     "timestampMs": 1788274799800,
+     "asOf": 1788274800000
+    },
+    "config": {
+     "gexConvention": {
+      "calls": 1,
+      "puts": -1
+     },
+     "dexConvention": {
+      "calls": 1,
+      "puts": 1
+     },
+     "gammaUnit": "per1PercentMove",
+     "maximumObservationAgeMs": 60000,
+     "defaultMultiplier": 10
+    }
+   },
+   "expected": {
+    "contributions": [
+     {
+      "inputIndex": 0,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.011353048905730247,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4146,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 1,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.04419858166947961,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 449,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 2,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.0335402549430728,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4037,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 3,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 10
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.034940337222069504,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 3032,
+      "multiplier": 10,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 4,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 262,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks",
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 5,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.02979548858478665,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 0,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 6,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.02507931091822684,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": null,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "missingOpenInterest"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 7,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.047159584788605574,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 3414,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "staleQuote"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 8,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.025162235917523503,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274800001,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1272,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "futureGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 9,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03467271185480058,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4392,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -1530449.1498455596,
+      "dex": -22014900
+     },
+     {
+      "inputIndex": 10,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 10
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.01996734187938273,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2398,
+      "multiplier": 10,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 48121.393516430006,
+      "dex": 901498.125
+     },
+     {
+      "inputIndex": 11,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.01672795186750591,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1690,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -284117.66538357007,
+      "dex": -10588906.25
+     },
+     {
+      "inputIndex": 12,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.04542115201242268,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 312,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 142423.4499626168,
+      "dex": 1954875
+     },
+     {
+      "inputIndex": 13,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 1629,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 14,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2155,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 376219.03715534444,
+      "dex": 10801937.5
+     },
+     {
+      "inputIndex": 24,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "second-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2155,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 376219.03715534444,
+      "dex": 10801937.5
+     },
+     {
+      "inputIndex": 15,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03815301078371704,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4964,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -1903396.869551828,
+      "dex": -24882050
+     },
+     {
+      "inputIndex": 16,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.047017140956595545,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 0,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 0,
+      "dex": 0
+     },
+     {
+      "inputIndex": 17,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 10
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.015993496105074882,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1693,
+      "multiplier": 10,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "staleQuote"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 18,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.010715347323566675,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 368,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 39629.88699446744,
+      "dex": 2305750
+     },
+     {
+      "inputIndex": 19,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.026957085542380813,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": null,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "missingOpenInterest"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 20,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.033547733407467605,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 49,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 16520.684056440983,
+      "dex": 245612.5
+     },
+     {
+      "inputIndex": 21,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.018108475506305694,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1204,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -219117.537984182,
+      "dex": -6035050
+     },
+     {
+      "inputIndex": 22,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 2293,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": 1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 23,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.043395696468651296,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2638,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": 1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -1150509.5200726916,
+      "dex": -16528718.75
+     }
+    ],
+    "aggregate": {
+     "gex": -4088457.253997187,
+     "dex": -53038014.375,
+     "grossGex": 6086724.231678476,
+     "grossDex": 107061235.625,
+     "callGex": 999133.4888406441,
+     "putGex": -5087590.742837831,
+     "callDex": 27011610.625,
+     "putDex": -80049625,
+     "openInterest": 22325,
+     "callOpenInterest": 7437,
+     "putOpenInterest": 14888,
+     "includedQuotes": 12
+    },
+    "byStrike": [
+     {
+      "strike": 95,
+      "gex": 182053.33695708425,
+      "dex": 4260625,
+      "grossGex": 182053.33695708425,
+      "grossDex": 4260625,
+      "callGex": 182053.33695708425,
+      "putGex": 0,
+      "callDex": 4260625,
+      "putDex": 0,
+      "openInterest": 680,
+      "callOpenInterest": 680,
+      "putOpenInterest": 0,
+      "includedQuotes": 2
+     },
+     {
+      "strike": 100,
+      "gex": -2884004.79901444,
+      "dex": -31082512.5,
+      "grossGex": 4421922.315748699,
+      "grossDex": 74781487.5,
+      "callGex": 768958.7583671298,
+      "putGex": -3652963.5573815694,
+      "callDex": 21849487.5,
+      "putDex": -52932000,
+      "openInterest": 14919,
+      "callOpenInterest": 4359,
+      "putOpenInterest": 10560,
+      "includedQuotes": 6
+     },
+     {
+      "strike": 105,
+      "gex": -1386505.7919398316,
+      "dex": -26216126.875,
+      "grossGex": 1482748.5789726917,
+      "grossDex": 28019123.125,
+      "callGex": 48121.393516430006,
+      "putGex": -1434627.1854562617,
+      "callDex": 901498.125,
+      "putDex": -27117625,
+      "openInterest": 6726,
+      "callOpenInterest": 2398,
+      "putOpenInterest": 4328,
+      "includedQuotes": 4
+     }
+    ],
+    "byExpiry": [
+     {
+      "expiry": "2026-08-28T20:00:00.000Z",
+      "expiresAt": 1787947200000,
+      "gex": 0,
+      "dex": 0,
+      "grossGex": 0,
+      "grossDex": 0,
+      "callGex": 0,
+      "putGex": 0,
+      "callDex": 0,
+      "putDex": 0,
+      "openInterest": 0,
+      "callOpenInterest": 0,
+      "putOpenInterest": 0,
+      "includedQuotes": 0
+     },
+     {
+      "expiry": "2026-09-04T20:00:00.000Z",
+      "expiresAt": 1788552000000,
+      "gex": -1766445.4217126996,
+      "dex": -31702308.125,
+      "grossGex": 1862688.2087455597,
+      "grossDex": 33505304.375,
+      "callGex": 48121.393516430006,
+      "putGex": -1814566.8152291297,
+      "callDex": 901498.125,
+      "putDex": -32603806.25,
+      "openInterest": 8480,
+      "callOpenInterest": 2398,
+      "putOpenInterest": 6082,
+      "includedQuotes": 3
+     },
+     {
+      "expiry": "2026-09-18T20:00:00.000Z",
+      "expiresAt": 1789761600000,
+      "gex": -1008535.3452785222,
+      "dex": -1323300,
+      "grossGex": 2798258.393825134,
+      "grossDex": 48440800,
+      "callGex": 894861.5242733057,
+      "putGex": -1903396.869551828,
+      "callDex": 23558750,
+      "putDex": -24882050,
+      "openInterest": 9586,
+      "callOpenInterest": 4622,
+      "putOpenInterest": 4964,
+      "includedQuotes": 5
+     },
+     {
+      "expiry": "2026-10-16T20:00:00.000Z",
+      "expiresAt": 1792180800000,
+      "gex": -1313476.487005965,
+      "dex": -20012406.25,
+      "grossGex": 1425777.6291077822,
+      "grossDex": 25115131.25,
+      "callGex": 56150.57105090842,
+      "putGex": -1369627.0580568737,
+      "callDex": 2551362.5,
+      "putDex": -22563768.75,
+      "openInterest": 4259,
+      "callOpenInterest": 417,
+      "putOpenInterest": 3842,
+      "includedQuotes": 4
+     }
+    ],
+    "coverage": {
+     "scope": "suppliedQuotesOnly",
+     "status": "partialInput",
+     "totalQuotes": 25,
+     "includedQuotes": 12,
+     "excludedQuotes": 13,
+     "fraction": 0.48,
+     "duplicateContractQuotes": 1,
+     "duplicateIncludedContractQuotes": 1,
+     "exclusionCounts": {
+      "missingGreeks": 3,
+      "missingOpenInterest": 2,
+      "expired": 6,
+      "staleQuote": 2,
+      "futureQuote": 0,
+      "staleGreeks": 0,
+      "futureGreeks": 1,
+      "staleMarket": 0,
+      "futureMarket": 0
+     }
+    },
+    "assumptions": {
+     "conventionsVersion": "0.0.1",
+     "asOf": 1788274800000,
+     "greekSource": "supplied",
+     "suppliedDeltaUnit": "priceDeltaPerUnderlyingUnit",
+     "suppliedGammaUnit": "deltaPerSpotPoint",
+     "suppliedGreekSignPolicy": "signed-as-provided",
+     "currencyPolicy": "caller-aligned-single-currency-no-fx-conversion",
+     "gammaUnit": "per1PercentMove",
+     "dexUnit": "dollarDelta",
+     "gexConvention": {
+      "calls": 1,
+      "puts": -1
+     },
+     "dexConvention": {
+      "calls": 1,
+      "puts": 1
+     },
+     "maximumObservationAgeMs": 60000,
+     "defaultMultiplier": 10,
+     "market": {
+      "underlying": "SPY",
+      "spot": 100.25,
+      "source": "spot-feed",
+      "timestampMs": 1788274799800,
+      "asOf": 1788274800000
+     },
+     "scenarioRepricing": "unavailable",
+     "aggregationPolicy": "additive-input-rows-no-deduplication"
+    },
+    "diagnostics": {
+     "method": "supplied-greek-accounting",
+     "warnings": [
+      {
+       "code": "model.limitation",
+       "message": "Positioning is estimated from supplied signed delta/gamma, open interest and independent GEX/DEX signs, not actual dealer books. Signed Greeks are used unchanged before position signs. No Greeks are recomputed and no scenario repricing is available.",
+       "severity": "info"
+      },
+      {
+       "code": "model.limitation",
+       "message": "Coverage is supplied quote rows only, not the full market. All rows share market.underlying; caller must align a single currency and deliverable basis (no FX conversion). Rows are additive, not deduplicated. Quote source/timestamp identify the supplied OI snapshot, not the exchange OI update or availability time.",
+       "severity": "info"
+      },
+      {
+       "code": "structure.duplicate_contract_quotes",
+       "message": "1 repeated contract-identity quote(s); 1 repeat an included identity and may double-count open interest. Rows remain additive; select non-overlapping snapshots before calling.",
+       "severity": "warn",
+       "context": {
+        "duplicateContractQuotes": 1,
+        "duplicateIncludedContractQuotes": 1
+       }
+      },
+      {
+       "code": "structure.contracts_skipped",
+       "message": "13 quote(s) excluded; inspect contributions[].exclusionReasons and coverage.exclusionCounts.",
+       "severity": "warn",
+       "context": {
+        "excludedQuotes": 13
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "perPoint, inverted signs",
+   "input": {
+    "quotes": [
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4146,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.011353048905730247,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 449,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.04419858166947961,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4037,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.0335402549430728,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 3032,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.034940337222069504,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 262
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 0,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.02979548858478665,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.02507931091822684,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "openInterest": 3414,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.047159584788605574,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1272,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.025162235917523503,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274800001,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4392,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03467271185480058,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2398,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.01996734187938273,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1690,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.01672795186750591,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 312,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.04542115201242268,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1629
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2155,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 4964,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03815301078371704,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 0,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.047017140956595545,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close"
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "openInterest": 1693,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.015993496105074882,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 368,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.010715347323566675,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.026957085542380813,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 49,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.033547733407467605,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 1204,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.018108475506305694,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2293
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2638,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.043395696468651296,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     },
+     {
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "second-feed",
+      "timestampMs": 1788274799000,
+      "openInterest": 2155,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      }
+     }
+    ],
+    "market": {
+     "underlying": "SPY",
+     "spot": 99.5,
+     "source": "spot-feed",
+     "timestampMs": 1788274800000,
+     "asOf": "2026-09-01T11:00:00-04:00"
+    },
+    "config": {
+     "gexConvention": {
+      "calls": -1,
+      "puts": 1
+     },
+     "dexConvention": {
+      "calls": -1,
+      "puts": -1
+     },
+     "gammaUnit": "perPoint",
+     "maximumObservationAgeMs": 90000,
+     "defaultMultiplier": 100
+    }
+   },
+   "expected": {
+    "contributions": [
+     {
+      "inputIndex": 0,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.011353048905730247,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4146,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 1,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.04419858166947961,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 449,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 2,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.0335402549430728,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4037,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 3,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.034940337222069504,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 3032,
+      "multiplier": 100,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 4,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 262,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks",
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 5,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-08-28",
+       "expiresAt": 1787947200000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.02979548858478665,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 0,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "expired"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 6,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.02507931091822684,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": null,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "missingOpenInterest"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 7,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.047159584788605574,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 3414,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "staleQuote"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 8,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.025162235917523503,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274800001,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1272,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "futureGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 9,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03467271185480058,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4392,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 1515211.3771395271,
+      "dex": 21850200
+     },
+     {
+      "inputIndex": 10,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.01996734187938273,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2398,
+      "multiplier": 100,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -476422.77397625986,
+      "dex": -8947537.5
+     },
+     {
+      "inputIndex": 11,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-04",
+       "expiresAt": 1788552000000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.01672795186750591,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1690,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 281288.8746280456,
+      "dex": 10509687.5
+     },
+     {
+      "inputIndex": 12,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.04542115201242268,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 312,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -141005.42430736497,
+      "dex": -1940250
+     },
+     {
+      "inputIndex": 13,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 1629,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 14,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2155,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -372473.2477729046,
+      "dex": -10721125
+     },
+     {
+      "inputIndex": 24,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "second-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.017370996410027147,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2155,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -372473.2477729046,
+      "dex": -10721125
+     },
+     {
+      "inputIndex": 15,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.03815301078371704,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 4964,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 1884445.878027195,
+      "dex": 24695900
+     },
+     {
+      "inputIndex": 16,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.375,
+       "gamma": 0.047017140956595545,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 0,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 0,
+      "dex": 0
+     },
+     {
+      "inputIndex": 17,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-09-18",
+       "expiresAt": 1789761600000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274680000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.015993496105074882,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1693,
+      "multiplier": 100,
+      "multiplierSource": "config.defaultMultiplier",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "staleQuote"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 18,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.625,
+       "gamma": 0.010715347323566675,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 368,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -39235.31575997174,
+      "dex": -2288500
+     },
+     {
+      "inputIndex": 19,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 95,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.375,
+       "gamma": 0.026957085542380813,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": null,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "missingOpenInterest"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 20,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": 0.5,
+       "gamma": 0.033547733407467605,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 49,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": -16356.19742281083,
+      "dex": -243775
+     },
+     {
+      "inputIndex": 21,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 100,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.5,
+       "gamma": 0.018108475506305694,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 1204,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 216935.91487044096,
+      "dex": 5989900
+     },
+     {
+      "inputIndex": 22,
+      "contract": {
+       "underlying": "SPY",
+       "type": "call",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": null,
+      "openInterest": 2293,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": -1,
+      "dexSign": -1,
+      "included": false,
+      "exclusionReasons": [
+       "missingGreeks"
+      ],
+      "gex": null,
+      "dex": null
+     },
+     {
+      "inputIndex": 23,
+      "contract": {
+       "underlying": "SPY",
+       "type": "put",
+       "style": "american",
+       "strike": 105,
+       "expiry": "2026-10-16",
+       "expiresAt": 1792180800000,
+       "expiryConvention": "us-equity-close",
+       "multiplier": 100
+      },
+      "source": "chain-feed",
+      "timestampMs": 1788274799000,
+      "greeks": {
+       "delta": -0.625,
+       "gamma": 0.043395696468651296,
+       "provenance": {
+        "source": "greek-feed",
+        "timestampMs": 1788274799500,
+        "model": "vendor"
+       }
+      },
+      "openInterest": 2638,
+      "multiplier": 100,
+      "multiplierSource": "contract",
+      "gexSign": 1,
+      "dexSign": -1,
+      "included": true,
+      "exclusionReasons": [],
+      "gex": 1139054.580478806,
+      "dex": 16405062.5
+     }
+    ],
+    "aggregate": {
+     "gex": 3618970.4181317985,
+     "dex": 44588437.5,
+     "grossGex": 6454902.832156232,
+     "grossDex": 114313062.5,
+     "callGex": -1417966.2070122166,
+     "putGex": 5036936.625144015,
+     "callDex": -34862312.5,
+     "putDex": 79450750,
+     "openInterest": 22325,
+     "callOpenInterest": 7437,
+     "putOpenInterest": 14888,
+     "includedQuotes": 12
+    },
+    "byStrike": [
+     {
+      "strike": 95,
+      "gex": -180240.7400673367,
+      "dex": -4228750,
+      "grossGex": 180240.7400673367,
+      "grossDex": 4228750,
+      "callGex": -180240.7400673367,
+      "putGex": 0,
+      "callDex": -4228750,
+      "putDex": 0,
+      "openInterest": 680,
+      "callOpenInterest": 680,
+      "putOpenInterest": 0,
+      "includedQuotes": 2
+     },
+     {
+      "strike": 100,
+      "gex": 2855290.4770685434,
+      "dex": 30849975,
+      "grossGex": 4377895.863005783,
+      "grossDex": 74222025,
+      "callGex": -761302.69296862,
+      "putGex": 3616593.1700371634,
+      "callDex": -21686025,
+      "putDex": 52536000,
+      "openInterest": 14919,
+      "callOpenInterest": 4359,
+      "putOpenInterest": 10560,
+      "includedQuotes": 6
+     },
+     {
+      "strike": 105,
+      "gex": 943920.6811305918,
+      "dex": 17967212.5,
+      "grossGex": 1896766.2290831115,
+      "grossDex": 35862287.5,
+      "callGex": -476422.77397625986,
+      "putGex": 1420343.4551068516,
+      "callDex": -8947537.5,
+      "putDex": 26914750,
+      "openInterest": 6726,
+      "callOpenInterest": 2398,
+      "putOpenInterest": 4328,
+      "includedQuotes": 4
+     }
+    ],
+    "byExpiry": [
+     {
+      "expiry": "2026-08-28T20:00:00.000Z",
+      "expiresAt": 1787947200000,
+      "gex": 0,
+      "dex": 0,
+      "grossGex": 0,
+      "grossDex": 0,
+      "callGex": 0,
+      "putGex": 0,
+      "callDex": 0,
+      "putDex": 0,
+      "openInterest": 0,
+      "callOpenInterest": 0,
+      "putOpenInterest": 0,
+      "includedQuotes": 0
+     },
+     {
+      "expiry": "2026-09-04T20:00:00.000Z",
+      "expiresAt": 1788552000000,
+      "gex": 1320077.4777913128,
+      "dex": 23412350,
+      "grossGex": 2272923.025743833,
+      "grossDex": 41307425,
+      "callGex": -476422.77397625986,
+      "putGex": 1796500.2517675727,
+      "callDex": -8947537.5,
+      "putDex": 32359887.5,
+      "openInterest": 8480,
+      "callOpenInterest": 2398,
+      "putOpenInterest": 6082,
+      "includedQuotes": 3
+     },
+     {
+      "expiry": "2026-09-18T20:00:00.000Z",
+      "expiresAt": 1789761600000,
+      "gex": 998493.958174021,
+      "dex": 1313400,
+      "grossGex": 2770397.7978803692,
+      "grossDex": 48078400,
+      "callGex": -885951.9198531741,
+      "putGex": 1884445.878027195,
+      "callDex": -23382500,
+      "putDex": 24695900,
+      "openInterest": 9586,
+      "callOpenInterest": 4622,
+      "putOpenInterest": 4964,
+      "includedQuotes": 5
+     },
+     {
+      "expiry": "2026-10-16T20:00:00.000Z",
+      "expiresAt": 1792180800000,
+      "gex": 1300398.9821664644,
+      "dex": 19862687.5,
+      "grossGex": 1411582.0085320296,
+      "grossDex": 24927237.5,
+      "callGex": -55591.51318278257,
+      "putGex": 1355990.495349247,
+      "callDex": -2532275,
+      "putDex": 22394962.5,
+      "openInterest": 4259,
+      "callOpenInterest": 417,
+      "putOpenInterest": 3842,
+      "includedQuotes": 4
+     }
+    ],
+    "coverage": {
+     "scope": "suppliedQuotesOnly",
+     "status": "partialInput",
+     "totalQuotes": 25,
+     "includedQuotes": 12,
+     "excludedQuotes": 13,
+     "fraction": 0.48,
+     "duplicateContractQuotes": 1,
+     "duplicateIncludedContractQuotes": 1,
+     "exclusionCounts": {
+      "missingGreeks": 3,
+      "missingOpenInterest": 2,
+      "expired": 6,
+      "staleQuote": 2,
+      "futureQuote": 0,
+      "staleGreeks": 0,
+      "futureGreeks": 1,
+      "staleMarket": 0,
+      "futureMarket": 0
+     }
+    },
+    "assumptions": {
+     "conventionsVersion": "0.0.1",
+     "asOf": 1788274800000,
+     "greekSource": "supplied",
+     "suppliedDeltaUnit": "priceDeltaPerUnderlyingUnit",
+     "suppliedGammaUnit": "deltaPerSpotPoint",
+     "suppliedGreekSignPolicy": "signed-as-provided",
+     "currencyPolicy": "caller-aligned-single-currency-no-fx-conversion",
+     "gammaUnit": "perPoint",
+     "dexUnit": "dollarDelta",
+     "gexConvention": {
+      "calls": -1,
+      "puts": 1
+     },
+     "dexConvention": {
+      "calls": -1,
+      "puts": -1
+     },
+     "maximumObservationAgeMs": 90000,
+     "defaultMultiplier": 100,
+     "market": {
+      "underlying": "SPY",
+      "spot": 99.5,
+      "source": "spot-feed",
+      "timestampMs": 1788274800000,
+      "asOf": 1788274800000
+     },
+     "scenarioRepricing": "unavailable",
+     "aggregationPolicy": "additive-input-rows-no-deduplication"
+    },
+    "diagnostics": {
+     "method": "supplied-greek-accounting",
+     "warnings": [
+      {
+       "code": "model.limitation",
+       "message": "Positioning is estimated from supplied signed delta/gamma, open interest and independent GEX/DEX signs, not actual dealer books. Signed Greeks are used unchanged before position signs. No Greeks are recomputed and no scenario repricing is available.",
+       "severity": "info"
+      },
+      {
+       "code": "model.limitation",
+       "message": "Coverage is supplied quote rows only, not the full market. All rows share market.underlying; caller must align a single currency and deliverable basis (no FX conversion). Rows are additive, not deduplicated. Quote source/timestamp identify the supplied OI snapshot, not the exchange OI update or availability time.",
+       "severity": "info"
+      },
+      {
+       "code": "structure.duplicate_contract_quotes",
+       "message": "1 repeated contract-identity quote(s); 1 repeat an included identity and may double-count open interest. Rows remain additive; select non-overlapping snapshots before calling.",
+       "severity": "warn",
+       "context": {
+        "duplicateContractQuotes": 1,
+        "duplicateIncludedContractQuotes": 1
+       }
+      },
+      {
+       "code": "structure.contracts_skipped",
+       "message": "13 quote(s) excluded; inspect contributions[].exclusionReasons and coverage.exclusionCounts.",
+       "severity": "warn",
+       "context": {
+        "excludedQuotes": 13
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

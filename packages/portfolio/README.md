@@ -6,10 +6,10 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.1: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.0
+pnpm add @insiderfinance/totalfinance@0.1.1
 ```
 
 ## Example
@@ -79,7 +79,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/portfolio` exposes **41** runtime exports (**240** including types) across 8 entrypoints (`.`, `./disclosed-holdings`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
+`@insiderfinance/totalfinance/portfolio` exposes **41** runtime exports (**244** including types) across 8 entrypoints (`.`, `./disclosed-holdings`, `./events`, `./ledger`, `./performance`, `./policy`, `./reconciliation`, `./trade`). See the generated [`etc/portfolio.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/portfolio/etc/portfolio.api.md) for the full surface.
 
 ## License
 

@@ -27,7 +27,7 @@ import { blackScholes, option } from '@insiderfinance/totalfinance/options';
 import { optionContractPricer } from '@insiderfinance/totalfinance/options/pricer';
 import { runScenarios, scenarioTarget } from '@insiderfinance/totalfinance/scenarios';
 import { expectedMoveFromImpliedVolatility } from '@insiderfinance/totalfinance/volatility';
-import { exposure } from '@insiderfinance/totalfinance/structure';
+import { exposure, gammaExposure } from '@insiderfinance/totalfinance/structure';
 import * as ta from '@insiderfinance/totalfinance/technical-analysis';
 import { legs, strategy } from '@insiderfinance/totalfinance/strategy';
 import { bonds, priceFromYield } from '@insiderfinance/totalfinance/fixed-income';
@@ -394,10 +394,20 @@ describe('README examples (run in CI so the generated package READMEs can never 
       riskFreeRate: 0.045,
       volatility: 0.22,
     });
+    // One Greek, computed alone (gamma evaluates no cumulative normal); several with .evaluate.
+    const gamma = blackScholes.gamma({
+      type: 'call',
+      spot: 100,
+      strike: 105,
+      timeToExpiryYears: 30 / 365,
+      riskFreeRate: 0.045,
+      volatility: 0.22,
+    });
     // readme:end
     expect(price).toBeGreaterThan(0);
     expect(explained.value).toBe(price);
     expect(explained.assumptions.dayCount).toBe('ACT/365F');
+    expect(gamma).toBeGreaterThan(0);
   });
 
   it('@insiderfinance/totalfinance/scenarios', () => {
@@ -501,7 +511,7 @@ describe('README examples (run in CI so the generated package READMEs can never 
 
   it('@insiderfinance/totalfinance/structure', () => {
     // readme:begin
-    // import { exposure } from '@insiderfinance/totalfinance/structure';
+    // import { exposure, gammaExposure } from '@insiderfinance/totalfinance/structure';
     // import { resolvedExpiry, type OptionQuote } from '@insiderfinance/totalfinance/core';
     const chain: OptionQuote[] = [
       {
@@ -533,14 +543,17 @@ describe('README examples (run in CI so the generated package READMEs can never 
         underlyingPrice: 100,
       },
     ];
-    const profile = exposure({
+    const input = {
       quotes: chain,
       market: { spot: 100, riskFreeRate: 0.045, asOf: Date.UTC(2026, 6, 13) },
-      config: { convention: 'callsPositivePutsNegative' },
-    });
-    const net = profile.atSpot(100); // net dealer { gex, dex } at spot
+      config: { convention: 'callsPositivePutsNegative' as const },
+    };
+    const gex = gammaExposure(input); // gamma exposure alone: computes gamma, nothing else
+    const net = gex.atSpot(101); // per-tick net dealer { gex } at a new spot
+    const both = exposure({ ...input, metrics: ['gex', 'dex'] }); // several metrics, one pass
     // readme:end
     expect(Number.isFinite(net.gex)).toBe(true);
+    expect(both.aggregate.gex).toBe(gex.aggregate.gex);
   });
 
   it('@insiderfinance/totalfinance/technical-analysis', () => {

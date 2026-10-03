@@ -13,11 +13,11 @@ should not. Those are exactly the reports we want.
 
 | Version                                  | Supported                                                            |
 | ---------------------------------------- | -------------------------------------------------------------------- |
-| `0.1.0`, once published                  | yes — fixes ship in a coordinated release of the two public packages |
+| `0.1.1`                                  | yes — fixes ship in a coordinated release of the two public packages |
 | earlier development or preview artifacts | no — use the current supported release                               |
 
 This policy covers `@insiderfinance/totalfinance` and `@insiderfinance/totalfinance-mcp`.
-Version 0.1.0 remains pre-1.0 software, with preview workflow and transport components.
+Version 0.1.1 remains pre-1.0 software, with preview workflow and transport components.
 The version in a source checkout does not establish that a public npm release exists.
 
 ## Reporting a vulnerability

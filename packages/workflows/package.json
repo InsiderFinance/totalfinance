@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/workflows",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TotalFinance workflows: the protocol-neutral operation registry — one operation definition drives the SDK-facing runtime, the CLI, OpenAPI, and MCP. Read-only, provider-free, browser-safe.",
   "license": "Apache-2.0",
   "keywords": [

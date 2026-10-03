@@ -355,6 +355,10 @@ export default defineConfig({
     // lower-contention re-run). Capping the pool at half the cores removes the oversubscription while
     // keeping meaningful parallelism, so the suite is stable in one pass.
     maxWorkers: '50%',
+    // An event-loop turn after every test, so back-to-back synchronous tests cannot hold a worker
+    // past its 60 s progress-RPC timeout (`Timeout calling "onTaskUpdate"` with every test passing).
+    // Long single tests yield inside with tools/test-support/cooperative-yield.ts.
+    setupFiles: [fromRoot('./tools/test-support/yield-between-tests.ts')],
     include: ['packages/*/test/**/*.test.ts', 'docs/**/*.test.ts', 'tools/**/*.test.ts'],
     benchmark: {
       include: ['packages/*/bench/**/*.bench.ts'],

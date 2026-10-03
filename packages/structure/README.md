@@ -6,16 +6,16 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.0: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.1: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.0
+pnpm add @insiderfinance/totalfinance@0.1.1
 ```
 
 ## Example
 
 ```ts
-import { exposure } from '@insiderfinance/totalfinance/structure';
+import { exposure, gammaExposure } from '@insiderfinance/totalfinance/structure';
 import { resolvedExpiry, type OptionQuote } from '@insiderfinance/totalfinance/core';
 const chain: OptionQuote[] = [
   {
@@ -47,12 +47,14 @@ const chain: OptionQuote[] = [
     underlyingPrice: 100,
   },
 ];
-const profile = exposure({
+const input = {
   quotes: chain,
   market: { spot: 100, riskFreeRate: 0.045, asOf: Date.UTC(2026, 6, 13) },
-  config: { convention: 'callsPositivePutsNegative' },
-});
-const net = profile.atSpot(100); // net dealer { gex, dex } at spot
+  config: { convention: 'callsPositivePutsNegative' as const },
+};
+const gex = gammaExposure(input); // gamma exposure alone: computes gamma, nothing else
+const net = gex.atSpot(101); // per-tick net dealer { gex } at a new spot
+const both = exposure({ ...input, metrics: ['gex', 'dex'] }); // several metrics, one pass
 ```
 
 _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot rot._
@@ -67,7 +69,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/structure` exposes **8** runtime exports (**65** including types) across 3 entrypoints (`.`, `./exposure`, `./flow`). See the generated [`etc/structure.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/structure/etc/structure.api.md) for the full surface.
+`@insiderfinance/totalfinance/structure` exposes **17** runtime exports (**91** including types) across 3 entrypoints (`.`, `./exposure`, `./flow`). See the generated [`etc/structure.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/structure/etc/structure.api.md) for the full surface.
 
 ## License
 

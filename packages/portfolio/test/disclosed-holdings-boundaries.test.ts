@@ -76,7 +76,7 @@ describe('disclosed-holdings boundary', () => {
   });
   it.each(['0', '100', 1000, '1.0', null])('refuses value scale %j', (value) => {
     const input = disclosedInput();
-    input.current.holdings[0]!.valueScale = value as string;
+    input.current.holdings[0]!.valueScale = value as never;
     expect(() => call(input)).toThrow(InputError);
   });
   it.each([-1, 19, 1.5, NaN, Infinity, '12', null])('refuses ratio precision %j', (value) => {

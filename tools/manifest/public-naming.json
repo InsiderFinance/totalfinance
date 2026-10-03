@@ -1,25 +1,25 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42149,
+    "identities": 42477,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3798,
-      "explicit": 38189,
+      "canonical-term": 3812,
+      "explicit": 38503,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
-      "code-string": 273,
-      "enum-member": 273,
-      "export": 7240,
-      "field": 22373,
-      "literal-value": 4455,
+      "code-string": 274,
+      "enum-member": 274,
+      "export": 7319,
+      "field": 22498,
+      "literal-value": 4546,
       "mcp-field": 1520,
       "mcp-tool": 55,
-      "method": 1681,
+      "method": 1688,
       "package": 25,
-      "parameter": 4065,
+      "parameter": 4089,
       "subpath": 189
     },
     "byPackage": {
@@ -27,7 +27,7 @@
       "@totalfinance/calendars": 158,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3140,
+      "@totalfinance/core": 3149,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
@@ -35,19 +35,19 @@
       "@totalfinance/http": 393,
       "@totalfinance/math": 923,
       "@totalfinance/mcp": 493,
-      "@totalfinance/options": 2637,
+      "@totalfinance/options": 2718,
       "@totalfinance/performance": 716,
-      "@totalfinance/portfolio": 2427,
+      "@totalfinance/portfolio": 2478,
       "@totalfinance/research": 1392,
       "@totalfinance/risk": 1886,
       "@totalfinance/scenarios": 1375,
       "@totalfinance/strategy": 1751,
-      "@totalfinance/structure": 985,
+      "@totalfinance/structure": 1134,
       "@totalfinance/technical-analysis": 4947,
       "@totalfinance/valuation": 1005,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3113
+      "totalfinance": 3151
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -43608,6 +43608,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|code-string|input.duplicate_entry",
+      "name": "input.duplicate_entry",
+      "kind": "code-string",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|code-string|input.invalid_enum",
       "name": "input.invalid_enum",
       "kind": "code-string",
@@ -45208,6 +45215,13 @@
     {
       "id": "@totalfinance/core|enum-member|ErrorCode.ImpliedVolatilityPriceBelowResolvable",
       "name": "ImpliedVolatilityPriceBelowResolvable",
+      "kind": "enum-member",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|enum-member|ErrorCode.InputDuplicateEntry",
+      "name": "InputDuplicateEntry",
       "kind": "enum-member",
       "position": "serialized",
       "disposition": "explicit"
@@ -47755,6 +47769,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|export|GuaranteedSelection",
+      "name": "GuaranteedSelection",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|export|HolidayRule",
       "name": "HolidayRule",
       "kind": "export",
@@ -48663,6 +48685,14 @@
     {
       "id": "@totalfinance/core|export|requireRepresentableResult",
       "name": "requireRepresentableResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|requireSelection",
+      "name": "requireSelection",
       "kind": "export",
       "position": "module",
       "entrypoints": ["."],
@@ -57367,6 +57397,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|literal-value|ErrorCode:input.duplicate_entry",
+      "name": "input.duplicate_entry",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|literal-value|ErrorCode:input.invalid_enum",
       "name": "input.invalid_enum",
       "kind": "literal-value",
@@ -64588,6 +64625,34 @@
     {
       "id": "@totalfinance/core|parameter|requireRepresentableResult(result)",
       "name": "result",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|requireSelection(allowed)",
+      "name": "allowed",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|requireSelection(field)",
+      "name": "field",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|requireSelection(functionName)",
+      "name": "functionName",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|requireSelection(value)",
+      "name": "value",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -103734,6 +103799,62 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|export|BlackScholesEvaluateFacade",
+      "name": "BlackScholesEvaluateFacade",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./black-scholes"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesEvaluateInput",
+      "name": "BlackScholesEvaluateInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./black-scholes"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|blackScholesEvaluateMany",
+      "name": "blackScholesEvaluateMany",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./batch"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|blackScholesEvaluateManyInto",
+      "name": "blackScholesEvaluateManyInto",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./batch"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesEvaluateManyOptions",
+      "name": "BlackScholesEvaluateManyOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./batch"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesEvaluateManyResult",
+      "name": "BlackScholesEvaluateManyResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./batch"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesEvaluation",
+      "name": "BlackScholesEvaluation",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./black-scholes"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|export|blackScholesExtendedGreeks",
       "name": "blackScholesExtendedGreeks",
       "kind": "export",
@@ -103843,6 +103964,30 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesOutput",
+      "name": "BlackScholesOutput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./batch", "./black-scholes"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesOutputBuffers",
+      "name": "BlackScholesOutputBuffers",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./batch"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|export|BlackScholesOutputSelection",
+      "name": "BlackScholesOutputSelection",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./batch", "./black-scholes"],
       "disposition": "explicit"
     },
     {
@@ -107230,6 +107375,69 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.dividendYield",
+      "name": "dividendYield",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.outputs",
+      "name": "outputs",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.riskFreeRate",
+      "name": "riskFreeRate",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.spot",
+      "name": "spot",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.strike",
+      "name": "strike",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.timeToExpiryYears",
+      "name": "timeToExpiryYears",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.type",
+      "name": "type",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateInput.volatility",
+      "name": "volatility",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesEvaluateManyOptions.outputs",
+      "name": "outputs",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|field|BlackScholesImpliedVolatilityInput.dividendYield",
       "name": "dividendYield",
       "kind": "field",
@@ -107640,6 +107848,83 @@
       "name": "upper",
       "kind": "field",
       "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.charm",
+      "name": "charm",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.color",
+      "name": "color",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.delta",
+      "name": "delta",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.gamma",
+      "name": "gamma",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.price",
+      "name": "price",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.rho",
+      "name": "rho",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.speed",
+      "name": "speed",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.theta",
+      "name": "theta",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.vanna",
+      "name": "vanna",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.vega",
+      "name": "vega",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesOutputBuffers.vomma",
+      "name": "vomma",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -117547,6 +117832,160 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:charm",
+      "name": "charm",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:color",
+      "name": "color",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:delta",
+      "name": "delta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:gamma",
+      "name": "gamma",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:price",
+      "name": "price",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:rho",
+      "name": "rho",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:speed",
+      "name": "speed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:theta",
+      "name": "theta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:vanna",
+      "name": "vanna",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:vega",
+      "name": "vega",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutput:vomma",
+      "name": "vomma",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:charm",
+      "name": "charm",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:color",
+      "name": "color",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:delta",
+      "name": "delta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:gamma",
+      "name": "gamma",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:price",
+      "name": "price",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:rho",
+      "name": "rho",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:speed",
+      "name": "speed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:theta",
+      "name": "theta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:vanna",
+      "name": "vanna",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:vega",
+      "name": "vega",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|BlackScholesOutputSelection:vomma",
+      "name": "vomma",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|literal-value|BlackScholesTypedInputSchema.kind:object",
       "name": "object",
       "kind": "literal-value",
@@ -118098,6 +118537,83 @@
     {
       "id": "@totalfinance/options|literal-value|NumberSchema.kind:number",
       "name": "number",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:charm",
+      "name": "charm",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:color",
+      "name": "color",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:delta",
+      "name": "delta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:gamma",
+      "name": "gamma",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:price",
+      "name": "price",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:rho",
+      "name": "rho",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:speed",
+      "name": "speed",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:theta",
+      "name": "theta",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:vanna",
+      "name": "vanna",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:vega",
+      "name": "vega",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|literal-value|O:vomma",
+      "name": "vomma",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -119028,8 +119544,29 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|method|blackScholes.delta",
+      "name": "delta",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|blackScholes.evaluate",
+      "name": "evaluate",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|method|blackScholes.extendedGreeks",
       "name": "extendedGreeks",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|blackScholes.gamma",
+      "name": "gamma",
       "kind": "method",
       "position": "module",
       "disposition": "explicit"
@@ -119060,6 +119597,34 @@
       "name": "put",
       "kind": "method",
       "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|blackScholes.rho",
+      "name": "rho",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|blackScholes.theta",
+      "name": "theta",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|blackScholes.vega",
+      "name": "vega",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|method|BlackScholesEvaluateFacade.explain",
+      "name": "explain",
+      "kind": "method",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -120450,7 +121015,28 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|parameter|blackScholes.delta(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholes.evaluate(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|parameter|blackScholes.extendedGreeks(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholes.gamma(input)",
       "name": "input",
       "kind": "parameter",
       "position": "signature",
@@ -120480,6 +121066,62 @@
     {
       "id": "@totalfinance/options|parameter|blackScholes.put(input)",
       "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholes.rho(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholes.theta(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholes.vega(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|BlackScholesEvaluateFacade.explain(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholesEvaluateMany(columns)",
+      "name": "columns",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholesEvaluateMany(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholesEvaluateManyInto(columns)",
+      "name": "columns",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|parameter|blackScholesEvaluateManyInto(outputs)",
+      "name": "outputs",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -127773,6 +128415,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingChangeReason",
+      "name": "DisclosedHoldingChangeReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingReason",
+      "name": "DisclosedHoldingReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|export|DisclosedHoldingResult",
       "name": "DisclosedHoldingResult",
       "kind": "export",
@@ -127783,6 +128441,14 @@
     {
       "id": "@totalfinance/portfolio|export|DisclosedHoldingsConcentration",
       "name": "DisclosedHoldingsConcentration",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsConcentrationReason",
+      "name": "DisclosedHoldingsConcentrationReason",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./disclosed-holdings"],
@@ -127807,6 +128473,14 @@
     {
       "id": "@totalfinance/portfolio|export|DisclosedHoldingsSnapshot",
       "name": "DisclosedHoldingsSnapshot",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./disclosed-holdings"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|export|DisclosedHoldingsSnapshotReason",
+      "name": "DisclosedHoldingsSnapshotReason",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./disclosed-holdings"],
@@ -132001,6 +132675,13 @@
     {
       "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.discretion",
       "name": "discretion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|field|DisclosedHoldingsReport.assumptions.policy",
+      "name": "policy",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -141486,6 +142167,20 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.valueScale:1",
+      "name": "1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHolding.valueScale:1000",
+      "name": "1000",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:newly_disclosed",
       "name": "newly_disclosed",
       "kind": "literal-value",
@@ -141509,6 +142204,209 @@
     {
       "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChange.classification:unknown",
       "name": "unknown",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_comparison_ineligible",
+      "name": "baseline_comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_holdings_require_review",
+      "name": "baseline_holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_mapping_incomplete",
+      "name": "baseline_mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_mixed_currencies",
+      "name": "baseline_mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_report_incomplete",
+      "name": "baseline_report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:baseline_source_snapshot_review",
+      "name": "baseline_source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:conflicting_security_identity",
+      "name": "conflicting_security_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:currency_mismatch",
+      "name": "currency_mismatch",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_comparison_ineligible",
+      "name": "current_comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_holdings_require_review",
+      "name": "current_holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_mapping_incomplete",
+      "name": "current_mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_mixed_currencies",
+      "name": "current_mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_report_incomplete",
+      "name": "current_report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:current_source_snapshot_review",
+      "name": "current_source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:duplicate_security_class",
+      "name": "duplicate_security_class",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:option_position",
+      "name": "option_position",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:source_row_review",
+      "name": "source_row_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unresolved_identity",
+      "name": "unresolved_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_discretion",
+      "name": "unsupported_discretion",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_instrument_type",
+      "name": "unsupported_instrument_type",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingChangeReason:unsupported_quantity_unit",
+      "name": "unsupported_quantity_unit",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:conflicting_security_identity",
+      "name": "conflicting_security_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:duplicate_security_class",
+      "name": "duplicate_security_class",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:option_position",
+      "name": "option_position",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:source_row_review",
+      "name": "source_row_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unresolved_identity",
+      "name": "unresolved_identity",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_discretion",
+      "name": "unsupported_discretion",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_instrument_type",
+      "name": "unsupported_instrument_type",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingReason:unsupported_quantity_unit",
+      "name": "unsupported_quantity_unit",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -141563,6 +142461,20 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.valueScale:1",
+      "name": "1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingResult.valueScale:1000",
+      "name": "1000",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentration.status:available",
       "name": "available",
       "kind": "literal-value",
@@ -141572,6 +142484,55 @@
     {
       "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentration.status:review",
       "name": "review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:comparison_ineligible",
+      "name": "comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:holdings_require_review",
+      "name": "holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:mapping_incomplete",
+      "name": "mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:mixed_currencies",
+      "name": "mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:report_incomplete",
+      "name": "report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:source_snapshot_review",
+      "name": "source_snapshot_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsConcentrationReason:zero_denominator",
+      "name": "zero_denominator",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -141621,6 +142582,48 @@
     {
       "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsReport.policyVersion:disclosed-holdings-v1",
       "name": "disclosed-holdings-v1",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:comparison_ineligible",
+      "name": "comparison_ineligible",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:holdings_require_review",
+      "name": "holdings_require_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:mapping_incomplete",
+      "name": "mapping_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:mixed_currencies",
+      "name": "mixed_currencies",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:report_incomplete",
+      "name": "report_incomplete",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/portfolio|literal-value|DisclosedHoldingsSnapshotReason:source_snapshot_review",
+      "name": "source_snapshot_review",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -190707,11 +191710,27 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|AtSpotExposure",
+      "name": "AtSpotExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|CallPutPremium",
       "name": "CallPutPremium",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./flow"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|charmExposure",
+      "name": "charmExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
       "disposition": "explicit"
     },
     {
@@ -190723,8 +191742,24 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|colorExposure",
+      "name": "colorExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|ContractExposure",
       "name": "ContractExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|ContractExposureRow",
+      "name": "ContractExposureRow",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./exposure"],
@@ -190755,6 +191790,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|deltaExposure",
+      "name": "deltaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|DirectionalFlowTrade",
       "name": "DirectionalFlowTrade",
       "kind": "export",
@@ -190773,6 +191816,14 @@
     {
       "id": "@totalfinance/structure|export|exposure",
       "name": "exposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|ExposureAggregate",
+      "name": "ExposureAggregate",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./exposure"],
@@ -190807,7 +191858,7 @@
       "name": "ExposureInput",
       "kind": "export",
       "position": "module",
-      "entrypoints": ["./exposure"],
+      "entrypoints": [".", "./exposure"],
       "disposition": "explicit"
     },
     {
@@ -190829,6 +191880,14 @@
     {
       "id": "@totalfinance/structure|export|ExposureProfile",
       "name": "ExposureProfile",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|ExposureShortcutInput",
+      "name": "ExposureShortcutInput",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./exposure"],
@@ -190899,6 +191958,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|gammaExposure",
+      "name": "gammaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|GammaUnit",
       "name": "GammaUnit",
       "kind": "export",
@@ -190914,6 +191981,22 @@
       "entrypoints": [".", "./exposure"],
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|export|GuaranteedExposureMetrics",
+      "name": "GuaranteedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|GuaranteedSuppliedExposureMetrics",
+      "name": "GuaranteedSuppliedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|export|Levels",
@@ -191060,6 +192143,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|PossibleExposureMetrics",
+      "name": "PossibleExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|PossibleSuppliedExposureMetrics",
+      "name": "PossibleSuppliedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|RankByKey",
       "name": "RankByKey",
       "kind": "export",
@@ -191100,6 +192199,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|speedExposure",
+      "name": "speedExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|Spread",
       "name": "Spread",
       "kind": "export",
@@ -191124,6 +192231,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|SuppliedExposureAssumptionsFor",
+      "name": "SuppliedExposureAssumptionsFor",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|SuppliedExposureConfig",
       "name": "SuppliedExposureConfig",
       "kind": "export",
@@ -191134,6 +192249,14 @@
     {
       "id": "@totalfinance/structure|export|SuppliedExposureContribution",
       "name": "SuppliedExposureContribution",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|SuppliedExposureContributionFor",
+      "name": "SuppliedExposureContributionFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["."],
@@ -191172,6 +192295,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|SuppliedExposureMetric",
+      "name": "SuppliedExposureMetric",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|SuppliedExposurePositionConvention",
       "name": "SuppliedExposurePositionConvention",
       "kind": "export",
@@ -191196,8 +192327,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|SuppliedExposureRequest",
+      "name": "SuppliedExposureRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|SuppliedExposureRequestConfig",
+      "name": "SuppliedExposureRequestConfig",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|SuppliedExposureRequestGreeks",
+      "name": "SuppliedExposureRequestGreeks",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|SuppliedExposureRequestQuote",
+      "name": "SuppliedExposureRequestQuote",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|SuppliedExposureTotals",
       "name": "SuppliedExposureTotals",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|SuppliedExposureTotalsFor",
+      "name": "SuppliedExposureTotalsFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["."],
@@ -191209,6 +192380,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./flow"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|thetaExposure",
+      "name": "thetaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
       "disposition": "explicit"
     },
     {
@@ -191225,6 +192404,30 @@
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./flow"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|vannaExposure",
+      "name": "vannaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|vegaExposure",
+      "name": "vegaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|export|vommaExposure",
+      "name": "vommaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./exposure"],
       "disposition": "explicit"
     },
     {
@@ -191384,6 +192587,13 @@
     {
       "id": "@totalfinance/structure|field|Assumptions.interval",
       "name": "interval",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|Assumptions.metrics",
+      "name": "metrics",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -191564,6 +192774,22 @@
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|AtSpotExposure.dex",
+      "name": "dex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|field|AtSpotExposure.gex",
+      "name": "gex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
     },
     {
       "id": "@totalfinance/structure|field|Calendar.name",
@@ -191871,6 +193097,62 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|ContractExposureRow.expiry",
+      "name": "expiry",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.impliedVolatility",
+      "name": "impliedVolatility",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.multiplier",
+      "name": "multiplier",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.openInterest",
+      "name": "openInterest",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.sign",
+      "name": "sign",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.strike",
+      "name": "strike",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.timeToExpiryYears",
+      "name": "timeToExpiryYears",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ContractExposureRow.type",
+      "name": "type",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|DaySession.close",
       "name": "close",
       "kind": "field",
@@ -192082,6 +193364,71 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|ExposureAggregate.charm",
+      "name": "charm",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.color",
+      "name": "color",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.dex",
+      "name": "dex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.gex",
+      "name": "gex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.speed",
+      "name": "speed",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.theta",
+      "name": "theta",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.vanna",
+      "name": "vanna",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.vega",
+      "name": "vega",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureAggregate.vomma",
+      "name": "vomma",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|ExposureConfig.convention",
       "name": "convention",
       "kind": "field",
@@ -192145,6 +193492,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|ExposureInput.metrics",
+      "name": "metrics",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|ExposureInput.quotes",
       "name": "quotes",
       "kind": "field",
@@ -192180,6 +193534,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|ExposureProfile.#private",
+      "name": "#private",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|ExposureProfile.aggregate",
       "name": "aggregate",
       "kind": "field",
@@ -192192,22 +193553,6 @@
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/structure|field|ExposureProfile.atSpot().dex",
-      "name": "dex",
-      "kind": "field",
-      "position": "result",
-      "disposition": "canonical-term",
-      "policy": "Dominant flow term."
-    },
-    {
-      "id": "@totalfinance/structure|field|ExposureProfile.atSpot().gex",
-      "name": "gex",
-      "kind": "field",
-      "position": "result",
-      "disposition": "canonical-term",
-      "policy": "Dominant flow term."
     },
     {
       "id": "@totalfinance/structure|field|ExposureProfile.contracts",
@@ -192422,24 +193767,45 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|ExposureShortcutInput.config",
+      "name": "config",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureShortcutInput.market",
+      "name": "market",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|ExposureShortcutInput.quotes",
+      "name": "quotes",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|ExposureTotals.charm",
       "name": "charm",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.color",
       "name": "color",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.dex",
       "name": "dex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -192447,7 +193813,7 @@
       "id": "@totalfinance/structure|field|ExposureTotals.gex",
       "name": "gex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -192455,35 +193821,35 @@
       "id": "@totalfinance/structure|field|ExposureTotals.speed",
       "name": "speed",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.theta",
       "name": "theta",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.vanna",
       "name": "vanna",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.vega",
       "name": "vega",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|ExposureTotals.vomma",
       "name": "vomma",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -195114,70 +196480,70 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.aggregationPolicy",
       "name": "aggregationPolicy",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.asOf",
       "name": "asOf",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.calendar",
       "name": "calendar",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.calendarVersion",
       "name": "calendarVersion",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.compounding",
       "name": "compounding",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.conventionsVersion",
       "name": "conventionsVersion",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.currencyPolicy",
       "name": "currencyPolicy",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.dayCount",
       "name": "dayCount",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.defaultMultiplier",
       "name": "defaultMultiplier",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.dexConvention",
       "name": "dexConvention",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195185,7 +196551,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.dexUnit",
       "name": "dexUnit",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195193,35 +196559,35 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.dividendModel",
       "name": "dividendModel",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.engine",
       "name": "engine",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.expiryConvention",
       "name": "expiryConvention",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.gammaUnit",
       "name": "gammaUnit",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.gexConvention",
       "name": "gexConvention",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195229,21 +196595,21 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.greekSource",
       "name": "greekSource",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.market",
       "name": "market",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.market.asOf",
       "name": "asOf",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -195279,7 +196645,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.maximumObservationAgeMs",
       "name": "maximumObservationAgeMs",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -195287,60 +196653,258 @@
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.model",
       "name": "model",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.scenarioRepricing",
       "name": "scenarioRepricing",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.seed",
       "name": "seed",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.suppliedDeltaUnit",
       "name": "suppliedDeltaUnit",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.suppliedGammaUnit",
       "name": "suppliedGammaUnit",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.suppliedGreekSignPolicy",
       "name": "suppliedGreekSignPolicy",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.timeToExpiryConvention",
       "name": "timeToExpiryConvention",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.timeToExpiryYears",
       "name": "timeToExpiryYears",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptions.units",
+      "name": "units",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.aggregationPolicy",
+      "name": "aggregationPolicy",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.asOf",
+      "name": "asOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.calendar",
+      "name": "calendar",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.calendarVersion",
+      "name": "calendarVersion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.compounding",
+      "name": "compounding",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.conventionsVersion",
+      "name": "conventionsVersion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.currencyPolicy",
+      "name": "currencyPolicy",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.dayCount",
+      "name": "dayCount",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.defaultMultiplier",
+      "name": "defaultMultiplier",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.dividendModel",
+      "name": "dividendModel",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.engine",
+      "name": "engine",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.expiryConvention",
+      "name": "expiryConvention",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.greekSource",
+      "name": "greekSource",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market",
+      "name": "market",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market.asOf",
+      "name": "asOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market.source",
+      "name": "source",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market.spot",
+      "name": "spot",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.market.underlying",
+      "name": "underlying",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.maximumObservationAgeMs",
+      "name": "maximumObservationAgeMs",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.metrics",
+      "name": "metrics",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.model",
+      "name": "model",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.scenarioRepricing",
+      "name": "scenarioRepricing",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.seed",
+      "name": "seed",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.suppliedGreekSignPolicy",
+      "name": "suppliedGreekSignPolicy",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.timeToExpiryConvention",
+      "name": "timeToExpiryConvention",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.timeToExpiryYears",
+      "name": "timeToExpiryYears",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.units",
       "name": "units",
       "kind": "field",
       "position": "result",
@@ -195350,14 +196914,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureConfig.defaultMultiplier",
       "name": "defaultMultiplier",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureConfig.dexConvention",
       "name": "dexConvention",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195365,14 +196929,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureConfig.gammaUnit",
       "name": "gammaUnit",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureConfig.gexConvention",
       "name": "gexConvention",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195380,7 +196944,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureConfig.maximumObservationAgeMs",
       "name": "maximumObservationAgeMs",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -195388,14 +196952,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.contract",
       "name": "contract",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.dex",
       "name": "dex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195403,7 +196967,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.dexSign",
       "name": "dexSign",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195411,14 +196975,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.exclusionReasons",
       "name": "exclusionReasons",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.gex",
       "name": "gex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195426,7 +196990,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.gexSign",
       "name": "gexSign",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195434,7 +196998,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.greeks",
       "name": "greeks",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -195505,46 +197069,146 @@
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.included",
       "name": "included",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.inputIndex",
       "name": "inputIndex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.multiplier",
       "name": "multiplier",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.multiplierSource",
       "name": "multiplierSource",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.openInterest",
       "name": "openInterest",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.source",
       "name": "source",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureContribution.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.contract",
+      "name": "contract",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.exclusionReasons",
+      "name": "exclusionReasons",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.greeks",
+      "name": "greeks",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.greeks.provenance",
+      "name": "provenance",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.greeks.provenance.model",
+      "name": "model",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.greeks.provenance.source",
+      "name": "source",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.greeks.provenance.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.included",
+      "name": "included",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.inputIndex",
+      "name": "inputIndex",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.multiplier",
+      "name": "multiplier",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.multiplierSource",
+      "name": "multiplierSource",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.openInterest",
+      "name": "openInterest",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.source",
+      "name": "source",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureContributionFor.timestampMs",
       "name": "timestampMs",
       "kind": "field",
       "position": "result",
@@ -195555,42 +197219,42 @@
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.delta",
       "name": "delta",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.gamma",
       "name": "gamma",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.provenance",
       "name": "provenance",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.provenance.model",
       "name": "model",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.provenance.source",
       "name": "source",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.provenance.timestampMs",
       "name": "timestampMs",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -195598,42 +197262,42 @@
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.rho",
       "name": "rho",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.theta",
       "name": "theta",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureGreeks.vega",
       "name": "vega",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureInput.config",
       "name": "config",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureInput.market",
       "name": "market",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureInput.quotes",
       "name": "quotes",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -195690,105 +197354,105 @@
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.ask",
       "name": "ask",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.askSize",
       "name": "askSize",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.bid",
       "name": "bid",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.bidSize",
       "name": "bidSize",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.conditions",
       "name": "conditions",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.contract",
       "name": "contract",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.exchange",
       "name": "exchange",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.greeks",
       "name": "greeks",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.impliedVolatility",
       "name": "impliedVolatility",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.last",
       "name": "last",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.mark",
       "name": "mark",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.mid",
       "name": "mid",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.openInterest",
       "name": "openInterest",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.source",
       "name": "source",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.timestampMs",
       "name": "timestampMs",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -195796,14 +197460,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.underlyingPrice",
       "name": "underlyingPrice",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureQuote.volume",
       "name": "volume",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -195940,10 +197604,260 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequest.config",
+      "name": "config",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequest.market",
+      "name": "market",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequest.metrics",
+      "name": "metrics",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequest.quotes",
+      "name": "quotes",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestConfig.defaultMultiplier",
+      "name": "defaultMultiplier",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestConfig.dexConvention",
+      "name": "dexConvention",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestConfig.gammaUnit",
+      "name": "gammaUnit",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestConfig.gexConvention",
+      "name": "gexConvention",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestConfig.maximumObservationAgeMs",
+      "name": "maximumObservationAgeMs",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.delta",
+      "name": "delta",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.gamma",
+      "name": "gamma",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.provenance",
+      "name": "provenance",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.provenance.model",
+      "name": "model",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.provenance.source",
+      "name": "source",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.provenance.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.rho",
+      "name": "rho",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.theta",
+      "name": "theta",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestGreeks.vega",
+      "name": "vega",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.ask",
+      "name": "ask",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.askSize",
+      "name": "askSize",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.bid",
+      "name": "bid",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.bidSize",
+      "name": "bidSize",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.conditions",
+      "name": "conditions",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.contract",
+      "name": "contract",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.exchange",
+      "name": "exchange",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.greeks",
+      "name": "greeks",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.impliedVolatility",
+      "name": "impliedVolatility",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.last",
+      "name": "last",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.mark",
+      "name": "mark",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.mid",
+      "name": "mid",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.openInterest",
+      "name": "openInterest",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.source",
+      "name": "source",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.underlyingPrice",
+      "name": "underlyingPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequestQuote.volume",
+      "name": "volume",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.callDex",
       "name": "callDex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195951,7 +197865,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.callGex",
       "name": "callGex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195959,14 +197873,14 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.callOpenInterest",
       "name": "callOpenInterest",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.dex",
       "name": "dex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195974,7 +197888,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.gex",
       "name": "gex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195982,7 +197896,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.grossDex",
       "name": "grossDex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195990,7 +197904,7 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.grossGex",
       "name": "grossGex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -195998,21 +197912,21 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.includedQuotes",
       "name": "includedQuotes",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.openInterest",
       "name": "openInterest",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.putDex",
       "name": "putDex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
@@ -196020,12 +197934,40 @@
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.putGex",
       "name": "putGex",
       "kind": "field",
-      "position": "result",
+      "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Dominant flow term."
     },
     {
       "id": "@totalfinance/structure|field|SuppliedExposureTotals.putOpenInterest",
+      "name": "putOpenInterest",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureTotalsFor.callOpenInterest",
+      "name": "callOpenInterest",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureTotalsFor.includedQuotes",
+      "name": "includedQuotes",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureTotalsFor.openInterest",
+      "name": "openInterest",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureTotalsFor.putOpenInterest",
       "name": "putOpenInterest",
       "kind": "field",
       "position": "result",
@@ -197243,6 +199185,56 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.aggregationPolicy:additive-input-rows-no-deduplication",
+      "name": "additive-input-rows-no-deduplication",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.currencyPolicy:caller-aligned-single-currency-no-fx-conversion",
+      "name": "caller-aligned-single-currency-no-fx-conversion",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Dominant market term."
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.expiryConvention:explicit-instant",
+      "name": "explicit-instant",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.expiryConvention:us-equity-close",
+      "name": "us-equity-close",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.greekSource:supplied",
+      "name": "supplied",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.scenarioRepricing:unavailable",
+      "name": "unavailable",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureAssumptionsFor.suppliedGreekSignPolicy:signed-as-provided",
+      "name": "signed-as-provided",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|literal-value|SuppliedExposureContribution.multiplierSource:config.defaultMultiplier",
       "name": "config.defaultMultiplier",
       "kind": "literal-value",
@@ -197251,6 +199243,20 @@
     },
     {
       "id": "@totalfinance/structure|literal-value|SuppliedExposureContribution.multiplierSource:contract",
+      "name": "contract",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureContributionFor.multiplierSource:config.defaultMultiplier",
+      "name": "config.defaultMultiplier",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureContributionFor.multiplierSource:contract",
       "name": "contract",
       "kind": "literal-value",
       "position": "serialized",
@@ -197318,6 +199324,22 @@
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureMetric:dex",
+      "name": "dex",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
+    },
+    {
+      "id": "@totalfinance/structure|literal-value|SuppliedExposureMetric:gex",
+      "name": "gex",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Dominant flow term."
     },
     {
       "id": "@totalfinance/structure|literal-value|SuppliedExposureReport.coverage.scope:suppliedQuotesOnly",
@@ -197601,8 +199623,29 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|parameter|charmExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|colorExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|parameter|deltaAdjustedPremium(trades)",
       "name": "trades",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|deltaExposure(input)",
+      "name": "input",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -197615,8 +199658,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/structure|parameter|exposureFromGreeks(input)",
-      "name": "input",
+      "id": "@totalfinance/structure|parameter|exposureFromGreeks(request)",
+      "name": "request",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -197713,7 +199756,28 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|parameter|gammaExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|parameter|optionFlowDrift(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|speedExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|thetaExposure(input)",
       "name": "input",
       "kind": "parameter",
       "position": "signature",
@@ -197729,6 +199793,27 @@
     {
       "id": "@totalfinance/structure|parameter|unusualness(value)",
       "name": "value",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|vannaExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|vegaExposure(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|parameter|vommaExposure(input)",
+      "name": "input",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -268588,8 +270673,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.0",
-      "name": "0.1.0",
+      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.1",
+      "name": "0.1.1",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -282208,6 +284293,14 @@
       "policy": "Dominant indicator identity."
     },
     {
+      "id": "totalfinance|export|AtSpotExposure",
+      "name": "AtSpotExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|attribution",
       "name": "attribution",
       "kind": "export",
@@ -282938,6 +285031,38 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|BlackScholesEvaluateInput",
+      "name": "BlackScholesEvaluateInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesEvaluateManyOptions",
+      "name": "BlackScholesEvaluateManyOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesEvaluateManyResult",
+      "name": "BlackScholesEvaluateManyResult",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesEvaluation",
+      "name": "BlackScholesEvaluation",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|BlackScholesImpliedVolatilityInput",
       "name": "BlackScholesImpliedVolatilityInput",
       "kind": "export",
@@ -282988,6 +285113,30 @@
     {
       "id": "totalfinance|export|BlackScholesNoArbitrageInput",
       "name": "BlackScholesNoArbitrageInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesOutput",
+      "name": "BlackScholesOutput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesOutputBuffers",
+      "name": "BlackScholesOutputBuffers",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./options"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BlackScholesOutputSelection",
+      "name": "BlackScholesOutputSelection",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./options"],
@@ -284665,6 +286814,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|charmExposure",
+      "name": "charmExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|ChartInclude",
       "name": "ChartInclude",
       "kind": "export",
@@ -284928,6 +287085,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./technical-analysis"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|colorExposure",
+      "name": "colorExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
       "disposition": "explicit"
     },
     {
@@ -285375,6 +287540,14 @@
     {
       "id": "totalfinance|export|ContractExposure",
       "name": "ContractExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ContractExposureRow",
+      "name": "ContractExposureRow",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
@@ -286851,6 +289024,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|deltaExposure",
+      "name": "deltaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|dema",
       "name": "dema",
       "kind": "export",
@@ -287044,6 +289225,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|DisclosedHoldingChangeReason",
+      "name": "DisclosedHoldingChangeReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingReason",
+      "name": "DisclosedHoldingReason",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|DisclosedHoldingResult",
       "name": "DisclosedHoldingResult",
       "kind": "export",
@@ -287054,6 +289251,14 @@
     {
       "id": "totalfinance|export|DisclosedHoldingsConcentration",
       "name": "DisclosedHoldingsConcentration",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsConcentrationReason",
+      "name": "DisclosedHoldingsConcentrationReason",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./portfolio"],
@@ -287078,6 +289283,14 @@
     {
       "id": "totalfinance|export|DisclosedHoldingsSnapshot",
       "name": "DisclosedHoldingsSnapshot",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DisclosedHoldingsSnapshotReason",
+      "name": "DisclosedHoldingsSnapshotReason",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./portfolio"],
@@ -288830,6 +291043,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|ExposureAggregate",
+      "name": "ExposureAggregate",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|ExposureConfig",
       "name": "ExposureConfig",
       "kind": "export",
@@ -288858,7 +291079,7 @@
       "name": "ExposureInput",
       "kind": "export",
       "position": "module",
-      "entrypoints": ["."],
+      "entrypoints": [".", "./structure"],
       "disposition": "explicit"
     },
     {
@@ -288899,6 +291120,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./performance"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ExposureShortcutInput",
+      "name": "ExposureShortcutInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
       "disposition": "explicit"
     },
     {
@@ -290264,6 +292493,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|gammaExposure",
+      "name": "gammaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|GammaUnit",
       "name": "GammaUnit",
       "kind": "export",
@@ -290636,6 +292873,30 @@
       "entrypoints": ["./backtest"],
       "disposition": "canonical-term",
       "policy": "Greater-than comparison operator."
+    },
+    {
+      "id": "totalfinance|export|GuaranteedExposureMetrics",
+      "name": "GuaranteedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|GuaranteedSelection",
+      "name": "GuaranteedSelection",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./core"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|GuaranteedSuppliedExposureMetrics",
+      "name": "GuaranteedSuppliedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
     },
     {
       "id": "totalfinance|export|guts",
@@ -297418,6 +299679,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|PossibleExposureMetrics",
+      "name": "PossibleExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PossibleSuppliedExposureMetrics",
+      "name": "PossibleSuppliedExposureMetrics",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|PostconditionError",
       "name": "PostconditionError",
       "kind": "export",
@@ -299090,6 +301367,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./research"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|requireSelection",
+      "name": "requireSelection",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./core"],
       "disposition": "explicit"
     },
     {
@@ -302092,6 +304377,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|speedExposure",
+      "name": "speedExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|SpinOffEvent",
       "name": "SpinOffEvent",
       "kind": "export",
@@ -302869,6 +305162,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|SuppliedExposureAssumptionsFor",
+      "name": "SuppliedExposureAssumptionsFor",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|SuppliedExposureConfig",
       "name": "SuppliedExposureConfig",
       "kind": "export",
@@ -302879,6 +305180,14 @@
     {
       "id": "totalfinance|export|SuppliedExposureContribution",
       "name": "SuppliedExposureContribution",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureContributionFor",
+      "name": "SuppliedExposureContributionFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
@@ -302917,6 +305226,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|SuppliedExposureMetric",
+      "name": "SuppliedExposureMetric",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|SuppliedExposurePositionConvention",
       "name": "SuppliedExposurePositionConvention",
       "kind": "export",
@@ -302941,8 +305258,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|SuppliedExposureRequest",
+      "name": "SuppliedExposureRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureRequestConfig",
+      "name": "SuppliedExposureRequestConfig",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureRequestGreeks",
+      "name": "SuppliedExposureRequestGreeks",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureRequestQuote",
+      "name": "SuppliedExposureRequestQuote",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|SuppliedExposureTotals",
       "name": "SuppliedExposureTotals",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureTotalsFor",
+      "name": "SuppliedExposureTotalsFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
@@ -303866,6 +306223,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./math"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|thetaExposure",
+      "name": "thetaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
       "disposition": "explicit"
     },
     {
@@ -304886,6 +307251,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|vannaExposure",
+      "name": "vannaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|VannaVolga5Density",
       "name": "VannaVolga5Density",
       "kind": "export",
@@ -305150,6 +307523,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./backtest"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|vegaExposure",
+      "name": "vegaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
       "disposition": "explicit"
     },
     {
@@ -305450,6 +307831,14 @@
       "entrypoints": ["./technical-analysis"],
       "disposition": "canonical-term",
       "policy": "Dominant indicator identity."
+    },
+    {
+      "id": "totalfinance|export|vommaExposure",
+      "name": "vommaExposure",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
     },
     {
       "id": "totalfinance|export|vortex",

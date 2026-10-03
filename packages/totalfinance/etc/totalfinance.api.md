@@ -5,7 +5,7 @@
 
 ## Exports (66)
 
-- `const blackScholes`: { call: Facade<BlackScholesInput, number>; put: Facade<BlackScholesInput, number>; price: Facade<BlackScholesTypedInput, number>; greeks: Facade<BlackScholesTypedInput, Greeks>; extendedGreeks: Facade<BlackScholesTypedInput, ExtendedGreeks>; impliedVolatility: Facade<BlackScholesImpliedVolatilityInput, number, Record<never, never>, number | null>; }
+- `const blackScholes`: { call: Facade<BlackScholesInput, number>; put: Facade<BlackScholesInput, number>; price: Facade<BlackScholesTypedInput, number>; delta: Facade<BlackScholesTypedInput, number>; gamma: Facade<BlackScholesTypedInput, number>; theta: Facade<BlackScholesTypedInput, number>; vega: Facade<BlackScholesTypedInput, number>; rho: Facade<BlackScholesTypedInput, number>; greeks: Facade<BlackScholesTypedInput, Greeks>; extendedGreeks: Facade<BlackScholesTypedInput, ExtendedGreeks>; evaluate: BlackScholesEvaluateFacade; impliedVolatility: Facade<BlackScholesImpliedVolatilityInput, number, Record<never, never>, number | null>; }
 - `const engines`: { readonly blackScholes: () => OptionPricingEngine; readonly blackScholesMerton: () => OptionPricingEngine; readonly black76: () => OptionPricingEngine; readonly binomial: (options?: BinomialEngineOptions) => OptionPricingEngine; readonly trinomial: (options?: TrinomialEngineOptions) => OptionPricingEngine; readonly baroneAdesiWhaley: () => OptionPricingEngine; readonly bjerksundStensland: () => OptionPricingEngine; readonly bjerksundStensland2002: () => OptionPricingEngine; readonly bjerksundStensland1993: () => OptionPricingEngine; readonly finiteDifference: { readonly crankNicolson: (options?: FiniteDifferenceEngineOptions) => OptionPricingEngine; }; readonly monteCarlo: (options: MonteCarloPriceOptions) => OptionPricingEngine; readonly heston: (parameters: HestonParameters, options?: HestonCosineExpansionOptions) => OptionPricingEngine; readonly sabr: (parameters: SabrParameters, options?: SabrOptions) => OptionPricingEngine; readonly localVolatility: (surface: LocalVolatilityFunction, options: LocalVolatilityMonteCarloOptions) => OptionPricingEngine; readonly auto: (options?: AutoEngineOptions) => OptionPricingEngine; }
 - `const option`: { readonly call: (input: OptionBuilderInput) => OptionContract; readonly put: (input: OptionBuilderInput) => OptionContract; readonly usEquityCall: (input: InstrumentBuilderInput) => OptionContract; readonly usEquityPut: (input: InstrumentBuilderInput) => OptionContract; readonly usEquityOption: (input: UsEquityOptionInput) => OptionContract; readonly european: (input: InstrumentBuilderInput & { type: OptionType; convention?: 'us-equity-close'; }) => OptionContract; readonly price: (input: PriceOptionInput) => PriceResult; readonly impliedVolatility: (input: ImpliedVolatilityOptionInput) => ImpliedVolatilitySolveResult; readonly compareEngines: (input: CompareEnginesInput) => EngineComparison; }
 - `function impliedVolatility`: (input: BlackScholesImpliedVolatilityInput, options?: ImpliedVolatilityOptions) => ImpliedVolatilitySolveResult
@@ -16,7 +16,7 @@
 - `interface CreditTriangleHazardInput`: CreditTriangleHazardInput
 - `interface DivergencesInput`: DivergencesInput
 - `interface DupireLocalVolatilityInput`: DupireLocalVolatilityInput
-- `interface ExposureInput`: ExposureInput
+- `interface ExposureInput`: ExposureInput<S>
 - `interface FibExtensionInput`: FibExtensionInput
 - `interface FlatCurveInput`: FlatCurveInput
 - `interface FlatHazardInput`: FlatHazardInput
