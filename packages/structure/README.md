@@ -69,7 +69,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/structure` exposes **17** runtime exports (**91** including types) across 3 entrypoints (`.`, `./exposure`, `./flow`). See the generated [`etc/structure.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/structure/etc/structure.api.md) for the full surface.
+`@insiderfinance/totalfinance/structure` exposes **17** runtime exports (**92** including types) across 3 entrypoints (`.`, `./exposure`, `./flow`). See the generated [`etc/structure.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/structure/etc/structure.api.md) for the full surface.
 
 ## License
 

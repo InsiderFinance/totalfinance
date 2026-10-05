@@ -2851,11 +2851,11 @@
     },
     "mutationsExecuted": {
       "unknown-key": 2739,
-      "null-when-nonnullable": 26244,
+      "null-when-nonnullable": 26245,
       "omit-required": 13311,
       "wrong-type": 16970,
       "non-finite": 9376,
-      "optional-wrong-type": 8036,
+      "optional-wrong-type": 8037,
       "invalid-literal": 1951,
       "empty-series": 914,
       "non-finite-element": 842,
@@ -2864,11 +2864,11 @@
     },
     "mutationsCovered": {
       "unknown-key": 6513,
-      "null-when-nonnullable": 65977,
+      "null-when-nonnullable": 65980,
       "omit-required": 33963,
       "wrong-type": 43396,
       "non-finite": 24458,
-      "optional-wrong-type": 19179,
+      "optional-wrong-type": 19182,
       "invalid-literal": 5003,
       "empty-series": 2414,
       "non-finite-element": 2176,
@@ -71989,19 +71989,19 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 19,
+        "optional-wrong-type": 3,
         "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 19,
+        "optional-wrong-type": 3,
         "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -154013,10 +154013,10 @@
       "undecided": ["alternative arg0.market.asOf#0 (unmeasured: baseline-rejected)"],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 19,
+        "optional-wrong-type": 3,
         "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },
@@ -227610,10 +227610,10 @@
       "undecided": ["alternative arg0.market.asOf#0 (unmeasured: baseline-rejected)"],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 19,
+        "optional-wrong-type": 3,
         "omit-required": 13,
         "wrong-type": 16,
-        "optional-wrong-type": 2,
         "invalid-literal": 5,
         "non-finite": 8
       },

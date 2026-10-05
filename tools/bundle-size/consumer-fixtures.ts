@@ -48,10 +48,12 @@ const NAMESPACE_REASON =
 // evaluate (each with .explain) and their shared kernel (bsm-evaluate.js). Installed Node 22.23.2
 // measurements 13783–13787 B esbuild / 9356 B Rollup; a namespace object cannot shed members, so
 // a blackScholes.call consumer pays for them. 12 → 13.75 KiB esbuild, 8 → 9.5 KiB Rollup.
+// 0.1.2 speed (2026-10-05): the gamma-only row loop, remembered expiry-label parses and the
+// path-on-hit finiteness walk add about 280 B to the facade (13.9 KiB esbuild); 13.75 → 14 KiB.
 const leanBudgets = {
   normal: 0.6,
   rsi: 9,
-  facade: 13.75,
+  facade: 14,
   expert: 2.5,
   'expert-black76': 2.5,
   'expert-bachelier': 2.5,

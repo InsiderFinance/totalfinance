@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42477,
+    "identities": 42476,
     "unresolved": 0,
     "byDisposition": {
       "canonical-term": 3812,
-      "explicit": 38503,
+      "explicit": 38502,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
       "code-string": 274,
       "enum-member": 274,
-      "export": 7319,
-      "field": 22498,
+      "export": 7321,
+      "field": 22495,
       "literal-value": 4546,
       "mcp-field": 1520,
       "mcp-tool": 55,
@@ -42,12 +42,12 @@
       "@totalfinance/risk": 1886,
       "@totalfinance/scenarios": 1375,
       "@totalfinance/strategy": 1751,
-      "@totalfinance/structure": 1134,
+      "@totalfinance/structure": 1132,
       "@totalfinance/technical-analysis": 4947,
       "@totalfinance/valuation": 1005,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3151
+      "totalfinance": 3152
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -192239,6 +192239,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|export|SuppliedExposureBreakdownsFor",
+      "name": "SuppliedExposureBreakdownsFor",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|export|SuppliedExposureConfig",
       "name": "SuppliedExposureConfig",
       "kind": "export",
@@ -196727,6 +196735,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.breakdowns",
+      "name": "breakdowns",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/structure|field|SuppliedExposureAssumptionsFor.calendar",
       "name": "calendar",
       "kind": "field",
@@ -197485,41 +197500,6 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/structure|field|SuppliedExposureReport.byExpiry",
-      "name": "byExpiry",
-      "kind": "field",
-      "position": "result",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/structure|field|SuppliedExposureReport.byExpiry.expiresAt",
-      "name": "expiresAt",
-      "kind": "field",
-      "position": "result",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/structure|field|SuppliedExposureReport.byExpiry.expiry",
-      "name": "expiry",
-      "kind": "field",
-      "position": "result",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/structure|field|SuppliedExposureReport.byStrike",
-      "name": "byStrike",
-      "kind": "field",
-      "position": "result",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/structure|field|SuppliedExposureReport.byStrike.strike",
-      "name": "strike",
-      "kind": "field",
-      "position": "result",
-      "disposition": "explicit"
-    },
-    {
       "id": "@totalfinance/structure|field|SuppliedExposureReport.contributions",
       "name": "contributions",
       "kind": "field",
@@ -197601,6 +197581,13 @@
       "name": "diagnostics",
       "kind": "field",
       "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/structure|field|SuppliedExposureRequest.breakdowns",
+      "name": "breakdowns",
+      "kind": "field",
+      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -305164,6 +305151,14 @@
     {
       "id": "totalfinance|export|SuppliedExposureAssumptionsFor",
       "name": "SuppliedExposureAssumptionsFor",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./structure"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|SuppliedExposureBreakdownsFor",
+      "name": "SuppliedExposureBreakdownsFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./structure"],
