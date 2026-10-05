@@ -145,6 +145,27 @@ const suppliedUnion = exposureFromGreeks({ ...supplied, metrics: [whichMetric] }
 // @ts-expect-error the element may be gex
 export const suppliedUnionDex: number = suppliedUnion.aggregate.dex;
 
+// `breakdowns`: omitted or true carries byStrike/byExpiry; false leaves them out; a runtime boolean
+// makes them optional.
+export const releasedByStrike: unknown[] = exposureFromGreeks(supplied).byStrike;
+export const explicitByExpiry: unknown[] = exposureFromGreeks({
+  ...supplied,
+  breakdowns: true,
+}).byExpiry;
+const lean = exposureFromGreeks({ ...supplied, breakdowns: false });
+export const leanAggregate: number = lean.aggregate.gex;
+// @ts-expect-error breakdowns: false leaves byStrike out of the report
+void lean.byStrike;
+// @ts-expect-error and byExpiry
+void lean.byExpiry;
+declare const maybeBreakdowns: boolean;
+const dynamicBreakdowns = exposureFromGreeks({ ...supplied, breakdowns: maybeBreakdowns });
+export const maybeByStrike: unknown[] | undefined = dynamicBreakdowns.byStrike;
+// @ts-expect-error a runtime boolean cannot promise the breakdowns exist
+export const certainByStrike: unknown[] = dynamicBreakdowns.byStrike;
+// @ts-expect-error breakdowns is a boolean, not a list
+exposureFromGreeks({ ...supplied, breakdowns: ['strike'] });
+
 declare const suppliedChoice: SuppliedExposureMetric[];
 const dynamicSupplied = exposureFromGreeks({ ...supplied, metrics: suppliedChoice });
 export const maybeSuppliedGex: number | undefined = dynamicSupplied.aggregate.gex;

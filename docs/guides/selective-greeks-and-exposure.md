@@ -205,6 +205,12 @@ if (supplied.aggregate.gex !== 0) throw new Error('equal call and put gamma nets
 if ('dex' in supplied.aggregate) throw new Error('DEX was not selected');
 ```
 
+The report also totals every metric per strike (`byStrike`) and per expiry (`byExpiry`). A caller
+that builds its own strike and expiry views from `contributions` can pass `breakdowns: false` to
+leave both out. That skips the grouping and two thirds of the exact summation; every other field is
+unchanged, and `assumptions.breakdowns` records the choice. The report's type follows the flag, so
+reading `byStrike` from a `breakdowns: false` report is a compile error.
+
 ## What does not change
 
 Selection removes work, never meaning. Pricing model, units, sign conventions, time conventions,

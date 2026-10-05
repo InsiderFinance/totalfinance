@@ -249,6 +249,23 @@ export function usEquityMarketDateUtcMs(epochMs: EpochMs): EpochMs {
  * time-to-expiry; a full datetime string is parsed as-is. Throws on an unparseable value.
  */
 export function optionExpiryToMs(expiry: string): EpochMs {
+  // A chain repeats a few dozen labels across thousands of quotes, and each parse is a regular
+  // expression plus a calendar round trip. The result depends on the string alone, so successful
+  // parses are remembered; a failure is not, and throws its teaching error every time.
+  if (typeof expiry !== 'string') return parseOptionExpiry(expiry);
+  const cached = expiryMsCache.get(expiry);
+  if (cached !== undefined) return cached;
+  const ms = parseOptionExpiry(expiry);
+  if (expiryMsCache.size >= EXPIRY_MS_CACHE_LIMIT) expiryMsCache.clear();
+  expiryMsCache.set(expiry, ms);
+  return ms;
+}
+
+/** Parsed expiry labels (see {@link optionExpiryToMs}); bounded so distinct labels cannot grow it. */
+const expiryMsCache = new Map<string, EpochMs>();
+const EXPIRY_MS_CACHE_LIMIT = 1024;
+
+function parseOptionExpiry(expiry: string): EpochMs {
   if (DATE_ONLY.test(expiry)) {
     // Validate it is a real calendar date — `parseIsoDate` rejects e.g. 2026-02-31 rather than letting
     // Date.UTC silently roll it forward to 2026-03-03.

@@ -199,6 +199,19 @@ outputs and their mathematical dependencies.
     profile's own `gex` over the valuation instant. The 0.1.0 parity test states the correction:
     each per-point color value equals 0.1.0's divided by `S·0.01` (to 7e-15), and every other value
     is still exact.
+19. **Supplied exposure without breakdowns (0.1.2).** Measured on a live 8,114-quote chain, a
+    supplied-Greek report spent most of its time on work a caller may not need. Every contribution
+    was summed exactly 33 times: 11 totals each for the aggregate, its strike and its expiry. A caller
+    that aggregates the contributions itself, as a dashboard building its own strike and expiry
+    views does, discarded two thirds of that. `exposureFromGreeks({ …, breakdowns: false })` leaves
+    `byStrike` and `byExpiry` out: no grouping and no per-group totals. Contributions, aggregate,
+    coverage and diagnostics are unchanged, and `assumptions.breakdowns` echoes the flag. The
+    breakdowns follow the same type rule as `metrics`: required when the flag is omitted or `true`,
+    absent for `false`, optional for a runtime `boolean`. The flag is a boolean, like `greeks`
+    elsewhere in the library, rather than a selection list, because "no breakdowns" is a meaningful
+    request and selections refuse an empty list. The same change made the existing paths faster
+    without changing a bit: indexed loops in `stableSum`, a finiteness walk that formats a path only
+    for a hit, remembered expiry-label parses, and a gamma-only row loop.
 
 ## Ordered checklist and exit evidence
 

@@ -43,6 +43,7 @@ export type {
   SuppliedExposureTotalsFor,
   SuppliedExposureContributionFor,
   SuppliedExposureAssumptionsFor,
+  SuppliedExposureBreakdownsFor,
   GuaranteedSuppliedExposureMetrics,
   PossibleSuppliedExposureMetrics,
 } from './supplied-exposure.js';

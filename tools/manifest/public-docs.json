@@ -10,10 +10,10 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4521,
+    "executableFences": 4522,
     "checkedUnderTruthfulness": 172,
     "checkedUnderVocabulary": 48,
-    "shippedNamesWatched": 9599,
+    "shippedNamesWatched": 9601,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -303,7 +303,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4256
+      "codeFences": 4257
     },
     {
       "path": "docs/llms.txt",

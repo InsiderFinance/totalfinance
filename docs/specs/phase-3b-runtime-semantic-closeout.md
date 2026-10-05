@@ -1151,7 +1151,7 @@ resolved it. `summary.mutationsExecuted` now reports what the harness actually R
 | `non-finite`            |    9,376 |  24,458 |
 | `invalid-literal`       |    1,951 |   5,003 |
 | `unknown-key`           |    2,739 |   6,513 |
-| `null-when-nonnullable` |   26,244 |  65,977 |
+| `null-when-nonnullable` |   26,245 |  65,980 |
 
 **EXECUTED and COVERED are different facts, and the table this replaces mixed them.** `executed` is
 what physically ran; `covered` is what a path may claim, directly or attributed from an alias twin.
@@ -1366,7 +1366,7 @@ or a rationale for an API decision.
 
 ### 3B.0 — Post-Wave-6 baseline and inventory design
 
-- [x] Verify Phase 3B.N is closed: 42,477 naming identities, 0 unresolved, gated in CI; the packed
+- [x] Verify Phase 3B.N is closed: 42,476 naming identities, 0 unresolved, gated in CI; the packed
       consumer proves the final package/MCP names and every removed alias has executable evidence.
 - [x] Build every public declaration and regenerate runtime/signature manifests after all Wave 6
       and naming-normalization checkboxes are closed.

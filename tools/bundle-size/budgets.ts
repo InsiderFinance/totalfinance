@@ -47,7 +47,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
-    budgetKB: 13.75,
+    budgetKB: 14,
     intent: 'all model exports; runtime guards included, schema/JSON-Schema machinery excluded',
     forbidden: [
       {
@@ -60,7 +60,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       },
     ],
     rationale:
-      '11.75 → 11.875 KB (disclosed-holdings warning registration, 2026-09-25): isolated Node 22.23.2/esbuild 0.25.12 measurements against 009f223 are 12,029 → 12,058 B gzip (+29 B), with an identical retained-module set. The one new public WarningCode member grows the shared catalog; no holdings or schema implementation enters pricing. The installed expert kernel remains 2,321 B. All forbidden-dependency and installed-consumer canaries stay unchanged; headroom is 102 B. ' +
+      '13.75 → 14 KB (0.1.2 speed, 2026-10-05): measured 14,208 B (0.1.1 measured 13,929 B) with Node 22.23.2/esbuild 0.25.12 — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade). Results are unchanged bit for bit; 128 B of headroom. 11.75 → 11.875 KB (disclosed-holdings warning registration, 2026-09-25): isolated Node 22.23.2/esbuild 0.25.12 measurements against 009f223 are 12,029 → 12,058 B gzip (+29 B), with an identical retained-module set. The one new public WarningCode member grows the shared catalog; no holdings or schema implementation enters pricing. The installed expert kernel remains 2,321 B. All forbidden-dependency and installed-consumer canaries stay unchanged; headroom is 102 B. ' +
       '8 KB → 8.5 KB in Phase 3B.N2. The stable diagnostic codes this entrypoint carries became ' +
       'self-describing (`vol.surface_extrapolated` → `volatility.surface_extrapolated`, plus the ' +
       'matching enum members), which costs ~25 B gzip. The budget’s real content — no schema or ' +
@@ -410,11 +410,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/backtest/environment',
     entry: 'packages/backtest/src/environment/index.ts',
-    budgetKB: 142,
+    budgetKB: 142.25,
     intent:
       'Stage 7B.1 createTradingEnvironment: the deterministic trading-agent environment over the portfolio engine — reset/step, open orders, typed rejections, the trace identity — a subpath so a backtest never pays for the environment and the environment pays only for the engine it drives',
     rationale:
-      '141 → 142 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the environment features require an annualization (no per-bar volatility feeding annualized consumers), the bench baseline and episodes name theirs, and the paper broker and plan it composes refuse an OCC option symbol without a declared multiplier through the core OCC grammar predicate; measured 144,489 B, 105 B over the 141 KB line. ' +
+      "142 → 142.25 KB (0.1.2 speed, 2026-10-05): measured 145,443 B, 35 B over the old line — core's remembered expiry-label parses and path-on-hit finiteness walk, which every result here passes through; 221 B of headroom. 141 → 142 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the environment features require an annualization (no per-bar volatility feeding annualized consumers), the bench baseline and episodes name theirs, and the paper broker and plan it composes refuse an OCC option symbol without a declared multiplier through the core OCC grammar predicate; measured 144,489 B, 105 B over the 141 KB line. " +
       'September 2026 R01–R05: 129 → 141 KB, measured 142,528 B. Inherits the corrected portfolio engine and existing fixed-income calendar owner; adds explicit currency funding in the multi-currency episode. The engine/environment split and hot-path exclusions remain intact. ' +
       'Stage 7B.1 slice 1 (2026-09-05): the environment core (the definition and action guards, reset/step over the stepper seam, open-order carry-forward and cancel/replace, idempotent retry, the trace hash) on top of the multi-asset engine it composes — the engine with its eight adapters is ~99 KB of the whole. Measured 103,352 B (100.9 KB) at landing; the budget is 103 KB so slice 2 (limits, the mask, the reward, features) reconciles its growth rather than absorbs it.' +
       "103 → 119 KB (Stage 7B.1 slice 2, 2026-09-05): limits judged post-trade by FC7's monitorPortfolio (the environment bundles the monitor rather than re-deriving one family of it), the pre-trade projection and the action mask, the reward composition, the feature recipes over @insiderfinance/totalfinance/math and @insiderfinance/totalfinance/performance, and the freshness block. Measured 119,353 B (116.6 KB); the budget is 119 KB so slice 3 (the episode library and the environment run kind) reconciles its growth rather than absorbs it." +
@@ -465,11 +465,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 502.25,
+    budgetKB: 502.5,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
-      '497.25 → 502.25 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 508,996 B (188 B under the old line), this change 514,035 B (+5,039 B) with Node 22.23.2/esbuild 0.25.12. The exposure operation composes the selective ExposureProfile, which now evaluates through @insiderfinance/totalfinance/options/batch (the validated blackScholesEvaluateManyInto boundary, 4.4 KB minified) and the shared kernel (2.2 KB), and carries the nine single-metric shortcuts and the supplied-Greek selection; core gains requireSelection (its label guard, added when the enforcement run measured the helper, is 302 B of the total; the review fixes on #3 — the batch row-value type check and its error descriptions, per-point color — another 123 B). No new operation, transport or dependency domain. ' +
+      '502.25 → 502.5 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 514,383 B (+79 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 177 B of headroom. 497.25 → 502.25 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 508,996 B (188 B under the old line), this change 514,035 B (+5,039 B) with Node 22.23.2/esbuild 0.25.12. The exposure operation composes the selective ExposureProfile, which now evaluates through @insiderfinance/totalfinance/options/batch (the validated blackScholesEvaluateManyInto boundary, 4.4 KB minified) and the shared kernel (2.2 KB), and carries the nine single-metric shortcuts and the supplied-Greek selection; core gains requireSelection (its label guard, added when the enforcement run measured the helper, is 302 B of the total; the review fixes on #3 — the batch row-value type check and its error descriptions, per-point color — another 123 B). No new operation, transport or dependency domain. ' +
       '495 → 497.25 KB (installed-consumer correctness repair, 2026-09-21): measured 508,947 B with Node 22.23.2/esbuild 0.25.12. All built-in TA facades now bind their own shared metadata before registry import. The complete operation catalog includes that construction code and shared named declarations; narrow consumers are separately budgeted, and no runtime dependency or financial calculation changed. ' +
       'Freeze correctness repairs (2026-09-21): 494 -> 495 KB, measured 494.3 KB on supported Node 22. Durable write-ahead grant recovery, plan-scoped combo lifecycle and hedge-capacity validation, and separate embedded execution-cost attribution. No new dependency; the local filesystem coordinator remains outside the browser root. ' +
       'Pre-publish interface repairs B (2026-09-21, wire contracts): 488 -> 494 KB, measured 492.8 KB. The shared envelope schema (the spilled-handle branch), grant consumption in the stores, the combo grammar on the trade wire, and the C code registries. ' +
@@ -622,11 +622,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 690.75,
+    budgetKB: 691.25,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
-      "686.5 → 690.75 KB (PR #4 integrated with 0.1.1 main, 2026-10-02): the combined source measures 707,171 B gzip with Node 22.23.2/esbuild 0.25.12, versus main's 702,783 B (+4,388 B). The umbrella now includes the three exact-decimal disclosed-holdings runtime modules, structured policy echo and one registered warning in addition to selective Greeks/exposure. Headroom is 157 B. The separate holdings import measures 10,550 B within its unchanged 10.5 KB cap, the portfolio domain 110,588 B within 108.125 KB; all narrow installed-consumer and forbidden-dependency gates remain intact. " +
+      "690.75 → 691.25 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 707,616 B (+288 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 224 B of headroom. 686.5 → 690.75 KB (PR #4 integrated with 0.1.1 main, 2026-10-02): the combined source measures 707,171 B gzip with Node 22.23.2/esbuild 0.25.12, versus main's 702,783 B (+4,388 B). The umbrella now includes the three exact-decimal disclosed-holdings runtime modules, structured policy echo and one registered warning in addition to selective Greeks/exposure. Headroom is 157 B. The separate holdings import measures 10,550 B within its unchanged 10.5 KB cap, the portfolio domain 110,588 B within 108.125 KB; all narrow installed-consumer and forbidden-dependency gates remain intact. " +
       '681.25 → 686.5 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 697,450 B (150 B under the old line), this change 702,783 B (+5,333 B) with Node 22.23.2/esbuild 0.25.12 — the same additions the workflows row records (selective kernel, batch selection boundary, named Greeks and evaluate, selective exposure with nine shortcuts, supplied selection, requireSelection and its label guard, the expiry formatter cache, and the review fixes on #3); 193 B of headroom. ' +
       '680 → 681.25 KB (installed-consumer correctness repair, 2026-09-21): measured 697,387 B with Node 22.23.2/esbuild 0.25.12. Built-in TA contracts are now shared named declarations bound by every leaf, so the all-exports umbrella includes their construction code. This protects narrow-import correctness without relying on discovery side effects; separate installed-function budgets enforce lean imports and document the esbuild root-namespace limitation. ' +
       'Pre-publish interface repairs B and C (2026-09-21): 674 -> 680 KB, measured 677.8 KB. Combos and one order vocabulary, chainGreeks and usEquityOption, the unified portfolio VaR door, and every code as a registry member. ' +

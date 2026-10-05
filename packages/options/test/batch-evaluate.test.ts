@@ -143,6 +143,42 @@ describe('blackScholesEvaluateMany — exact parity with the scalar kernels', ()
     );
   });
 
+  it('a gamma-only selection runs its own row loop and equals the general loop bit for bit', () => {
+    // Gamma alone (GEX profile and zero-gamma sweeps, gammaExposure) has a dedicated loop; zero rates
+    // and yields take a shortcut that skips their discount exponential. Both must leave every value
+    // exactly what the general loop and the scalar kernels produce, -0 yields included.
+    fc.assert(
+      fc.property(
+        fc.array(row, { minLength: 1, maxLength: 24 }),
+        fc.boolean(),
+        fc.constantFrom('given', 'zero', 'negative-zero'),
+        (rows, withDividends, rates) => {
+          const base = columnsOf(rows, withDividends);
+          const zero = () => new Float64Array(rows.length).fill(rates === 'zero' ? 0 : -0);
+          const columns: OptionBatchColumns =
+            rates === 'given'
+              ? base
+              : {
+                  ...base,
+                  riskFreeRate: zero(),
+                  ...(withDividends ? { dividendYield: zero() } : {}),
+                };
+          const alone = blackScholesEvaluateMany(columns, { outputs: ['gamma'] }).gamma;
+          const general = blackScholesEvaluateMany(columns, { outputs: ['gamma', 'delta'] }).gamma;
+          const into = new Float64Array(rows.length);
+          blackScholesEvaluateManyInto(columns, { gamma: into });
+          for (let i = 0; i < rows.length; i++) {
+            const want = existingRow(columns, i).gamma;
+            expect(Object.is(alone[i], want)).toBe(true);
+            expect(Object.is(general[i], want)).toBe(true);
+            expect(Object.is(into[i], want)).toBe(true);
+          }
+        },
+      ),
+      { numRuns: 300, seed: 20261005 },
+    );
+  });
+
   it('matches the scalar blackScholes.evaluate row by row, in request order', () => {
     const columns = chain();
     const outputs = ['color', 'price', 'gamma'] as const;

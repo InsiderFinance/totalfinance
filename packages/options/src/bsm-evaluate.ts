@@ -151,6 +151,10 @@ export function evaluateBlackScholesRowsUnchecked(
   rows: number,
   targets: readonly (Float64Array | undefined)[],
 ): void {
+  if (plan.outputs.length === 1 && plan.requested[GAMMA]) {
+    evaluateGammaRows(columns, rows, targets[GAMMA]!);
+    return;
+  }
   const { spot, strike, timeToExpiryYears, riskFreeRate, volatility, type, dividendYield } =
     columns;
   const { requested } = plan;
@@ -186,8 +190,10 @@ export function evaluateBlackScholesRowsUnchecked(
     const sqrtT = Math.sqrt(T);
     const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
     const d2 = wantD2 ? d1 - sigma * sqrtT : 0;
-    const discountFactor = wantRateDiscount ? Math.exp(-r * T) : 0;
-    const dq = wantDividendDiscount ? Math.exp(-q * T) : 0;
+    // A zero rate or yield discounts by exactly 1 (`Math.exp(-0)`), so the exponential is skipped
+    // without changing a bit: GEX sweeps run with q = 0, and paid an extra `exp` per row for it.
+    const discountFactor = wantRateDiscount ? (r === 0 ? 1 : Math.exp(-r * T)) : 0;
+    const dq = wantDividendDiscount ? (q === 0 ? 1 : Math.exp(-q * T)) : 0;
     const pdf = wantDensity ? normalPdf(d1) : 0;
     const nd1 = wantNd1 ? normalCdf(isCall ? d1 : -d1) : 0;
     const nd2 = wantNd2 ? normalCdf(isCall ? d2 : -d2) : 0;
@@ -223,6 +229,34 @@ export function evaluateBlackScholesRowsUnchecked(
       }
       if (outColor !== undefined) outColor[i] = gamma * (-q - d1 * dd1dT - 1 / (2 * T));
     }
+  }
+}
+
+/**
+ * The row loop for a gamma-only plan: GEX price-profile and zero-gamma sweeps, `gammaExposure`,
+ * `blackScholes.gamma`. The general loop's own expressions for d1, the dividend discount, the
+ * density and gamma, so every value is that loop's bit for bit (the exact parity tests hold both),
+ * without its per-row output branches, which made a gamma-only sweep about 1.6× slower. Like the
+ * general loop, each row's inputs are read before its output is written.
+ */
+function evaluateGammaRows(
+  columns: BlackScholesColumnsView,
+  rows: number,
+  out: Float64Array,
+): void {
+  const { spot, strike, timeToExpiryYears, riskFreeRate, volatility, dividendYield } = columns;
+  for (let i = 0; i < rows; i++) {
+    const S = spot[i]!;
+    const K = strike[i]!;
+    const T = timeToExpiryYears[i]!;
+    const r = riskFreeRate[i]!;
+    const q = dividendYield === undefined ? 0 : dividendYield[i]!;
+    const sigma = volatility[i]!;
+    const sqrtT = Math.sqrt(T);
+    const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+    const dq = q === 0 ? 1 : Math.exp(-q * T);
+    const pdf = normalPdf(d1);
+    out[i] = (dq * pdf) / (S * sigma * sqrtT);
   }
 }
 

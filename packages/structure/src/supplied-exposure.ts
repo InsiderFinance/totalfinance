@@ -132,6 +132,7 @@ export interface SuppliedExposureInput {
  */
 export interface SuppliedExposureRequest<
   S extends readonly SuppliedExposureMetric[] | undefined = undefined,
+  B extends boolean | undefined = undefined,
 > {
   quotes: readonly SuppliedExposureRequestQuote[];
   market: SuppliedExposureMarket;
@@ -142,6 +143,13 @@ export interface SuppliedExposureRequest<
    * `dexConvention`. The unselected metric's fields are absent from the report, never zero.
    */
   metrics?: S;
+  /**
+   * `false` leaves `byStrike` and `byExpiry` out of the report: no grouping and no per-group exact
+   * totals, two thirds of the summation, for a caller that aggregates the contributions itself.
+   * Omitted or `true`: the released report. Contributions, aggregate, coverage and diagnostics are
+   * the same either way.
+   */
+  breakdowns?: B;
 }
 
 export type SuppliedExposureExclusion =
@@ -279,42 +287,66 @@ export type SuppliedExposureAssumptionsFor<
   > & {
     /** The selection as passed; present only when `metrics` was passed. */
     metrics?: readonly SuppliedExposureMetric[];
+    /** The `breakdowns` flag as passed; present only when it was passed. */
+    breakdowns?: boolean;
   };
+
+/**
+ * The `byStrike` and `byExpiry` breakdowns of a report, by the request's `breakdowns` flag: present
+ * when it is omitted or `true` (the released report), absent for `false`, and optional when the flag
+ * is a runtime `boolean` the type cannot know.
+ */
+export type SuppliedExposureBreakdownsFor<
+  G extends SuppliedExposureMetric = SuppliedExposureMetric,
+  P extends SuppliedExposureMetric = G,
+  B extends boolean | undefined = undefined,
+> = [B] extends [false]
+  ? unknown
+  : [B] extends [true | undefined]
+    ? {
+        byStrike: Array<SuppliedExposureTotalsFor<G, P> & { strike: number }>;
+        /** Groups economically identical expiry instants, even when labels use different time zones. */
+        byExpiry: Array<SuppliedExposureTotalsFor<G, P> & { expiry: string; expiresAt: number }>;
+      }
+    : {
+        byStrike?: Array<SuppliedExposureTotalsFor<G, P> & { strike: number }>;
+        byExpiry?: Array<SuppliedExposureTotalsFor<G, P> & { expiry: string; expiresAt: number }>;
+      };
 
 /**
  * Plain JSON-safe analysis report, directly compatible with saved-analysis report grammar.
  *
  * `G`/`P` follow the `metrics` selection (guaranteed/possible metrics); both default to GEX and DEX,
  * today's report. A GEX+DEX report requires BOTH supplied Greeks on every row that supplies Greeks,
- * so the two metrics are always computed over the same included rows.
+ * so the two metrics are always computed over the same included rows. `B` is the `breakdowns` flag
+ * ({@link SuppliedExposureBreakdownsFor}); by default the report carries both breakdowns.
  */
 export type SuppliedExposureReport<
   G extends SuppliedExposureMetric = SuppliedExposureMetric,
   P extends SuppliedExposureMetric = G,
+  B extends boolean | undefined = undefined,
 > = {
   contributions: SuppliedExposureContributionFor<G, P>[];
   aggregate: SuppliedExposureTotalsFor<G, P>;
-  byStrike: Array<SuppliedExposureTotalsFor<G, P> & { strike: number }>;
-  /** Groups economically identical expiry instants, even when labels use different time zones. */
-  byExpiry: Array<SuppliedExposureTotalsFor<G, P> & { expiry: string; expiresAt: number }>;
-  coverage: {
-    scope: 'suppliedQuotesOnly';
-    status: 'emptyInput' | 'noEligibleQuotes' | 'partialInput' | 'allInputQuotesIncluded';
-    totalQuotes: number;
-    includedQuotes: number;
-    excludedQuotes: number;
-    /** Included / supplied rows; null for an empty chain. Not coverage of an unknown full universe. */
-    fraction: number | null;
-    /** Rows beyond the first matching underlying/type/style/strike/expiry instant, across sources/times. */
-    duplicateContractQuotes: number;
-    /** Included rows beyond the first included matching identity; these can double-count OI. */
-    duplicateIncludedContractQuotes: number;
-    /** Counts overlap when a row has several reasons. */
-    exclusionCounts: Record<SuppliedExposureExclusion, number>;
+} & SuppliedExposureBreakdownsFor<G, P, B> & {
+    coverage: {
+      scope: 'suppliedQuotesOnly';
+      status: 'emptyInput' | 'noEligibleQuotes' | 'partialInput' | 'allInputQuotesIncluded';
+      totalQuotes: number;
+      includedQuotes: number;
+      excludedQuotes: number;
+      /** Included / supplied rows; null for an empty chain. Not coverage of an unknown full universe. */
+      fraction: number | null;
+      /** Rows beyond the first matching underlying/type/style/strike/expiry instant, across sources/times. */
+      duplicateContractQuotes: number;
+      /** Included rows beyond the first included matching identity; these can double-count OI. */
+      duplicateIncludedContractQuotes: number;
+      /** Counts overlap when a row has several reasons. */
+      exclusionCounts: Record<SuppliedExposureExclusion, number>;
+    };
+    assumptions: SuppliedExposureAssumptionsFor<G, P>;
+    diagnostics: Diagnostics;
   };
-  assumptions: SuppliedExposureAssumptionsFor<G, P>;
-  diagnostics: Diagnostics;
-};
 
 /**
  * The metrics a selection guarantees: both when omitted, otherwise the names the selection is certain
@@ -535,6 +567,10 @@ function totals(
  * report as `SuppliedExposureReport` and its input as `SuppliedExposureInput`: `Parameters<typeof
  * exposureFromGreeks>` and `ReturnType<…>` see the selection's general (dynamic) form.
  *
+ * `breakdowns: false` leaves out `byStrike` and `byExpiry` for a caller that aggregates the
+ * contributions itself: no grouping and no per-group exact totals (two thirds of the summation),
+ * with every other field unchanged and `assumptions.breakdowns` echoing the flag.
+ *
  * @example
  * ```ts
  * import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
@@ -557,11 +593,13 @@ function totals(
  */
 export function exposureFromGreeks<
   const S extends readonly SuppliedExposureMetric[] | undefined = undefined,
+  const B extends boolean | undefined = undefined,
 >(
-  request: SuppliedExposureRequest<S>,
+  request: SuppliedExposureRequest<S, B>,
 ): SuppliedExposureReport<
   GuaranteedSuppliedExposureMetrics<S>,
-  PossibleSuppliedExposureMetrics<S>
+  PossibleSuppliedExposureMetrics<S>,
+  B
 > {
   // One loose view of the request: which fields are required depends on the selection, checked below.
   const input = request as unknown as {
@@ -569,9 +607,18 @@ export function exposureFromGreeks<
     market: SuppliedExposureMarket;
     config: Partial<SuppliedExposureConfig>;
     metrics?: unknown;
+    breakdowns?: unknown;
   };
   requireArgumentObject(FN, 'input', input);
-  ensureKnownKeys(FN, 'input', input, ['quotes', 'market', 'config', 'metrics']);
+  ensureKnownKeys(FN, 'input', input, ['quotes', 'market', 'config', 'metrics', 'breakdowns']);
+  if (input.breakdowns !== undefined && typeof input.breakdowns !== 'boolean') {
+    const received = input.breakdowns === null ? 'null' : typeof input.breakdowns;
+    throw new InputError(
+      `${FN}: breakdowns must be true or false when provided; got ${received}. Omit it (or pass true) for byStrike and byExpiry, or pass false to leave them out.`,
+      { code: ErrorCode.InputWrongType, context: { field: 'breakdowns', received } },
+    );
+  }
+  const withBreakdowns = input.breakdowns !== false;
   const { quotes, market, config } = input;
   const selection =
     input.metrics === undefined
@@ -787,7 +834,7 @@ export function exposureFromGreeks<
   );
   const strikes = new Map<number, ContributionRow[]>();
   const expiries = new Map<number, ContributionRow[]>();
-  for (const row of contributions) {
+  for (const row of withBreakdowns ? contributions : []) {
     for (const [groups, key] of [
       [strikes, row.contract.strike],
       [expiries, row.contract.expiresAt],
@@ -850,19 +897,24 @@ export function exposureFromGreeks<
   const report = {
     contributions,
     aggregate,
-    byStrike: [...strikes.entries()]
-      .sort(([a], [b]) => a - b)
-      .map(([strike, rows]) => ({
-        strike,
-        ...totals(rows, `byStrike[${strike}]`, wantGex, wantDex),
-      })),
-    byExpiry: [...expiries.entries()]
-      .sort(([a], [b]) => a - b)
-      .map(([expiresAt, rows]) => ({
-        expiry: new Date(expiresAt).toISOString(),
-        expiresAt,
-        ...totals(rows, `byExpiry[${expiresAt}]`, wantGex, wantDex),
-      })),
+    // Field order is the released report's whether or not the breakdowns are present.
+    ...(withBreakdowns
+      ? {
+          byStrike: [...strikes.entries()]
+            .sort(([a], [b]) => a - b)
+            .map(([strike, rows]) => ({
+              strike,
+              ...totals(rows, `byStrike[${strike}]`, wantGex, wantDex),
+            })),
+          byExpiry: [...expiries.entries()]
+            .sort(([a], [b]) => a - b)
+            .map(([expiresAt, rows]) => ({
+              expiry: new Date(expiresAt).toISOString(),
+              expiresAt,
+              ...totals(rows, `byExpiry[${expiresAt}]`, wantGex, wantDex),
+            })),
+        }
+      : {}),
     coverage: {
       scope: 'suppliedQuotesOnly',
       status:
@@ -906,12 +958,14 @@ export function exposureFromGreeks<
       scenarioRepricing: 'unavailable',
       aggregationPolicy: 'additive-input-rows-no-deduplication',
       ...(selection === undefined ? {} : { metrics: selection }),
+      ...(input.breakdowns === undefined ? {} : { breakdowns: withBreakdowns }),
     },
     diagnostics: { method: 'supplied-greek-accounting', warnings },
   };
   assertFiniteValue(FN, report);
   return report as unknown as SuppliedExposureReport<
     GuaranteedSuppliedExposureMetrics<S>,
-    PossibleSuppliedExposureMetrics<S>
+    PossibleSuppliedExposureMetrics<S>,
+    B
   >;
 }
