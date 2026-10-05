@@ -14,12 +14,12 @@ the preview instructions work from any checkout of this branch. Public hosting i
 
 **Status: pre-1.0, published to npm as `@insiderfinance/totalfinance`** (the optional MCP package
 is not yet published). The release has **two packages**:
-`@insiderfinance/totalfinance@0.1.1` includes every domain, workflows, CLI and HTTP;
-`@insiderfinance/totalfinance-mcp@0.1.1` is the optional MCP server. The main package has no runtime
+`@insiderfinance/totalfinance@0.1.2` includes every domain, workflows, CLI and HTTP;
+`@insiderfinance/totalfinance-mcp@0.1.2` is the optional MCP server. The main package has no runtime
 dependencies; MCP depends on the exact main version and the MCP SDK. Calculations run locally;
 paper execution requires explicit capabilities and is not live trading.
 
-The current release is `0.1.1`: pre-1.0 software, not a 1.0 stability guarantee.
+The current release is `0.1.2`: pre-1.0 software, not a 1.0 stability guarantee.
 [`STABILITY.md`](./STABILITY.md) explains each surface's guarantees. Install the main package from
 npm as below, or use the [source-checkout instructions](#develop). This repository is the canonical
 source home. What's inside:
@@ -69,7 +69,7 @@ Everything under one install: use the `@insiderfinance/totalfinance` umbrella, t
 domain subpaths for portable browser tree shaking:
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.1
+pnpm add @insiderfinance/totalfinance@0.1.2
 ```
 
 ```ts
@@ -107,7 +107,7 @@ workspace.
 Add the optional MCP server when an agent needs it (after publication):
 
 ```sh
-pnpm add @insiderfinance/totalfinance-mcp@0.1.1
+pnpm add @insiderfinance/totalfinance-mcp@0.1.2
 ```
 
 Named imports from `@insiderfinance/totalfinance/<domain>` and supported feature subpaths work too. Installation
@@ -177,7 +177,7 @@ result.diagnostics;
 read-only tools (option pricing/Greeks/IV, strategy analysis, vol surfaces and expected move,
 GEX/flow, any of the 335 TA indicators, performance, VaR, portfolio optimization, calendars,
 crypto funding/carry, bond analytics).
-The checked-in `0.1.1` package is pre-1.0 software. From a checkout with dependencies installed,
+The checked-in `0.1.2` package is pre-1.0 software. From a checkout with dependencies installed,
 build and run the local binary (Node ≥22.13); no npm publication is implied:
 
 ```sh

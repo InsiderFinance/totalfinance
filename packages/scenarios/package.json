@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/scenarios",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cross-domain scenario analysis with explicit targets, shared market state, full revaluation, Taylor attribution, reporting-currency aggregation, and durable replay",
   "license": "Apache-2.0",
   "keywords": [

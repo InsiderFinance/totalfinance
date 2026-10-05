@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TotalFinance local operations: file-backed artifact and job stores and the worker-terminated job runner behind the `totalfinance` command line.",
   "license": "Apache-2.0",
   "keywords": [

@@ -107,7 +107,7 @@ describe('complete public reference', () => {
       [PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME].sort(),
     );
     expect(JSON.stringify(reference.packages)).not.toContain('@totalfinance/');
-    expect(reference.packages.every((pkg) => pkg.version === '0.1.1')).toBe(true);
+    expect(reference.packages.every((pkg) => pkg.version === '0.1.2')).toBe(true);
     expect(JSON.stringify(reference.entries)).not.toContain('@totalfinance/');
   });
 

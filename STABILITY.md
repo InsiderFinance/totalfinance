@@ -1,6 +1,6 @@
 # Stability
 
-TotalFinance `0.1.1` is **pre-1.0 software**, not a 1.0 stability guarantee. Two public packages
+TotalFinance `0.1.2` is **pre-1.0 software**, not a 1.0 stability guarantee. Two public packages
 move together: `@insiderfinance/totalfinance` and optional `@insiderfinance/totalfinance-mcp`.
 This file ships in both artifacts. A local build or version number is not evidence of npm publication.
 

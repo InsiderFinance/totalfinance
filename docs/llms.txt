@@ -32,6 +32,6 @@ Explicit packs are an exact selection, not additions to defaults. Check doctor a
 
 ## Packages
 
-- @insiderfinance/totalfinance @ 0.1.1 — pre-1.0; component maturity varies (see stability policy); 193 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
-- @insiderfinance/totalfinance-mcp @ 0.1.1 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
+- @insiderfinance/totalfinance @ 0.1.2 — pre-1.0; component maturity varies (see stability policy); 193 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
+- @insiderfinance/totalfinance-mcp @ 0.1.2 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
 

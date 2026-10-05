@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TotalFinance MCP server: exposes the TotalFinance engine to AI agents via the Model Context Protocol. Read-only by default.",
   "license": "Apache-2.0",
   "keywords": [

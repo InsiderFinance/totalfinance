@@ -6,10 +6,10 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.1: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.2: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.1
+pnpm add @insiderfinance/totalfinance@0.1.2
 ```
 
 ## Example

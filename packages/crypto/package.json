@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/crypto",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TotalFinance crypto analytics: perpetual-swap funding, dated-futures basis, cash-and-carry, and the perp-vs-future no-arbitrage carry spread. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [

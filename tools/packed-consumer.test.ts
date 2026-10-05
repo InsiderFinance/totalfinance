@@ -521,7 +521,7 @@ beforeAll(() => {
   const versions = new Set(artifacts.map((artifact) => artifact.version));
   if (versions.size !== 1)
     throw new Error('Packed examples require matching main and MCP versions.');
-  expect([...versions]).toEqual(['0.1.1']);
+  expect([...versions]).toEqual(['0.1.2']);
   const source = captureSmokeSource();
   releaseManifest = {
     version: artifacts[0]!.version,

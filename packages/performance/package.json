@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/performance",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TotalFinance performance metrics: returns, Sharpe/Sortino/Calmar, drawdowns. Browser-safe, light imports.",
   "license": "Apache-2.0",
   "keywords": [

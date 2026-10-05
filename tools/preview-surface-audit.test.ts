@@ -109,7 +109,7 @@ describe('public-surface audit — two distributions, private source workspaces'
   it('every member is publishable (not private) and shares one version', () => {
     const versions = new Set(members.map((m) => m.manifest.version));
     expect([...versions]).toHaveLength(1);
-    expect([...versions]).toEqual(['0.1.1']);
+    expect([...versions]).toEqual(['0.1.2']);
     for (const m of members) expect(m.manifest.private ?? false, m.manifest.name).toBe(false);
   });
 });
@@ -146,7 +146,7 @@ describe('FC9 row 6 — metadata (Decision 3), enumerated per package, fails on 
       expect(Object.keys(p.dependencies ?? {}).sort()).toEqual(
         [PUBLIC_PACKAGE_NAME, '@modelcontextprotocol/sdk'].sort(),
       );
-      expect(p.dependencies?.[PUBLIC_PACKAGE_NAME]).toBe('0.1.1');
+      expect(p.dependencies?.[PUBLIC_PACKAGE_NAME]).toBe('0.1.2');
     }
     // Public metadata may contain neither private aliases nor workspace protocols.
     for (const [dep, range] of Object.entries(p.dependencies ?? {})) {
@@ -239,7 +239,7 @@ describe('FC9 row 6 — the stability statement (Decision 2)', () => {
   it('STABILITY.md exists at the root, names the three tiers, and states the series', () => {
     for (const tier of ['stable-by-law', 'preview', 'experimental'])
       expect(rootStability).toContain(`**${tier}**`);
-    expect(rootStability).toContain('0.1.1');
+    expect(rootStability).toContain('0.1.2');
     expect(rootStability).not.toContain('0.1.0-preview.N');
   });
 
@@ -368,7 +368,7 @@ describe('FC9 row 6 — community and security files (Decision 5) and rollback o
 
   it('SECURITY.md names the supported release and says how to report privately', () => {
     const text = readFileSync(join(ROOT, 'SECURITY.md'), 'utf8');
-    expect(text).toContain('0.1.1');
+    expect(text).toContain('0.1.2');
     expect(text).not.toContain('0.1.0-preview.N');
     expect(text).toContain('security/advisories/new');
   });

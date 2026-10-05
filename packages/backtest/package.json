@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/backtest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TotalFinance backtesting: a vectorized research engine and an event-driven execution simulator (broker, order types, margin/shorting, costs, corporate actions), walk-forward, tear sheets, and implementation-risk diagnostics. Browser-safe.",
   "license": "Apache-2.0",
   "keywords": [
