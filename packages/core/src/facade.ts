@@ -180,22 +180,32 @@ function doubleFromUnits(units: bigint): number {
  * `Number.MAX_VALUE`. Non-finite addends retain ordinary IEEE-754 propagation semantics.
  */
 export function stableSum(addends: readonly number[]): number {
+  // Indexed loops and a plain swap: the destructuring swap and iterator protocol cost a third of
+  // the time on the per-row totals of a supplied-exposure report. Same algorithm, same order, same
+  // result bit for bit.
   const partials: number[] = [];
+  const count = addends.length;
   let needsExactFallback = false;
 
-  addendsLoop: for (const addend of addends) {
+  addendsLoop: for (let a = 0; a < count; a++) {
+    const addend = addends[a]!;
     if (!Number.isFinite(addend)) {
       let ieeeTotal = 0;
-      for (const value of addends) ieeeTotal += value;
+      for (let b = 0; b < count; b++) ieeeTotal += addends[b]!;
       return ieeeTotal;
     }
 
     let next = addend;
     let write = 0;
-    for (const existing of partials) {
+    const live = partials.length;
+    for (let p = 0; p < live; p++) {
+      const existing = partials[p]!;
       let larger = next;
       let smaller = existing;
-      if (Math.abs(larger) < Math.abs(smaller)) [larger, smaller] = [smaller, larger];
+      if (Math.abs(larger) < Math.abs(smaller)) {
+        larger = existing;
+        smaller = next;
+      }
       const high = larger + smaller;
       if (!Number.isFinite(high)) {
         needsExactFallback = true;
@@ -211,7 +221,7 @@ export function stableSum(addends: readonly number[]): number {
 
   if (!needsExactFallback) {
     let total = 0;
-    for (const partial of partials) total += partial;
+    for (let p = 0; p < partials.length; p++) total += partials[p]!;
     return total;
   }
 
@@ -279,16 +289,35 @@ function collectNonFinitePaths(
   out: string[],
 ): void {
   const seen = new Set<unknown>();
-  const walk = (v: unknown, path: string, skip: number): void => {
+  // The path to the value being visited, kept as a stack of segments and formatted only for a hit.
+  // Formatting `${path}.${key}` at every node cost a quarter of a large report's construction, for
+  // strings a valid result — nearly every result — never uses. The paths reported are unchanged.
+  const segmentKeys: unknown[] = [];
+  const segmentIsIndex: boolean[] = [];
+  const pathHere = (): string => {
+    let path = root;
+    for (let s = 0; s < segmentKeys.length; s++) {
+      path += segmentIsIndex[s] ? `[${String(segmentKeys[s])}]` : `.${String(segmentKeys[s])}`;
+    }
+    return path;
+  };
+  const child = (val: unknown, key: unknown, isIndex: boolean): void => {
+    segmentKeys.push(key);
+    segmentIsIndex.push(isIndex);
+    walk(val, 0);
+    segmentKeys.pop();
+    segmentIsIndex.pop();
+  };
+  const walk = (v: unknown, skip: number): void => {
     if (out.length >= 8) return;
     if (typeof v === 'number') {
-      if (!Number.isFinite(v)) out.push(path);
+      if (!Number.isFinite(v)) out.push(pathHere());
       return;
     }
     // JSON.stringify THROWS on a BigInt — a "successful" envelope carrying one is not serializable.
     // Checked before the cycle set, whose SameValueZero identity would dedupe equal bigints.
     if (typeof v === 'bigint') {
-      out.push(path);
+      out.push(pathHere());
       return;
     }
     if (v === null || typeof v !== 'object') return;
@@ -298,7 +327,7 @@ function collectNonFinitePaths(
     // silently skip it — and JSON.stringify corrupts it to `{}`. Opaque bytes in a numeric result
     // envelope are a defect, not data: report the path rather than guess at an interpretation.
     if (v instanceof DataView) {
-      out.push(path);
+      out.push(pathHere());
       return;
     }
     // Map/Set contents vanish under JSON.stringify (`{}`), so an undisclosed NaN inside one would
@@ -307,7 +336,7 @@ function collectNonFinitePaths(
       let i = 0;
       for (const entry of v) {
         const [k, val] = v instanceof Map ? (entry as [unknown, unknown]) : [i++, entry];
-        walk(val, `${path}[${String(k)}]`, 0);
+        child(val, k, true);
         if (out.length >= 8) return;
       }
       return;
@@ -315,7 +344,7 @@ function collectNonFinitePaths(
     if (Array.isArray(v) || ArrayBuffer.isView(v)) {
       const arr = v as ArrayLike<unknown>;
       for (let i = skip; i < arr.length; i++) {
-        walk(arr[i], `${path}[${i}]`, 0);
+        child(arr[i], i, true);
         if (out.length >= 8) return;
       }
       return;
@@ -327,15 +356,18 @@ function collectNonFinitePaths(
     const sentinel =
       (disc.direction === 0 && ('mid' in v || 'level' in v)) ||
       (disc.code === 0 && 'priceSwings' in v);
-    for (const [k, val] of Object.entries(v)) {
+    const record = v as Record<string, unknown>;
+    const keys = Object.keys(record);
+    for (let k = 0; k < keys.length; k++) {
+      const key = keys[k]!;
       // Fields outside the documented set are checked even here: the disclosure covers the
       // documented slots, not whatever else a producer attaches.
-      if (sentinel && SENTINEL_NONE_FIELDS.includes(`|${k}|`)) continue;
-      walk(val, `${path}.${k}`, 0);
+      if (sentinel && SENTINEL_NONE_FIELDS.includes(`|${key}|`)) continue;
+      child(record[key], key, false);
       if (out.length >= 8) return;
     }
   };
-  walk(value, root, skipLeading);
+  walk(value, skipLeading);
 }
 
 /**

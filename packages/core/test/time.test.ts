@@ -238,3 +238,27 @@ describe('usEquityMarketDayIndex — the ONE America/New_York day boundary', () 
     ); // 00:00 ET Jan 16
   });
 });
+
+describe('optionExpiryToMs remembers parsed labels, never failures', () => {
+  it('returns the same instants from the cache, past its bound, and throws on every bad label', () => {
+    expect(optionExpiryToMs('2026-09-18')).toBe(Date.UTC(2026, 8, 18, 20));
+    expect(optionExpiryToMs('2026-09-18')).toBe(Date.UTC(2026, 8, 18, 20));
+    // More distinct labels than the cache holds: every one still resolves exactly.
+    for (let minute = 0; minute < 3000; minute++) {
+      const at = Date.UTC(2027, 0, 4, 14, 0) + minute * 60_000;
+      const label = new Date(at).toISOString().replace('.000Z', 'Z');
+      expect(optionExpiryToMs(label)).toBe(at);
+      expect(optionExpiryToMs(label)).toBe(at);
+    }
+    // A failure is not cached: the same bad label teaches every time.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      let error: unknown;
+      try {
+        optionExpiryToMs('2026-02-31');
+      } catch (caught) {
+        error = caught;
+      }
+      expect(isQuantError(error)).toBe(true);
+    }
+  });
+});
