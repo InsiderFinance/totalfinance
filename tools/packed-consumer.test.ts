@@ -52,6 +52,12 @@ import {
  */
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
+/** The release this checkout carries; every pin below must agree with it. */
+const RELEASE_VERSION = (
+  JSON.parse(readFileSync(join(ROOT, 'distribution/totalfinance/package.json'), 'utf8')) as {
+    version: string;
+  }
+).version;
 const PKG_DIR = join(ROOT, 'packages');
 const TSC = join(ROOT, 'node_modules', '.bin', 'tsc');
 // The full, pretty-printed trade OpenAPI exceeds Node's default 1 MiB capture buffer.
@@ -521,7 +527,7 @@ beforeAll(() => {
   const versions = new Set(artifacts.map((artifact) => artifact.version));
   if (versions.size !== 1)
     throw new Error('Packed examples require matching main and MCP versions.');
-  expect([...versions]).toEqual(['0.1.2']);
+  expect([...versions]).toEqual([RELEASE_VERSION]);
   const source = captureSmokeSource();
   releaseManifest = {
     version: artifacts[0]!.version,

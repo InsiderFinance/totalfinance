@@ -63,6 +63,26 @@ token under separate maintainer authority. Future dispatches use `bootstrap=fals
 If only main succeeded, retain the token only as needed for the explicitly approved MCP recovery;
 follow the rollback runbook. Do not bootstrap by publishing dummy versions or unrelated packages.
 
+## 0. The one-command release (maintainer's machine)
+
+From a clean, up-to-date `main` with pending changesets, and with version-change authorization:
+
+```sh
+tools/release/release.sh            # the bump the changesets ask for
+tools/release/release.sh --patch    # or release every pending change as a patch (--minor likewise)
+```
+
+It versions the public pair (`changeset version`, `publication:update`, the lockfile), rewrites the
+version in README, SECURITY and STABILITY, rebuilds, regenerates what carries the version (naming
+manifest, API reports, package READMEs, llms docs, OpenAPI), runs the release-pin checks, commits
+`Release <version>`, pushes `main`, and publishes the main package with
+`tools/release/publish-npm.sh` (a clean build, `release:dry-run --skip-ci --expect-version`, then
+`npm publish ./release/<tarball> --provenance=false`). npm may ask for a one-time password.
+`--no-publish` stops after the push; `--dry-run` stops before committing. A rehearsal took about a
+minute end to end. Hosted CI runs the full suites and `regen:check` on the pushed commit.
+
+The sections below are the hosted, provenance-attested release path and its checks.
+
 ## 1. Prepare one reviewed release commit
 
 The initial distributions and runtime version metadata are **0.1.0** already. Changesets has one

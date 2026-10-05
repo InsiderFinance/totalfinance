@@ -25,6 +25,12 @@ import {
 } from './public-reference.js';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
+/** The release this checkout carries; every pin below must agree with it. */
+const RELEASE_VERSION = (
+  JSON.parse(readFileSync(resolve(ROOT, 'distribution/totalfinance/package.json'), 'utf8')) as {
+    version: string;
+  }
+).version;
 const hash = (value: unknown): string =>
   createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
@@ -107,7 +113,7 @@ describe('complete public reference', () => {
       [PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME].sort(),
     );
     expect(JSON.stringify(reference.packages)).not.toContain('@totalfinance/');
-    expect(reference.packages.every((pkg) => pkg.version === '0.1.2')).toBe(true);
+    expect(reference.packages.every((pkg) => pkg.version === RELEASE_VERSION)).toBe(true);
     expect(JSON.stringify(reference.entries)).not.toContain('@totalfinance/');
   });
 
