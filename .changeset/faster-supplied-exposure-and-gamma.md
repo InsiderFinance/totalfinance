@@ -3,7 +3,15 @@
 '@insiderfinance/totalfinance-mcp': patch
 ---
 
-Faster supplied-Greek exposure and gamma sweeps; every result is unchanged bit for bit.
+Faster supplied-Greek exposure and gamma sweeps, and supplied exposure without breakdowns.
+
+- `exposureFromGreeks({ …, breakdowns: false })` leaves `byStrike` and `byExpiry` out of the report,
+  for a caller that aggregates the contributions itself: no grouping and no per-group exact totals
+  (two thirds of the summation). Contributions, aggregate, coverage and diagnostics are unchanged;
+  `assumptions.breakdowns` echoes the flag. Omitted or `true` is the released report. The report
+  type follows the flag (`SuppliedExposureBreakdownsFor`).
+
+Every existing result is unchanged bit for bit:
 
 - `exposureFromGreeks` is about 36% faster on a large chain (8,114 quotes: 41.5 → 26.7 ms). Exact
   summation (`stableSum`) uses indexed loops instead of a destructuring swap and the iterator
