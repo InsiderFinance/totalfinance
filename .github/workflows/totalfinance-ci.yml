@@ -93,7 +93,7 @@ jobs:
       # Every shard builds: tests read the built distribution and the site.
       - run: pnpm build && pnpm site:build
 
-      # This shard's third of the test files. `tools/packed-consumer.test.ts` packs real tarballs,
+      # This shard's share of the test files. `tools/packed-consumer.test.ts` packs real tarballs,
       # installs them, and imports them as ESM, CJS, through esbuild and under strict TypeScript
       # resolution, so the published-consumer experience is covered here rather than in a separate job.
       # No NODE_OPTIONS here on purpose. The conformance suite's heap requirement is declared in
@@ -112,7 +112,8 @@ jobs:
         if: ${{ !cancelled() && github.event_name != 'pull_request' }}
         with:
           name: vitest-blob-node-${{ matrix.node }}-shard-${{ matrix.shard }}
-          path: .vitest-reports/*
+          path: .vitest-reports/blob-${{ matrix.shard }}-5.json
+          if-no-files-found: error
           include-hidden-files: true
           retention-days: 1
 
@@ -183,6 +184,10 @@ jobs:
           pattern: vitest-blob-node-${{ matrix.node }}-shard-*
           path: .vitest-reports
           merge-multiple: true
+
+      # The download pattern alone does not prove completeness: Vitest will merge a partial set.
+      - name: verify every coverage shard arrived
+        run: pnpm exec tsx tools/test-support/verify-coverage-reports.ts .vitest-reports 5
 
       - run: pnpm exec vitest run --merge-reports --coverage
 

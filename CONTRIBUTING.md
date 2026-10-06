@@ -38,7 +38,50 @@ api:update → readme → llms → bundle:update → openapi:update → docs:upd
 
 ## The landing standard
 
-A change is ready when all of these hold, checked by exit code, never through a pipe:
+### Pull requests: temporary maintainer-only fast gate
+
+Approved 2026-10-06 while the maintainers are the only contributors; revisit before accepting
+outside contributions. An ordinary PR may land after review and all **current-head** PR checks pass:
+
+- The whole test suite on minimum-supported Node 22.13.0, split into five duration-balanced shards.
+  Coverage is not collected, and enforcement regeneration runs once: the drift assertion stays,
+  but the second-generation determinism assertion waits for the full gate.
+- Format, lint, TypeScript checks, builds, site tests, and the API-report check.
+- Clean-repository artifact regeneration on `.nvmrc` and the local-registry release rehearsal.
+
+This is a deliberate reduction in pre-merge checks, not equivalent evidence delivered faster.
+Node 24/26-only failures, a coverage drop, or a determinism regression can first appear after merge.
+Fix a red `main` before merging unrelated work. Keep any controlling trackers consistent and name
+the actual verified commit; do not describe a fast run as a full CI pass.
+
+### Full gate: main, daily, manual, and before changing the gate itself
+
+Pushes to `main`, the daily 09:23 UTC schedule, and manual runs test Node 22.13.0, 24.x, and 26.x.
+Each version has five test shards with coverage and both independent enforcement generations.
+The merge job requires all five nonempty report files before enforcing the unchanged coverage
+floors. Static checks run once per Node version; regeneration and the release rehearsal also run.
+
+**Before merging changes to CI, sharding/test selection, coverage, enforcement generation, or
+supported Node versions, run the full workflow on the PR branch and require every job to pass at
+the exact proposed head.** A green fast PR run is not sufficient to verify a change to the gate.
+Use Actions → TotalFinance CI → Run workflow → select the PR branch, or:
+
+```sh
+gh workflow run totalfinance-ci.yml --repo InsiderFinance/totalfinance --ref <pr-branch>
+```
+
+Record the run URL and head SHA in the PR. A later code commit requires a new run. Do not wait until
+after merging to discover whether a changed full-gate path works.
+
+### Local full verification and releases
+
+`pnpm run ci` is unchanged: it runs the full local checks, including coverage and determinism.
+Use targeted checks while iterating; rely on the hosted matrix for cross-version verification.
+Do not set `TOTALFINANCE_PR_CHECKS` or `TOTALFINANCE_COVERAGE_SHARD` in a local full run or release
+environment; they are workflow-internal switches for fast PR tests and partial coverage shards.
+
+Release candidates still require the full gate, plus the independent repeat below. Check exit
+codes directly, never through a pipe:
 
 1. `pnpm run ci` exits 0 — format, lint, typecheck, build, coverage, and the API-report check.
 2. `pnpm api:check` exits 0 on its own.

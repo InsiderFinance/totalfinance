@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { fileWeight, partitionByDuration } from './duration-sequencer.js';
 
-describe('CI shards balanced by duration', () => {
+describe.each([1, 3, 5])('CI shards balanced by duration (%i shards)', (count) => {
   const paths = Array.from(
     { length: 579 },
     (_, i) => `packages/p${i % 20}/test/t${i}.test.ts`,
@@ -13,14 +13,14 @@ describe('CI shards balanced by duration', () => {
   ]);
 
   it('assigns every file to exactly one shard, the same way every time', () => {
-    const shards = partitionByDuration(paths, 3);
+    const shards = partitionByDuration(paths, count);
     expect(shards.flat().sort()).toEqual([...paths].sort());
     expect(new Set(shards.flat()).size).toBe(paths.length);
-    expect(partitionByDuration([...paths].reverse(), 3)).toEqual(shards);
+    expect(partitionByDuration([...paths].reverse(), count)).toEqual(shards);
   });
 
   it('keeps the slowest shard within the largest single file of the average', () => {
-    const shards = partitionByDuration(paths, 3);
+    const shards = partitionByDuration(paths, count);
     const loads = shards.map((shard) => shard.reduce((sum, path) => sum + fileWeight(path), 0));
     const average = loads.reduce((sum, load) => sum + load, 0) / loads.length;
     const largest = Math.max(...paths.map((path) => fileWeight(path)));
