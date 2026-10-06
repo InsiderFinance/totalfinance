@@ -2132,6 +2132,41 @@ export function unionSites(
   fields: readonly string[],
   producers?: Producers,
 ): UnionSite[] {
+  let byFields = unionSitesMemo.get(parameters);
+  if (!byFields) unionSitesMemo.set(parameters, (byFields = new Map()));
+  let byProducers = byFields.get(fields);
+  if (!byProducers) byFields.set(fields, (byProducers = new Map()));
+  let sites = byProducers.get(producers);
+  if (!sites)
+    byProducers.set(producers, (sites = computeUnionSites(parameters, fields, producers)));
+  return [...sites];
+}
+
+/**
+ * `unionSites`, remembered per declaration object.
+ *
+ * `realizationGaps` asks for a callable's sites once per synthesized fixture, and the harness
+ * synthesizes a fixture per variant per attempt. Each answer enumerates every variant and walks the
+ * declaration once per variant, so recomputing it made a boundary cost the square of its variant
+ * count: 37–50 seconds each for the portfolio event and agent-bench boundaries, about two thirds of a
+ * whole enforcement generation.
+ *
+ * The answer is a pure function of the three arguments. It reads declarations only — no synthesis,
+ * so no minted identities move — and the harness never mutates a declaration it read from the
+ * committed inventory. Keyed by object identity, so a caller holding a different declaration object
+ * (every test that builds one) gets its own answer, never a stale one. Callers get a copy of the
+ * array; the sites themselves are shared and read-only.
+ */
+const unionSitesMemo = new WeakMap<
+  readonly SynthesisParameter[],
+  Map<readonly string[], Map<Producers | undefined, UnionSite[]>>
+>();
+
+function computeUnionSites(
+  parameters: readonly SynthesisParameter[],
+  fields: readonly string[],
+  producers?: Producers,
+): UnionSite[] {
   /**
    * Every site reachable under ANY selection, not just the canonical walk's.
    *

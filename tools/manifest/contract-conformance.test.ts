@@ -54,7 +54,9 @@ import {
  * Re-measured 2026-09-16 (5,318 candidates): one generation is ~360 seconds in isolation and ran past
  * 2,200 seconds inside `pnpm run ci` (coverage instrumentation plus the rest of the suite in parallel),
  * so 1,200 seconds no longer covered the same one-to-two generations. 2,400 seconds does; the CI job
- * timeout remains the real backstop.
+ * timeout remains the real backstop. Re-measured 2026-10-06, after `unionSites` was remembered per
+ * declaration: one generation is ~75 seconds in isolation and the record is byte-identical. The bound
+ * stays where it is, because it is a hang backstop rather than a target.
  */
 const ENFORCEMENT_BUDGET_MS = 2_400_000;
 /** Two full contract-inventory builds. Generous on purpose: it backstops a hang, it is not a target. */
@@ -74,19 +76,25 @@ const INVENTORY_BUDGET_MS = 300_000;
  * run on `Timeout calling "onTaskUpdate"` with every test passing. Moving work to another process does
  * not help if you then block waiting for it.
  *
- * The FIRST result is memoized and shared, so the file spawns two generations rather than three: the
- * drift gate needs one, and the determinism check needs one more to compare against. Memoizing is safe
- * here — unlike the in-process version it once replaced — because what is retained is a parsed record
- * and a hash, not a live module graph.
+ * The file needs two generations, and they START TOGETHER. The drift gate needs one, and the
+ * determinism check needs a second, independent one to compare against. Each runs in its own process,
+ * so started together the pair costs one generation of wall time rather than two: this file was the
+ * longest single file in hosted CI, and a test file runs on one worker, so its length was the floor
+ * under the whole suite's. One generation peaks near 900 MB resident (measured 2026-10-06), so two at
+ * once fit any runner. Sharing the results is safe here — unlike the in-process version this once
+ * replaced — because what is retained is a parsed record and a hash, not a live module graph.
  */
 type EnforcementRun = {
   record: Awaited<ReturnType<typeof buildEnforcementRecord>>;
   digest: string;
 };
-let firstRun: Promise<EnforcementRun> | null = null;
+let bothRuns: Promise<[EnforcementRun, EnforcementRun]> | null = null;
+function enforcementRuns(): Promise<[EnforcementRun, EnforcementRun]> {
+  bothRuns ??= Promise.all([generateEnforcement(), generateEnforcement()]);
+  return bothRuns;
+}
 function enforcementOnce(): Promise<EnforcementRun> {
-  firstRun ??= generateEnforcement();
-  return firstRun;
+  return enforcementRuns().then(([first]) => first);
 }
 
 async function generateEnforcement(): Promise<EnforcementRun> {
@@ -1020,7 +1028,7 @@ describe('public contract inventory (Phase 3B.0)', () => {
        * gate above already proves. Excluded by NAME from a curated list so the exemption cannot quietly
        * grow to cover a real non-determinism.
        */
-      const [first, second] = [await enforcementOnce(), await generateEnforcement()];
+      const [first, second] = await enforcementRuns();
       expect(
         first.digest,
         `two independent generations of the enforcement record disagree. The digest covers the FULL ` +

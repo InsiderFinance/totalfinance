@@ -33,10 +33,10 @@ jobs:
   ci:
     name: ci (node ${{ matrix.node }})
     runs-on: ubuntu-latest
-    # The contract-conformance suite regenerates the enforcement record in-process more than once, and
-    # one generation is ~190s of real library calls. The full run is ~12 minutes on the development
-    # machine and slower on the oldest supported Node, so this is headroom rather than a target — and it
-    # is the real backstop for a hung run, which is why the in-test budgets do not need to be tight.
+    # The contract-conformance suite generates the enforcement record twice, in two child processes
+    # started together; one generation is ~75s of real library calls on the development machine
+    # (2026-10-06). This is headroom rather than a target — and it is the real backstop for a hung run,
+    # which is why the in-test budgets do not need to be tight.
     timeout-minutes: 60
     strategy:
       # Every version reports. Stopping at the first failure hides whether a break is universal or
