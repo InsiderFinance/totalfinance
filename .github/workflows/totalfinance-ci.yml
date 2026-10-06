@@ -30,8 +30,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Everything `pnpm run ci` runs, on every supported Node, split across three machines per version.
+  #
+  # One job per version ran the whole suite on a 4-core runner at `maxWorkers: '50%'` — two test
+  # workers — and took 19–39 minutes (2026-10-06). Raising the worker count on that one machine would
+  # bring back the CPU and memory oversubscription `vitest.config.ts` caps it against (WS1.16), so the
+  # parallelism comes from more machines instead: each version's test files are sharded three ways,
+  # and every shard runs on its own runner with the same two workers.
+  #
+  # The non-test steps of `pnpm run ci` are spread across the shards so no shard carries them all; each
+  # still runs once per version. Coverage is collected per shard and its floor enforced once per version
+  # in `coverage`, over the merged blobs (see `vitest.config.ts`).
   ci:
-    name: ci (node ${{ matrix.node }})
+    name: ci (node ${{ matrix.node }}, shard ${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
     # The contract-conformance suite generates the enforcement record twice, in two child processes
     # started together; one generation is ~75s of real library calls on the development machine
@@ -44,6 +55,7 @@ jobs:
       fail-fast: false
       matrix:
         node: ['22.13.0', '24.x', '26.x']
+        shard: [1, 2, 3]
 
     steps:
       - uses: actions/checkout@v4
@@ -64,16 +76,73 @@ jobs:
       # install that may resolve a newer patch is an install that may rewrite a generated artifact.
       - run: pnpm install --frozen-lockfile
 
-      # `pnpm run ci` is the whole suite: format, lint, typecheck, build, tests with coverage, and the
-      # API report. That includes `tools/packed-consumer.test.ts`, which packs real tarballs, installs
-      # them, and imports them as ESM, CJS, through esbuild and under strict TypeScript resolution — so
-      # the published-consumer experience is covered here rather than in a separate job.
-      # No NODE_OPTIONS here on purpose. The conformance suite needs a larger heap than Node's 4 GB
-      # default — it regenerates the enforcement record in-process more than once — and that requirement
-      # is declared in `vitest.config.ts` (`poolOptions.*.execArgv`), where it reaches the pooled child
-      # that actually runs out. Setting it here as well would make `pnpm run ci` pass in CI and fail on
-      # a contributor's machine, which is how the reviewer hit it.
-      - run: pnpm run ci
+      # The static half of `pnpm run ci`, once per version, spread so no shard waits on all of it.
+      - if: matrix.shard == 1
+        run: pnpm format:check && pnpm lint
+      - if: matrix.shard == 2
+        run: pnpm typecheck && pnpm site:typecheck
+
+      # Every shard builds: tests read the built distribution and the site.
+      - run: pnpm build && pnpm site:build
+
+      - if: matrix.shard == 3
+        run: pnpm site:test && pnpm api:check
+
+      # This shard's third of the test files. `tools/packed-consumer.test.ts` packs real tarballs,
+      # installs them, and imports them as ESM, CJS, through esbuild and under strict TypeScript
+      # resolution, so the published-consumer experience is covered here rather than in a separate job.
+      # No NODE_OPTIONS here on purpose. The conformance suite's heap requirement is declared in
+      # `vitest.config.ts` (`poolOptions.*.execArgv`) and in the child processes it spawns, where it
+      # reaches the processes that need it. Setting it here as well would make CI pass where a
+      # contributor's `pnpm run ci` fails, which is how a reviewer once hit it.
+      - name: tests (shard ${{ matrix.shard }} of 3)
+        env:
+          TOTALFINANCE_COVERAGE_SHARD: '1'
+        run: pnpm exec vitest run --coverage --reporter=default --reporter=blob --shard=${{ matrix.shard }}/3
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: vitest-blob-node-${{ matrix.node }}-shard-${{ matrix.shard }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          retention-days: 1
+
+  # The coverage floor, once per version, over the merged shards. Merging reproduces the unsharded
+  # totals exactly (measured 2026-10-06), and it reports every shard's test results again, so a
+  # failed shard fails here too.
+  coverage:
+    name: coverage (node ${{ matrix.node }})
+    needs: ci
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.13.0', '24.x', '26.x']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: vitest-blob-node-${{ matrix.node }}-shard-*
+          path: .vitest-reports
+          merge-multiple: true
+
+      - run: pnpm exec vitest run --merge-reports --coverage
 
   # The release rehearsal (Stage 5A, Decision 9): the dry-run packs the fixed group and writes the hash
   # manifest, the tarballs are published into a Verdaccio started in this job, and the registry smoke

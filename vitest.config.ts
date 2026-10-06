@@ -380,12 +380,22 @@ export default defineConfig({
       // `pnpm test:coverage` (wired into `pnpm run ci`) without flaking on normal variation. These are
       // GLOBAL over executed files — `all:false` is retained because istanbul's static pass does not
       // reconcile with this monorepo's `@totalfinance/*`→source aliases (it would report every file 0%).
-      thresholds: {
-        statements: 93,
-        branches: 82,
-        functions: 93,
-        lines: 93,
-      },
+      //
+      // A hosted CI SHARD (`vitest run --shard=i/n --reporter=blob`) runs part of the suite, so its
+      // coverage is partial by design and the floor would fail every shard. The shard jobs set
+      // TOTALFINANCE_COVERAGE_SHARD=1; the floor is enforced once, by `vitest --merge-reports
+      // --coverage` over every shard's blob, which reproduces the unsharded totals exactly
+      // (measured 2026-10-06). `pnpm run ci` sets nothing, so a local run enforces it as before.
+      ...(process.env['TOTALFINANCE_COVERAGE_SHARD'] === '1'
+        ? {}
+        : {
+            thresholds: {
+              statements: 93,
+              branches: 82,
+              functions: 93,
+              lines: 93,
+            },
+          }),
     },
   },
 });
