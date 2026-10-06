@@ -19,6 +19,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # The full matrix once a day as well, so a new Node 24.x/26.x patch release is caught without a push.
+  schedule:
+    - cron: '23 9 * * *'
   workflow_dispatch:
 
 permissions:
@@ -29,33 +32,44 @@ concurrency:
   group: totalfinance-ci-${{ github.ref }}
   cancel-in-progress: true
 
+# TWO DEPTHS (Trey, 2026-10-06: "right now we're the only users"; revisit before outside contributors).
+#
+#   pull_request   the fast check: the whole test suite on the MINIMUM supported Node only, five
+#                  shards, no coverage, one enforcement generation (TOTALFINANCE_PR_CHECKS), plus
+#                  the static checks, the clean-checkout regeneration and the release rehearsal.
+#   main, daily,   the full gate: every supported Node, coverage with its floor, and the
+#   manual         enforcement generator's determinism check.
+#
+# A red `main` is fixed before anything else merges.
+
 jobs:
-  # Everything `pnpm run ci` runs, on every supported Node, split across three machines per version.
+  # Everything `pnpm run ci` runs, split across five machines per Node version.
   #
   # One job per version ran the whole suite on a 4-core runner at `maxWorkers: '50%'` — two test
   # workers — and took 19–39 minutes (2026-10-06). Raising the worker count on that one machine would
   # bring back the CPU and memory oversubscription `vitest.config.ts` caps it against (WS1.16), so the
-  # parallelism comes from more machines instead: each version's test files are sharded three ways,
-  # and every shard runs on its own runner with the same two workers.
+  # parallelism comes from more machines instead: each version's test files are sharded five ways,
+  # balanced by measured duration, and every shard runs on its own runner with the same two workers.
   #
   # The non-test steps of `pnpm run ci` run once per version in `static`, in parallel with the shards,
   # so no shard waits on them. Coverage is collected per shard and its floor enforced once per version
   # in `coverage`, over the merged blobs (see `vitest.config.ts`).
   ci:
-    name: ci (node ${{ matrix.node }}, shard ${{ matrix.shard }}/3)
+    name: ci (node ${{ matrix.node }}, shard ${{ matrix.shard }}/5)
     runs-on: ubuntu-latest
-    # The contract-conformance suite generates the enforcement record twice, in two child processes
-    # started together; one generation is ~75s of real library calls on the development machine
-    # (2026-10-06). This is headroom rather than a target — and it is the real backstop for a hung run,
-    # which is why the in-test budgets do not need to be tight.
+    # `tools/manifest/enforcement-regeneration.test.ts` generates the enforcement record in child
+    # processes: one on a pull request, two started together on the full gate. One generation is ~75s
+    # of real library calls on the development machine (2026-10-06). This is headroom rather than a
+    # target — and it is the real backstop for a hung run, which is why the in-test budgets do not need
+    # to be tight.
     timeout-minutes: 60
     strategy:
       # Every version reports. Stopping at the first failure hides whether a break is universal or
       # version-specific, which is the single most useful thing a matrix can tell you.
       fail-fast: false
       matrix:
-        node: ['22.13.0', '24.x', '26.x']
-        shard: [1, 2, 3]
+        node: ${{ fromJSON(github.event_name == 'pull_request' && '["22.13.0"]' || '["22.13.0", "24.x", "26.x"]') }}
+        shard: [1, 2, 3, 4, 5]
 
     steps:
       - uses: actions/checkout@v4
@@ -86,13 +100,16 @@ jobs:
       # `vitest.config.ts` (`poolOptions.*.execArgv`) and in the child processes it spawns, where it
       # reaches the processes that need it. Setting it here as well would make CI pass where a
       # contributor's `pnpm run ci` fails, which is how a reviewer once hit it.
-      - name: tests (shard ${{ matrix.shard }} of 3)
+      - name: tests (shard ${{ matrix.shard }} of 5)
         env:
           TOTALFINANCE_COVERAGE_SHARD: '1'
-        run: pnpm exec vitest run --coverage --reporter=default --reporter=blob --shard=${{ matrix.shard }}/3
+          TOTALFINANCE_PR_CHECKS: ${{ github.event_name == 'pull_request' && '1' || '0' }}
+        run: >-
+          pnpm exec vitest run ${{ github.event_name == 'pull_request' && ' ' || '--coverage' }}
+          --reporter=default --reporter=blob --shard=${{ matrix.shard }}/5
 
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event_name != 'pull_request' }}
         with:
           name: vitest-blob-node-${{ matrix.node }}-shard-${{ matrix.shard }}
           path: .vitest-reports/*
@@ -109,7 +126,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22.13.0', '24.x', '26.x']
+        node: ${{ fromJSON(github.event_name == 'pull_request' && '["22.13.0"]' || '["22.13.0", "24.x", "26.x"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -138,7 +155,8 @@ jobs:
   coverage:
     name: coverage (node ${{ matrix.node }})
     needs: ci
-    if: ${{ !cancelled() }}
+    # The full gate only: pull requests run without coverage (see TWO DEPTHS above).
+    if: ${{ !cancelled() && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:

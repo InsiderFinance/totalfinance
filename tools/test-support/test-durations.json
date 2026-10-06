@@ -1,15 +1,16 @@
 {
-  "_note": "Seconds per test file, measured in hosted CI (Node 22.13.0, run of ci/shard-tests c4fac6b, 2026-10-06). Only files of 5 s or more; every other file counts as the default. Used only to balance CI shards: a stale number costs balance, never coverage. Refresh from a hosted run's per-file times when shards drift apart.",
+  "_note": "Seconds per test file, measured in hosted CI (Node 22.13.0, run of ci/shard-tests c4fac6b, 2026-10-06). Only files of 5 s or more; every other file counts as the default. Used only to balance CI shards: a stale number costs balance, never coverage. Refresh from a hosted run's per-file times when shards drift apart. contract-conformance was split on 2026-10-06; its two entries come from that run's per-test times (the drift test, 322 s, moved to enforcement-regeneration).",
   "defaultSeconds": 0.5,
   "collectSeconds": 1,
   "files": {
-    "tools/manifest/contract-conformance.test.ts": 331,
+    "tools/manifest/enforcement-regeneration.test.ts": 322,
     "tools/packed-consumer.test.ts": 207,
     "tools/transport-parity.test.ts": 97,
     "packages/options/test/hardening-engines.test.ts": 97,
     "tools/public-reference.test.ts": 70,
     "tools/manifest/declared-coverage.test.ts": 70,
     "tools/first-touch/overflow-sweep.test.ts": 62,
+    "tools/manifest/contract-conformance.test.ts": 55,
     "packages/options/test/american-engines.test.ts": 37,
     "packages/cli/test/bin.test.ts": 23,
     "packages/options/test/engine-contract-suite.test.ts": 22,
