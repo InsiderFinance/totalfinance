@@ -20,8 +20,9 @@ This is the standalone TypeScript finance library, not the parent web applicatio
   (`pnpm exec vitest run <test files>`), plus `pnpm exec vitest run tools/bundle-size/budgets.test.ts`
   when bundle size can move. Regenerate derived artifacts once, after the source is final:
   `enforcement:update` is the slow step. Do not run `pnpm run ci`, a second coverage
-  pass or `pnpm regen:check` locally to land a change. Hosted CI runs them on every supported Node
-  version, and a green final commit is the landing standard in `CONTRIBUTING.md`.
+  pass or `pnpm regen:check` locally to land a change. Hosted CI runs them: a fast check on each
+  pull request, the full matrix with coverage on `main` and daily. A green final commit is the
+  landing standard in `CONTRIBUTING.md`; a red `main` is fixed first.
 - The public name is TotalFinance. Publish only `@insiderfinance/totalfinance` and the optional
   `@insiderfinance/totalfinance-mcp`, from `distribution/*`. `packages/*` and their aliases are
   private source/build workspaces. After a Changesets version bump, run `pnpm publication:update`

@@ -44,18 +44,21 @@ api:update → readme → llms → bundle:update → openapi:update → docs:upd
 
 A change is ready when all of these hold:
 
-1. Hosted CI is green on the pull request's final commit. It runs everything `pnpm run ci` runs
-   (format, lint, typecheck, build, the full test suite with coverage, and the API-report check;
-   the tests split across parallel runners) on the minimum
-   supported Node and on newer versions, and regenerates every derived artifact in a clean
-   checkout (`pnpm regen:check`). Each Node version runs the whole suite independently, which is
-   the repeat run. The stochastic suites are seeded; a one-off flake is documented in `docs/`, not
-   waved through.
+1. Hosted CI is green on the pull request's final commit. On a pull request it runs the fast
+   check: format, lint, typecheck, build and the API-report check, the whole test suite on the
+   minimum supported Node (split across parallel runners, without coverage), and a regeneration of
+   every derived artifact in a clean checkout (`pnpm regen:check`). The stochastic suites are
+   seeded; a one-off flake is documented in `docs/`, not waved through.
 2. Locally, the tests for what changed pass, and the derived artifacts were regenerated once from
    the final source, with `summary.defective` at `0`. Check every local command by its exit code,
    never through a pipe.
 3. Every controlling tracker the change touches says the same thing: the spec's slice record, the
    implementation order, and the completeness tracker name one commit.
+
+After merge, `main` runs the full gate: everything `pnpm run ci` runs on every supported Node,
+with coverage and its floor, and the enforcement generator's determinism check. It also runs daily.
+A red `main` is fixed before anything else merges. The two depths are a decision for while the
+maintainers are the only contributors (2026-10-06); revisit them before accepting outside ones.
 
 Running `pnpm run ci` locally is still the way to reproduce a hosted failure. It is not a second
 gate to pass before you push.

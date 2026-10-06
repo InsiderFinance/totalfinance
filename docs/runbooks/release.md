@@ -104,10 +104,10 @@ generated manifests and lockfile. Future notes come from
 `distribution/totalfinance/CHANGELOG.md`; initial notes come from the reviewed initial ledger.
 Do not perform versioning or rebuilding after artifact approval.
 
-The release commit meets the landing standard in `CONTRIBUTING.md` like any other change: hosted CI
-on its final commit runs everything `pnpm run ci` runs (the API-report check included) on every
-supported Node version, and `pnpm regen:check` in a clean checkout. Run these locally only to
-reproduce a hosted failure.
+The release commit meets the landing standard in `CONTRIBUTING.md` like any other change, and it
+lands on `main`, so the full gate runs on it: everything `pnpm run ci` runs (the API-report check
+included) on every supported Node version, and `pnpm regen:check` in a clean checkout. Run these
+locally only to reproduce a hosted failure.
 
 Commit/review/land through the normal maintainer process. Publication requires a clean checkout and
 the manifest's exact HEAD. `--allow-dirty` marks a rehearsal and can never become public approval
