@@ -375,7 +375,7 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
     }
   });
 
-  it('costs one Intl read for an hour asked about once, as before the cache', async () => {
+  it('keeps one Intl read for an hour asked about once, as before the cache', async () => {
     vi.resetModules();
     const fresh = await import('../src/time.js');
     // A daily backtest: one close a day for 1,000 days, each in its own UTC hour.
@@ -398,6 +398,50 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
       formatToParts.mockClear();
       expect(pass()).toEqual(expected);
       expect(reads()).toBe(0);
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('uses one, three, then one Intl read per visit to an uncacheable hour', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // All visits share a UTC hour, but lie on both sides of New York's LMT midnight.
+    const midnight = Date.UTC(1880, 5, 2, 4, 56, 2);
+    const instants = [midnight - 1, midnight, midnight - 1, midnight + 1];
+    const expected = instants.map((at) => referenceDayIndex(at));
+    const readsPerVisit = [1, 3, 1, 1];
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      for (let i = 0; i < instants.length; i++) {
+        formatToParts.mockClear();
+        expect(fresh.usEquityMarketDayIndex(instants[i]!)).toBe(expected[i]);
+        // Confirmation reads both ends, then the requested instant; later visits stay exact.
+        expect(formatToParts).toHaveBeenCalledTimes(readsPerVisit[i]!);
+      }
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('restarts confirmation after an hour is evicted between its first and second visits', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    const first = Date.UTC(2042, 0, 1, 12);
+    const expected = referenceDayIndex(first);
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      expect(fresh.usEquityMarketDayIndex(first)).toBe(expected);
+      expect(formatToParts).toHaveBeenCalledTimes(1);
+      // The original hour is only marked "seen once". Exceed the documented 8,192-entry bound
+      // before revisiting it, so its first-visit marker must be discarded too.
+      for (let hour = 1; hour <= 8_192; hour++)
+        fresh.usEquityMarketDayIndex(first + hour * 3_600_000);
+      for (const reads of [1, 2, 0]) {
+        formatToParts.mockClear();
+        expect(fresh.usEquityMarketDayIndex(first)).toBe(expected);
+        expect(formatToParts).toHaveBeenCalledTimes(reads);
+      }
     } finally {
       formatToParts.mockRestore();
     }

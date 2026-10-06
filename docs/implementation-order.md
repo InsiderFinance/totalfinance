@@ -58,6 +58,13 @@ an hour with a mid-hour New York midnight (pre-1883 local mean time) is answered
 `workflows` bundle budget moves 502.5 → 502.75 KB from a measurement (+196 B). No public API change;
 a patch changeset; no version bump or publish here.
 
+Review clarification: read counts are per resident entry, not lifetime guarantees for a UTC hour.
+Cacheable hours use 1/2/0 reads on their first/second/later visits; uncacheable hours use 1/3/1.
+One-off calls preserve the Intl-read count, not an identical wall-clock cost. Each module instance
+has its own bounded cache, and eviction restarts confirmation. Dedicated read-count tests cover
+the uncacheable path and eviction between the first and second visits. These review-added tests
+were inspected but not run locally, per the maintainer's request; their execution remains a CI gate.
+
 ### Preview launch queue (2026-09-07)
 
 **Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**

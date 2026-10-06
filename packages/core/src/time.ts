@@ -222,13 +222,16 @@ const CACHED_TIME_LIMIT = 8_639_999_996_400_000;
  * Market day per UTC hour. Formatting a date in New York costs a few microseconds, and a flow tape
  * asks for the market day of every print (and of its expiry) — 50,000 prints spent most of
  * `flow()` here. The first time an hour is asked about, the instant is read exactly, as it always
- * was, and the hour is only noted, so work that visits each hour once pays nothing extra. The
- * second time, the hour's first and last milliseconds are read, and if they fall on one New York
- * date the hour stores it. That is sound because every New York offset change falls on a whole UTC
- * hour (the tests check the zone data): inside one hour local time only moves forward, so two ends
+ * was, and the hour is only noted, so a one-off visit keeps the same Intl-read count (with added
+ * cache bookkeeping). The second time, the hour's first and last milliseconds are read, and if they
+ * fall on one New York date the hour stores it. Every New York offset change falls on a whole UTC
+ * hour (the tests check the zone data), so inside one hour local time only moves forward; two ends
  * on one date mean one date throughout. An hour whose ends differ (New York's pre-1883 local mean
  * time, −4:56:02, puts midnight inside one) stores `NaN` and is answered exactly, every time.
- * Cleared when full, like the offset cache above; errors are never stored.
+ * While an entry stays resident, a cacheable hour costs 1, 2, then 0 Intl reads per visit; an
+ * uncacheable hour costs 1, 3, then 1 (confirmation also reads the requested instant exactly).
+ * Bounded per module instance, including each worker's own instance. Cleared when full, like the
+ * offset cache above: revisiting an evicted hour starts over. Errors are never stored.
  */
 const marketDayByUtcHour = new Map<number, number>();
 const MARKET_DAY_CACHE_LIMIT = 8_192;
