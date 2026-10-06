@@ -80,9 +80,11 @@ const INVENTORY_BUDGET_MS = 300_000;
  * determinism check needs a second, independent one to compare against. Each runs in its own process,
  * so started together the pair costs one generation of wall time rather than two: this file was the
  * longest single file in hosted CI, and a test file runs on one worker, so its length was the floor
- * under the whole suite's. One generation peaks near 900 MB resident (measured 2026-10-06), so two at
- * once fit any runner. Sharing the results is safe here — unlike the in-process version this once
- * replaced — because what is retained is a parsed record and a hash, not a live module graph.
+ * under the whole suite's. One generation peaked near 900 MB resident on Node 22.23.2 / Apple M4
+ * (measured 2026-10-06), suggesting room for the pair on the 16 GB hosted runner. That is not a
+ * bound for other Node versions or machines; the full hosted matrix remains the memory gate.
+ * Sharing the results is safe here — unlike the in-process version this once replaced — because
+ * what is retained is a parsed record and a hash, not a live module graph.
  */
 type EnforcementRun = {
   record: Awaited<ReturnType<typeof buildEnforcementRecord>>;

@@ -820,7 +820,9 @@ export interface SynthesisBranch {
  * the alternative is migrating producers and consumers together and then being unable to tell a
  * translation bug from an intended correction in the diff.
  */
-export function armsOf(node: { branches?: SynthesisBranch[] }): SynthesisBranch[] | null {
+export function armsOf(node: {
+  branches?: readonly SynthesisBranch[];
+}): readonly SynthesisBranch[] | null {
   return node.branches && node.branches.length > 1 ? node.branches : null;
 }
 
@@ -848,21 +850,21 @@ export function armTypes(arms: readonly SynthesisBranch[]): string[] {
  */
 export interface VariantChoice {
   /** Index into the node's `branchFields`. */
-  branch: number;
+  readonly branch: number;
   /**
    * The discriminator FIELDS and literals that identify this alternative — a list, not one pair.
    *
    * `WhatIfProbabilityModel` needs `kind` AND `measure` together: three of its branches say
    * `kind: 'gbm'` and only `measure` tells them apart.
    */
-  discriminator?: { field: string; value: LiteralValue }[];
+  readonly discriminator?: readonly { readonly field: string; readonly value: LiteralValue }[];
   /**
    * True when another branch spells the same discriminator, so the text alone does not name it.
    *
    * Set by `alternativesFor`, read by `variantId`. Without it a union whose arms share a tag emitted
    * one alternative for two shapes.
    */
-  ambiguous?: boolean;
+  readonly ambiguous?: boolean;
   /**
    * For a PRESENCE GATE: the optional field this node stands for is absent from the call.
    *
@@ -872,9 +874,9 @@ export interface VariantChoice {
    * were never enumerated, 23 of them branch-`#0` calls. As a choice it flows through dedupe,
    * naming, materialization and realization by the same route as every other choice.
    */
-  absent?: boolean;
+  readonly absent?: boolean;
   /** True for a presence gate, so rendering and handling never depend on inferring it. */
-  gate?: boolean;
+  readonly gate?: boolean;
 }
 
 export type VariantSelection = ReadonlyMap<string, VariantChoice>;
@@ -896,10 +898,10 @@ export type VariantSelection = ReadonlyMap<string, VariantChoice>;
  * not measure, while reporting nothing missing.
  */
 export type RouteStep =
-  | { argument: number }
-  | { property: string }
-  | { element: true }
-  | { position: number };
+  | { readonly argument: number }
+  | { readonly property: string }
+  | { readonly element: true }
+  | { readonly position: number };
 
 /** Follow a declaration route through a built argument list. `undefined` when it does not lead there. */
 function followRoute(args: readonly unknown[], route: readonly RouteStep[]): unknown {
@@ -929,7 +931,12 @@ function followRoute(args: readonly unknown[], route: readonly RouteStep[]): unk
   return value;
 }
 
-/** A union node reached on a walk, with every alternative it offers. */
+/**
+ * A union node reached on a walk, with every alternative it offers.
+ *
+ * Site metadata is shared by `unionSites`' cache: consume it without mutation. The nested declaration
+ * nodes are borrowed from the inventory and must likewise remain unchanged after discovery.
+ */
 export interface UnionSite {
   /**
    * Dotted path QUALIFIED BY THE ANCESTOR SELECTION that made this node reachable —
@@ -944,9 +951,9 @@ export interface UnionSite {
    * selecting `right/s` was reported as `right/q`, attributing evidence from one declaration to
    * another that happens to sit at the same dotted position.
    */
-  path: string;
+  readonly path: string;
   /** The plain dotted path, for reading the value out of a built argument list. */
-  valuePath: string;
+  readonly valuePath: string;
   /**
    * Identity for selection and dedupe: the qualified path AND a digest of the branch schema.
    *
@@ -955,7 +962,7 @@ export interface UnionSite {
    * branches are not. Two unions with the same qualified path and the same schema genuinely ARE the
    * same node, and share a selection.
    */
-  key: string;
+  readonly key: string;
   /**
    * The qualified id of the ancestor alternative this node lives inside — `''` at the root.
    *
@@ -963,8 +970,8 @@ export interface UnionSite {
    * fixture selecting the OUTER `left` branch was also matched against the site recorded under
    * `right`, and picked up a second label for a union its own value never reaches.
    */
-  scope: string;
-  alternatives: VariantChoice[];
+  readonly scope: string;
+  readonly alternatives: readonly VariantChoice[];
   /**
    * HOW TO REACH this union's value from the argument list — the declaration's own route.
    *
@@ -978,7 +985,7 @@ export interface UnionSite {
    * declaration describes, in order, however deeply the two alternate. It is kept SEPARATE from
    * `path`, which is a display identity and must stay readable.
    */
-  route: RouteStep[];
+  readonly route: readonly RouteStep[];
   /**
    * Every arm as the complete declaration node the selection machinery reads.
    *
@@ -987,10 +994,10 @@ export interface UnionSite {
    * such as `ReadonlyArray<{ date: ... }> | ReadonlyArray<{ time: ... }>`. Keeping the declaration
    * nodes makes fixture labelling use the same complete grammar that synthesis used to build it.
    */
-  branches?: SynthesisBranch[];
+  readonly branches?: readonly SynthesisBranch[];
   /** Legacy projections used by presence gates and declarations without complete arm nodes. */
-  branchFields: (SynthesisField[] | null)[];
-  branchTypes?: string[];
+  readonly branchFields: readonly (readonly SynthesisField[] | null)[];
+  readonly branchTypes?: readonly string[];
   /**
    * True when this site is a PRESENCE GATE for an optional field rather than a union of shapes.
    *
@@ -1004,7 +1011,7 @@ export interface UnionSite {
    * selection already uses — so two required unions under one optional object are materialized
    * together and named together, instead of one being labelled absent while the call carries it.
    */
-  gate?: boolean;
+  readonly gate?: boolean;
 }
 
 /**
@@ -1297,12 +1304,12 @@ function alternativesFor(branches: readonly (SynthesisField[] | null)[]): Varian
     const tags = alternative.discriminator.map((tag) => `${tag.field}=${tag.value}`).join(',');
     spelling.set(tags, (spelling.get(tags) ?? 0) + 1);
   }
-  for (const alternative of alternatives) {
-    if (!alternative.discriminator) continue;
+  const resolved = alternatives.map((alternative) => {
+    if (!alternative.discriminator) return alternative;
     const tags = alternative.discriminator.map((tag) => `${tag.field}=${tag.value}`).join(',');
-    if ((spelling.get(tags) ?? 0) > 1) alternative.ambiguous = true;
-  }
-  return alternatives.length > 0 ? alternatives : branches.map((_, index) => ({ branch: index }));
+    return (spelling.get(tags) ?? 0) > 1 ? { ...alternative, ambiguous: true } : alternative;
+  });
+  return resolved.length > 0 ? resolved : branches.map((_, index) => ({ branch: index }));
 }
 
 /**
@@ -2045,9 +2052,9 @@ export function alternativeIdOf(
 export function selectBranch(
   node: {
     name?: string;
-    branches?: SynthesisBranch[];
+    branches?: readonly SynthesisBranch[];
     /** The INTERNAL working shape — a `UnionSite`, which keeps the paired arrays. */
-    branchFields?: readonly (SynthesisField[] | null)[];
+    branchFields?: readonly (readonly SynthesisField[] | null)[];
     branchTypes?: readonly string[];
   },
   value: unknown,
@@ -2074,7 +2081,7 @@ export function selectBranch(
       ? (value as Record<string, unknown>)
       : undefined;
 
-  const admitsLiterals = (branch: SynthesisField[] | null): boolean =>
+  const admitsLiterals = (branch: readonly SynthesisField[] | null): boolean =>
     record === undefined ||
     (branch ?? []).every(
       (field) =>
@@ -2082,7 +2089,7 @@ export function selectBranch(
         record[field.name] === undefined ||
         admits(field.literals, record[field.name]),
     );
-  const discriminated = (branch: SynthesisField[] | null): boolean =>
+  const discriminated = (branch: readonly SynthesisField[] | null): boolean =>
     record !== undefined &&
     (branch ?? []).some(
       (field) =>
@@ -2155,11 +2162,12 @@ export function unionSites(
  * so no minted identities move — and the harness never mutates a declaration it read from the
  * committed inventory. Keyed by object identity, so a caller holding a different declaration object
  * (every test that builds one) gets its own answer, never a stale one. Callers get a copy of the
- * array; the sites themselves are shared and read-only.
+ * array; site metadata is shared and readonly in its TypeScript contract. This is not a deep freeze:
+ * callers must not mutate the borrowed declaration graph or bypass the readonly types.
  */
 const unionSitesMemo = new WeakMap<
   readonly SynthesisParameter[],
-  Map<readonly string[], Map<Producers | undefined, UnionSite[]>>
+  Map<readonly string[], Map<Producers | undefined, readonly UnionSite[]>>
 >();
 
 function computeUnionSites(
@@ -2824,7 +2832,7 @@ function buildObject(
    * branch's literals would build the same call — which is how four spread variants sharing a field
    * shape came to be measured once and reported as four.
    */
-  discriminator?: { field: string; value: LiteralValue }[],
+  discriminator?: VariantChoice['discriminator'],
 ): Record<string, unknown> | undefined {
   const attempt = context.attempt;
   /**
@@ -3426,12 +3434,12 @@ function tupleMemberTypes(type: string): string[] | null {
 function branchNode(
   name: string | undefined,
   type: string | undefined,
-  fields: SynthesisField[],
+  fields: readonly SynthesisField[],
 ): {
   name?: string;
   type?: string;
   kind: string;
-  fields: SynthesisField[];
+  fields: readonly SynthesisField[];
 } {
   return {
     ...(name !== undefined ? { name } : {}),
@@ -3464,7 +3472,7 @@ function nodeGap(
     nullable?: boolean;
     literals?: LiteralValue[];
     element?: SynthesisField;
-    fields?: SynthesisField[];
+    fields?: readonly SynthesisField[];
     fieldTree?: SynthesisField[];
     branches?: SynthesisBranch[];
   },
