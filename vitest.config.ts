@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { publicSourcePaths } from './tools/public-packages.js';
+import DurationSequencer from './tools/test-support/duration-sequencer.js';
 
 const fromRoot = (p: string): string => fileURLToPath(new URL(p, import.meta.url));
 
@@ -359,6 +360,9 @@ export default defineConfig({
     // past its 60 s progress-RPC timeout (`Timeout calling "onTaskUpdate"` with every test passing).
     // Long single tests yield inside with tools/test-support/cooperative-yield.ts.
     setupFiles: [fromRoot('./tools/test-support/yield-between-tests.ts')],
+    // Hosted CI shards by measured duration rather than by file count; a run without `--shard`
+    // keeps Vitest's own ordering. See tools/test-support/duration-sequencer.ts.
+    sequence: { sequencer: DurationSequencer },
     include: ['packages/*/test/**/*.test.ts', 'docs/**/*.test.ts', 'tools/**/*.test.ts'],
     benchmark: {
       include: ['packages/*/bench/**/*.bench.ts'],
