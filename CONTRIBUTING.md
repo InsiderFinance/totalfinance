@@ -27,7 +27,11 @@ the same gates the maintainers use. This page is that process in one screen; the
   export needs its tests, its manifest row (`tools/manifest/packages/<name>.json`, hand-classified
   — never `manifest:update`, which wipes curation), a first-touch fixture when it takes more than one
   positional argument, and a `@totalfinance/core` error code when it can refuse.
-- **Regenerate in order** after the source is final:
+- **Iterate on the tests for what you changed** (`pnpm exec vitest run <test files>`), plus
+  `pnpm exec vitest run tools/bundle-size/budgets.test.ts` when bundle size can move. The full
+  suite and the regeneration chain are the slow parts. Run the suite in hosted CI, and the chain
+  once.
+- **Regenerate in order, once,** after the source is final:
   `signature:update → naming:update → contract:update → enforcement:update → validation:update →
 api:update → readme → llms → bundle:update → openapi:update → docs:update`. Check
   `summary.defective` is `0` after `enforcement:update`; a generated file is never edited by hand.
@@ -38,14 +42,22 @@ api:update → readme → llms → bundle:update → openapi:update → docs:upd
 
 ## The landing standard
 
-A change is ready when all of these hold, checked by exit code, never through a pipe:
+A change is ready when all of these hold:
 
-1. `pnpm run ci` exits 0 — format, lint, typecheck, build, coverage, and the API-report check.
-2. `pnpm api:check` exits 0 on its own.
-3. A second `pnpm test:coverage` is all green (the stochastic suites are seeded; a one-off flake is
-   documented in `docs/`, not waved through).
-4. Every controlling tracker the change touches says the same thing: the spec's slice record, the
+1. Hosted CI is green on the pull request's final commit. It runs `pnpm run ci` (format, lint,
+   typecheck, build, the full test suite with coverage, and the API-report check) on the minimum
+   supported Node and on newer versions, and regenerates every derived artifact in a clean
+   checkout (`pnpm regen:check`). Each Node version runs the whole suite independently, which is
+   the repeat run. The stochastic suites are seeded; a one-off flake is documented in `docs/`, not
+   waved through.
+2. Locally, the tests for what changed pass, and the derived artifacts were regenerated once from
+   the final source, with `summary.defective` at `0`. Check every local command by its exit code,
+   never through a pipe.
+3. Every controlling tracker the change touches says the same thing: the spec's slice record, the
    implementation order, and the completeness tracker name one commit.
+
+Running `pnpm run ci` locally is still the way to reproduce a hosted failure. It is not a second
+gate to pass before you push.
 
 ## What we say no to
 

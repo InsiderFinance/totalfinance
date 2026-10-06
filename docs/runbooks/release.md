@@ -104,14 +104,10 @@ generated manifests and lockfile. Future notes come from
 `distribution/totalfinance/CHANGELOG.md`; initial notes come from the reviewed initial ledger.
 Do not perform versioning or rebuilding after artifact approval.
 
-Run the landing standard before review, plus the independent checks:
-
-```sh
-pnpm run ci
-pnpm api:check
-pnpm test:coverage
-pnpm regen:check
-```
+The release commit meets the landing standard in `CONTRIBUTING.md` like any other change: hosted
+CI on its final commit runs `pnpm run ci` (the API-report check included) on every supported Node
+version, and `pnpm regen:check` in a clean checkout. Run these locally only to reproduce a hosted
+failure.
 
 Commit/review/land through the normal maintainer process. Publication requires a clean checkout and
 the manifest's exact HEAD. `--allow-dirty` marks a rehearsal and can never become public approval
