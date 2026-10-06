@@ -16,7 +16,7 @@
  * expiries from the same day (0DTE) to three months out, with a seeded mix of calls and puts,
  * strikes, sizes, quotes and aggressor sides. Every run builds the same tape. Timing is the median
  * of 25 timed iterations after a warm-up of at least five iterations and 500 ms. Quote numbers only
- * from an idle machine, with the environment block this prints.
+ * from an idle machine, with the environment block this prints (its load average included).
  */
 import { performance } from 'node:perf_hooks';
 import { readFileSync } from 'node:fs';
@@ -56,7 +56,7 @@ const SIDES = ['buy', 'sell', 'unknown'];
 
 function tape(prints) {
   let seed = 12_345;
-  const random = () => (seed = (seed * 1_103_515_245 + 12_345) >>> 0) / 2 ** 32;
+  const random = () => (seed = (Math.imul(seed, 1_103_515_245) + 12_345) >>> 0) / 2 ** 32;
   const cents = (value) => Math.round(value * 100) / 100;
   const resolved = Object.fromEntries(EXPIRIES.map((expiry) => [expiry, resolvedExpiry(expiry)]));
   return Array.from({ length: prints }, (_, i) => {
@@ -127,6 +127,7 @@ console.log(
   JSON.stringify(
     {
       package: `${pkg.name}@${pkg.version}`,
+      root,
       environment: {
         runtime: `node ${process.version}`,
         platform: `${platform()} ${release()}`,

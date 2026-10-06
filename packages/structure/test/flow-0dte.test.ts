@@ -47,19 +47,24 @@ describe('flow 0DTE classification (WS1.14)', () => {
 });
 
 describe('flow 0DTE classification cost', () => {
-  it('classifies a session of prints with a handful of calendar reads, not two per print', () => {
+  it('classifies a session of prints with a handful of calendar reads, not two per print', async () => {
     // Prints every 0.47 s through a 2033 session on four expiries, including the day's own.
     const open = Date.UTC(2033, 5, 1, 13, 30);
     const expiries = ['2033-06-01', '2033-06-03', '2033-06-17', '2033-09-16'];
     const trades = Array.from({ length: 10_000 }, (_, i) =>
       tradeWithExpiry(expiries[i % expiries.length]!, open + i * 470),
     );
+    // Fresh modules, so no other test's calendar reads are already remembered.
+    vi.resetModules();
+    const fresh = await import('@totalfinance/structure');
     const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
     let analysis: ReturnType<typeof flow>;
     try {
-      analysis = flow(trades);
-      // Two reads for each UTC hour the prints span (two) and each expiry instant's hour (four).
-      expect(formatToParts.mock.calls.length).toBeLessThanOrEqual(2 * (2 + expiries.length));
+      analysis = fresh.flow(trades);
+      // One read per expiry label (its 16:00 ET close), then three per UTC hour (two hours of prints,
+      // four expiry instants): the hour's first instant exactly, then its two ends. Not two per print.
+      const hours = 2 + expiries.length;
+      expect(formatToParts.mock.calls.length).toBeLessThanOrEqual(expiries.length + 3 * hours);
     } finally {
       formatToParts.mockRestore();
     }

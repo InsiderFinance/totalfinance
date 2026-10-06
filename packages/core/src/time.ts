@@ -221,14 +221,19 @@ const CACHED_TIME_LIMIT = 8_639_999_996_400_000;
 /**
  * Market day per UTC hour. Formatting a date in New York costs a few microseconds, and a flow tape
  * asks for the market day of every print (and of its expiry) — 50,000 prints spent most of
- * `flow()` here. Every instant in one UTC hour falls on the same New York date whenever the hour's
- * first and last milliseconds do: the zone's offsets are whole hours, so local midnight and every
- * DST change fall on a UTC hour boundary. An hour that fails that check (New York's pre-1883 local
- * mean time, −4:56:02, puts midnight inside one) stores `NaN` and is answered exactly, every time.
- * Cleared when full, like the offset cache above; failures are never stored.
+ * `flow()` here. The first time an hour is asked about, the instant is read exactly, as it always
+ * was, and the hour is only noted, so work that visits each hour once pays nothing extra. The
+ * second time, the hour's first and last milliseconds are read, and if they fall on one New York
+ * date the hour stores it. That is sound because every New York offset change falls on a whole UTC
+ * hour (the tests check the zone data): inside one hour local time only moves forward, so two ends
+ * on one date mean one date throughout. An hour whose ends differ (New York's pre-1883 local mean
+ * time, −4:56:02, puts midnight inside one) stores `NaN` and is answered exactly, every time.
+ * Cleared when full, like the offset cache above; errors are never stored.
  */
 const marketDayByUtcHour = new Map<number, number>();
 const MARKET_DAY_CACHE_LIMIT = 8_192;
+/** Marks an hour asked about once. Never a day index, which is a whole number or `NaN`. */
+const HOUR_SEEN_ONCE = Infinity;
 
 /**
  * The US equity/options market's calendar DAY an instant falls on, as a whole-day index (days since
@@ -250,9 +255,14 @@ export function usEquityMarketDayIndex(epochMs: EpochMs): number {
   const hourStart = instant - (((instant % MS_PER_HOUR) + MS_PER_HOUR) % MS_PER_HOUR);
   let day = marketDayByUtcHour.get(hourStart);
   if (day === undefined) {
+    const exact = newYorkDayIndex(epochMs);
+    if (marketDayByUtcHour.size >= MARKET_DAY_CACHE_LIMIT) marketDayByUtcHour.clear();
+    marketDayByUtcHour.set(hourStart, HOUR_SEEN_ONCE);
+    return exact;
+  }
+  if (day === HOUR_SEEN_ONCE) {
     const first = newYorkDayIndex(hourStart);
     day = first === newYorkDayIndex(hourStart + MS_PER_HOUR - 1) ? first : NaN;
-    if (marketDayByUtcHour.size >= MARKET_DAY_CACHE_LIMIT) marketDayByUtcHour.clear();
     marketDayByUtcHour.set(hourStart, day);
   }
   return Number.isNaN(day) ? newYorkDayIndex(epochMs) : day;

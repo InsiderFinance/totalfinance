@@ -51,10 +51,12 @@ preserves it without bumping or publishing another version. MCP expansion and de
 separate work.
 
 **Post-0.1.2 amendment (2026-10-06): the New York market day per clock hour.**
-`usEquityMarketDayIndex` reads `Intl` once per UTC hour (confirmed at both ends of the hour) instead
-of once per call, so `flow()`'s per-print 0DTE flag no longer dominates flow analysis. Results and
-errors are unchanged; an hour with a mid-hour New York midnight (pre-1883 local mean time) is
-answered exactly. No public API change; a patch changeset; no version bump or publish here.
+`usEquityMarketDayIndex` remembers the New York date per UTC hour (read exactly on an hour's first
+visit, confirmed at both ends of the hour on its second) instead of reading `Intl` on every call, so
+`flow()`'s per-print 0DTE flag no longer dominates flow analysis. Results and errors are unchanged;
+an hour with a mid-hour New York midnight (pre-1883 local mean time) is answered exactly. The
+`workflows` bundle budget moves 502.5 → 502.75 KB from a measurement (+196 B). No public API change;
+a patch changeset; no version bump or publish here.
 
 ### Preview launch queue (2026-09-07)
 

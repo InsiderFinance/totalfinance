@@ -266,16 +266,23 @@ function outcome(run: () => number): { value: number } | { error: string } {
     return { error: `${(error as Error).name}: ${(error as Error).message}` };
   }
 }
-const expectSameDay = (epochMs: number) =>
-  expect(
-    outcome(() => usEquityMarketDayIndex(epochMs)),
-    String(epochMs),
-  ).toEqual(outcome(() => referenceDayIndex(epochMs)));
+/**
+ * Asks three times, so the instant is answered on its hour's first visit, on the visit that reads
+ * the hour's two ends, and from memory (or the same paths again in an hour already known).
+ */
+const expectSameDay = (epochMs: number) => {
+  const expected = outcome(() => referenceDayIndex(epochMs));
+  for (let call = 1; call <= 3; call++)
+    expect(
+      outcome(() => usEquityMarketDayIndex(epochMs)),
+      `${epochMs}, call ${call}`,
+    ).toEqual(expected);
+};
 
 describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl does', () => {
   it('matches Intl on 50,000 instants from 2000 BC to 3000 AD, fractional milliseconds included', () => {
     let seed = 20261006;
-    const random = () => (seed = (seed * 1103515245 + 12345) >>> 0) / 2 ** 32;
+    const random = () => (seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 2 ** 32;
     const from = Date.UTC(-2000, 0, 1);
     const to = Date.UTC(3000, 0, 1);
     for (let i = 0; i < 50_000; i++) expectSameDay(from + random() * (to - from));
@@ -296,6 +303,16 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
     for (let day = Date.UTC(1860, 0, 1); day < Date.UTC(2101, 0, 1); day += 86_400_000) {
       const current = offsetAt(day + 12 * 3_600_000);
       if (current === previous) continue;
+      // The first millisecond of the new offset lies within the 24 hours before the probe. The cache
+      // is sound only because it is always the start of a UTC hour: check the zone data says so.
+      let before = day - 12 * 3_600_000;
+      let after = day + 12 * 3_600_000;
+      while (after - before > 1) {
+        const middle = before + Math.floor((after - before) / 2);
+        if (offsetAt(middle) === previous) before = middle;
+        else after = middle;
+      }
+      expect(((after % 3_600_000) + 3_600_000) % 3_600_000, new Date(after).toISOString()).toBe(0);
       previous = current;
       changes++;
       for (let hour = -36; hour <= 36; hour++) {
@@ -323,10 +340,11 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
 
   it('keeps the edge of the time range, signed zero and invalid input exactly as Intl answers them', () => {
     // The range ends at ±8.64e15; the cache serves only instants at least one hour inside it.
+    // No fractions here: above 2^52 a double steps by whole milliseconds.
     for (const edge of [8.64e15, -8.64e15]) {
       const inward = -Math.sign(edge);
-      for (const delta of [0, 1, -1, 0.5, -0.5, 3_600_000, -3_600_000]) expectSameDay(edge + delta);
-      for (const delta of [3_599_999, 3_600_000, 3_600_001, 3_600_000.5, 7_200_000])
+      for (const delta of [0, 1, -1, 3_600_000, -3_600_000]) expectSameDay(edge + delta);
+      for (const delta of [3_599_999, 3_600_000, 3_600_001, 7_200_000])
         expectSameDay(edge + inward * delta);
     }
     for (const value of [0, -0, 0.5, -0.5, -1, 1, NaN, Infinity, -Infinity, Number.MAX_VALUE])
@@ -336,19 +354,50 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
       expectSameDay(value);
   });
 
-  it('reads Intl twice per clock hour, not once per instant', () => {
-    // A trading session's worth of prints, one every 0.47 s, in hours no other test touches.
+  it('reads Intl three times per clock hour of a session, not once per instant', async () => {
+    // A fresh module, so no other test's hours are already known.
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // A trading session's worth of prints, one every 0.47 s.
     const open = Date.UTC(2031, 2, 4, 14, 30);
     const instants = Array.from({ length: 50_000 }, (_, i) => open + i * 470);
     const expected = referenceDayIndex(open);
     const hours = new Set(instants.map((at) => Math.floor(at / 3_600_000))).size;
     const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
     try {
-      const days = new Set(instants.map((at) => usEquityMarketDayIndex(at)));
+      const days = new Set(instants.map((at) => fresh.usEquityMarketDayIndex(at)));
       expect([...days]).toEqual([expected]);
-      // The first and last millisecond of each of the eight UTC hours, and nothing per print.
+      // Per UTC hour: the first print read exactly, then the hour's first and last millisecond.
       expect(hours).toBe(8);
-      expect(formatToParts).toHaveBeenCalledTimes(2 * hours);
+      expect(formatToParts).toHaveBeenCalledTimes(3 * hours);
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('costs one Intl read for an hour asked about once, as before the cache', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // A daily backtest: one close a day for 1,000 days, each in its own UTC hour.
+    const closes = Array.from(
+      { length: 1_000 },
+      (_, i) => Date.UTC(2032, 0, 1, 20) + i * 86_400_000,
+    );
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      const reads = () => formatToParts.mock.calls.length;
+      const pass = () => closes.map((at) => fresh.usEquityMarketDayIndex(at));
+      const expected = closes.map((at) => referenceDayIndex(at));
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(closes.length);
+      // A second visit reads each hour's two ends; after that the hours answer from memory.
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(2 * closes.length);
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(0);
     } finally {
       formatToParts.mockRestore();
     }
@@ -356,10 +405,7 @@ describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl do
 
   it('stays exact past the bound of its memory', () => {
     const start = Date.UTC(2040, 0, 1);
-    for (let hour = 0; hour < 9_000; hour++) {
-      const at = start + hour * 3_600_000 + 1_234;
-      expect(usEquityMarketDayIndex(at)).toBe(referenceDayIndex(at));
-    }
+    for (let hour = 0; hour < 9_000; hour++) expectSameDay(start + hour * 3_600_000 + 1_234);
     expectSameDay(start + 1_234);
   });
 });
