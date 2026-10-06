@@ -27,6 +27,12 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Bounded consumer-requested addition (2026-09-25)
 
+**Current bounded addition (2026-10-06):** the FMP consumer requests the additive
+[disclosed holding partition comparison](./specs/disclosed-holding-partitions.md), HP1–HP5.
+Independent pre-code review precedes implementation. Preserve the completed v1 calculator,
+published consumers and release metadata. This slice adds provider-free calculation only;
+the consumer owns its separate offline handoff. It does not authorize npm publication.
+
 The FMP rebuild consumer authorizes the independent provider-free
 [disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review
 verification complete (2026-10-02) @ `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** This includes

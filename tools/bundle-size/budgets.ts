@@ -541,12 +541,29 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       'Initial disclosed-holdings surface (2026-09-25): measured 10,510 B gzip with Node 22.23.2/esbuild 0.25.12; 242 B headroom. The dedicated import retains only its exact-decimal/boundary/calculation modules and shared core helpers. It does not retain portfolio ledger, provider, artifact or schema implementations.',
   },
   {
+    specifier: '@insiderfinance/totalfinance/portfolio/disclosed-holding-partitions',
+    entry: 'packages/portfolio/src/disclosed-holding-partitions.ts',
+    budgetKB: 11.375,
+    intent:
+      'exact reported line partitions, complete-universe partition weights and conservative basis comparisons',
+    forbidden: [
+      {
+        needle: 'toJSONSchema',
+        why: 'the provider-free calculator must not retain schema machinery',
+      },
+      { needle: '__TOTALFINANCE_SCHEMA_FACADE__', why: 'the runtime schema facade stays separate' },
+    ],
+    rationale:
+      'Initial reported holding partitions (2026-10-06): measured 11,449 B gzip with Node 22.23.2/esbuild 0.25.12; 199 B headroom. Only the dedicated validator/calculator and shared exact-decimal/core helpers are retained, without ledger, provider or artifact implementations.',
+  },
+  {
     specifier: '@insiderfinance/totalfinance/portfolio',
     entry: 'packages/portfolio/src/index.ts',
-    budgetKB: 108.125,
+    budgetKB: 110.5,
     intent:
       'the FC7 event-derived ledger and independent disclosed-holdings comparison; events, reducer, serialization, valuation, FC4 seam',
     rationale:
+      '108.125 → 110.5 KB (reported holding partitions, 2026-10-06): measured 110,715 → 112,927 B gzip (+2,212 B) on Node 22.23.2/esbuild 0.25.12. The additive calculator/validator reuse the existing private exact-decimal module; no dependency family is added. The dedicated partition import measures 11,449 B and has its own cap. Headroom is 225 B; all narrow installed-consumer canaries remain unchanged. ' +
       '104 → 108.125 KB (disclosed holdings, 2026-09-25): isolated 009f223/current measurements are 106,352 → 110,554 B gzip (+4,202 B), with Node 22.23.2/esbuild 0.25.12. The only newly retained modules are disclosed-holdings, its boundary and its private exact-decimal arithmetic; no dependency family is added. The named domain export adds the requested API; its dedicated 10.5 KB subpath is independently capped. Headroom is 166 B. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21): 102 -> 104 KB, measured 103.1 KB. Combos on the trade grammar, the core order vocabulary, and the option terms spelled as type. ' +
       '101 → 102 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): a rebalance leaves a non-held OCC option target unresolved with the reason instead of sizing it at a share multiplier (the core OCC grammar predicate, without the session calendar), and every plan row carries the contract multiplier its estimate applied; measured 103,759 B, 335 B over the 101 KB line. ' +
@@ -622,10 +639,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 691.25,
+    budgetKB: 693.5,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      '691.25 → 693.5 KB (reported holding partitions, 2026-10-06): measured 707,616 → 709,976 B gzip (+2,360 B) on Node 22.23.2/esbuild 0.25.12. Only the new provider-free partition calculation and its separate validation/type boundary enter the deliberately whole-surface umbrella; exact decimals are shared, all original disclosure code stays unchanged. Headroom is 168 B; narrow installed-consumer budgets are not raised. ' +
       "690.75 → 691.25 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 707,616 B (+288 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 224 B of headroom. 686.5 → 690.75 KB (PR #4 integrated with 0.1.1 main, 2026-10-02): the combined source measures 707,171 B gzip with Node 22.23.2/esbuild 0.25.12, versus main's 702,783 B (+4,388 B). The umbrella now includes the three exact-decimal disclosed-holdings runtime modules, structured policy echo and one registered warning in addition to selective Greeks/exposure. Headroom is 157 B. The separate holdings import measures 10,550 B within its unchanged 10.5 KB cap, the portfolio domain 110,588 B within 108.125 KB; all narrow installed-consumer and forbidden-dependency gates remain intact. " +
       '681.25 → 686.5 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 697,450 B (150 B under the old line), this change 702,783 B (+5,333 B) with Node 22.23.2/esbuild 0.25.12 — the same additions the workflows row records (selective kernel, batch selection boundary, named Greeks and evaluate, selective exposure with nine shortcuts, supplied selection, requireSelection and its label guard, the expiry formatter cache, and the review fixes on #3); 193 B of headroom. ' +
       '680 → 681.25 KB (installed-consumer correctness repair, 2026-09-21): measured 697,387 B with Node 22.23.2/esbuild 0.25.12. Built-in TA contracts are now shared named declarations bound by every leaf, so the all-exports umbrella includes their construction code. This protects narrow-import correctness without relying on discovery side effects; separate installed-function budgets enforce lean imports and document the esbuild root-namespace limitation. ' +

@@ -563,6 +563,11 @@
       "import": "./modules/portfolio/dist/disclosed-holdings.js",
       "default": "./modules/portfolio/dist/disclosed-holdings.js"
     },
+    "./portfolio/disclosed-holding-partitions": {
+      "types": "./modules/portfolio/dist/disclosed-holding-partitions.d.ts",
+      "import": "./modules/portfolio/dist/disclosed-holding-partitions.js",
+      "default": "./modules/portfolio/dist/disclosed-holding-partitions.js"
+    },
     "./research": {
       "types": "./modules/research/dist/index.d.ts",
       "import": "./modules/research/dist/index.js",

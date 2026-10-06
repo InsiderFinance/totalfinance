@@ -2588,3 +2588,50 @@ describe('packed selective Greeks and exposure', () => {
     120_000,
   );
 });
+
+/** The additive partition surface is verified from installed public tarballs, not workspace aliases. */
+describe('packed reported holding partitions', () => {
+  it.each(['nodenext', 'bundler'] as const)(
+    'runs the complete guide and compile contracts with %s',
+    (resolution) => {
+      const guide = readFileSync(join(ROOT, 'docs/guides/disclosed-holding-partitions.md'), 'utf8');
+      const source = [...guide.matchAll(/```ts\n([\s\S]*?)```/g)]
+        .map((match) => match[1])
+        .join('\n');
+      const dir = join(consumer, `disclosed-holding-partitions-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(
+        join(dir, 'consumer.mts'),
+        source + '\nconsole.log("HOLDING_PARTITIONS_PUBLIC_OK");',
+      );
+      writeFileSync(
+        join(dir, 'partition-contract.mts'),
+        readFileSync(
+          join(ROOT, 'packages/portfolio/test/disclosed-holding-partitions.compile.ts'),
+          'utf8',
+        ).replaceAll('@totalfinance/', '@insiderfinance/totalfinance/'),
+      );
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts', 'partition-contract.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'HOLDING_PARTITIONS_PUBLIC_OK',
+      );
+    },
+    120_000,
+  );
+});

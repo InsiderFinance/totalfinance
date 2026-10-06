@@ -183,7 +183,8 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // blackScholes.evaluate and its .explain, blackScholesEvaluateMany/Into, the nine exposure
     // shortcuts and core's requireSelection join their contracts with first-touch fixtures.
     // 1314 → 1315: exact-decimal disclosed-holdings comparison joins its public contract.
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1315);
+    // 1315 → 1316: the separately typed reported-partition comparison adds its own valid fixture.
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1316);
   });
 
   it('every matched fixture can be BUILT', () => {

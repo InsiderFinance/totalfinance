@@ -29,6 +29,10 @@
 
 ## Bounded disclosed-holdings addition (2026-09-25)
 
+The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5,
+is selected October 6, 2026. Its independent contract review is complete; implementation and
+verification remain pending. It preserves the v1 calculator and does not reopen ledger semantics.
+
 The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
 **DH1–DH7 implementation and review verification complete (2026-10-02) @
 `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** Typed scales and reason codes, structured policy reporting,
