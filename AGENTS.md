@@ -19,7 +19,7 @@ This is the standalone TypeScript finance library, not the parent web applicatio
 - Verify fast, and regenerate once. While you iterate, run only the tests for what you changed
   (`pnpm exec vitest run <test files>`), plus `pnpm exec vitest run tools/bundle-size/budgets.test.ts`
   when bundle size can move. Regenerate derived artifacts once, after the source is final:
-  `enforcement:update` alone takes about five minutes. Do not run `pnpm run ci`, a second coverage
+  `enforcement:update` is the slow step. Do not run `pnpm run ci`, a second coverage
   pass or `pnpm regen:check` locally to land a change. Hosted CI runs them on every supported Node
   version, and a green final commit is the landing standard in `CONTRIBUTING.md`.
 - The public name is TotalFinance. Publish only `@insiderfinance/totalfinance` and the optional
