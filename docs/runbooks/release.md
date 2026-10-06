@@ -105,7 +105,7 @@ generated manifests and lockfile. Future notes come from
 Do not perform versioning or rebuilding after artifact approval.
 
 The release commit meets the landing standard in `CONTRIBUTING.md` like any other change: hosted
-CI on its final commit runs `pnpm run ci` (the API-report check included) on every supported Node
+CI on its final commit runs everything `pnpm run ci` runs (the API-report check included) on every supported Node
 version, and `pnpm regen:check` in a clean checkout. Run these locally only to reproduce a hosted
 failure.
 

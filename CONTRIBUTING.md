@@ -44,8 +44,9 @@ api:update → readme → llms → bundle:update → openapi:update → docs:upd
 
 A change is ready when all of these hold:
 
-1. Hosted CI is green on the pull request's final commit. It runs `pnpm run ci` (format, lint,
-   typecheck, build, the full test suite with coverage, and the API-report check) on the minimum
+1. Hosted CI is green on the pull request's final commit. It runs everything `pnpm run ci` runs
+   (format, lint, typecheck, build, the full test suite with coverage, and the API-report check;
+   the tests split across parallel runners) on the minimum
    supported Node and on newer versions, and regenerates every derived artifact in a clean
    checkout (`pnpm regen:check`). Each Node version runs the whole suite independently, which is
    the repeat run. The stochastic suites are seeded; a one-off flake is documented in `docs/`, not
