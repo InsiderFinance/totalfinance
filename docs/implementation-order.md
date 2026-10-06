@@ -50,6 +50,12 @@ preserved. Main now includes the 0.1.1 release metadata at `b1edf16`; this holdi
 preserves it without bumping or publishing another version. MCP expansion and deployment remain
 separate work.
 
+**Post-0.1.2 amendment (2026-10-06): the New York market day per clock hour.**
+`usEquityMarketDayIndex` reads `Intl` once per UTC hour (confirmed at both ends of the hour) instead
+of once per call, so `flow()`'s per-print 0DTE flag no longer dominates flow analysis. Results and
+errors are unchanged; an hour with a mid-hour New York midnight (pre-1883 local mean time) is
+answered exactly. No public API change; a patch changeset; no version bump or publish here.
+
 ### Preview launch queue (2026-09-07)
 
 **Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**
