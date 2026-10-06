@@ -38,8 +38,8 @@ jobs:
   # parallelism comes from more machines instead: each version's test files are sharded three ways,
   # and every shard runs on its own runner with the same two workers.
   #
-  # The non-test steps of `pnpm run ci` are spread across the shards so no shard carries them all; each
-  # still runs once per version. Coverage is collected per shard and its floor enforced once per version
+  # The non-test steps of `pnpm run ci` run once per version in `static`, in parallel with the shards,
+  # so no shard waits on them. Coverage is collected per shard and its floor enforced once per version
   # in `coverage`, over the merged blobs (see `vitest.config.ts`).
   ci:
     name: ci (node ${{ matrix.node }}, shard ${{ matrix.shard }}/3)
@@ -76,17 +76,8 @@ jobs:
       # install that may resolve a newer patch is an install that may rewrite a generated artifact.
       - run: pnpm install --frozen-lockfile
 
-      # The static half of `pnpm run ci`, once per version, spread so no shard waits on all of it.
-      - if: matrix.shard == 1
-        run: pnpm format:check && pnpm lint
-      - if: matrix.shard == 2
-        run: pnpm typecheck && pnpm site:typecheck
-
       # Every shard builds: tests read the built distribution and the site.
       - run: pnpm build && pnpm site:build
-
-      - if: matrix.shard == 3
-        run: pnpm site:test && pnpm api:check
 
       # This shard's third of the test files. `tools/packed-consumer.test.ts` packs real tarballs,
       # installs them, and imports them as ESM, CJS, through esbuild and under strict TypeScript
@@ -107,6 +98,39 @@ jobs:
           path: .vitest-reports/*
           include-hidden-files: true
           retention-days: 1
+
+  # The rest of `pnpm run ci` — format, lint, typecheck, the site's own tests and the API report — once
+  # per version, beside the shards rather than in front of one. About four minutes, shorter than any
+  # shard, so it never sets the wall time.
+  static:
+    name: static checks (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.13.0', '24.x', '26.x']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm format:check && pnpm lint && pnpm typecheck && pnpm site:typecheck
+
+      # The site tests and the API report read the build.
+      - run: pnpm build && pnpm site:build
+
+      - run: pnpm site:test && pnpm api:check
 
   # The coverage floor, once per version, over the merged shards. Merging reproduces the unsharded
   # totals exactly (measured 2026-10-06), and it reports every shard's test results again, so a
