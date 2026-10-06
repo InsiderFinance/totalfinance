@@ -25,9 +25,9 @@ void policy;
 void reason;
 // @ts-expect-error New profile must not widen the preserved v1 policy.
 const oldPolicy: DisclosedHoldingsPolicy = policy;
-// @ts-expect-error Explicit supported profile has no legacy alternate literal.
 const badPolicy: DisclosedHoldingPartitionsPolicy = {
   ...policy,
+  // @ts-expect-error Explicit supported profile has no legacy alternate literal.
   supportedProfile: 'common-stock-shares-v1',
 };
 // @ts-expect-error Generated reasons are finite; source text belongs in reviewReasons.
