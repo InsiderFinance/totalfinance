@@ -27,11 +27,15 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Bounded consumer-requested addition (2026-09-25)
 
-**Current bounded addition (2026-10-06):** the FMP consumer requests the additive
-[disclosed holding partition comparison](./specs/disclosed-holding-partitions.md), HP1–HP5.
-Independent pre-code review precedes implementation. Preserve the completed v1 calculator,
-published consumers and release metadata. This slice adds provider-free calculation only;
-the consumer owns its separate offline handoff. It does not authorize npm publication.
+**Bounded addition locally complete (2026-10-06):** the additive
+[disclosed holding partition comparison](./specs/disclosed-holding-partitions.md), HP1–HP5,
+is implemented and independently verified at `612fed23e094c7468d9398ebb1e9edb644af8904`.
+Full CI and an independent coverage repeat passed 579 library files / 12,852 tests plus 80 site
+tests; separate API checks and clean committed regeneration passed. The linked spec records the
+verification and the earlier unsuccessful RPC-timeout attempt. Existing v1 calculation sources,
+published contracts and release metadata are preserved. This adds provider-free calculation;
+the consumer owns its separate offline handoff. Final-head hosted checks remain required before
+[PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges. No npm publication is authorized.
 
 The FMP rebuild consumer authorizes the independent provider-free
 [disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review

@@ -29,9 +29,14 @@
 
 ## Bounded disclosed-holdings addition (2026-09-25)
 
-The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5,
-is selected October 6, 2026. Its independent contract review is complete; implementation and
-verification remain pending. It preserves the v1 calculator and does not reopen ledger semantics.
+The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5, is
+**implementation and independent local verification complete (2026-10-06) @
+`612fed23e094c7468d9398ebb1e9edb644af8904`.** Full CI and an independent coverage repeat passed
+579 library files / 12,852 tests plus 80 site tests; separate API checks and clean committed
+regeneration passed. The linked spec records the exact verification and earlier RPC-timeout retry.
+It preserves the v1 calculator and does not reopen ledger semantics. Final-head hosted checks
+remain required before [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges;
+publication and the consumer's offline handoff remain separate.
 
 The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
 **DH1–DH7 implementation and review verification complete (2026-10-02) @

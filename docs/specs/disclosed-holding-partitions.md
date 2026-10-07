@@ -1,7 +1,8 @@
 # Disclosed holding partitions
 
-Status: HP1 contract independently reviewed October 6, 2026; HP2–HP5 implementation pending. This
-consumer-requested additive feature follows the completed disclosed-holdings comparison.
+Status: HP1–HP5 implementation and independent local verification complete October 6, 2026
+at `612fed23e094c7468d9398ebb1e9edb644af8904`. This consumer-requested additive feature follows
+the completed disclosed-holdings comparison.
 The FMP consumer owns source acquisition, authenticated mappings, report selection and handoff.
 This specification owns the provider-free calculation. No release or publication is authorized.
 
@@ -91,18 +92,40 @@ It performs no I/O, source lookup or clock access. Existing v1 public types and 
 ## Ordered slices and acceptance
 
 - [x] HP1: register this bounded row and independently review this contract before semantic code.
-- [ ] HP2: new separate types/boundary/report and conservative grouping/basis/accounting; share
+- [x] HP2: new separate types/boundary/report and conservative grouping/basis/accounting; share
       private decimal arithmetic while preserving current v1 source, literals and output.
-- [ ] HP3: exact independent rational oracle, complete/incomplete gate matrix, SOLE/DFND/OTR mixed
+- [x] HP3: exact independent rational oracle, complete/incomplete gate matrix, SOLE/DFND/OTR mixed
       partitions, multiple reports, scoped references, basis redistribution, duplicate/identity
       conflict, authored addition/removal/revision/zero and rounded/unrounded cases, adversarial
       runtime bounds/accessors, nonmutation/permutation and full partition accounting.
-- [ ] HP4: public root/domain/deep exports, hand-curated manifest, first-touch/compile-fail tests,
+- [x] HP4: public root/domain/deep exports, hand-curated manifest, first-touch/compile-fail tests,
       artifact serialization, executable guide, changeset and packed NodeNext/Bundler consumers.
-- [ ] HP5: canonical regeneration sequence, format changed files only, full CI, separate API check,
+- [x] HP5: canonical regeneration sequence, format changed files only, full CI, separate API check,
       independent full coverage repeat and clean-commit regeneration. Synchronize this spec,
       implementation order and completeness tracker against exact evidence; no release bump.
 
 ## Verification record
 
-Pending. Local verification will not be described as hosted verification or npm publication.
+The verified revision is `612fed23e094c7468d9398ebb1e9edb644af8904`, integrated over main
+`2dc1927cdab6051861ed32cc229e787acf783f84`. Calculation source is unchanged from
+`acef3949303cae288588ac3c8ff21092c3517e0a`; this closeout changes tracking prose only.
+
+- Literal full CI passed with 579 library test files / 12,852 tests, 8 site files / 80 tests,
+  and 25 API reports. Coverage was 94.21% statements, 84.16% branches, 97.02% functions and
+  94.77% lines. Separate API checking passed.
+- An independent full coverage repeat passed all 579 files / 12,852 tests at the same revision.
+  An isolated clean committed checkout completed the full canonical `regen:check` chain with no
+  tracked changes; documentation inventory had 233 surfaces, 4,540 executable fences and no findings.
+- The new profile has 51 authored tests; 154 focused tests include the existing disclosed-holdings
+  regressions. All 218 packed-consumer tests passed, including NodeNext and Bundler imports.
+- An independent exact rational oracle passed 120 cases / 19,166 assertions; boundary review passed
+  486 assertions. Existing contracts, names, signatures and v1 calculation sources were preserved.
+  Independent review has no open findings.
+
+One earlier full-CI attempt passed every test but exited unsuccessfully with an unhandled Vitest
+`onTaskUpdate` RPC timeout. Its cause was not established. The complete unchanged rerun passed;
+no worker settings, timeouts, coverage floors or implementation were changed for that retry.
+
+[PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) carries the implementation.
+Final-head hosted checks remain required before merge. Local verification does not authorize
+npm publication, a version bump or production consumer cutover.
