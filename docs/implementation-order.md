@@ -34,6 +34,25 @@ checks remained red; that decision does not waive the hosted matrix for release.
 
 ### Bounded consumer-requested addition (2026-09-25)
 
+**Bounded addition locally complete (2026-10-06):** the additive
+[disclosed holding partition comparison](./specs/disclosed-holding-partitions.md), HP1–HP5,
+is implemented and independently verified at `612fed23e094c7468d9398ebb1e9edb644af8904`.
+Full CI and an independent coverage repeat passed 579 library files / 12,852 tests plus 80 site
+tests; separate API checks and clean committed regeneration passed. The linked spec records the
+verification and the earlier unsuccessful RPC-timeout attempt. Existing v1 calculation sources,
+published contracts and release metadata are preserved. This adds provider-free calculation;
+the consumer owns its separate offline handoff. Final-head hosted checks remain required before
+[PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges. No npm publication is authorized.
+
+**Review follow-up complete (2026-10-07):** HP6 in the same partition spec is implemented and
+independently verified at `3a75fd0fd9d575768a8b91b2ef38268c9c4d9449`: caller-attestation guidance,
+the task-first guide and 349 permanent regression tests. Full local CI passed 580 library files /
+13,201 tests plus 80 site tests; standalone API checks, the hosted Node 22.13/24/26 full-CI matrix,
+clean regeneration and the package rehearsal passed. The spec retains exact receipts. Calculation,
+request shape, provider boundary and release scope are unchanged. The next step is consumer-owned
+integration verification against the caller checklist, not another library redesign. Final-head
+hosted checks, merge and npm publication remain separate gates.
+
 The FMP rebuild consumer authorizes the independent provider-free
 [disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review
 verification complete (2026-10-02) @ `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** This includes
@@ -352,8 +371,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,476 public naming identities are walked and 0 are unresolved; 38,502 are `explicit`,
-3,812 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+42,731 public naming identities are walked and 0 are unresolved; 38,724 are `explicit`,
+3,845 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

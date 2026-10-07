@@ -53,6 +53,9 @@ export default defineConfig({
         './packages/foreign-exchange/src/exposure.ts',
       ),
       '@totalfinance/foreign-exchange': fromRoot('./packages/foreign-exchange/src/index.ts'),
+      '@totalfinance/portfolio/disclosed-holding-partitions': fromRoot(
+        './packages/portfolio/src/disclosed-holding-partitions.ts',
+      ),
       '@totalfinance/portfolio/disclosed-holdings': fromRoot(
         './packages/portfolio/src/disclosed-holdings.ts',
       ),

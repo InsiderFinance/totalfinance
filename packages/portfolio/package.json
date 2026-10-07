@@ -67,6 +67,11 @@
       "types": "./dist/disclosed-holdings.d.ts",
       "import": "./dist/disclosed-holdings.js",
       "default": "./dist/disclosed-holdings.js"
+    },
+    "./disclosed-holding-partitions": {
+      "types": "./dist/disclosed-holding-partitions.d.ts",
+      "import": "./dist/disclosed-holding-partitions.js",
+      "default": "./dist/disclosed-holding-partitions.js"
     }
   },
   "files": [

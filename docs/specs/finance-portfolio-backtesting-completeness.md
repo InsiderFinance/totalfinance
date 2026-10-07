@@ -29,6 +29,23 @@
 
 ## Bounded disclosed-holdings addition (2026-09-25)
 
+The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5, is
+**implementation and independent local verification complete (2026-10-06) @
+`612fed23e094c7468d9398ebb1e9edb644af8904`.** Full CI and an independent coverage repeat passed
+579 library files / 12,852 tests plus 80 site tests; separate API checks and clean committed
+regeneration passed. The linked spec records the exact verification and earlier RPC-timeout retry.
+It preserves the v1 calculator and does not reopen ledger semantics. Final-head hosted checks
+remain required before [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges;
+publication and the consumer's offline handoff remain separate.
+
+The bounded HP6 review follow-up is **complete (2026-10-07) @
+`3a75fd0fd9d575768a8b91b2ef38268c9c4d9449`**: caller-attestation guidance, a task-first example
+and 349 permanent exact-oracle/completeness/basis regression tests. Full local CI passed 580
+library files / 13,201 tests plus 80 site tests; standalone API checks, the hosted Node 22.13/24/26
+full-CI matrix (including the independent coverage repeat), clean regeneration and package rehearsal passed. The same spec
+holds the receipts. It preserves HP1–HP5 calculations and introduces no new capability or transport;
+consumer integration verification, final-head hosted checks, merge and release remain separate.
+
 The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
 **DH1–DH7 implementation and review verification complete (2026-10-02) @
 `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** Typed scales and reason codes, structured policy reporting,

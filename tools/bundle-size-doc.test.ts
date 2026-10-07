@@ -103,7 +103,8 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
     // 29 → 30 (PR #336, 2026-09-07): @insiderfinance/totalfinance/performance/sector-performance is independently budgeted.
 
     // The independently capped disclosed-holdings subpath adds one entrypoint (2026-09-25).
-    expect(declared.length).toBe(31);
+    // Its reported-partitions successor adds another independent deep-import cap (2026-10-06).
+    expect(declared.length).toBe(32);
   });
 
   it('publishes the budget CI enforces, exactly', () => {

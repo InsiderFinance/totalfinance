@@ -2822,8 +2822,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5373,
-    "enforced": 2485,
+    "candidates": 5376,
+    "enforced": 2488,
     "defective": 0,
     "partial": 2701,
     "unmeasured": 187,
@@ -2850,26 +2850,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2739,
-      "null-when-nonnullable": 26245,
-      "omit-required": 13311,
-      "wrong-type": 16970,
-      "non-finite": 9376,
+      "unknown-key": 2740,
+      "null-when-nonnullable": 26270,
+      "omit-required": 13336,
+      "wrong-type": 16995,
+      "non-finite": 9377,
       "optional-wrong-type": 8037,
-      "invalid-literal": 1951,
+      "invalid-literal": 1954,
       "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6513,
-      "null-when-nonnullable": 65980,
-      "omit-required": 33963,
-      "wrong-type": 43396,
-      "non-finite": 24458,
+      "unknown-key": 6516,
+      "null-when-nonnullable": 66055,
+      "omit-required": 34038,
+      "wrong-type": 43471,
+      "non-finite": 24461,
       "optional-wrong-type": 19182,
-      "invalid-literal": 5003,
+      "invalid-literal": 5012,
       "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
@@ -2877,7 +2877,7 @@
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3030,
+    "inherited": 3032,
     "fromSynthesizedInput": 1971,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
@@ -2889,8 +2889,8 @@
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13084,
-      "enforced": 3860,
+      "total": 13087,
+      "enforced": 3863,
       "partial": 2517,
       "defective": 0,
       "unmeasured": 6707,
@@ -51486,6 +51486,30 @@
         "unmeasured": 73
       },
       "fixtureSource": "@totalfinance/portfolio:applyPortfolioEvents"
+    },
+    {
+      "id": "@totalfinance/portfolio:compareDisclosedHoldingPartitions",
+      "package": "@totalfinance/portfolio",
+      "implementation": "packages/portfolio/dist/disclosed-holding-partitions.d.ts#compareDisclosedHoldingPartitions",
+      "verdict": "enforced",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldingPartitions"
     },
     {
       "id": "@totalfinance/portfolio:compareDisclosedHoldings",
@@ -139277,6 +139301,24 @@
       "fixtureSource": "@totalfinance/valuation:comparableCompanyValuation"
     },
     {
+      "id": "totalfinance:compareDisclosedHoldingPartitions",
+      "package": "totalfinance",
+      "implementation": "packages/portfolio/dist/disclosed-holding-partitions.d.ts#compareDisclosedHoldingPartitions",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/portfolio:compareDisclosedHoldingPartitions",
+      "inheritedFrom": "@totalfinance/portfolio:compareDisclosedHoldingPartitions",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldingPartitions"
+    },
+    {
       "id": "totalfinance:compareDisclosedHoldings",
       "package": "totalfinance",
       "implementation": "packages/portfolio/dist/disclosed-holdings.d.ts#compareDisclosedHoldings",
@@ -194816,6 +194858,24 @@
         "unmeasured": 73
       },
       "fixtureSource": "@totalfinance/portfolio:applyPortfolioEvents"
+    },
+    {
+      "id": "totalfinance:portfolio.compareDisclosedHoldingPartitions",
+      "package": "totalfinance",
+      "implementation": "packages/portfolio/dist/disclosed-holding-partitions.d.ts#compareDisclosedHoldingPartitions",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/portfolio:compareDisclosedHoldingPartitions",
+      "inheritedFrom": "@totalfinance/portfolio:compareDisclosedHoldingPartitions",
+      "guardReachability": "direct",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 25,
+        "omit-required": 25,
+        "wrong-type": 25,
+        "invalid-literal": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/portfolio:compareDisclosedHoldingPartitions"
     },
     {
       "id": "totalfinance:portfolio.compareDisclosedHoldings",

@@ -296,3 +296,6 @@ export type {
 
 export { compareDisclosedHoldings } from './disclosed-holdings.js';
 export type * from './disclosed-holdings-types.js';
+
+export { compareDisclosedHoldingPartitions } from './disclosed-holding-partitions.js';
+export type * from './disclosed-holding-partitions-types.js';

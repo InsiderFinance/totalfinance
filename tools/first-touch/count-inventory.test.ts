@@ -46,6 +46,10 @@ const LEDGER = new Map<string, string>([
     'same condition also requires Number.isSafeInteger before accepting the seed',
   ],
   [
+    'packages/portfolio/src/disclosed-holding-partitions.ts#compareDisclosedHoldingPartitions:Number.isInteger(decimalPlaces)',
+    'exact-decimal ratio precision is bounded to [0, 18] before decimal exponentiation',
+  ],
+  [
     'packages/portfolio/src/disclosed-holdings.ts#compareDisclosedHoldings:Number.isInteger(decimalPlaces)',
     'exact-decimal ratio precision is bounded to [0, 18] in the same condition before any decimal exponentiation',
   ],

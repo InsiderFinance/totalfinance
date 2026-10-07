@@ -1,3 +1,4 @@
+import { DISCLOSED_HOLDING_PARTITION_FIXTURES } from './fixtures/disclosed-holding-partitions.js';
 import { DISCLOSED_HOLDINGS_FIXTURES } from './fixtures/disclosed-holdings.js';
 /**
  * R3 — happy-path fixtures for the deep sweep (`deep-sweep.test.ts`).
@@ -242,6 +243,7 @@ export function allFixtures(): Map<string, FixtureThunk> {
     CONSTRUCTOR_FIXTURES,
     PORTFOLIO_FIXTURES,
     DISCLOSED_HOLDINGS_FIXTURES,
+    DISCLOSED_HOLDING_PARTITION_FIXTURES,
     SCENARIOS_FIXTURES,
     VOLATILITY_ARTIFACTS_FIXTURES,
     FIXED_INCOME_ARTIFACTS_FIXTURES,

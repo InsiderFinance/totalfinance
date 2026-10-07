@@ -2588,3 +2588,76 @@ describe('packed selective Greeks and exposure', () => {
     120_000,
   );
 });
+
+/** The additive partition surface is verified from installed public tarballs, not workspace aliases. */
+describe('packed reported holding partitions', () => {
+  it.each(['nodenext', 'bundler'] as const)(
+    'runs the complete guide and compile contracts with %s',
+    (resolution) => {
+      const guide = readFileSync(join(ROOT, 'docs/guides/disclosed-holding-partitions.md'), 'utf8');
+      const source = [...guide.matchAll(/```ts\n([\s\S]*?)```/g)]
+        .map((match) => match[1])
+        .join('\n');
+      const dir = join(consumer, `disclosed-holding-partitions-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(
+        join(dir, 'consumer.mts'),
+        source +
+          `
+import { portfolio } from '@insiderfinance/totalfinance';
+import { compareDisclosedHoldingPartitions as domain } from '@insiderfinance/totalfinance/portfolio';
+import { canonicalJsonOf, readAnalysisArtifact } from '@insiderfinance/totalfinance/core/artifacts';
+
+// Keep the out-of-tree consumer independent of Node type declarations, like the public guide.
+function expectEqual(actual: unknown, expected: unknown): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected))
+    throw new Error('Partition guide result mismatch: ' + JSON.stringify({ actual, expected }));
+}
+expectEqual(result.current.concentration.denominatorReportedValue, '200');
+expectEqual(result.current.concentration.largestPartitionWeight, '0.7');
+expectEqual(result.current.concentration.partitionHerfindahlIndex, '0.58');
+expectEqual(result.changes.map((change) => ({
+  discretion: change.partitionKey.investmentDiscretion,
+  quantityDifference: change.quantityDifference,
+  valueDifference: change.valueDifference,
+})), [
+  { discretion: 'OTR', quantityDifference: '1', valueDifference: '10' },
+  { discretion: 'SOLE', quantityDifference: '4', valueDifference: '40' },
+]);
+expectEqual(canonicalJsonOf(domain(input)), canonicalJsonOf(result));
+expectEqual(canonicalJsonOf(portfolio.compareDisclosedHoldingPartitions(input)), canonicalJsonOf(result));
+expectEqual(readAnalysisArtifact({ artifact }).artifact.id, artifact.id);
+console.log('HOLDING_PARTITIONS_PUBLIC_OK');
+`,
+      );
+      writeFileSync(
+        join(dir, 'partition-contract.mts'),
+        readFileSync(
+          join(ROOT, 'packages/portfolio/test/disclosed-holding-partitions.compile.ts'),
+          'utf8',
+        ).replaceAll('@totalfinance/', '@insiderfinance/totalfinance/'),
+      );
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts', 'partition-contract.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'HOLDING_PARTITIONS_PUBLIC_OK',
+      );
+    },
+    120_000,
+  );
+});
