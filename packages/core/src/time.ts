@@ -210,6 +210,33 @@ const NEW_YORK_DATE_PARTS = new Intl.DateTimeFormat('en-US-u-ca-gregory-nu-latn'
 });
 
 const MS_PER_DAY = 86_400_000;
+const MS_PER_HOUR = 3_600_000;
+/**
+ * The largest magnitude the cache serves: one hour inside the ±8.64e15 ms (±100,000,000 days) an
+ * ECMAScript time value may hold, so the whole UTC hour of every instant it serves is valid too.
+ * A literal, not `8.64e15 - MS_PER_HOUR`, so a bundle that never asks for a market day drops it.
+ */
+const CACHED_TIME_LIMIT = 8_639_999_996_400_000;
+
+/**
+ * Market day per UTC hour. Formatting a date in New York costs a few microseconds, and a flow tape
+ * asks for the market day of every print (and of its expiry) — 50,000 prints spent most of
+ * `flow()` here. The first time an hour is asked about, the instant is read exactly, as it always
+ * was, and the hour is only noted, so a one-off visit keeps the same Intl-read count (with added
+ * cache bookkeeping). The second time, the hour's first and last milliseconds are read, and if they
+ * fall on one New York date the hour stores it. Every New York offset change falls on a whole UTC
+ * hour (the tests check the zone data), so inside one hour local time only moves forward; two ends
+ * on one date mean one date throughout. An hour whose ends differ (New York's pre-1883 local mean
+ * time, −4:56:02, puts midnight inside one) stores `NaN` and is answered exactly, every time.
+ * While an entry stays resident, a cacheable hour costs 1, 2, then 0 Intl reads per visit; an
+ * uncacheable hour costs 1, 3, then 1 (confirmation also reads the requested instant exactly).
+ * Bounded per module instance, including each worker's own instance. Cleared when full, like the
+ * offset cache above: revisiting an evicted hour starts over. Errors are never stored.
+ */
+const marketDayByUtcHour = new Map<number, number>();
+const MARKET_DAY_CACHE_LIMIT = 8_192;
+/** Marks an hour asked about once. Never a day index, which is a whole number or `NaN`. */
+const HOUR_SEEN_ONCE = Infinity;
 
 /**
  * The US equity/options market's calendar DAY an instant falls on, as a whole-day index (days since
@@ -220,6 +247,32 @@ const MS_PER_DAY = 86_400_000;
  * 23:59 ET. Pure and clock-free.
  */
 export function usEquityMarketDayIndex(epochMs: EpochMs): number {
+  // Anything that is not a finite number (`Number.isFinite` refuses every non-number), or that lies
+  // at the edge of the time range, keeps the exact path, and with it the exact result or error.
+  if (!Number.isFinite(epochMs) || Math.abs(epochMs) > CACHED_TIME_LIMIT) {
+    return newYorkDayIndex(epochMs);
+  }
+  // `new Date` truncates a fractional time toward zero; bucket the instant it actually reads. The
+  // start of its UTC hour, for negative instants too (`%` keeps the dividend's sign).
+  const instant = Math.trunc(epochMs);
+  const hourStart = instant - (((instant % MS_PER_HOUR) + MS_PER_HOUR) % MS_PER_HOUR);
+  let day = marketDayByUtcHour.get(hourStart);
+  if (day === undefined) {
+    const exact = newYorkDayIndex(epochMs);
+    if (marketDayByUtcHour.size >= MARKET_DAY_CACHE_LIMIT) marketDayByUtcHour.clear();
+    marketDayByUtcHour.set(hourStart, HOUR_SEEN_ONCE);
+    return exact;
+  }
+  if (day === HOUR_SEEN_ONCE) {
+    const first = newYorkDayIndex(hourStart);
+    day = first === newYorkDayIndex(hourStart + MS_PER_HOUR - 1) ? first : NaN;
+    marketDayByUtcHour.set(hourStart, day);
+  }
+  return Number.isNaN(day) ? newYorkDayIndex(epochMs) : day;
+}
+
+/** The New York calendar date of an instant, read from `Intl`: the definition the cache above serves. */
+function newYorkDayIndex(epochMs: EpochMs): number {
   const parts = NEW_YORK_DATE_PARTS.formatToParts(new Date(epochMs));
   let year = NaN;
   let month = NaN;
