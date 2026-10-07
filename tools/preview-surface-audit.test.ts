@@ -343,6 +343,10 @@ describe('FC9 rows 2–5 — the gates that carry the cold-user, parity, generat
       'generated evidence — the manifest contract conformance',
       'tools/manifest/contract-conformance.test.ts',
     ],
+    [
+      'generated evidence — the enforcement record regenerates identically and deterministically',
+      'tools/manifest/enforcement-regeneration.test.ts',
+    ],
     ['packed consumer — clean installs from pnpm pack tarballs', 'tools/packed-consumer.test.ts'],
   ] as const;
 

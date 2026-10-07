@@ -14,3 +14,4 @@ docs/api/
 /distribution/*/README.md
 /distribution/*/LICENSE
 /distribution/*/STABILITY.md
+.vitest-reports/

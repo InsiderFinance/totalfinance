@@ -104,10 +104,16 @@ generated manifests and lockfile. Future notes come from
 `distribution/totalfinance/CHANGELOG.md`; initial notes come from the reviewed initial ledger.
 Do not perform versioning or rebuilding after artifact approval.
 
-The release commit meets the landing standard in `CONTRIBUTING.md` like any other change, and it
-lands on `main`, so the full gate runs on it: everything `pnpm run ci` runs (the API-report check
-included) on every supported Node version, and `pnpm regen:check` in a clean checkout. Run these
-locally only to reproduce a hosted failure.
+The release commit meets the release standard in
+[`CONTRIBUTING.md`](../../CONTRIBUTING.md#local-full-verification-and-releases). Before publication,
+require a green full hosted run at that exact commit: all supported Node versions, coverage floors,
+determinism, clean-tree regeneration, and the installed-artifact rehearsal. A pending `main` run
+or green fast PR run is not release approval.
+
+The release verification job also runs `pnpm run ci`, a standalone `pnpm api:check`, and an
+independent second `pnpm test:coverage`. These may instead run locally with their exit codes
+checked directly and receipts recorded for the exact release commit. Ordinary PRs do not require
+this local repetition; release candidates still require the complete evidence before any upload.
 
 Commit/review/land through the normal maintainer process. Publication requires a clean checkout and
 the manifest's exact HEAD. `--allow-dirty` marks a rehearsal and can never become public approval

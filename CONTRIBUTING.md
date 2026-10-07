@@ -29,9 +29,12 @@ the same gates the maintainers use. This page is that process in one screen; the
   positional argument, and a `@totalfinance/core` error code when it can refuse.
 - **Iterate on the tests for what you changed** (`pnpm exec vitest run <test files>`), plus
   `pnpm exec vitest run tools/bundle-size/budgets.test.ts` when bundle size can move. The full
-  suite and the regeneration chain are the slow parts. Run the suite in hosted CI, and the chain
-  once.
-- **Regenerate in order, once,** after the source is final:
+  suite and the regeneration chain are the slow parts. Ordinary PRs do not need a local full CI
+  run, a second coverage pass, or a clean-tree `regen:check` before pushing; hosted CI owns those
+  gates. Full local checks remain available to reproduce failures, and releases have stronger
+  requirements below. Check each local command's exit code directly, never through a pipe.
+- **Regenerate affected artifacts in order, once,** after the source is final (including any
+  integration changes); repeat only when their inputs change:
   `signature:update → naming:update → contract:update → enforcement:update → validation:update →
 api:update → readme → llms → bundle:update → openapi:update → docs:update`. Check
   `summary.defective` is `0` after `enforcement:update`; a generated file is never edited by hand.
@@ -42,26 +45,59 @@ api:update → readme → llms → bundle:update → openapi:update → docs:upd
 
 ## The landing standard
 
-A change is ready when all of these hold:
+### Pull requests: temporary maintainer-only fast gate
 
-1. Hosted CI is green on the pull request's final commit. On a pull request it runs the fast
-   check: format, lint, typecheck, build and the API-report check, the whole test suite on the
-   minimum supported Node (split across parallel runners, without coverage), and a regeneration of
-   every derived artifact in a clean checkout (`pnpm regen:check`). The stochastic suites are
-   seeded; a one-off flake is documented in `docs/`, not waved through.
-2. Locally, the tests for what changed pass, and the derived artifacts were regenerated once from
-   the final source, with `summary.defective` at `0`. Check every local command by its exit code,
-   never through a pipe.
-3. Every controlling tracker the change touches says the same thing: the spec's slice record, the
+Approved 2026-10-06 while the maintainers are the only contributors; revisit before accepting
+outside contributions. An ordinary PR may land after review and all **current-head** PR checks pass:
+
+- The whole test suite on minimum-supported Node 22.13.0, split into five duration-balanced shards.
+  Coverage is not collected, and enforcement regeneration runs once: the drift assertion stays,
+  but the second-generation determinism assertion waits for the full gate.
+- Format, lint, TypeScript checks, builds, site tests, and the API-report check.
+- Clean-repository artifact regeneration on `.nvmrc` and the local-registry release rehearsal.
+
+This is a deliberate reduction in pre-merge checks, not equivalent evidence delivered faster.
+Node 24/26-only failures, a coverage drop, or a determinism regression can first appear after merge.
+Fix a red `main` before merging unrelated work. Keep any controlling trackers consistent and name
+the actual verified commit; do not describe a fast run as a full CI pass.
+
+### Full gate: main, daily, manual, and before changing the gate itself
+
+Pushes to `main`, the daily 09:23 UTC schedule, and manual runs test Node 22.13.0, 24.x, and 26.x.
+Each version has five test shards with coverage and both independent enforcement generations.
+The merge job requires all five nonempty report files before enforcing the unchanged coverage
+floors. Static checks run once per Node version; regeneration and the release rehearsal also run.
+
+**Before merging changes to CI, sharding/test selection, coverage, enforcement generation, or
+supported Node versions, run the full workflow on the PR branch and require every job to pass at
+the exact proposed head.** A green fast PR run is not sufficient to verify a change to the gate.
+Use Actions → TotalFinance CI → Run workflow → select the PR branch, or:
+
+```sh
+gh workflow run totalfinance-ci.yml --repo InsiderFinance/totalfinance --ref <pr-branch>
+```
+
+Record the run URL and head SHA in the PR. A later code commit requires a new run. Do not wait until
+after merging to discover whether a changed full-gate path works.
+
+### Local full verification and releases
+
+`pnpm run ci` is unchanged: it runs the full local checks, including coverage and determinism.
+Use targeted checks while iterating; rely on the hosted matrix for cross-version verification.
+Do not set `TOTALFINANCE_PR_CHECKS` or `TOTALFINANCE_COVERAGE_SHARD` in a local full run or release
+environment; they are workflow-internal switches for fast PR tests and partial coverage shards.
+
+Release candidates still require a green full hosted gate at the exact release commit **before
+publication**, plus the independent repeat below. These checks may run in the hosted release
+verification job or locally; an ordinary fast PR pass is not a release receipt. Check exit codes
+directly, never through a pipe:
+
+1. `pnpm run ci` exits 0 — format, lint, typecheck, build, coverage, and the API-report check.
+2. `pnpm api:check` exits 0 on its own.
+3. A second `pnpm test:coverage` is all green (the stochastic suites are seeded; a one-off flake is
+   documented in `docs/`, not waved through).
+4. Every controlling tracker the change touches says the same thing: the spec's slice record, the
    implementation order, and the completeness tracker name one commit.
-
-After merge, `main` runs the full gate: everything `pnpm run ci` runs on every supported Node,
-with coverage and its floor, and the enforcement generator's determinism check. It also runs daily.
-A red `main` is fixed before anything else merges. The two depths are a decision for while the
-maintainers are the only contributors (2026-10-06); revisit them before accepting outside ones.
-
-Running `pnpm run ci` locally is still the way to reproduce a hosted failure. It is not a second
-gate to pass before you push.
 
 ## What we say no to
 

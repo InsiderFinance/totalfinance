@@ -12,6 +12,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import fc from 'fast-check';
+import { ErrorCode, isQuantError } from '@totalfinance/core';
 import {
   CANONICAL_JSON_VERSION,
   CONTENT_HASH_PREFIX,
@@ -171,6 +173,123 @@ describe('canonicalJsonOf', () => {
 
   it('names its rules version', () => {
     expect(CANONICAL_JSON_VERSION).toBe(1);
+  });
+});
+
+describe('fromCanonicalJson — owned parsed-tree decoding', () => {
+  it('retains typed refusals for non-string inputs and invalid JSON', () => {
+    expect.assertions(6);
+    for (const [input, expectedCode] of [
+      [null, ErrorCode.InputWrongType],
+      [42, ErrorCode.InputWrongType],
+      ['{"broken":', ErrorCode.SerializationUnsupportedValue],
+    ] as const) {
+      try {
+        fromCanonicalJson(input as string);
+      } catch (error) {
+        expect(isQuantError(error)).toBe(true);
+        expect(isQuantError(error) ? error.code : undefined).toBe(expectedCode);
+      }
+    }
+  });
+
+  it.each([
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+    ['-Infinity', Number.NEGATIVE_INFINITY],
+  ])('decodes %s at the root and inside arrays and objects', (tag, expected) => {
+    const wrapper = JSON.stringify({ nonFinite: tag });
+    expect(fromCanonicalJson(wrapper)).toBe(expected);
+    expect(fromCanonicalJson(`[{"value":${wrapper}},[${wrapper}]]`)).toEqual([
+      { value: expected },
+      [expected],
+    ]);
+  });
+
+  it('preserves near-wrappers, noncanonical key spelling, and duplicate-key JSON semantics', () => {
+    expect(
+      fromCanonicalJson(
+        '[{"nonFinite":"NaN","note":null},{"nonFinite":"nan"},{"nonFinite":0},{"nonFinite":null}]',
+      ),
+    ).toEqual([
+      { nonFinite: 'NaN', note: null },
+      { nonFinite: 'nan' },
+      { nonFinite: 0 },
+      { nonFinite: null },
+    ]);
+    expect(fromCanonicalJson('{"\\u006eonFinite":"NaN"}')).toBeNaN();
+    expect(fromCanonicalJson('{"nonFinite":"invalid","nonFinite":"Infinity"}')).toBe(Infinity);
+    expect(fromCanonicalJson('{"nonFinite":"NaN","nonFinite":"invalid"}')).toEqual({
+      nonFinite: 'invalid',
+    });
+  });
+
+  it('keeps dangerous keys as own data properties even when their values decode', () => {
+    const decoded = fromCanonicalJson(
+      '{"__proto__":{"nonFinite":"NaN"},"nested":[{"__proto__":{"polluted":true},"constructor":{"prototype":{"nonFinite":"Infinity"}}}]}',
+    ) as { nested: Record<string, unknown>[] } & Record<string, unknown>;
+    expect(Object.getPrototypeOf(decoded)).toBe(Object.prototype);
+    expect(Object.getOwnPropertyDescriptor(decoded, '__proto__')).toEqual({
+      value: Number.NaN,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+    const nested = decoded.nested[0]!;
+    expect(Object.getPrototypeOf(nested)).toBe(Object.prototype);
+    expect(Object.hasOwn(nested, '__proto__')).toBe(true);
+    expect(nested['__proto__']).toEqual({ polluted: true });
+    expect(nested['constructor']).toEqual({ prototype: Infinity });
+    expect(Object.prototype).not.toHaveProperty('polluted');
+  });
+
+  it('returns independent writable trees across calls and equal sibling values', () => {
+    const text = '{"rows":[{"value":{"nonFinite":"NaN"}},{"value":{"nonFinite":"NaN"}}]}';
+    const first = fromCanonicalJson(text) as { rows: { value: number }[] };
+    const second = fromCanonicalJson(text) as typeof first;
+    first.rows[0]!.value = 123;
+    first.rows.push({ value: 456 });
+    expect(first.rows[1]!.value).toBeNaN();
+    expect(second.rows).toHaveLength(2);
+    expect(second.rows[0]!.value).toBeNaN();
+    expect(second.rows[1]!.value).toBeNaN();
+    expect(first.rows[0]).not.toBe(first.rows[1]);
+    expect(first.rows).not.toBe(second.rows);
+  });
+
+  it('preserves plain scalars, empty containers, key order, and negative zero from arbitrary JSON', () => {
+    for (const text of ['null', 'true', 'false', '0', '1.25', '"text"', '[]', '{}']) {
+      expect(fromCanonicalJson(text)).toEqual(JSON.parse(text));
+    }
+    expect(Object.is(fromCanonicalJson('-0'), -0)).toBe(true);
+    expect(Object.keys(fromCanonicalJson('{"z":0,"a":1}') as object)).toEqual(['z', 'a']);
+  });
+
+  it('matches an independent JSON reviver over seeded generated trees', () => {
+    const wrapper = fc.record({ nonFinite: fc.constantFrom('NaN', 'Infinity', '-Infinity') });
+    const trees = fc.array(fc.oneof(fc.jsonValue(), wrapper), { maxLength: 20 });
+    fc.assert(
+      fc.property(trees, (rows) => {
+        const text = JSON.stringify({ rows, nested: { value: rows } });
+        const expected: unknown = JSON.parse(text, (_key, value: unknown): unknown => {
+          if (value === null || typeof value !== 'object' || Array.isArray(value)) return value;
+          const entries = Object.entries(value);
+          if (entries.length !== 1 || entries[0]![0] !== 'nonFinite') return value;
+          switch (entries[0]![1]) {
+            case 'NaN':
+              return Number.NaN;
+            case 'Infinity':
+              return Infinity;
+            case '-Infinity':
+              return -Infinity;
+            default:
+              return value;
+          }
+        });
+        expect(fromCanonicalJson(text)).toEqual(expected);
+      }),
+      { seed: 20261006, numRuns: 300 },
+    );
   });
 });
 

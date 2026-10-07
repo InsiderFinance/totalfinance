@@ -16,18 +16,22 @@ This is the standalone TypeScript finance library, not the parent web applicatio
   runs `pnpm regen:check` on a clean tree. Do not weaken gates or hand-edit evidence to make it pass.
 - Format only changed files with the pinned local Prettier. Never run a repository-wide format
   write.
-- Verify fast, and regenerate once. While you iterate, run only the tests for what you changed
+- Verify fast while iterating. Run the tests for what you changed
   (`pnpm exec vitest run <test files>`), plus `pnpm exec vitest run tools/bundle-size/budgets.test.ts`
-  when bundle size can move. Regenerate derived artifacts once, after the source is final:
-  `enforcement:update` is the slow step. Do not run `pnpm run ci`, a second coverage
-  pass or `pnpm regen:check` locally to land a change. Hosted CI runs them: a fast check on each
-  pull request, the full matrix with coverage on `main` and daily. A green final commit is the
-  landing standard in `CONTRIBUTING.md`; a red `main` is fixed first.
+  when bundle size can move. Regenerate affected derived artifacts once the source is final,
+  including after integration changes; do not repeat the whole chain for unchanged source.
+- Follow `CONTRIBUTING.md`'s fast-PR/full-gate policy: all current-head PR jobs must be green,
+  with a full hosted run before landing changes to CI/enforcement gates or supported Node
+  versions. Ordinary PRs do not require local full CI, a second coverage pass, or `regen:check`;
+  hosted CI owns those gates. `pnpm run ci` remains available for full local verification and
+  reproducing failures. Releases still require the independent repeat in the contributing guide.
+  A fast PR pass is not a full CI pass; fix a red `main` before merging unrelated work.
 - The public name is TotalFinance. Publish only `@insiderfinance/totalfinance` and the optional
   `@insiderfinance/totalfinance-mcp`, from `distribution/*`. `packages/*` and their aliases are
   private source/build workspaces. After a Changesets version bump, run `pnpm publication:update`
   to synchronize source versions and derived export maps before building.
 - Never publish packages, change release versions, deploy the site, or enable live execution
   without explicit maintainer approval. Never add credentials or private application code.
-- Agent instructions live in this file, which Claude Code and the other agents read. Do not add a
-  `CLAUDE.md` (Claude Code's `/init` creates one by default); put new instructions here.
+- Agent instructions have one source of truth: this file. If an agent does not discover
+  `AGENTS.md` automatically, load it explicitly. Do not add a duplicate `CLAUDE.md`; put new
+  repository instructions here.
