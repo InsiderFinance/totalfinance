@@ -93,6 +93,15 @@ static; integration with the merged verification improvements subsequently passe
 time, 0DTE-flow and canonical-serialization tests on Node 22.23.2. Final-head hosted checks remain
 the landing gate.
 
+**Post-0.1.2 amendment (2026-10-07): option-flow drift on a premium path.**
+[`option-flow-drift-premium-path.md`](./specs/option-flow-drift-premium-path.md) controls it. DR1
+is implemented: `optionFlowDrift` runs `flow()`'s shared per-print validation, premium and side
+classification (`classifyPrint`) without the block, 0DTE, open/close, sweep and spread analytics
+it never reported. About 1.9× faster on 50,000 prints, with results and errors equal to the
+published 0.1.2 on 71 pinned cases. A patch changeset; no version bump or publish here. DR2–DR5
+(a compact per-minute result and an incremental tracker) are proposed and await maintainer
+decisions.
+
 ### Preview launch queue (2026-09-07)
 
 **Current work (2026-09-22): prepare the scoped, single-package 0.1.0 release.**

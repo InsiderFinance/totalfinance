@@ -16,6 +16,7 @@ import {
   ensureNonNegative,
   ensurePositive,
   isoDateToEpochMs,
+  optionExpiryToMs,
   requireArgumentArray,
   requireArgumentObject,
   requireFiniteFields,
@@ -23,11 +24,11 @@ import {
 } from '@totalfinance/core';
 import { NYSE, requireCalendar } from '@totalfinance/calendars';
 import {
-  flow,
   type AggressorSide,
   type FlowClassificationProvenance,
   type FlowClassificationSource,
 } from './flow.js';
+import { classifyPrint, requireClassificationSource } from './flow-print.js';
 
 /** Canonical epoch-ms print, optionally carrying a caller-normalized, tape-wide unique ID. */
 export interface OptionFlowDriftTrade extends OptionTrade {
@@ -512,9 +513,17 @@ export function optionFlowDrift(input: OptionFlowDriftInput): OptionFlowDriftRes
     });
   }
 
-  // Use the existing classifier; discard sweep/spread labels, which require later print context.
-  const analysis = flow([...input.trades], { classificationSource, multiplier });
-  const indexes = new Map<OptionTrade, number>();
+  // flow()'s own per-print validation, premium and side classification — the same function, so the
+  // two cannot disagree — WITHOUT its block, 0DTE, open/close, sweep and spread analytics, which
+  // drift never reported. flow() also resolved every expiry (for its 0DTE flag), so an unparseable
+  // expiry has always failed here; resolving it keeps that error. Then flow()'s stable time order.
+  if (config.classificationSource !== undefined) requireClassificationSource(classificationSource);
+  const classified = input.trades.map((trade, inputIndex) => {
+    const print = classifyPrint(trade, inputIndex, multiplier, classificationSource);
+    optionExpiryToMs(trade.contract.expiry);
+    return { trade, inputIndex, ...print };
+  });
+  classified.sort((a, b) => a.trade.timestampMs - b.trade.timestampMs);
   const identities = new Set<string>();
   input.trades.forEach((trade, i) => {
     const path = `trades[${i}]`;
@@ -557,7 +566,6 @@ export function optionFlowDrift(input: OptionFlowDriftInput): OptionFlowDriftRes
         'duplicates an ID or an identical ID-less print; supply unique IDs for distinct executions.',
       );
     identities.add(key);
-    indexes.set(trade, i);
     if (trade.underlyingPrice !== undefined) {
       if (c.underlying === overlaySymbol)
         prices.push({
@@ -598,28 +606,28 @@ export function optionFlowDrift(input: OptionFlowDriftInput): OptionFlowDriftRes
     open === null || close === null ? null : Math.max(open, Math.min(close, config.asOf ?? close));
   const inSession = (ms: number): boolean =>
     open !== null && end !== null && ms >= open && ms < end;
-  const prints: OptionFlowDriftPrint[] = analysis.trades
+  const prints: OptionFlowDriftPrint[] = classified
     .filter(
       (t) =>
         inSession(t.trade.timestampMs) &&
-        (config.symbol === undefined || t.underlying === config.symbol),
+        (config.symbol === undefined || t.trade.contract.underlying === config.symbol),
     )
     .map((t) => ({
-      id: (t.trade as OptionFlowDriftTrade).id ?? null,
-      inputIndex: indexes.get(t.trade)!,
+      id: t.trade.id ?? null,
+      inputIndex: t.inputIndex,
       timestampMs: t.trade.timestampMs,
-      underlying: t.underlying,
-      type: t.type,
+      underlying: t.trade.contract.underlying,
+      type: t.trade.contract.type,
       side: t.side,
       classificationProvenance: { ...t.classificationProvenance },
       premium: t.premium,
       premiumSource: t.trade.premium === undefined ? 'price-size-multiplier' : 'provided',
       multiplier: t.trade.contract.multiplier ?? multiplier,
-      contracts: t.size,
+      contracts: t.trade.size,
       directionalPremium:
         t.side === 'unknown'
           ? 0
-          : (t.type === 'call') === (t.side === 'buy')
+          : (t.trade.contract.type === 'call') === (t.side === 'buy')
             ? t.premium
             : -t.premium,
     }));
