@@ -26,9 +26,10 @@
  * would manufacture false positives — the failure this whole rework exists to correct. They become
  * authoritative in 3B.1, once the field-level policy exists to say which fields are required.
  *
- * Regenerate with `pnpm enforcement:update`. The gate lives in `contract-conformance.test.ts` and
- * includes the cross-check that makes the original contradiction impossible: a path recorded defective
- * here may not be recorded enforced anywhere.
+ * Regenerate with `pnpm enforcement:update`. The gates live in `contract-conformance.test.ts`, which
+ * includes the cross-check that makes the original contradiction impossible (a path recorded defective
+ * here may not be recorded enforced anywhere), and `enforcement-regeneration.test.ts` (drift and
+ * determinism against fresh generations).
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

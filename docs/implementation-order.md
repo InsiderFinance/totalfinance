@@ -5,6 +5,13 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+**Bounded regeneration performance follow-up — complete (2026-10-06), implementation `51599ae`:**
+the [profiling and verification record](./specs/regeneration-performance.md) closes the maintainer-approved
+PR #8 optimization. Local tests and clean regeneration pass; exact-source hosted fast and full runs
+pass (23/23 full jobs), preserving calculation/API evidence and every verification gate. It does not
+reopen core-library work or authorize merging or publishing. Later documentation-closeout receipts
+remain with the PR's current-head checks.
+
 **September review repairs — locally verified complete:**
 [`R01–R14 and their evidence`](./specs/review-september-2026-repairs.md) passed the local source,
 static/API, and full-coverage gates on `dccfce53` plus the repair changes. This records local
@@ -68,6 +75,23 @@ elsewhere that there are no released consumers no longer apply, and existing sup
 preserved. Main now includes the 0.1.1 release metadata at `b1edf16`; this holdings integration
 preserves it without bumping or publishing another version. MCP expansion and deployment remain
 separate work.
+
+**Post-0.1.2 amendment (2026-10-06): the New York market day per clock hour.**
+`usEquityMarketDayIndex` remembers the New York date per UTC hour (read exactly on an hour's first
+visit, confirmed at both ends of the hour on its second) instead of reading `Intl` on every call, so
+`flow()`'s per-print 0DTE flag no longer dominates flow analysis. Results and errors are unchanged;
+an hour with a mid-hour New York midnight (pre-1883 local mean time) is answered exactly. The
+`workflows` bundle budget moves 502.5 → 502.75 KB from a measurement (+196 B). No public API change;
+a patch changeset; no version bump or publish here.
+
+Review clarification: read counts are per resident entry, not lifetime guarantees for a UTC hour.
+Cacheable hours use 1/2/0 reads on their first/second/later visits; uncacheable hours use 1/3/1.
+One-off calls preserve the Intl-read count, not an identical wall-clock cost. Each module instance
+has its own bounded cache, and eviction restarts confirmation. Dedicated read-count tests cover
+the uncacheable path and eviction between the first and second visits. The original review was
+static; integration with the merged verification improvements subsequently passed all 67 focused
+time, 0DTE-flow and canonical-serialization tests on Node 22.23.2. Final-head hosted checks remain
+the landing gate.
 
 ### Preview launch queue (2026-09-07)
 

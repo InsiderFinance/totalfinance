@@ -104,14 +104,16 @@ generated manifests and lockfile. Future notes come from
 `distribution/totalfinance/CHANGELOG.md`; initial notes come from the reviewed initial ledger.
 Do not perform versioning or rebuilding after artifact approval.
 
-Run the landing standard before review, plus the independent checks:
+The release commit meets the release standard in
+[`CONTRIBUTING.md`](../../CONTRIBUTING.md#local-full-verification-and-releases). Before publication,
+require a green full hosted run at that exact commit: all supported Node versions, coverage floors,
+determinism, clean-tree regeneration, and the installed-artifact rehearsal. A pending `main` run
+or green fast PR run is not release approval.
 
-```sh
-pnpm run ci
-pnpm api:check
-pnpm test:coverage
-pnpm regen:check
-```
+The release verification job also runs `pnpm run ci`, a standalone `pnpm api:check`, and an
+independent second `pnpm test:coverage`. These may instead run locally with their exit codes
+checked directly and receipts recorded for the exact release commit. Ordinary PRs do not require
+this local repetition; release candidates still require the complete evidence before any upload.
 
 Commit/review/land through the normal maintainer process. Publication requires a clean checkout and
 the manifest's exact HEAD. `--allow-dirty` marks a rehearsal and can never become public approval

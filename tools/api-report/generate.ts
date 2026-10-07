@@ -155,11 +155,8 @@ function renderSymbol(checker: ts.TypeChecker, exportName: string, original: ts.
   return `- \`${label} ${exportName}\`: ${normalizeTypeString(typeString)}`.trimEnd();
 }
 
-/** Generate the API-report markdown for a single package, or `null` if its source is absent. */
-export function generateReport(pkg: ApiPackage): string | null {
-  const entry = entryFor(pkg);
-  if (!existsSync(entry)) return null;
-
+/** One compiler host per batch, with unchanged options and a fresh source-file cache. */
+function createReportSession(): (pkg: ApiPackage, oldProgram?: ts.Program) => ts.Program {
   const options: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.ESNext,
@@ -173,7 +170,27 @@ export function generateReport(pkg: ApiPackage): string | null {
     types: [],
   };
 
-  const program = ts.createProgram([entry], options);
+  const host = ts.createCompilerHost(options);
+  const loadSource = host.getSourceFile;
+  const sources = new Map<string, ts.SourceFile>();
+  host.getSourceFile = (path, languageVersion, onError, shouldCreateNewSourceFile) => {
+    const key = host.getCanonicalFileName(path);
+    if (!shouldCreateNewSourceFile) {
+      const cached = sources.get(key);
+      if (cached !== undefined) return cached;
+    }
+    const source = loadSource(path, languageVersion, onError, shouldCreateNewSourceFile);
+    if (source !== undefined) sources.set(key, source);
+    else sources.delete(key);
+    return source;
+  };
+  return (pkg, oldProgram) =>
+    ts.createProgram([entryFor(pkg)].filter(existsSync), options, host, oldProgram);
+}
+
+function renderReport(pkg: ApiPackage, program: ts.Program): string | null {
+  const entry = entryFor(pkg);
+  if (!existsSync(entry)) return null;
   const checker = program.getTypeChecker();
   const sourceFile = program.getSourceFile(entry);
   if (!sourceFile) throw new Error(`Could not load ${entry}`);
@@ -205,6 +222,28 @@ export function generateReport(pkg: ApiPackage): string | null {
   ].join('\n');
 }
 
+/** Generate the API-report markdown for a single package, or `null` if its source is absent. */
+export function generateReport(pkg: ApiPackage): string | null {
+  return renderReport(pkg, createReportSession()(pkg));
+}
+
+/**
+ * Reuse parsed source files through one host and the compiler's own incremental machinery.
+ * Keep one root per report: one all-package program changes the checker's property ordering in
+ * rendered types. No compiler or report survives this invocation, so later calls see fresh sources.
+ * `generateReport` remains an independent reading for parity checks.
+ */
+export function generateReports(): ReadonlyMap<ApiPackage, string | null> {
+  const reports = new Map<ApiPackage, string | null>();
+  const createProgram = createReportSession();
+  let program: ts.Program | undefined;
+  for (const pkg of API_PACKAGES) {
+    program = createProgram(pkg, program);
+    reports.set(pkg, renderReport(pkg, program));
+  }
+  return reports;
+}
+
 export interface ApiCheckResult {
   pkg: ApiPackage;
   status: 'ok' | 'drift' | 'missing-snapshot' | 'skipped';
@@ -213,8 +252,7 @@ export interface ApiCheckResult {
 
 export function checkReports(): ApiCheckResult[] {
   const results: ApiCheckResult[] = [];
-  for (const pkg of API_PACKAGES) {
-    const generated = generateReport(pkg);
+  for (const [pkg, generated] of generateReports()) {
     const expectedPath = reportPathFor(pkg);
     if (generated === null) {
       results.push({ pkg, status: 'skipped', expectedPath });
@@ -236,8 +274,7 @@ export function checkReports(): ApiCheckResult[] {
 
 export function writeReports(): ApiPackage[] {
   const written: ApiPackage[] = [];
-  for (const pkg of API_PACKAGES) {
-    const generated = generateReport(pkg);
+  for (const [pkg, generated] of generateReports()) {
     if (generated === null) continue;
     const out = reportPathFor(pkg);
     mkdirSync(dirname(out), { recursive: true });

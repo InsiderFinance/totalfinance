@@ -239,6 +239,221 @@ describe('usEquityMarketDayIndex — the ONE America/New_York day boundary', () 
   });
 });
 
+/**
+ * The New York date straight from `Intl`, independently of the module: the definition the market-day
+ * cache must reproduce exactly, error for error.
+ */
+const referenceFormatter = new Intl.DateTimeFormat('en-US-u-ca-gregory-nu-latn', {
+  timeZone: 'America/New_York',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  era: 'short',
+});
+function referenceDayIndex(epochMs: number): number {
+  const parts = referenceFormatter.formatToParts(new Date(epochMs));
+  const value = (type: string) => parts.find((part) => part.type === type)?.value;
+  const year = Number(value('year'));
+  const bc = value('era')?.startsWith('B') ?? false;
+  return Math.round(
+    Date.UTC(bc ? 1 - year : year, Number(value('month')) - 1, Number(value('day'))) / 86_400_000,
+  );
+}
+function outcome(run: () => number): { value: number } | { error: string } {
+  try {
+    return { value: run() };
+  } catch (error) {
+    return { error: `${(error as Error).name}: ${(error as Error).message}` };
+  }
+}
+/**
+ * Asks three times, so the instant is answered on its hour's first visit, on the visit that reads
+ * the hour's two ends, and from memory (or the same paths again in an hour already known).
+ */
+const expectSameDay = (epochMs: number) => {
+  const expected = outcome(() => referenceDayIndex(epochMs));
+  for (let call = 1; call <= 3; call++)
+    expect(
+      outcome(() => usEquityMarketDayIndex(epochMs)),
+      `${epochMs}, call ${call}`,
+    ).toEqual(expected);
+};
+
+describe('usEquityMarketDayIndex answers from the clock hour, exactly as Intl does', () => {
+  it('matches Intl on 50,000 instants from 2000 BC to 3000 AD, fractional milliseconds included', () => {
+    let seed = 20261006;
+    const random = () => (seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 2 ** 32;
+    const from = Date.UTC(-2000, 0, 1);
+    const to = Date.UTC(3000, 0, 1);
+    for (let i = 0; i < 50_000; i++) expectSameDay(from + random() * (to - from));
+  });
+
+  it('matches Intl on both sides of every New York clock change and midnight, 1860 to 2100', () => {
+    // Each day whose New York UTC offset differs from the day before has a clock change: probe every
+    // UTC hour around it (local midnights included) at the boundary and just either side.
+    const offsetFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      timeZoneName: 'longOffset',
+    });
+    const offsetAt = (ms: number) =>
+      offsetFormatter.formatToParts(new Date(ms)).find((part) => part.type === 'timeZoneName')
+        ?.value;
+    let changes = 0;
+    let previous = offsetAt(Date.UTC(1859, 11, 31, 12));
+    for (let day = Date.UTC(1860, 0, 1); day < Date.UTC(2101, 0, 1); day += 86_400_000) {
+      const current = offsetAt(day + 12 * 3_600_000);
+      if (current === previous) continue;
+      // The first millisecond of the new offset lies within the 24 hours before the probe. The cache
+      // is sound only because it is always the start of a UTC hour: check the zone data says so.
+      let before = day - 12 * 3_600_000;
+      let after = day + 12 * 3_600_000;
+      while (after - before > 1) {
+        const middle = before + Math.floor((after - before) / 2);
+        if (offsetAt(middle) === previous) before = middle;
+        else after = middle;
+      }
+      expect(((after % 3_600_000) + 3_600_000) % 3_600_000, new Date(after).toISOString()).toBe(0);
+      previous = current;
+      changes++;
+      for (let hour = -36; hour <= 36; hour++) {
+        const boundary = day + hour * 3_600_000;
+        for (const delta of [-1, -0.5, 0, 0.5, 1, 1_799_999, 3_599_999])
+          expectSameDay(boundary + delta);
+      }
+    }
+    // Standard time in 1883, war time, and two changes a year since 1918 (with gaps).
+    expect(changes).toBeGreaterThan(300);
+  });
+
+  it('answers the local-mean-time era exactly, where midnight falls inside a clock hour', () => {
+    // Before 18 Nov 1883 New York ran at −4:56:02: local midnight is 04:56:02Z.
+    const midnight = Date.UTC(1880, 5, 2, 4, 56, 2);
+    expect(referenceDayIndex(midnight - 1)).toBe(referenceDayIndex(midnight) - 1);
+    for (let second = -3600; second <= 3600; second++) {
+      expectSameDay(midnight + second * 1000);
+      expectSameDay(midnight + second * 1000 - 1);
+    }
+    // The 1883 switch to standard time, at local noon.
+    for (let minute = -120; minute <= 120; minute++)
+      expectSameDay(Date.UTC(1883, 10, 18, 17) + minute * 60_000);
+  });
+
+  it('keeps the edge of the time range, signed zero and invalid input exactly as Intl answers them', () => {
+    // The range ends at ±8.64e15; the cache serves only instants at least one hour inside it.
+    // No fractions here: above 2^52 a double steps by whole milliseconds.
+    for (const edge of [8.64e15, -8.64e15]) {
+      const inward = -Math.sign(edge);
+      for (const delta of [0, 1, -1, 3_600_000, -3_600_000]) expectSameDay(edge + delta);
+      for (const delta of [3_599_999, 3_600_000, 3_600_001, 7_200_000])
+        expectSameDay(edge + inward * delta);
+    }
+    for (const value of [0, -0, 0.5, -0.5, -1, 1, NaN, Infinity, -Infinity, Number.MAX_VALUE])
+      expectSameDay(value);
+    // Not a number at all: whatever `new Date` makes of it, as before.
+    for (const value of ['2026-06-04T15:00:00Z', null, undefined] as unknown as number[])
+      expectSameDay(value);
+  });
+
+  it('reads Intl three times per clock hour of a session, not once per instant', async () => {
+    // A fresh module, so no other test's hours are already known.
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // A trading session's worth of prints, one every 0.47 s.
+    const open = Date.UTC(2031, 2, 4, 14, 30);
+    const instants = Array.from({ length: 50_000 }, (_, i) => open + i * 470);
+    const expected = referenceDayIndex(open);
+    const hours = new Set(instants.map((at) => Math.floor(at / 3_600_000))).size;
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      const days = new Set(instants.map((at) => fresh.usEquityMarketDayIndex(at)));
+      expect([...days]).toEqual([expected]);
+      // Per UTC hour: the first print read exactly, then the hour's first and last millisecond.
+      expect(hours).toBe(8);
+      expect(formatToParts).toHaveBeenCalledTimes(3 * hours);
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('keeps one Intl read for an hour asked about once, as before the cache', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // A daily backtest: one close a day for 1,000 days, each in its own UTC hour.
+    const closes = Array.from(
+      { length: 1_000 },
+      (_, i) => Date.UTC(2032, 0, 1, 20) + i * 86_400_000,
+    );
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      const reads = () => formatToParts.mock.calls.length;
+      const pass = () => closes.map((at) => fresh.usEquityMarketDayIndex(at));
+      const expected = closes.map((at) => referenceDayIndex(at));
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(closes.length);
+      // A second visit reads each hour's two ends; after that the hours answer from memory.
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(2 * closes.length);
+      formatToParts.mockClear();
+      expect(pass()).toEqual(expected);
+      expect(reads()).toBe(0);
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('uses one, three, then one Intl read per visit to an uncacheable hour', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    // All visits share a UTC hour, but lie on both sides of New York's LMT midnight.
+    const midnight = Date.UTC(1880, 5, 2, 4, 56, 2);
+    const instants = [midnight - 1, midnight, midnight - 1, midnight + 1];
+    const expected = instants.map((at) => referenceDayIndex(at));
+    const readsPerVisit = [1, 3, 1, 1];
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      for (let i = 0; i < instants.length; i++) {
+        formatToParts.mockClear();
+        expect(fresh.usEquityMarketDayIndex(instants[i]!)).toBe(expected[i]);
+        // Confirmation reads both ends, then the requested instant; later visits stay exact.
+        expect(formatToParts).toHaveBeenCalledTimes(readsPerVisit[i]!);
+      }
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('restarts confirmation after an hour is evicted between its first and second visits', async () => {
+    vi.resetModules();
+    const fresh = await import('../src/time.js');
+    const first = Date.UTC(2042, 0, 1, 12);
+    const expected = referenceDayIndex(first);
+    const formatToParts = vi.spyOn(Intl.DateTimeFormat.prototype, 'formatToParts');
+    try {
+      expect(fresh.usEquityMarketDayIndex(first)).toBe(expected);
+      expect(formatToParts).toHaveBeenCalledTimes(1);
+      // The original hour is only marked "seen once". Exceed the documented 8,192-entry bound
+      // before revisiting it, so its first-visit marker must be discarded too.
+      for (let hour = 1; hour <= 8_192; hour++)
+        fresh.usEquityMarketDayIndex(first + hour * 3_600_000);
+      for (const reads of [1, 2, 0]) {
+        formatToParts.mockClear();
+        expect(fresh.usEquityMarketDayIndex(first)).toBe(expected);
+        expect(formatToParts).toHaveBeenCalledTimes(reads);
+      }
+    } finally {
+      formatToParts.mockRestore();
+    }
+  });
+
+  it('stays exact past the bound of its memory', () => {
+    const start = Date.UTC(2040, 0, 1);
+    for (let hour = 0; hour < 9_000; hour++) expectSameDay(start + hour * 3_600_000 + 1_234);
+    expectSameDay(start + 1_234);
+  });
+});
+
 describe('optionExpiryToMs remembers parsed labels, never failures', () => {
   it('returns the same instants from the cache, past its bound, and throws on every bad label', () => {
     expect(optionExpiryToMs('2026-09-18')).toBe(Date.UTC(2026, 8, 18, 20));
