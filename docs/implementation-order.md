@@ -5,6 +5,13 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+**Bounded regeneration performance follow-up — complete (2026-10-06), implementation `51599ae`:**
+the [profiling and verification record](./specs/regeneration-performance.md) closes the maintainer-approved
+PR #8 optimization. Local tests and clean regeneration pass; exact-source hosted fast and full runs
+pass (23/23 full jobs), preserving calculation/API evidence and every verification gate. It does not
+reopen core-library work or authorize merging or publishing. Later documentation-closeout receipts
+remain with the PR's current-head checks.
+
 **September review repairs — locally verified complete:**
 [`R01–R14 and their evidence`](./specs/review-september-2026-repairs.md) passed the local source,
 static/API, and full-coverage gates on `dccfce53` plus the repair changes. This records local
@@ -62,8 +69,10 @@ Review clarification: read counts are per resident entry, not lifetime guarantee
 Cacheable hours use 1/2/0 reads on their first/second/later visits; uncacheable hours use 1/3/1.
 One-off calls preserve the Intl-read count, not an identical wall-clock cost. Each module instance
 has its own bounded cache, and eviction restarts confirmation. Dedicated read-count tests cover
-the uncacheable path and eviction between the first and second visits. These review-added tests
-were inspected but not run locally, per the maintainer's request; their execution remains a CI gate.
+the uncacheable path and eviction between the first and second visits. The original review was
+static; integration with the merged verification improvements subsequently passed all 67 focused
+time, 0DTE-flow and canonical-serialization tests on Node 22.23.2. Final-head hosted checks remain
+the landing gate.
 
 ### Preview launch queue (2026-09-07)
 

@@ -63,10 +63,10 @@ export function isNonFiniteNumber(value: unknown): value is NonFiniteNumber {
   return true;
 }
 
-function decodeNonFinite(value: NonFiniteNumber): number {
-  return value.nonFinite === 'NaN'
+function decodeNonFinite(tag: NonFiniteNumber['nonFinite']): number {
+  return tag === 'NaN'
     ? Number.NaN
-    : value.nonFinite === 'Infinity'
+    : tag === 'Infinity'
       ? Number.POSITIVE_INFINITY
       : Number.NEGATIVE_INFINITY;
 }
@@ -239,23 +239,27 @@ export function canonicalJsonOf(value: unknown): string {
   return serialize(value, '');
 }
 
-function decodeTree(value: unknown): unknown {
-  if (isNonFiniteNumber(value)) return decodeNonFinite(value);
-  if (Array.isArray(value)) return value.map((element) => decodeTree(element));
-  if (value !== null && typeof value === 'object') {
-    const out: Record<string, unknown> = {};
-    for (const [key, member] of Object.entries(value as Record<string, unknown>)) {
-      // `out['__proto__'] = member` invokes Object.prototype's legacy setter instead of creating
-      // a JSON field. Define the own enumerable member explicitly so every valid JSON key survives
-      // the canonical round trip and no decoded artifact can mutate an object's prototype.
-      Object.defineProperty(out, key, {
-        configurable: true,
-        enumerable: true,
-        value: decodeTree(member),
-        writable: true,
-      });
+/**
+ * Only receives the fresh tree owned by JSON.parse below, never a caller's object graph. Its members
+ * are already enumerable, writable stored data and its arrays are dense. Decode in place instead of
+ * allocating a second tree and re-checking descriptors on every node. The public wrapper predicate
+ * and serializer still perform the full hostile-input checks; this is not a general object walker.
+ */
+function decodeParsedTree(value: unknown): unknown {
+  if (value === null || typeof value !== 'object') return value;
+  const object = value as Record<string, unknown>;
+  const keys = Object.keys(object);
+  // Parsed arrays have only indexed enumerable keys, so this exact key test excludes them too.
+  if (keys.length === 1 && keys[0] === 'nonFinite') {
+    const tag = object['nonFinite'];
+    if (tag === 'NaN' || tag === 'Infinity' || tag === '-Infinity') {
+      return decodeNonFinite(tag);
     }
-    return out;
+  }
+  for (const key of keys) {
+    // Each key ALREADY exists as an own data property created by JSON.parse. Assignment therefore
+    // updates it, including `__proto__`, without invoking an inherited setter or changing prototypes.
+    object[key] = decodeParsedTree(object[key]);
   }
   return value;
 }
@@ -285,5 +289,5 @@ export function fromCanonicalJson(text: string): unknown {
       { code: ErrorCode.SerializationUnsupportedValue, context: { textPrefix: text.slice(0, 80) } },
     );
   }
-  return decodeTree(parsed);
+  return decodeParsedTree(parsed);
 }

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 231,
+    "surfaces": 232,
     "byClass": {
       "current-runnable": 90,
-      "future-target": 48,
+      "future-target": 49,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4522,
     "checkedUnderTruthfulness": 172,
-    "checkedUnderVocabulary": 48,
+    "checkedUnderVocabulary": 49,
     "shippedNamesWatched": 9601,
     "documentedExceptions": 7,
     "findings": 0
@@ -1028,6 +1028,13 @@
     },
     {
       "path": "docs/specs/preview-integration-and-shipping.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/regeneration-performance.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

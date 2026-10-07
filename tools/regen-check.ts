@@ -15,6 +15,7 @@
  */
 
 import { execSync } from 'node:child_process';
+import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -37,11 +38,13 @@ export const REGENERATION_STEPS: readonly string[] = [
 
 function run(command: string): void {
   process.stdout.write(`\n▶ ${command}\n`);
+  const startedAt = performance.now();
   execSync(command, {
     cwd: ROOT,
     stdio: 'inherit',
     env: { ...process.env, CI: process.env['CI'] ?? '1' },
   });
+  process.stdout.write(`✓ ${command} (${((performance.now() - startedAt) / 1000).toFixed(2)}s)\n`);
 }
 
 /** Paths that differ from HEAD after the chain (tracked changes and untracked files). */
