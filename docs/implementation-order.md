@@ -5,6 +5,12 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+**Bounded CI tooling follow-up (2026-10-06):** the maintainer-approved
+[regeneration performance pass](./specs/regeneration-performance.md) profiles and optimizes PR #8's
+remaining bottleneck (including profiled internal runtime work) while preserving all generated evidence
+and verification gates. It does not
+reopen core-library work or authorize merging or publishing.
+
 **September review repairs — locally verified complete:**
 [`R01–R14 and their evidence`](./specs/review-september-2026-repairs.md) passed the local source,
 static/API, and full-coverage gates on `dccfce53` plus the repair changes. This records local
