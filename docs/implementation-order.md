@@ -37,6 +37,10 @@ published contracts and release metadata are preserved. This adds provider-free 
 the consumer owns its separate offline handoff. Final-head hosted checks remain required before
 [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges. No npm publication is authorized.
 
+**Review follow-up in progress (2026-10-07):** HP6 in the same partition spec clarifies caller
+attestations, simplifies the first-use guide and retains broader regression checks in CI. It does
+not change the calculation, request shape, provider boundary or release scope.
+
 The FMP rebuild consumer authorizes the independent provider-free
 [disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review
 verification complete (2026-10-02) @ `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** This includes

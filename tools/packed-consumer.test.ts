@@ -2602,7 +2602,33 @@ describe('packed reported holding partitions', () => {
       sh('mkdir', ['-p', dir], consumer);
       writeFileSync(
         join(dir, 'consumer.mts'),
-        source + '\nconsole.log("HOLDING_PARTITIONS_PUBLIC_OK");',
+        source +
+          `
+import { portfolio } from '@insiderfinance/totalfinance';
+import { compareDisclosedHoldingPartitions as domain } from '@insiderfinance/totalfinance/portfolio';
+import { canonicalJsonOf, readAnalysisArtifact } from '@insiderfinance/totalfinance/core/artifacts';
+
+// Keep the out-of-tree consumer independent of Node type declarations, like the public guide.
+function expectEqual(actual: unknown, expected: unknown): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected))
+    throw new Error('Partition guide result mismatch: ' + JSON.stringify({ actual, expected }));
+}
+expectEqual(result.current.concentration.denominatorReportedValue, '200');
+expectEqual(result.current.concentration.largestPartitionWeight, '0.7');
+expectEqual(result.current.concentration.partitionHerfindahlIndex, '0.58');
+expectEqual(result.changes.map((change) => ({
+  discretion: change.partitionKey.investmentDiscretion,
+  quantityDifference: change.quantityDifference,
+  valueDifference: change.valueDifference,
+})), [
+  { discretion: 'OTR', quantityDifference: '1', valueDifference: '10' },
+  { discretion: 'SOLE', quantityDifference: '4', valueDifference: '40' },
+]);
+expectEqual(canonicalJsonOf(domain(input)), canonicalJsonOf(result));
+expectEqual(canonicalJsonOf(portfolio.compareDisclosedHoldingPartitions(input)), canonicalJsonOf(result));
+expectEqual(readAnalysisArtifact({ artifact }).artifact.id, artifact.id);
+console.log('HOLDING_PARTITIONS_PUBLIC_OK');
+`,
       );
       writeFileSync(
         join(dir, 'partition-contract.mts'),

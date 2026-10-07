@@ -10,7 +10,7 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4540,
+    "executableFences": 4541,
     "checkedUnderTruthfulness": 173,
     "checkedUnderVocabulary": 49,
     "shippedNamesWatched": 9638,
@@ -142,7 +142,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 1
+      "codeFences": 2
     },
     {
       "path": "docs/guides/disclosed-holdings.md",

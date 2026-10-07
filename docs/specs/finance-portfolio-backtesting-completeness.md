@@ -38,6 +38,10 @@ It preserves the v1 calculator and does not reopen ledger semantics. Final-head 
 remain required before [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges;
 publication and the consumer's offline handoff remain separate.
 
+The bounded HP6 review follow-up (2026-10-07) is in progress in the same spec: caller-attestation
+guidance, a task-first example and permanent exact-oracle/completeness/basis regression tests.
+It preserves the HP1–HP5 calculation and does not add another library capability or transport.
+
 The independent consumer-requested [disclosed holdings comparison](./disclosed-holdings.md) is
 **DH1–DH7 implementation and review verification complete (2026-10-02) @
 `69b9ef92094f16b5f4fa881229b586ecb1c3f67e`.** Typed scales and reason codes, structured policy reporting,

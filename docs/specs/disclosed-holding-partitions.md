@@ -103,6 +103,10 @@ It performs no I/O, source lookup or clock access. Existing v1 public types and 
 - [x] HP5: canonical regeneration sequence, format changed files only, full CI, separate API check,
       independent full coverage repeat and clean-commit regeneration. Synchronize this spec,
       implementation order and completeness tracker against exact evidence; no release bump.
+- [ ] HP6: review polish without changing calculations: document the three caller attestations,
+      teach one calculation before optional storage/import variants, retain exact-oracle and
+      exhaustive completeness/basis regression matrices in CI, and verify regenerated references
+      and installed-guide consumers. Preserve HP1–HP5 semantics and all existing verification gates.
 
 ## Verification record
 

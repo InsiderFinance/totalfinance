@@ -32,8 +32,25 @@ export interface DisclosedHoldingPartitionsSnapshot {
   periodEnd: string;
   reportIds: readonly string[];
   evidenceIds: readonly string[];
+  /**
+   * Caller attests that holdings contains the entire selected reported universe for this period,
+   * not a page, filtered subset, or a report with known withheld/missing holdings. This does not
+   * assert that a disclosure covers all of the manager's economic assets. Unknown means false.
+   */
   reportComplete: boolean;
+  /**
+   * Caller attests that every supplied holding has an authenticated issuer/security/class mapping.
+   * Keep unresolved rows in holdings; never drop them to make this true. The library also checks
+   * consumed mapping fields and conflicts. Unknown means false.
+   */
   mappingComplete: boolean;
+  /**
+   * Caller attests that upstream source/report-selection review permits using this snapshot for
+   * the requested comparison (including amendment selection and known disclosure limitations).
+   * The SDK does not authenticate evidence or select reports. Unknown means false; explain known
+   * issues in reviewReasons. True never overrides row reviews, reference scope or changed bases.
+   * All three flags gate totals/weights; both snapshots must pass before absence or deltas are inferred.
+   */
   comparisonEligible: boolean;
   reviewReasons: readonly string[];
   holdings: readonly DisclosedHoldingPartition[];
