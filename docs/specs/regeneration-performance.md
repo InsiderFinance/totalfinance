@@ -29,8 +29,8 @@ an API change, merge, release, or publication.
 - [x] Capture the current generator CPU profile and baseline output.
 - [x] Implement the measured optimization with regression coverage.
 - [x] Compare independent output digests and uninstrumented before/after timings.
-- [ ] Pass focused/static checks and clean regeneration.
-- [ ] Record current-head fast and full hosted CI results.
+- [x] Pass focused/static checks and clean regeneration.
+- [x] Record current-head fast and full hosted CI results.
 
 ## Starting evidence
 
@@ -50,6 +50,9 @@ seconds were below `runAgentBench`; grouped self samples included 12.8 seconds i
 serialization, 5.1 in the recursive decoder, 3.0 in `fromCanonicalJson` (including parsing), and
 3.0 in the general-purpose non-finite wrapper predicate. This locates runtime copying/serialization
 work, not another quadratic declaration-enumeration bottleneck. Sampling time is not a benchmark.
+The after-profile took 64.97 seconds, with decoder self samples down from 5.13 to 0.60 seconds.
+That confirms removal of the targeted work; the profile's whole-run improvement is about 9%,
+illustrating why the separate 26% local timing observation must not be treated as a universal speedup.
 
 The decoder optimization operates only on the fresh, private `JSON.parse` result. It decodes that
 tree in place instead of constructing a second copy and validating data descriptors already
@@ -91,7 +94,7 @@ The printed digest covers the complete record, including evidence and summary, n
   The final decoder uses one traversal for arrays and objects and took **64.15s** in a separate,
   uninstrumented run (about 26% less than the isolated baseline). It fits the unchanged bundle budgets;
   the generated bundle report changes only scenarios' rounded size (71.7 to 71.6 KiB).
-- All six fresh-process enforcement outputs captured during investigation are byte-identical:
+- All seven fresh-process enforcement outputs captured during investigation are byte-identical:
   SHA-256 `7dc1cb6b1344b38307a07a23aecf66b52dce703f44a4c25106ee7ca11801e658`.
 - Generating all 25 API reports independently took **6.07s**, versus **1.14s** through the reused
   host, sequentially in one process. Every report matched its independent result byte for byte.
@@ -105,4 +108,36 @@ The printed digest covers the complete record, including evidence and summary, n
   all 31 exact bundle budgets and all 30 canonical-JSON tests then passed. No budget was raised.
 - TypeScript checking, changed-file ESLint/Prettier, the build, and all 25 API snapshot checks pass.
 - The generated documentation inventory adds only this note (232 surfaces, 0 findings).
-- Clean regeneration and current-head hosted verification are still required. No completion claim yet.
+- Clean regeneration passes on `51599ae`, with no changed artifacts. Its timed steps included
+  enforcement at 66.33s and API reports at 2.08s, including their command-launch/formatting overhead.
+
+### Hosted closeout — implementation `51599ae`
+
+Both workflows passed on the exact implementation revision
+`51599ae854e1597aa798f908f498183aeeb29a3c`:
+
+- [Fast PR run](https://github.com/InsiderFinance/totalfinance/actions/runs/37566432210): all eight
+  required jobs passed; **5m08s** total elapsed including scheduling, versus 7m15s on the starting
+  revision. This remains the intentionally lighter PR policy, not full coverage/matrix evidence.
+- [Full manual run](https://github.com/InsiderFinance/totalfinance/actions/runs/37566460326): **23/23
+  jobs passed**, including Node 22.13.0/24.x/26.x, all five reports per coverage merge, unchanged
+  coverage floors, independent enforcement generations, clean regeneration, and the local-registry
+  release rehearsal. **10m18s** total elapsed, versus 11m41s on the starting revision.
+
+Per-step measurements show both improvement and runner variation:
+
+| Measurement                       | Starting fast run | Updated fast run | Updated full run |
+| --------------------------------- | ----------------: | ---------------: | ---------------: |
+| Complete regeneration command     |              358s |             248s |             329s |
+| Enforcement generation/formatting |           205.53s |          135.86s |          189.66s |
+| API reports                       |            19.76s |            4.81s |            6.28s |
+
+The starting full run's regeneration command took 328s, so that particular full-run comparison is
+essentially unchanged. Do not present the fast run's 31% regeneration improvement as a universal
+promise. The controlled output comparisons and CPU profiles establish the removed work; hosted
+wall time also includes hardware variance and runner contention. No further parallelization or
+verification-policy change was needed for this bounded pass.
+
+Implementation is complete. These are the source revision's receipts; the PR's checks/description
+carry any later documentation-closeout head's verification. **The PR remains unmerged by request;
+publication and version changes are not authorized.**
