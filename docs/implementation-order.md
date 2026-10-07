@@ -37,9 +37,14 @@ published contracts and release metadata are preserved. This adds provider-free 
 the consumer owns its separate offline handoff. Final-head hosted checks remain required before
 [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) merges. No npm publication is authorized.
 
-**Review follow-up in progress (2026-10-07):** HP6 in the same partition spec clarifies caller
-attestations, simplifies the first-use guide and retains broader regression checks in CI. It does
-not change the calculation, request shape, provider boundary or release scope.
+**Review follow-up complete (2026-10-07):** HP6 in the same partition spec is implemented and
+independently verified at `3a75fd0fd9d575768a8b91b2ef38268c9c4d9449`: caller-attestation guidance,
+the task-first guide and 349 permanent regression tests. Full local CI passed 580 library files /
+13,201 tests plus 80 site tests; standalone API checks, the hosted Node 22.13/24/26 full-CI matrix,
+clean regeneration and the package rehearsal passed. The spec retains exact receipts. Calculation,
+request shape, provider boundary and release scope are unchanged. The next step is consumer-owned
+integration verification against the caller checklist, not another library redesign. Final-head
+hosted checks, merge and npm publication remain separate gates.
 
 The FMP rebuild consumer authorizes the independent provider-free
 [disclosed holdings comparison](./specs/disclosed-holdings.md). **DH1–DH7 implementation and review

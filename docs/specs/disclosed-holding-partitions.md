@@ -3,6 +3,8 @@
 Status: HP1–HP5 implementation and independent local verification complete October 6, 2026
 at `612fed23e094c7468d9398ebb1e9edb644af8904`. This consumer-requested additive feature follows
 the completed disclosed-holdings comparison.
+HP6 review polish is implemented and independently verified October 7 at
+`3a75fd0fd9d575768a8b91b2ef38268c9c4d9449`; its verification record is below.
 The FMP consumer owns source acquisition, authenticated mappings, report selection and handoff.
 This specification owns the provider-free calculation. No release or publication is authorized.
 
@@ -103,7 +105,7 @@ It performs no I/O, source lookup or clock access. Existing v1 public types and 
 - [x] HP5: canonical regeneration sequence, format changed files only, full CI, separate API check,
       independent full coverage repeat and clean-commit regeneration. Synchronize this spec,
       implementation order and completeness tracker against exact evidence; no release bump.
-- [ ] HP6: review polish without changing calculations: document the three caller attestations,
+- [x] HP6: review polish without changing calculations: document the three caller attestations,
       teach one calculation before optional storage/import variants, retain exact-oracle and
       exhaustive completeness/basis regression matrices in CI, and verify regenerated references
       and installed-guide consumers. Preserve HP1–HP5 semantics and all existing verification gates.
@@ -133,3 +135,45 @@ no worker settings, timeouts, coverage floors or implementation were changed for
 [PR #11](https://github.com/InsiderFinance/totalfinance/pull/11) carries the implementation.
 Final-head hosted checks remain required before merge. Local verification does not authorize
 npm publication, a version bump or production consumer cutover.
+
+## HP6 review closeout (2026-10-07)
+
+Verified code/test revision: `3a75fd0fd9d575768a8b91b2ef38268c9c4d9449`. This closeout changes
+tracking prose only. The calculator, boundary validator, exact-decimal arithmetic, public
+contracts, enforcement evidence, API report and bundle-size report are unchanged from `c00bbd0`.
+
+- Input JSDoc and the public guide now explain each caller attestation: full selected reporting
+  universe, authenticated mappings, and upstream source/report-selection eligibility. Unknown
+  means the caller supplies `false`, not that the library defaults or authenticates anything.
+  Unsupported/unresolved observations stay in the input and reviews still override optimistic flags.
+- The guide starts with one import and one calculation, modest example quantities and explicit
+  expected output. Artifact storage is a separate optional section. Import parity, displayed-value
+  assertions and artifact round-trip checks live in the installed NodeNext/Bundler tests.
+- `packages/portfolio/test/disclosed-holding-partitions-oracle.test.ts` retains 349 regression tests:
+  200 independent integer-rational concentration cases; mixed-scale, large-integer and sub-unit
+  amounts at all 19 allowed precisions; all 64 completeness combinations with matched/added/removed
+  holdings; all 64 no-reference basis combinations; and two side-parameterized tests that each
+  exercise six ordinary/reviewed-reference cases. Partition accounting is checked alongside the
+  financial answers. No production decimal helper supplies the oracle's expected result.
+- Local `pnpm run ci` passed **580 library files / 13,201 tests**, **80 site tests**, formatting,
+  lint, both typechecks, builds and all 25 API reports. Coverage: 94.21% statements, 84.16% branches,
+  97.02% functions and 94.77% lines. Standalone `pnpm api:check` also passed. The focused holdings
+  run passed 503 tests; the installed-guide checks passed both resolution modes.
+- All three [hosted full-CI jobs (Node 22.13, 24 and 26)](https://github.com/InsiderFinance/totalfinance/actions/runs/37669121386)
+  passed at the same source revision; the
+  [independent Node 22.13 run](https://github.com/InsiderFinance/totalfinance/actions/runs/37669121386/job/112955964421)
+  confirms the full coverage repeat. The
+  [clean committed regeneration job](https://github.com/InsiderFinance/totalfinance/actions/runs/37669121386/job/112955964577)
+  and [isolated-package release rehearsal](https://github.com/InsiderFinance/totalfinance/actions/runs/37669121386/job/112955963875)
+  passed too. Documentation inventory: 233 surfaces, 4,541 executable fences, zero findings.
+
+During development, the first revised packed test used `node:assert/strict`, which required Node
+declarations that the isolated consumer deliberately does not install. Portable in-fixture assertions
+replaced that test-only dependency; both installed modes and the complete local suite then passed.
+No dependency, runner limit, budget, coverage floor, calculation or public calling shape changed.
+
+The consumer should check its integration against the guide's caller checklist, retain unknown/null
+results and reasons, and keep source acquisition, amendment selection, authenticated mappings and
+report-local reference validation outside TotalFinance. Do not relabel disclosure differences as
+trades or assume this PR's API is already in the published npm release. Merge, release and consumer
+cutover remain separate authorization; final-head hosted checks are still required before merge.
