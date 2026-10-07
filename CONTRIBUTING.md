@@ -27,7 +27,14 @@ the same gates the maintainers use. This page is that process in one screen; the
   export needs its tests, its manifest row (`tools/manifest/packages/<name>.json`, hand-classified
   — never `manifest:update`, which wipes curation), a first-touch fixture when it takes more than one
   positional argument, and a `@totalfinance/core` error code when it can refuse.
-- **Regenerate in order** after the source is final:
+- **Iterate on the tests for what you changed** (`pnpm exec vitest run <test files>`), plus
+  `pnpm exec vitest run tools/bundle-size/budgets.test.ts` when bundle size can move. The full
+  suite and the regeneration chain are the slow parts. Ordinary PRs do not need a local full CI
+  run, a second coverage pass, or a clean-tree `regen:check` before pushing; hosted CI owns those
+  gates. Full local checks remain available to reproduce failures, and releases have stronger
+  requirements below. Check each local command's exit code directly, never through a pipe.
+- **Regenerate affected artifacts in order, once,** after the source is final (including any
+  integration changes); repeat only when their inputs change:
   `signature:update → naming:update → contract:update → enforcement:update → validation:update →
 api:update → readme → llms → bundle:update → openapi:update → docs:update`. Check
   `summary.defective` is `0` after `enforcement:update`; a generated file is never edited by hand.
@@ -80,8 +87,10 @@ Use targeted checks while iterating; rely on the hosted matrix for cross-version
 Do not set `TOTALFINANCE_PR_CHECKS` or `TOTALFINANCE_COVERAGE_SHARD` in a local full run or release
 environment; they are workflow-internal switches for fast PR tests and partial coverage shards.
 
-Release candidates still require the full gate, plus the independent repeat below. Check exit
-codes directly, never through a pipe:
+Release candidates still require a green full hosted gate at the exact release commit **before
+publication**, plus the independent repeat below. These checks may run in the hosted release
+verification job or locally; an ordinary fast PR pass is not a release receipt. Check exit codes
+directly, never through a pipe:
 
 1. `pnpm run ci` exits 0 — format, lint, typecheck, build, coverage, and the API-report check.
 2. `pnpm api:check` exits 0 on its own.
