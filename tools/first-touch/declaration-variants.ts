@@ -21,6 +21,7 @@ import {
   variantId,
   type RouteStep,
   type SynthesisParameter,
+  type VariantChoice,
 } from '../manifest/contract-synthesis.js';
 import { createModelPortfolio } from '@totalfinance/portfolio';
 import type { FixtureThunk } from './inputs.js';
@@ -119,10 +120,7 @@ function branchValue(type: string | undefined, synthesized: unknown): unknown {
 function directlyMatchesBranch(
   value: unknown,
   type: string | undefined,
-  choice: {
-    absent?: boolean;
-    discriminator?: { field: string; value: string | number | boolean }[];
-  },
+  choice: Pick<VariantChoice, 'absent' | 'discriminator'>,
 ): boolean {
   if (choice.absent === true) return value === undefined;
   if (choice.discriminator?.length) {
