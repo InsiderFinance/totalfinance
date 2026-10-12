@@ -81,6 +81,20 @@ independent reviewer endorsement.
 
 No unresolved contract decision blocks implementation. External PR review remains required.
 
+Integration review (2026-10-12): the first full CI attempt at `2189afe` passed 13,292 tests but
+failed the exact bundle-table count and two declaration-parity checks. The generic `Facade`
+annotation exposed the concrete union to the generator through a different declaration route
+than the independent checker. The public call and `.explain()` now state their concrete input
+and output signatures directly, while retaining core's facade wrapper and the same behavior.
+No checker exemption or allowlist is added. The exact budget-table count increases 32 → 33 for
+the newly budgeted feature. Full verification must restart on the integrated revision.
+
+The integration regeneration hit npm registry connection resets during its temporary consumer
+installation. A cache-preferred retry completed. A subsequent cached/as-of bundle invocation
+(`npm_config_offline=true`, `npm_config_before=2026-10-12T16:20:00Z`) produced identical artifacts.
+The source dependency graph and lockfile are unchanged. Final local verification prefers cached
+retrieval for temporary consumers; every installation, measurement and test still executes.
+
 ## Ordered slices and acceptance
 
 | Slice | Contents                                                                                       | State                            |

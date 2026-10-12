@@ -727,7 +727,7 @@ Published per the 3B.6 exit checklist; every number below is quoted from the com
 artifacts (`public-contracts.json`, `public-enforcement.json`, `public-naming.json`) and each is bound by an executable
 gate — a manual checkbox cannot waive drift.
 
-**Surface:** 7,871 public paths / 2,685 implementations / 1,557 input contracts / 1,930 result
+**Surface:** 7,871 public paths / 2,686 implementations / 1,557 input contracts / 1,930 result
 contracts / 385 validator identities. **Enforcement:** 2,493 enforced · 2,701 partial (every open
 dimension named) · 0 defective · 187 unmeasured (each with a recorded reason) of 5,381 measured
 candidates. **Ledgers:** helper quant-answers 0 of an initial 36 (all 27 H-decisions implemented);

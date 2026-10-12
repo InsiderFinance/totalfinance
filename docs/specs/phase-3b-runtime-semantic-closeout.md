@@ -188,7 +188,7 @@ method bag. An unconstrained callback result such as `Array<any>` gets the one u
 structural baseline, `[]`; this restored direct measurement of `register` instead of hiding a
 process-global defective boundary behind `callback-input-required`.
 
-The generated surface is now **7,871 public paths / 2,685 implementations / 1,557 input contracts /
+The generated surface is now **7,871 public paths / 2,686 implementations / 1,557 input contracts /
 1,930 result contracts / 385 validator identities**. The measured population is **5,381** records.
 The exact residual branch list shrank by four: three recursive `register` mismatches disappeared and
 the MCP safe-parse projection stopped masquerading as a caller-selectable branch. Every remaining
@@ -1372,7 +1372,7 @@ or a rationale for an API decision.
       and naming-normalization checkboxes are closed.
 - [x] Generate the initial contract-identity graph and report path, implementation, input-contract,
       result-contract, and validator counts separately — `tools/manifest/contract-inventory.ts` →
-      `public-contracts.json`: 7,871 paths / 2,685 implementations / 1,557 input
+      `public-contracts.json`: 7,871 paths / 2,686 implementations / 1,557 input
       contracts / 1,930 result contracts / 385 validator identities (refreshed after the 2026-08-02
       defect-fix wave, which added validators and two fixed-income deep entrypoints, again after
       3B.1a's snapshot reader, and again when intersections were recognized as objects — 996 → 1,034

@@ -5,7 +5,7 @@
 
 ## Exports (161)
 
-- `const convertPriceLevel`: Facade<ConvertPriceLevelInput, number, PriceLevelConversionAssumptions>
+- `const convertPriceLevel`: { (input: ConvertPriceLevelInput): number; explain: (input: ConvertPriceLevelInput) => Computed<number, PriceLevelConversionAssumptions>; }
 - `const datedInternalRateOfReturn`: ((input: DatedInternalRateOfReturnInput) => number | null) & { explain: (input: DatedInternalRateOfReturnInput) => InternalRateOfReturnReport; }
 - `const internalRateOfReturn`: ((input: InternalRateOfReturnInput) => number | null) & { explain: (input: InternalRateOfReturnInput) => InternalRateOfReturnReport; }
 - `function adjustedPresentValue`: (input: AdjustedPresentValueInput) => AdjustedPresentValueResult

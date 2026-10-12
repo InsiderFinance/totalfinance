@@ -1,7 +1,7 @@
 import {
   CONVENTIONS_VERSION,
   facade,
-  type Facade,
+  type Computed,
   ErrorCode,
   InputError,
   requireRepresentableResult,
@@ -108,11 +108,11 @@ function calculate(input: ConvertPriceLevelInput): number {
  * }); // approximately 598.98
  * ```
  */
-export const convertPriceLevel: Facade<
-  ConvertPriceLevelInput,
-  number,
-  PriceLevelConversionAssumptions
-> = /* @__PURE__ */ facade('convertPriceLevel', calculate, (input) => ({
+export const convertPriceLevel: {
+  (input: ConvertPriceLevelInput): number;
+  /** Same closed input and arithmetic; echoes the method, units, references/ratio and limitations. */
+  explain: (input: ConvertPriceLevelInput) => Computed<number, PriceLevelConversionAssumptions>;
+} = /* @__PURE__ */ facade('convertPriceLevel', calculate, (input) => ({
   value: calculate(input),
   assumptions: {
     conventionsVersion: CONVENTIONS_VERSION,

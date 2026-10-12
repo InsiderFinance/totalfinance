@@ -111384,9 +111384,9 @@
     {
       "id": "@totalfinance/valuation:convertPriceLevel.explain",
       "package": "@totalfinance/valuation",
-      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#convertPriceLevel.explain",
       "verdict": "enforced",
-      "guardReachability": "none",
+      "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
@@ -259596,11 +259596,11 @@
     {
       "id": "totalfinance:valuation.convertPriceLevel.explain",
       "package": "totalfinance",
-      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#convertPriceLevel.explain",
       "verdict": "enforced",
       "measurementSource": "@totalfinance/valuation:convertPriceLevel.explain",
       "inheritedFrom": "@totalfinance/valuation:convertPriceLevel.explain",
-      "guardReachability": "none",
+      "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
