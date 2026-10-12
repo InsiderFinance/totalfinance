@@ -29,10 +29,12 @@
 
 ## Bounded reference-price addition (2026-10-12)
 
-**PL6 is the active follow-up in PR #14:** sixteen named three-price helpers across eight pairs,
+**PL6 is locally complete in PR #14 at `50f87aca2570c0f6ec51f0f5883d31eaf41790a8`:**
+sixteen named three-price helpers across eight pairs,
 optional generic unit metadata, and matching schemas/docs/installed-consumer evidence. This is
 an ergonomic extension of the same price mapping, not new economics, a provider or a transport.
-Its controlling contract and exit gate are in the linked reference-price specification.
+Its controlling contract and local receipts are in the linked reference-price specification;
+final-head fast/full hosted checks and maintainer review are the next gates, recorded in PR #14.
 
 The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
 is implementation and requested local verification complete at `f5beceb3b325d4763313b1019bfb904eb3033b89`,
@@ -46,7 +48,7 @@ method-matched teaching examples, independent 40,460-case rounding checks and in
 regressions. The repair passes 182 valuation/bundle tests, 3 installed-consumer tests, 1,104 boundary
 checks, types, lint, API reports and ordered regeneration, without changing the public API.
 The linked spec preserves each revision's separate receipts. Final-head hosted checks and the full
-hosted workflow must verify the repairs before landing; the earlier runs do not cover PL5.
+hosted workflow must verify the current head before landing; earlier PL1–PL5 runs do not cover PL6.
 These gates for bounded enforcement records,
 maintainer review, application work, adjacent calculators and publication remain separate.
 

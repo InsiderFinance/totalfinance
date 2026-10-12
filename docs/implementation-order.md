@@ -5,11 +5,15 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-**Active bounded follow-up (2026-10-12):** PL6 in
+**Bounded follow-up locally complete (2026-10-12), implementation
+`50f87aca2570c0f6ec51f0f5883d31eaf41790a8`:** PL6 in
 [reference-price level conversion](./specs/reference-price-level-conversion.md) adds sixteen named
 three-price helpers (eight futures/cash-index ↔ ETF pairs) and makes generic descriptive units
 optional. It preserves caller-supplied references and the shared calculation; no data lookup or
-fixed market ratio. Implement, verify and push in PR #14; no merge or publication is authorized.
+fixed market ratio. The spec records 1,548 focused tests, 137 contract/naming tests, installed
+Node/browser/tree-shaking checks and synchronized artifacts. Next: final-head fast/full hosted
+checks and maintainer review in PR #14; no further implementation slice, merge or publication is
+authorized by this follow-up. The PR owns the exact final-head check receipts.
 
 **Earlier bounded addition and review repairs locally complete (2026-10-12):**
 [reference-price level conversion](./specs/reference-price-level-conversion.md), tracked in

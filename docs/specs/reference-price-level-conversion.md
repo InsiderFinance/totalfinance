@@ -1,6 +1,6 @@
 # Reference-price level conversion
 
-Status: PL1–PL4 implementation and requested local verification complete (2026-10-12) at `f5beceb3b325d4763313b1019bfb904eb3033b89`; PL5 review repairs locally verified at `ac6142d85634d84ffb47534cd08590c9cbce025d`. [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14) is open; final-head hosted checks and maintainer review remain separate landing gates.
+Status: PL6 named helpers and optional metadata locally verified (2026-10-12) at `50f87aca2570c0f6ec51f0f5883d31eaf41790a8`. Historical PL1–PL4 implementation is `f5beceb3b325d4763313b1019bfb904eb3033b89`; PL5 review repairs are `ac6142d85634d84ffb47534cd08590c9cbce025d`. [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14) is open and records final-head fast/full hosted receipts; maintainer review remains a separate landing gate.
 Queue: bounded consumer-requested addition in `../implementation-order.md`.
 Issue: [#13](https://github.com/InsiderFinance/totalfinance/issues/13). This is a library addition requested for the ES/SPY and NQ/QQQ
 application pages; application implementation and publication are separate work.
@@ -79,6 +79,8 @@ independent reviewer endorsement.
 - Ambiguous ratio direction: resolved by `targetPricePerSourcePrice` and explicit inverse calls.
 - Mutually exclusive methods: resolved by a required discriminator and method-specific key sets.
 - Hidden instrument economics: resolved by supplied unit labels and no ticker presets.
+  PL6 supersedes the required-label/no-named-helper rule below; supplied reference prices and
+  the prohibition on inferred instrument economics remain unchanged.
 - Intermediate numeric overflow and explanation leaks: resolved by scaled reference arithmetic
   and echoing references rather than requiring a representable derived ratio.
 - Positive underflow silently becoming a valid zero level: resolved by a typed refusal.
@@ -112,6 +114,7 @@ retrieval for temporary consumers; every installation, measurement and test stil
 | PL3   | Public classification, first-touch fixtures, runnable guide, installed consumers and changeset  | complete at `f5beceb`          |
 | PL4   | Derived artifacts, full requested verification, truthful tracker closeout and PR                | complete at `f5beceb`          |
 | PL5   | Review repairs: exact range-boundary rounding, method-matched teaching, independent regressions | locally verified at `ac6142d`  |
+| PL6   | Sixteen three-price helpers, optional generic metadata, schemas/docs and consumer coverage      | locally verified at `50f87ac`  |
 
 - [x] ES/SPY worked example returns 598.98 for 6030 using 6000/596 references; inverse returns 6030.
 - [x] Independent NQ/QQQ worked example: 20,250 from 20,000/500 gives 506.25; inverse returns 20,250.
@@ -220,7 +223,7 @@ fast/full receipts belong to PR #14; this local repair record is not permission 
 
 ## PL6 — task-first named helpers and optional descriptive metadata
 
-**Authorized and locally verified 2026-10-12.** This amendment supersedes the original
+**Authorized and locally verified 2026-10-12 at `50f87aca2570c0f6ec51f0f5883d31eaf41790a8`.** This amendment supersedes the original
 prohibition on ticker-specific exports and mandatory descriptive units. It does not introduce
 financial defaults. The required numeric inputs, generic method discriminator and range laws stay.
 
