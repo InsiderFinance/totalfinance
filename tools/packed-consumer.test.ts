@@ -2677,6 +2677,20 @@ for (const boundary of [convertPriceLevel, convertPriceLevel.explain]) {
   if (!(refusal instanceof InputError) || refusal.code !== ErrorCode.InputUnknownField)
     throw new Error('mixed-method input did not receive the exact typed teaching error');
   if (boundary(input) === undefined) throw new Error('corrected request failed');
+  refusal = undefined;
+  try { boundary({ ...input, targetPricePerSourcePrice: undefined } as unknown as typeof input); } catch (error) { refusal = error; }
+  if (!(refusal instanceof InputError) || refusal.code !== ErrorCode.InputMissingField ||
+      !refusal.message.includes("method: 'ratio'") || !refusal.message.includes('targetPricePerSourcePrice: 0.025'))
+    throw new Error('ratio teaching example changed methods');
+}
+for (const [sourcePriceLevel, referenceTargetPrice, referenceSourcePrice, expected] of [
+  [3 * Number.MIN_VALUE, 0.9999999999999999, 5.999999999999999, Number.MIN_VALUE],
+  [Number.MAX_VALUE - 2 ** 971, 1.4999999999999998, 1.4999999999999996, Number.MAX_VALUE],
+] as const) {
+  const request = { method: 'reference-prices' as const, sourcePriceLevel, referenceTargetPrice, referenceSourcePrice,
+    sourcePriceUnit: 'source points', targetPriceUnit: 'target points' };
+  if (convertPriceLevel(request) !== expected || convertPriceLevel.explain(request).value !== expected)
+    throw new Error('installed reference conversion falsely refused a representable boundary result');
 }
 console.log('PRICE_LEVEL_PUBLIC_OK');
 `;

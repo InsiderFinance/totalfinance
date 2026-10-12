@@ -40,6 +40,40 @@ function binaryParts(value: number): { significand: number; exponent: number } {
   return { significand: value / 2 ** exponent, exponent };
 }
 
+/** Round the exact reference quotient once at the normal/subnormal and overflow boundaries. */
+function boundaryReferenceLevel(input: ReferencePriceLevelInput): number {
+  // Only extreme outputs allocate this scratch buffer/use BigInt. All three inputs have already
+  // been validated as positive finite doubles. Express each exactly in Number.MIN_VALUE units.
+  const view = new DataView(new ArrayBuffer(8));
+  const units = (value: number): bigint => {
+    view.setFloat64(0, value);
+    const bits = view.getBigUint64(0);
+    const exponent = Number(bits >> 52n);
+    const fraction = bits & ((1n << 52n) - 1n);
+    return exponent === 0 ? fraction : ((1n << 52n) | fraction) << BigInt(exponent - 1);
+  };
+  const numerator = units(input.sourcePriceLevel) * units(input.referenceTargetPrice);
+  const denominator = units(input.referenceSourcePrice);
+  // Their quotient is the result in MIN_VALUE units. Locate its binade with integer comparisons,
+  // not a rounded intermediate product/ratio; then retain at most 53 significant binary digits.
+  let exponent = numerator.toString(2).length - denominator.toString(2).length;
+  if (
+    exponent >= 0
+      ? numerator < denominator << BigInt(exponent)
+      : numerator << BigInt(-exponent) < denominator
+  )
+    exponent -= 1;
+  const shift = Math.max(0, exponent - 52);
+  const divisor = denominator << BigInt(shift);
+  let significand = numerator / divisor;
+  const twiceRemainder = 2n * (numerator % divisor);
+  if (twiceRemainder > divisor || (twiceRemainder === divisor && (significand & 1n) === 1n))
+    significand += 1n;
+  // The integer is exactly representable, including a carry to 2^53. Multiplication by a power
+  // of two is exact here unless the correctly rounded answer is Infinity. True underflow is 0.
+  return Number(significand) * 2 ** (shift - 1074);
+}
+
 /** Scale the three named price coordinates before multiplying/dividing. */
 function referenceLevel(input: ReferencePriceLevelInput): number {
   if (input.sourcePriceLevel === input.referenceSourcePrice) return input.referenceTargetPrice;
@@ -58,12 +92,10 @@ function referenceLevel(input: ReferencePriceLevelInput): number {
     significand *= 2;
     exponent -= 1;
   }
-  if (exponent > 1023) return Infinity;
-  if (exponent < -1075) return 0;
-  // Round once in subnormal units; 2**exponent itself would round prematurely below -1074.
-  return exponent < -1022
-    ? significand * 2 ** (exponent + 1074) * Number.MIN_VALUE
-    : significand * 2 ** exponent;
+  // A rounded significand can land on the wrong side of a range boundary. Recompute extreme
+  // answers from the original doubles, including finite neighbors of MAX_VALUE and subnormals.
+  if (exponent <= -1022 || exponent >= 1023) return boundaryReferenceLevel(input);
+  return significand * 2 ** exponent;
 }
 
 function calculate(input: ConvertPriceLevelInput): number {
@@ -77,7 +109,10 @@ function calculate(input: ConvertPriceLevelInput): number {
   if (value === 0) {
     throw new InputError(
       'convertPriceLevel: the positive target price level rounds to zero in IEEE-754 double precision. Rescale the price units or reduce the ratio disparity and recompute.',
-      { code: ErrorCode.InputOutOfRange, context: { field: 'targetPriceLevel' } },
+      {
+        code: ErrorCode.InputOutOfRange,
+        context: { function: 'convertPriceLevel', field: 'targetPriceLevel' },
+      },
     );
   }
   return value;

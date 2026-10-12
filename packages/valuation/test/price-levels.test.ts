@@ -204,6 +204,33 @@ describe.each([
   );
 
   for (const input of [ES, RATIO]) {
+    it(`teaches a corrected ${input.method} call without switching methods`, () => {
+      const numericField =
+        input.method === 'ratio' ? 'targetPricePerSourcePrice' : 'referenceSourcePrice';
+      const invalidFields: Record<string, unknown[]> = {
+        [numericField]: [undefined, 0],
+        sourcePriceUnit: [undefined, 1, ' '],
+        targetPriceUnit: [undefined, 1, ' '],
+      };
+      for (const [field, values] of Object.entries(invalidFields)) {
+        for (const value of values) {
+          let error: unknown;
+          try {
+            boundary({ ...input, [field]: value } as ConvertPriceLevelInput);
+          } catch (caught) {
+            error = caught;
+          }
+          expect(error).toBeInstanceOf(InputError);
+          const example = (error as InputError).message.split('e.g. ')[1];
+          expect(example).toContain(`method: '${input.method}'`);
+          expect(example).toContain(numericField);
+          expect(example).not.toContain(
+            input.method === 'ratio' ? 'referenceSourcePrice' : 'targetPricePerSourcePrice',
+          );
+        }
+      }
+    });
+
     it(`validates every required field for ${input.method}`, () => {
       for (const field of Object.keys(input)) {
         const omitted: Record<string, unknown> = { ...input };

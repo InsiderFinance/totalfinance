@@ -38,18 +38,21 @@ export interface RatioPriceLevelInput extends PriceLevelCoordinates {
 /** Select exactly one method; ratio and reference fields cannot be mixed at runtime. */
 export type ConvertPriceLevelInput = ReferencePriceLevelInput | RatioPriceLevelInput;
 
-const EXAMPLE =
+const REFERENCE_EXAMPLE =
   "convertPriceLevel({ method: 'reference-prices', sourcePriceLevel: 6030, referenceSourcePrice: 6000, referenceTargetPrice: 596, sourcePriceUnit: 'ES index points', targetPriceUnit: 'USD per SPY share' })";
+const RATIO_EXAMPLE =
+  "convertPriceLevel({ method: 'ratio', sourcePriceLevel: 20250, targetPricePerSourcePrice: 0.025, sourcePriceUnit: 'NQ index points', targetPriceUnit: 'USD per QQQ share' })";
 const COMMON_KEYS = ['method', 'sourcePriceLevel', 'sourcePriceUnit', 'targetPriceUnit'];
 
 /** Shared private boundary law for both facade calls. */
 export function requirePriceLevelInput(input: ConvertPriceLevelInput): void {
   const functionName = 'convertPriceLevel';
   requireArgumentObject(functionName, 'input', input);
-  if (input.method === undefined) throw missingFieldError(functionName, 'method', EXAMPLE);
+  if (input.method === undefined)
+    throw missingFieldError(functionName, 'method', REFERENCE_EXAMPLE);
   if (typeof input.method !== 'string') {
     throw new InputError(
-      `${functionName}: method must be a string selecting 'reference-prices' or 'ratio'.\n  e.g. ${EXAMPLE}`,
+      `${functionName}: method must be a string selecting 'reference-prices' or 'ratio'.\n  e.g. ${REFERENCE_EXAMPLE}`,
       {
         code: ErrorCode.InputWrongType,
         context: { function: functionName, field: 'method' },
@@ -58,32 +61,33 @@ export function requirePriceLevelInput(input: ConvertPriceLevelInput): void {
   }
   if (input.method !== 'reference-prices' && input.method !== 'ratio') {
     throw new InputError(
-      `${functionName}: method must be 'reference-prices' or 'ratio'; select one explicitly.\n  e.g. ${EXAMPLE}`,
+      `${functionName}: method must be 'reference-prices' or 'ratio'; select one explicitly.\n  e.g. ${REFERENCE_EXAMPLE}`,
       { code: ErrorCode.InputInvalidEnum, context: { function: functionName, field: 'method' } },
     );
   }
+  const example = input.method === 'ratio' ? RATIO_EXAMPLE : REFERENCE_EXAMPLE;
   const numericFields =
     input.method === 'reference-prices'
       ? ['sourcePriceLevel', 'referenceSourcePrice', 'referenceTargetPrice']
       : ['sourcePriceLevel', 'targetPricePerSourcePrice'];
   ensureKnownKeys(functionName, 'input', input, [...COMMON_KEYS, ...numericFields.slice(1)]);
-  requireFiniteFields(functionName, input, numericFields, { exampleCall: EXAMPLE });
+  requireFiniteFields(functionName, input, numericFields, { exampleCall: example });
   const record = input as unknown as Record<string, unknown>;
   for (const field of numericFields) {
     const value = record[field] as number;
     if (field === 'sourcePriceLevel' ? value < 0 : value <= 0) {
       throw new InputError(
-        `${functionName}: ${field} must be ${field === 'sourcePriceLevel' ? '>= 0 in source price units' : '> 0 in the declared price units or target-per-source ratio units'}.\n  e.g. ${EXAMPLE}`,
+        `${functionName}: ${field} must be ${field === 'sourcePriceLevel' ? '>= 0 in source price units' : '> 0 in the declared price units or target-per-source ratio units'}.\n  e.g. ${example}`,
         { code: ErrorCode.InputOutOfRange, context: { function: functionName, field, value } },
       );
     }
   }
   for (const field of ['sourcePriceUnit', 'targetPriceUnit'] as const) {
     const value = input[field];
-    if (value === undefined) throw missingFieldError(functionName, field, EXAMPLE);
+    if (value === undefined) throw missingFieldError(functionName, field, example);
     if (typeof value !== 'string') {
       throw new InputError(
-        `${functionName}: ${field} must be a nonblank unit-label string.\n  e.g. ${EXAMPLE}`,
+        `${functionName}: ${field} must be a nonblank unit-label string.\n  e.g. ${example}`,
         {
           code: ErrorCode.InputWrongType,
           context: { function: functionName, field },
@@ -92,7 +96,7 @@ export function requirePriceLevelInput(input: ConvertPriceLevelInput): void {
     }
     if (value.trim().length === 0) {
       throw new InputError(
-        `${functionName}: ${field} must name the price unit.\n  e.g. ${EXAMPLE}`,
+        `${functionName}: ${field} must name the price unit.\n  e.g. ${example}`,
         {
           code: ErrorCode.InputOutOfRange,
           context: { function: functionName, field },
