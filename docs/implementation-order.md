@@ -5,13 +5,16 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-**Bounded addition active (2026-10-12):** [reference-price level conversion](./specs/reference-price-level-conversion.md),
-tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13). PL1's contract and
-pre-implementation review are complete; PL2–PL3 are implemented with focused tests green; PL4's
-full verification and PR remain pending. This adds one provider-free
-valuation facade for caller-supplied references or a directed ratio, initially serving ES/SPY and
-NQ/QQQ consumers. Application pages, adjacent calculators, release versions, publication and
-deployment are outside this library change.
+**Bounded addition locally complete (2026-10-12) at `f5beceb3b325d4763313b1019bfb904eb3033b89`:**
+[reference-price level conversion](./specs/reference-price-level-conversion.md), tracked in
+[issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
+[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 implement one
+provider-free valuation facade for explicit references or a directed ratio, initially serving
+ES/SPY and NQ/QQQ. Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests),
+standalone API checks and an independent coverage repeat pass at that revision. The spec records
+the initial integration failures, repairs and exact receipts. Final-head hosted checks, the full
+hosted workflow for the bounded enforcement records and maintainer review remain landing gates;
+application pages, adjacent calculators, release versions, publication and deployment are separate.
 
 **Bounded regeneration performance follow-up — complete (2026-10-06), implementation `51599ae`:**
 the [profiling and verification record](./specs/regeneration-performance.md) closes the maintainer-approved

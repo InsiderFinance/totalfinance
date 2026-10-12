@@ -30,11 +30,14 @@
 ## Bounded reference-price addition (2026-10-12)
 
 The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
-is active, tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13).
-PL1's contract and pre-code review are complete; PL2–PL3 are implemented with focused tests
-green; PL4's full verification and PR remain pending. It extends valuation's
-price transformations with explicit reference mapping, without reopening FC0–FC9 or claiming
-fair value. Application work, adjacent calculators and publication remain separate.
+is implementation and requested local verification complete at `f5beceb3b325d4763313b1019bfb904eb3033b89`,
+tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
+[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 extend valuation's price
+transformations with explicit reference mapping, without reopening FC0–FC9 or claiming fair value.
+Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests), standalone API
+checks and the independent coverage repeat pass. The linked spec records integration repairs and
+exact receipts. Final-head hosted checks, the full hosted workflow for bounded enforcement records,
+maintainer review, application work, adjacent calculators and publication remain separate.
 
 ## Bounded disclosed-holdings addition (2026-09-25)
 
