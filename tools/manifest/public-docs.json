@@ -10,10 +10,10 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4550,
+    "executableFences": 4600,
     "checkedUnderTruthfulness": 174,
     "checkedUnderVocabulary": 51,
-    "shippedNamesWatched": 9657,
+    "shippedNamesWatched": 9730,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -205,7 +205,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 1
+      "codeFences": 2
     },
     {
       "path": "docs/guides/sector-performance.md",
@@ -317,7 +317,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4282
+      "codeFences": 4331
     },
     {
       "path": "docs/llms.txt",

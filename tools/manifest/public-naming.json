@@ -1,25 +1,25 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42874,
+    "identities": 43257,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3849,
-      "explicit": 38863,
+      "canonical-term": 3993,
+      "explicit": 39102,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
       "code-string": 274,
       "enum-member": 274,
-      "export": 7368,
-      "field": 22713,
-      "literal-value": 4651,
+      "export": 7450,
+      "field": 22836,
+      "literal-value": 4653,
       "mcp-field": 1520,
       "mcp-tool": 55,
-      "method": 1700,
+      "method": 1780,
       "package": 25,
-      "parameter": 4102,
+      "parameter": 4198,
       "subpath": 192
     },
     "byPackage": {
@@ -44,10 +44,10 @@
       "@totalfinance/strategy": 1751,
       "@totalfinance/structure": 1132,
       "@totalfinance/technical-analysis": 4947,
-      "@totalfinance/valuation": 1142,
+      "@totalfinance/valuation": 1492,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3175
+      "totalfinance": 3208
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -238101,6 +238101,60 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|diaToDjiaLevel",
+      "name": "diaToDjiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DiaToDjiaLevelInput",
+      "name": "DiaToDjiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DiaToDjiaLevelInputSchema",
+      "name": "DiaToDjiaLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|export|diaToYmLevel",
+      "name": "diaToYmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DiaToYmLevelInput",
+      "name": "DiaToYmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DiaToYmLevelInputSchema",
+      "name": "DiaToYmLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
       "id": "@totalfinance/valuation|export|discountCashFlows",
       "name": "discountCashFlows",
       "kind": "export",
@@ -238269,6 +238323,33 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|djiaToDiaLevel",
+      "name": "djiaToDiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DjiaToDiaLevelInput",
+      "name": "DjiaToDiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "@totalfinance/valuation|export|DjiaToDiaLevelInputSchema",
+      "name": "DjiaToDiaLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
       "id": "@totalfinance/valuation|export|doubleDecliningBalanceDepreciation",
       "name": "doubleDecliningBalanceDepreciation",
       "kind": "export",
@@ -238347,6 +238428,33 @@
       "position": "module",
       "entrypoints": [".", "./cash-flows"],
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|esToSpyLevel",
+      "name": "esToSpyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|EsToSpyLevelInput",
+      "name": "EsToSpyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|EsToSpyLevelInputSchema",
+      "name": "EsToSpyLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
     },
     {
       "id": "@totalfinance/valuation|export|FinancingSideEffect",
@@ -238443,6 +238551,60 @@
       "position": "module",
       "entrypoints": [".", "./cash-flows"],
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|iwmToRtyLevel",
+      "name": "iwmToRtyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|IwmToRtyLevelInput",
+      "name": "IwmToRtyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|IwmToRtyLevelInputSchema",
+      "name": "IwmToRtyLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|iwmToRutLevel",
+      "name": "iwmToRutLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|IwmToRutLevelInput",
+      "name": "IwmToRutLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|IwmToRutLevelInputSchema",
+      "name": "IwmToRutLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
     },
     {
       "id": "@totalfinance/valuation|export|leveragedBuyoutAnalysis",
@@ -238637,6 +238799,41 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|NamedPriceLevelConversionAssumptions",
+      "name": "NamedPriceLevelConversionAssumptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|ndxToQqqLevel",
+      "name": "ndxToQqqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "@totalfinance/valuation|export|NdxToQqqLevelInput",
+      "name": "NdxToQqqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "@totalfinance/valuation|export|NdxToQqqLevelInputSchema",
+      "name": "NdxToQqqLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
       "id": "@totalfinance/valuation|export|netPresentValue",
       "name": "netPresentValue",
       "kind": "export",
@@ -238667,6 +238864,33 @@
       "position": "module",
       "entrypoints": [".", "./cash-flows"],
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|nqToQqqLevel",
+      "name": "nqToQqqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "@totalfinance/valuation|export|NqToQqqLevelInput",
+      "name": "NqToQqqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "@totalfinance/valuation|export|NqToQqqLevelInputSchema",
+      "name": "NqToQqqLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
     },
     {
       "id": "@totalfinance/valuation|export|operatingForecast",
@@ -238853,6 +239077,60 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|qqqToNdxLevel",
+      "name": "qqqToNdxLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|QqqToNdxLevelInput",
+      "name": "QqqToNdxLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|QqqToNdxLevelInputSchema",
+      "name": "QqqToNdxLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|qqqToNqLevel",
+      "name": "qqqToNqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|QqqToNqLevelInput",
+      "name": "QqqToNqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|QqqToNqLevelInputSchema",
+      "name": "QqqToNqLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
       "id": "@totalfinance/valuation|export|RandomizedVariable",
       "name": "RandomizedVariable",
       "kind": "export",
@@ -238965,6 +239243,60 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|rtyToIwmLevel",
+      "name": "rtyToIwmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|export|RtyToIwmLevelInput",
+      "name": "RtyToIwmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|export|RtyToIwmLevelInputSchema",
+      "name": "RtyToIwmLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|export|rutToIwmLevel",
+      "name": "rutToIwmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|RutToIwmLevelInput",
+      "name": "RutToIwmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|RutToIwmLevelInputSchema",
+      "name": "RutToIwmLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
       "id": "@totalfinance/valuation|export|ScenarioAnalysisInput",
       "name": "ScenarioAnalysisInput",
       "kind": "export",
@@ -239003,6 +239335,87 @@
       "position": "module",
       "entrypoints": [".", "./corporate"],
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|spxToSpyLevel",
+      "name": "spxToSpyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpxToSpyLevelInput",
+      "name": "SpxToSpyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpxToSpyLevelInputSchema",
+      "name": "SpxToSpyLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|export|spyToEsLevel",
+      "name": "spyToEsLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpyToEsLevelInput",
+      "name": "SpyToEsLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpyToEsLevelInputSchema",
+      "name": "SpyToEsLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|spyToSpxLevel",
+      "name": "spyToSpxLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpyToSpxLevelInput",
+      "name": "SpyToSpxLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|export|SpyToSpxLevelInputSchema",
+      "name": "SpyToSpxLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
     },
     {
       "id": "@totalfinance/valuation|export|StatementProjectionPeriod",
@@ -239091,6 +239504,33 @@
       "position": "module",
       "entrypoints": [".", "./corporate"],
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|ymToDiaLevel",
+      "name": "ymToDiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|YmToDiaLevelInput",
+      "name": "YmToDiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|export|YmToDiaLevelInputSchema",
+      "name": "YmToDiaLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
     },
     {
       "id": "@totalfinance/valuation|field|AdjustedPresentValueInput.compounding",
@@ -240108,6 +240548,110 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInput.diaPriceLevel",
+      "name": "diaPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInput.referenceDiaPrice",
+      "name": "referenceDiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInput.referenceDjiaPrice",
+      "name": "referenceDjiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToDjiaLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInput.diaPriceLevel",
+      "name": "diaPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInput.referenceDiaPrice",
+      "name": "referenceDiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInput.referenceYmPrice",
+      "name": "referenceYmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DiaToYmLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|discountCashFlows().presentValueTotal",
       "name": "presentValueTotal",
       "kind": "field",
@@ -240899,6 +241443,58 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInput.djiaPriceLevel",
+      "name": "djiaPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInput.referenceDiaPrice",
+      "name": "referenceDiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInput.referenceDjiaPrice",
+      "name": "referenceDjiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|DjiaToDiaLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|EffectiveAnnualRateInput.compounding",
       "name": "compounding",
       "kind": "field",
@@ -241006,6 +241602,58 @@
     {
       "id": "@totalfinance/valuation|field|EquivalentInterestRateInput.toCompounding",
       "name": "toCompounding",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInput.esPriceLevel",
+      "name": "esPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInput.referenceEsPrice",
+      "name": "referenceEsPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInput.referenceSpyPrice",
+      "name": "referenceSpyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|EsToSpyLevelInputSchema.parse(options).mode",
+      "name": "mode",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
@@ -241542,6 +242190,110 @@
       "name": "residualNetPresentValue",
       "kind": "field",
       "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInput.iwmPriceLevel",
+      "name": "iwmPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInput.referenceIwmPrice",
+      "name": "referenceIwmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInput.referenceRtyPrice",
+      "name": "referenceRtyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRtyLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInput.iwmPriceLevel",
+      "name": "iwmPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInput.referenceIwmPrice",
+      "name": "referenceIwmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInput.referenceRutPrice",
+      "name": "referenceRutPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|IwmToRutLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -242463,6 +243215,135 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion",
+      "name": "conversion",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.method",
+      "name": "method",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.referenceSourcePrice",
+      "name": "referenceSourcePrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.referenceTargetPrice",
+      "name": "referenceTargetPrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.sourcePriceLevel",
+      "name": "sourcePriceLevel",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.sourcePriceUnit",
+      "name": "sourcePriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.conversion.targetPriceUnit",
+      "name": "targetPriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.input",
+      "name": "input",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.mappingAssumption",
+      "name": "mappingAssumption",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.ratioDirection",
+      "name": "ratioDirection",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NamedPriceLevelConversionAssumptions.resultUnit",
+      "name": "resultUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInput.ndxPriceLevel",
+      "name": "ndxPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInput.referenceNdxPrice",
+      "name": "referenceNdxPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInput.referenceQqqPrice",
+      "name": "referenceQqqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NdxToQqqLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|NetPresentValueInput.annualDiscountRate",
       "name": "annualDiscountRate",
       "kind": "field",
@@ -242493,6 +243374,58 @@
     {
       "id": "@totalfinance/valuation|field|NominalAnnualRateInput.effectiveAnnualRate",
       "name": "effectiveAnnualRate",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInput.nqPriceLevel",
+      "name": "nqPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInput.referenceNqPrice",
+      "name": "referenceNqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInput.referenceQqqPrice",
+      "name": "referenceQqqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|NqToQqqLevelInputSchema.parse(options).mode",
+      "name": "mode",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
@@ -243387,6 +244320,110 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInput.qqqPriceLevel",
+      "name": "qqqPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInput.referenceNdxPrice",
+      "name": "referenceNdxPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInput.referenceQqqPrice",
+      "name": "referenceQqqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNdxLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInput.qqqPriceLevel",
+      "name": "qqqPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInput.referenceNqPrice",
+      "name": "referenceNqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInput.referenceQqqPrice",
+      "name": "referenceQqqPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|QqqToNqLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|QuantWarning.code",
       "name": "code",
       "kind": "field",
@@ -244003,6 +245040,110 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInput.referenceIwmPrice",
+      "name": "referenceIwmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInput.referenceRtyPrice",
+      "name": "referenceRtyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInput.rtyPriceLevel",
+      "name": "rtyPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RtyToIwmLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInput.referenceIwmPrice",
+      "name": "referenceIwmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInput.referenceRutPrice",
+      "name": "referenceRutPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInput.rutPriceLevel",
+      "name": "rutPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RutToIwmLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|SafeParseResult.data",
       "name": "data",
       "kind": "field",
@@ -244301,6 +245442,162 @@
       "name": "rowVariable",
       "kind": "field",
       "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInput.referenceSpxPrice",
+      "name": "referenceSpxPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInput.referenceSpyPrice",
+      "name": "referenceSpyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInput.spxPriceLevel",
+      "name": "spxPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpxToSpyLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInput.referenceEsPrice",
+      "name": "referenceEsPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInput.referenceSpyPrice",
+      "name": "referenceSpyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInput.spyPriceLevel",
+      "name": "spyPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToEsLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInput.referenceSpxPrice",
+      "name": "referenceSpxPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInput.referenceSpyPrice",
+      "name": "referenceSpyPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInput.spyPriceLevel",
+      "name": "spyPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SpyToSpxLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -244651,6 +245948,58 @@
       "name": "weightedAverageCostOfCapital",
       "kind": "field",
       "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInput.referenceDiaPrice",
+      "name": "referenceDiaPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInput.referenceYmPrice",
+      "name": "referenceYmPrice",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInput.ymPriceLevel",
+      "name": "ymPriceLevel",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|YmToDiaLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -245083,6 +246432,20 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|literal-value|NamedPriceLevelConversionAssumptions.conversion.method:reference-prices",
+      "name": "reference-prices",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|NamedPriceLevelConversionAssumptions.ratioDirection:target-price-per-source-price",
+      "name": "target-price-per-source-price",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|literal-value|PaymentTiming:beginning",
       "name": "beginning",
       "kind": "literal-value",
@@ -245421,10 +246784,442 @@
       "policy": "Universal."
     },
     {
+      "id": "@totalfinance/valuation|method|DiaToDjiaLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToDjiaLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToDjiaLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToDjiaLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToDjiaLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToYmLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToYmLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToYmLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToYmLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DiaToYmLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|DjiaToDiaLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DjiaToDiaLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DjiaToDiaLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DjiaToDiaLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|DjiaToDiaLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|EsToSpyLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|EsToSpyLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|EsToSpyLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|EsToSpyLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|EsToSpyLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
       "id": "@totalfinance/valuation|method|InputError.toJSON",
       "name": "toJSON",
       "kind": "method",
       "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRtyLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRtyLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRtyLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRtyLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRtyLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRutLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRutLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRutLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRutLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|IwmToRutLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|NdxToQqqLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NdxToQqqLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NdxToQqqLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NdxToQqqLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NdxToQqqLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|NqToQqqLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NqToQqqLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NqToQqqLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NqToQqqLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|NqToQqqLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNdxLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNdxLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNdxLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNdxLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNdxLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNqLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNqLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNqLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNqLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|QqqToNqLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|RtyToIwmLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RtyToIwmLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RtyToIwmLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RtyToIwmLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RtyToIwmLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|RutToIwmLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RutToIwmLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RutToIwmLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RutToIwmLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|RutToIwmLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
       "disposition": "canonical-term",
       "policy": "Universal."
     },
@@ -245465,11 +247260,155 @@
       "policy": "Universal."
     },
     {
+      "id": "@totalfinance/valuation|method|SpxToSpyLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpxToSpyLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpxToSpyLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpxToSpyLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpxToSpyLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToEsLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToEsLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToEsLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToEsLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToEsLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToSpxLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToSpxLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToSpxLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToSpxLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|SpyToSpxLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
       "id": "@totalfinance/valuation|method|StandardSchemaV1Props.validate",
       "name": "validate",
       "kind": "method",
       "position": "result",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|YmToDiaLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|YmToDiaLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|YmToDiaLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|YmToDiaLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|YmToDiaLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
     },
     {
       "id": "@totalfinance/valuation|package|@totalfinance/valuation",
@@ -245605,6 +247544,90 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|diaToDjiaLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToDjiaLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToDjiaLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToDjiaLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToDjiaLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToDjiaLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|diaToYmLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToYmLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToYmLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToYmLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToYmLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DiaToYmLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|discountCashFlows(input)",
       "name": "input",
       "kind": "parameter",
@@ -245654,6 +247677,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|djiaToDiaLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DjiaToDiaLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DjiaToDiaLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DjiaToDiaLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DjiaToDiaLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|DjiaToDiaLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|doubleDecliningBalanceDepreciation(input)",
       "name": "input",
       "kind": "parameter",
@@ -245689,6 +247754,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|esToSpyLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|EsToSpyLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|EsToSpyLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|EsToSpyLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|EsToSpyLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|EsToSpyLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|freeCashFlowToEquity(input)",
       "name": "input",
       "kind": "parameter",
@@ -245712,6 +247819,90 @@
     {
       "id": "@totalfinance/valuation|parameter|internalRateOfReturn(input)",
       "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|iwmToRtyLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRtyLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRtyLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRtyLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRtyLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRtyLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|iwmToRutLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRutLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRutLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRutLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRutLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|IwmToRutLevelInputSchema.safeParse(options)",
+      "name": "options",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -245759,6 +247950,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|ndxToQqqLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NdxToQqqLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NdxToQqqLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NdxToQqqLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NdxToQqqLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NdxToQqqLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|netPresentValue(input)",
       "name": "input",
       "kind": "parameter",
@@ -245768,6 +248001,48 @@
     {
       "id": "@totalfinance/valuation|parameter|nominalAnnualRate(input)",
       "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|nqToQqqLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NqToQqqLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NqToQqqLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NqToQqqLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NqToQqqLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|NqToQqqLevelInputSchema.safeParse(options)",
+      "name": "options",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -245815,6 +248090,90 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|qqqToNdxLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNdxLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNdxLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNdxLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNdxLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNdxLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|qqqToNqLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNqLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNqLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNqLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNqLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|QqqToNqLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|requireCompoundingWhenPresent(compounding)",
       "name": "compounding",
       "kind": "parameter",
@@ -245857,6 +248216,90 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|rtyToIwmLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RtyToIwmLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RtyToIwmLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RtyToIwmLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RtyToIwmLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RtyToIwmLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|rutToIwmLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RutToIwmLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RutToIwmLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RutToIwmLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RutToIwmLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|RutToIwmLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|Schema.describe(description)",
       "name": "description",
       "kind": "parameter",
@@ -245886,6 +248329,132 @@
     },
     {
       "id": "@totalfinance/valuation|parameter|Schema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|spxToSpyLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpxToSpyLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpxToSpyLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpxToSpyLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpxToSpyLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpxToSpyLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|spyToEsLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToEsLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToEsLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToEsLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToEsLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToEsLevelInputSchema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|spyToSpxLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToSpxLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToSpxLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToSpxLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToSpxLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|SpyToSpxLevelInputSchema.safeParse(options)",
       "name": "options",
       "kind": "parameter",
       "position": "signature",
@@ -245922,6 +248491,48 @@
     {
       "id": "@totalfinance/valuation|parameter|weightedAverageCostOfCapital(input)",
       "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ymToDiaLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|YmToDiaLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|YmToDiaLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|YmToDiaLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|YmToDiaLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|YmToDiaLevelInputSchema.safeParse(options)",
+      "name": "options",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -291850,6 +294461,42 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|diaToDjiaLevel",
+      "name": "diaToDjiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "totalfinance|export|DiaToDjiaLevelInput",
+      "name": "DiaToDjiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "totalfinance|export|diaToYmLevel",
+      "name": "diaToYmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
+      "id": "totalfinance|export|DiaToYmLevelInput",
+      "name": "DiaToYmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level."
+    },
+    {
       "id": "totalfinance|export|difference",
       "name": "difference",
       "kind": "export",
@@ -292465,6 +295112,24 @@
       "position": "module",
       "entrypoints": ["./fundamentals"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|djiaToDiaLevel",
+      "name": "djiaToDiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
+    },
+    {
+      "id": "totalfinance|export|DjiaToDiaLevelInput",
+      "name": "DjiaToDiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index."
     },
     {
       "id": "totalfinance|export|dmi",
@@ -293396,6 +296061,24 @@
       "position": "module",
       "entrypoints": ["./volatility"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|esToSpyLevel",
+      "name": "esToSpyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
+    },
+    {
+      "id": "totalfinance|export|EsToSpyLevelInput",
+      "name": "EsToSpyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping."
     },
     {
       "id": "totalfinance|export|european",
@@ -297285,6 +299968,42 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|iwmToRtyLevel",
+      "name": "iwmToRtyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|IwmToRtyLevelInput",
+      "name": "IwmToRtyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|iwmToRutLevel",
+      "name": "iwmToRutLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|IwmToRutLevelInput",
+      "name": "IwmToRutLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "iShares Russell 2000 ETF ticker; the fund identity used by callers and market data."
+    },
+    {
       "id": "totalfinance|export|jacobiEigen",
       "name": "jacobiEigen",
       "kind": "export",
@@ -299840,6 +302559,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|NamedPriceLevelConversionAssumptions",
+      "name": "NamedPriceLevelConversionAssumptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|NanPolicy",
       "name": "NanPolicy",
       "kind": "export",
@@ -299872,6 +302599,24 @@
       "entrypoints": ["./technical-analysis"],
       "disposition": "canonical-term",
       "policy": "Dominant indicator identity."
+    },
+    {
+      "id": "totalfinance|export|ndxToQqqLevel",
+      "name": "ndxToQqqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
+    },
+    {
+      "id": "totalfinance|export|NdxToQqqLevelInput",
+      "name": "NdxToQqqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices."
     },
     {
       "id": "totalfinance|export|nearestCorrelation",
@@ -300158,6 +302903,24 @@
       "position": "module",
       "entrypoints": ["./technical-analysis"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|nqToQqqLevel",
+      "name": "nqToQqqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
+    },
+    {
+      "id": "totalfinance|export|NqToQqqLevelInput",
+      "name": "NqToQqqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter."
     },
     {
       "id": "totalfinance|export|nthWeekdayOfMonth",
@@ -303279,6 +306042,42 @@
       "policy": "Quantitative Qualitative Estimation identity."
     },
     {
+      "id": "totalfinance|export|qqqToNdxLevel",
+      "name": "qqqToNdxLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|QqqToNdxLevelInput",
+      "name": "QqqToNdxLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|qqqToNqLevel",
+      "name": "qqqToNqLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|QqqToNqLevelInput",
+      "name": "QqqToNqLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Invesco QQQ Trust ticker; the fund identity used by callers and market data."
+    },
+    {
       "id": "totalfinance|export|qrDecompose",
       "name": "qrDecompose",
       "kind": "export",
@@ -305141,6 +307940,24 @@
       "policy": "Jurik RSX identity."
     },
     {
+      "id": "totalfinance|export|rtyToIwmLevel",
+      "name": "rtyToIwmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
+      "id": "totalfinance|export|RtyToIwmLevelInput",
+      "name": "RtyToIwmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity."
+    },
+    {
       "id": "totalfinance|export|Rule",
       "name": "Rule",
       "kind": "export",
@@ -305203,6 +308020,24 @@
       "position": "module",
       "entrypoints": ["./scenarios"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|rutToIwmLevel",
+      "name": "rutToIwmLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
+    },
+    {
+      "id": "totalfinance|export|RutToIwmLevelInput",
+      "name": "RutToIwmLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "Russell 2000 index symbol; identifies the cash index side of the ETF price mapping."
     },
     {
       "id": "totalfinance|export|RvgiPoint",
@@ -307328,6 +310163,60 @@
       "position": "module",
       "entrypoints": ["./options"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|spxToSpyLevel",
+      "name": "spxToSpyLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "totalfinance|export|SpxToSpyLevelInput",
+      "name": "SpxToSpyLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier."
+    },
+    {
+      "id": "totalfinance|export|spyToEsLevel",
+      "name": "spyToEsLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|SpyToEsLevelInput",
+      "name": "SpyToEsLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|spyToSpxLevel",
+      "name": "spyToSpxLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
+    },
+    {
+      "id": "totalfinance|export|SpyToSpxLevelInput",
+      "name": "SpyToSpxLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data."
     },
     {
       "id": "totalfinance|export|sqrt",
@@ -311312,6 +314201,24 @@
       "entrypoints": ["./core"],
       "disposition": "canonical-term",
       "policy": "Year-month-day - the date-tuple convention."
+    },
+    {
+      "id": "totalfinance|export|ymToDiaLevel",
+      "name": "ymToDiaLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
+    },
+    {
+      "id": "totalfinance|export|YmToDiaLevelInput",
+      "name": "YmToDiaLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "canonical-term",
+      "policy": "CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping."
     },
     {
       "id": "totalfinance|export|ZeroCouponBondSpecification",

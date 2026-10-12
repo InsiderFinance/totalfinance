@@ -209,8 +209,8 @@ describe.each([
         input.method === 'ratio' ? 'targetPricePerSourcePrice' : 'referenceSourcePrice';
       const invalidFields: Record<string, unknown[]> = {
         [numericField]: [undefined, 0],
-        sourcePriceUnit: [undefined, 1, ' '],
-        targetPriceUnit: [undefined, 1, ' '],
+        sourcePriceUnit: [1, ' '],
+        targetPriceUnit: [1, ' '],
       };
       for (const [field, values] of Object.entries(invalidFields)) {
         for (const value of values) {
@@ -235,8 +235,13 @@ describe.each([
       for (const field of Object.keys(input)) {
         const omitted: Record<string, unknown> = { ...input };
         delete omitted[field];
-        refused(omitted, ErrorCode.InputMissingField, boundary);
-        refused({ ...input, [field]: undefined }, ErrorCode.InputMissingField, boundary);
+        if (field === 'sourcePriceUnit' || field === 'targetPriceUnit') {
+          expect(boundary(omitted as unknown as ConvertPriceLevelInput)).toBeDefined();
+          expect(boundary({ ...input, [field]: undefined })).toBeDefined();
+        } else {
+          refused(omitted, ErrorCode.InputMissingField, boundary);
+          refused({ ...input, [field]: undefined }, ErrorCode.InputMissingField, boundary);
+        }
         for (const wrong of [null, {}, [], true])
           refused({ ...input, [field]: wrong }, ErrorCode.InputWrongType, boundary);
       }

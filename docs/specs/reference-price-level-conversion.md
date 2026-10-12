@@ -9,8 +9,9 @@ application pages; application implementation and publication are separate work.
 
 One browser-safe, deterministic call maps a nonnegative source price level to an approximate
 target price level from caller-supplied positive reference prices or a positive directed ratio.
-Both instrument pairs use the same call. No ticker presets, quote acquisition, clock, timestamp
-inference, credentials, or network requests belong here. Units are caller-supplied labels; the
+Named helpers cover the eight PL6 pairs in both directions; arbitrary pairs use the generic call.
+No fixed ticker ratios, quote acquisition, clock, timestamp
+inference, credentials, or network requests belong here. Generic units are optional caller-supplied labels; the
 library does not certify instrument identity, freshness, comparability, or economic equivalence.
 
 This is proportional price mapping. It does not estimate a live quote, predicted ETF open,
@@ -34,10 +35,11 @@ level. Negative price levels are outside this bounded contract; zero maps to zer
    available through the umbrella namespace. Schemas stay behind `valuation/schemas` so compute
    imports do not load schema machinery.
 3. **Flat discriminated input:** required `method: 'reference-prices' | 'ratio'`,
-   `sourcePriceLevel`, `sourcePriceUnit`, and `targetPriceUnit`. Reference mode additionally
+   `sourcePriceLevel`, and optional `sourcePriceUnit` / `targetPriceUnit` metadata. Reference mode additionally
    requires `referenceSourcePrice` and `referenceTargetPrice`. Ratio mode instead requires
    `targetPricePerSourcePrice` (target price units per one source price unit). No inferred method,
-   optional financial default, reverse flag, alias, builder, or ticker-specific export.
+   optional financial default, reverse flag, alias or builder. PL6 explicitly named pair helpers
+   fix the reference-price method and descriptive units without assuming reference prices.
 4. **Arithmetic:** reference mode computes
    `sourcePriceLevel * referenceTargetPrice / referenceSourcePrice`; ratio mode computes
    `sourcePriceLevel * targetPricePerSourcePrice`. No rounding to cents/ticks occurs. Inversion
@@ -60,7 +62,9 @@ level. Negative price levels are outside this bounded contract; zero maps to zer
    explanation. No nonfinite derived ratio is inserted into assumptions.
 7. **Explanation:** echo a copy of the complete selected input (method, references or directed
    ratio, level and units), the result unit, the ratio direction and the mapping-validity
-   assumption. Include the registered `model.limitation` warning naming the limitations above.
+   assumption. Without a generic target unit label, `resultUnit` is `null` (unspecified), not an
+   invented currency/unit. Optional undefined labels are omitted from the echoed request.
+   Include the registered `model.limitation` warning naming the limitations above.
 8. **Scope:** additive public surface and minor changeset for the two public fixed-group
    artifacts, without version changes. No new transport, MCP tool, application page, release,
    merge, deployment, or live execution.
@@ -213,3 +217,96 @@ whole umbrella 711,093 → 711,393 B (+300 B). The respective ceilings are 8.375
 leaving 144 B and 287 B headroom. Every other narrow-import ceiling and schema/provider exclusion
 is unchanged. The existing minor changeset covers the still-unreleased addition. Final-head hosted
 fast/full receipts belong to PR #14; this local repair record is not permission to merge or publish.
+
+## PL6 — task-first named helpers and optional descriptive metadata
+
+**Authorized and locally verified 2026-10-12.** This amendment supersedes the original
+prohibition on ticker-specific exports and mandatory descriptive units. It does not introduce
+financial defaults. The required numeric inputs, generic method discriminator and range laws stay.
+
+### Contract and pre-code review
+
+- Export both directions for ES/SPY, NQ/QQQ, YM/DIA, RTY/IWM, SPX/SPY, NDX/QQQ, RUT/IWM and
+  DJIA/DIA from `valuation/price-levels` and the valuation domain, with no umbrella root hoist.
+  Names end in `Level`: `esToSpyLevel`, `spyToEsLevel`, etc. DJIA means the full Dow Jones
+  Industrial Average, not the scaled DJX index. No provider-specific ticker spelling is inferred.
+- Each helper takes exactly three named finite numbers, e.g.
+  `esToSpyLevel({ esPriceLevel, referenceEsPrice, referenceSpyPrice })`. The requested level is
+  nonnegative; both references are positive. Unit labels, method, ratio and every other key are
+  refused, including an unknown field set to undefined. Instrument abbreviations here are
+  recognizable market identities, not abbreviations of concepts such as volatility or volume.
+- Every helper is a number-returning facade with `.explain()` and a separately imported closed
+  input schema. `.explain()` copies the original named input, the canonical reference-price
+  mapping with fixed descriptive unit labels, and the existing mapping assumption/warning.
+  Invalid inputs and unrepresentable outputs name the helper actually called and its own fields.
+- All helpers delegate to one arithmetic implementation, including PL5's exact range fallback.
+  They do not call network services, select contracts, apply multipliers, infer market sessions,
+  promise economic equivalence, or hardcode a price ratio. A single-helper import must tree-shake
+  unused siblings and exclude schema/transport machinery.
+- Generic unit labels become independently optional metadata. Omission/undefined is accepted;
+  a provided null, wrong primitive or blank string remains a typed error. Supplied labels retain
+  their previous meaning; supplied-label `.explain()` results are preserved. Without a target
+  label, `resultUnit` is null and the documentation explicitly means “caller did not label units.”
+  No method inference is added. This additive input relaxation affects an unreleased PR feature.
+- The helper set covers four major US equity-index families through futures and cash-index
+  reference mapping. Other pairs still use the generic primitive. No leveraged/inverse ETF,
+  commodity or micro-contract aliases are added speculatively; a contract-size multiplier is not
+  a price-level conversion ratio. Application/provider selection remains outside this library.
+
+The pair selection is grounded in [CME's product list](https://www.cmegroup.com/markets/products),
+[SPY's benchmark](https://www.ssga.com/us/en/individual/etfs/state-street-spdr-sp-500-etf-trust-spy),
+[QQQ's benchmark](https://www.invesco.com/qqq-etf/en/home.html),
+[DIA's benchmark](https://www.ssga.com/us/en/individual/capabilities/spdr-core-equity-etfs/dia-djia),
+and [IWM's benchmark](https://www.ishares.com/us/products/239710/ishares-russell-2000-etf).
+These establish instrument identity, not fixed ratios or a guarantee of proportional returns.
+
+### Implementation and acceptance
+
+- [x] All 16 named calls, types and optional schemas are exported and classified; generic labels
+      are optional at both TypeScript/runtime boundaries and in JSON Schema.
+- [x] Every helper's worked/inverse/parity/zero/frozen-input examples and every required-field,
+      wrong-type, nonfinite, range, unknown-key and output-range refusal pass on both calls.
+- [x] Examples/errors name the called helper; original named and canonical inputs are disclosed
+      without mutation, nonfinite values or undefined metadata in successful explanations.
+- [x] All helpers have meaningful first-touch fixtures and independently checked schema/contract
+      coverage. Existing boundary oracles remain unchanged and green.
+- [x] Installed strict NodeNext/Bundler and browser consumers cover all helpers and generic
+      metadata omission; single-helper bundles prove sibling tree shaking and schema isolation.
+- [x] Public guide, examples, changeset, classifications, generated reference/API/contract/docs
+      artifacts and measured bundle records are synchronized; the queue names this same slice.
+- [x] Focused local checks pass; their receipts are below. The final-head hosted fast/full
+      landing gate remains separate and its exact head/run URLs are recorded in PR #14.
+
+### PL6 local verification record
+
+Node 22.23.2 / pnpm 10.32.0, direct exits 0:
+
+- Valuation, bundle budgets and all five boundary-sweep suites: **1,548 tests / 13 files**.
+  This includes **392 valuation tests**, 243 of them in the new helper/metadata suite. PL5's
+  independent 40,460-case rounding oracle remains unchanged and passes.
+- Installed strict NodeNext, Bundler, browser/guide and esbuild/Rollup single-helper tests:
+  **5 pass**. All sixteen helpers and their schemas/types execute from the actual tarballs.
+  A single `esToSpyLevel` import removes the generic facade and all fifteen siblings, retains
+  only core/valuation modules, and excludes schema machinery under both bundlers.
+- Public export, signature, fixture, contract, independent declaration/checker parity and
+  naming conformance: **137 tests / 8 files**. The fixture join is 1,333; 0 names are unresolved.
+- README snippets plus overflow sweep: **31 tests / 2 files**. Site build and **80 site tests**
+  pass. The guide's TypeScript fences execute in the installed consumer.
+- Library types, changed-file lint/format, build and all **25 API reports** pass. The full
+  ordered artifact chain ran successfully; docs inventory reports 0 findings.
+- Generated enforcement adds **80 fully enforced aliases/call paths** for the 16 helpers:
+  2,573 enforced of 5,461 candidates, 0 defective. Partial (2,701) and unmeasured (187)
+  populations do not increase. Current machine-checked tracker counts are synchronized.
+
+The first conformance pass caught unclassified instrument tokens and stale live tracker counts;
+published symbol rationales and the measured prose were corrected, not the gates weakened. An
+early boundary run raced the unfinished contract regeneration; the ordered regeneration followed
+by the complete 1,548-test rerun above passes. Neither failed attempt is counted as a green receipt.
+
+Measured whole-entrypoint gzip: **8,432 → 9,621 B** (+1,189 B); whole umbrella
+**711,393 → 712,699 B** (+1,306 B), Node 22.23.2/esbuild 0.25.12. The respective ceilings
+are 9.625 KiB (235 B headroom) and 696.25 KiB (261 B). Other narrow ceilings and structural
+gates remain unchanged. The installed single-helper canaries have separate 9 KiB limits.
+
+Commit and push are authorized; merging, version bumps and npm publication are not. The earlier
+PL1–PL5 hosted receipts do not verify PL6; PR #14 records fresh final-head fast/full receipts.

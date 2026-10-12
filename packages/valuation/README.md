@@ -15,7 +15,7 @@ pnpm add @insiderfinance/totalfinance@0.1.2
 ## Example
 
 ```ts
-import { convertPriceLevel, netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
+import { esToSpyLevel, netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
 const cashFlows = [
   { amount: -1_000, timeYears: 0 },
   { amount: 600, timeYears: 1 },
@@ -24,14 +24,11 @@ const cashFlows = [
 const projectValue = netPresentValue({ cashFlows, annualDiscountRate: 0.1 });
 // number | null — an ambiguous IRR is never chosen silently; read .explain() for every root.
 const rate = internalRateOfReturn({ cashFlows });
-// Approximate reference mapping, with supplied prices and explicit units (no quote inference).
-const estimatedSpy = convertPriceLevel({
-  method: 'reference-prices',
-  sourcePriceLevel: 6030,
-  referenceSourcePrice: 6000,
-  referenceTargetPrice: 596,
-  sourcePriceUnit: 'ES index points',
-  targetPriceUnit: 'USD per SPY share',
+// Approximate ES → SPY mapping from your reference prices; no fixed ratio or quote inference.
+const estimatedSpy = esToSpyLevel({
+  esPriceLevel: 6030,
+  referenceEsPrice: 6000,
+  referenceSpyPrice: 596,
 }); // approximately 598.98 USD per SPY share
 ```
 
@@ -47,7 +44,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/valuation` exposes **51** runtime exports (**161** including types) across 6 entrypoints (`.`, `./cash-flows`, `./corporate`, `./forecasting`, `./price-levels`, `./schemas`). See the generated [`etc/valuation.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/valuation/etc/valuation.api.md) for the full surface.
+`@insiderfinance/totalfinance/valuation` exposes **67** runtime exports (**194** including types) across 6 entrypoints (`.`, `./cash-flows`, `./corporate`, `./forecasting`, `./price-levels`, `./schemas`). See the generated [`etc/valuation.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/valuation/etc/valuation.api.md) for the full surface.
 
 ## License
 

@@ -29,7 +29,12 @@ import {
   type PublicDependencyMetadata,
 } from './bundle-size/public-artifacts.js';
 import { CONSUMER_BUNDLERS, CONSUMER_FIXTURES } from './bundle-size/consumer-fixtures.js';
-import { measureConsumer } from './bundle-size/consumer-measure.js';
+import {
+  callConsumer,
+  consumerBrowser,
+  consumerError,
+  measureConsumer,
+} from './bundle-size/consumer-measure.js';
 import {
   MCP_PACKAGE_NAME,
   PUBLIC_PACKAGE_NAME,
@@ -2662,6 +2667,353 @@ console.log('HOLDING_PARTITIONS_PUBLIC_OK');
   );
 });
 
+const NAMED_PRICE_LEVEL_ASSERTIONS = `
+import * as namedLevels from '@insiderfinance/totalfinance/valuation/price-levels';
+{
+  const request = { esPriceLevel: 6030, referenceEsPrice: 6000, referenceSpyPrice: 596 };
+  const value: number = namedLevels.esToSpyLevel(request);
+  const explanation = namedLevels.esToSpyLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.esPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 598.98) > 1e-8 || explanation.value !== value || originalLevel !== 6030 ||
+      unit !== 'USD per SPY share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('esToSpyLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.esToSpyLevel({ esPriceLevel: 6030, referenceEsPrice: 6000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.esToSpyLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.esToSpyLevel(6030, 6000, 596);
+  }
+}
+{
+  const request = { spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceEsPrice: 6000 };
+  const value: number = namedLevels.spyToEsLevel(request);
+  const explanation = namedLevels.spyToEsLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.spyPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 6030) > 1e-8 || explanation.value !== value || originalLevel !== 598.98 ||
+      unit !== 'ES index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('spyToEsLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.spyToEsLevel({ spyPriceLevel: 598.98, referenceSpyPrice: 596 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.spyToEsLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.spyToEsLevel(598.98, 596, 6000);
+  }
+}
+{
+  const request = { nqPriceLevel: 20250, referenceNqPrice: 20000, referenceQqqPrice: 500 };
+  const value: number = namedLevels.nqToQqqLevel(request);
+  const explanation = namedLevels.nqToQqqLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.nqPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 506.25) > 1e-8 || explanation.value !== value || originalLevel !== 20250 ||
+      unit !== 'USD per QQQ share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('nqToQqqLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.nqToQqqLevel({ nqPriceLevel: 20250, referenceNqPrice: 20000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.nqToQqqLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.nqToQqqLevel(20250, 20000, 500);
+  }
+}
+{
+  const request = { qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNqPrice: 20000 };
+  const value: number = namedLevels.qqqToNqLevel(request);
+  const explanation = namedLevels.qqqToNqLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.qqqPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 20250) > 1e-8 || explanation.value !== value || originalLevel !== 506.25 ||
+      unit !== 'NQ index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('qqqToNqLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.qqqToNqLevel({ qqqPriceLevel: 506.25, referenceQqqPrice: 500 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.qqqToNqLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.qqqToNqLevel(506.25, 500, 20000);
+  }
+}
+{
+  const request = { ymPriceLevel: 40400, referenceYmPrice: 40000, referenceDiaPrice: 398 };
+  const value: number = namedLevels.ymToDiaLevel(request);
+  const explanation = namedLevels.ymToDiaLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.ymPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 401.98) > 1e-8 || explanation.value !== value || originalLevel !== 40400 ||
+      unit !== 'USD per DIA share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('ymToDiaLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.ymToDiaLevel({ ymPriceLevel: 40400, referenceYmPrice: 40000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.ymToDiaLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.ymToDiaLevel(40400, 40000, 398);
+  }
+}
+{
+  const request = { diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceYmPrice: 40000 };
+  const value: number = namedLevels.diaToYmLevel(request);
+  const explanation = namedLevels.diaToYmLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.diaPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 40400) > 1e-8 || explanation.value !== value || originalLevel !== 401.98 ||
+      unit !== 'YM index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('diaToYmLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.diaToYmLevel({ diaPriceLevel: 401.98, referenceDiaPrice: 398 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.diaToYmLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.diaToYmLevel(401.98, 398, 40000);
+  }
+}
+{
+  const request = { rtyPriceLevel: 2020, referenceRtyPrice: 2000, referenceIwmPrice: 198 };
+  const value: number = namedLevels.rtyToIwmLevel(request);
+  const explanation = namedLevels.rtyToIwmLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.rtyPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 199.98) > 1e-8 || explanation.value !== value || originalLevel !== 2020 ||
+      unit !== 'USD per IWM share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('rtyToIwmLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.rtyToIwmLevel({ rtyPriceLevel: 2020, referenceRtyPrice: 2000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.rtyToIwmLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.rtyToIwmLevel(2020, 2000, 198);
+  }
+}
+{
+  const request = { iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRtyPrice: 2000 };
+  const value: number = namedLevels.iwmToRtyLevel(request);
+  const explanation = namedLevels.iwmToRtyLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.iwmPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 2020) > 1e-8 || explanation.value !== value || originalLevel !== 199.98 ||
+      unit !== 'RTY index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('iwmToRtyLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.iwmToRtyLevel({ iwmPriceLevel: 199.98, referenceIwmPrice: 198 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.iwmToRtyLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.iwmToRtyLevel(199.98, 198, 2000);
+  }
+}
+{
+  const request = { spxPriceLevel: 6030, referenceSpxPrice: 6000, referenceSpyPrice: 596 };
+  const value: number = namedLevels.spxToSpyLevel(request);
+  const explanation = namedLevels.spxToSpyLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.spxPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 598.98) > 1e-8 || explanation.value !== value || originalLevel !== 6030 ||
+      unit !== 'USD per SPY share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('spxToSpyLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.spxToSpyLevel({ spxPriceLevel: 6030, referenceSpxPrice: 6000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.spxToSpyLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.spxToSpyLevel(6030, 6000, 596);
+  }
+}
+{
+  const request = { spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceSpxPrice: 6000 };
+  const value: number = namedLevels.spyToSpxLevel(request);
+  const explanation = namedLevels.spyToSpxLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.spyPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 6030) > 1e-8 || explanation.value !== value || originalLevel !== 598.98 ||
+      unit !== 'SPX index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('spyToSpxLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.spyToSpxLevel({ spyPriceLevel: 598.98, referenceSpyPrice: 596 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.spyToSpxLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.spyToSpxLevel(598.98, 596, 6000);
+  }
+}
+{
+  const request = { ndxPriceLevel: 20250, referenceNdxPrice: 20000, referenceQqqPrice: 500 };
+  const value: number = namedLevels.ndxToQqqLevel(request);
+  const explanation = namedLevels.ndxToQqqLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.ndxPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 506.25) > 1e-8 || explanation.value !== value || originalLevel !== 20250 ||
+      unit !== 'USD per QQQ share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('ndxToQqqLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.ndxToQqqLevel({ ndxPriceLevel: 20250, referenceNdxPrice: 20000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.ndxToQqqLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.ndxToQqqLevel(20250, 20000, 500);
+  }
+}
+{
+  const request = { qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNdxPrice: 20000 };
+  const value: number = namedLevels.qqqToNdxLevel(request);
+  const explanation = namedLevels.qqqToNdxLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.qqqPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 20250) > 1e-8 || explanation.value !== value || originalLevel !== 506.25 ||
+      unit !== 'NDX index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('qqqToNdxLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.qqqToNdxLevel({ qqqPriceLevel: 506.25, referenceQqqPrice: 500 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.qqqToNdxLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.qqqToNdxLevel(506.25, 500, 20000);
+  }
+}
+{
+  const request = { rutPriceLevel: 2020, referenceRutPrice: 2000, referenceIwmPrice: 198 };
+  const value: number = namedLevels.rutToIwmLevel(request);
+  const explanation = namedLevels.rutToIwmLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.rutPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 199.98) > 1e-8 || explanation.value !== value || originalLevel !== 2020 ||
+      unit !== 'USD per IWM share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('rutToIwmLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.rutToIwmLevel({ rutPriceLevel: 2020, referenceRutPrice: 2000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.rutToIwmLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.rutToIwmLevel(2020, 2000, 198);
+  }
+}
+{
+  const request = { iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRutPrice: 2000 };
+  const value: number = namedLevels.iwmToRutLevel(request);
+  const explanation = namedLevels.iwmToRutLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.iwmPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 2020) > 1e-8 || explanation.value !== value || originalLevel !== 199.98 ||
+      unit !== 'RUT index points' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('iwmToRutLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.iwmToRutLevel({ iwmPriceLevel: 199.98, referenceIwmPrice: 198 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.iwmToRutLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.iwmToRutLevel(199.98, 198, 2000);
+  }
+}
+{
+  const request = { djiaPriceLevel: 40400, referenceDjiaPrice: 40000, referenceDiaPrice: 398 };
+  const value: number = namedLevels.djiaToDiaLevel(request);
+  const explanation = namedLevels.djiaToDiaLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.djiaPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 401.98) > 1e-8 || explanation.value !== value || originalLevel !== 40400 ||
+      unit !== 'USD per DIA share' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('djiaToDiaLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.djiaToDiaLevel({ djiaPriceLevel: 40400, referenceDjiaPrice: 40000 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.djiaToDiaLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.djiaToDiaLevel(40400, 40000, 398);
+  }
+}
+{
+  const request = { diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceDjiaPrice: 40000 };
+  const value: number = namedLevels.diaToDjiaLevel(request);
+  const explanation = namedLevels.diaToDjiaLevel.explain(request);
+  const originalLevel: number = explanation.assumptions.input.diaPriceLevel;
+  const unit: string = explanation.assumptions.resultUnit;
+  if (Math.abs(value - 40400) > 1e-8 || explanation.value !== value || originalLevel !== 401.98 ||
+      unit !== 'DJIA index points (full Dow Jones Industrial Average)' || JSON.stringify(explanation.assumptions.input) !== JSON.stringify(request))
+    throw new Error('diaToDjiaLevel installed result/typing drifted');
+  if (false) {
+    // @ts-expect-error All three named prices are required.
+    namedLevels.diaToDjiaLevel({ diaPriceLevel: 401.98, referenceDiaPrice: 398 });
+    // @ts-expect-error A helper fixes its method; it is not an extra request field.
+    namedLevels.diaToDjiaLevel({ ...request, method: 'reference-prices' });
+    // @ts-expect-error Positional financial scalars are not supported.
+    namedLevels.diaToDjiaLevel(401.98, 398, 40000);
+  }
+}
+if (convertPriceLevel.explain({ method: 'reference-prices', sourcePriceLevel: 12,
+    referenceSourcePrice: 8, referenceTargetPrice: 3, sourcePriceUnit: undefined }).assumptions.resultUnit !== null)
+  throw new Error('generic metadata omission invented a unit');
+`;
+
+const NAMED_PRICE_LEVEL_SCHEMAS = `
+import * as pairSchemas from '@insiderfinance/totalfinance/valuation/schemas';
+if (!pairSchemas.EsToSpyLevelInputSchema.safeParse({ esPriceLevel: 6030, referenceEsPrice: 6000, referenceSpyPrice: 596 }).success ||
+    valuation.esToSpyLevel !== namedLevels.esToSpyLevel)
+  throw new Error('esToSpyLevel schema or namespace identity drifted');
+if (!pairSchemas.SpyToEsLevelInputSchema.safeParse({ spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceEsPrice: 6000 }).success ||
+    valuation.spyToEsLevel !== namedLevels.spyToEsLevel)
+  throw new Error('spyToEsLevel schema or namespace identity drifted');
+if (!pairSchemas.NqToQqqLevelInputSchema.safeParse({ nqPriceLevel: 20250, referenceNqPrice: 20000, referenceQqqPrice: 500 }).success ||
+    valuation.nqToQqqLevel !== namedLevels.nqToQqqLevel)
+  throw new Error('nqToQqqLevel schema or namespace identity drifted');
+if (!pairSchemas.QqqToNqLevelInputSchema.safeParse({ qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNqPrice: 20000 }).success ||
+    valuation.qqqToNqLevel !== namedLevels.qqqToNqLevel)
+  throw new Error('qqqToNqLevel schema or namespace identity drifted');
+if (!pairSchemas.YmToDiaLevelInputSchema.safeParse({ ymPriceLevel: 40400, referenceYmPrice: 40000, referenceDiaPrice: 398 }).success ||
+    valuation.ymToDiaLevel !== namedLevels.ymToDiaLevel)
+  throw new Error('ymToDiaLevel schema or namespace identity drifted');
+if (!pairSchemas.DiaToYmLevelInputSchema.safeParse({ diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceYmPrice: 40000 }).success ||
+    valuation.diaToYmLevel !== namedLevels.diaToYmLevel)
+  throw new Error('diaToYmLevel schema or namespace identity drifted');
+if (!pairSchemas.RtyToIwmLevelInputSchema.safeParse({ rtyPriceLevel: 2020, referenceRtyPrice: 2000, referenceIwmPrice: 198 }).success ||
+    valuation.rtyToIwmLevel !== namedLevels.rtyToIwmLevel)
+  throw new Error('rtyToIwmLevel schema or namespace identity drifted');
+if (!pairSchemas.IwmToRtyLevelInputSchema.safeParse({ iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRtyPrice: 2000 }).success ||
+    valuation.iwmToRtyLevel !== namedLevels.iwmToRtyLevel)
+  throw new Error('iwmToRtyLevel schema or namespace identity drifted');
+if (!pairSchemas.SpxToSpyLevelInputSchema.safeParse({ spxPriceLevel: 6030, referenceSpxPrice: 6000, referenceSpyPrice: 596 }).success ||
+    valuation.spxToSpyLevel !== namedLevels.spxToSpyLevel)
+  throw new Error('spxToSpyLevel schema or namespace identity drifted');
+if (!pairSchemas.SpyToSpxLevelInputSchema.safeParse({ spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceSpxPrice: 6000 }).success ||
+    valuation.spyToSpxLevel !== namedLevels.spyToSpxLevel)
+  throw new Error('spyToSpxLevel schema or namespace identity drifted');
+if (!pairSchemas.NdxToQqqLevelInputSchema.safeParse({ ndxPriceLevel: 20250, referenceNdxPrice: 20000, referenceQqqPrice: 500 }).success ||
+    valuation.ndxToQqqLevel !== namedLevels.ndxToQqqLevel)
+  throw new Error('ndxToQqqLevel schema or namespace identity drifted');
+if (!pairSchemas.QqqToNdxLevelInputSchema.safeParse({ qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNdxPrice: 20000 }).success ||
+    valuation.qqqToNdxLevel !== namedLevels.qqqToNdxLevel)
+  throw new Error('qqqToNdxLevel schema or namespace identity drifted');
+if (!pairSchemas.RutToIwmLevelInputSchema.safeParse({ rutPriceLevel: 2020, referenceRutPrice: 2000, referenceIwmPrice: 198 }).success ||
+    valuation.rutToIwmLevel !== namedLevels.rutToIwmLevel)
+  throw new Error('rutToIwmLevel schema or namespace identity drifted');
+if (!pairSchemas.IwmToRutLevelInputSchema.safeParse({ iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRutPrice: 2000 }).success ||
+    valuation.iwmToRutLevel !== namedLevels.iwmToRutLevel)
+  throw new Error('iwmToRutLevel schema or namespace identity drifted');
+if (!pairSchemas.DjiaToDiaLevelInputSchema.safeParse({ djiaPriceLevel: 40400, referenceDjiaPrice: 40000, referenceDiaPrice: 398 }).success ||
+    valuation.djiaToDiaLevel !== namedLevels.djiaToDiaLevel)
+  throw new Error('djiaToDiaLevel schema or namespace identity drifted');
+if (!pairSchemas.DiaToDjiaLevelInputSchema.safeParse({ diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceDjiaPrice: 40000 }).success ||
+    valuation.diaToDjiaLevel !== namedLevels.diaToDjiaLevel)
+  throw new Error('diaToDjiaLevel schema or namespace identity drifted');
+`;
+
 const PRICE_LEVEL_ASSERTIONS = `
 if (Math.abs(estimatedSpy - 598.98) > 1e-10 || Math.abs(estimatedEs - 6030) > 1e-9)
   throw new Error('ES/SPY guide arithmetic drifted');
@@ -2701,6 +3053,75 @@ function priceLevelGuideSource(): string {
 }
 
 describe('packed price-level conversion', () => {
+  it.each(CONSUMER_BUNDLERS)(
+    'tree-shakes unused pair helpers and the generic boundary with %s',
+    async (bundler) => {
+      const fixture = {
+        id: 'price-level-es-spy',
+        canary: 'facade' as const,
+        specifier: '@insiderfinance/totalfinance/valuation/price-levels',
+        style: 'named-pair',
+        source:
+          "import { esToSpyLevel } from '@insiderfinance/totalfinance/valuation/price-levels';\n" +
+          'globalThis.consumerCall = (input) => esToSpyLevel(input);\n',
+        budgetKiB: { esbuild: 9, rollup: 9 },
+        reason: 'A single named mapping retains shared arithmetic and guards, not sibling pairs.',
+      };
+      const measurement = await measureConsumer(consumer, fixture, bundler);
+      expect(measurement.bytesGzip).toBeLessThan(fixture.budgetKiB[bundler] * 1024);
+      for (const sibling of [
+        'spyToEsLevel',
+        'nqToQqqLevel',
+        'qqqToNqLevel',
+        'ymToDiaLevel',
+        'diaToYmLevel',
+        'rtyToIwmLevel',
+        'iwmToRtyLevel',
+        'spxToSpyLevel',
+        'spyToSpxLevel',
+        'ndxToQqqLevel',
+        'qqqToNdxLevel',
+        'rutToIwmLevel',
+        'iwmToRutLevel',
+        'djiaToDiaLevel',
+        'diaToDjiaLevel',
+        'convertPriceLevel',
+        'toJSONSchema',
+        '__TOTALFINANCE_SCHEMA_FACADE__',
+      ])
+        expect(measurement.code).not.toContain(sibling);
+      for (const module of measurement.retainedModules)
+        expect(module.id).toMatch(/\/modules\/(core|valuation)\//);
+      expect(measurement.retainedModules.some((module) => module.id.includes('/schema'))).toBe(
+        false,
+      );
+      const browser = consumerBrowser(measurement);
+      expect(
+        callConsumer(
+          browser,
+          '{ esPriceLevel: 6030, referenceEsPrice: 6000, referenceSpyPrice: 596 }',
+        ),
+      ).toBeCloseTo(598.98, 10);
+      expect(
+        callConsumer(
+          browser,
+          '{ esPriceLevel: 3 * Number.MIN_VALUE, referenceEsPrice: 5.999999999999999, referenceSpyPrice: 0.9999999999999999 }',
+        ),
+      ).toBe(Number.MIN_VALUE);
+      const validationBrowser = consumerBrowser(
+        await measureConsumer(consumer, fixture, bundler, true),
+      );
+      expect(
+        consumerError(validationBrowser, '{ esPriceLevel: 6030, referenceEsPrice: 6000 }'),
+      ).toMatchObject({
+        typed: true,
+        code: 'input.missing_field',
+        context: { function: 'esToSpyLevel', field: 'referenceSpyPrice' },
+      });
+    },
+    120_000,
+  );
+
   it.each(['nodenext', 'bundler'])(
     'runs the guide, schemas, namespace identity and compile refusals under %s',
     (resolution) => {
@@ -2728,7 +3149,9 @@ if (false) {
   convertPriceLevel({ method: 'ratio', sourcePriceLevel: 1, targetPricePerSourcePrice: 2, referenceSourcePrice: 6000, sourcePriceUnit: 'ES points', targetPriceUnit: 'USD/share' });
 }
 ` +
-          PRICE_LEVEL_ASSERTIONS,
+          PRICE_LEVEL_ASSERTIONS +
+          NAMED_PRICE_LEVEL_ASSERTIONS +
+          NAMED_PRICE_LEVEL_SCHEMAS,
       );
       writeFileSync(
         join(dir, 'tsconfig.json'),
@@ -2766,7 +3189,8 @@ for (const name of ['process', 'require', 'Buffer', 'module']) {
   if (typeof (globalThis as Record<string, unknown>)[name] !== 'undefined') throw new Error(name + ' leaked into the browser');
 }
 ` +
-        PRICE_LEVEL_ASSERTIONS,
+        PRICE_LEVEL_ASSERTIONS +
+        NAMED_PRICE_LEVEL_ASSERTIONS,
     );
     sh(
       join(ROOT, 'node_modules', '.bin', 'esbuild'),

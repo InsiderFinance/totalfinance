@@ -47,7 +47,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/valuation/price-levels',
     entry: 'packages/valuation/src/price-levels.ts',
-    budgetKB: 8.375,
+    budgetKB: 9.625,
     intent:
       'reference-price conversion with typed validation, finite postconditions and explanations; no schema or provider machinery',
     forbidden: [
@@ -58,7 +58,8 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       },
     ],
     rationale:
-      'PL5 numerical/DX review (2026-10-12): 8,189 → 8,432 B gzip (+243 B) on Node 22.23.2/esbuild 0.25.12. Exact rounding only at IEEE-754 range boundaries prevents false refusals; method-specific teaching examples preserve the selected call shape. The 8.375 KiB ceiling leaves 144 B headroom. No new dependency or public surface; schema/provider exclusions are unchanged. Initial PL budget was 8.125 KiB for the callable/explain facade, teaching errors and scaled reference arithmetic.',
+      'PL6 named pairs (2026-10-12): whole price-level entrypoint 8,432 → 9,621 B gzip (+1,189 B) on Node 22.23.2/esbuild 0.25.12. Sixteen three-price facades share validation, explanations and exact-boundary arithmetic; generic descriptive labels become optional. The 9.625 KiB ceiling leaves 235 B headroom. This preserves every export; installed esbuild/Rollup tests separately prove that one helper removes its siblings and schema machinery. No dependency added. ' +
+      'PL5 numerical/DX review (2026-10-12): 8,189 → 8,432 B gzip (+243 B). Exact range-boundary rounding and method-specific teaching left 144 B headroom under 8.375 KiB. Initial PL ceiling was 8.125 KiB.',
   },
   {
     specifier: '@insiderfinance/totalfinance/options/black-scholes',
@@ -656,11 +657,12 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 695,
+    budgetKB: 696.25,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
-      '694.625 → 695 KiB (PL5 numerical/DX review, 2026-10-12): 711,093 → 711,393 B gzip (+300 B), measured on Node 22.23.2/esbuild 0.25.12. The private extreme-range exact-rounding fallback and method-specific examples leave 287 B headroom. Only the new price-level subpath ceiling also changes (8.375 KiB); all other narrow limits and structural gates remain intact. ' +
+      '695 → 696.25 KiB (PL6 named pairs, 2026-10-12): 711,393 → 712,699 B gzip (+1,306 B) on Node 22.23.2/esbuild 0.25.12. Sixteen named pair facades and optional generic metadata add no dependencies. Headroom is 261 B; only price-levels also changes its whole-entrypoint ceiling, with single-helper installed tree-shaking tests. Every other narrow limit and structural gate is retained. ' +
+      '694.625 → 695 KiB (PL5 numerical/DX review, 2026-10-12): 711,093 → 711,393 B gzip (+300 B), measured on Node 22.23.2/esbuild 0.25.12. The private extreme-range exact-rounding fallback and method-specific examples left 287 B headroom. Only the new price-level subpath ceiling also changed (8.375 KiB); all other narrow limits and structural gates remained intact. ' +
       '693.5 → 694.625 KB (reference-price level conversion, 2026-10-12): base ec6ae2d measured 710,091 B and this addition 711,093 B gzip (+1,002 B) on Node 22.23.2/esbuild 0.25.12. Only the new valuation facade and its private validation boundary join the deliberately whole-surface umbrella; schemas stay isolated. Headroom was 203 B. Every existing narrower limit was preserved, and valuation/price-levels gained its own initial 8.125 KiB ceiling. ' +
       '691.25 → 693.5 KB (reported holding partitions, 2026-10-06): measured 707,616 → 709,976 B gzip (+2,360 B) on Node 22.23.2/esbuild 0.25.12. Only the new provider-free partition calculation and its separate validation/type boundary enter the deliberately whole-surface umbrella; exact decimals are shared, all original disclosure code stays unchanged. Headroom is 168 B; narrow installed-consumer budgets are not raised. ' +
       "690.75 → 691.25 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 707,616 B (+288 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 224 B of headroom. 686.5 → 690.75 KB (PR #4 integrated with 0.1.1 main, 2026-10-02): the combined source measures 707,171 B gzip with Node 22.23.2/esbuild 0.25.12, versus main's 702,783 B (+4,388 B). The umbrella now includes the three exact-decimal disclosed-holdings runtime modules, structured policy echo and one registered warning in addition to selective Greeks/exposure. Headroom is 157 B. The separate holdings import measures 10,550 B within its unchanged 10.5 KB cap, the portfolio domain 110,588 B within 108.125 KB; all narrow installed-consumer and forbidden-dependency gates remain intact. " +

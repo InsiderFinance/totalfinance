@@ -3,6 +3,262 @@
   "domain": "valuation",
   "tier": "facade",
   "exports": {
+    "esToSpyLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named ES → SPY reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "EsToSpyLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for esToSpyLevel; isolated from compute imports."
+    },
+    "spyToEsLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named SPY → ES reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "SpyToEsLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for spyToEsLevel; isolated from compute imports."
+    },
+    "nqToQqqLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named NQ → QQQ reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "NqToQqqLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for nqToQqqLevel; isolated from compute imports."
+    },
+    "qqqToNqLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named QQQ → NQ reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "QqqToNqLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for qqqToNqLevel; isolated from compute imports."
+    },
+    "ymToDiaLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named YM → DIA reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "YmToDiaLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for ymToDiaLevel; isolated from compute imports."
+    },
+    "diaToYmLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named DIA → YM reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "DiaToYmLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for diaToYmLevel; isolated from compute imports."
+    },
+    "rtyToIwmLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named RTY → IWM reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "RtyToIwmLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for rtyToIwmLevel; isolated from compute imports."
+    },
+    "iwmToRtyLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named IWM → RTY reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "IwmToRtyLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for iwmToRtyLevel; isolated from compute imports."
+    },
+    "spxToSpyLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named SPX → SPY reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "SpxToSpyLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for spxToSpyLevel; isolated from compute imports."
+    },
+    "spyToSpxLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named SPY → SPX reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "SpyToSpxLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for spyToSpxLevel; isolated from compute imports."
+    },
+    "ndxToQqqLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named NDX → QQQ reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "NdxToQqqLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for ndxToQqqLevel; isolated from compute imports."
+    },
+    "qqqToNdxLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named QQQ → NDX reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "QqqToNdxLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for qqqToNdxLevel; isolated from compute imports."
+    },
+    "rutToIwmLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named RUT → IWM reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "RutToIwmLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for rutToIwmLevel; isolated from compute imports."
+    },
+    "iwmToRutLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named IWM → RUT reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "IwmToRutLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for iwmToRutLevel; isolated from compute imports."
+    },
+    "djiaToDiaLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named DJIA → DIA reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "DjiaToDiaLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for djiaToDiaLevel; isolated from compute imports."
+    },
+    "diaToDjiaLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL6: named DIA → DJIA reference-price mapping; three explicit prices, fixed descriptive units, shared arithmetic, no market ratio or quote inference."
+    },
+    "DiaToDjiaLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed three-price request for diaToDjiaLevel; isolated from compute imports."
+    },
     "ConvertPriceLevelInputSchema": {
       "kind": "object",
       "entrypoints": ["./schemas"],
@@ -55,7 +311,7 @@
       "inputPolicies": {
         "0": "closed"
       },
-      "note": "PL contract: approximate proportional mapping with explicit units and references or a directed ratio; deterministic, no market presets or quote inference."
+      "note": "PL6: approximate proportional mapping with optional descriptive units and explicit references or a directed ratio; deterministic, no market ratios or quote inference."
     },
     "costOfEquity": {
       "kind": "function",

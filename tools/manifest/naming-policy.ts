@@ -820,6 +820,20 @@ export const CANONICAL_TOKENS: Readonly<Record<string, string>> = {
   nan: 'IEEE-754 term.',
   ok: 'Universal.',
   // Market / security identifiers
+  // PL6: published instrument identities, not abbreviations of financial quantities. In
+  // particular, `es` names the futures contract here, never a shorthand for expectedShortfall.
+  es: 'CME E-mini S&P 500 futures root symbol; spelling out the instrument would hide the identifier traders use for this price mapping.',
+  nq: 'CME E-mini Nasdaq-100 futures root symbol; the instrument identifier, not an abbreviated calculation parameter.',
+  ym: 'CME E-mini Dow futures root symbol; identifies the futures side of the Dow/ETF price mapping.',
+  rty: 'CME E-mini Russell 2000 futures root symbol; identifies the futures instrument rather than a financial quantity.',
+  spy: 'SPDR S&P 500 ETF Trust ticker; the fund identity used by callers and market data.',
+  qqq: 'Invesco QQQ Trust ticker; the fund identity used by callers and market data.',
+  dia: 'SPDR Dow Jones Industrial Average ETF Trust ticker; identifies the ETF, distinct from the full index level.',
+  iwm: 'iShares Russell 2000 ETF ticker; the fund identity used by callers and market data.',
+  spx: 'S&P 500 index symbol; identifies an index level, not an option premium or contract multiplier.',
+  ndx: 'Nasdaq-100 index symbol; identifies an index level, distinct from futures and ETF prices.',
+  rut: 'Russell 2000 index symbol; identifies the cash index side of the ETF price mapping.',
+  djia: 'Dow Jones Industrial Average identifier for the full index level; deliberately distinct from the scaled DJX options index.',
   occ: 'Options Clearing Corporation symbology.',
   cboe: 'Exchange.',
   nyse: 'Exchange.',

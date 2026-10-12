@@ -2822,8 +2822,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5381,
-    "enforced": 2493,
+    "candidates": 5461,
+    "enforced": 2573,
     "defective": 0,
     "partial": 2701,
     "unmeasured": 187,
@@ -2850,12 +2850,12 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2744,
-      "null-when-nonnullable": 26292,
-      "omit-required": 13358,
-      "wrong-type": 17017,
-      "non-finite": 9387,
-      "optional-wrong-type": 8037,
+      "unknown-key": 2776,
+      "null-when-nonnullable": 26388,
+      "omit-required": 13446,
+      "wrong-type": 17107,
+      "non-finite": 9483,
+      "optional-wrong-type": 8043,
       "invalid-literal": 1958,
       "empty-series": 914,
       "non-finite-element": 842,
@@ -2863,12 +2863,12 @@
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6526,
-      "null-when-nonnullable": 66110,
-      "omit-required": 34093,
-      "wrong-type": 43526,
-      "non-finite": 24486,
-      "optional-wrong-type": 19182,
+      "unknown-key": 6606,
+      "null-when-nonnullable": 66350,
+      "omit-required": 34313,
+      "wrong-type": 43752,
+      "non-finite": 24726,
+      "optional-wrong-type": 19196,
       "invalid-literal": 5022,
       "empty-series": 2414,
       "non-finite-element": 2176,
@@ -2877,8 +2877,8 @@
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3035,
-    "fromSynthesizedInput": 1973,
+    "inherited": 3083,
+    "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
       "external-callback-contract": 250,
@@ -2889,8 +2889,8 @@
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13097,
-      "enforced": 3873,
+      "total": 13177,
+      "enforced": 3953,
       "partial": 2517,
       "defective": 0,
       "unmeasured": 6707,
@@ -111345,18 +111345,20 @@
       "mutationsExecuted": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 9,
+        "non-finite": 5,
+        "optional-wrong-type": 2
       },
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 9,
+        "non-finite": 5,
+        "optional-wrong-type": 2
       },
       "inputPolicies": {
         "0": "closed"
@@ -111390,18 +111392,20 @@
       "mutationsExecuted": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 7,
+        "non-finite": 5,
+        "optional-wrong-type": 4
       },
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 7,
+        "non-finite": 5,
+        "optional-wrong-type": 4
       },
       "synthesized": true,
       "alternatives": [
@@ -111840,6 +111844,100 @@
         "non-finite": 5
       },
       "fixtureSource": "@totalfinance/valuation:decliningBalanceDepreciation"
+    },
+    {
+      "id": "@totalfinance/valuation:diaToDjiaLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToDjiaLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToDjiaLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:diaToDjiaLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToDjiaLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:diaToYmLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToYmLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToYmLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:diaToYmLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToYmLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "@totalfinance/valuation:discountCashFlows",
@@ -112635,6 +112733,53 @@
       "fixtureSource": "@totalfinance/valuation:dividendDiscountValuation"
     },
     {
+      "id": "@totalfinance/valuation:djiaToDiaLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#djiaToDiaLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:djiaToDiaLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:djiaToDiaLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#djiaToDiaLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:doubleDecliningBalanceDepreciation",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/capital-budgeting.d.ts#doubleDecliningBalanceDepreciation",
@@ -112893,6 +113038,53 @@
       "fixtureSource": "@totalfinance/valuation:equivalentInterestRate"
     },
     {
+      "id": "@totalfinance/valuation:esToSpyLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#esToSpyLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:esToSpyLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:esToSpyLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#esToSpyLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:freeCashFlowToEquity",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/corporate-primitives.d.ts#freeCashFlowToEquity",
@@ -113134,6 +113326,100 @@
       }
     },
     {
+      "id": "@totalfinance/valuation:iwmToRtyLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRtyLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRtyLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:iwmToRtyLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRtyLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:iwmToRutLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRutLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRutLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:iwmToRutLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRutLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:leveragedBuyoutAnalysis",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/leveraged-buyout.d.ts#leveragedBuyoutAnalysis",
@@ -113326,6 +113612,53 @@
       "fixtureSource": "@totalfinance/valuation:modifiedInternalRateOfReturn"
     },
     {
+      "id": "@totalfinance/valuation:ndxToQqqLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ndxToQqqLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:ndxToQqqLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:ndxToQqqLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ndxToQqqLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:netPresentValue",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/discounting.d.ts#netPresentValue",
@@ -113452,6 +113785,53 @@
         "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/valuation:nominalAnnualRate"
+    },
+    {
+      "id": "@totalfinance/valuation:nqToQqqLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#nqToQqqLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:nqToQqqLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:nqToQqqLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#nqToQqqLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "@totalfinance/valuation:operatingForecast",
@@ -113889,6 +114269,100 @@
       "fixtureSource": "@totalfinance/valuation:projectFinancialStatements"
     },
     {
+      "id": "@totalfinance/valuation:qqqToNdxLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNdxLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNdxLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:qqqToNdxLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNdxLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:qqqToNqLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNqLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNqLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:qqqToNqLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNqLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:residualIncomeValuation",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/equity-valuation.d.ts#residualIncomeValuation",
@@ -114093,6 +114567,241 @@
       "fixtureSource": "@totalfinance/valuation:reverseDiscountedCashFlow"
     },
     {
+      "id": "@totalfinance/valuation:rtyToIwmLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rtyToIwmLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:rtyToIwmLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:rtyToIwmLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rtyToIwmLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:rutToIwmLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rutToIwmLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:rutToIwmLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:rutToIwmLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rutToIwmLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:spxToSpyLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spxToSpyLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:spxToSpyLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:spxToSpyLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spxToSpyLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:spyToEsLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToEsLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToEsLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:spyToEsLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToEsLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "@totalfinance/valuation:spyToSpxLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToSpxLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToSpxLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:spyToSpxLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToSpxLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "@totalfinance/valuation:straightLineDepreciation",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/capital-budgeting.d.ts#straightLineDepreciation",
@@ -114197,6 +114906,53 @@
         "wrong-type": 1
       },
       "fixtureSource": "@totalfinance/valuation:weightedAverageCostOfCapital"
+    },
+    {
+      "id": "@totalfinance/valuation:ymToDiaLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ymToDiaLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "fixtureSource": "@totalfinance/valuation:ymToDiaLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:ymToDiaLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ymToDiaLevel.explain",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "@totalfinance/volatility:CalendarSkewFacade#explain",
@@ -140067,10 +140823,11 @@
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 9,
+        "non-finite": 5,
+        "optional-wrong-type": 2
       },
       "alternatives": [
         {
@@ -149488,6 +150245,46 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:diaToDjiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToDjiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToDjiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:diaToDjiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToDjiaLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:diaToYmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToYmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToYmLevel",
+      "inheritedFrom": "@totalfinance/valuation:diaToYmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToYmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
       "id": "totalfinance:diagonalCallSpread",
       "package": "totalfinance",
       "implementation": "packages/strategy/dist/manifest.d.ts#diagonalCallSpread",
@@ -150665,6 +151462,26 @@
         "invalid-literal": 6
       },
       "fixtureSource": "@totalfinance/fundamentals:dividendYield"
+    },
+    {
+      "id": "totalfinance:djiaToDiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#djiaToDiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:djiaToDiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:djiaToDiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:djiaToDiaLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:dmi",
@@ -153483,6 +154300,26 @@
         "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/valuation:equivalentInterestRate"
+    },
+    {
+      "id": "totalfinance:esToSpyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#esToSpyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:esToSpyLevel",
+      "inheritedFrom": "@totalfinance/valuation:esToSpyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:esToSpyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:estimateCovariance",
@@ -177759,6 +178596,46 @@
       "fixtureSource": "@totalfinance/fundamentals:isPeriodAvailableAt"
     },
     {
+      "id": "totalfinance:iwmToRtyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRtyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRtyLevel",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRtyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRtyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:iwmToRutLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRutLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRutLevel",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRutLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRutLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
       "id": "totalfinance:jacobiEigen",
       "package": "totalfinance",
       "implementation": "packages/math/dist/linalg.d.ts#jacobiEigen",
@@ -184994,6 +185871,26 @@
       "fixtureSource": "@totalfinance/technical-analysis:natr"
     },
     {
+      "id": "totalfinance:ndxToQqqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ndxToQqqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ndxToQqqLevel",
+      "inheritedFrom": "@totalfinance/valuation:ndxToQqqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:ndxToQqqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
       "id": "totalfinance:nearestCorrelation",
       "package": "totalfinance",
       "implementation": "packages/math/dist/linalg.d.ts#nearestCorrelation",
@@ -185551,6 +186448,26 @@
         "unmeasured": 8
       },
       "fixtureSource": "@totalfinance/portfolio:normalizeTradePlan"
+    },
+    {
+      "id": "totalfinance:nqToQqqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#nqToQqqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:nqToQqqLevel",
+      "inheritedFrom": "@totalfinance/valuation:nqToQqqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:nqToQqqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:nvi",
@@ -208793,6 +209710,46 @@
       "fixtureSource": "@totalfinance/technical-analysis:qqe"
     },
     {
+      "id": "totalfinance:qqqToNdxLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNdxLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNdxLevel",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNdxLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNdxLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:qqqToNqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNqLevel",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
       "id": "totalfinance:qrDecompose",
       "package": "totalfinance",
       "implementation": "packages/math/dist/linalg.d.ts#qrDecompose",
@@ -216492,6 +217449,26 @@
       "fixtureSource": "@totalfinance/technical-analysis:rsx"
     },
     {
+      "id": "totalfinance:rtyToIwmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rtyToIwmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rtyToIwmLevel",
+      "inheritedFrom": "@totalfinance/valuation:rtyToIwmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:rtyToIwmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
       "id": "totalfinance:runAgentBench",
       "package": "totalfinance",
       "implementation": "packages/backtest/dist/environment/bench.d.ts#runAgentBench",
@@ -216782,6 +217759,26 @@
         "unmeasured": 9
       },
       "fixtureSource": "@totalfinance/scenarios:runScenarios"
+    },
+    {
+      "id": "totalfinance:rutToIwmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rutToIwmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rutToIwmLevel",
+      "inheritedFrom": "@totalfinance/valuation:rutToIwmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:rutToIwmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:sabr.monteCarloEstimate",
@@ -219710,6 +220707,66 @@
         "invalid-literal": 1
       },
       "fixtureSource": "@totalfinance/options:spread.price"
+    },
+    {
+      "id": "totalfinance:spxToSpyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spxToSpyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spxToSpyLevel",
+      "inheritedFrom": "@totalfinance/valuation:spxToSpyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spxToSpyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:spyToEsLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToEsLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToEsLevel",
+      "inheritedFrom": "@totalfinance/valuation:spyToEsLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToEsLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:spyToSpxLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToSpxLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToSpxLevel",
+      "inheritedFrom": "@totalfinance/valuation:spyToSpxLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToSpxLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:sqrt",
@@ -259565,10 +260622,11 @@
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 9,
+        "non-finite": 5,
+        "optional-wrong-type": 2
       },
       "alternatives": [
         {
@@ -259604,10 +260662,11 @@
       "mutationsCovered": {
         "unknown-key": 2,
         "null-when-nonnullable": 11,
-        "omit-required": 11,
+        "omit-required": 7,
         "invalid-literal": 2,
-        "wrong-type": 11,
-        "non-finite": 5
+        "wrong-type": 7,
+        "non-finite": 5,
+        "optional-wrong-type": 4
       },
       "alternatives": [
         {
@@ -260004,6 +261063,80 @@
         "non-finite": 5
       },
       "fixtureSource": "@totalfinance/valuation:decliningBalanceDepreciation"
+    },
+    {
+      "id": "totalfinance:valuation.diaToDjiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToDjiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToDjiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:diaToDjiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToDjiaLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.diaToDjiaLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToDjiaLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToDjiaLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:diaToDjiaLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.diaToYmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToYmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToYmLevel",
+      "inheritedFrom": "@totalfinance/valuation:diaToYmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:diaToYmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.diaToYmLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#diaToYmLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:diaToYmLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:diaToYmLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "totalfinance:valuation.discountCashFlows",
@@ -260753,6 +261886,43 @@
       "fixtureSource": "@totalfinance/valuation:dividendDiscountValuation"
     },
     {
+      "id": "totalfinance:valuation.djiaToDiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#djiaToDiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:djiaToDiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:djiaToDiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:djiaToDiaLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.djiaToDiaLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#djiaToDiaLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:djiaToDiaLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:djiaToDiaLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.doubleDecliningBalanceDepreciation",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/capital-budgeting.d.ts#doubleDecliningBalanceDepreciation",
@@ -260983,6 +262153,43 @@
       "fixtureSource": "@totalfinance/valuation:equivalentInterestRate"
     },
     {
+      "id": "totalfinance:valuation.esToSpyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#esToSpyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:esToSpyLevel",
+      "inheritedFrom": "@totalfinance/valuation:esToSpyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:esToSpyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.esToSpyLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#esToSpyLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:esToSpyLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:esToSpyLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.freeCashFlowToEquity",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/corporate-primitives.d.ts#freeCashFlowToEquity",
@@ -261196,6 +262403,80 @@
       "synthesized": true
     },
     {
+      "id": "totalfinance:valuation.iwmToRtyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRtyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRtyLevel",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRtyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRtyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.iwmToRtyLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRtyLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRtyLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRtyLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.iwmToRutLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRutLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRutLevel",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRutLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:iwmToRutLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.iwmToRutLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#iwmToRutLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:iwmToRutLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:iwmToRutLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.leveragedBuyoutAnalysis",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/leveraged-buyout.d.ts#leveragedBuyoutAnalysis",
@@ -261349,6 +262630,43 @@
       "fixtureSource": "@totalfinance/valuation:modifiedInternalRateOfReturn"
     },
     {
+      "id": "totalfinance:valuation.ndxToQqqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ndxToQqqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ndxToQqqLevel",
+      "inheritedFrom": "@totalfinance/valuation:ndxToQqqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:ndxToQqqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.ndxToQqqLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ndxToQqqLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ndxToQqqLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:ndxToQqqLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.netPresentValue",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/discounting.d.ts#netPresentValue",
@@ -261463,6 +262781,43 @@
         "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/valuation:nominalAnnualRate"
+    },
+    {
+      "id": "totalfinance:valuation.nqToQqqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#nqToQqqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:nqToQqqLevel",
+      "inheritedFrom": "@totalfinance/valuation:nqToQqqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:nqToQqqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.nqToQqqLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#nqToQqqLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:nqToQqqLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:nqToQqqLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "totalfinance:valuation.operatingForecast",
@@ -261865,6 +263220,80 @@
       "fixtureSource": "@totalfinance/valuation:projectFinancialStatements"
     },
     {
+      "id": "totalfinance:valuation.qqqToNdxLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNdxLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNdxLevel",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNdxLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNdxLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.qqqToNdxLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNdxLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNdxLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNdxLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.qqqToNqLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNqLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNqLevel",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNqLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:qqqToNqLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.qqqToNqLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#qqqToNqLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:qqqToNqLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:qqqToNqLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.residualIncomeValuation",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/equity-valuation.d.ts#residualIncomeValuation",
@@ -262056,6 +263485,191 @@
       "fixtureSource": "@totalfinance/valuation:reverseDiscountedCashFlow"
     },
     {
+      "id": "totalfinance:valuation.rtyToIwmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rtyToIwmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rtyToIwmLevel",
+      "inheritedFrom": "@totalfinance/valuation:rtyToIwmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:rtyToIwmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.rtyToIwmLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rtyToIwmLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rtyToIwmLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:rtyToIwmLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.rutToIwmLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rutToIwmLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rutToIwmLevel",
+      "inheritedFrom": "@totalfinance/valuation:rutToIwmLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:rutToIwmLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.rutToIwmLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#rutToIwmLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:rutToIwmLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:rutToIwmLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.spxToSpyLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spxToSpyLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spxToSpyLevel",
+      "inheritedFrom": "@totalfinance/valuation:spxToSpyLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spxToSpyLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.spxToSpyLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spxToSpyLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spxToSpyLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:spxToSpyLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.spyToEsLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToEsLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToEsLevel",
+      "inheritedFrom": "@totalfinance/valuation:spyToEsLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToEsLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.spyToEsLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToEsLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToEsLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:spyToEsLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
+      "id": "totalfinance:valuation.spyToSpxLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToSpxLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToSpxLevel",
+      "inheritedFrom": "@totalfinance/valuation:spyToSpxLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:spyToSpxLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.spyToSpxLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#spyToSpxLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:spyToSpxLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:spyToSpxLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
+    },
+    {
       "id": "totalfinance:valuation.straightLineDepreciation",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/capital-budgeting.d.ts#straightLineDepreciation",
@@ -262140,6 +263754,43 @@
         "wrong-type": 1
       },
       "fixtureSource": "@totalfinance/valuation:weightedAverageCostOfCapital"
+    },
+    {
+      "id": "totalfinance:valuation.ymToDiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ymToDiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ymToDiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:ymToDiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:ymToDiaLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.ymToDiaLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ymToDiaLevel.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ymToDiaLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:ymToDiaLevel.explain",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "synthesized": true
     },
     {
       "id": "totalfinance:valueAtRisk",
@@ -266196,6 +267847,26 @@
       "fixtureSource": "@totalfinance/fixed-income:yieldToMaturity",
       "inputPolicies": {
         "0": "open"
+      }
+    },
+    {
+      "id": "totalfinance:ymToDiaLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#ymToDiaLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:ymToDiaLevel",
+      "inheritedFrom": "@totalfinance/valuation:ymToDiaLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 3,
+        "omit-required": 3,
+        "wrong-type": 3,
+        "non-finite": 3
+      },
+      "fixtureSource": "@totalfinance/valuation:ymToDiaLevel",
+      "inputPolicies": {
+        "0": "closed"
       }
     },
     {

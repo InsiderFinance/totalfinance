@@ -5,7 +5,13 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-**Bounded addition and review repairs locally complete (2026-10-12):**
+**Active bounded follow-up (2026-10-12):** PL6 in
+[reference-price level conversion](./specs/reference-price-level-conversion.md) adds sixteen named
+three-price helpers (eight futures/cash-index ↔ ETF pairs) and makes generic descriptive units
+optional. It preserves caller-supplied references and the shared calculation; no data lookup or
+fixed market ratio. Implement, verify and push in PR #14; no merge or publication is authorized.
+
+**Earlier bounded addition and review repairs locally complete (2026-10-12):**
 [reference-price level conversion](./specs/reference-price-level-conversion.md), tracked in
 [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
 [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 at
@@ -387,8 +393,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,874 public naming identities are walked and 0 are unresolved; 38,863 are `explicit`,
-3,849 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,257 public naming identities are walked and 0 are unresolved; 39,102 are `explicit`,
+3,993 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

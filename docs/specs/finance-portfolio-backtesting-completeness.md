@@ -29,6 +29,11 @@
 
 ## Bounded reference-price addition (2026-10-12)
 
+**PL6 is the active follow-up in PR #14:** sixteen named three-price helpers across eight pairs,
+optional generic unit metadata, and matching schemas/docs/installed-consumer evidence. This is
+an ergonomic extension of the same price mapping, not new economics, a provider or a transport.
+Its controlling contract and exit gate are in the linked reference-price specification.
+
 The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
 is implementation and requested local verification complete at `f5beceb3b325d4763313b1019bfb904eb3033b89`,
 tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and

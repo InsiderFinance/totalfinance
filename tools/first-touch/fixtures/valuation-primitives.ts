@@ -25,6 +25,54 @@ const LOAN = {
 };
 
 export const VALUATION_PRIMITIVES_FIXTURES: Record<string, FixtureThunk> = {
+  'valuation.esToSpyLevel': () => [
+    { esPriceLevel: 6030, referenceEsPrice: 6000, referenceSpyPrice: 596 },
+  ],
+  'valuation.spyToEsLevel': () => [
+    { spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceEsPrice: 6000 },
+  ],
+  'valuation.nqToQqqLevel': () => [
+    { nqPriceLevel: 20250, referenceNqPrice: 20000, referenceQqqPrice: 500 },
+  ],
+  'valuation.qqqToNqLevel': () => [
+    { qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNqPrice: 20000 },
+  ],
+  'valuation.ymToDiaLevel': () => [
+    { ymPriceLevel: 40400, referenceYmPrice: 40000, referenceDiaPrice: 398 },
+  ],
+  'valuation.diaToYmLevel': () => [
+    { diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceYmPrice: 40000 },
+  ],
+  'valuation.rtyToIwmLevel': () => [
+    { rtyPriceLevel: 2020, referenceRtyPrice: 2000, referenceIwmPrice: 198 },
+  ],
+  'valuation.iwmToRtyLevel': () => [
+    { iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRtyPrice: 2000 },
+  ],
+  'valuation.spxToSpyLevel': () => [
+    { spxPriceLevel: 6030, referenceSpxPrice: 6000, referenceSpyPrice: 596 },
+  ],
+  'valuation.spyToSpxLevel': () => [
+    { spyPriceLevel: 598.98, referenceSpyPrice: 596, referenceSpxPrice: 6000 },
+  ],
+  'valuation.ndxToQqqLevel': () => [
+    { ndxPriceLevel: 20250, referenceNdxPrice: 20000, referenceQqqPrice: 500 },
+  ],
+  'valuation.qqqToNdxLevel': () => [
+    { qqqPriceLevel: 506.25, referenceQqqPrice: 500, referenceNdxPrice: 20000 },
+  ],
+  'valuation.rutToIwmLevel': () => [
+    { rutPriceLevel: 2020, referenceRutPrice: 2000, referenceIwmPrice: 198 },
+  ],
+  'valuation.iwmToRutLevel': () => [
+    { iwmPriceLevel: 199.98, referenceIwmPrice: 198, referenceRutPrice: 2000 },
+  ],
+  'valuation.djiaToDiaLevel': () => [
+    { djiaPriceLevel: 40400, referenceDjiaPrice: 40000, referenceDiaPrice: 398 },
+  ],
+  'valuation.diaToDjiaLevel': () => [
+    { diaPriceLevel: 401.98, referenceDiaPrice: 398, referenceDjiaPrice: 40000 },
+  ],
   'valuation.convertPriceLevel': () => [
     {
       method: 'reference-prices',

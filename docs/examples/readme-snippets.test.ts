@@ -1,7 +1,7 @@
 import { resolvedExpiry } from '@insiderfinance/totalfinance/core';
 import { isPeriodAvailableAt } from '@insiderfinance/totalfinance/fundamentals';
 import {
-  convertPriceLevel,
+  esToSpyLevel,
   internalRateOfReturn,
   netPresentValue,
 } from '@insiderfinance/totalfinance/valuation';
@@ -91,7 +91,7 @@ describe('README examples (run in CI so the generated package READMEs can never 
 
   it('@insiderfinance/totalfinance/valuation', () => {
     // readme:begin
-    // import { convertPriceLevel, netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
+    // import { esToSpyLevel, netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
     const cashFlows = [
       { amount: -1_000, timeYears: 0 },
       { amount: 600, timeYears: 1 },
@@ -100,14 +100,11 @@ describe('README examples (run in CI so the generated package READMEs can never 
     const projectValue = netPresentValue({ cashFlows, annualDiscountRate: 0.1 });
     // number | null — an ambiguous IRR is never chosen silently; read .explain() for every root.
     const rate = internalRateOfReturn({ cashFlows });
-    // Approximate reference mapping, with supplied prices and explicit units (no quote inference).
-    const estimatedSpy = convertPriceLevel({
-      method: 'reference-prices',
-      sourcePriceLevel: 6030,
-      referenceSourcePrice: 6000,
-      referenceTargetPrice: 596,
-      sourcePriceUnit: 'ES index points',
-      targetPriceUnit: 'USD per SPY share',
+    // Approximate ES → SPY mapping from your reference prices; no fixed ratio or quote inference.
+    const estimatedSpy = esToSpyLevel({
+      esPriceLevel: 6030,
+      referenceEsPrice: 6000,
+      referenceSpyPrice: 596,
     }); // approximately 598.98 USD per SPY share
     // readme:end
     expect(projectValue).toBeCloseTo(41.32, 2);

@@ -11,10 +11,10 @@ import {
 export interface PriceLevelCoordinates {
   /** Finite nonnegative level in `sourcePriceUnit`; zero maps to zero. */
   sourcePriceLevel: number;
-  /** Nonblank caller-supplied unit label, e.g. 'ES index points'. No instrument inference. */
-  sourcePriceUnit: string;
-  /** Nonblank caller-supplied unit label, e.g. 'USD per SPY share'; also the result unit. */
-  targetPriceUnit: string;
+  /** Optional descriptive label, e.g. 'ES index points'; nonblank when supplied. No unit inference. */
+  sourcePriceUnit?: string | undefined;
+  /** Optional descriptive result-unit label, e.g. 'USD per SPY share'; nonblank when supplied. */
+  targetPriceUnit?: string | undefined;
 }
 
 /** Proportional mapping from a pair of caller-supplied reference prices. */
@@ -84,7 +84,7 @@ export function requirePriceLevelInput(input: ConvertPriceLevelInput): void {
   }
   for (const field of ['sourcePriceUnit', 'targetPriceUnit'] as const) {
     const value = input[field];
-    if (value === undefined) throw missingFieldError(functionName, field, example);
+    if (value === undefined) continue;
     if (typeof value !== 'string') {
       throw new InputError(
         `${functionName}: ${field} must be a nonblank unit-label string.\n  e.g. ${example}`,
