@@ -313,3 +313,10 @@ gates remain unchanged. The installed single-helper canaries have separate 9 KiB
 
 Commit and push are authorized; merging, version bumps and npm publication are not. The earlier
 PL1–PL5 hosted receipts do not verify PL6; PR #14 records fresh final-head fast/full receipts.
+
+The first PL6 hosted runs at `513d05b` caught one additional stale-prose gate in
+`tools/review-repair-doc-conformance.test.ts`: the alignment spec's library-wide totals and its
+valuation/umbrella breakdown still described the pre-helper surface. The 13,594 other full-suite
+tests passed on Node 22.13.0; that run remains a failure, not a landing receipt. The alignment
+prose is now synchronized with the same committed artifacts; no calculation or test gate changes.
+Fresh final-head fast/full runs must pass before the maintainer-authorized merge.
