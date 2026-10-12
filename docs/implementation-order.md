@@ -5,14 +5,19 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-**Bounded addition locally complete (2026-10-12) at `f5beceb3b325d4763313b1019bfb904eb3033b89`:**
+**Bounded addition and review repairs locally complete (2026-10-12):**
 [reference-price level conversion](./specs/reference-price-level-conversion.md), tracked in
 [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
-[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 implement one
+[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 at
+`f5beceb3b325d4763313b1019bfb904eb3033b89` implement one
 provider-free valuation facade for explicit references or a directed ratio, initially serving
 ES/SPY and NQ/QQQ. Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests),
-standalone API checks and an independent coverage repeat pass at that revision. The spec records
-the initial integration failures, repairs and exact receipts. Final-head hosted checks, the full
+standalone API checks and an independent coverage repeat pass at that revision. PL5 at
+`ac6142d85634d84ffb47534cd08590c9cbce025d` fixes extreme-range false refusals and keeps teaching
+examples in the selected method. Focused valuation/bundle checks (182 tests), installed Node/browser
+consumers (3), boundary sweeps (1,104), types, lint, API reports and ordered regeneration pass.
+The spec records both revisions' separate evidence; the public API is unchanged by PL5.
+Final-head hosted checks, the full
 hosted workflow for the bounded enforcement records and maintainer review remain landing gates;
 application pages, adjacent calculators, release versions, publication and deployment are separate.
 

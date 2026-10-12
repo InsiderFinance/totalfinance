@@ -35,8 +35,14 @@ tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13)
 [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 extend valuation's price
 transformations with explicit reference mapping, without reopening FC0–FC9 or claiming fair value.
 Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests), standalone API
-checks and the independent coverage repeat pass. The linked spec records integration repairs and
-exact receipts. Final-head hosted checks, the full hosted workflow for bounded enforcement records,
+checks and the independent coverage repeat pass at that original revision. PL5 review repairs are
+locally verified at `ac6142d85634d84ffb47534cd08590c9cbce025d`: exact range-boundary rounding,
+method-matched teaching examples, independent 40,460-case rounding checks and installed Node/browser
+regressions. The repair passes 182 valuation/bundle tests, 3 installed-consumer tests, 1,104 boundary
+checks, types, lint, API reports and ordered regeneration, without changing the public API.
+The linked spec preserves each revision's separate receipts. Final-head hosted checks and the full
+hosted workflow must verify the repairs before landing; the earlier runs do not cover PL5.
+These gates for bounded enforcement records,
 maintainer review, application work, adjacent calculators and publication remain separate.
 
 ## Bounded disclosed-holdings addition (2026-09-25)

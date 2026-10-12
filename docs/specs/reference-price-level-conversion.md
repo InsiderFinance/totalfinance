@@ -1,6 +1,6 @@
 # Reference-price level conversion
 
-Status: PL1–PL4 implementation and requested local verification complete (2026-10-12) at `f5beceb3b325d4763313b1019bfb904eb3033b89`. [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14) is open; final-head hosted checks and maintainer review remain separate landing gates.
+Status: PL1–PL4 implementation and requested local verification complete (2026-10-12) at `f5beceb3b325d4763313b1019bfb904eb3033b89`; PL5 review repairs locally verified at `ac6142d85634d84ffb47534cd08590c9cbce025d`. [PR #14](https://github.com/InsiderFinance/totalfinance/pull/14) is open; final-head hosted checks and maintainer review remain separate landing gates.
 Queue: bounded consumer-requested addition in `../implementation-order.md`.
 Issue: [#13](https://github.com/InsiderFinance/totalfinance/issues/13). This is a library addition requested for the ES/SPY and NQ/QQQ
 application pages; application implementation and publication are separate work.
@@ -47,11 +47,15 @@ level. Negative price levels are outside this bounded contract; zero maps to zer
    mixing ratio and reference fields is refused even when the forbidden field is `undefined`.
    Missing fields, wrong containers/primitives, unknown fields, invalid methods, nonfinite
    numbers, negative levels, nonpositive references/ratios, and blank units receive registered,
-   typed teaching errors. Input records are never mutated.
+   typed teaching errors. Once the method is valid, corrective examples retain that method and
+   its required fields. Input records are never mutated.
 6. **Numerics:** reference arithmetic scales binary significands/exponents to avoid unnecessary
    intermediate overflow/underflow, including when the implicit ratio itself is not
-   representable. A positive result rounded to zero is refused as underflow; subnormal nonzero
-   results are supported with ordinary double precision. Overflow is refused using the existing
+   representable. Near the output range boundaries, it recomputes the exact quotient of the
+   supplied doubles and rounds once to nearest, ties to even; prematurely rounded intermediates
+   must not cause false overflow/underflow refusals. Ordinary prices retain the scaled-number
+   path. A positive result rounded to zero is refused as underflow; subnormal nonzero results
+   are supported. Overflow is refused using the existing
    `requireRepresentableResult` finalizer. Facade finite postconditions also inspect the whole
    explanation. No nonfinite derived ratio is inserted into assumptions.
 7. **Explanation:** echo a copy of the complete selected input (method, references or directed
@@ -97,12 +101,13 @@ retrieval for temporary consumers; every installation, measurement and test stil
 
 ## Ordered slices and acceptance
 
-| Slice | Contents                                                                                       | State                          |
-| ----- | ---------------------------------------------------------------------------------------------- | ------------------------------ |
-| PL1   | Issue, queue row, controlling contract and pre-code review                                     | complete before implementation |
-| PL2   | Facade, validation, schemas, unit/error documentation and domain tests                         | complete at `f5beceb`          |
-| PL3   | Public classification, first-touch fixtures, runnable guide, installed consumers and changeset | complete at `f5beceb`          |
-| PL4   | Derived artifacts, full requested verification, truthful tracker closeout and PR               | complete at `f5beceb`          |
+| Slice | Contents                                                                                        | State                          |
+| ----- | ----------------------------------------------------------------------------------------------- | ------------------------------ |
+| PL1   | Issue, queue row, controlling contract and pre-code review                                      | complete before implementation |
+| PL2   | Facade, validation, schemas, unit/error documentation and domain tests                          | complete at `f5beceb`          |
+| PL3   | Public classification, first-touch fixtures, runnable guide, installed consumers and changeset  | complete at `f5beceb`          |
+| PL4   | Derived artifacts, full requested verification, truthful tracker closeout and PR                | complete at `f5beceb`          |
+| PL5   | Review repairs: exact range-boundary rounding, method-matched teaching, independent regressions | locally verified at `ac6142d`  |
 
 - [x] ES/SPY worked example returns 598.98 for 6030 using 6000/596 references; inverse returns 6030.
 - [x] Independent NQ/QQQ worked example: 20,250 from 20,000/500 gives 506.25; inverse returns 20,250.
@@ -123,7 +128,21 @@ retrieval for temporary consumers; every installation, measurement and test stil
 - [x] Queue, this slice ledger and the completeness tracker name the same verified commit.
 - [x] Reviewable PR against main is open; hosted current-head checks are reported accurately.
 
-## Verification record
+PL5 review follow-up acceptance (the original verification record below remains historical):
+
+- [x] The two finite-result regressions return `Number.MIN_VALUE` and `Number.MAX_VALUE` on both
+      calls; exact zero/infinity rounding thresholds still receive typed `input.out_of_range`.
+- [x] Subnormal ties, the normal/subnormal midpoint and 40,460 boundary-neighbor triples are
+      checked independently using exact fractions and adjacent-double rounding intervals.
+- [x] Corrective examples retain the selected method on both calls; installed strict NodeNext,
+      Bundler and browser consumers exercise the regressions and ratio-mode correction.
+- [x] No public signature, dependency, financial default, schema, version or transport change;
+      focused checks and the ordered artifact regeneration pass at the repair revision.
+
+Landing gate: final-head fast PR checks and the full hosted Node 22.13/24/26 gate must pass.
+The PR records the exact head and run URLs; older receipts do not verify these repairs.
+
+## PL1–PL4 verification record (historical)
 
 Focused checks: all valuation tests and bundle budgets pass (159 tests); the installed NodeNext,
 Bundler and browser guide checks pass (3 tests); first-touch/deep/unknown-key/finite-result
@@ -161,3 +180,36 @@ and the local-registry rehearsal). This is a fast PR receipt, not a full hosted 
 and the separately required full Node 22.13.0/24/26 workflow receipt before landing the bounded
 bundle/fixture enforcement records. No merge, public-registry publication, version bump,
 application change or deployment is authorized or performed.
+
+## PL5 review repair record
+
+The review of `9a4aca1` found two extreme-range false refusals: a result just above half
+`Number.MIN_VALUE` rounded too early to zero, and a result that should round to `Number.MAX_VALUE`
+rounded too early to infinity. A separate DX finding showed ratio-mode missing-field errors
+teaching a reference-price call instead. These are bounded implementation/error-guidance fixes,
+not a new API or a claim that proportional mapping predicts market prices.
+
+At `ac6142d85634d84ffb47534cd08590c9cbce025d`, the rare boundary path uses private exact integer
+arithmetic over the original binary inputs; ordinary prices continue through the existing scaled
+floating-point path. Both reviewed values, ties to even, true refusals, and 40,460 independently
+checked rounding intervals pass. The oracle compares exact fractions with fixed range thresholds
+and the midpoints around the returned double; it does not duplicate the implementation's quotient
+rounding algorithm.
+
+Local receipts on Node 22.23.2 / pnpm 10.32.0 (direct exits 0):
+
+- Valuation tests plus `tools/bundle-size/budgets.test.ts`: 182 tests across 7 files.
+- `tools/packed-consumer.test.ts -t 'packed price-level conversion'`: 3 installed-consumer tests,
+  including Node-free browser execution of the new exact-boundary path.
+- First-touch, deep-sweep, unknown-key and finite-result suites: 1,104 tests across 4 files.
+- Library TypeScript, changed-file ESLint/Prettier, build, and standalone API checks: all pass;
+  the 25 public API reports are unchanged.
+- The complete `REGENERATION_STEPS` chain runs in order. The only changed derived artifact is the
+  bundle report. Enforcement remains 0 defective and naming remains 0 unresolved. This dirty-tree
+  generation is not presented as a clean-tree `regen:check`; hosted CI owns that final-head gate.
+
+Measured gzip changes versus `9a4aca1`: focused price-level import 8,189 → 8,432 B (+243 B),
+whole umbrella 711,093 → 711,393 B (+300 B). The respective ceilings are 8.375 KiB and 695 KiB,
+leaving 144 B and 287 B headroom. Every other narrow-import ceiling and schema/provider exclusion
+is unchanged. The existing minor changeset covers the still-unreleased addition. Final-head hosted
+fast/full receipts belong to PR #14; this local repair record is not permission to merge or publish.
