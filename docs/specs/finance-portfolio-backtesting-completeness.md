@@ -27,6 +27,14 @@
 > [`options-backtest.md`](./options-backtest.md) remains normative for the current implementation and
 > this specification owns its portfolio-grade completion requirements.
 
+## Bounded reference-price addition (2026-10-12)
+
+The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
+is active, tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13).
+PL1's contract and pre-code review are complete; PL2–PL4 remain pending. It extends valuation's
+price transformations with explicit reference mapping, without reopening FC0–FC9 or claiming
+fair value. Application work, adjacent calculators and publication remain separate.
+
 ## Bounded disclosed-holdings addition (2026-09-25)
 
 The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5, is

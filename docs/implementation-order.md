@@ -5,6 +5,13 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+**Bounded addition active (2026-10-12):** [reference-price level conversion](./specs/reference-price-level-conversion.md),
+tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13). PL1's contract and
+pre-implementation review are complete; PL2–PL4 remain pending. This adds one provider-free
+valuation facade for caller-supplied references or a directed ratio, initially serving ES/SPY and
+NQ/QQQ consumers. Application pages, adjacent calculators, release versions, publication and
+deployment are outside this library change.
+
 **Bounded regeneration performance follow-up — complete (2026-10-06), implementation `51599ae`:**
 the [profiling and verification record](./specs/regeneration-performance.md) closes the maintainer-approved
 PR #8 optimization. Local tests and clean regeneration pass; exact-source hosted fast and full runs
