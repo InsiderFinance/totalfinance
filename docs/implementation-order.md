@@ -7,7 +7,8 @@
 
 **Bounded addition active (2026-10-12):** [reference-price level conversion](./specs/reference-price-level-conversion.md),
 tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13). PL1's contract and
-pre-implementation review are complete; PL2–PL4 remain pending. This adds one provider-free
+pre-implementation review are complete; PL2–PL3 are implemented with focused tests green; PL4's
+full verification and PR remain pending. This adds one provider-free
 valuation facade for caller-supplied references or a directed ratio, initially serving ES/SPY and
 NQ/QQQ consumers. Application pages, adjacent calculators, release versions, publication and
 deployment are outside this library change.
@@ -378,8 +379,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,731 public naming identities are walked and 0 are unresolved; 38,724 are `explicit`,
-3,845 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+42,874 public naming identities are walked and 0 are unresolved; 38,863 are `explicit`,
+3,849 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

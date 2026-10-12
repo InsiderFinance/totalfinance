@@ -1,26 +1,26 @@
 {
   "version": 1,
   "summary": {
-    "identities": 42731,
+    "identities": 42874,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3845,
-      "explicit": 38724,
+      "canonical-term": 3849,
+      "explicit": 38863,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
       "code-string": 274,
       "enum-member": 274,
-      "export": 7355,
-      "field": 22632,
-      "literal-value": 4628,
+      "export": 7368,
+      "field": 22713,
+      "literal-value": 4651,
       "mcp-field": 1520,
       "mcp-tool": 55,
-      "method": 1688,
+      "method": 1700,
       "package": 25,
-      "parameter": 4090,
-      "subpath": 190
+      "parameter": 4102,
+      "subpath": 192
     },
     "byPackage": {
       "@totalfinance/backtest": 5069,
@@ -44,10 +44,10 @@
       "@totalfinance/strategy": 1751,
       "@totalfinance/structure": 1132,
       "@totalfinance/technical-analysis": 4947,
-      "@totalfinance/valuation": 1005,
+      "@totalfinance/valuation": 1142,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3169
+      "totalfinance": 3175
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -237981,6 +237981,30 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|convertPriceLevel",
+      "name": "convertPriceLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|ConvertPriceLevelInput",
+      "name": "ConvertPriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|ConvertPriceLevelInputSchema",
+      "name": "ConvertPriceLevelInputSchema",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./schemas"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|export|costOfEquity",
       "name": "costOfEquity",
       "kind": "export",
@@ -238725,6 +238749,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|export|PriceLevelConversionAssumptions",
+      "name": "PriceLevelConversionAssumptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|PriceLevelCoordinates",
+      "name": "PriceLevelCoordinates",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|export|probabilisticDiscountedCashFlow",
       "name": "probabilisticDiscountedCashFlow",
       "kind": "export",
@@ -238818,6 +238858,22 @@
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./corporate"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|RatioPriceLevelInput",
+      "name": "RatioPriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|export|ReferencePriceLevelInput",
+      "name": "ReferencePriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./price-levels"],
       "disposition": "explicit"
     },
     {
@@ -239776,6 +239832,83 @@
       "name": "weight",
       "kind": "field",
       "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.method",
+      "name": "method",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.referenceSourcePrice",
+      "name": "referenceSourcePrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.referenceTargetPrice",
+      "name": "referenceTargetPrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.sourcePriceLevel",
+      "name": "sourcePriceLevel",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.sourcePriceUnit",
+      "name": "sourcePriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.targetPricePerSourcePrice",
+      "name": "targetPricePerSourcePrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInput.targetPriceUnit",
+      "name": "targetPriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInputSchema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInputSchema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInputSchema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ConvertPriceLevelInputSchema.parse(options).mode",
+      "name": "mode",
+      "kind": "field",
+      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -241216,6 +241349,55 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|InputError.code",
+      "name": "code",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.context",
+      "name": "context",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.toJSON().code",
+      "name": "code",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.toJSON().context",
+      "name": "context",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.toJSON().message",
+      "name": "message",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.toJSON().name",
+      "name": "name",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|InputError.toJSON().serialization",
+      "name": "serialization",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|InterestCompounding.periodsPerYear",
       "name": "periodsPerYear",
       "kind": "field",
@@ -241360,6 +241542,189 @@
       "name": "residualNetPresentValue",
       "kind": "field",
       "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.$id",
+      "name": "$id",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.$schema",
+      "name": "$schema",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.additionalProperties",
+      "name": "additionalProperties",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.allOf",
+      "name": "allOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.anyOf",
+      "name": "anyOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.const",
+      "name": "const",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.default",
+      "name": "default",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.description",
+      "name": "description",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.enum",
+      "name": "enum",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.exclusiveMaximum",
+      "name": "exclusiveMaximum",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.exclusiveMinimum",
+      "name": "exclusiveMinimum",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.format",
+      "name": "format",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.items",
+      "name": "items",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.maximum",
+      "name": "maximum",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.maxItems",
+      "name": "maxItems",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.maxLength",
+      "name": "maxLength",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.minimum",
+      "name": "minimum",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.minItems",
+      "name": "minItems",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.minLength",
+      "name": "minLength",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.multipleOf",
+      "name": "multipleOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.oneOf",
+      "name": "oneOf",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.pattern",
+      "name": "pattern",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.properties",
+      "name": "properties",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.required",
+      "name": "required",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.title",
+      "name": "title",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|JSONSchema.type",
+      "name": "type",
+      "kind": "field",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -242378,6 +242743,55 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|PriceLevelConversionAssumptions.conversion",
+      "name": "conversion",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelConversionAssumptions.mappingAssumption",
+      "name": "mappingAssumption",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelConversionAssumptions.ratioDirection",
+      "name": "ratioDirection",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelConversionAssumptions.resultUnit",
+      "name": "resultUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelCoordinates.sourcePriceLevel",
+      "name": "sourcePriceLevel",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelCoordinates.sourcePriceUnit",
+      "name": "sourcePriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|PriceLevelCoordinates.targetPriceUnit",
+      "name": "targetPriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|ProbabilisticDiscountedCashFlowInput.correlationMatrix",
       "name": "correlationMatrix",
       "kind": "field",
@@ -243015,6 +243429,83 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|RatioPriceLevelInput.method",
+      "name": "method",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RatioPriceLevelInput.sourcePriceLevel",
+      "name": "sourcePriceLevel",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RatioPriceLevelInput.sourcePriceUnit",
+      "name": "sourcePriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RatioPriceLevelInput.targetPricePerSourcePrice",
+      "name": "targetPricePerSourcePrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|RatioPriceLevelInput.targetPriceUnit",
+      "name": "targetPriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.method",
+      "name": "method",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.referenceSourcePrice",
+      "name": "referenceSourcePrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.referenceTargetPrice",
+      "name": "referenceTargetPrice",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.sourcePriceLevel",
+      "name": "sourcePriceLevel",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.sourcePriceUnit",
+      "name": "sourcePriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|ReferencePriceLevelInput.targetPriceUnit",
+      "name": "targetPriceUnit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|ResidualIncomeInput.annualCostOfEquity",
       "name": "annualCostOfEquity",
       "kind": "field",
@@ -243512,6 +244003,34 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|field|SafeParseResult.data",
+      "name": "data",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SafeParseResult.error",
+      "name": "error",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SafeParseResult.issues",
+      "name": "issues",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SafeParseResult.success",
+      "name": "success",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|field|ScenarioAnalysisInput.discountedCashFlowInput",
       "name": "discountedCashFlowInput",
       "kind": "field",
@@ -243584,6 +244103,48 @@
     {
       "id": "@totalfinance/valuation|field|ScenarioAnalysisResult.scenarios.scenarioName",
       "name": "scenarioName",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|Schema.~standard",
+      "name": "~standard",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|Schema.isOptional",
+      "name": "isOptional",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|Schema.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SchemaIssue.code",
+      "name": "code",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SchemaIssue.message",
+      "name": "message",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|SchemaIssue.path",
+      "name": "path",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -243738,6 +244299,69 @@
     {
       "id": "@totalfinance/valuation|field|SensitivityTableResult.rowVariable",
       "name": "rowVariable",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Issue.message",
+      "name": "message",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Issue.path",
+      "name": "path",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Props.types",
+      "name": "types",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Props.types.input",
+      "name": "input",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Props.types.output",
+      "name": "output",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Props.vendor",
+      "name": "vendor",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Props.version",
+      "name": "version",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Result.issues",
+      "name": "issues",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|field|StandardSchemaV1Result.value",
+      "name": "value",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -244086,6 +244710,20 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|literal-value|ConvertPriceLevelInput.method:ratio",
+      "name": "ratio",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|ConvertPriceLevelInput.method:reference-prices",
+      "name": "reference-prices",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|literal-value|CostOfEquityInput.method:capital-asset-pricing",
       "name": "capital-asset-pricing",
       "kind": "literal-value",
@@ -244326,6 +244964,104 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:array",
+      "name": "array",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:boolean",
+      "name": "boolean",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:integer",
+      "name": "integer",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:null",
+      "name": "null",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:number",
+      "name": "number",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:object",
+      "name": "object",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchema.type:string",
+      "name": "string",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:array",
+      "name": "array",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:boolean",
+      "name": "boolean",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:integer",
+      "name": "integer",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:null",
+      "name": "null",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:number",
+      "name": "number",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:object",
+      "name": "object",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|JSONSchemaTypeName:string",
+      "name": "string",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|literal-value|MarginalDistribution.type:normal",
       "name": "normal",
       "kind": "literal-value",
@@ -244356,6 +245092,13 @@
     {
       "id": "@totalfinance/valuation|literal-value|PaymentTiming:end",
       "name": "end",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|PriceLevelConversionAssumptions.ratioDirection:target-price-per-source-price",
+      "name": "target-price-per-source-price",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -244412,6 +245155,20 @@
     {
       "id": "@totalfinance/valuation|literal-value|RandomizedVariable.variable:perpetual-growth-rate",
       "name": "perpetual-growth-rate",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|RatioPriceLevelInput.method:ratio",
+      "name": "ratio",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|ReferencePriceLevelInput.method:reference-prices",
+      "name": "reference-prices",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -244571,6 +245328,34 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|literal-value|ValidationMode:coerce",
+      "name": "coerce",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|ValidationMode:off",
+      "name": "off",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|ValidationMode:passthrough",
+      "name": "passthrough",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|literal-value|ValidationMode:strict",
+      "name": "strict",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|literal-value|WarningSeverity:error",
       "name": "error",
       "kind": "literal-value",
@@ -244597,6 +245382,93 @@
       "name": "market values, normalized to sum to one",
       "kind": "literal-value",
       "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|ConvertPriceLevelInputSchema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|ConvertPriceLevelInputSchema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|ConvertPriceLevelInputSchema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|ConvertPriceLevelInputSchema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|ConvertPriceLevelInputSchema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "module",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|InputError.toJSON",
+      "name": "toJSON",
+      "kind": "method",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|Schema.describe",
+      "name": "describe",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|Schema.optional",
+      "name": "optional",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|Schema.parse",
+      "name": "parse",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|Schema.safeParse",
+      "name": "safeParse",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|method|Schema.toJSONSchema",
+      "name": "toJSONSchema",
+      "kind": "method",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/valuation|method|StandardSchemaV1Props.validate",
+      "name": "validate",
+      "kind": "method",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -244644,6 +245516,48 @@
     {
       "id": "@totalfinance/valuation|parameter|comparableCompanyValuation(input)",
       "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|convertPriceLevel(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ConvertPriceLevelInputSchema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ConvertPriceLevelInputSchema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ConvertPriceLevelInputSchema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ConvertPriceLevelInputSchema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|ConvertPriceLevelInputSchema.safeParse(options)",
+      "name": "options",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -244943,6 +245857,48 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/valuation|parameter|Schema.describe(description)",
+      "name": "description",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|Schema.parse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|Schema.parse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|Schema.safeParse(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|Schema.safeParse(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|parameter|StandardSchemaV1Props.validate(value)",
+      "name": "value",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/valuation|parameter|straightLineDepreciation(input)",
       "name": "input",
       "kind": "parameter",
@@ -244987,6 +245943,20 @@
     {
       "id": "@totalfinance/valuation|subpath|./forecasting",
       "name": "forecasting",
+      "kind": "subpath",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|subpath|./price-levels",
+      "name": "price-levels",
+      "kind": "subpath",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/valuation|subpath|./schemas",
+      "name": "schemas",
       "kind": "subpath",
       "position": "module",
       "disposition": "explicit"
@@ -289449,6 +290419,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|convertPriceLevel",
+      "name": "convertPriceLevel",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ConvertPriceLevelInput",
+      "name": "ConvertPriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|coppock",
       "name": "coppock",
       "kind": "export",
@@ -301697,6 +302683,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|PriceLevelConversionAssumptions",
+      "name": "PriceLevelConversionAssumptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceLevelCoordinates",
+      "name": "PriceLevelCoordinates",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|priceMany",
       "name": "priceMany",
       "kind": "export",
@@ -302576,6 +303578,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|RatioPriceLevelInput",
+      "name": "RatioPriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|RatioReport",
       "name": "RatioReport",
       "kind": "export",
@@ -302909,6 +303919,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./portfolio"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ReferencePriceLevelInput",
+      "name": "ReferencePriceLevelInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./valuation"],
       "disposition": "explicit"
     },
     {

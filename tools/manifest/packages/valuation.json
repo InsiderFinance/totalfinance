@@ -3,6 +3,12 @@
   "domain": "valuation",
   "tier": "facade",
   "exports": {
+    "ConvertPriceLevelInputSchema": {
+      "kind": "object",
+      "entrypoints": ["./schemas"],
+      "role": "schema",
+      "note": "Closed two-method request schema, isolated from compute imports."
+    },
     "adjustedPresentValue": {
       "kind": "function",
       "entrypoints": [".", "./corporate"],
@@ -40,6 +46,16 @@
       "role": "analysis",
       "shape": "report",
       "note": "FC2 comparables: metric/period/basis/aggregation/outlier policy all recorded; exclusions named"
+    },
+    "convertPriceLevel": {
+      "kind": "function",
+      "entrypoints": [".", "./price-levels"],
+      "hasExplain": true,
+      "role": "facade",
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "note": "PL contract: approximate proportional mapping with explicit units and references or a directed ratio; deterministic, no market presets or quote inference."
     },
     "costOfEquity": {
       "kind": "function",

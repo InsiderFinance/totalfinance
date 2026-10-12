@@ -166,6 +166,8 @@
     "packages/valuation/src/corporate.ts",
     "packages/valuation/src/forecasting.ts",
     "packages/valuation/src/index.ts",
+    "packages/valuation/src/price-levels.ts",
+    "packages/valuation/src/schemas.ts",
     "packages/volatility/src/analytics.ts",
     "packages/volatility/src/arbitrage.ts",
     "packages/volatility/src/artifacts.ts",

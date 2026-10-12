@@ -299,6 +299,10 @@
       "@insiderfinance/totalfinance/valuation/forecasting": [
         "./packages/valuation/src/forecasting.ts"
       ],
+      "@insiderfinance/totalfinance/valuation/price-levels": [
+        "./packages/valuation/src/price-levels.ts"
+      ],
+      "@insiderfinance/totalfinance/valuation/schemas": ["./packages/valuation/src/schemas.ts"],
       "@insiderfinance/totalfinance/volatility": ["./packages/volatility/src/index.ts"],
       "@insiderfinance/totalfinance/volatility/surface": ["./packages/volatility/src/surface.ts"],
       "@insiderfinance/totalfinance/volatility/svi": ["./packages/volatility/src/svi.ts"],

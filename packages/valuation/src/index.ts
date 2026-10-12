@@ -8,3 +8,5 @@ export * from './cash-flows.js';
 // FC2 — corporate valuation and forecasting.
 export * from './corporate.js';
 export * from './forecasting.js';
+// Caller-supplied proportional reference-price mapping; no fair-value or quote inference.
+export * from './price-levels.js';

@@ -45,6 +45,22 @@ export interface BundleBudget {
 
 export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
+    specifier: '@insiderfinance/totalfinance/valuation/price-levels',
+    entry: 'packages/valuation/src/price-levels.ts',
+    budgetKB: 8.125,
+    intent:
+      'reference-price conversion with typed validation, finite postconditions and explanations; no schema or provider machinery',
+    forbidden: [
+      { needle: 'toJSONSchema', why: 'runtime schemas remain behind valuation/schemas' },
+      {
+        needle: '__TOTALFINANCE_SCHEMA_FACADE__',
+        why: 'compute imports do not load schema machinery',
+      },
+    ],
+    rationale:
+      'Initial PL budget (2026-10-12): measured 8,189 B gzip on Node 22.23.2/esbuild 0.25.12, with 131 B headroom under 8.125 KiB. Includes the callable/explain facade, teaching errors and scaled reference arithmetic; no ticker presets or new dependency.',
+  },
+  {
     specifier: '@insiderfinance/totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
     budgetKB: 14,
@@ -640,10 +656,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 693.5,
+    budgetKB: 694.625,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      '693.5 → 694.625 KB (reference-price level conversion, 2026-10-12): base ec6ae2d measured 710,091 B and this addition 711,093 B gzip (+1,002 B) on Node 22.23.2/esbuild 0.25.12. Only the new valuation facade and its private validation boundary join the deliberately whole-surface umbrella; schemas stay isolated. Headroom is 203 B. Every existing narrower limit is preserved, and valuation/price-levels gains its own 8.125 KiB ceiling. ' +
       '691.25 → 693.5 KB (reported holding partitions, 2026-10-06): measured 707,616 → 709,976 B gzip (+2,360 B) on Node 22.23.2/esbuild 0.25.12. Only the new provider-free partition calculation and its separate validation/type boundary enter the deliberately whole-surface umbrella; exact decimals are shared, all original disclosure code stays unchanged. Headroom is 168 B; narrow installed-consumer budgets are not raised. ' +
       "690.75 → 691.25 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 707,616 B (+288 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 224 B of headroom. 686.5 → 690.75 KB (PR #4 integrated with 0.1.1 main, 2026-10-02): the combined source measures 707,171 B gzip with Node 22.23.2/esbuild 0.25.12, versus main's 702,783 B (+4,388 B). The umbrella now includes the three exact-decimal disclosed-holdings runtime modules, structured policy echo and one registered warning in addition to selective Greeks/exposure. Headroom is 157 B. The separate holdings import measures 10,550 B within its unchanged 10.5 KB cap, the portfolio domain 110,588 B within 108.125 KB; all narrow installed-consumer and forbidden-dependency gates remain intact. " +
       '681.25 → 686.5 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 697,450 B (150 B under the old line), this change 702,783 B (+5,333 B) with Node 22.23.2/esbuild 0.25.12 — the same additions the workflows row records (selective kernel, batch selection boundary, named Greeks and evaluate, selective exposure with nine shortcuts, supplied selection, requireSelection and its label guard, the expiry formatter cache, and the review fixes on #3); 193 B of headroom. ' +

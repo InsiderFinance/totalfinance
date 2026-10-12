@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 234,
+    "surfaces": 236,
     "byClass": {
-      "current-runnable": 91,
-      "future-target": 50,
+      "current-runnable": 92,
+      "future-target": 51,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4541,
-    "checkedUnderTruthfulness": 173,
-    "checkedUnderVocabulary": 50,
-    "shippedNamesWatched": 9638,
+    "executableFences": 4550,
+    "checkedUnderTruthfulness": 174,
+    "checkedUnderVocabulary": 51,
+    "shippedNamesWatched": 9657,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -201,6 +201,13 @@
       "codeFences": 1
     },
     {
+      "path": "docs/guides/price-level-conversion.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
+    },
+    {
       "path": "docs/guides/sector-performance.md",
       "class": "current-runnable",
       "owner": "human",
@@ -310,7 +317,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4274
+      "codeFences": 4282
     },
     {
       "path": "docs/llms.txt",
@@ -1042,6 +1049,13 @@
     },
     {
       "path": "docs/specs/preview-integration-and-shipping.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/specs/reference-price-level-conversion.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

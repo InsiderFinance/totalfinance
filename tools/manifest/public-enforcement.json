@@ -2822,8 +2822,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5376,
-    "enforced": 2488,
+    "candidates": 5381,
+    "enforced": 2493,
     "defective": 0,
     "partial": 2701,
     "unmeasured": 187,
@@ -2850,26 +2850,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2740,
-      "null-when-nonnullable": 26270,
-      "omit-required": 13336,
-      "wrong-type": 16995,
-      "non-finite": 9377,
+      "unknown-key": 2744,
+      "null-when-nonnullable": 26292,
+      "omit-required": 13358,
+      "wrong-type": 17017,
+      "non-finite": 9387,
       "optional-wrong-type": 8037,
-      "invalid-literal": 1954,
+      "invalid-literal": 1958,
       "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6516,
-      "null-when-nonnullable": 66055,
-      "omit-required": 34038,
-      "wrong-type": 43471,
-      "non-finite": 24461,
+      "unknown-key": 6526,
+      "null-when-nonnullable": 66110,
+      "omit-required": 34093,
+      "wrong-type": 43526,
+      "non-finite": 24486,
       "optional-wrong-type": 19182,
-      "invalid-literal": 5012,
+      "invalid-literal": 5022,
       "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
@@ -2877,8 +2877,8 @@
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3032,
-    "fromSynthesizedInput": 1971,
+    "inherited": 3035,
+    "fromSynthesizedInput": 1973,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
       "external-callback-contract": 250,
@@ -2889,8 +2889,8 @@
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13087,
-      "enforced": 3863,
+      "total": 13097,
+      "enforced": 3873,
       "partial": 2517,
       "defective": 0,
       "unmeasured": 6707,
@@ -111337,6 +111337,92 @@
       "fixtureSource": "@totalfinance/valuation:comparableCompanyValuation"
     },
     {
+      "id": "@totalfinance/valuation:convertPriceLevel",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#convertPriceLevel",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "inputPolicies": {
+        "0": "closed"
+      },
+      "alternatives": [
+        {
+          "id": "arg0:method=reference-prices",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/valuation:convertPriceLevel"
+        },
+        {
+          "id": "arg0:method=ratio",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      },
+      "fixtureSource": "@totalfinance/valuation:convertPriceLevel"
+    },
+    {
+      "id": "@totalfinance/valuation:convertPriceLevel.explain",
+      "package": "@totalfinance/valuation",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "guardReachability": "none",
+      "mutationsExecuted": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0:method=reference-prices",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0:method=ratio",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
+    },
+    {
       "id": "@totalfinance/valuation:costOfEquity",
       "package": "@totalfinance/valuation",
       "implementation": "packages/valuation/dist/corporate-primitives.d.ts#costOfEquity",
@@ -139969,6 +140055,45 @@
         "non-finite": 2
       },
       "fixtureSource": "@totalfinance/foreign-exchange:convertCurrency"
+    },
+    {
+      "id": "totalfinance:convertPriceLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#convertPriceLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:convertPriceLevel",
+      "inheritedFrom": "@totalfinance/valuation:convertPriceLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "alternatives": [
+        {
+          "id": "arg0:method=reference-prices",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/valuation:convertPriceLevel"
+        },
+        {
+          "id": "arg0:method=ratio",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      },
+      "fixtureSource": "@totalfinance/valuation:convertPriceLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
     },
     {
       "id": "totalfinance:convertibleBond",
@@ -259428,6 +259553,80 @@
         "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/valuation:comparableCompanyValuation"
+    },
+    {
+      "id": "totalfinance:valuation.convertPriceLevel",
+      "package": "totalfinance",
+      "implementation": "packages/valuation/dist/price-levels.d.ts#convertPriceLevel",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:convertPriceLevel",
+      "inheritedFrom": "@totalfinance/valuation:convertPriceLevel",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "alternatives": [
+        {
+          "id": "arg0:method=reference-prices",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/valuation:convertPriceLevel"
+        },
+        {
+          "id": "arg0:method=ratio",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      },
+      "fixtureSource": "@totalfinance/valuation:convertPriceLevel",
+      "inputPolicies": {
+        "0": "closed"
+      }
+    },
+    {
+      "id": "totalfinance:valuation.convertPriceLevel.explain",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/facade.d.ts#Facade.explain",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/valuation:convertPriceLevel.explain",
+      "inheritedFrom": "@totalfinance/valuation:convertPriceLevel.explain",
+      "guardReachability": "none",
+      "mutationsCovered": {
+        "unknown-key": 2,
+        "null-when-nonnullable": 11,
+        "omit-required": 11,
+        "invalid-literal": 2,
+        "wrong-type": 11,
+        "non-finite": 5
+      },
+      "alternatives": [
+        {
+          "id": "arg0:method=reference-prices",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0:method=ratio",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      },
+      "synthesized": true
     },
     {
       "id": "totalfinance:valuation.costOfEquity",

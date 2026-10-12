@@ -1,6 +1,6 @@
 # @insiderfinance/totalfinance/valuation
 
-> TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe.
+> TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe. Explicit reference-price level conversion.
 
 Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)** — a TypeScript quant toolkit with browser-safe calculation entry points. The main package has no runtime dependencies; optional MCP adds the MCP SDK. On the pro API every result carries its `assumptions` and `diagnostics` (model, conventions, seed, convergence) so nothing is hidden.
 
@@ -15,7 +15,7 @@ pnpm add @insiderfinance/totalfinance@0.1.2
 ## Example
 
 ```ts
-import { netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
+import { convertPriceLevel, netPresentValue, internalRateOfReturn } from '@insiderfinance/totalfinance/valuation';
 const cashFlows = [
   { amount: -1_000, timeYears: 0 },
   { amount: 600, timeYears: 1 },
@@ -24,6 +24,15 @@ const cashFlows = [
 const projectValue = netPresentValue({ cashFlows, annualDiscountRate: 0.1 });
 // number | null — an ambiguous IRR is never chosen silently; read .explain() for every root.
 const rate = internalRateOfReturn({ cashFlows });
+// Approximate reference mapping, with supplied prices and explicit units (no quote inference).
+const estimatedSpy = convertPriceLevel({
+  method: 'reference-prices',
+  sourcePriceLevel: 6030,
+  referenceSourcePrice: 6000,
+  referenceTargetPrice: 596,
+  sourcePriceUnit: 'ES index points',
+  targetPriceUnit: 'USD per SPY share',
+}); // approximately 598.98 USD per SPY share
 ```
 
 _This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot rot._
@@ -38,7 +47,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/valuation` exposes **50** runtime exports (**155** including types) across 4 entrypoints (`.`, `./cash-flows`, `./corporate`, `./forecasting`). See the generated [`etc/valuation.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/valuation/etc/valuation.api.md) for the full surface.
+`@insiderfinance/totalfinance/valuation` exposes **51** runtime exports (**161** including types) across 6 entrypoints (`.`, `./cash-flows`, `./corporate`, `./forecasting`, `./price-levels`, `./schemas`). See the generated [`etc/valuation.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/valuation/etc/valuation.api.md) for the full surface.
 
 ## License
 

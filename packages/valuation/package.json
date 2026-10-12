@@ -1,7 +1,7 @@
 {
   "name": "@totalfinance/valuation",
   "version": "0.1.2",
-  "description": "TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe.",
+  "description": "TotalFinance valuation: time-value-of-money, NPV/IRR/MIRR cash-flow solvers, loans and amortization, capital budgeting and depreciation. Browser-safe. Explicit reference-price level conversion.",
   "license": "Apache-2.0",
   "keywords": [
     "totalfinance",
@@ -46,7 +46,17 @@
       "import": "./dist/forecasting.js",
       "default": "./dist/forecasting.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./price-levels": {
+      "types": "./dist/price-levels.d.ts",
+      "import": "./dist/price-levels.js",
+      "default": "./dist/price-levels.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js",
+      "default": "./dist/schemas.js"
+    }
   },
   "files": [
     "dist",

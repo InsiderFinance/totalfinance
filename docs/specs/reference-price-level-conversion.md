@@ -1,6 +1,6 @@
 # Reference-price level conversion
 
-Status: contract reviewed before implementation on 2026-10-12; implementation pending.
+Status: PL1–PL3 implemented and focused verification green on 2026-10-12; full verification and PR pending.
 Queue: bounded consumer-requested addition in `../implementation-order.md`.
 Issue: [#13](https://github.com/InsiderFinance/totalfinance/issues/13). This is a library addition requested for the ES/SPY and NQ/QQQ
 application pages; application implementation and publication are separate work.
@@ -83,25 +83,25 @@ No unresolved contract decision blocks implementation. External PR review remain
 
 ## Ordered slices and acceptance
 
-| Slice | Contents                                                                                       | State                          |
-| ----- | ---------------------------------------------------------------------------------------------- | ------------------------------ |
-| PL1   | Issue, queue row, controlling contract and pre-code review                                     | complete before implementation |
-| PL2   | Facade, validation, schemas, unit/error documentation and domain tests                         | pending                        |
-| PL3   | Public classification, first-touch fixtures, runnable guide, installed consumers and changeset | pending                        |
-| PL4   | Derived artifacts, full requested verification, truthful tracker closeout and PR               | pending                        |
+| Slice | Contents                                                                                       | State                            |
+| ----- | ---------------------------------------------------------------------------------------------- | -------------------------------- |
+| PL1   | Issue, queue row, controlling contract and pre-code review                                     | complete before implementation   |
+| PL2   | Facade, validation, schemas, unit/error documentation and domain tests                         | implemented; focused tests green |
+| PL3   | Public classification, first-touch fixtures, runnable guide, installed consumers and changeset | implemented; focused tests green |
+| PL4   | Derived artifacts, full requested verification, truthful tracker closeout and PR               | pending                          |
 
-- [ ] ES/SPY worked example returns 598.98 for 6030 using 6000/596 references; inverse returns 6030.
-- [ ] Independent NQ/QQQ worked example: 20,250 from 20,000/500 gives 506.25; inverse returns 20,250.
-- [ ] Reference identity, ratio equivalence, round trips, homogeneity and joint-reference-scale
+- [x] ES/SPY worked example returns 598.98 for 6030 using 6000/596 references; inverse returns 6030.
+- [x] Independent NQ/QQQ worked example: 20,250 from 20,000/500 gives 506.25; inverse returns 20,250.
+- [x] Reference identity, ratio equivalence, round trips, homogeneity and joint-reference-scale
       invariance pass at relative tolerance 1e-12 for well-conditioned normal cases.
-- [ ] Both methods/boundaries reject malformed, missing, wrong-type, unknown and mixed fields;
+- [x] Both methods/boundaries reject malformed, missing, wrong-type, unknown and mixed fields;
       nonfinite, negative, zero-reference and blank-unit cases have exact typed codes.
-- [ ] Extreme inputs preserve representable answers, support nonzero subnormals and zero identity,
+- [x] Extreme inputs preserve representable answers, support nonzero subnormals and zero identity,
       and refuse output overflow/underflow. Independent power-of-two cases pin numeric behavior.
-- [ ] Explanations are JSON-safe, echo all selected inputs/units, disclose the assumption and limits,
+- [x] Explanations are JSON-safe, echo all selected inputs/units, disclose the assumption and limits,
       and do not mutate caller input.
-- [ ] Runtime schema and generated declaration/contract/first-touch evidence cover both methods.
-- [ ] Packed ESM, strict NodeNext/Bundler, namespace/subpath identity and a browser bundle execute
+- [x] Runtime schema and generated declaration/contract/first-touch evidence cover both methods.
+- [x] Packed ESM, strict NodeNext/Bundler, namespace/subpath identity and a browser bundle execute
       the guide and malformed-input correction without private aliases or Node globals.
 - [ ] Changed files are formatted; bundle budgets, targeted tests and generated gates pass.
 - [ ] Canonical-runtime clean `regen:check`, `pnpm run ci`, standalone `api:check` and an independent
@@ -111,4 +111,17 @@ No unresolved contract decision blocks implementation. External PR review remain
 
 ## Verification record
 
-Pending. No completion, hosted-matrix, public-registry, or deployment evidence is claimed.
+Focused checks: all valuation tests and bundle budgets pass (159 tests); the installed NodeNext,
+Bundler and browser guide checks pass (3 tests); first-touch/deep/unknown-key/finite-result
+checks pass (1,104 tests). Generated enforcement reports 0 defective and both method alternatives
+fully enforced on the plain and explained calls; naming reports 0 unresolved. The generated
+fixture join increased exactly 1,316 → 1,317 for the new fixture.
+
+Canonical bundle measurements (Node 22.23.2 / pnpm 10.32.0 / esbuild 0.25.12): base ec6ae2d
+umbrella 710,091 B gzip, implementation 711,093 B (+1,002 B); focused converter 8,189 B.
+The whole-surface ceiling increases 693.5 → 694.625 KiB with 203 B headroom; the new focused
+ceiling is 8.125 KiB with 131 B headroom. Existing narrow-import ceilings and structural gates
+are retained. A full hosted workflow will verify these bounded enforcement-record changes.
+
+Full verification, exact implementation commit and PR receipts remain pending. No hosted-matrix,
+public-registry or deployment evidence is claimed.

@@ -25,6 +25,16 @@ const LOAN = {
 };
 
 export const VALUATION_PRIMITIVES_FIXTURES: Record<string, FixtureThunk> = {
+  'valuation.convertPriceLevel': () => [
+    {
+      method: 'reference-prices',
+      sourcePriceLevel: 6030,
+      referenceSourcePrice: 6000,
+      referenceTargetPrice: 596,
+      sourcePriceUnit: 'ES index points',
+      targetPriceUnit: 'USD per SPY share',
+    },
+  ],
   // discounting.ts
   'valuation.presentValue': () => [
     { futureAmount: 1_000, annualInterestRate: 0.08, timeYears: 5, compounding: 'annual' },

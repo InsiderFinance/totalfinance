@@ -31,7 +31,8 @@
 
 The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
 is active, tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13).
-PL1's contract and pre-code review are complete; PL2–PL4 remain pending. It extends valuation's
+PL1's contract and pre-code review are complete; PL2–PL3 are implemented with focused tests
+green; PL4's full verification and PR remain pending. It extends valuation's
 price transformations with explicit reference mapping, without reopening FC0–FC9 or claiming
 fair value. Application work, adjacent calculators and publication remain separate.
 

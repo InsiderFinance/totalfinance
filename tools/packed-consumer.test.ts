@@ -2661,3 +2661,119 @@ console.log('HOLDING_PARTITIONS_PUBLIC_OK');
     120_000,
   );
 });
+
+const PRICE_LEVEL_ASSERTIONS = `
+if (Math.abs(estimatedSpy - 598.98) > 1e-10 || Math.abs(estimatedEs - 6030) > 1e-9)
+  throw new Error('ES/SPY guide arithmetic drifted');
+if (explainedQqq.value !== 506.25 || estimatedQqqFromRatio !== 506.25 || estimatedNqFromRatio !== 20250)
+  throw new Error('NQ/QQQ guide arithmetic drifted');
+if (explainedQqq.assumptions.conversion.method !== 'reference-prices' || explainedQqq.assumptions.resultUnit !== 'USD per QQQ share')
+  throw new Error('explanation lost method or units');
+const input = { method: 'ratio' as const, sourcePriceLevel: 20250, targetPricePerSourcePrice: 0.025,
+  sourcePriceUnit: 'NQ index points', targetPriceUnit: 'USD per QQQ share' };
+for (const boundary of [convertPriceLevel, convertPriceLevel.explain]) {
+  let refusal: unknown;
+  try { boundary({ ...input, referenceSourcePrice: undefined } as unknown as typeof input); } catch (error) { refusal = error; }
+  if (!(refusal instanceof InputError) || refusal.code !== ErrorCode.InputUnknownField)
+    throw new Error('mixed-method input did not receive the exact typed teaching error');
+  if (boundary(input) === undefined) throw new Error('corrected request failed');
+}
+console.log('PRICE_LEVEL_PUBLIC_OK');
+`;
+
+function priceLevelGuideSource(): string {
+  const guide = readFileSync(join(ROOT, 'docs/guides/price-level-conversion.md'), 'utf8');
+  return [...guide.matchAll(/```ts\n([\s\S]*?)```/g)].map((match) => match[1]).join('\n');
+}
+
+describe('packed price-level conversion', () => {
+  it.each(['nodenext', 'bundler'])(
+    'runs the guide, schemas, namespace identity and compile refusals under %s',
+    (resolution) => {
+      const dir = join(consumer, 'price-levels-' + resolution);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(
+        join(dir, 'consumer.mts'),
+        priceLevelGuideSource() +
+          `
+import { valuation } from '@insiderfinance/totalfinance';
+import { convertPriceLevel as domain } from '@insiderfinance/totalfinance/valuation';
+import { ConvertPriceLevelInputSchema } from '@insiderfinance/totalfinance/valuation/schemas';
+import { InputError, ErrorCode } from '@insiderfinance/totalfinance/core';
+if (valuation.convertPriceLevel !== convertPriceLevel || domain !== convertPriceLevel)
+  throw new Error('namespace/domain/subpath identity drifted');
+if (!ConvertPriceLevelInputSchema.safeParse({ method: 'ratio', sourcePriceLevel: 1, targetPricePerSourcePrice: 2,
+  sourcePriceUnit: 'source points', targetPriceUnit: 'target points' }).success)
+  throw new Error('installed schema refused a valid request');
+if (false) {
+  // @ts-expect-error Named object input is required.
+  convertPriceLevel(6030, 6000, 596);
+  // @ts-expect-error A method is required; it is not inferred from reference fields.
+  convertPriceLevel({ sourcePriceLevel: 6030, referenceSourcePrice: 6000, referenceTargetPrice: 596, sourcePriceUnit: 'ES points', targetPriceUnit: 'USD/share' });
+  // @ts-expect-error Ratio mode cannot contain reference fields.
+  convertPriceLevel({ method: 'ratio', sourcePriceLevel: 1, targetPricePerSourcePrice: 2, referenceSourcePrice: 6000, sourcePriceUnit: 'ES points', targetPriceUnit: 'USD/share' });
+}
+` +
+          PRICE_LEVEL_ASSERTIONS,
+      );
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'PRICE_LEVEL_PUBLIC_OK',
+      );
+    },
+    120_000,
+  );
+
+  it('executes the installed granular guide in a browser bundle without Node globals or schema machinery', () => {
+    const dir = join(consumer, 'price-levels-browser');
+    sh('mkdir', ['-p', dir], consumer);
+    writeFileSync(
+      join(dir, 'entry.ts'),
+      priceLevelGuideSource() +
+        `
+import { InputError, ErrorCode } from '@insiderfinance/totalfinance/core';
+for (const name of ['process', 'require', 'Buffer', 'module']) {
+  if (typeof (globalThis as Record<string, unknown>)[name] !== 'undefined') throw new Error(name + ' leaked into the browser');
+}
+` +
+        PRICE_LEVEL_ASSERTIONS,
+    );
+    sh(
+      join(ROOT, 'node_modules', '.bin', 'esbuild'),
+      [
+        join(dir, 'entry.ts'),
+        '--bundle',
+        '--platform=browser',
+        '--format=iife',
+        '--outfile=' + join(dir, 'bundle.js'),
+      ],
+      consumer,
+    );
+    expect(readFileSync(join(dir, 'bundle.js'), 'utf8')).not.toContain('totalfinance/schema');
+    writeFileSync(
+      join(dir, 'harness.mjs'),
+      `
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
+vm.runInNewContext(readFileSync(new URL('./bundle.js', import.meta.url), 'utf8'), { console });
+`,
+    );
+    expect(sh('node', [join(dir, 'harness.mjs')], consumer)).toContain('PRICE_LEVEL_PUBLIC_OK');
+  }, 120_000);
+});
