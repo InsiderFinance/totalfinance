@@ -104,7 +104,8 @@ describe('published bundle table (3B.N8-DOCS item 7)', () => {
 
     // The independently capped disclosed-holdings subpath adds one entrypoint (2026-09-25).
     // Its reported-partitions successor adds another independent deep-import cap (2026-10-06).
-    expect(declared.length).toBe(32);
+    // Reference-price conversion adds its own isolated compute-entrypoint cap (2026-10-12).
+    expect(declared.length).toBe(33);
   });
 
   it('publishes the budget CI enforces, exactly', () => {

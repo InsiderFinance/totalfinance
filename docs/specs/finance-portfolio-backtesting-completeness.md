@@ -27,6 +27,31 @@
 > [`options-backtest.md`](./options-backtest.md) remains normative for the current implementation and
 > this specification owns its portfolio-grade completion requirements.
 
+## Bounded reference-price addition (2026-10-12)
+
+**PL6 is locally complete in PR #14 at `50f87aca2570c0f6ec51f0f5883d31eaf41790a8`:**
+sixteen named three-price helpers across eight pairs,
+optional generic unit metadata, and matching schemas/docs/installed-consumer evidence. This is
+an ergonomic extension of the same price mapping, not new economics, a provider or a transport.
+Its controlling contract and local receipts are in the linked reference-price specification;
+final-head fast/full hosted checks and maintainer review are the next gates, recorded in PR #14.
+
+The separately authorized [reference-price level conversion](./reference-price-level-conversion.md)
+is implementation and requested local verification complete at `f5beceb3b325d4763313b1019bfb904eb3033b89`,
+tracked in [issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
+[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 extend valuation's price
+transformations with explicit reference mapping, without reopening FC0–FC9 or claiming fair value.
+Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests), standalone API
+checks and the independent coverage repeat pass at that original revision. PL5 review repairs are
+locally verified at `ac6142d85634d84ffb47534cd08590c9cbce025d`: exact range-boundary rounding,
+method-matched teaching examples, independent 40,460-case rounding checks and installed Node/browser
+regressions. The repair passes 182 valuation/bundle tests, 3 installed-consumer tests, 1,104 boundary
+checks, types, lint, API reports and ordered regeneration, without changing the public API.
+The linked spec preserves each revision's separate receipts. Final-head hosted checks and the full
+hosted workflow must verify the current head before landing; earlier PL1–PL5 runs do not cover PL6.
+These gates for bounded enforcement records,
+maintainer review, application work, adjacent calculators and publication remain separate.
+
 ## Bounded disclosed-holdings addition (2026-09-25)
 
 The additive [reported-partition successor](./disclosed-holding-partitions.md), HP1–HP5, is

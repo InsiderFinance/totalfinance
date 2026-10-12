@@ -858,6 +858,16 @@
       "import": "./modules/valuation/dist/forecasting.js",
       "default": "./modules/valuation/dist/forecasting.js"
     },
+    "./valuation/price-levels": {
+      "types": "./modules/valuation/dist/price-levels.d.ts",
+      "import": "./modules/valuation/dist/price-levels.js",
+      "default": "./modules/valuation/dist/price-levels.js"
+    },
+    "./valuation/schemas": {
+      "types": "./modules/valuation/dist/schemas.d.ts",
+      "import": "./modules/valuation/dist/schemas.js",
+      "default": "./modules/valuation/dist/schemas.js"
+    },
     "./volatility": {
       "types": "./modules/volatility/dist/index.d.ts",
       "import": "./modules/volatility/dist/index.js",

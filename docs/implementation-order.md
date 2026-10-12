@@ -5,6 +5,32 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+**Bounded follow-up locally complete (2026-10-12), implementation
+`50f87aca2570c0f6ec51f0f5883d31eaf41790a8`:** PL6 in
+[reference-price level conversion](./specs/reference-price-level-conversion.md) adds sixteen named
+three-price helpers (eight futures/cash-index ↔ ETF pairs) and makes generic descriptive units
+optional. It preserves caller-supplied references and the shared calculation; no data lookup or
+fixed market ratio. The spec records 1,548 focused tests, 137 contract/naming tests, installed
+Node/browser/tree-shaking checks and synchronized artifacts. Next: final-head fast/full hosted
+checks and maintainer review in PR #14; no further implementation slice, merge or publication is
+authorized by this follow-up. The PR owns the exact final-head check receipts.
+
+**Earlier bounded addition and review repairs locally complete (2026-10-12):**
+[reference-price level conversion](./specs/reference-price-level-conversion.md), tracked in
+[issue #13](https://github.com/InsiderFinance/totalfinance/issues/13) and
+[PR #14](https://github.com/InsiderFinance/totalfinance/pull/14). PL1–PL4 at
+`f5beceb3b325d4763313b1019bfb904eb3033b89` implement one
+provider-free valuation facade for explicit references or a directed ratio, initially serving
+ES/SPY and NQ/QQQ. Clean regeneration, full local CI (586 files / 13,295 tests plus 80 site tests),
+standalone API checks and an independent coverage repeat pass at that revision. PL5 at
+`ac6142d85634d84ffb47534cd08590c9cbce025d` fixes extreme-range false refusals and keeps teaching
+examples in the selected method. Focused valuation/bundle checks (182 tests), installed Node/browser
+consumers (3), boundary sweeps (1,104), types, lint, API reports and ordered regeneration pass.
+The spec records both revisions' separate evidence; the public API is unchanged by PL5.
+Final-head hosted checks, the full
+hosted workflow for the bounded enforcement records and maintainer review remain landing gates;
+application pages, adjacent calculators, release versions, publication and deployment are separate.
+
 **Bounded regeneration performance follow-up — complete (2026-10-06), implementation `51599ae`:**
 the [profiling and verification record](./specs/regeneration-performance.md) closes the maintainer-approved
 PR #8 optimization. Local tests and clean regeneration pass; exact-source hosted fast and full runs
@@ -371,8 +397,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-42,731 public naming identities are walked and 0 are unresolved; 38,724 are `explicit`,
-3,845 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,257 public naming identities are walked and 0 are unresolved; 39,102 are `explicit`,
+3,993 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

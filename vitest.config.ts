@@ -33,6 +33,8 @@ export default defineConfig({
       '@totalfinance/valuation/cash-flows': fromRoot('./packages/valuation/src/cash-flows.ts'),
       '@totalfinance/valuation/corporate': fromRoot('./packages/valuation/src/corporate.ts'),
       '@totalfinance/valuation/forecasting': fromRoot('./packages/valuation/src/forecasting.ts'),
+      '@totalfinance/valuation/price-levels': fromRoot('./packages/valuation/src/price-levels.ts'),
+      '@totalfinance/valuation/schemas': fromRoot('./packages/valuation/src/schemas.ts'),
       '@totalfinance/valuation': fromRoot('./packages/valuation/src/index.ts'),
       '@totalfinance/research/screening': fromRoot('./packages/research/src/screening.ts'),
       '@totalfinance/research/factors': fromRoot('./packages/research/src/factors.ts'),
