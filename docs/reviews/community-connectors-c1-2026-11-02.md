@@ -173,3 +173,18 @@ Main was freshly fetched while preparing this handoff: `origin/main` remains
 [41511802199](https://github.com/InsiderFinance/totalfinance/actions/runs/41511802199) and post-merge
 full run [41504979418](https://github.com/InsiderFinance/totalfinance/actions/runs/41504979418) both
 completed successfully. Those base receipts do not certify the feature head.
+
+## Review handoff
+
+Draft SDK PR: [#26](https://github.com/InsiderFinance/totalfinance/pull/26).
+SDK implementation commit: `820314eb557cf9dbb3139e539434006d84ed2826`. Later SDK receipt commits change documentation only;
+the tarball checksum above identifies the exact packed runtime. Provider implementation commit:
+`92b8737c67cb98878ca730ea88490e6df3c78842`; provider verification commit: `d8ae064376b8671e70e140d71f9cc3f095b38718`.
+Both repositories have reviewable local history; only the SDK feature branch was pushed. The
+provider has no remote and remains private/provisional/local-only.
+
+Fast PR checks and the required full manual workflow must run against the final SDK receipt head.
+They are pending at this documentation checkpoint; the Ri handoff records their actual run IDs,
+head and state after push. No hosted pass or feature merge is inferred from the local suite.
+No local full-CI/coverage repeat was claimed. The feature task and attached execution stay in
+progress for technical implementation review and the separate live/agent/App acceptance.
