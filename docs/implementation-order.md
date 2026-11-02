@@ -5,6 +5,32 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active community connector foundation (2026-11-02)
+
+The maintainer agreed to community-owned independent provider packages. The next feature is the
+bounded Stage 6 C0/C1 lane in
+[community-connector-foundation.md](./specs/community-connector-foundation.md): the public query
+contract, compatibility kit/fixture and an externally installed InsiderFinance provider for price
+bars and option-chain research. Broad provider inventories remain possible community work.
+
+- [x] Start from fetched `origin/main` `d50b401ee237006c75c76ef90784e5dcde1439a3`, including merged
+      repair PR #25, in an isolated Ri-owned worktree.
+- [x] C0: write the decision-complete proposal against existing public types and inspected REST
+      source; exact paths, package metadata, time/error/pagination semantics and proof plan are defined.
+- [ ] C0 technical review by the coordinating chat, before new public implementation.
+- [ ] C1: implement the narrow contract, fixture/shared kit and independent provider; prove packed
+      installation against the public SDK and offline HTTP mapping with synthetic facts.
+- [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
+      actual paper-journey and MCP App acceptance.
+
+The feature is in progress; C0 is proposed, C1 is not implemented. The prior staging allowance is
+exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
+with its separate app/API task. Publication, release versions, remote-repository creation, deployment
+and live execution remain outside scope. The full post-PR-25 main run
+[41504979418](https://github.com/InsiderFinance/totalfinance/actions/runs/41504979418) was verified
+completed successfully at `d50b401ee237006c75c76ef90784e5dcde1439a3` on November 2; future landing
+still requires current-head checks and review. No feature merge is authorized by that receipt.
+
 ### Immediate dogfood correctness repairs (2026-11-02)
 
 The maintainer authorized LIB-01 → LIB-03 → LIB-02 from the

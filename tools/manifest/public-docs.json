@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 238,
+    "surfaces": 240,
     "byClass": {
       "current-runnable": 92,
-      "future-target": 53,
+      "future-target": 55,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4600,
+    "executableFences": 4603,
     "checkedUnderTruthfulness": 174,
-    "checkedUnderVocabulary": 53,
+    "checkedUnderVocabulary": 55,
     "shippedNamesWatched": 9730,
     "documentedExceptions": 7,
     "findings": 0
@@ -593,6 +593,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c0-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/dogfood-repair-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
@@ -689,6 +696,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/community-connector-foundation.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
     },
     {
       "path": "docs/specs/compo-option.md",
