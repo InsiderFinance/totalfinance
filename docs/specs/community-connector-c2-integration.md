@@ -1,130 +1,22 @@
-# Community connector C2: SDK-first consumer rework
+# Community connector C2: consumer data view
 
-Status: **provisional SDK-first review candidate; no C2 runtime implementation approved or started.**
-Date: 2026-11-02. Feature task: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
-Required request: `50853bf4-78d3-8bac-bcc9-9d358fb94ff6`.
-Controlling later steering: `f34544c7-0432-8fbe-9464-9df4e5da2e12` and
-`941bb23d-461d-87e7-88b3-2cd29fbc2c4a`.
-Execution: `01a19da1-1351-7b84-b67f-58bc81698fb5` (existing feature execution remains linked).
+Status: **provisional revised review candidate; changes requested on 4fc5f9d, no C2 implementation approval.**
+Date: 2026-11-02. Feature: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
+Current review: `d5f95724-5d5d-8c4e-9e08-b2b658fa658a`.
+Earlier request/steering: `50853bf4-78d3-8bac-bcc9-9d358fb94ff6`,
+`f34544c7-0432-8fbe-9464-9df4e5da2e12`, `941bb23d-461d-87e7-88b3-2cd29fbc2c4a`.
+Execution remains `01a19da1-1351-7b84-b67f-58bc81698fb5`.
 
-## Outcome and review boundary
+## Primary consumer example: configure, fetch, calculate
 
-A connector supplies normalized inputs to existing TotalFinance calculations. An ordinary SDK user
-must be able to configure a key, acquire a bounded sample and calculate from it without MCP/server/
-pack registration or provider-specific field mapping. The primary checkpoint is the short SDK
-example below, not another infrastructure layer. C1 source/CI acceptance is not consumer acceptance;
-PR26 stays draft pending this review.
-
-The maintainer's later feedback supersedes the earlier request to freeze a full host/async design
-now. This document makes a concrete minimal SDK proposal for review and records the optional host
-requirements separately. It does not declare an async runtime necessary for lovability. The
-coordinator is resolving the product promise with the maintainer; these proposed signatures are
-not already available or approved. Revise them before implementing if that discussion changes the
-expected experience. Do not defend a poor unreleased API merely because it passed technical gates.
-
-The [C0/C1 spec](./community-connector-foundation.md) still controls financial types, source clocks,
-paging, validation, quality and community ownership. C2 proposes changing poor unreleased call
-shapes rather than preserving them with aliases or building a large client facade. No provider
-implementation/credential is imported into core/root/browser compute. No financial algorithm,
-indicator grammar, portfolio accounting or paper approval policy changes.
-
-## Three paths, kept explicit
-
-| Audience                | Interaction                                                                                 | C1 state                                                                             |
-| ----------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Provider author         | Implement the normalized capability/query protocol and pass the public kit                  | Reviewed source and offline compatibility proofs exist                               |
-| SDK user                | Fetch normalized data; project shared input shapes; call an existing calculation            | Works with generic query plus manual projection; this is the friction C2 must repair |
-| Optional agent/MCP host | Configure the same SDK path once, offer acquisition tools and keep large samples in handles | Not implemented by C1; not a prerequisite for SDK use                                |
-
-A second import such as sma selects the calculation the user wants. It does not mean the connector
-is unconnected: the value returned by acquisition becomes that function's input. A provider does
-not need its own copy of sma, and a pure sma call does not need a configured provider. The same
-engine continues to accept arrays loaded from a file, another provider or caller-owned data.
-
-## Baseline and isolation
-
-Reviewed SDK head: `b5c3c83fbeb9197dde9714cfeee9b8fb2e960083`, draft PR26.
-Reviewed external provider: `c492d2d15a1aeeb0ba2104fe55066d017bf66474`, private/provisional 0.0.0,
-local repository `/Users/agent/ri/.work/repos/totalfinance-insiderfinance-connector`, no remote.
-Neither reviewed tree is edited here. This worktree is
-`/Users/agent/ri/.work/worktrees/totalfinance/totalfinance-c2-addendum`, branch
-`totalfinance/community-connector-c2-spec`, based exactly on that SDK head.
-
-C1 [fast CI](https://github.com/InsiderFinance/totalfinance/actions/runs/41523330653) passed eight jobs
-(coverage skipped); [full CI](https://github.com/InsiderFinance/totalfinance/actions/runs/41523446543)
-passed all 23. The [C1 record](../reviews/community-connectors-c1-2026-11-02.md) and Ri task preserve
-source corrections, independent review, tarball hashes and installed proofs. These receipts certify
-C1 technical behavior, not this unimplemented SDK experience or connected-agent acceptance.
-
-## Decision 1 — proposed normal-use factory and infrastructure overrides
-
-Recommend one direct credential argument:
-
-```ts
-// Proposed C2; this spelling is not accepted by C1.
-const provider = createInsiderFinanceProvider(apiKey);
-```
-
-Target external signature: `createInsiderFinanceProvider(apiKey: string, overrides?: InsiderFinanceProviderOptions): DataProvider`.
-Options are the closed optional fields baseUrl, fetch and now. Do not retain the old config-object
-spelling as an alias. The earlier `{ apiKey }` request is recorded as superseded for this review
-candidate by the subsequent instruction to reassess sole-value wrappers. A single credential is
-not a financially confusable scalar group; named financial query/parameter inputs remain objects.
-The coordinator must accept this revised signature before implementation.
-
-For this private 0.0.0 preview, omitted baseUrl selects exactly
-`https://api-staging.insiderfinance.workers.dev`. This is a documented staging preview default,
-not a production endpoint, deployment change, live data receipt or grant to read. Production
-default selection belongs to a separately authorized release. No environment guessing from a key,
-fallback origin, key discovery or constructor request is allowed.
-
-Omitted fetch captures/binds native global fetch; omitted now supplies deferred Date.now. Both
-remain overridable for synthetic tests and custom hosts. No normal example mentions now. Its only
-uses remain response-receipt time and HTTP-date retry-delay evaluation. It never supplies source
-observation, availability, valuation, bar time, expiry, rate or volatility. Construction and local
-InsiderFinance discovery perform zero HTTP calls and zero clock reads.
-
-Only undefined means omission. Explicit null/wrong-type fetch/now, invalid clock return values,
-empty URL or non-HTTPS/userinfo/path/query/fragment origins refuse with existing typed input errors.
-A missing native fetch without override uses ConfigurationError with registered input.missing_field
-and safe field context. A blank/non-string key retains the explicit data.authentication_required
-refusal without its value in context. Redirect refusal and C1 safe error mapping remain unchanged.
-No implicit retry, timeout, allowance reset or grant change accompanies these defaults.
-
-## Decision 2 — revise the generic query once, without a second facade
-
-Recommend the direct object request `provider.query(request, options?)` instead of
-`provider.query({ request, signal? })`. Keep the existing named DataRequest fields and all bounds.
-Options is the closed optional `{ signal?: AbortSignal }`; its presence represents a genuine
-behavioral option, not a required wrapper. Discovery remains `provider.capabilities(options?)`
-with options optional rather than requiring an empty object. No duplicated named price-bars API,
-universal client, provider-bound calculation methods or alternate indicator parameters are added.
-
-Provider implementers, defineDataProvider, the kit, fixture, external provider and packed examples
-change together. There is exactly one query implementation. No C1 aliases/overloads survive just
-for compatibility with an unreleased interface. This is a reviewed C2 source API break; it does not
-change normalized DataPage fields, financial/time semantics or DATA_CONTRACT_VERSION 1. That
-constant describes the research-data protocol, not calling-syntax SemVer. Package versions remain
-unchanged in this local preview, and fresh exact tarball compatibility must be recorded.
-
-Requests still require symbol, explicit interval/from/to/limit or chain snapshot/filter inputs.
-There is no default symbol, lookback, sampling interval, as-of time, page limit or financial input.
-One query returns one page and performs at most one upstream data request; it does not silently
-retry, cache, auto-page or convert EOD research into current liquidity. A continuation still repeats
-resource identity, cursor and limit, with the corrected retained original filters/pins enforced.
-
-## Decision 3 — shared projections, existing calculation, visible source
-
-The following is the proposed SDK-first review example. It must become a runnable installed
-synthetic example after technical review; it is not claimed to run against C1 today:
+**Proposed C2, not currently implemented:**
 
 ```ts
 import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';
-import { closePrices } from '@insiderfinance/totalfinance/core/data';
 import { sma } from '@insiderfinance/totalfinance/technical-analysis';
 
 const provider = createInsiderFinanceProvider(apiKey);
-const page = await provider.query({
+const prices = await provider.query({
   kind: 'price-bars',
   symbol: 'SPY',
   interval: '1d',
@@ -132,197 +24,323 @@ const page = await provider.query({
   to: '2026-10-28',
   limit: 100,
 });
-const prices = closePrices(page);
-const research = {
-  calculation: sma.explain(prices.values, { period: 2 }),
-  source: prices.source,
-};
+const average = sma(prices.closePrices, { period: 2 });
 ```
 
-The sample dates/prices are synthetic facts. The ordinary API example includes no MCP, packs,
-clock/fetch injection or provider-specific mapping. The output explicitly keeps the existing
-calculation explain result and its source together; neither engine diagnostics nor source warnings
-are hidden or overwritten. It is ordinary JavaScript composition, not a new calculation wrapper.
-No public helper wraps sma, reimplements its math or attaches all indicators to a data client.
+This is the recommended handoff: explicitly choose closing prices, then pass the normal numeric
+array to existing SMA. There is no third import, standalone projection, values/source unwrapping,
+manual report assembly, MCP prerequisite or provider-specific mapping. Named symbol/interval/date/
+limit fields and period remain meaningful financial choices. No such inputs are inferred/defaulted.
+The synthetic three-close sample 100, 101, 102 produces last SMA 101.5 with period 2.
 
-Two strict, provider-neutral projection functions are proposed in the existing opt-in /core/data
-entry, not a new distribution or core/root re-export:
+The common SDK automatically constructs the small consumer view after validating the provider's
+raw response. `prices.page` is the unchanged validated research DataPage, including original data,
+metadata, source identity, provenance, page/row diagnostics and temporal/coverage limits. Selecting
+`prices.closePrices` does not erase or overwrite that page. To inspect source limits, read
+`prices.page.metadata` and `prices.page.diagnostics`; use existing sma.explain instead of sma when
+engine assumptions/diagnostics are needed. No extra setup is required for either.
 
-- closePrices(page): `{ readonly values: readonly number[]; readonly source: DataPage<PriceBarRecord> }`.
-  Copies the actual closes in page order; accepts known zero values. No price calculation.
-- ohlcvBars(page): `{ readonly values: readonly OhlcvInput[]; readonly source: DataPage<PriceBarRecord> }`.
-  OhlcvInput has required finite open/high/low/close/volume, with nonnegative volume; it is structurally
-  usable by existing BarInput consumers. No dependency on technical-analysis is introduced in core.
+SMA stays a pure existing calculation and returns its ordinary result. This design does **not**
+claim provenance magically follows a number or that SMA copies source warnings into its result.
+The retained view is the source context for the calculation. Applications keep it when presenting
+or persisting research; serializing only average cannot preserve its acquisition provenance.
 
-Both take a single research page directly, without a sole-value object wrapper. All returned data
-is immutable. source is the validated, frozen complete original page (same source identity, clocks,
-provenance, metadata, assumptions and page/row diagnostics), never a fabricated observation or a
-lossy flattened summary. It need not be copied again when already safely owned. The projection
-values correspond exactly to source.data and cannot be sorted/truncated/filled independently.
+## Review outcome and scope
 
-The second concrete calculation example uses the same acquired page and existing VWAP:
+The coordinator read all 328 lines of draft 4fc5f9d and the evidence. Exact disposition:
+**"changes requested; no C2 implementation approval."** Direct credential/direct query/optional
+discovery/invisible infrastructure defaults are sound in principle. That draft's third import,
+projection call, values/source unwrapping and manual assembly did not demonstrate the maintainer's
+low-ceremony expectation. Its blanket partial-quality refusal and broad data.incomplete_page policy
+also confused field suitability and history claims. This revision replaces those decisions.
+
+10/10 consumer lovability is an acceptance condition; technically green C1 is not consumer
+acceptance. This is a concrete evaluated candidate for coordinator review, not a broad question
+asking the maintainer to choose an architecture. No runtime/async/MCP implementation starts until
+the written spec is reviewed. The [C0/C1 spec](./community-connector-foundation.md) still controls
+normalized financial units, unknown times/terms, paging/error/cancellation laws and independent
+community package ownership. No calculation grammar, financial default, provider-bound indicator
+methods, all-purpose finance client or provider dependency in ordinary compute is introduced.
+
+## Decision 1 — choose an SDK-owned view over standalone projections
+
+| Candidate                   | Consumer handoff                                                        | Consequence                                                                      | Disposition |
+| --------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------- |
+| Previous standalone helper  | Import closePrices, project page, unwrap values, assemble source report | Small implementation but makes repeated plumbing the primary experience          | Replaced    |
+| SDK consumer view           | Query once; select prices.closePrices; call existing SMA                | Common validation/projection once, raw page attached, two imports                | Recommended |
+| Decorated numeric array     | Extra source properties on the series itself                            | Unneeded special array semantics; canonical scanner rejects non-index members    | Excluded    |
+| Provider-bound calculations | provider.sma(...) or a universal client                                 | Couples acquisition/calculation APIs, repeats registry grammar or grows a facade | Excluded    |
+
+The view has only data access, not pricing/indicator methods. Explicit closePrices states which
+financial field is analyzed; there is no implicit OHLC selection. An additional strict ohlcvBars
+selection supports existing bar-input calculations without unknown-volume-as-zero:
 
 ```ts
-// Proposed C2 shared projection, existing TotalFinance calculation.
-const bars = ohlcvBars(page);
-const research = {
-  calculation: vwap.explain(bars.values),
-  source: bars.source,
-};
+// Existing vwap imported from technical-analysis; no new calculation API.
+const volumeAverage = vwap(prices.ohlcvBars);
 ```
 
-The application imports existing vwap from technical-analysis. Missing volume on any row refuses
-with InputError input.missing_field before any indicator runs; context names the row/field without
-secret data. Volume zero is preserved. This check matters because current VWAP/OBV leaves use
-`bar.volume ?? 0`; an acquired-data projection must not turn an unknown financial input into that
-implicit assumption. closePrices can still project known closes from a page with unknown volume;
-it does not claim those values are suitable for a volume-based indicator. Missing OHLC or nonfinite
-source data is already a C1 invalid-response refusal and stays one. No forward filling, conversion
-of unknown to zero, guessed adjustment or override of financial requirements is offered.
+A missing required volume on any row throws while selecting ohlcvBars, before vwap executes.
+It does not prevent fetching, inspecting or computing SMA from known closes on that same page.
+The raw page remains interoperable with caller-owned transforms and other tools at prices.page.
+Existing pure calculations continue accepting ordinary arrays/files/other providers' data.
 
-The current public barsFromColumns and columnsFromBars converters remain usable for caller-owned
-canonical arrays. They do not unwrap research pages or preserve their metadata. columnsFromBars
-selects columns from the first row, so it cannot prove mixed acquired rows have volume. The
-framework's closes helper is not exported from the public technical-analysis entry. These findings
-justify two small strict projections, not a new engine/client or a whole per-indicator requirement
-registry. Existing Bar and BarInput contracts remain unchanged.
+## Decision 2 — exact proposed provider and consumer signatures
 
-Both projections revalidate stored/serialized page structure, rows, clocks, metadata and within-page
-ordering through shared private C1 validator components extracted from pageData as needed. They
-cannot verify an original query that was not supplied, and must not invent one; query bounds/pins
-remain the query wrapper/provider responsibility. A malformed page uses data.invalid_response, a
-wrong protocol version uses data.contract_version_unsupported, and a non-price page uses
-data.unsupported_capability. Do not duplicate financial validation in a transport. Refuse an empty
-sample, source quality partial/unavailable,
-or non-null nextCursor with registered `data.incomplete_page` (DataError, safe reason context).
-Do not silently calculate the first page and describe it as the requested history. No partial-data
-bypass is added. A terminal continuation alone can represent only that page's sample: source keeps
-the original facts, and no helper/summary calls any terminal page complete history. Page status
-cannot establish calendar continuity or recover earlier pages that the caller did not supply.
-General multi-page assembly is outside this minimal checkpoint; no auto-paging framework is added.
+Common SDK types belong to the existing opt-in `@insiderfinance/totalfinance/core/data` entry.
+The following is the proposed revised source API, not C1 exports:
 
-Unknown/observed-only coverage, adjustment, freshness and source clock warnings remain in source.
-A terminal cursor only means pagination ended. Daily midnight is still a date label, minute start
-is not observation, and unknown availability still prevents a PIT guarantee. Results describe an
-indicator over supplied observations, not a total-return series or an executable quote. Warmup and
-indicator parameter defaults remain the existing explicit engine conventions, not provider defaults.
-Chains remain option-chain research records; no projection manufactures roots/OCC, multipliers,
-rate, volatility, exact expiry/valuation or market/fill inputs.
+```ts
+interface DataCallOptions {
+  readonly signal?: AbortSignal;
+}
 
-The product review must decide whether this short explicit acquisition/projection/calculation path
-meets the expected experience. If the maintainer wants one specific composed workflow instead,
-revise this unreleased proposal around that demonstrated workflow before implementation. Do not
-add an all-purpose facade to avoid asking what should happen to actual data and diagnostics.
+// Authored by an external package; normalized raw responses, no view implementation.
+interface DataProviderSource {
+  readonly id: string;
+  readonly version: string;
+  readonly contractVersion: 1;
+  capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+  query<R extends DataRequest>(
+    request: R,
+    options?: DataCallOptions,
+  ): Promise<DataPage<DataFor<R>>>;
+}
 
-## Current versus proposed contract impact
+interface OhlcvInput {
+  readonly open: number;
+  readonly high: number;
+  readonly low: number;
+  readonly close: number;
+  readonly volume: number;
+}
+interface PriceBarsView {
+  readonly kind: 'price-bars';
+  readonly page: DataPage<PriceBarRecord>;
+  readonly closePrices: readonly number[];
+  readonly ohlcvBars: readonly OhlcvInput[];
+}
+interface OptionChainResearchView {
+  readonly kind: 'option-chain-research';
+  readonly page: DataPage<OptionChainResearchRecord>;
+}
+type DataView = PriceBarsView | OptionChainResearchView;
+type DataViewFor<R extends DataRequest> = R['kind'] extends 'price-bars'
+  ? PriceBarsView
+  : R['kind'] extends 'option-chain-research'
+    ? OptionChainResearchView
+    : DataView;
 
-| Surface                     | C1 today                                                       | Proposed SDK-first rework                                                  |
-| --------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Factory                     | All of baseUrl/apiKey/fetch/now required in config object      | Direct apiKey; optional infrastructure overrides; staging preview default  |
-| Query                       | query({ request, signal? })                                    | query(request, { signal? }?)                                               |
-| Discovery                   | capabilities({})                                               | capabilities() or capabilities({ signal })                                 |
-| Price-to-calculation bridge | Manual page.data.map(row => row.bar.close)                     | Strict shared closePrices/ohlcvBars; complete source retained              |
-| Calculations                | Existing sma/vwap/etc accept caller data                       | Same functions, imports, registry, parameters and numeric behavior         |
-| Financial/data protocol     | C1 v1 normalized rows/pages, explicit unknowns, one-page reads | Unchanged; projection rejects unsuitable input rather than repair it       |
-| Host/agent                  | No acquisition registration                                    | Still not implied by this SDK slice; optional orchestration follows review |
+// Consumed by applications; query constructs the common view automatically.
+interface DataProvider {
+  readonly id: string;
+  readonly version: string;
+  readonly contractVersion: 1;
+  capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+  query<R extends DataRequest>(request: R, options?: DataCallOptions): Promise<DataViewFor<R>>;
+}
+// Common SDK boundary, no provider import or network implementation in core.
+declare function defineDataProvider(input: { readonly provider: DataProviderSource }): DataProvider;
+// Advanced raw-page restoration; not needed in normal fetch/calculate onboarding.
+declare function createDataView(page: unknown): DataView;
+```
 
-The current installed C1 rehearsal already proves direct manually projected closes -> existing SMA
-101.5 on shared synthetic fixture/HTTP facts. That is baseline calculation proof, not acceptance of
-C1 ceremony. The new example must be proved without that manual provider-specific mapping and with
-source diagnostics preserved. No new call shape/projection is advertised as currently implemented.
+Options is optional, closed and limited to signal. Discovery accepts omission rather than requiring
+an empty object. Requests retain the existing C1 discriminated grammar and explicit bounds. Source
+and consumer protocols are deliberately different return types; one function must not ambiguously
+return a raw page or view. The external factory builds a raw source and calls the public common
+SDK defineDataProvider exactly once; provider authors implement no projection/view or indicator.
 
-## Optional host continuation, deliberately not this checkpoint
+`defineDataProvider` uses the same existing C1 request/raw-page validation, immutable copies and
+safe errors; after validation it builds the consumer view. createDataView uses the same shared
+structural row/page validator for raw/serialized inputs, with no invented original query. Bounds/
+filters/resource/snapshot checks remain at the query/provider boundary. Public construction and
+stored-data use do not duplicate validation in a transport. The SDK owns all field-selection rules.
 
-The preceding proposal of createTotalFinanceMcpServer({ artifacts: host.artifacts,
-dataProvider: provider }) remains a candidate host convenience, not the primary SDK setup. It
-would bind one provider-neutral operation pack; advanced callers could compose dataPack explicitly.
-Preserve exact tools/packs selection: convenience with either explicit tools or packs, even empty,
-refuses a registration conflict; profile plus convenience explicitly selects profile + data.
-Multiple bound data packs/providers or duplicate ids refuse. No provider calls occur at registration.
-Explicit writable artifact storage, credentials and request allowance stay with the host.
+C2 deliberately replaces unreleased query({ request, signal? }), required capabilities({}), and the
+old raw consumer result with direct query/options and a consumer view. No gratuitous aliases,
+Promise-or-value unions or dual raw/view query modes. DataPage/PriceBarRecord/OptionResearchTerms
+and wire protocol DATA_CONTRACT_VERSION 1 keep the same financial/temporal meaning; source calling
+syntax and the consumer return type change together under review. The wrapper, kit, fixture,
+external package and public examples must all migrate before fresh packed compatibility is claimed.
 
-That later slice should reuse the accepted SDK projections and source metadata with versioned
-research-page report handles, not introduce another normalization/calculation implementation.
-Trace dynamic capabilities -> one explicit page query -> validated content-addressed handle ->
-existing technical_analysis.calculate. Tool discovery must distinguish configured provider identity
-from queried access/coverage facts. No request/cost should be hidden by discovery or startup.
+The public kit checks consumer DataProvider results, compares view.page against its existing exact
+expected raw pages and additionally verifies view/array/field-selection laws. It never repairs a
+bad page/view or rebuild it to hide a failure. Expected arrays come from independent golden facts,
+not another invocation of the view constructor. Wrapper/source tests exercise raw source failures; expected-pages
+comparison still refutes wrong bounds/filter/pin/ordering facts. No conformance acceptance of C1
+source syntax is claimed for C2; all participating local packages use the exact reviewed SDK tarball.
 
-Existing operations/runOperation/registry.run/tool.run are synchronous. An async MCP callback does
-not make them awaitable. If that host slice is approved, a separate technical design must preserve
-sync return/throw behavior and extract shared prepare/finalize logic rather than duplicate schema,
-budget, handle, envelope or error handling. Pre/in-flight/body abort and configured deadlines need
-a real AbortSignal and rejection of late success before storage. Metered reads remain host-owned;
-no retry/refill/account probe or new execution capability. Workers reconstruct built-in profiles
-and cannot recover provider closures; acquisition must not be submitted to them or serialize keys.
-This is an identified dependency for optional orchestration, not permission to implement an async
-runtime now. Its precise public types/transport rollout remain deferred until SDK review resolves.
+## Decision 3 — arrays, validation, serialization and bundle ownership
 
-## Ownership and ordered review/implementation slices
+The arrays are plain native arrays with Array.prototype, dense numeric indexes and no extra source
+properties, custom subclasses or proxies. Arrays and constructed OHLCV rows are frozen; values
+retain the original row order and exact canonical units. This is immediately compatible with existing SMA/BarInput consumers.
+It also avoids non-index metadata members, which the current canonical-data scanner rejects on
+arrays. The parent view, rather than a decorated array, retains the source page.
 
-1. **C2.0, this checkpoint:** review the concrete short SDK example and source/missing-field behavior.
-   The coordinator confirms/revises the direct-key/direct-query grammar and two projections with the
-   maintainer. This draft stays provisional until that product and technical review occurs.
-2. **C2.1, only after review:** separate isolated provider branch/worktree for factory/query rework;
-   SDK core/data wrapper/kit/fixture changes and pure projections on a separate SDK branch. No new
-   provider remote or distribution package. Keep private app implementation out of these modules.
-3. **C2.2:** public-consumer working example, proof matrix and truthful documentation. Freeze the
-   accepted consumer experience before planning optional agent/MCP integration against it.
-4. **Later optional host addendum:** dataProvider convenience, advanced dataPack, async shared runtime,
-   one-page versioned handles and existing TA operation handoff. Review first; no runtime work now.
-5. **Later connected acceptance:** separately configured access/new confirmed allowance, staging,
-   installed-agent parity and actual agent/paper/App evidence. Never infer these from synthetic tests.
+The immutable view's kind/page are enumerable read-only data properties. closePrices and ohlcvBars
+are nonenumerable read-only accessors built by common SDK code. Each materializes/caches at most
+one frozen array per view when selected; no re-fetch, hidden async work or financial computation.
+Lazy ohlcvBars is necessary: building a view must not reject unknown volume before a user can
+select closes. JSON enumeration must not invoke this strict selection accidentally.
 
-The SDK owns the protocol wrapper, two pure projections and kit. The external repository owns
-credential/default-host/fetch implementation and HTTP mapping. The consuming app owns display of
-source/calculation diagnostics and its allowance. MCP/workflow owners compose the same accepted
-path later. No library-level global provider, central inclusion approval or remote installation.
+The canonical persisted/transported object is **view.page**, not the behavior-bearing view.
+`JSON.stringify(view.page)` and contentHash(view.page) retain the unchanged raw-page semantics.
+`JSON.stringify(view)` contains only kind and page; it neither materializes arrays nor invokes
+strict getters. To restore, parse the stored raw page and call createDataView, then narrow on kind.
+Do not accept the view itself as a canonical artifact: canonical scanning rejects accessor-bearing
+objects. JSON.stringify(view.closePrices) is deliberately just numeric data with no provenance;
+ordinary array transformations similarly produce values without a retained view. No custom toJSON,
+array serialization patch, global registry, hidden source lookup or second wire schema is added.
 
-## Targeted proof plan and exit checks
+Both selections validate actual consumed fields on every row, never only the first. Validation is
+shared with C1 raw-page components; malformed OHLC/nonfinite fields cannot become an accepted page
+merely because a calculation would ignore them. Missing optional volume is a legitimate raw-page
+unknown, not a malformed required close. Type-specific field refusal uses existing InputError
+input.missing_field with safe row/field context; malformed response, protocol mismatch and unsupported
+kind retain the existing data.invalid_response/data.contract_version_unsupported/data.unsupported_capability
+semantics at their applicable boundary. Chains have no price-array selectors; callers must narrow
+kind/use the raw research records, not price incomplete terms or manufacture a fill.
 
-All runtime checks below are planned; none are claimed passed for unimplemented C2:
+Source ownership is exact: view.page is the validated frozen raw page, including identity,
+provenance, generation/receipt/observation/availability clocks, page/row diagnostics, quality,
+freshness, adjustment, coverage and nextCursor. Selection does not edit or discard any of it.
+Engine assumptions/diagnostics remain engine-owned and unchanged. No source warning is copied into
+or allowed to overwrite an existing explain result. Future composed reports can reference the
+retained page/handle explicitly; this slice does not add that report API.
 
-- [ ] Normal-use installed example: only apiKey setup, direct normalized query, shared projection,
-      existing SMA explain; no MCP, mandatory clock/fetch options or provider-specific field map.
-- [ ] Factory constructor/discovery zero-request/zero-clock controls; fake native fetch proves the
-      staging preview default without a network request. Custom fetch/now/origin retain compatibility;
-      null/wrong/unsafe overrides and invalid receipt instants refuse. Source unknown times stay null.
-- [ ] Revise the exact same public wrapper/kit/fixture/HTTP mapping and first-touch coverage to the
-      reviewed query/discovery grammar. No old-spelling aliases; TypeScript and JS teach old misuse.
-- [ ] Identical fixture/HTTP closes yield unchanged full SMA explain output and 101.5 last value;
-      OHLCV yields unchanged VWAP explain. Full source identity/row times/page+row diagnostics survive
-      projection and appear alongside engine assumptions/diagnostics without overwriting either.
-- [ ] Independent defects: missing volume first/later row, null vs zero, malformed OHLC/nonfinite,
-      wrong kind/version, mutated input, nonterminal page, empty/partial quality refuse as specified.
-      Zero volume/price values remain facts; no data gap fill, inferred clock, rate or other term.
-- [ ] Preserve corrected original bounds/nextFrom/filter/pin/order/resource cursor tests and C1
-      typed access/entitlement/throttle/allowance/redaction controls. Abort before fetch, during
-      fetch and body parsing remains typed data.aborted with no retry or accepted late page.
-- [ ] Public callable/manifest/first-touch/API/type misuse/generated-contract and affected ordered
-      generation pass; measured defects zero and no budget/gate weakening. No new projection imports
-      an indicator/provider implementation into core/root/browser compute or bundles credentials.
-- [ ] Fresh SDK/provider tarballs install outside both repositories and run the accepted example
-      with synthetic fixture/HTTP implementations. Record source commits, SHA256, pinned Node/pnpm;
-      NodeNext/Bundler/ESM and unchanged ordinary compute/browser/guard-only bundle gates pass.
-- [ ] Optional host review later specifies selection/discovery/handle validation, sync/async contracts,
-      safe errors, cancellation/deadlines, metered host grants, worker exclusion and applicable
-      registry/MCP/HTTP parity before implementation. It is not silently included in SDK acceptance.
+New implementation ownership, if approved: common view code in packages/core/src/data-view.ts,
+shared types in data-types.ts, exports and integration in existing data.ts/data-validation.ts;
+focused tests beside core data tests. No technical-analysis import in core: OhlcvInput is structural
+OHLCV data, assignable to existing BarInput. The external package owns only its factory/defaults/
+HTTP mapping. Existing SDK assembly exposes core/data without root/main re-export or a new package.
+No provider or view module may become a dependency of ordinary options/TA/root/browser compute.
+View code is reached from the opt-in data entry; existing bundle/guard-only budgets must hold.
 
-Use Node 22.23.2/pnpm 10.32.0, frozen installs, focused tests and scoped formatting. After accepted
-source is final, regenerate affected owners in documented order: signature -> naming -> contract ->
-enforcement -> validation -> API -> README -> llms -> bundle -> OpenAPI -> docs; record any omissions
-because inputs are unchanged. Current-head hosted rules remain in force, including a full exact-head
-run for CI/enforcement/runtime-support gate changes. Local tarball compatibility never claims the
-registry SDK 0.1.2 contains unreleased exports. No version bump or publication is authorized.
+## Decision 4 — field suitability is separate from source quality
 
-## Current truthful checkpoint
+No blanket quality.partial refusal and no data.incomplete_page code/policy are introduced.
 
-This branch contains this provisional written spec, queue/review documentation and generated docs
-inventory only. Documentation checks are evidence about that work, not C2 runtime acceptance.
-The actual unresolved product choice is whether the short explicit SDK path above meets the
-maintainer's desired integration, or which specific composed workflow should replace it. The
-coordinator is discussing that choice; no generic permission loop is introduced here. Preview
-staging origin is already selected, now remains invisible, and no live access is needed for review.
+| Validated page facts                                           | closePrices/SMA                         | ohlcvBars/VWAP                           | Source handling                                                              |
+| -------------------------------------------------------------- | --------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------- |
+| All actual closes, volume unknown, quality partial             | Allowed                                 | Missing-field refusal on selecting OHLCV | Preserve partial status and missing-volume diagnostics                       |
+| Known OHLCV, another nonblocking quality issue                 | Allowed                                 | Allowed                                  | Preserve issue; neither selection upgrades quality                           |
+| Zero close or zero volume                                      | Preserve actual zero                    | Preserve actual zero                     | Existing engine handles its defined zero-input behavior                      |
+| Required close/OHLC malformed or nonfinite                     | Invalid raw-page refusal                | Invalid raw-page refusal                 | Never skip/repair the row                                                    |
+| Empty valid page                                               | Empty array                             | Empty array                              | Preserve empty/quality/coverage facts; existing engine empty/warmup behavior |
+| Unavailable/unknown quality label with otherwise valid rows    | Known fields remain selectable          | Actual required fields still required    | Label is disclosed, not a new policy ban                                     |
+| Unknown observation/availability, EOD or split-only adjustment | Research calculation on supplied values | Same, when fields known                  | Retain every limitation; no PIT/live/total-return claim                      |
 
-C1 heads and green CI stay intact; PR26 remains draft. No staging read, secret access, old allowance
-reuse/reset, key/grant mutation, active account/paper/journal/policy change, merge, release/publication,
-deployment, remote repository or recurring automation has occurred or is implied by this document.
+A transport/auth/entitlement/service failure still throws the existing typed error; it does not
+turn into an apparently successful empty view. Quality metadata cannot authorize access, trading
+or a stronger financial assumption. Known values plus warnings remain research facts; unknown
+required inputs remain unknown/refuse at the consuming selection. User-owned pure arrays remain
+subject to existing leaf contracts; the view does not secretly change every calculation's behavior.
+
+## Decision 5 — one-page sample semantics, no complete-history promise
+
+provider.query returns one explicit page, and the view exposes exactly that page's rows, even when
+nextCursor is non-null or the page is a terminal continuation. Arrays contain no implicit prior/
+next page, no sorting, gap fill, skipped row, annualization or lookback inference. Selection neither
+makes another request nor refuses simply because a cursor exists. A caller explicitly asks for a
+continuation using the repeated resource/cursor/limit laws, and each returned view remains a page.
+
+The primary example calculates SMA over the **returned page**. It does not claim to represent the
+whole from/to history; page size and source nextCursor are explicit, and page metadata remains
+attached. A null cursor says only that pagination ended, never that source historical coverage is
+continuous, availability was known or a complete expected calendar was observed. Partial quality
+also does not make known selected values disappear. No data.incomplete_page bypass matrix remains.
+
+A future requested-window workflow would have a different obligation: track the original request,
+walk within explicit budgets, retain page identities/pins and refuse an unfinished requested window
+rather than return an apparently complete result. No such workflow, completeness assertion or
+auto-paging mechanism is part of this view. The contract's unit is one page of research observations.
+
+## Decision 6 — external preview defaults stay invisible
+
+External signature: `createInsiderFinanceProvider(apiKey: string, overrides?: InsiderFinanceProviderOptions): DataProvider`.
+Options is the closed optional baseUrl/fetch/now object. The direct credential is structurally
+unmistakable; named financial query/period inputs remain objects. No old factory-config alias.
+
+For the private 0.0.0 internal preview only, omitted baseUrl is exactly
+`https://api-staging.insiderfinance.workers.dev`. This documented preview default is not production,
+a deployment change or staging-read permission. Production default selection belongs to an
+authorized release. No environment guessing, fallback origin, key discovery or constructor request.
+Omitted fetch captures/binds global native fetch; omitted now uses deferred Date.now for response
+receipt and HTTP-date retry advice only. Normal use never supplies/reads a clock. Source observation,
+availability, valuation, expiry, rates/volatility and other unknown financial terms stay unchanged.
+
+Only undefined means omission. Null/wrong-type overrides, unsafe origin, invalid receipt instants
+and blank/invalid credentials retain safe typed refusal. Missing native fetch without override uses
+ConfigurationError with registered input.missing_field. Construction/local discovery do not call
+fetch or now. Custom injection still enables synthetic HTTP/clock tests; no automatic retry, cache,
+request allowance, grant change, clock-based source default or live fill permission is introduced.
+
+## Current versus proposed and acceptance ownership
+
+C1 currently requires infrastructure config, query({ request }) and manual
+page.data.map(row => row.bar.close) before an existing SMA call. Revision 4fc5f9d replaced that map
+with another imported helper/values/source report. This revision instead gives common consumer
+query a data view with explicitly selected native arrays and its raw page attached. The calculation
+imports, parameter grammar, numeric result and ordinary raw-data interoperability stay unchanged.
+No SDK-only view is represented as an already implemented or published C1 feature.
+
+The revised call shapes and view need coordinator technical review. 10/10 consumer acceptance,
+not merely test pass status, remains the exit condition for the reworked experience. This candidate
+chooses the minimal view against the alternatives above; it does not defer that evaluation to a
+broad question. There is no additional unresolved endpoint/product dependency needed to review it.
+
+## Small synthetic proof plan after approval
+
+- [ ] A clean installed consumer runs the exact two-import key/query/SMA example using fake global
+      fetch and a three-row raw fixture [100, 101, 102]; last period-2 value is 101.5. Fixture and
+      external HTTP provider use the same SDK view with no provider-specific projection code.
+- [ ] Existing sma and sma.explain over view.closePrices equal their results on the plain numeric
+      reference array, including warmup/assumptions/diagnostics. Existing vwap matches complete OHLCV.
+      Type tests accept readonly arrays and preserve raw .page compatibility; no engine source changes.
+- [ ] One-defect facts: missing first/later volume + quality.partial still permits identical closes/
+      SMA, but selecting ohlcvBars throws before VWAP. Zero survives; unrelated source issues do not
+      block known values. Invalid required OHLC/nonfinite data refuses; empty valid page stays empty.
+      Unknown-volume tests use legitimate normalized fixtures; do not weaken actual required HTTP
+      source fields to force a synthetic case through the adapter. Those source failures still refuse.
+- [ ] Non-null cursor and terminal continuation both expose exactly their own rows without another
+      HTTP request or completeness claim. All original bounds/filter/nextFrom/pin/order/resource
+      and typed entitlement/rate/allowance/redaction/cancellation controls remain exercised.
+- [ ] view.page retains exact canonical data, metadata, row/page warnings, identity and all null
+      clocks. Lazy selection does not mutate input or source. Frozen native arrays have no non-index
+      members; serializing the view does not invoke OHLCV access. Persist/restore .page gives equal
+      values and source with no hidden lookup. Direct calculation results remain ordinary results.
+- [ ] API-key-only constructor/discovery do zero fetch/clock work. Native preview default and valid
+      overrides use injected synthetic facts; invalid overrides refuse. No source-time substitution.
+- [ ] Wrapper/kit/fixture/source and consumer types, first-touch, API/generated contracts and packed
+      NodeNext/Bundler/ESM proofs migrate together; generated measured defects zero, whole/installed/
+      guard-only/browser bundle budgets unchanged. Record exact new local tarball hashes and commits.
+
+No test above is claimed passed for unimplemented C2. Spec-only verification is documentation
+conformance/inventory, scoped formatting and diff checks with Node 22.23.2/pnpm 10.32.0/frozen install.
+After approved source settles, follow CONTRIBUTING's affected generation order and hosted gates.
+No source/API/bundle regeneration or runtime CI is claimed for this documentation revision.
+
+## Isolation, history and later work
+
+Worktree `/Users/agent/ri/.work/worktrees/totalfinance/totalfinance-c2-addendum`, branch
+`totalfinance/community-connector-c2-spec`. It is based on reviewed SDK
+`b5c3c83fbeb9197dde9714cfeee9b8fb2e960083`, not on a changed PR26 head. Reviewed provider remains
+`c492d2d15a1aeeb0ba2104fe55066d017bf66474` in its local-only repository. Their C1 exact-head
+[fast](https://github.com/InsiderFinance/totalfinance/actions/runs/41523330653) and
+[full](https://github.com/InsiderFinance/totalfinance/actions/runs/41523446543) green receipts remain
+technical C1 evidence; they do not certify consumer acceptance. PR26 stays draft, feature in progress.
+The [review record](../reviews/community-connectors-c2-spec-2026-11-02.md) and Ri task retain the
+previous candidate and changes-requested disposition rather than erasing review history.
+
+MCP/agent orchestration remains optional later composition of this same SDK path. No host/server/
+pack prerequisite or async-runtime implementation is included here. Any later versioned-handle,
+exact-selection, cancellation/deadline, metered-read and worker-binding design needs its own
+review; it must reuse the accepted common data view/engine rather than copy logic into transports.
+
+C1 trees, shared/linked checkouts and active accounting/approval stores are untouched. No runtime
+code, staging/secret/allowance/account/paper operation, merge, version/publication/deployment,
+remote provider repository or recurring automation is authorized or performed. Package versions
+remain unchanged and local tarballs never claim registry SDK0.1.2 has unreleased exports. Consumer
+view implementation follows only after this written revision passes technical review.

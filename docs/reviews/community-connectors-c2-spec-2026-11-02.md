@@ -1,8 +1,12 @@
 # C2 SDK-first provisional specification handoff — 2026-11-02
 
-Status: **spec-only; primary SDK experience awaits coordinator/maintainer review. C2 is not implemented.**
+Status: **spec-only; 4fc5f9d received changes requested; revised consumer-view candidate awaits review. No C2 implementation approval.**
 Feature `01a19da0-2a6f-7450-89a4-2e51047b05b5` stays in progress with existing execution
 `01a19da1-1351-7b84-b67f-58bc81698fb5` attached.
+
+The sections through Verification and limitations below retain the original 4fc5f9d handoff as
+historical evidence. The appended coordinator disposition and revision supersede its helper design,
+quality refusal and unresolved broad product question; they do not erase that review history.
 
 ## Isolation and controlling feedback
 
@@ -80,3 +84,54 @@ key/grant, active paper/account/journal/policy, release version, remote provider
 publication, merge or recurring automation was touched. No C2 runtime export, SDK example execution
 against proposed APIs or connected-agent acceptance is claimed. The existing task/Ri outcome will
 record the exact spec commit and final documentation checks after commit.
+
+## Coordinator review of 4fc5f9d: changes requested
+
+Request d5f95724-5d5d-8c4e-9e08-b2b658fa658a reviewed all 328 spec lines and the full evidence.
+Exact disposition: **"changes requested; no C2 implementation approval."** Direct credential,
+direct query, optional discovery and invisible defaults were sound in principle. The primary
+example's third import, helper call, values/source unwrapping and manual report assembly did not
+yet demonstrate the maintainer's requested experience. The coordinator required a small SDK-owned
+consumer data view, an explicit financial field selection, field-specific missing-input refusal
+rather than blanket partial-quality rejection, and precise page-sample semantics rather than a
+broad data.incomplete_page policy. 10/10 consumer lovability remains an acceptance condition.
+This exact disposition was appended to the feature task before revision (body revision 9), without
+marking completion or implying source implementation approval.
+
+## Revised candidate and reasoning
+
+The primary example now has two imports: external factory plus existing SMA. It configures one
+credential, queries once and passes prices.closePrices directly to SMA. Common core/data code
+constructs the consumer view; providers still implement only normalized raw sources. prices.page
+retains the exact validated raw page, metadata and source/page/row diagnostics. Pure calculations
+and raw-page interoperability remain unchanged. No source is automatically copied into a plain
+numeric result and no manual report assembly is required for the primary calculation.
+
+The spec explicitly compares and selects this view over the old helper, decorated arrays and a
+provider-bound calculation client. Series are plain frozen native arrays with no source decoration;
+the parent view owns context. Strict OHLCV access is lazy so unknown volume cannot block valid
+close selection. The reason for rejecting decorated arrays is concrete: the existing canonical
+scanner rejects non-index array members, while existing SMA already accepts ordinary arrays.
+View accessors are SDK behavior; canonical storage/hashing remains the unchanged raw .page.
+Serialization/restoration and no hidden materialization of strict OHLCV fields are specified.
+
+quality.partial and other disclosed source limits do not block known fields. Missing volume on
+any row blocks only OHLCV selection/VWAP, with zero retained. Nonterminal pages and terminal
+continuations expose exactly their own samples without auto-paging, refusal just for a cursor,
+or complete-history assertions. The broad proposed data.incomplete_page policy/code is removed.
+Invalid required financial values and typed access/cancellation failures still refuse.
+
+Exact proposed source/consumer interfaces, view types, factory/default/override behavior, SDK-owned
+placement, kit migration and a small synthetic/packed proof plan are in the revised spec. There
+is no new broad question handed to the maintainer in place of a recommendation. The candidate is
+provisional for technical/product review and is not claimed accepted, implemented or 10/10.
+Optional agent/MCP/async work remains deferred and cannot be inferred from this revision.
+
+## Revision verification scope
+
+This revision changes only the written spec, queue, review evidence and derived docs inventory.
+The existing pinned frozen install/lockfile is unchanged. Final documentation conformance,
+inventory, scoped pinned format and diff results are recorded in the Ri outcome for this commit.
+No source/API/gate/bundle/OpenAPI generation, runtime test, installed C2 artifact or hosted C2 pass
+is claimed. New synthetic cases are a precise implementation proof plan, not completed evidence.
+Reviewed C1 SDK/provider heads, draft PR26 and their exact-head green CI remain intact.

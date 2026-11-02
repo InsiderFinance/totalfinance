@@ -25,9 +25,10 @@ bars and option-chain research. Broad provider inventories remain possible commu
       corrected tarball installation and unchanged whole/installed bundle gates. Exact source,
       independent review and artifact receipts are in the implementation record.
 - [x] C1 exact-head hosted fast/full checks and technical implementation review at `b5c3c83`; no merge authority.
-- [ ] C2: review the [provisional SDK-first addendum](./specs/community-connector-c2-integration.md),
-      settle the primary SDK experience and factory grammar with the coordinator, then approve a
-      decision-complete spec before any C2 implementation. MCP registration remains optional.
+- [ ] C2: review the [revised consumer-view candidate](./specs/community-connector-c2-integration.md).
+      Coordinator review requested changes to `4fc5f9d`: consumer lovability remains an acceptance
+      condition; no C2 implementation approval. The common view replaces standalone projection
+      plumbing and separates field suitability from quality/history limits. MCP remains later work.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
