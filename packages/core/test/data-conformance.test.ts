@@ -10,6 +10,38 @@ import {
   dailyRequest,
   barCapability,
 } from '../../../docs/examples/community-connector-facts.js';
+// Test-only unchecked view: preserves malformed raw facts instead of validating/repairing them.
+function unchecked(raw: any): any {
+  function freeze(value: any): any {
+    if (value && typeof value === 'object') {
+      Object.values(value).forEach(freeze);
+      Object.freeze(value);
+    }
+    return value;
+  }
+  const p = freeze(raw);
+  let closes: any, bars: any;
+  return Object.freeze(
+    Object.defineProperties(
+      { kind: p.kind, page: p },
+      {
+        closePrices: { get: () => (closes ??= freeze(p.data.map((r: any) => r.bar.close))) },
+        ohlcvBars: {
+          get: () =>
+            (bars ??= freeze(
+              p.data.map((r: any) => ({
+                open: r.bar.open,
+                high: r.bar.high,
+                low: r.bar.low,
+                close: r.bar.close,
+                volume: r.bar.volume,
+              })),
+            )),
+        },
+      },
+    ),
+  );
+}
 function fixture() {
   const first = page(),
     last = page();
@@ -169,18 +201,18 @@ describe('public data compatibility kit', () => {
       let index = 0;
       const provider: DataProvider = {
         ...f.provider,
-        async query(input) {
-          if (input.signal?.aborted)
+        async query(_input, options) {
+          if (options?.signal?.aborted)
             throw new DataError('aborted', { code: ErrorCode.DataAborted });
           const p = JSON.parse(JSON.stringify(index ? f.last : f.first));
-          return copyFrozen(mutate(p, index++)) as never;
+          return unchecked(mutate(p, index++)) as never;
         },
       };
       // A NaN mutation must be visible to the kit, rather than repaired by the fixture wrapper.
       if (name.startsWith('nonfinite'))
-        provider.query = async ({ signal }) => {
+        provider.query = async (_request, { signal } = {}) => {
           if (signal?.aborted) throw new DataError('aborted', { code: ErrorCode.DataAborted });
-          return mutate(JSON.parse(JSON.stringify(f.first)), 0) as never;
+          return unchecked(mutate(JSON.parse(JSON.stringify(f.first)), 0)) as never;
         };
       await expect(
         validateDataProvider({ ...options, provider, probes: [f.probe] }),
@@ -190,9 +222,9 @@ describe('public data compatibility kit', () => {
     const f = fixture();
     const provider = {
       ...f.provider,
-      async query({ signal }: any) {
+      async query(_request: any, { signal }: any = {}) {
         if (signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
-        return f.first as never;
+        return { kind: f.first.kind, page: f.first } as never;
       },
     };
     await expect(
@@ -204,9 +236,9 @@ describe('public data compatibility kit', () => {
     const original = f.provider.query;
     const provider = {
       ...f.provider,
-      async query(input: any) {
-        const result = await original(input);
-        input.request.symbol = 'OTHER';
+      async query(input: any, options?: any) {
+        const result = await original(input, options);
+        input.symbol = 'OTHER';
         return result as never;
       },
     };
@@ -219,7 +251,7 @@ describe('public data compatibility kit', () => {
     const provider = {
       ...f.provider,
       async capabilities(): Promise<DataCapabilities> {
-        const c = await f.provider.capabilities({});
+        const c = await f.provider.capabilities();
         return copyFrozen({ ...c, capabilities: [{ ...barCapability, maxPageSize: 1 }] });
       },
     };
@@ -256,10 +288,10 @@ describe('public data compatibility kit', () => {
     const f = fixture();
     const provider = {
       ...f.provider,
-      async query(input: any) {
-        if (input.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
-        if (input.signal) return copyFrozen(f.first) as never;
-        return (await f.provider.query(input)) as never;
+      async query(input: any, options?: any) {
+        if (options?.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
+        if (options?.signal) return unchecked(structuredClone(f.first)) as never;
+        return (await f.provider.query(input, options)) as never;
       },
     };
     await expect(
@@ -271,6 +303,151 @@ describe('public data compatibility kit', () => {
           { name: 'late', kind: 'abort', request: dailyRequest, waitUntilStarted: async () => {} },
         ],
       }),
+    ).rejects.toMatchObject({ code: ErrorCode.DataNonconformant });
+  });
+});
+
+describe('independent consumer-view compatibility mutants', () => {
+  const cases: [string, (descriptors: PropertyDescriptorMap) => void][] = [
+    [
+      'wrong kind',
+      (d) => {
+        d['kind']!.value = 'option-chain-research';
+      },
+    ],
+    [
+      'wrong close',
+      (d) => {
+        d['closePrices']!.get = () => Object.freeze([999, 101]);
+      },
+    ],
+    [
+      'lost close',
+      (d) => {
+        d['closePrices']!.get = () => Object.freeze([101]);
+      },
+    ],
+    [
+      'reordered closes',
+      (d) => {
+        d['closePrices']!.get = () => Object.freeze([102, 101]);
+      },
+    ],
+    [
+      'mutable closes',
+      (d) => {
+        d['closePrices']!.get = () => [101, 101];
+      },
+    ],
+    [
+      'unstable selection',
+      (d) => {
+        d['closePrices']!.get = () => Object.freeze([101, 101]);
+      },
+    ],
+    [
+      'decorated array',
+      (d) => {
+        const a = [101, 101];
+        Object.defineProperty(a, 'source', { value: 'hidden' });
+        Object.freeze(a);
+        d['closePrices']!.get = () => a;
+      },
+    ],
+    [
+      'array subclass',
+      (d) => {
+        class Series extends Array<number> {}
+        const a = Object.freeze(new Series(101, 101));
+        d['closePrices']!.get = () => a;
+      },
+    ],
+    [
+      'wrong OHLCV',
+      (d) => {
+        const old = d['ohlcvBars']!.get!;
+        const a = old().map((r: any, i: number) =>
+          Object.freeze({ ...r, volume: i ? 123 : r.volume }),
+        );
+        const b = Object.freeze(a);
+        d['ohlcvBars']!.get = () => b;
+      },
+    ],
+    [
+      'enumerable OHLCV',
+      (d) => {
+        d['ohlcvBars']!.enumerable = true;
+      },
+    ],
+    [
+      'enumerable closes',
+      (d) => {
+        d['closePrices']!.enumerable = true;
+      },
+    ],
+    [
+      'source accessor',
+      (d) => {
+        const p = d['page']!.value;
+        d['page'] = { enumerable: true, configurable: false, get: () => p };
+      },
+    ],
+    [
+      'lost source warning',
+      (d) => {
+        const p = structuredClone(d['page']!.value);
+        p.diagnostics.warnings = [];
+        d['page']!.value = copyFrozen(p);
+      },
+    ],
+  ];
+  for (const [name, mutate] of cases)
+    it('refutes ' + name + ' without rebuilding the view', async () => {
+      const f = fixture();
+      (f.first.diagnostics.warnings as unknown[]).push({
+        code: 'data.source_issue',
+        message: 'Synthetic source limitation',
+        severity: 'warn',
+      });
+      const base = await f.provider.query(dailyRequest);
+      const d = Object.getOwnPropertyDescriptors(base);
+      mutate(d);
+      const lie = Object.freeze(Object.defineProperties({}, d));
+      const provider = {
+        ...f.provider,
+        async query(request: DataRequest, options?: { signal?: AbortSignal }) {
+          if (options?.signal?.aborted)
+            throw new DataError('abort', { code: ErrorCode.DataAborted });
+          return ('cursor' in request ? await f.provider.query(request, options) : lie) as never;
+        },
+      };
+      await expect(
+        validateDataProvider({ ...options, provider, probes: [f.probe] }),
+      ).rejects.toMatchObject({ code: ErrorCode.DataNonconformant });
+    });
+  it('proves partial-source closes plus field-specific volume refusal, and refutes invented zero', async () => {
+    const f = fixture();
+    delete (f.first.data[1] as any).bar.volume;
+    (f.first.metadata.quality as any).status = 'partial';
+    await expect(
+      validateDataProvider({ ...options, provider: f.provider, probes: [f.probe] }),
+    ).resolves.toBeUndefined();
+    const base = await f.provider.query(dailyRequest);
+    const d = Object.getOwnPropertyDescriptors(base);
+    const fake = Object.freeze(
+      f.first.data.map((r: any) => Object.freeze({ ...r.bar, volume: 0 })),
+    );
+    d['ohlcvBars']!.get = () => fake;
+    const lie = Object.freeze(Object.defineProperties({}, d));
+    const provider = {
+      ...f.provider,
+      async query(request: DataRequest, opts?: { signal?: AbortSignal }) {
+        if (opts?.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
+        return ('cursor' in request ? await f.provider.query(request, opts) : lie) as never;
+      },
+    };
+    await expect(
+      validateDataProvider({ ...options, provider, probes: [f.probe] }),
     ).rejects.toMatchObject({ code: ErrorCode.DataNonconformant });
   });
 });

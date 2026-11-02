@@ -186,8 +186,8 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // 1315 → 1316: the separately typed reported-partition comparison adds its own valid fixture.
     // 1316 → 1317 (PL, 2026-10-12): the reference-price conversion fixture joins its two-method contract.
     // PL6 adds 16 named price-level fixtures, one per direction and pair (1317 → 1333).
-    // Community connector wrapper and bounded conformance kit add two valid fixtures (1333 → 1335).
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1335);
+    // Community connector wrapper/kit add two fixtures; C2 raw-page restoration adds one (1333 → 1336).
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1336);
   });
 
   it('every matched fixture can be BUILT', () => {

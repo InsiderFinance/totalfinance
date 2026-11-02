@@ -1,20 +1,20 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 244,
+    "surfaces": 245,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 58,
+      "future-target": 59,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4629,
+    "executableFences": 4638,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 58,
-    "shippedNamesWatched": 9846,
-    "documentedExceptions": 7,
+    "checkedUnderVocabulary": 59,
+    "shippedNamesWatched": 9857,
+    "documentedExceptions": 8,
     "findings": 0
   },
   "surfaces": [
@@ -142,7 +142,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 0
+      "codeFences": 1
     },
     {
       "path": "docs/guides/disclosed-holding-partitions.md",
@@ -324,7 +324,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4354
+      "codeFences": 4362
     },
     {
       "path": "docs/llms.txt",
@@ -608,6 +608,13 @@
     },
     {
       "path": "docs/reviews/community-connectors-c1-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c2-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

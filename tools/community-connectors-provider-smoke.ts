@@ -62,6 +62,30 @@ try {
     passed = Number(/^# pass (\d+)$/m.exec(testOutput)?.[1]);
   if (total < 40 || passed !== total || !/^# skipped 0$/m.test(testOutput))
     throw new Error('Provider proof did not execute all synthetic checks.');
+  const primary = readFileSync(join(root, 'docs/examples/community-connector-sdk.ts'), 'utf8');
+  if (
+    (primary.match(/^import /gm) ?? []).length !== 2 ||
+    /\.map\(|closePrices\(|createTotalFinanceMcpServer/.test(primary)
+  )
+    throw new Error('Primary example acquired setup/projection/host ceremony.');
+  writeFileSync(join(work, 'primary.mts'), primary);
+  writeFileSync(
+    join(work, 'primary.mjs'),
+    "const apiKey='synthetic-preview-key';\n" +
+      transformSync(primary, { loader: 'ts', format: 'esm', target: 'es2022' }).code,
+  );
+  writeFileSync(
+    join(work, 'primary-check.mjs'),
+    `
+import assert from 'node:assert/strict';
+import {primarySource,received} from './facts.mjs';
+const savedFetch=globalThis.fetch,savedNow=Date.now;let calls=0,clocks=0;
+globalThis.fetch=async function(url,init){calls++;assert.equal(this,globalThis);assert.equal(new URL(url).origin,'https://api-staging.insiderfinance.workers.dev');assert.equal(init.headers.Authorization,'Bearer synthetic-preview-key');return new Response(JSON.stringify(primarySource()));};
+Date.now=()=>{clocks++;return received;};
+try{const {prices,average}=await import('./primary.mjs');assert.deepEqual(prices.closePrices,[100,101,102]);assert.equal(average.at(-1),101.5);assert.equal(prices.page.metadata.quality.status,'partial');assert.equal(prices.page.metadata.times.observedTimestampMs,null);assert.equal(prices.page.metadata.times.availableTimestampMs,null);assert.equal(prices.page.metadata.executionEligibility,'research-only');assert.equal(calls,1);assert.equal(clocks,1);console.log('EXACT_TWO_IMPORT_KEY_ONLY_PRIMARY_OK SMA=101.5 SOURCE_RETAINED');}finally{globalThis.fetch=savedFetch;Date.now=savedNow;}
+`,
+  );
+  const primaryOutput = run(process.execPath, ['primary-check.mjs']);
   const fixture = readFileSync(join(root, 'docs/examples/community-connector-fixture.ts'), 'utf8');
   writeFileSync(join(work, 'fixture.ts'), fixture);
   writeFileSync(
@@ -79,12 +103,12 @@ import {sma} from '@insiderfinance/totalfinance/technical-analysis';
 import {market} from '@insiderfinance/totalfinance/options';
 import {createFixtureDataProvider} from './fixture.js';
 import {daily,minute,chain,received,sourcePages,probes} from './facts.mjs';
-function factory(){const counters=new Map();return createInsiderFinanceProvider({baseUrl:'https://synthetic.example',apiKey:'synthetic-fixture',now:()=>received,fetch:async url=>{const u=new URL(url);const r=u.pathname.includes('options')?chain:u.searchParams.get('interval')==='1m'?minute:daily;const i=counters.get(r)||0;counters.set(r,i+1);return new Response(JSON.stringify(sourcePages(r)[i]));}});}
+function factory(){const counters=new Map();return createInsiderFinanceProvider('synthetic-fixture',{baseUrl:'https://synthetic.example',now:()=>received,fetch:async url=>{const u=new URL(url);const r=u.pathname.includes('options')?chain:u.searchParams.get('interval')==='1m'?minute:daily;const i=counters.get(r)||0;counters.set(r,i+1);return new Response(JSON.stringify(sourcePages(r)[i]));}});}
 const http=factory();await validateDataProvider({provider:http,probes:probes(),maxPages:4,maxRecords:20,timeoutMs:1000});
 const entries=probes().flatMap(p=>[{request:p.request,page:p.expectedPages[0]},{request:{kind:p.request.kind,symbol:p.request.symbol,cursor:p.expectedPages[0].nextCursor,limit:2},page:p.expectedPages[1]}]);
-const fixture=createFixtureDataProvider({id:'insiderfinance',version:'0.0.0',capabilities:(await http.capabilities({})).capabilities,entries});
+const fixture=createFixtureDataProvider({id:'insiderfinance',version:'0.0.0',capabilities:(await http.capabilities()).capabilities,entries});
 await validateDataProvider({provider:fixture,probes:probes(),maxPages:4,maxRecords:20,timeoutMs:1000});
-async function research(p){const bars=await p.query({request:daily});const chainPage=await p.query({request:chain});const last=sma(bars.data.map(row=>row.bar.close),{period:2}).at(-1);assert.equal(last,101.5);const row=chainPage.data[0];assert.throws(()=>market({spot:row.quote.underlyingPrice,volatility:row.quote.impliedVolatility,asOf:row.times.observedTimestampMs}),QuantError);return {average:last,terms:row.terms,observed:row.times.observedTimestampMs,availability:row.times.availableTimestampMs,eligibility:chainPage.metadata.executionEligibility};}
+async function research(p){const bars=await p.query(daily);const chainPage=await p.query(chain);const last=sma(bars.closePrices,{period:2}).at(-1);assert.equal(last,101.5);const row=chainPage.page.data[0];assert.throws(()=>market({spot:row.quote.underlyingPrice,volatility:row.quote.impliedVolatility,asOf:row.times.observedTimestampMs}),QuantError);return {average:last,terms:row.terms,observed:row.times.observedTimestampMs,availability:row.times.availableTimestampMs,eligibility:chainPage.page.metadata.executionEligibility};}
 assert.deepEqual(await research(fixture),await research(factory()));
 console.log('INSTALLED_EXTERNAL_AND_PUBLIC_FIXTURE_PARITY_OK average=101.5 missing_market_refused=true');
 `,
@@ -95,11 +119,29 @@ console.log('INSTALLED_EXTERNAL_AND_PUBLIC_FIXTURE_PARITY_OK average=101.5 missi
     `
 import {createInsiderFinanceProvider} from '@insiderfinance/totalfinance-connector-insiderfinance';
 import type {DataProvider,PriceBarRecord} from '@insiderfinance/totalfinance/core/data';
-const provider:DataProvider=createInsiderFinanceProvider({baseUrl:'https://synthetic.example',apiKey:'synthetic',fetch,now:()=>123});
-const page=await provider.query({request:{kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28',limit:2}});
-const rows:readonly PriceBarRecord[]=page.data;void rows;
+const provider:DataProvider=createInsiderFinanceProvider('synthetic',{baseUrl:'https://synthetic.example',fetch,now:()=>123});
+const page=await provider.query({kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28',limit:2});
+const rows:readonly PriceBarRecord[]=page.page.data;void rows;
+const values:readonly number[]=page.closePrices; void values;
+import {sma} from '@insiderfinance/totalfinance/technical-analysis';
+sma(page.closePrices,{period:2});
+const chain=await provider.query({kind:'option-chain-research',symbol:'TEST',snapshot:{kind:'latest'},limit:2});
+// @ts-expect-error chain research is not a closing-price series
+chain.closePrices;
+import type {DataRequest} from '@insiderfinance/totalfinance/core/data';
+async function generic<R extends DataRequest>(request:R){return provider.query(request);}
+const narrowed=await generic({kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28',limit:2});
+sma(narrowed.closePrices,{period:2});
+async function fromUnion(request:DataRequest){const view=await provider.query(request);if(view.kind==='price-bars')sma(view.closePrices,{period:2});else view.page.data[0]?.terms;}
+void fromUnion;
+// @ts-expect-error removed factory envelope
+createInsiderFinanceProvider({apiKey:'synthetic'});
+// @ts-expect-error removed query envelope
+provider.query({request:{kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28',limit:2}});
+// @ts-expect-error readonly consumer arrays
+page.closePrices.push(0);
 // @ts-expect-error data configuration cannot grant execution
-provider.query({request:{kind:'place-order',symbol:'TEST',limit:2}});
+provider.query({kind:'place-order',symbol:'TEST',limit:2});
 `,
   );
   for (const [module, resolution] of [
@@ -119,6 +161,7 @@ provider.query({request:{kind:'place-order',symbol:'TEST',limit:2}});
       '--moduleResolution',
       resolution!,
       'consumer.mts',
+      'primary.mts',
     ]);
   const browser = buildSync({
     stdin: {
@@ -170,6 +213,7 @@ provider.query({request:{kind:'place-order',symbol:'TEST',limit:2}});
         passed,
         skipped: 0,
         workflow: workflow.trim(),
+        primaryExample: primaryOutput.trim(),
         typescript: ['NodeNext', 'Bundler'],
         ordinaryBrowserComputeProviderFree: true,
         commands,
@@ -179,7 +223,15 @@ provider.query({request:{kind:'place-order',symbol:'TEST',limit:2}});
       2,
     ) + '\n',
   );
-  console.log(JSON.stringify({ providerTests: total, passed, workflow: workflow.trim(), receipt }));
+  console.log(
+    JSON.stringify({
+      providerTests: total,
+      passed,
+      workflow: workflow.trim(),
+      primary: primaryOutput.trim(),
+      receipt,
+    }),
+  );
 } finally {
   rmSync(work, { recursive: true, force: true });
 }

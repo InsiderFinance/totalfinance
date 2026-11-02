@@ -1,25 +1,25 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43607,
+    "identities": 43656,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 4020,
-      "explicit": 39425,
+      "canonical-term": 4024,
+      "explicit": 39470,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
       "code-string": 294,
       "enum-member": 294,
-      "export": 7473,
-      "field": 23026,
-      "literal-value": 4740,
+      "export": 7481,
+      "field": 23054,
+      "literal-value": 4746,
       "mcp-field": 1520,
       "mcp-tool": 55,
-      "method": 1784,
+      "method": 1786,
       "package": 25,
-      "parameter": 4202,
+      "parameter": 4207,
       "subpath": 194
     },
     "byPackage": {
@@ -27,7 +27,7 @@
       "@totalfinance/calendars": 158,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3499,
+      "@totalfinance/core": 3548,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
@@ -47622,6 +47622,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|export|createDataView",
+      "name": "createDataView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|export|createMarketSnapshot",
       "name": "createMarketSnapshot",
       "kind": "export",
@@ -47683,6 +47691,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data-conformance"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|DataCallOptions",
+      "name": "DataCallOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
       "disposition": "explicit"
     },
     {
@@ -47782,8 +47798,32 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|export|DataProviderSource",
+      "name": "DataProviderSource",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|export|DataRequest",
       "name": "DataRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|DataView",
+      "name": "DataView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|DataViewFor",
+      "name": "DataViewFor",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data"],
@@ -48583,6 +48623,15 @@
       "policy": "Options Clearing Corporation symbology."
     },
     {
+      "id": "@totalfinance/core|export|OhlcvInput",
+      "name": "OhlcvInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
       "id": "@totalfinance/core|export|optionalObservationValue",
       "name": "optionalObservationValue",
       "kind": "export",
@@ -48617,6 +48666,14 @@
     {
       "id": "@totalfinance/core|export|OptionChainResearchRequest",
       "name": "OptionChainResearchRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|OptionChainResearchView",
+      "name": "OptionChainResearchView",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data"],
@@ -48836,6 +48893,14 @@
     {
       "id": "@totalfinance/core|export|PriceBarsRequest",
       "name": "PriceBarsRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|PriceBarsView",
+      "name": "PriceBarsView",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data"],
@@ -52362,6 +52427,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|field|DataCallOptions.signal",
+      "name": "signal",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|field|DataCapabilities.capabilities",
       "name": "capabilities",
       "kind": "field",
@@ -52555,21 +52627,21 @@
       "id": "@totalfinance/core|field|DataPage.assumptions",
       "name": "assumptions",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.contractVersion",
       "name": "contractVersion",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.data",
       "name": "data",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -52780,98 +52852,98 @@
       "id": "@totalfinance/core|field|DataPage.diagnostics",
       "name": "diagnostics",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.kind",
       "name": "kind",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.metadata",
       "name": "metadata",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.nextCursor",
       "name": "nextCursor",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.provenance",
       "name": "provenance",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPage.symbol",
       "name": "symbol",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.access",
       "name": "access",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.adjustment",
       "name": "adjustment",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.consistency",
       "name": "consistency",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.coverage",
       "name": "coverage",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.coverage.end",
       "name": "end",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.coverage.start",
       "name": "start",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.coverage.status",
       "name": "status",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.datasetId",
       "name": "datasetId",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Universal."
     },
@@ -52879,28 +52951,28 @@
       "id": "@totalfinance/core|field|DataPageMetadata.datasetVersion",
       "name": "datasetVersion",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.executionEligibility",
       "name": "executionEligibility",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.freshness",
       "name": "freshness",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.freshness.configuredDelayMs",
       "name": "configuredDelayMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -52908,7 +52980,7 @@
       "id": "@totalfinance/core|field|DataPageMetadata.freshness.evaluatedTimestampMs",
       "name": "evaluatedTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -52916,56 +52988,56 @@
       "id": "@totalfinance/core|field|DataPageMetadata.freshness.status",
       "name": "status",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality",
       "name": "quality",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality.issues",
       "name": "issues",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality.issues.code",
       "name": "code",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality.issues.message",
       "name": "message",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality.issues.source",
       "name": "source",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.quality.status",
       "name": "status",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.receivedTimestampMs",
       "name": "receivedTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -52973,14 +53045,14 @@
       "id": "@totalfinance/core|field|DataPageMetadata.sessionDate",
       "name": "sessionDate",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataPageMetadata.snapshotId",
       "name": "snapshotId",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Universal."
     },
@@ -52988,7 +53060,7 @@
       "id": "@totalfinance/core|field|DataPageMetadata.sourceGeneratedTimestampMs",
       "name": "sourceGeneratedTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -52996,7 +53068,7 @@
       "id": "@totalfinance/core|field|DataPageMetadata.times",
       "name": "times",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -53028,7 +53100,7 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|field|DataProvider.capabilities(input).signal",
+      "id": "@totalfinance/core|field|DataProvider.capabilities(options).signal",
       "name": "signal",
       "kind": "field",
       "position": "request",
@@ -53038,36 +53110,22 @@
       "id": "@totalfinance/core|field|DataProvider.contractVersion",
       "name": "contractVersion",
       "kind": "field",
-      "position": "request",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataProvider.id",
       "name": "id",
       "kind": "field",
-      "position": "request",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Universal."
-    },
-    {
-      "id": "@totalfinance/core|field|DataProvider.query(input).request",
-      "name": "request",
-      "kind": "field",
-      "position": "request",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/core|field|DataProvider.query(input).signal",
-      "name": "signal",
-      "kind": "field",
-      "position": "request",
-      "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|DataProvider.version",
       "name": "version",
       "kind": "field",
-      "position": "request",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -53101,6 +53159,35 @@
     {
       "id": "@totalfinance/core|field|DataProviderProbe.request",
       "name": "request",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataProviderSource.capabilities(options).signal",
+      "name": "signal",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataProviderSource.contractVersion",
+      "name": "contractVersion",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataProviderSource.id",
+      "name": "id",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/core|field|DataProviderSource.version",
+      "name": "version",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
@@ -53219,6 +53306,112 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|field|DataView.closePrices",
+      "name": "closePrices",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataView.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataView.ohlcvBars",
+      "name": "ohlcvBars",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
+      "id": "@totalfinance/core|field|DataView.page",
+      "name": "page",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page",
+      "name": "page",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.assumptions",
+      "name": "assumptions",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.contractVersion",
+      "name": "contractVersion",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.data",
+      "name": "data",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.diagnostics",
+      "name": "diagnostics",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.metadata",
+      "name": "metadata",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.nextCursor",
+      "name": "nextCursor",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.provenance",
+      "name": "provenance",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataViewFor.page.symbol",
+      "name": "symbol",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|field|DaySession.close",
       "name": "close",
       "kind": "field",
@@ -53286,13 +53479,6 @@
       "name": "vega",
       "kind": "field",
       "position": "module",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/core|field|defineDataProvider(input).provider",
-      "name": "provider",
-      "kind": "field",
-      "position": "request",
       "disposition": "explicit"
     },
     {
@@ -54675,7 +54861,7 @@
       "id": "@totalfinance/core|field|ObservationTimes.availableTimestampMs",
       "name": "availableTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -54683,7 +54869,7 @@
       "id": "@totalfinance/core|field|ObservationTimes.observedTimestampMs",
       "name": "observedTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -54691,7 +54877,7 @@
       "id": "@totalfinance/core|field|ObservationTimes.sourceStoredTimestampMs",
       "name": "sourceStoredTimestampMs",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
@@ -54787,6 +54973,41 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|field|OhlcvInput.close",
+      "name": "close",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OhlcvInput.high",
+      "name": "high",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OhlcvInput.low",
+      "name": "low",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OhlcvInput.open",
+      "name": "open",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OhlcvInput.volume",
+      "name": "volume",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|field|optionalObservationValue(requirement).kind",
       "name": "kind",
       "kind": "field",
@@ -54839,140 +55060,140 @@
       "id": "@totalfinance/core|field|OptionChainResearchRecord.diagnostics",
       "name": "diagnostics",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks",
       "name": "greeks",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.delta",
       "name": "delta",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.gamma",
       "name": "gamma",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.provenance",
       "name": "provenance",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.rho",
       "name": "rho",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.theta",
       "name": "theta",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.greeks.vega",
       "name": "vega",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.openInterestSessionDate",
       "name": "openInterestSessionDate",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote",
       "name": "quote",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.ask",
       "name": "ask",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.bid",
       "name": "bid",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.impliedVolatility",
       "name": "impliedVolatility",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.last",
       "name": "last",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.mark",
       "name": "mark",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.mid",
       "name": "mid",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.openInterest",
       "name": "openInterest",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.underlyingPrice",
       "name": "underlyingPrice",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.quote.volume",
       "name": "volume",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.sourceContractId",
       "name": "sourceContractId",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Universal."
     },
@@ -54980,21 +55201,21 @@
       "id": "@totalfinance/core|field|OptionChainResearchRecord.terms",
       "name": "terms",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.theoreticalPrice",
       "name": "theoreticalPrice",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionChainResearchRecord.times",
       "name": "times",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -55078,6 +55299,20 @@
     {
       "id": "@totalfinance/core|field|OptionChainResearchRequest.symbol",
       "name": "symbol",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OptionChainResearchView.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|OptionChainResearchView.page",
+      "name": "page",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -55573,35 +55808,35 @@
       "id": "@totalfinance/core|field|OptionResearchTerms.currency",
       "name": "currency",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.expiresAt",
       "name": "expiresAt",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.expiry",
       "name": "expiry",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.multiplier",
       "name": "multiplier",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.occSymbol",
       "name": "occSymbol",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "canonical-term",
       "policy": "Options Clearing Corporation symbology."
     },
@@ -55609,49 +55844,49 @@
       "id": "@totalfinance/core|field|OptionResearchTerms.root",
       "name": "root",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.settlement",
       "name": "settlement",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.strike",
       "name": "strike",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.style",
       "name": "style",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.termsStatus",
       "name": "termsStatus",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.type",
       "name": "type",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|OptionResearchTerms.underlying",
       "name": "underlying",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -56052,56 +56287,56 @@
       "id": "@totalfinance/core|field|PriceBarRecord.bar",
       "name": "bar",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.diagnostics",
       "name": "diagnostics",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.provisional",
       "name": "provisional",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.revision",
       "name": "revision",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.sessionDate",
       "name": "sessionDate",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.source",
       "name": "source",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.times",
       "name": "times",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|field|PriceBarRecord.timestampConvention",
       "name": "timestampConvention",
       "kind": "field",
-      "position": "artifact",
+      "position": "result",
       "disposition": "explicit"
     },
     {
@@ -56142,6 +56377,35 @@
     {
       "id": "@totalfinance/core|field|PriceBarsRequest.to",
       "name": "to",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsView.closePrices",
+      "name": "closePrices",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsView.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsView.ohlcvBars",
+      "name": "ohlcvBars",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsView.page",
+      "name": "page",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -59048,6 +59312,34 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|literal-value|DataView.kind:option-chain-research",
+      "name": "option-chain-research",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|DataView.kind:price-bars",
+      "name": "price-bars",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|DataViewFor.kind:option-chain-research",
+      "name": "option-chain-research",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|DataViewFor.kind:price-bars",
+      "name": "price-bars",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|literal-value|DayCount:30/360",
       "name": "30/360",
       "kind": "literal-value",
@@ -60779,6 +61071,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|literal-value|OptionChainResearchView.kind:option-chain-research",
+      "name": "option-chain-research",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|literal-value|OptionContract.expiryConvention:explicit-instant",
       "name": "explicit-instant",
       "kind": "literal-value",
@@ -61070,6 +61369,13 @@
     },
     {
       "id": "@totalfinance/core|literal-value|PriceBarsRequest.kind:price-bars",
+      "name": "price-bars",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsView.kind:price-bars",
       "name": "price-bars",
       "kind": "literal-value",
       "position": "serialized",
@@ -63138,19 +63444,33 @@
       "id": "@totalfinance/core|method|DataProvider.capabilities",
       "name": "capabilities",
       "kind": "method",
-      "position": "request",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|method|DataProvider.query",
       "name": "query",
       "kind": "method",
-      "position": "request",
+      "position": "result",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|method|DataProviderProbe.waitUntilStarted",
       "name": "waitUntilStarted",
+      "kind": "method",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|method|DataProviderSource.capabilities",
+      "name": "capabilities",
+      "kind": "method",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|method|DataProviderSource.query",
+      "name": "query",
       "kind": "method",
       "position": "request",
       "disposition": "explicit"
@@ -65282,6 +65602,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|parameter|createDataView(page)",
+      "name": "page",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|parameter|createMarketSnapshot(input)",
       "name": "input",
       "kind": "parameter",
@@ -65324,15 +65651,43 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|parameter|DataProvider.capabilities(input)",
-      "name": "input",
+      "id": "@totalfinance/core|parameter|DataProvider.capabilities(options)",
+      "name": "options",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|parameter|DataProvider.query(input)",
-      "name": "input",
+      "id": "@totalfinance/core|parameter|DataProvider.query(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|DataProvider.query(request)",
+      "name": "request",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|DataProviderSource.capabilities(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|DataProviderSource.query(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|DataProviderSource.query(request)",
+      "name": "request",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -65352,8 +65707,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/core|parameter|defineDataProvider(input)",
-      "name": "input",
+      "id": "@totalfinance/core|parameter|defineDataProvider(source)",
+      "name": "source",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"

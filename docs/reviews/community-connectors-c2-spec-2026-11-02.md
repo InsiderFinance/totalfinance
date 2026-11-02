@@ -1,6 +1,8 @@
 # C2 SDK-first provisional specification handoff — 2026-11-02
 
-Status: **spec-only; 4fc5f9d received changes requested; revised consumer-view candidate awaits review. No C2 implementation approval.**
+Status: **historical spec review; e1e5a910 approved for bounded offline implementation.**
+The original rejected handoff and later revision/approval remain below; current implementation evidence
+is in [the C2 record](./community-connectors-c2-2026-11-02.md).
 Feature `01a19da0-2a6f-7450-89a4-2e51047b05b5` stays in progress with existing execution
 `01a19da1-1351-7b84-b67f-58bc81698fb5` attached.
 
@@ -135,3 +137,14 @@ inventory, scoped pinned format and diff results are recorded in the Ri outcome 
 No source/API/gate/bundle/OpenAPI generation, runtime test, installed C2 artifact or hosted C2 pass
 is claimed. New synthetic cases are a precise implementation proof plan, not completed evidence.
 Reviewed C1 SDK/provider heads, draft PR26 and their exact-head green CI remain intact.
+
+## Technical approval and direct source correction
+
+Request754a6ffa-2218-8bba-9767-5c98b322390c approved the bounded SDK-first implementation at
+e1e5a910ef1ca50778c80dd68c8931952f4a6575 after reading all346 lines and evidence. One consistency
+correction is approved before runtime work: defineDataProvider(source), without an extra provider
+envelope. Wrapper/source/consumer/kit/fixtures/examples migrate together. Earlier changes-requested
+history remains above. This is technical implementation authority, not a claim of 10/10 consumer,
+connected acceptance, merge or release approval. Implementation uses the existing C2 SDK worktree
+and separate provider worktree /Users/agent/ri/.work/worktrees/totalfinance-insiderfinance-connector/connector-c2-view,
+branch connector/sdk-consumer-view, based on immutable C1c492d2d. C1 SDKb5c3c83 is untouched.

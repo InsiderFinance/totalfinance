@@ -1,5 +1,7 @@
 # Community connector foundation and the external InsiderFinance provider
 
+> C1 historical call shapes below are superseded by the approved [C2 consumer-view spec](./community-connector-c2-integration.md) on the active C2 branch. Financial/raw-page laws remain controlling; C1 heads/receipts are immutable history.
+
 Status: **C0 approved at `9815f73567ddf235fca7e94d8ee560c1e6bed42a`; offline C1.1–C1.4 implemented and locally verified; hosted/review gates pending.**
 Technical review: coordinating request `b08d8379-d256-8977-8958-f1a9e2248f9e`, 2026-11-02.
 Implemented API and offline receipts are recorded in the linked C1 review; later connected acceptance remains open.

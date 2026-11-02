@@ -137,6 +137,17 @@ export const DOCUMENTED_EXCEPTIONS: Readonly<
     }
   >
 > = {
+  'docs/guides/community-connectors.md#createInsiderFinanceProvider': {
+    disposition: 'illustrative',
+    why: 'This example imports the maintained external connector factory from @insiderfinance/totalfinance-connector-insiderfinance, not from the TotalFinance SDK. Its exact two-package example is verified with the local tarballs; the guide states that it is unreleased.',
+    generatedSource: {
+      owner: 'human',
+      // Human guides have no generated ### source identity; scope by exact import instead.
+      headings: [''],
+      position: 'import',
+      line: "import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';",
+    },
+  },
   'docs/guides/http.md#Authorization': {
     disposition: 'illustrative',
     why: 'The authenticated fetch example names the HTTP Authorization header, not a TotalFinance input field. Its bearer value is the server-owned credential.',

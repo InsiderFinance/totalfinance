@@ -25,16 +25,16 @@ bars and option-chain research. Broad provider inventories remain possible commu
       corrected tarball installation and unchanged whole/installed bundle gates. Exact source,
       independent review and artifact receipts are in the implementation record.
 - [x] C1 exact-head hosted fast/full checks and technical implementation review at `b5c3c83`; no merge authority.
-- [ ] C2: review the [revised consumer-view candidate](./specs/community-connector-c2-integration.md).
-      Coordinator review requested changes to `4fc5f9d`: consumer lovability remains an acceptance
-      condition; no C2 implementation approval. The common view replaces standalone projection
-      plumbing and separates field suitability from quality/history limits. MCP remains later work.
+- [x] C2 technical spec review approved at `e1e5a910`, with direct defineDataProvider(source).
+- [ ] C2 SDK-first implementation and fresh installed/public/generated/bundle/hosted proofs; see
+      the [approved consumer-view spec](./specs/community-connector-c2-integration.md). Earlier
+      rejection remains in the review history; no 10/10 or connected acceptance is inferred.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
 The feature is in progress; C0 is approved and offline C1 source review plus exact-head fast/full
-hosted checks passed. C2 is a provisional spec-only lane on a separate branch; no C2 implementation
-or connected-agent acceptance is claimed. C1 receipt links and review history remain in the Ri task
+hosted checks passed. C2 bounded offline implementation is approved and active on separate SDK/provider branches;
+final implementation evidence and connected-agent acceptance remain open. C1 receipt links and review history remain in the Ri task
 and C1 record; this addendum does not alter reviewed PR26. The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment
@@ -451,8 +451,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,607 public naming identities are walked and 0 are unresolved; 39,425 are `explicit`,
-4,020 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,656 public naming identities are walked and 0 are unresolved; 39,470 are `explicit`,
+4,024 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

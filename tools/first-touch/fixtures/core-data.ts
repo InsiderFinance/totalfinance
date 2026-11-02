@@ -13,7 +13,16 @@ const provider = () =>
     entries: [{ request: dailyRequest, page: page() }],
   });
 export const CORE_DATA_FIXTURES: Record<string, FixtureThunk> = {
-  'core.defineDataProvider': () => [{ provider: provider() }],
+  'core.defineDataProvider': () => [
+    {
+      id: 'fixture',
+      version: '0.0.0',
+      contractVersion: 1,
+      capabilities: () => provider().capabilities(),
+      query: async () => page(),
+    },
+  ],
+  'core.createDataView': () => [page()],
   'core.validateDataProvider': Object.assign(
     () => [
       {

@@ -1,6 +1,7 @@
 # Community connector C2: consumer data view
 
-Status: **provisional revised review candidate; changes requested on 4fc5f9d, no C2 implementation approval.**
+Status: **C2 SDK-first technical spec approved at e1e5a910ef1ca50778c80dd68c8931952f4a6575; bounded offline implementation locally verified; final hosted checks pending.**
+Approval: `754a6ffa-2218-8bba-9767-5c98b322390c`; the wrapper takes the direct source argument as corrected below.
 Date: 2026-11-02. Feature: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
 Current review: `d5f95724-5d5d-8c4e-9e08-b2b658fa658a`.
 Earlier request/steering: `50853bf4-78d3-8bac-bcc9-9d358fb94ff6`,
@@ -9,7 +10,7 @@ Execution remains `01a19da1-1351-7b84-b67f-58bc81698fb5`.
 
 ## Primary consumer example: configure, fetch, calculate
 
-**Proposed C2, not currently implemented:**
+**Implemented C2 preview; unreleased:**
 
 ```ts
 import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';
@@ -55,9 +56,10 @@ low-ceremony expectation. Its blanket partial-quality refusal and broad data.inc
 also confused field suitability and history claims. This revision replaces those decisions.
 
 10/10 consumer lovability is an acceptance condition; technically green C1 is not consumer
-acceptance. This is a concrete evaluated candidate for coordinator review, not a broad question
-asking the maintainer to choose an architecture. No runtime/async/MCP implementation starts until
-the written spec is reviewed. The [C0/C1 spec](./community-connector-foundation.md) still controls
+acceptance. The reviewed revision is approved for bounded offline SDK implementation.
+The approval corrects defineDataProvider({ provider: source }) to defineDataProvider(source), since
+the source is already a single structurally unmistakable object. No extra approval loop applies.
+Async/MCP implementation remains outside this approval. The [C0/C1 spec](./community-connector-foundation.md) still controls
 normalized financial units, unknown times/terms, paging/error/cancellation laws and independent
 community package ownership. No calculation grammar, financial default, provider-bound indicator
 methods, all-purpose finance client or provider dependency in ordinary compute is introduced.
@@ -88,7 +90,7 @@ Existing pure calculations continue accepting ordinary arrays/files/other provid
 ## Decision 2 — exact proposed provider and consumer signatures
 
 Common SDK types belong to the existing opt-in `@insiderfinance/totalfinance/core/data` entry.
-The following is the proposed revised source API, not C1 exports:
+The following revised source API replaces the unreleased C1 call shapes:
 
 ```ts
 interface DataCallOptions {
@@ -140,7 +142,7 @@ interface DataProvider {
   query<R extends DataRequest>(request: R, options?: DataCallOptions): Promise<DataViewFor<R>>;
 }
 // Common SDK boundary, no provider import or network implementation in core.
-declare function defineDataProvider(input: { readonly provider: DataProviderSource }): DataProvider;
+declare function defineDataProvider(source: DataProviderSource): DataProvider;
 // Advanced raw-page restoration; not needed in normal fetch/calculate onboarding.
 declare function createDataView(page: unknown): DataView;
 ```
@@ -286,41 +288,42 @@ query a data view with explicitly selected native arrays and its raw page attach
 imports, parameter grammar, numeric result and ordinary raw-data interoperability stay unchanged.
 No SDK-only view is represented as an already implemented or published C1 feature.
 
-The revised call shapes and view need coordinator technical review. 10/10 consumer acceptance,
+The revised call shapes/view are technically approved, with direct defineDataProvider(source).
+10/10 consumer acceptance,
 not merely test pass status, remains the exit condition for the reworked experience. This candidate
 chooses the minimal view against the alternatives above; it does not defer that evaluation to a
 broad question. There is no additional unresolved endpoint/product dependency needed to review it.
 
-## Small synthetic proof plan after approval
+## Synthetic proof acceptance
 
-- [ ] A clean installed consumer runs the exact two-import key/query/SMA example using fake global
+- [x] A clean installed consumer runs the exact two-import key/query/SMA example using fake global
       fetch and a three-row raw fixture [100, 101, 102]; last period-2 value is 101.5. Fixture and
       external HTTP provider use the same SDK view with no provider-specific projection code.
-- [ ] Existing sma and sma.explain over view.closePrices equal their results on the plain numeric
+- [x] Existing sma and sma.explain over view.closePrices equal their results on the plain numeric
       reference array, including warmup/assumptions/diagnostics. Existing vwap matches complete OHLCV.
       Type tests accept readonly arrays and preserve raw .page compatibility; no engine source changes.
-- [ ] One-defect facts: missing first/later volume + quality.partial still permits identical closes/
+- [x] One-defect facts: missing first/later volume + quality.partial still permits identical closes/
       SMA, but selecting ohlcvBars throws before VWAP. Zero survives; unrelated source issues do not
       block known values. Invalid required OHLC/nonfinite data refuses; empty valid page stays empty.
       Unknown-volume tests use legitimate normalized fixtures; do not weaken actual required HTTP
       source fields to force a synthetic case through the adapter. Those source failures still refuse.
-- [ ] Non-null cursor and terminal continuation both expose exactly their own rows without another
+- [x] Non-null cursor and terminal continuation both expose exactly their own rows without another
       HTTP request or completeness claim. All original bounds/filter/nextFrom/pin/order/resource
       and typed entitlement/rate/allowance/redaction/cancellation controls remain exercised.
-- [ ] view.page retains exact canonical data, metadata, row/page warnings, identity and all null
+- [x] view.page retains exact canonical data, metadata, row/page warnings, identity and all null
       clocks. Lazy selection does not mutate input or source. Frozen native arrays have no non-index
       members; serializing the view does not invoke OHLCV access. Persist/restore .page gives equal
       values and source with no hidden lookup. Direct calculation results remain ordinary results.
-- [ ] API-key-only constructor/discovery do zero fetch/clock work. Native preview default and valid
+- [x] API-key-only constructor/discovery do zero fetch/clock work. Native preview default and valid
       overrides use injected synthetic facts; invalid overrides refuse. No source-time substitution.
-- [ ] Wrapper/kit/fixture/source and consumer types, first-touch, API/generated contracts and packed
+- [x] Wrapper/kit/fixture/source and consumer types, first-touch, API/generated contracts and packed
       NodeNext/Bundler/ESM proofs migrate together; generated measured defects zero, whole/installed/
       guard-only/browser bundle budgets unchanged. Record exact new local tarball hashes and commits.
 
-No test above is claimed passed for unimplemented C2. Spec-only verification is documentation
-conformance/inventory, scoped formatting and diff checks with Node 22.23.2/pnpm 10.32.0/frozen install.
-After approved source settles, follow CONTRIBUTING's affected generation order and hosted gates.
-No source/API/bundle regeneration or runtime CI is claimed for this documentation revision.
+The offline cases above now pass on Node 22.23.2/pnpm 10.32.0, including fresh installed SDK/provider
+tarballs. Exact commands, artifact provenance and remaining hosted acceptance are recorded in the
+[C2 implementation evidence](../reviews/community-connectors-c2-2026-11-02.md). The earlier spec-only
+review remains historical evidence and does not certify this implementation.
 
 ## Isolation, history and later work
 
@@ -339,8 +342,19 @@ pack prerequisite or async-runtime implementation is included here. Any later ve
 exact-selection, cancellation/deadline, metered-read and worker-binding design needs its own
 review; it must reuse the accepted common data view/engine rather than copy logic into transports.
 
-C1 trees, shared/linked checkouts and active accounting/approval stores are untouched. No runtime
-code, staging/secret/allowance/account/paper operation, merge, version/publication/deployment,
-remote provider repository or recurring automation is authorized or performed. Package versions
+C1 trees, shared/linked checkouts and active accounting/approval stores are untouched. Bounded runtime work is authorized by the technical approval. No staging/secret/allowance/account/
+paper operation, merge, version/publication/deployment, remote provider repository or recurring
+automation is authorized or performed. Package versions
 remain unchanged and local tarballs never claim registry SDK0.1.2 has unreleased exports. Consumer
-view implementation follows only after this written revision passes technical review.
+view implementation is locally verified under that approval; final hosted acceptance remains open.
+
+## Approved implementation ledger
+
+- [x] Technical review approved at e1e5a910, with direct defineDataProvider(source) correction.
+- [x] SDK source/consumer split, immutable view/restoration and shared validation implemented/tested.
+- [x] Independent kit, fixtures, examples, first-touch/type/JS misuse and view mutants migrated.
+- [x] Separate provider worktree direct-key/defaults/query migration and safe error/cancellation tests.
+- [x] Exact primary two-import installed consumer and parity/quality/missing-field/serialization proof.
+- [x] Public generated contracts and unchanged bundle/packed/browser gates pass at final source.
+- [ ] Reviewable commits and draft PR26 fast-forward, fresh fast/full exact-head hosted checks.
+- [ ] Later separately authorized connected/agent/App acceptance (not implied by offline proofs).

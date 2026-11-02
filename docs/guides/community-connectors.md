@@ -10,7 +10,46 @@ fresh local SDK/provider tarballs named in the [implementation evidence](../revi
 until an SDK release is separately authorized. An external provider's provisional peer version is
 not proof that an older registry artifact contains a new export.
 
-## Start with a synthetic provider
+## Fetch data and calculate
+
+Install the SDK and your chosen connector in the same application. For this unreleased preview,
+install both tested local tarballs; registry SDK 0.1.2 does not yet provide this contract.
+The maintained InsiderFinance connector accepts your API key directly:
+
+```ts
+import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';
+import { sma } from '@insiderfinance/totalfinance/technical-analysis';
+
+const provider = createInsiderFinanceProvider(apiKey);
+const prices = await provider.query({
+  kind: 'price-bars',
+  symbol: 'SPY',
+  interval: '1d',
+  from: '2026-10-26',
+  to: '2026-10-28',
+  limit: 100,
+});
+const average = sma(prices.closePrices, { period: 2 });
+```
+
+The host supplies `apiKey`. This private preview defaults to the documented staging API origin,
+native fetch and the system receipt clock. Optional overrides are for custom hosts and tests;
+construction and discovery make no requests. Configure access and a request allowance before
+using real data. The [exact installed example](../examples/community-connector-sdk.ts) is exercised
+with synthetic HTTP facts, including partial source quality; it is not a live-data receipt.
+
+`closePrices` is a normal immutable numeric array accepted by existing TotalFinance calculations.
+The same view retains its complete normalized source at `prices.page`, including metadata,
+diagnostics and `nextCursor`. The calculation uses only the returned page's observations; it does
+not fetch more pages or assert continuous history. Ordinary numeric calculation results do not
+automatically inherit source provenance. Keep the view when displaying or saving research.
+
+For bar indicators, `prices.ohlcvBars` supplies actual OHLCV rows. Selecting it refuses if any row
+has unknown volume, before a calculation can interpret missing volume as zero. Known closes remain
+usable on that same page. Persist `prices.page`; `createDataView(savedRawPage)` restores the common
+view. MCP setup is not required for any of these SDK calls.
+
+## Build a community connector
 
 The [minimal fixture provider](../examples/community-connector-fixture.ts) imports only the public
 SDK. It is a small example, not a built-in provider service or a package requiring registration.
@@ -21,8 +60,9 @@ and request/page entries. The adjacent facts module supplies a synthetic daily r
 page metadata. Run `validateDataProvider` with named expected-page probes and explicit maxPages,
 maxRecords and timeoutMs bounds. The [first-touch fixture](../../tools/first-touch/fixtures/core-data.ts)
 and [installed consumer test](../../tools/community-connectors-consumer.test.ts) show the complete
-working calls. After a successful query, project `record.bar.close` into existing TA functions;
-no provider-aware calculation is required.
+working calls. Implement `DataProviderSource` with raw normalized pages, then call
+`defineDataProvider(source)` directly. The SDK validates those pages and supplies the same consumer
+view for every provider; connector authors implement no price projection or calculation engine.
 
 `defineDataProvider` lives at `@insiderfinance/totalfinance/core/data`. Construction checks the
 structural protocol and binds it without calling provider methods. Each call validates its request
@@ -33,8 +73,11 @@ directly and does not repair invalid output.
 
 ## Discover and query explicitly
 
-A provider implements `capabilities({ signal? })` and `query({ request, signal? })`, returning
-Promises. No particular dataset is mandatory. Discovery describes supported behavior; it does not
+A raw source implements `capabilities(options?)` and `query(request, options?)`, returning
+Promises; options is the optional `{ signal }` control. Its capabilities return a descriptor and
+its query returns a normalized `DataPage`. The public consumer uses the same direct request grammar,
+but receives an SDK-owned view with `.page` and the selections appropriate to its kind.
+No particular dataset is mandatory. Discovery describes supported behavior; it does not
 grant account access or redistribution rights. Unsupported kinds/intervals produce
 `data.unsupported_capability`; malformed known requests produce typed input errors.
 

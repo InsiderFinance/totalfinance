@@ -368,24 +368,28 @@ export function compareKeys(
 }
 export function pageData(
   value: unknown,
-  request: DataRequest,
-  provider: Pick<DataProvider, 'id' | 'version'>,
+  request?: DataRequest,
+  provider?: Pick<DataProvider, 'id' | 'version'>,
 ): asserts value is DataPage<PriceBarRecord | OptionChainResearchRecord> {
   plain(value);
   const p = object(value, 'page');
   version(p['contractVersion']);
-  if (p['kind'] !== request.kind || p['symbol'] !== request.symbol) fail('page.resource');
+  enumField(p['kind'], 'page.kind', ['price-bars', 'option-chain-research']);
+  textField(p['symbol'], 'page.symbol', 128);
+  if (request && (p['kind'] !== request.kind || p['symbol'] !== request.symbol))
+    fail('page.resource');
   const rows = array(p['data'], 'page.data');
-  if (rows.length > request.limit) fail('page.data.length');
+  if (rows.length > (request?.limit ?? 2000)) fail('page.data.length');
   if (p['nextCursor'] !== null) textField(p['nextCursor'], 'page.nextCursor', 16384);
   if (
     p['nextCursor'] !== null &&
-    (!rows.length || ('cursor' in request && p['nextCursor'] === request.cursor))
+    (!rows.length || (request && 'cursor' in request && p['nextCursor'] === request.cursor))
   )
     fail('page.nextCursor');
   requireProvenance(FUNCTION, 'page.provenance', p['provenance']);
   const provenance = p['provenance'] as RecordValue;
-  if (provenance['provider'] !== provider.id) fail('page.provenance.provider');
+  textField(provenance['provider'], 'page.provenance.provider');
+  if (provider && provenance['provider'] !== provider.id) fail('page.provenance.provider');
   textField(provenance['dataset'], 'page.provenance.dataset');
   const m = object(p['metadata'], 'metadata');
   for (const k of ['datasetId', 'datasetVersion']) textField(m[k], `metadata.${k}`);
@@ -445,7 +449,7 @@ export function pageData(
   const assumptions = object(p['assumptions'], 'assumptions');
   textField(assumptions['conventionsVersion'], 'assumptions.conventionsVersion');
   diagnostics(p['diagnostics'], 'page.diagnostics');
-  if (request.kind === 'option-chain-research' && !('cursor' in request)) {
+  if (request?.kind === 'option-chain-research' && !('cursor' in request)) {
     if (request.snapshot.kind === 'id' && request.snapshot.snapshotId !== m['snapshotId'])
       fail('metadata.snapshotId');
     if (request.snapshot.kind === 'session' && request.snapshot.sessionDate !== m['sessionDate'])
@@ -454,13 +458,13 @@ export function pageData(
   let previous: readonly (string | number)[] | undefined;
   const ids = new Set();
   for (const row of rows) {
-    if (request.kind === 'price-bars') barData(row, request.symbol);
-    else chainData(row, request.symbol);
+    if (p['kind'] === 'price-bars') barData(row, p['symbol'] as string);
+    else chainData(row, p['symbol'] as string);
     const r = row as PriceBarRecord | OptionChainResearchRecord;
     const rowTimes = r.times as unknown as RecordValue;
     for (const clock of ['observedTimestampMs', 'availableTimestampMs', 'sourceStoredTimestampMs'])
       if (mt[clock] !== null && rowTimes[clock] !== mt[clock]) fail('metadata.times.' + clock);
-    if (!('cursor' in request)) {
+    if (request && !('cursor' in request)) {
       if (request.kind === 'price-bars') {
         const record = r as PriceBarRecord;
         const parse = request.interval === '1d' ? calendarDate : zonedInstant;
@@ -486,11 +490,11 @@ export function pageData(
           fail('row.terms.filters');
       }
     }
-    const key = rowKey(request.kind, r);
+    const key = rowKey(p['kind'] as string, r);
     if (previous && compareKeys(previous, key) >= 0) fail('page.data.order');
     previous = key;
     const id =
-      request.kind === 'price-bars'
+      p['kind'] === 'price-bars'
         ? String(key[0])
         : (r as OptionChainResearchRecord).sourceContractId;
     if (ids.has(id)) fail('page.data.identity');

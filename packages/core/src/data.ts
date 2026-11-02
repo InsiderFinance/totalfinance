@@ -2,10 +2,11 @@
 import { DataError, ErrorCode, QuantError } from './errors.js';
 import type {
   DataProvider,
+  DataProviderSource,
   DataRequest,
-  DataFor,
-  DataPage,
+  DataViewFor,
   DataCapabilities,
+  DataCallOptions,
 } from './data-types.js';
 import {
   object,
@@ -17,24 +18,25 @@ import {
   pageData,
   copyFrozen,
 } from './data-validation.js';
+import { dataViewOf } from './data-view.js';
+export { createDataView } from './data-view.js';
 export type * from './data-types.js';
 /** Research acquisition protocol version, independent of package and dataset versions. */
 export const DATA_CONTRACT_VERSION = 1;
 
-/** Validate and bind a provider without calling it. Every call validates requests and observations.
- * Valid output is copied/frozen; malformed provider output is refused rather than normalized.
+/** Validate and bind a raw source without calling it. Query returns an immutable common SDK view.
  * @example
- * const provider = defineDataProvider({ provider: myProvider });
- * const supported = await provider.capabilities({});
+ * const provider = defineDataProvider(mySource);
+ * const prices = await provider.query({ kind: 'price-bars', symbol: 'SPY', interval: '1d', from: '2026-10-26', to: '2026-10-28', limit: 100 });
+ * const average = sma(prices.closePrices, { period: 2 });
  */
-export function defineDataProvider(input: { readonly provider: DataProvider }): DataProvider {
-  const config = object(input, 'input', ['provider']);
-  providerShape(config['provider']);
-  const source = config['provider'];
-  const id = source.id,
-    version = source.version;
-  const query = source.query.bind(source);
-  const capabilities = source.capabilities.bind(source);
+export function defineDataProvider(source: DataProviderSource): DataProvider {
+  providerShape(source);
+  const raw: DataProviderSource = source;
+  const id = raw.id,
+    version = raw.version;
+  const query = raw.query.bind(raw);
+  const capabilities = raw.capabilities.bind(raw);
   const identity = { id, version };
   function responseError(error: unknown): never {
     if (error instanceof QuantError && error.code === ErrorCode.DataContractVersionUnsupported)
@@ -43,6 +45,11 @@ export function defineDataProvider(input: { readonly provider: DataProvider }): 
       'defineDataProvider: provider returned invalid data; check its declared contract and diagnostics.',
       { code: ErrorCode.DataInvalidResponse, context: { provider: id } },
     );
+  }
+  function callSignal(options: DataCallOptions = {}): AbortSignal | undefined {
+    const args = object(options, 'options', ['signal']);
+    signalField(args['signal']);
+    return args['signal'];
   }
   async function call<T>(signal: AbortSignal | undefined, run: () => Promise<T>): Promise<T> {
     aborted(signal);
@@ -60,36 +67,32 @@ export function defineDataProvider(input: { readonly provider: DataProvider }): 
     id,
     version,
     contractVersion: DATA_CONTRACT_VERSION,
-    async capabilities(input: { signal?: AbortSignal }): Promise<DataCapabilities> {
-      const args = object(input, 'input', ['signal']);
-      signalField(args['signal']);
-      const signal = args['signal'];
+    async capabilities(options?: DataCallOptions): Promise<DataCapabilities> {
+      const signal = callSignal(options);
       return call(signal, async () => {
-        const result = await capabilities(signal ? { signal } : {});
+        const result = await capabilities(signal ? { signal } : undefined);
         try {
           capabilityData(result, identity);
           return copyFrozen(result);
-        } catch (e) {
-          responseError(e);
+        } catch (error) {
+          responseError(error);
         }
       });
     },
-    async query<R extends DataRequest>(input: {
-      request: R;
-      signal?: AbortSignal;
-    }): Promise<DataPage<DataFor<R>>> {
-      const args = object(input, 'input', ['request', 'signal']);
-      signalField(args['signal']);
-      requestData(args['request']);
-      const signal = args['signal'];
-      const request = copyFrozen(args['request']);
+    async query<R extends DataRequest>(
+      input: R,
+      options?: DataCallOptions,
+    ): Promise<DataViewFor<R>> {
+      const signal = callSignal(options);
+      requestData(input);
+      const request = copyFrozen(input);
       return call(signal, async () => {
-        const result = await query(signal ? { request, signal } : { request });
+        const result = await query(request, signal ? { signal } : undefined);
         try {
           pageData(result, request, identity);
-          return copyFrozen(result) as DataPage<DataFor<R>>;
-        } catch (e) {
-          responseError(e);
+          return dataViewOf(copyFrozen(result)) as DataViewFor<R>;
+        } catch (error) {
+          responseError(error);
         }
       });
     },

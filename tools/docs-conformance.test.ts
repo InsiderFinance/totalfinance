@@ -293,6 +293,34 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
     }
   });
 
+  it('allows only the documented external connector import, not an invented SDK export', () => {
+    const context = {
+      path: 'docs/guides/community-connectors.md',
+      owner: 'human',
+    };
+    const identifier = {
+      name: 'createInsiderFinanceProvider',
+      position: 'import' as const,
+      line: "import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';",
+    };
+    expect(matchesDocumentedException({ ...context, identifier })).toBe(true);
+    expect(
+      matchesDocumentedException({
+        ...context,
+        identifier: {
+          ...identifier,
+          line: "import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance';",
+        },
+      }),
+    ).toBe(false);
+    expect(
+      matchesDocumentedException({
+        ...context,
+        identifier: { ...identifier, position: 'field' },
+      }),
+    ).toBe(false);
+  });
+
   it('keeps HTTP authentication examples with narrowly documented host-API dispositions', () => {
     const path = 'docs/guides/http.md';
     const source = readFileSync(resolve(ROOT, path), 'utf8');

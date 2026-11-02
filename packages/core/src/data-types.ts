@@ -62,15 +62,59 @@ export interface DataCapabilities {
   readonly capabilities: readonly DataCapability[];
 }
 
+/** Optional cancellation behavior, separate from named financial request fields. */
+export interface DataCallOptions {
+  readonly signal?: AbortSignal;
+}
+
+/** Raw normalized protocol authored by an independent provider package. */
+export interface DataProviderSource {
+  readonly id: string;
+  readonly version: string;
+  readonly contractVersion: 1;
+  capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+  query<R extends DataRequest>(
+    request: R,
+    options?: DataCallOptions,
+  ): Promise<DataPage<DataFor<R>>>;
+}
+
+/** Complete actual OHLCV inputs: unknown volume is never supplied as zero. */
+export interface OhlcvInput {
+  readonly open: number;
+  readonly high: number;
+  readonly low: number;
+  readonly close: number;
+  readonly volume: number;
+}
+
+/** One validated page sample, with lazily selected native arrays and retained source context. */
+export interface PriceBarsView {
+  readonly kind: 'price-bars';
+  readonly page: DataPage<PriceBarRecord>;
+  readonly closePrices: readonly number[];
+  readonly ohlcvBars: readonly OhlcvInput[];
+}
+
+/** Incomplete research terms remain raw research records, never automatic pricing inputs. */
+export interface OptionChainResearchView {
+  readonly kind: 'option-chain-research';
+  readonly page: DataPage<OptionChainResearchRecord>;
+}
+export type DataView = PriceBarsView | OptionChainResearchView;
+export type DataViewFor<R extends DataRequest> = R['kind'] extends 'price-bars'
+  ? PriceBarsView
+  : R['kind'] extends 'option-chain-research'
+    ? OptionChainResearchView
+    : DataView;
+
+/** Consumer protocol: the common SDK constructs a view, not each provider author. */
 export interface DataProvider {
   readonly id: string;
   readonly version: string;
   readonly contractVersion: 1;
-  capabilities(input: { signal?: AbortSignal }): Promise<DataCapabilities>;
-  query<R extends DataRequest>(input: {
-    readonly request: R;
-    readonly signal?: AbortSignal;
-  }): Promise<DataPage<DataFor<R>>>;
+  capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+  query<R extends DataRequest>(request: R, options?: DataCallOptions): Promise<DataViewFor<R>>;
 }
 
 export interface ObservationTimes {

@@ -55,9 +55,9 @@ import {validateDataProvider} from '@insiderfinance/totalfinance/core/data-confo
 import {QuantError} from '@insiderfinance/totalfinance/core';
 const provider:DataProvider=createFixtureDataProvider({id:'fixture',version:'0.0.0',capabilities:[barCapability],entries:[{request:dailyRequest,page:page()}]});
 await validateDataProvider({provider,probes:[{name:'installed fixture',kind:'pages',request:dailyRequest,expectedPages:[page()]}],maxPages:1,maxRecords:2,timeoutMs:1000});
-const result=await provider.query({request:dailyRequest});const rows:readonly PriceBarRecord[]=result.data;
-if(rows.length!==0||result.metadata.executionEligibility!=='research-only')throw new Error('unexpected fixture facts');
-try{defineDataProvider({provider:null as never});throw new Error('missing refusal');}catch(error){if(!(error instanceof QuantError))throw error;}
+const result=await provider.query(dailyRequest);const rows:readonly PriceBarRecord[]=result.page.data;
+if(rows.length!==0||result.page.metadata.executionEligibility!=='research-only')throw new Error('unexpected fixture facts');
+try{defineDataProvider(null as never);throw new Error('missing refusal');}catch(error){if(!(error instanceof QuantError))throw error;}
 console.log('INSTALLED_COMMUNITY_CONTRACT_OK');
 `;
   writeFileSync(join(work, 'consumer.mts'), source);
@@ -71,7 +71,11 @@ console.log('INSTALLED_COMMUNITY_CONTRACT_OK');
 const missing:PriceBarsRequest={kind:'price-bars',symbol:'TEST'};
 declare const provider:DataProvider;
 // @ts-expect-error unknown kind is not a public account-read capability
-provider.query({request:{kind:'account-read',symbol:'TEST',limit:2}});
+provider.query({kind:'account-read',symbol:'TEST',limit:2});
+// @ts-expect-error removed source envelope
+import('@insiderfinance/totalfinance/core/data').then(m=>m.defineDataProvider({provider}));
+// @ts-expect-error removed query envelope
+provider.query({request:{kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28',limit:2}});
 void missing;
 `;
   writeFileSync(join(work, 'misuse.mts'), misuse);

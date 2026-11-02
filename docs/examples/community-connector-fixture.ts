@@ -27,43 +27,41 @@ export function createFixtureDataProvider(input: {
   beforeQuery?: (input: { signal?: AbortSignal }) => Promise<void>;
 }): DataProvider {
   return defineDataProvider({
-    provider: {
-      id: input.id,
-      version: input.version,
-      contractVersion: 1,
-      async capabilities() {
-        return {
-          contractVersion: 1,
-          providerId: input.id,
-          providerVersion: input.version,
-          capabilities: input.capabilities,
-        };
-      },
-      async query({ request, signal }) {
-        const capability = input.capabilities.find((c) => c.kind === request.kind);
-        if (
-          !capability ||
-          (request.kind === 'price-bars' &&
-            !('cursor' in request) &&
-            !capability.intervals.includes(request.interval))
-        )
-          throw new UnsupportedError('fixture: capability not supplied.', {
-            code: ErrorCode.DataUnsupportedCapability,
-          });
-        if (request.limit > capability.maxPageSize)
-          throw new InputError('fixture: limit exceeds capability.', {
-            code: ErrorCode.InputOutOfRange,
-          });
-        await input.beforeQuery?.(signal ? { signal } : {});
-        const found = input.entries.find(
-          (entry) => canonicalJsonOf(entry.request) === canonicalJsonOf(request),
-        );
-        if (!found)
-          throw new DataError('fixture: no page supplied for this request.', {
-            code: ErrorCode.DataNotFound,
-          });
-        return found.page as DataPage<never>;
-      },
+    id: input.id,
+    version: input.version,
+    contractVersion: 1,
+    async capabilities() {
+      return {
+        contractVersion: 1,
+        providerId: input.id,
+        providerVersion: input.version,
+        capabilities: input.capabilities,
+      };
+    },
+    async query(request, { signal } = {}) {
+      const capability = input.capabilities.find((c) => c.kind === request.kind);
+      if (
+        !capability ||
+        (request.kind === 'price-bars' &&
+          !('cursor' in request) &&
+          !capability.intervals.includes(request.interval))
+      )
+        throw new UnsupportedError('fixture: capability not supplied.', {
+          code: ErrorCode.DataUnsupportedCapability,
+        });
+      if (request.limit > capability.maxPageSize)
+        throw new InputError('fixture: limit exceeds capability.', {
+          code: ErrorCode.InputOutOfRange,
+        });
+      await input.beforeQuery?.(signal ? { signal } : {});
+      const found = input.entries.find(
+        (entry) => canonicalJsonOf(entry.request) === canonicalJsonOf(request),
+      );
+      if (!found)
+        throw new DataError('fixture: no page supplied for this request.', {
+          code: ErrorCode.DataNotFound,
+        });
+      return found.page as DataPage<never>;
     },
   });
 }

@@ -1208,6 +1208,12 @@
       "role": "artifact",
       "note": "Reviewed C0: structural binding and request/result validation, immutable copied output; no provider calls at construction."
     },
+    "createDataView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C2: validate raw normalized page and restore an immutable consumer view with lazy native-array field selection, no I/O or financial computation."
+    },
     "validateDataProvider": {
       "kind": "function",
       "entrypoints": ["./data-conformance"],

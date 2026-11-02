@@ -58003,6 +58003,30 @@
       ]
     },
     {
+      "id": "@totalfinance/core:createDataView",
+      "package": "@totalfinance/core",
+      "path": "createDataView",
+      "owner": "export",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "implementation": "packages/core/dist/data-view.d.ts#createDataView",
+      "grammar": "single-subject",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "page",
+              "type": "unknown",
+              "optional": false,
+              "rest": false,
+              "kind": "other"
+            }
+          ],
+          "returns": "DataView"
+        }
+      ]
+    },
+    {
       "id": "@totalfinance/core:createMarketSnapshot",
       "package": "@totalfinance/core",
       "path": "createMarketSnapshot",
@@ -58818,8 +58842,9 @@
         {
           "parameters": [
             {
-              "name": "input",
-              "type": "{ signal?: AbortSignal; }",
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
               "checkerFieldTree": [
                 {
                   "name": "signal",
@@ -58829,7 +58854,7 @@
                   "nullable": false
                 }
               ],
-              "optional": false,
+              "optional": true,
               "rest": false,
               "kind": "object"
             }
@@ -58845,259 +58870,19 @@
       "owner": "artifact-method",
       "entrypoints": ["./data"],
       "implementation": "packages/core/dist/data-types.d.ts#DataProvider.query",
-      "grammar": "object",
+      "grammar": "subject-options",
       "signatures": [
         {
           "parameters": [
             {
-              "name": "input",
-              "type": "{ readonly request: R; readonly signal?: AbortSignal; }",
-              "checkerFieldTree": [
+              "name": "request",
+              "type": "R",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#R",
+              "branches": [
                 {
-                  "name": "request",
-                  "type": "R",
+                  "type": "PriceBarsRequest",
                   "kind": "object",
-                  "optional": false,
                   "nullable": false,
-                  "branches": [
-                    {
-                      "type": "PriceBarsRequest",
-                      "kind": "object",
-                      "nullable": false,
-                      "fields": [
-                        {
-                          "name": "from",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "interval",
-                          "type": "'1m' | '1d'",
-                          "kind": "enum",
-                          "optional": false,
-                          "nullable": false,
-                          "literals": ["1d", "1m"]
-                        },
-                        {
-                          "name": "kind",
-                          "type": "'price-bars'",
-                          "kind": "enum",
-                          "optional": false,
-                          "nullable": false,
-                          "literals": ["price-bars"]
-                        },
-                        {
-                          "name": "limit",
-                          "type": "number",
-                          "kind": "numeric",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "symbol",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "to",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        }
-                      ]
-                    },
-                    {
-                      "type": "OptionChainResearchRequest",
-                      "kind": "object",
-                      "nullable": false,
-                      "fields": [
-                        {
-                          "name": "expirationFrom",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": true,
-                          "nullable": false
-                        },
-                        {
-                          "name": "expirationTo",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": true,
-                          "nullable": false
-                        },
-                        {
-                          "name": "kind",
-                          "type": "'option-chain-research'",
-                          "kind": "enum",
-                          "optional": false,
-                          "nullable": false,
-                          "literals": ["option-chain-research"]
-                        },
-                        {
-                          "name": "limit",
-                          "type": "number",
-                          "kind": "numeric",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "maxStrike",
-                          "type": "number",
-                          "kind": "numeric",
-                          "optional": true,
-                          "nullable": false
-                        },
-                        {
-                          "name": "minStrike",
-                          "type": "number",
-                          "kind": "numeric",
-                          "optional": true,
-                          "nullable": false
-                        },
-                        {
-                          "name": "rights",
-                          "type": "ReadonlyArray<'call' | 'put'>",
-                          "kind": "array",
-                          "optional": true,
-                          "nullable": false,
-                          "element": {
-                            "name": "[]",
-                            "type": "'call' | 'put'",
-                            "kind": "enum",
-                            "optional": false,
-                            "nullable": false,
-                            "literals": ["call", "put"]
-                          }
-                        },
-                        {
-                          "name": "snapshot",
-                          "type": "{ readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }",
-                          "kind": "object",
-                          "optional": false,
-                          "nullable": false,
-                          "branches": [
-                            {
-                              "type": "{ readonly kind: 'latest'; }",
-                              "kind": "object",
-                              "nullable": false,
-                              "fields": [
-                                {
-                                  "name": "kind",
-                                  "type": "'latest'",
-                                  "kind": "enum",
-                                  "optional": false,
-                                  "nullable": false,
-                                  "literals": ["latest"]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "{ readonly kind: 'session'; readonly sessionDate: string; }",
-                              "kind": "object",
-                              "nullable": false,
-                              "fields": [
-                                {
-                                  "name": "kind",
-                                  "type": "'session'",
-                                  "kind": "enum",
-                                  "optional": false,
-                                  "nullable": false,
-                                  "literals": ["session"]
-                                },
-                                {
-                                  "name": "sessionDate",
-                                  "type": "string",
-                                  "kind": "string",
-                                  "optional": false,
-                                  "nullable": false
-                                }
-                              ]
-                            },
-                            {
-                              "type": "{ readonly kind: 'id'; readonly snapshotId: string; }",
-                              "kind": "object",
-                              "nullable": false,
-                              "fields": [
-                                {
-                                  "name": "kind",
-                                  "type": "'id'",
-                                  "kind": "enum",
-                                  "optional": false,
-                                  "nullable": false,
-                                  "literals": ["id"]
-                                },
-                                {
-                                  "name": "snapshotId",
-                                  "type": "string",
-                                  "kind": "string",
-                                  "optional": false,
-                                  "nullable": false
-                                }
-                              ]
-                            }
-                          ],
-                          "fields": [
-                            {
-                              "name": "kind",
-                              "type": "'latest'",
-                              "kind": "enum",
-                              "optional": false,
-                              "nullable": false,
-                              "literals": ["latest"]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "symbol",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        }
-                      ]
-                    },
-                    {
-                      "type": "DataContinuationRequest",
-                      "kind": "object",
-                      "nullable": false,
-                      "fields": [
-                        {
-                          "name": "cursor",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "kind",
-                          "type": "DataKind",
-                          "kind": "enum",
-                          "optional": false,
-                          "nullable": false,
-                          "literals": ["option-chain-research", "price-bars"]
-                        },
-                        {
-                          "name": "limit",
-                          "type": "number",
-                          "kind": "numeric",
-                          "optional": false,
-                          "nullable": false
-                        },
-                        {
-                          "name": "symbol",
-                          "type": "string",
-                          "kind": "string",
-                          "optional": false,
-                          "nullable": false
-                        }
-                      ]
-                    }
-                  ],
                   "fields": [
                     {
                       "name": "from",
@@ -59146,6 +58931,227 @@
                   ]
                 },
                 {
+                  "type": "OptionChainResearchRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "expirationFrom",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "expirationTo",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "'option-chain-research'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "maxStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "minStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "rights",
+                      "type": "ReadonlyArray<'call' | 'put'>",
+                      "kind": "array",
+                      "optional": true,
+                      "nullable": false,
+                      "element": {
+                        "name": "[]",
+                        "type": "'call' | 'put'",
+                        "kind": "enum",
+                        "optional": false,
+                        "nullable": false,
+                        "literals": ["call", "put"]
+                      }
+                    },
+                    {
+                      "name": "snapshot",
+                      "type": "{ readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }",
+                      "kind": "object",
+                      "optional": false,
+                      "nullable": false,
+                      "branches": [
+                        {
+                          "type": "{ readonly kind: 'latest'; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'latest'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["latest"]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'session'; readonly sessionDate: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'session'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["session"]
+                            },
+                            {
+                              "name": "sessionDate",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'id'; readonly snapshotId: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'id'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["id"]
+                            },
+                            {
+                              "name": "snapshotId",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        }
+                      ],
+                      "fields": [
+                        {
+                          "name": "kind",
+                          "type": "'latest'",
+                          "kind": "enum",
+                          "optional": false,
+                          "nullable": false,
+                          "literals": ["latest"]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                },
+                {
+                  "type": "DataContinuationRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "cursor",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "DataKind",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research", "price-bars"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                }
+              ],
+              "checkerFieldTree": [
+                {
+                  "name": "kind",
+                  "type": "DataKind",
+                  "kind": "enum",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": ["option-chain-research", "price-bars"]
+                },
+                {
+                  "name": "limit",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "symbol",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ],
+              "inferredGeneric": true,
+              "optional": false,
+              "rest": false,
+              "kind": "object"
+            },
+            {
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
+              "checkerFieldTree": [
+                {
                   "name": "signal",
                   "type": "AbortSignal",
                   "kind": "object",
@@ -59153,7 +59159,345 @@
                   "nullable": false
                 }
               ],
+              "optional": true,
+              "rest": false,
+              "kind": "object"
+            }
+          ],
+          "returns": "Promise<DataViewFor<R>>"
+        }
+      ]
+    },
+    {
+      "id": "@totalfinance/core:DataProviderSource#capabilities",
+      "package": "@totalfinance/core",
+      "path": "DataProviderSource#capabilities",
+      "owner": "interface-method",
+      "entrypoints": ["./data"],
+      "implementation": "packages/core/dist/data-types.d.ts#DataProviderSource.capabilities",
+      "grammar": "object",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
+              "checkerFieldTree": [
+                {
+                  "name": "signal",
+                  "type": "AbortSignal",
+                  "kind": "object",
+                  "optional": true,
+                  "nullable": false
+                }
+              ],
+              "optional": true,
+              "rest": false,
+              "kind": "object"
+            }
+          ],
+          "returns": "Promise<DataCapabilities>"
+        }
+      ]
+    },
+    {
+      "id": "@totalfinance/core:DataProviderSource#query",
+      "package": "@totalfinance/core",
+      "path": "DataProviderSource#query",
+      "owner": "interface-method",
+      "entrypoints": ["./data"],
+      "implementation": "packages/core/dist/data-types.d.ts#DataProviderSource.query",
+      "grammar": "subject-options",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "request",
+              "type": "R",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#R",
+              "branches": [
+                {
+                  "type": "PriceBarsRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "from",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "interval",
+                      "type": "'1m' | '1d'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["1d", "1m"]
+                    },
+                    {
+                      "name": "kind",
+                      "type": "'price-bars'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["price-bars"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "to",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                },
+                {
+                  "type": "OptionChainResearchRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "expirationFrom",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "expirationTo",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "'option-chain-research'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "maxStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "minStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "rights",
+                      "type": "ReadonlyArray<'call' | 'put'>",
+                      "kind": "array",
+                      "optional": true,
+                      "nullable": false,
+                      "element": {
+                        "name": "[]",
+                        "type": "'call' | 'put'",
+                        "kind": "enum",
+                        "optional": false,
+                        "nullable": false,
+                        "literals": ["call", "put"]
+                      }
+                    },
+                    {
+                      "name": "snapshot",
+                      "type": "{ readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }",
+                      "kind": "object",
+                      "optional": false,
+                      "nullable": false,
+                      "branches": [
+                        {
+                          "type": "{ readonly kind: 'latest'; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'latest'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["latest"]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'session'; readonly sessionDate: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'session'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["session"]
+                            },
+                            {
+                              "name": "sessionDate",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'id'; readonly snapshotId: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'id'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["id"]
+                            },
+                            {
+                              "name": "snapshotId",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        }
+                      ],
+                      "fields": [
+                        {
+                          "name": "kind",
+                          "type": "'latest'",
+                          "kind": "enum",
+                          "optional": false,
+                          "nullable": false,
+                          "literals": ["latest"]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                },
+                {
+                  "type": "DataContinuationRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "cursor",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "DataKind",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research", "price-bars"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                }
+              ],
+              "checkerFieldTree": [
+                {
+                  "name": "kind",
+                  "type": "DataKind",
+                  "kind": "enum",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": ["option-chain-research", "price-bars"]
+                },
+                {
+                  "name": "limit",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "symbol",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ],
+              "inferredGeneric": true,
               "optional": false,
+              "rest": false,
+              "kind": "object"
+            },
+            {
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
+              "checkerFieldTree": [
+                {
+                  "name": "signal",
+                  "type": "AbortSignal",
+                  "kind": "object",
+                  "optional": true,
+                  "nullable": false
+                }
+              ],
+              "optional": true,
               "rest": false,
               "kind": "object"
             }
@@ -59368,107 +59712,105 @@
         {
           "parameters": [
             {
-              "name": "input",
-              "type": "{ readonly provider: DataProvider; }",
+              "name": "source",
+              "type": "DataProviderSource",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataProviderSource",
               "checkerFieldTree": [
                 {
-                  "name": "provider",
-                  "type": "DataProvider",
-                  "kind": "object",
+                  "name": "capabilities",
+                  "type": "(options?: DataCallOptions | undefined) => Promise<DataCapabilities>",
+                  "kind": "function",
                   "optional": false,
                   "nullable": false,
-                  "fields": [
+                  "callSignatures": [
                     {
-                      "name": "capabilities",
-                      "type": "(input: { signal?: AbortSignal; }) => Promise<DataCapabilities>",
-                      "kind": "function",
-                      "optional": false,
-                      "nullable": false,
-                      "callSignatures": [
+                      "parameters": [
                         {
-                          "parameters": [
-                            {
-                              "name": "input",
-                              "type": "{ signal?: AbortSignal; }",
-                              "optional": false,
-                              "rest": false
-                            }
-                          ],
-                          "returns": "Promise<DataCapabilities>"
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
                         }
                       ],
-                      "callSignature": {
-                        "parameters": 1,
-                        "returns": "Promise<DataCapabilities>"
-                      },
-                      "returns": {
-                        "name": "()",
-                        "type": "Promise<DataCapabilities>",
-                        "kind": "object",
-                        "optional": false,
-                        "nullable": false
-                      }
-                    },
-                    {
-                      "name": "contractVersion",
-                      "type": "1",
-                      "kind": "numeric",
-                      "optional": false,
-                      "nullable": false,
-                      "literals": [1]
-                    },
-                    {
-                      "name": "id",
-                      "type": "string",
-                      "kind": "string",
-                      "optional": false,
-                      "nullable": false
-                    },
-                    {
-                      "name": "query",
-                      "type": "<R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>",
-                      "kind": "function",
-                      "optional": false,
-                      "nullable": false,
-                      "callSignatures": [
-                        {
-                          "parameters": [
-                            {
-                              "name": "input",
-                              "type": "{ readonly request: R; readonly signal?: AbortSignal; }",
-                              "optional": false,
-                              "rest": false
-                            }
-                          ],
-                          "returns": "Promise<DataPage<DataFor<R>>>",
-                          "typeParameters": [
-                            {
-                              "name": "R",
-                              "constraint": "DataRequest"
-                            }
-                          ]
-                        }
-                      ],
-                      "callSignature": {
-                        "parameters": 1,
-                        "returns": "Promise<DataPage<DataFor<R>>>"
-                      },
-                      "returns": {
-                        "name": "()",
-                        "type": "Promise<DataPage<DataFor<R>>>",
-                        "kind": "object",
-                        "optional": false,
-                        "nullable": false
-                      }
-                    },
-                    {
-                      "name": "version",
-                      "type": "string",
-                      "kind": "string",
-                      "optional": false,
-                      "nullable": false
+                      "returns": "Promise<DataCapabilities>"
                     }
-                  ]
+                  ],
+                  "callSignature": {
+                    "parameters": 1,
+                    "returns": "Promise<DataCapabilities>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataCapabilities>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "contractVersion",
+                  "type": "1",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": [1]
+                },
+                {
+                  "name": "id",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "query",
+                  "type": "<R extends DataRequest>(request: R, options?: DataCallOptions | undefined) => Promise<DataPage<DataFor<R>>>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "request",
+                          "type": "R",
+                          "optional": false,
+                          "rest": false
+                        },
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataPage<DataFor<R>>>",
+                      "typeParameters": [
+                        {
+                          "name": "R",
+                          "constraint": "DataRequest"
+                        }
+                      ]
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 2,
+                    "returns": "Promise<DataPage<DataFor<R>>>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataPage<DataFor<R>>>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "version",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
                 }
               ],
               "optional": false,
@@ -78384,7 +78726,7 @@
                   "fields": [
                     {
                       "name": "capabilities",
-                      "type": "(input: { signal?: AbortSignal; }) => Promise<DataCapabilities>",
+                      "type": "(options?: DataCallOptions | undefined) => Promise<DataCapabilities>",
                       "kind": "function",
                       "optional": false,
                       "nullable": false,
@@ -78392,9 +78734,9 @@
                         {
                           "parameters": [
                             {
-                              "name": "input",
-                              "type": "{ signal?: AbortSignal; }",
-                              "optional": false,
+                              "name": "options",
+                              "type": "DataCallOptions | undefined",
+                              "optional": true,
                               "rest": false
                             }
                           ],
@@ -78430,7 +78772,7 @@
                     },
                     {
                       "name": "query",
-                      "type": "<R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>",
+                      "type": "<R extends DataRequest>(request: R, options?: DataCallOptions | undefined) => Promise<DataViewFor<R>>",
                       "kind": "function",
                       "optional": false,
                       "nullable": false,
@@ -78438,13 +78780,19 @@
                         {
                           "parameters": [
                             {
-                              "name": "input",
-                              "type": "{ readonly request: R; readonly signal?: AbortSignal; }",
+                              "name": "request",
+                              "type": "R",
                               "optional": false,
+                              "rest": false
+                            },
+                            {
+                              "name": "options",
+                              "type": "DataCallOptions | undefined",
+                              "optional": true,
                               "rest": false
                             }
                           ],
-                          "returns": "Promise<DataPage<DataFor<R>>>",
+                          "returns": "Promise<DataViewFor<R>>",
                           "typeParameters": [
                             {
                               "name": "R",
@@ -78454,12 +78802,12 @@
                         }
                       ],
                       "callSignature": {
-                        "parameters": 1,
-                        "returns": "Promise<DataPage<DataFor<R>>>"
+                        "parameters": 2,
+                        "returns": "Promise<DataViewFor<R>>"
                       },
                       "returns": {
                         "name": "()",
-                        "type": "Promise<DataPage<DataFor<R>>>",
+                        "type": "Promise<DataViewFor<R>>",
                         "kind": "object",
                         "optional": false,
                         "nullable": false

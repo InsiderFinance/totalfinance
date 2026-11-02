@@ -115725,6 +115725,23 @@ Research acquisition protocol version, independent of package and dataset versio
 export declare const DATA_CONTRACT_VERSION: 1;
 ```
 
+### @insiderfinance/totalfinance/core/data#DataCallOptions
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Optional cancellation behavior, separate from named financial request fields.
+
+```typescript
+/** Optional cancellation behavior, separate from named financial request fields. */
+export interface DataCallOptions {
+    readonly signal?: AbortSignal;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- signal?: AbortSignal; default: not declared
+
 ### @insiderfinance/totalfinance/core/data#DataCapabilities
 
 Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
@@ -115889,18 +115906,18 @@ computation seeds. Equals the input length when the indicator never emitted.
 - metadata.access: 'unknown' | 'granted' | 'denied'; default: not declared
 - metadata.adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
 - metadata.consistency: 'snapshot' | 'best-effort'; default: not declared
-- metadata.coverage: { readonly status: 'continuous' | 'observed-only' | 'unknown'; readonly start: string | null; readonly end: string | null; }; default: not declared
+- metadata.coverage: { readonly end: string | null; readonly start: string | null; readonly status: 'continuous' | 'observed-only' | 'unknown'; }; default: not declared
 - metadata.coverage.end: string | null; default: not declared
 - metadata.coverage.start: string | null; default: not declared
 - metadata.coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
 - metadata.datasetId: string; default: not declared
 - metadata.datasetVersion: string; default: not declared
 - metadata.executionEligibility: 'research-only'; default: not declared
-- metadata.freshness: { readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; }; default: not declared
+- metadata.freshness: { readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; }; default: not declared
 - metadata.freshness.configuredDelayMs: number | null; default: not declared
 - metadata.freshness.evaluatedTimestampMs: number | null; default: not declared
 - metadata.freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
-- metadata.quality: { readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; readonly issues: readonly { source: string; code: string; message: string; }[]; }; default: not declared
+- metadata.quality: { readonly issues: readonly { source: string; code: string; message: string; }[]; readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; }; default: not declared
 - metadata.quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
 - metadata.quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
 - metadata.receivedTimestampMs: number; default: not declared
@@ -115992,32 +116009,60 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 
 Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
+Consumer protocol: the common SDK constructs a view, not each provider author.
+
 ```typescript
+/** Consumer protocol: the common SDK constructs a view, not each provider author. */
 export interface DataProvider {
     readonly id: string;
     readonly version: string;
     readonly contractVersion: 1;
-    capabilities(input: {
-        signal?: AbortSignal;
-    }): Promise<DataCapabilities>;
-    query<R extends DataRequest>(input: {
-        readonly request: R;
-        readonly signal?: AbortSignal;
-    }): Promise<DataPage<DataFor<R>>>;
+    capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+    query<R extends DataRequest>(request: R, options?: DataCallOptions): Promise<DataViewFor<R>>;
 }
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- capabilities: (input: { signal?: AbortSignal; }) => Promise<DataCapabilities>; default: not declared
-- capabilities(input): { signal?: AbortSignal; }; default: not declared
-- capabilities(input).signal?: AbortSignal; default: not declared
+- capabilities: (options?: DataCallOptions) => Promise<DataCapabilities>; default: not declared
+- capabilities(options)?: DataCallOptions | undefined; default: not declared
+- capabilities(options).signal?: AbortSignal; default: not declared
 - contractVersion: 1; default: not declared
 - id: string; default: not declared
-- query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>; default: not declared
-- query(input): { readonly request: R; readonly signal?: AbortSignal; }; default: not declared
-- query(input).request: R; default: not declared
-- query(input).signal?: AbortSignal; default: not declared
+- query: <R extends DataRequest>(request: R, options?: DataCallOptions) => Promise<DataViewFor<R>>; default: not declared
+- query(options)?: DataCallOptions | undefined; default: not declared
+- query(options).signal?: AbortSignal; default: not declared
+- query(request): R; default: not declared
+- version: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataProviderSource
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Raw normalized protocol authored by an independent provider package.
+
+```typescript
+/** Raw normalized protocol authored by an independent provider package. */
+export interface DataProviderSource {
+    readonly id: string;
+    readonly version: string;
+    readonly contractVersion: 1;
+    capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
+    query<R extends DataRequest>(request: R, options?: DataCallOptions): Promise<DataPage<DataFor<R>>>;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- capabilities: (options?: DataCallOptions) => Promise<DataCapabilities>; default: not declared
+- capabilities(options)?: DataCallOptions | undefined; default: not declared
+- capabilities(options).signal?: AbortSignal; default: not declared
+- contractVersion: 1; default: not declared
+- id: string; default: not declared
+- query: <R extends DataRequest>(request: R, options?: DataCallOptions) => Promise<DataPage<DataFor<R>>>; default: not declared
+- query(options)?: DataCallOptions | undefined; default: not declared
+- query(options).signal?: AbortSignal; default: not declared
+- query(request): R; default: not declared
 - version: string; default: not declared
 
 ### @insiderfinance/totalfinance/core/data#DataRequest
@@ -116047,6 +116092,125 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - symbol: string; default: not declared
 - to: string; default: not declared
 
+### @insiderfinance/totalfinance/core/data#DataView
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataView = PriceBarsView | OptionChainResearchView;
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- closePrices: readonly number[]; default: not declared
+- kind: ('option-chain-research') | ('price-bars'); default: not declared
+- ohlcvBars: readonly OhlcvInput[]; default: not declared
+- page: (DataPage<OptionChainResearchRecord>) | (DataPage<PriceBarRecord>); default: not declared
+- page.assumptions: Assumptions; default: not declared
+- page.assumptions.asOf?: number; default: not declared
+- page.assumptions.calendar?: string; default: not declared
+- page.assumptions.calendarVersion?: string; default: not declared
+- page.assumptions.compounding?: import('@insiderfinance/totalfinance/core').InterestCompounding; default: not declared
+- page.assumptions.compounding.periodsPerYear: number; default: not declared
+- page.assumptions.compounding.type: 'periodic'; default: not declared
+- page.assumptions.conventionsVersion: string; default: not declared
+- page.assumptions.dayCount?: import('@insiderfinance/totalfinance/core').DayCount; default: not declared
+- page.assumptions.dividendModel?: import('@insiderfinance/totalfinance/core').DividendModel; default: not declared
+- page.assumptions.engine?: string; default: not declared
+- page.assumptions.expiryConvention?: 'us-equity-close' | 'explicit-instant'; default: not declared — How the contract's expiry label was resolved to an instant: `'us-equity-close'` when a
+date-only `YYYY-MM-DD` expiry resolved to the US equity/options close — 16:00 America/New_York,
+or 13:00 on an early-close day;
+`'explicit-instant'` when the caller supplied a zoned datetime. Named so the convention is
+never silent (alignment spec P1.6); instrument builders own the full story in Phase 3.
+- page.assumptions.model?: string; default: not declared
+- page.assumptions.seed?: number; default: not declared — The randomness seed this result was computed under — REQUIRED echo for a
+`randomness: 'seeded'` Pricer (Gate C, 2026-08-23): a stochastic result that does not name
+its seed cannot be replayed from the result alone. Deterministic paths never set it.
+- page.assumptions.timeToExpiryConvention?: never; default: not declared
+- page.assumptions.timeToExpiryYears?: number; default: not declared
+- page.assumptions.units?: import('@insiderfinance/totalfinance/core').GreekUnits; default: not declared
+- page.assumptions.units.rho: import('@insiderfinance/totalfinance/core').RhoUnit; default: not declared
+- page.assumptions.units.theta: import('@insiderfinance/totalfinance/core').ThetaUnit; default: not declared
+- page.assumptions.units.vega: import('@insiderfinance/totalfinance/core').VegaUnit; default: not declared
+- page.contractVersion: 1; default: not declared
+- page.data: (readonly OptionChainResearchRecord[]) | (readonly PriceBarRecord[]); default: not declared
+- page.diagnostics: Diagnostics; default: not declared
+- page.diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- page.diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- page.diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- page.diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- page.diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- page.diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- page.diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- page.diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- page.diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- page.diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- page.diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- page.diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- page.diagnostics.selection.selected.name: string; default: not declared
+- page.diagnostics.selection.selected.version?: string; default: not declared
+- page.diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- page.diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- page.diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- page.kind: DataKind; default: not declared
+- page.metadata: DataPageMetadata; default: not declared
+- page.metadata.access: 'unknown' | 'granted' | 'denied'; default: not declared
+- page.metadata.adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
+- page.metadata.consistency: 'snapshot' | 'best-effort'; default: not declared
+- page.metadata.coverage: { readonly end: string | null; readonly start: string | null; readonly status: 'continuous' | 'observed-only' | 'unknown'; }; default: not declared
+- page.metadata.coverage.end: string | null; default: not declared
+- page.metadata.coverage.start: string | null; default: not declared
+- page.metadata.coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
+- page.metadata.datasetId: string; default: not declared
+- page.metadata.datasetVersion: string; default: not declared
+- page.metadata.executionEligibility: 'research-only'; default: not declared
+- page.metadata.freshness: { readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; }; default: not declared
+- page.metadata.freshness.configuredDelayMs: number | null; default: not declared
+- page.metadata.freshness.evaluatedTimestampMs: number | null; default: not declared
+- page.metadata.freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
+- page.metadata.quality: { readonly issues: readonly { source: string; code: string; message: string; }[]; readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; }; default: not declared
+- page.metadata.quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
+- page.metadata.quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
+- page.metadata.receivedTimestampMs: number; default: not declared
+- page.metadata.sessionDate: string | null; default: not declared
+- page.metadata.snapshotId: string | null; default: not declared
+- page.metadata.sourceGeneratedTimestampMs: number | null; default: not declared
+- page.metadata.times: ObservationTimes; default: not declared
+- page.metadata.times.availableTimestampMs: number | null; default: not declared
+- page.metadata.times.observedTimestampMs: number | null; default: not declared
+- page.metadata.times.sourceStoredTimestampMs: number | null; default: not declared
+- page.nextCursor: string | null; default: not declared
+- page.provenance: Provenance; default: not declared
+- page.provenance.asOf?: number; default: not declared
+- page.provenance.dataset?: string; default: not declared
+- page.provenance.provider?: string; default: not declared
+- page.provenance.receivedAt?: number; default: not declared
+- page.provenance.requestId?: string; default: not declared
+- page.provenance.sourceVersion?: string; default: not declared
+- page.provenance.warnings?: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared
+- page.symbol: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataViewFor
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataViewFor<R extends DataRequest> = R['kind'] extends 'price-bars' ? PriceBarsView : R['kind'] extends 'option-chain-research' ? OptionChainResearchView : DataView;
+```
+
 ### @insiderfinance/totalfinance/core/data#ObservationTimes
 
 Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
@@ -116064,6 +116228,31 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - availableTimestampMs: number | null; default: not declared
 - observedTimestampMs: number | null; default: not declared
 - sourceStoredTimestampMs: number | null; default: not declared
+
+### @insiderfinance/totalfinance/core/data#OhlcvInput
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Complete actual OHLCV inputs: unknown volume is never supplied as zero.
+
+```typescript
+/** Complete actual OHLCV inputs: unknown volume is never supplied as zero. */
+export interface OhlcvInput {
+    readonly open: number;
+    readonly high: number;
+    readonly low: number;
+    readonly close: number;
+    readonly volume: number;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- close: number; default: not declared
+- high: number; default: not declared
+- low: number; default: not declared
+- open: number; default: not declared
+- volume: number; default: not declared
 
 ### @insiderfinance/totalfinance/core/data#OptionChainResearchRecord
 
@@ -116197,6 +116386,121 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - snapshot.snapshotId: string; default: not declared
 - symbol: string; default: not declared
 
+### @insiderfinance/totalfinance/core/data#OptionChainResearchView
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Incomplete research terms remain raw research records, never automatic pricing inputs.
+
+```typescript
+/** Incomplete research terms remain raw research records, never automatic pricing inputs. */
+export interface OptionChainResearchView {
+    readonly kind: 'option-chain-research';
+    readonly page: DataPage<OptionChainResearchRecord>;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- kind: 'option-chain-research'; default: not declared
+- page: DataPage<OptionChainResearchRecord>; default: not declared
+- page.assumptions: Assumptions; default: not declared
+- page.assumptions.asOf?: number; default: not declared
+- page.assumptions.calendar?: string; default: not declared
+- page.assumptions.calendarVersion?: string; default: not declared
+- page.assumptions.compounding?: import('@insiderfinance/totalfinance/core').InterestCompounding; default: not declared
+- page.assumptions.compounding.periodsPerYear: number; default: not declared
+- page.assumptions.compounding.type: 'periodic'; default: not declared
+- page.assumptions.conventionsVersion: string; default: not declared
+- page.assumptions.dayCount?: import('@insiderfinance/totalfinance/core').DayCount; default: not declared
+- page.assumptions.dividendModel?: import('@insiderfinance/totalfinance/core').DividendModel; default: not declared
+- page.assumptions.engine?: string; default: not declared
+- page.assumptions.expiryConvention?: 'us-equity-close' | 'explicit-instant'; default: not declared — How the contract's expiry label was resolved to an instant: `'us-equity-close'` when a
+date-only `YYYY-MM-DD` expiry resolved to the US equity/options close — 16:00 America/New_York,
+or 13:00 on an early-close day;
+`'explicit-instant'` when the caller supplied a zoned datetime. Named so the convention is
+never silent (alignment spec P1.6); instrument builders own the full story in Phase 3.
+- page.assumptions.model?: string; default: not declared
+- page.assumptions.seed?: number; default: not declared — The randomness seed this result was computed under — REQUIRED echo for a
+`randomness: 'seeded'` Pricer (Gate C, 2026-08-23): a stochastic result that does not name
+its seed cannot be replayed from the result alone. Deterministic paths never set it.
+- page.assumptions.timeToExpiryConvention?: never; default: not declared
+- page.assumptions.timeToExpiryYears?: number; default: not declared
+- page.assumptions.units?: import('@insiderfinance/totalfinance/core').GreekUnits; default: not declared
+- page.assumptions.units.rho: import('@insiderfinance/totalfinance/core').RhoUnit; default: not declared
+- page.assumptions.units.theta: import('@insiderfinance/totalfinance/core').ThetaUnit; default: not declared
+- page.assumptions.units.vega: import('@insiderfinance/totalfinance/core').VegaUnit; default: not declared
+- page.contractVersion: 1; default: not declared
+- page.data: readonly OptionChainResearchRecord[]; default: not declared
+- page.diagnostics: Diagnostics; default: not declared
+- page.diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- page.diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- page.diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- page.diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- page.diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- page.diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- page.diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- page.diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- page.diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- page.diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- page.diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- page.diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- page.diagnostics.selection.selected.name: string; default: not declared
+- page.diagnostics.selection.selected.version?: string; default: not declared
+- page.diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- page.diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- page.diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- page.kind: DataKind; default: not declared
+- page.metadata: DataPageMetadata; default: not declared
+- page.metadata.access: 'unknown' | 'granted' | 'denied'; default: not declared
+- page.metadata.adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
+- page.metadata.consistency: 'snapshot' | 'best-effort'; default: not declared
+- page.metadata.coverage: { readonly end: string | null; readonly start: string | null; readonly status: 'continuous' | 'observed-only' | 'unknown'; }; default: not declared
+- page.metadata.coverage.end: string | null; default: not declared
+- page.metadata.coverage.start: string | null; default: not declared
+- page.metadata.coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
+- page.metadata.datasetId: string; default: not declared
+- page.metadata.datasetVersion: string; default: not declared
+- page.metadata.executionEligibility: 'research-only'; default: not declared
+- page.metadata.freshness: { readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; }; default: not declared
+- page.metadata.freshness.configuredDelayMs: number | null; default: not declared
+- page.metadata.freshness.evaluatedTimestampMs: number | null; default: not declared
+- page.metadata.freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
+- page.metadata.quality: { readonly issues: readonly { source: string; code: string; message: string; }[]; readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; }; default: not declared
+- page.metadata.quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
+- page.metadata.quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
+- page.metadata.receivedTimestampMs: number; default: not declared
+- page.metadata.sessionDate: string | null; default: not declared
+- page.metadata.snapshotId: string | null; default: not declared
+- page.metadata.sourceGeneratedTimestampMs: number | null; default: not declared
+- page.metadata.times: ObservationTimes; default: not declared
+- page.metadata.times.availableTimestampMs: number | null; default: not declared
+- page.metadata.times.observedTimestampMs: number | null; default: not declared
+- page.metadata.times.sourceStoredTimestampMs: number | null; default: not declared
+- page.nextCursor: string | null; default: not declared
+- page.provenance: Provenance; default: not declared
+- page.provenance.asOf?: number; default: not declared
+- page.provenance.dataset?: string; default: not declared
+- page.provenance.provider?: string; default: not declared
+- page.provenance.receivedAt?: number; default: not declared
+- page.provenance.requestId?: string; default: not declared
+- page.provenance.sourceVersion?: string; default: not declared
+- page.provenance.warnings?: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared
+- page.symbol: string; default: not declared
+
 ### @insiderfinance/totalfinance/core/data#OptionResearchTerms
 
 Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
@@ -116327,29 +116631,174 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - symbol: string; default: not declared
 - to: string; default: not declared
 
+### @insiderfinance/totalfinance/core/data#PriceBarsView
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+One validated page sample, with lazily selected native arrays and retained source context.
+
+```typescript
+/** One validated page sample, with lazily selected native arrays and retained source context. */
+export interface PriceBarsView {
+    readonly kind: 'price-bars';
+    readonly page: DataPage<PriceBarRecord>;
+    readonly closePrices: readonly number[];
+    readonly ohlcvBars: readonly OhlcvInput[];
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- closePrices: readonly number[]; default: not declared
+- kind: 'price-bars'; default: not declared
+- ohlcvBars: readonly OhlcvInput[]; default: not declared
+- page: DataPage<PriceBarRecord>; default: not declared
+- page.assumptions: Assumptions; default: not declared
+- page.assumptions.asOf?: number; default: not declared
+- page.assumptions.calendar?: string; default: not declared
+- page.assumptions.calendarVersion?: string; default: not declared
+- page.assumptions.compounding?: import('@insiderfinance/totalfinance/core').InterestCompounding; default: not declared
+- page.assumptions.compounding.periodsPerYear: number; default: not declared
+- page.assumptions.compounding.type: 'periodic'; default: not declared
+- page.assumptions.conventionsVersion: string; default: not declared
+- page.assumptions.dayCount?: import('@insiderfinance/totalfinance/core').DayCount; default: not declared
+- page.assumptions.dividendModel?: import('@insiderfinance/totalfinance/core').DividendModel; default: not declared
+- page.assumptions.engine?: string; default: not declared
+- page.assumptions.expiryConvention?: 'us-equity-close' | 'explicit-instant'; default: not declared — How the contract's expiry label was resolved to an instant: `'us-equity-close'` when a
+date-only `YYYY-MM-DD` expiry resolved to the US equity/options close — 16:00 America/New_York,
+or 13:00 on an early-close day;
+`'explicit-instant'` when the caller supplied a zoned datetime. Named so the convention is
+never silent (alignment spec P1.6); instrument builders own the full story in Phase 3.
+- page.assumptions.model?: string; default: not declared
+- page.assumptions.seed?: number; default: not declared — The randomness seed this result was computed under — REQUIRED echo for a
+`randomness: 'seeded'` Pricer (Gate C, 2026-08-23): a stochastic result that does not name
+its seed cannot be replayed from the result alone. Deterministic paths never set it.
+- page.assumptions.timeToExpiryConvention?: never; default: not declared
+- page.assumptions.timeToExpiryYears?: number; default: not declared
+- page.assumptions.units?: import('@insiderfinance/totalfinance/core').GreekUnits; default: not declared
+- page.assumptions.units.rho: import('@insiderfinance/totalfinance/core').RhoUnit; default: not declared
+- page.assumptions.units.theta: import('@insiderfinance/totalfinance/core').ThetaUnit; default: not declared
+- page.assumptions.units.vega: import('@insiderfinance/totalfinance/core').VegaUnit; default: not declared
+- page.contractVersion: 1; default: not declared
+- page.data: readonly PriceBarRecord[]; default: not declared
+- page.diagnostics: Diagnostics; default: not declared
+- page.diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- page.diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- page.diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- page.diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- page.diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- page.diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- page.diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- page.diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- page.diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- page.diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- page.diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- page.diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- page.diagnostics.selection.selected.name: string; default: not declared
+- page.diagnostics.selection.selected.version?: string; default: not declared
+- page.diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- page.diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- page.diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- page.kind: DataKind; default: not declared
+- page.metadata: DataPageMetadata; default: not declared
+- page.metadata.access: 'unknown' | 'granted' | 'denied'; default: not declared
+- page.metadata.adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
+- page.metadata.consistency: 'snapshot' | 'best-effort'; default: not declared
+- page.metadata.coverage: { readonly status: 'continuous' | 'observed-only' | 'unknown'; readonly start: string | null; readonly end: string | null; }; default: not declared
+- page.metadata.coverage.end: string | null; default: not declared
+- page.metadata.coverage.start: string | null; default: not declared
+- page.metadata.coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
+- page.metadata.datasetId: string; default: not declared
+- page.metadata.datasetVersion: string; default: not declared
+- page.metadata.executionEligibility: 'research-only'; default: not declared
+- page.metadata.freshness: { readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; }; default: not declared
+- page.metadata.freshness.configuredDelayMs: number | null; default: not declared
+- page.metadata.freshness.evaluatedTimestampMs: number | null; default: not declared
+- page.metadata.freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
+- page.metadata.quality: { readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; readonly issues: readonly { source: string; code: string; message: string; }[]; }; default: not declared
+- page.metadata.quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
+- page.metadata.quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
+- page.metadata.receivedTimestampMs: number; default: not declared
+- page.metadata.sessionDate: string | null; default: not declared
+- page.metadata.snapshotId: string | null; default: not declared
+- page.metadata.sourceGeneratedTimestampMs: number | null; default: not declared
+- page.metadata.times: ObservationTimes; default: not declared
+- page.metadata.times.availableTimestampMs: number | null; default: not declared
+- page.metadata.times.observedTimestampMs: number | null; default: not declared
+- page.metadata.times.sourceStoredTimestampMs: number | null; default: not declared
+- page.nextCursor: string | null; default: not declared
+- page.provenance: Provenance; default: not declared
+- page.provenance.asOf?: number; default: not declared
+- page.provenance.dataset?: string; default: not declared
+- page.provenance.provider?: string; default: not declared
+- page.provenance.receivedAt?: number; default: not declared
+- page.provenance.requestId?: string; default: not declared
+- page.provenance.sourceVersion?: string; default: not declared
+- page.provenance.warnings?: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared
+- page.symbol: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#createDataView
+
+Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Restore a validated data view from a raw research page. Persist/hash the page, not its accessors.
+
+```typescript
+export declare function createDataView(page: unknown): DataView;
+```
+
+Example (source JSDoc):
+const restored = createDataView(JSON.parse(savedPageJson));
+if (restored.kind === 'price-bars') sma(restored.closePrices, { period: 20 });
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- (page): unknown; default: not declared
+- return.closePrices: readonly number[]; default: not declared
+- return.kind: ('option-chain-research') | ('price-bars'); default: not declared
+- return.ohlcvBars: readonly OhlcvInput[]; default: not declared
+- return.page: (DataPage<OptionChainResearchRecord>) | (DataPage<PriceBarRecord>); default: not declared
+
 ### @insiderfinance/totalfinance/core/data#defineDataProvider
 
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
-Validate and bind a provider without calling it. Every call validates requests and observations.
-Valid output is copied/frozen; malformed provider output is refused rather than normalized.
+Validate and bind a raw source without calling it. Query returns an immutable common SDK view.
 
 ```typescript
-export declare function defineDataProvider(input: { readonly provider: DataProvider; }): DataProvider;
+export declare function defineDataProvider(source: DataProviderSource): DataProvider;
 ```
 
 Example (source JSDoc):
-const provider = defineDataProvider({ provider: myProvider });
-const supported = await provider.capabilities({});
+const provider = defineDataProvider(mySource);
+const prices = await provider.query({ kind: 'price-bars', symbol: 'SPY', interval: '1d', from: '2026-10-26', to: '2026-10-28', limit: 100 });
+const average = sma(prices.closePrices, { period: 2 });
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- (input): { readonly provider: DataProvider; }; default: not declared
-- (input).provider: DataProvider; default: not declared
-- return.capabilities: (input: { signal?: AbortSignal; }) => Promise<DataCapabilities>; default: not declared
+- (source): DataProviderSource; default: not declared
+- (source).capabilities: (options?: DataCallOptions) => Promise<DataCapabilities>; default: not declared
+- (source).contractVersion: 1; default: not declared
+- (source).id: string; default: not declared
+- (source).query: <R extends DataRequest>(request: R, options?: DataCallOptions) => Promise<import('@insiderfinance/totalfinance/core/data').DataPage<import('@insiderfinance/totalfinance/core/data').DataFor<R>>>; default: not declared
+- (source).version: string; default: not declared
+- return.capabilities: (options?: DataCallOptions) => Promise<DataCapabilities>; default: not declared
 - return.contractVersion: 1; default: not declared
 - return.id: string; default: not declared
-- return.query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>; default: not declared
+- return.query: <R extends DataRequest>(request: R, options?: DataCallOptions) => Promise<DataViewFor<R>>; default: not declared
 - return.version: string; default: not declared
 
 ## Entrypoint @insiderfinance/totalfinance/core/data-conformance
@@ -116511,15 +116960,15 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - maxRecords: number; default: not declared
 - probes: readonly DataProviderProbe[]; default: not declared
 - provider: DataProvider; default: not declared
-- provider.capabilities: (input: { signal?: AbortSignal; }) => Promise<import('@insiderfinance/totalfinance/core/data').DataCapabilities>; default: not declared
-- provider.capabilities(input): { signal?: AbortSignal; }; default: not declared
-- provider.capabilities(input).signal?: AbortSignal; default: not declared
+- provider.capabilities: (options?: import('@insiderfinance/totalfinance/core/data').DataCallOptions) => Promise<import('@insiderfinance/totalfinance/core/data').DataCapabilities>; default: not declared
+- provider.capabilities(options)?: import('@insiderfinance/totalfinance/core/data').DataCallOptions | undefined; default: not declared
+- provider.capabilities(options).signal?: AbortSignal; default: not declared
 - provider.contractVersion: 1; default: not declared
 - provider.id: string; default: not declared
-- provider.query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<import('@insiderfinance/totalfinance/core/data').DataFor<R>>>; default: not declared
-- provider.query(input): { readonly request: R; readonly signal?: AbortSignal; }; default: not declared
-- provider.query(input).request: R; default: not declared
-- provider.query(input).signal?: AbortSignal; default: not declared
+- provider.query: <R extends DataRequest>(request: R, options?: import('@insiderfinance/totalfinance/core/data').DataCallOptions) => Promise<import('@insiderfinance/totalfinance/core/data').DataViewFor<R>>; default: not declared
+- provider.query(options)?: import('@insiderfinance/totalfinance/core/data').DataCallOptions | undefined; default: not declared
+- provider.query(options).signal?: AbortSignal; default: not declared
+- provider.query(request): R; default: not declared
 - provider.version: string; default: not declared
 - timeoutMs: number; default: not declared
 

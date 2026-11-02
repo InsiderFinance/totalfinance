@@ -2851,9 +2851,9 @@
     },
     "mutationsExecuted": {
       "unknown-key": 2778,
-      "null-when-nonnullable": 26404,
-      "omit-required": 13462,
-      "wrong-type": 17119,
+      "null-when-nonnullable": 26403,
+      "omit-required": 13461,
+      "wrong-type": 17118,
       "non-finite": 9488,
       "optional-wrong-type": 8043,
       "invalid-literal": 1960,
@@ -2864,9 +2864,9 @@
     },
     "mutationsCovered": {
       "unknown-key": 6608,
-      "null-when-nonnullable": 66366,
-      "omit-required": 34329,
-      "wrong-type": 43764,
+      "null-when-nonnullable": 66365,
+      "omit-required": 34328,
+      "wrong-type": 43763,
       "non-finite": 24731,
       "optional-wrong-type": 19196,
       "invalid-literal": 5024,
@@ -15271,19 +15271,22 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 6,
-        "omit-required": 6,
-        "wrong-type": 4,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
         "invalid-literal": 1,
+        "wrong-type": 3,
         "non-finite": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 6,
-        "omit-required": 6,
-        "wrong-type": 4,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
         "invalid-literal": 1,
+        "wrong-type": 3,
         "non-finite": 1
+      },
+      "inputPolicies": {
+        "0": "open"
       },
       "fixtureSource": "@totalfinance/core:defineDataProvider"
     },
