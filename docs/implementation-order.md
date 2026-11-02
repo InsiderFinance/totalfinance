@@ -26,16 +26,18 @@ bars and option-chain research. Broad provider inventories remain possible commu
       independent review and artifact receipts are in the implementation record.
 - [x] C1 exact-head hosted fast/full checks and technical implementation review at `b5c3c83`; no merge authority.
 - [x] C2 technical spec review approved at `e1e5a910`, with direct defineDataProvider(source).
-- [ ] C2 SDK-first implementation and fresh installed/public/generated/bundle/hosted proofs; see
+- [x] C2 SDK-first implementation and fresh installed/public/generated/bundle proofs; see
       the [approved consumer-view spec](./specs/community-connector-c2-integration.md). Earlier
       rejection remains in the review history; no 10/10 or connected acceptance is inferred.
+- [ ] C2 combined-head technical acceptance and fresh fast/full hosted results on draft PR26.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
 The feature is in progress; C0 is approved and offline C1 source review plus exact-head fast/full
-hosted checks passed. C2 bounded offline implementation is approved and active on separate SDK/provider branches;
-final implementation evidence and connected-agent acceptance remain open. C1 receipt links and review history remain in the Ri task
-and C1 record; this addendum does not alter reviewed PR26. The prior staging allowance is
+hosted checks passed. C2 bounded offline implementation is locally verified on separate SDK/provider branches;
+[exact implementation and package evidence](./reviews/community-connectors-c2-2026-11-02.md) is retained.
+Fresh combined-head hosted checks, consumer acceptance and connected-agent acceptance remain open. C1 receipt links and review history remain in the Ri task
+and C1 record; the approved C2 branch will fast-forward the existing draft PR26; its prior C1 checks do not certify the new head. The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment
 and live execution remain outside scope. The full post-PR-25 main run

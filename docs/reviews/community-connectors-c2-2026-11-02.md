@@ -43,8 +43,8 @@ shared checkouts and linked application source remain untouched.
 Node **22.23.2**, pnpm **10.32.0**. Frozen installs, build, TypeScript, scoped ESLint/Prettier and
 all 25 API reports pass. No dependency graph or release version changes in the SDK.
 
-- **530 distinct SDK assertions across 19 files**, counting the corrected naming tracker rerun
-  once: 303 focused/source/generated/docs/bundle assertions and 227 packed SDK/fixture assertions.
+- **530 distinct SDK tests across 19 files**, counting the corrected naming tracker rerun
+  once: 303 focused/source/generated/docs/bundle tests and 227 packed SDK/fixture tests.
 - **83/83 provider tests locally and all 83 again through a fresh installed package**, none skipped.
 - Exact two-import, API-key-only example runs with independently supplied synthetic HTTP facts;
   closes `[100,101,102]` give last period-2 SMA **101.5**, with original partial quality/null source
@@ -88,8 +88,9 @@ pnpm exec tsx tools/community-connectors-provider-smoke.ts /Users/agent/ri/.work
 | Provider `.sdk/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz` | `442ae93eeee5f48284918f83c4f16ac9b9ca5cb99ebeceaec650da1074ba5b9e` |
 
 Paths are in the isolated provider C2 worktree above. SDK pack was assembled by `pnpm build` and
-packed from `distribution/totalfinance`, then copied into that ignored `.sdk` directory. The SDK
-source commit and provider source/receipt commits are attached to PR26 and the Ri handoff. Package
+packed from `distribution/totalfinance`, then copied into that ignored `.sdk` directory. SDK source commit: `73dc804a139bb95eb98a0650c91fa436701b62aa`. Provider source/receipt commit:
+`47c2883aeac51a355d8f8097d30a7068379766c3`. The final SDK documentation receipt is attached to PR26
+and the Ri handoff. Package
 versions remain SDK 0.1.2/provider 0.0.0; **registry SDK 0.1.2 lacks these unreleased subpaths**.
 The artifact hashes, not matching version labels, identify this tested compatibility.
 
@@ -101,7 +102,8 @@ migration initially left the old nested-provider policy attached to a removed en
 existing open structural-source policy to argument zero restored truthful classification; vendor
 state remains allowed and consumed identity/methods remain validated. Requests/options remain
 closed. Final enforcement has **0 defects**, 2,574 enforced, 2,702 partial and the unchanged
-187 unmeasured ceiling. Naming walks 43,656 identities with zero unresolved.
+187 unmeasured ceiling. Naming walks 43,656 identities with zero unresolved; documentation inventory has 245 surfaces and
+zero findings.
 
 Generation exposed stale human tracker totals and the new raw-page first-touch fixture count;
 these were synchronized to measured artifacts (1,336 fixtures), with their gates retained. The
