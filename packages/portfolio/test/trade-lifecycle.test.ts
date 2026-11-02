@@ -675,6 +675,99 @@ describe('reconcileExecution', () => {
   };
   const tolerance = { quantity: 1e-9, cashAmount: 0.01 };
 
+  it('scopes both joins to one plan while retaining source-wide orphan detection (LIB-03)', () => {
+    const { ledgerAfter, journal, fills, sell } = executed();
+    const twoPlans = journal.map((event) =>
+      event.orderId === sell.orderId ? { ...event, planHash: 'plan:B' } : event,
+    );
+    const input = {
+      journal: twoPlans,
+      ledger: ledgerAfter,
+      sourceId: 'paper:main',
+      fills,
+      asOf: NOW,
+      tolerance,
+    };
+    expect(reconcileExecution(input).reconciled).toBe(true);
+    for (const delivered of [fills, fills.slice(1)]) {
+      const report = reconcileExecution({ ...input, fills: delivered, planHash: 'plan:B' });
+      expect(report.reconciled).toBe(true);
+      expect(report.orders.map((order) => order.orderId)).toEqual([sell.orderId]);
+      expect(report.fills.map((match) => match.fillId)).toEqual(['f2']);
+      expect(report.ledgerNotJournaled).toEqual([]);
+      expect(report.diagnostics).toMatchObject({
+        orderCount: 1,
+        fillCount: 1,
+        ledgerFillCount: 1,
+        differenceCount: 0,
+      });
+      expect(report.diagnostics.warnings.join(' ')).toContain('other plans');
+      expect(
+        reconcileExecution({
+          ...input,
+          journal: applyJournalEvents({ events: twoPlans }).state,
+          fills: delivered,
+          planHash: 'plan:B',
+        }),
+      ).toEqual(report);
+    }
+    const orphanedLedger = applyPortfolioEvents({
+      previousState: ledgerAfter,
+      events: [paperFill('orphan', 'BBB', 'buy', 1, 50, 'missing-order')],
+    });
+    const sourceReport = reconcileExecution({ ...input, ledger: orphanedLedger });
+    expect(sourceReport.reconciled).toBe(false);
+    expect(sourceReport.ledgerNotJournaled).toEqual(['orphan']);
+    const scoped = reconcileExecution({
+      ...input,
+      ledger: orphanedLedger,
+      fills: fills.slice(1),
+      planHash: 'plan:B',
+    });
+    expect(scoped.reconciled).toBe(false);
+    expect(scoped.ledgerNotJournaled).toEqual(['orphan']);
+    const missing = reconcileExecution({
+      ...input,
+      ledger: setup().state,
+      fills: fills.slice(1),
+      planHash: 'plan:B',
+    });
+    expect(missing.journaledNotInLedger).toEqual(['f2']);
+    expect(missing.reconciled).toBe(false);
+    const short = reconcileExecution({
+      ...input,
+      planHash: 'plan:B',
+      fills: [{ ...fills[1]!, quantity: 19 }],
+    });
+    expect(short.reconciled).toBe(false);
+    expect(short.orderChecks[0]).toMatchObject({ difference: -1, withinTolerance: false });
+    const external = {
+      asOf: NOW,
+      accounts: {
+        main: {
+          cash: { USD: { total: 82_240 } },
+          positions: [
+            { instrumentId: 'AAA', quantity: 80, currency: 'USD' },
+            { instrumentId: 'BBB', quantity: 200, currency: 'USD' },
+          ],
+        },
+      },
+    };
+    const withExternal = reconcileExecution({ ...input, planHash: 'plan:B', external });
+    expect(withExternal.reconciled).toBe(true);
+    expect(withExternal.portfolio).toEqual(reconcileExecution({ ...input, external }).portfolio);
+    const externalDifference = reconcileExecution({
+      ...input,
+      planHash: 'plan:B',
+      external: {
+        ...external,
+        accounts: { main: { ...external.accounts.main, cash: { USD: { total: 0 } } } },
+      },
+    });
+    expect(externalDifference.reconciled).toBe(false);
+    expect(externalDifference.portfolio!.reconciled).toBe(false);
+  });
+
   it('reconciles a journal whose fills are the ledger fills, and composes reconcilePortfolio for an external snapshot', () => {
     const { s, ledgerAfter, journal, fills } = executed();
     const report = reconcileExecution({

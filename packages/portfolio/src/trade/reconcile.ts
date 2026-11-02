@@ -119,18 +119,21 @@ export function reconcileExecution(input: ReconcileExecutionInput): Reconciliati
   // The journal's orders — restricted to the plan when one is named.
   const allOrders = journalOrderStates(state);
   const orders: ExecutionOrderState[] = [];
+  const otherPlanFillIds = new Set<string>();
   let otherPlanCount = 0;
   for (const order of allOrders) {
-    if (planHash !== null && order.planHash !== planHash) otherPlanCount += 1;
-    else orders.push(order);
+    if (planHash !== null && order.planHash !== planHash) {
+      otherPlanCount += 1;
+      for (const fillId of order.fillIds) otherPlanFillIds.add(fillId);
+    } else orders.push(order);
   }
   if (otherPlanCount > 0) {
     warnings.push(
-      `${otherPlanCount} journaled order${otherPlanCount === 1 ? '' : 's'} belong to other plans and are not judged here`,
+      `${otherPlanCount} journaled order${otherPlanCount === 1 ? '' : 's'} belong to other plans and are not judged here; their fills are excluded from both joins`,
     );
   }
 
-  // The ledger's fills under this source.
+  // Exclude fills attributed to other plans; unattributed source fills remain discrepancies.
   const ledgerFillIds = new Set<string>();
   let foreignKeyCount = 0;
   for (const key of Object.keys(input.ledger.fillEffects)) {
@@ -139,7 +142,7 @@ export function reconcileExecution(input: ReconcileExecutionInput): Reconciliati
       foreignKeyCount += 1;
       continue;
     }
-    if (parts[0] === input.sourceId) ledgerFillIds.add(parts[1]);
+    if (parts[0] === input.sourceId && !otherPlanFillIds.has(parts[1])) ledgerFillIds.add(parts[1]);
   }
   if (foreignKeyCount > 0) {
     warnings.push(
@@ -168,6 +171,7 @@ export function reconcileExecution(input: ReconcileExecutionInput): Reconciliati
       refuse(FN, `input.fills[${index}].fillId`, `duplicates ${JSON.stringify(fill.fillId)}`);
     }
     seenFillIds.add(fill.fillId);
+    if (otherPlanFillIds.has(fill.fillId)) return;
     const journaledOrderId = fillOrder.get(fill.fillId) ?? null;
     const orderId = fill.orderId ?? journaledOrderId;
     if (
@@ -259,14 +263,14 @@ export function reconcileExecution(input: ReconcileExecutionInput): Reconciliati
       conventionsVersion: CONVENTIONS_VERSION,
       tolerance,
       matchConvention:
-        'a journaled fill id is the ledger trade.fill event id under the execution source (fillEffects key = canonical [sourceId, fillId]); fill quantities per order are compared to the journal within tolerance.quantity; an external snapshot is judged by reconcilePortfolio verbatim',
+        'a journaled fill id is the ledger trade.fill event id under the execution source (fillEffects key = canonical [sourceId, fillId]); with planHash, orders and fills attributed by the journal to other plans are excluded from both joins, while unattributed source fills remain discrepancies; fill quantities per order are compared to the journal within tolerance.quantity; an external snapshot is judged over the whole portfolio by reconcilePortfolio verbatim',
     },
     diagnostics: {
       engine: 'trade-reconciliation' as const,
       warnings,
       orderCount: orders.length,
       openCount,
-      fillCount: fills.length,
+      fillCount: fillMatches.length,
       ledgerFillCount: ledgerFillIds.size,
       unresolvedCount: unresolved.length,
       differenceCount,

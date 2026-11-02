@@ -5,6 +5,22 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Immediate dogfood correctness repairs (2026-11-02)
+
+The maintainer authorized LIB-01 → LIB-03 → LIB-02 from the
+[public agent feedback](./reviews/agent-dogfood-2026-10-28.md), preserving its original observations.
+This bounded batch precedes further connected-agent expansion; API-01 belongs to the separate
+InsiderFinance API task, and broader DX/data proposals remain follow-ups.
+
+- [x] LIB-01: use supplied classification for held instruments; ledger currency, multiplier and contract terms remain authoritative.
+- [x] LIB-03: align plan-scoped joins and diagnostics; preserve source-wide orphan detection.
+- [x] LIB-02: report newly folded events, including zero on replay, without changing economic deduplication or the public output shape.
+- [x] Verify targeted trade/workflow/transport, generated-contract, bundle and installed-consumer evidence; attach exact receipts in the repair record.
+
+Fetched `origin/main` is `b678363441c80a0c84be58791ec3df2bd03cf1c0`. All three defects reproduce there
+in permanent source tests and freshly packed public SDK tests. The [repair verification record](./reviews/dogfood-repair-2026-11-02.md) records local receipts.
+Current-head hosted checks, review and connected-agent retesting remain separate evidence; no active paper store mutation or release action is authorized.
+
 **Bounded follow-up locally complete (2026-10-12), implementation
 `50f87aca2570c0f6ec51f0f5883d31eaf41790a8`:** PL6 in
 [reference-price level conversion](./specs/reference-price-level-conversion.md) adds sixteen named

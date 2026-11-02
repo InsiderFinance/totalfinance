@@ -10949,7 +10949,7 @@ Output JSON Schema:
 
 Apply events to a ledger and store the new ledger
 
-Fold validated portfolio events (fills from trade.submit, deposits, corporate actions) onto a ledger through the ledger's own reducer and put the new ledger into the artifact store as a content-addressed portfolio handle. The write is the put: an unchanged ledger is the same handle, a replayed event is refused by the fold. Requires a writable artifact store and the portfolio:write capability. Opt-in (tradePack).
+Fold validated portfolio events (fills from trade.submit, deposits, corporate actions) onto a ledger through the ledger's own reducer and put the new ledger into the artifact store as a content-addressed portfolio handle. The write is the put: an unchanged ledger is the same handle; identical replays fold once and applied counts only new events. Changed event bodies are refused. Requires a writable artifact store and the portfolio:write capability. Opt-in (tradePack).
 
 Version: 1; pack: trade; profiles: `full`; defaultEnabled: false; SDKonly: false.
 
@@ -27144,7 +27144,7 @@ Output JSON Schema:
 
 Reconcile an execution journal to the ledger
 
-Join the journal's order states (from the journal store by `journalId`, or inline events) to the ledger's fills under the execution source in both directions, compare delivered fill quantities per order within an explicit tolerance, list the unresolved orders, and — with an external snapshot — compose reconcilePortfolio verbatim. reconciled is true only when everything agrees and no order is unresolved. No effect; requires trade:paper. Opt-in (tradePack).
+Join the journal's order states (from the journal store by `journalId`, or inline events) to the ledger's fills under the execution source in both directions, compare delivered fill quantities per order within an explicit tolerance, list the unresolved orders, and — with an external snapshot — compose reconcilePortfolio verbatim. With planHash, exclude other plans’ journaled orders and fills from both joins; unattributed source fills remain discrepancies. External snapshots are judged over the whole portfolio. reconciled is true only when everything agrees and no order is unresolved. No effect; requires trade:paper. Opt-in (tradePack).
 
 Version: 1; pack: trade; profiles: `full`; defaultEnabled: false; SDKonly: false.
 
@@ -52193,7 +52193,7 @@ separate authorized portfolio write.
 - reconcileExecution(input).journal.orders: Record<string, import('@insiderfinance/totalfinance/portfolio').ExecutionOrderState>; default: not declared
 - reconcileExecution(input).journal.preSubmission: Record<string, ('expired' | 'proposed' | 'preflighted' | 'authorized' | 'submitted' | 'acknowledged' | 'partially-filled' | 'filled' | 'rejected' | 'cancel-requested' | 'cancelled' | 'replaced' | 'reconciled' | 'unresolved')[]>; default: not declared — Orders journaled only before submission: the pre-submission event types seen.
 - reconcileExecution(input).ledger: import('@insiderfinance/totalfinance/portfolio').PortfolioState; default: not declared
-- reconcileExecution(input).planHash?: string; default: not declared — Restrict the judgment to one plan's orders.
+- reconcileExecution(input).planHash?: string; default: not declared — Exclude other plans' journaled orders and fills; unattributed source fills remain discrepancies.
 - reconcileExecution(input).sourceId: string; default: not declared — The `sourceId` the execution's fills were folded into the ledger under.
 - reconcileExecution(input).tolerance: import('@insiderfinance/totalfinance/portfolio').ReconciliationTolerance; default: not declared — Explicit — reconciliation never assumes a tolerance.
 - reconcilePortfolio: (input: import('@insiderfinance/totalfinance/portfolio').ReconcilePortfolioInput) => import('@insiderfinance/totalfinance/portfolio').ReconcilePortfolioResult; default: not declared — Compare a derived state with a normalized external snapshot at `asOf` — see the module comment.
@@ -174620,7 +174620,7 @@ export interface ReconcileExecutionInput {
     asOf: EpochMs | string;
     /** Explicit — reconciliation never assumes a tolerance. */
     tolerance: ReconciliationTolerance;
-    /** Restrict the judgment to one plan's orders. */
+    /** Exclude other plans' journaled orders and fills; unattributed source fills remain discrepancies. */
     planHash?: string;
 }
 ```
@@ -174653,7 +174653,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - ledger.portfolioId?: string; default: not declared
 - ledger.reversals: Record<string, string>; default: not declared — Registry key of every reversed fact → registry key of the admin event that reversed it.
 - ledger.schemaVersion: number; default: not declared
-- planHash?: string; default: not declared — Restrict the judgment to one plan's orders.
+- planHash?: string; default: not declared — Exclude other plans' journaled orders and fills; unattributed source fills remain discrepancies.
 - sourceId: string; default: not declared — The `sourceId` the execution's fills were folded into the ledger under.
 - tolerance: ReconciliationTolerance; default: not declared — Explicit — reconciliation never assumes a tolerance.
 - tolerance.cashAmount: number; default: not declared
@@ -176959,7 +176959,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).journal.orders: Record<string, ExecutionOrderState>; default: not declared
 - (input).journal.preSubmission: Record<string, ('expired' | 'proposed' | 'preflighted' | 'authorized' | 'submitted' | 'acknowledged' | 'partially-filled' | 'filled' | 'rejected' | 'cancel-requested' | 'cancelled' | 'replaced' | 'reconciled' | 'unresolved')[]>; default: not declared — Orders journaled only before submission: the pre-submission event types seen.
 - (input).ledger: import('@insiderfinance/totalfinance/portfolio').PortfolioState; default: not declared
-- (input).planHash?: string; default: not declared — Restrict the judgment to one plan's orders.
+- (input).planHash?: string; default: not declared — Exclude other plans' journaled orders and fills; unattributed source fills remain discrepancies.
 - (input).sourceId: string; default: not declared — The `sourceId` the execution's fills were folded into the ledger under.
 - (input).tolerance: ReconciliationTolerance; default: not declared — Explicit — reconciliation never assumes a tolerance.
 - return.asOf: number; default: not declared
@@ -178597,21 +178597,22 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 
 Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
-What preflight and the paper broker need to know about an instrument the ledger may not hold yet.
+Instrument description for preflight; held economic terms remain ledger-authoritative.
 
 ```typescript
-/** What preflight and the paper broker need to know about an instrument the ledger may not hold yet. */
+/** Instrument description for preflight; held economic terms remain ledger-authoritative. */
 export interface PreflightInstrument {
     currency: string;
     contractMultiplier?: number;
     contract?: DerivativeContractTerms;
+    /** Caller-supplied policy classification, also used when the ledger already holds the instrument. */
     assetClass?: string;
 }
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- assetClass?: string; default: not declared
+- assetClass?: string; default: not declared — Caller-supplied policy classification, also used when the ledger already holds the instrument.
 - contract?: DerivativeContractTerms; default: not declared
 - contract.expiryTimestampMs: number; default: not declared
 - contract.kind: ('future') | ('option') | ('perpetual'); default: not declared
@@ -179240,7 +179241,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (functionName): string; default: not declared
 - (label): string; default: not declared
 - (value): unknown; default: not declared
-- return.assetClass?: string; default: not declared
+- return.assetClass?: string; default: not declared — Caller-supplied policy classification, also used when the ledger already holds the instrument.
 - return.contract?: import('@insiderfinance/totalfinance/portfolio').DerivativeContractTerms; default: not declared
 - return.contractMultiplier?: number; default: not declared
 - return.currency: string; default: not declared
