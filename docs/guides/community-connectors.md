@@ -6,7 +6,7 @@ TotalFinance inclusion PR, central allowlist or listing is required. Ordinary ca
 accept caller data and load no provider, network client or credential.
 
 This addition is unreleased. The current registry SDK does not contain these subpaths; use the
-fresh local SDK/provider tarballs named in the [implementation evidence](../reviews/community-connectors-c1-2026-11-02.md)
+fresh local SDK/provider tarballs named in the [implementation evidence](../reviews/community-connectors-c2-2026-11-02.md)
 until an SDK release is separately authorized. An external provider's provisional peer version is
 not proof that an older registry artifact contains a new export.
 
