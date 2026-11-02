@@ -129,11 +129,12 @@ export interface ExecutionPlan {
   contentHash: string;
 }
 
-/** What preflight and the paper broker need to know about an instrument the ledger may not hold yet. */
+/** Instrument description for preflight; held economic terms remain ledger-authoritative. */
 export interface PreflightInstrument {
   currency: string;
   contractMultiplier?: number;
   contract?: DerivativeContractTerms;
+  /** Caller-supplied policy classification, also used when the ledger already holds the instrument. */
   assetClass?: string;
 }
 
@@ -577,7 +578,7 @@ export interface ReconcileExecutionInput {
   asOf: EpochMs | string;
   /** Explicit — reconciliation never assumes a tolerance. */
   tolerance: ReconciliationTolerance;
-  /** Restrict the judgment to one plan's orders. */
+  /** Exclude other plans' journaled orders and fills; unattributed source fills remain discrepancies. */
   planHash?: string;
 }
 

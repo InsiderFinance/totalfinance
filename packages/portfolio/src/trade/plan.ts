@@ -100,7 +100,7 @@ function requireDeclaredMultiplier(
   );
 }
 
-/** What preflight and the broker know about an instrument: the ledger's position first, then the caller's description, then the spot. */
+/** Economic terms come from the ledger first; classification comes from the caller's description. */
 export function resolveInstrument(
   functionName: string,
   portfolio: PortfolioState,
@@ -115,15 +115,18 @@ export function resolveInstrument(
   source: string;
 } | null {
   const held = portfolio.accounts[accountId]?.positions[instrumentId];
+  const described = instruments?.[instrumentId];
   if (held !== undefined) {
     return {
       currency: held.currency,
       contractMultiplier: held.contractMultiplier,
-      assetClass: null,
-      source: 'ledger position',
+      assetClass: described?.assetClass ?? null,
+      source:
+        described?.assetClass === undefined
+          ? 'ledger position'
+          : 'ledger position; asset class from instruments',
     };
   }
-  const described = instruments?.[instrumentId];
   if (described !== undefined) {
     if (described.contractMultiplier === undefined)
       requireDeclaredMultiplier(functionName, instrumentId, 'instruments');

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 236,
+    "surfaces": 238,
     "byClass": {
       "current-runnable": 92,
-      "future-target": 51,
+      "future-target": 53,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4600,
     "checkedUnderTruthfulness": 174,
-    "checkedUnderVocabulary": 51,
+    "checkedUnderVocabulary": 53,
     "shippedNamesWatched": 9730,
     "documentedExceptions": 7,
     "findings": 0
@@ -572,6 +572,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/agent-dogfood-2026-10-28.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/app-dogfooding-comparison.md",
       "class": "future-target",
       "owner": "human",
@@ -580,6 +587,13 @@
     },
     {
       "path": "docs/reviews/app-dogfooding-implementation.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/dogfood-repair-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

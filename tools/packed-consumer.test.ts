@@ -1899,6 +1899,18 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
     expect(cliStructured).toBe(sdkStructured);
   }, 120_000);
 
+  it.each(['classification', 'reconciliation', 'retries'])(
+    'dogfood repair: %s through the installed public SDK',
+    (finding) => {
+      const fixture = join(consumer, 'dogfood-trade-repairs.mjs');
+      writeFileSync(
+        fixture,
+        readFileSync(join(ROOT, 'tools/fixtures/dogfood-trade-repairs.mjs'), 'utf8'),
+      );
+      expect(sh('node', [fixture, finding], consumer)).toContain(`DOGFOOD_REPAIR_OK ${finding}`);
+    },
+  );
+
   it('Stage 7B.2: the trade lifecycle runs from the tarballs — preflight, authorize, submit, record, reconcile — through the registry and the CLI, and agrees', () => {
     const dir = join(consumer, 'trade');
     sh('mkdir', ['-p', dir], consumer);

@@ -782,6 +782,7 @@ const tradeReconcile = defineOperation({
     "Join the journal's order states (from the journal store by `journalId`, or inline events) to the ledger's fills " +
     'under the execution source in both directions, compare delivered fill quantities per order within an explicit ' +
     'tolerance, list the unresolved orders, and — with an external snapshot — compose reconcilePortfolio verbatim. ' +
+    'With planHash, exclude other plans’ journaled orders and fills from both joins; unattributed source fills remain discrepancies. External snapshots are judged over the whole portfolio. ' +
     'reconciled is true only when everything agrees and no order is unresolved. No effect; requires trade:paper. Opt-in (tradePack).',
   inputSchema: tradeInputSchema(ReconcileInputSchema, 'trade.reconcile.input'),
   outputSchema: tradeSchemaDocument(ReconcileOutputSchema.toJSONSchema(), 'trade.reconcile.output'),
@@ -858,7 +859,7 @@ const portfolioRecordEvents = defineOperation({
   description:
     "Fold validated portfolio events (fills from trade.submit, deposits, corporate actions) onto a ledger through the ledger's " +
     'own reducer and put the new ledger into the artifact store as a content-addressed portfolio handle. The write is ' +
-    'the put: an unchanged ledger is the same handle, a replayed event is refused by the fold. Requires a writable ' +
+    'the put: an unchanged ledger is the same handle; identical replays fold once and applied counts only new events. Changed event bodies are refused. Requires a writable ' +
     'artifact store and the portfolio:write capability. Opt-in (tradePack).',
   inputSchema: tradeInputSchema(RecordEventsInputSchema, 'portfolio.record_events.input'),
   outputSchema: tradeSchemaDocument(
@@ -897,6 +898,7 @@ const portfolioRecordEvents = defineOperation({
       );
     const previous = portfolioStateOf(input.portfolio);
     const state = applyPortfolioEvents({ previousState: previous, events: input.events });
+    const applied = state.eventCount - previous.eventCount;
     // The stored form is the ledger envelope: every applied event in order, re-hydratable by the read door.
     const priorEvents = 'kind' in input.portfolio ? input.portfolio.events : null;
     if (priorEvents === null)
@@ -918,10 +920,10 @@ const portfolioRecordEvents = defineOperation({
       createdTimestampMs: input.createdTimestampMs,
     });
     return {
-      summary: `${input.events.length} event${input.events.length === 1 ? '' : 's'} applied; ledger now ${state.eventCount} events → ${handle.uri}`,
+      summary: `${applied} event${applied === 1 ? '' : 's'} applied; ledger now ${state.eventCount} events → ${handle.uri}`,
       structured: {
         handle,
-        applied: input.events.length,
+        applied,
         eventCount: state.eventCount,
         baseCurrency: state.baseCurrency,
         lastEffectiveTimestampMs: state.lastEffectiveTimestampMs,

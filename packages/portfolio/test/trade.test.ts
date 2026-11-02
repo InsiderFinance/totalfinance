@@ -97,6 +97,117 @@ const failure = (fn: () => unknown): { code?: string; message: string } => {
   throw new Error('expected a refusal');
 };
 
+describe('held-instrument classification (LIB-01)', () => {
+  it.each([
+    ['etf', 'pass', 'allow'],
+    ['equity', 'fail', 'deny'],
+    [undefined, 'unverifiable', 'deny'],
+  ] as const)('judges a held exit with supplied class %s', (assetClass, verdict, decision) => {
+    const portfolio = ledger().state;
+    const instruments = {
+      AAA: {
+        currency: 'USD',
+        contractMultiplier: 1,
+        ...(assetClass === undefined ? {} : { assetClass }),
+      },
+    };
+    const plan = normalizeTradePlan({
+      intent: intent({
+        orders: [{ instrumentId: 'AAA', side: 'sell', quantity: 100, type: 'market' }],
+      }),
+      portfolio,
+      market: market(),
+      asOf: T0 + 2 * DAY,
+      instruments,
+    });
+    const report = preflightTradePlan({
+      plan,
+      portfolio,
+      market: market(),
+      asOf: T0 + 2 * DAY,
+      instruments,
+      policy: {
+        mode: 'paper',
+        allowedInstruments: ['AAA'],
+        allowedAssetClasses: ['etf'],
+        onUnverifiable: 'deny',
+      },
+    });
+    expect(
+      report.checks.find((check) => check.name === 'orders[0].allowed-asset-class'),
+    ).toMatchObject({ verdict, value: assetClass ?? null });
+    expect(report.decision.verdict).toBe(decision);
+  });
+
+  it('uses supplied classification without replacing held currency, multiplier or contract terms', () => {
+    const contract = {
+      kind: 'option' as const,
+      underlyingInstrumentId: 'AAA',
+      type: 'call' as const,
+      strikePricePerUnit: 100,
+      expiryTimestampMs: T0 + 30 * DAY,
+    };
+    const portfolio = createPortfolioLedger({
+      baseCurrency: 'USD',
+      events: [
+        events()[0]!,
+        envelope('option', T0 + DAY, {
+          eventType: 'trade.fill',
+          instrumentId: 'OPT',
+          side: 'buy',
+          quantity: 1,
+          pricePerUnit: 2,
+          currency: 'USD',
+          contractMultiplier: 100,
+          contract,
+        }),
+      ],
+    }).state;
+    const snapshot = createMarketSnapshot({
+      asOf: T0 + 2 * DAY,
+      observations: { spots: { OPT: { price: 3, currency: 'USD' } } },
+    });
+    const instruments = {
+      OPT: {
+        currency: 'EUR',
+        contractMultiplier: 10,
+        assetClass: 'option',
+        contract: { ...contract, strikePricePerUnit: 200 },
+      },
+    };
+    const plan = normalizeTradePlan({
+      intent: intent({
+        orders: [{ instrumentId: 'OPT', side: 'sell', quantity: 1, type: 'market' }],
+      }),
+      portfolio,
+      market: snapshot,
+      asOf: T0 + 2 * DAY,
+      instruments,
+    });
+    expect(plan.trades[0]).toMatchObject({
+      currency: 'USD',
+      contractMultiplier: 100,
+      estimatedNotional: 300,
+    });
+    const report = preflightTradePlan({
+      plan,
+      portfolio,
+      market: snapshot,
+      asOf: T0 + 2 * DAY,
+      instruments,
+      policy: { mode: 'paper', allowedAssetClasses: ['option'], onUnverifiable: 'deny' },
+    });
+    expect(report.decision.verdict).toBe('allow');
+    expect(report.hypotheticalEvents[0]!.event).toMatchObject({
+      currency: 'USD',
+      contractMultiplier: 100,
+      contract,
+    });
+    expect(report.assumptions.instrumentSources['OPT']).toContain('ledger position');
+    expect(report.assumptions.instrumentSources['OPT']).toContain('asset class from instruments');
+  });
+});
+
 describe('normalizeTradePlan', () => {
   it('normalizes an intent to the execution grammar, sizes a target weight at the mark, and hashes the body', () => {
     const state = ledger().state;

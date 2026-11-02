@@ -2409,7 +2409,7 @@
           }
         ],
         "summary": "Apply events to a ledger and store the new ledger",
-        "description": "Fold validated portfolio events (fills from trade.submit, deposits, corporate actions) onto a ledger through the ledger's own reducer and put the new ledger into the artifact store as a content-addressed portfolio handle. The write is the put: an unchanged ledger is the same handle, a replayed event is refused by the fold. Requires a writable artifact store and the portfolio:write capability. Opt-in (tradePack).",
+        "description": "Fold validated portfolio events (fills from trade.submit, deposits, corporate actions) onto a ledger through the ledger's own reducer and put the new ledger into the artifact store as a content-addressed portfolio handle. The write is the put: an unchanged ledger is the same handle; identical replays fold once and applied counts only new events. Changed event bodies are refused. Requires a writable artifact store and the portfolio:write capability. Opt-in (tradePack).",
         "requestBody": {
           "required": true,
           "content": {
@@ -4826,7 +4826,7 @@
           }
         ],
         "summary": "Reconcile an execution journal to the ledger",
-        "description": "Join the journal's order states (from the journal store by `journalId`, or inline events) to the ledger's fills under the execution source in both directions, compare delivered fill quantities per order within an explicit tolerance, list the unresolved orders, and — with an external snapshot — compose reconcilePortfolio verbatim. reconciled is true only when everything agrees and no order is unresolved. No effect; requires trade:paper. Opt-in (tradePack).",
+        "description": "Join the journal's order states (from the journal store by `journalId`, or inline events) to the ledger's fills under the execution source in both directions, compare delivered fill quantities per order within an explicit tolerance, list the unresolved orders, and — with an external snapshot — compose reconcilePortfolio verbatim. With planHash, exclude other plans’ journaled orders and fills from both joins; unattributed source fills remain discrepancies. External snapshots are judged over the whole portfolio. reconciled is true only when everything agrees and no order is unresolved. No effect; requires trade:paper. Opt-in (tradePack).",
         "requestBody": {
           "required": true,
           "content": {

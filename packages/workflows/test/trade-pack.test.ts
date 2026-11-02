@@ -222,6 +222,57 @@ describe('the trade pack in the registry', () => {
     ).toContain('bogus');
   });
 
+  it('reports newly folded events on retries and mixed batches (LIB-02)', () => {
+    const artifacts = createMemoryArtifactStore();
+    const original = ledger().toJSON();
+    const deposit = envelope('retry-deposit', NOW, {
+      eventType: 'cash.deposit',
+      currency: 'USD',
+      amount: 100,
+    });
+    const second = envelope('second-deposit', NOW, {
+      eventType: 'cash.deposit',
+      currency: 'USD',
+      amount: 50,
+    });
+    const validateOutput = new AjvJsonSchemaValidator().getValidator(
+      registry.require('totalfinance.portfolio.record_events').outputSchema!,
+    );
+    const record = (portfolio: unknown, events: PortfolioEventEnvelope[]) => {
+      const result = registry.run({
+        id: 'totalfinance.portfolio.record_events',
+        input: { portfolio, events, createdTimestampMs: CREATED },
+        artifacts,
+        capabilities: ALL,
+        createdTimestampMs: CREATED,
+      });
+      expect(validateOutput(wire(result.structured))).toMatchObject({ valid: true });
+      return result;
+    };
+    const first = record(wire(original), [deposit, deposit]);
+    expect(first.structured).toMatchObject({ applied: 1, eventCount: 3 });
+    expect(first.summary).toContain('1 event applied');
+    const handle = (first.structured as { handle: { uri: string } }).handle.uri;
+    const replay = record(handle, [deposit]);
+    expect(replay.structured).toMatchObject({ applied: 0, eventCount: 3, handle: { uri: handle } });
+    expect(replay.summary).toContain('0 events applied');
+    const mixed = record(handle, [deposit, second, second]);
+    expect(mixed.structured).toMatchObject({ applied: 1, eventCount: 4 });
+    expect(mixed.summary).toContain('1 event applied');
+    const mixedHandle = (mixed.structured as { handle: { uri: string } }).handle.uri;
+    expect(record(mixedHandle, [second, deposit]).structured).toEqual({
+      ...mixed.structured,
+      applied: 0,
+    });
+    expect(
+      failure(() =>
+        record(handle, [
+          { ...deposit, event: { eventType: 'cash.deposit', currency: 'USD', amount: 101 } },
+        ]),
+      ).code,
+    ).toBe(ErrorCode.PortfolioDuplicateEventConflict);
+  });
+
   it('runs the lifecycle: preflight → authorize (store) → submit with observations → record_events (handle) → reconcile', () => {
     const artifacts = createMemoryArtifactStore();
     const stores = {
