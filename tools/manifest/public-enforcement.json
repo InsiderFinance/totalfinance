@@ -15381,7 +15381,7 @@
       "implementation": "packages/core/dist/invariants.d.ts#ensureKnownKeys",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "delegated"
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/core:finalizeResult",
@@ -141252,7 +141252,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:ensureKnownKeys",
       "inheritedFrom": "@totalfinance/core:ensureKnownKeys",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "unmeasuredReason": "no-input"
     },
     {
@@ -154061,7 +154061,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:ensureKnownKeys",
       "inheritedFrom": "@totalfinance/core:ensureKnownKeys",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "unmeasuredReason": "no-input"
     },
     {

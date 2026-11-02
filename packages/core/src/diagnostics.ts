@@ -85,6 +85,15 @@ export function warning(
   return context !== undefined ? { code, message, severity, context } : { code, message, severity };
 }
 
+/** Pure per-property initializer: static keys let Rollup prune unused diagnostics, while a
+ * retained whole registry stores only one spelling for regularly named codes. */
+function warningCode(name: string): string {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .toLowerCase()
+    .replace('_', '.');
+}
+
 /**
  * Canonical warning codes. Like error codes, these are stable public API — consumers branch on them.
  * The set is open; packages may add codes, but documented ones do not change without a major version.
@@ -94,20 +103,29 @@ export function warning(
  * {@link ErrorCode} — the single source of truth — and warning sites reference `ErrorCode.*` for the
  * code string, so no string is duplicated across the two registries (WS2.9).
  */
+
 export const WarningCode = {
-  DataUnknownTimes: 'data.unknown_times',
-  DataIncompleteTerms: 'data.incomplete_terms',
-  DataCoverageUnverified: 'data.coverage_unverified',
-  DataResearchOnly: 'data.research_only',
-  DataMissingField: 'data.missing_field',
-  DataSourceIssue: 'data.source_issue',
+  DataUnknownTimes: /* @__PURE__ */ warningCode('DataUnknownTimes') as 'data.unknown_times',
+  DataIncompleteTerms: /* @__PURE__ */ warningCode(
+    'DataIncompleteTerms',
+  ) as 'data.incomplete_terms',
+  DataCoverageUnverified: /* @__PURE__ */ warningCode(
+    'DataCoverageUnverified',
+  ) as 'data.coverage_unverified',
+  DataResearchOnly: /* @__PURE__ */ warningCode('DataResearchOnly') as 'data.research_only',
+  DataMissingField: /* @__PURE__ */ warningCode('DataMissingField') as 'data.missing_field',
+  DataSourceIssue: /* @__PURE__ */ warningCode('DataSourceIssue') as 'data.source_issue',
   /** Supplied disclosed holdings do not support some changes, weights or concentration. */
-  PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review',
-  DataLockedMarket: 'data.locked_market',
-  DataZeroBidAsk: 'data.zero_bid_ask',
+  PortfolioDisclosedHoldingsReview: /* @__PURE__ */ warningCode(
+    'PortfolioDisclosedHoldingsReview',
+  ) as 'portfolio.disclosed_holdings_review',
+  DataLockedMarket: /* @__PURE__ */ warningCode('DataLockedMarket') as 'data.locked_market',
+  DataZeroBidAsk: /* @__PURE__ */ warningCode('DataZeroBidAsk') as 'data.zero_bid_ask',
   SurfaceExtrapolated: 'volatility.surface_extrapolated',
-  BinomialStepsRoundedOdd: 'binomial.steps_rounded_odd',
-  GreeksNotComputed: 'greeks.not_computed',
+  BinomialStepsRoundedOdd: /* @__PURE__ */ warningCode(
+    'BinomialStepsRoundedOdd',
+  ) as 'binomial.steps_rounded_odd',
+  GreeksNotComputed: /* @__PURE__ */ warningCode('GreeksNotComputed') as 'greeks.not_computed',
   SuspiciousVolatility: 'input.suspicious_volatility',
   SuspiciousTime: 'input.suspicious_time',
   SuspiciousRiskFreeRate: 'input.suspicious_risk_free_rate',
@@ -123,171 +141,365 @@ export const WarningCode = {
   /** A degenerate/collinear covariance was eigenvalue-floored to keep the SPD postcondition. */
   CovarianceFloored: 'math.covariance_floored',
   /** Greeks were explicitly requested but this engine cannot compute them — request not honored. */
-  GreeksUnsupportedByEngine: 'greeks.unsupported_by_engine',
+  GreeksUnsupportedByEngine: /* @__PURE__ */ warningCode(
+    'GreeksUnsupportedByEngine',
+  ) as 'greeks.unsupported_by_engine',
   /** A structural limitation of the model/data the caller should know about (design law #4). */
-  ModelLimitation: 'model.limitation',
+  ModelLimitation: /* @__PURE__ */ warningCode('ModelLimitation') as 'model.limitation',
   /** A valid reusable FX quote was supplied but no target required it in this scenario run. */
-  ScenarioUnusedCurrencyConversion: 'scenario.unused_currency_conversion',
+  ScenarioUnusedCurrencyConversion: /* @__PURE__ */ warningCode(
+    'ScenarioUnusedCurrencyConversion',
+  ) as 'scenario.unused_currency_conversion',
 
   // ── Phase 3 registry consolidation (P3.1c) — leaf-package warning codes, see ErrorCode note ──
-  BacktestAssignment: 'backtest.assignment',
-  BacktestDataDuplicateTimestamp: 'backtest.data_duplicate_timestamp',
-  BacktestDataNonfinite: 'backtest.data_nonfinite',
+  BacktestAssignment: /* @__PURE__ */ warningCode('BacktestAssignment') as 'backtest.assignment',
+  BacktestDataDuplicateTimestamp: /* @__PURE__ */ warningCode(
+    'BacktestDataDuplicateTimestamp',
+  ) as 'backtest.data_duplicate_timestamp',
+  BacktestDataNonfinite: /* @__PURE__ */ warningCode(
+    'BacktestDataNonfinite',
+  ) as 'backtest.data_nonfinite',
   /** Stage 4.6 (FC8): a benchmark session had no return and counted as 0; the count rides the warning. */
-  BacktestDataMissing: 'backtest.data_missing',
+  BacktestDataMissing: /* @__PURE__ */ warningCode(
+    'BacktestDataMissing',
+  ) as 'backtest.data_missing',
   /** Stage 4.6 (FC8) — a pre-trade limit rejected an entry (the row names the limit and the values). */
-  BacktestLimitRejected: 'backtest.limit_rejected',
+  BacktestLimitRejected: /* @__PURE__ */ warningCode(
+    'BacktestLimitRejected',
+  ) as 'backtest.limit_rejected',
   /** Stage 4.6 (FC8) — a structure could not fill every leg under the fill policy (the row names the legs). */
-  BacktestComboLegUnfilled: 'backtest.combo_leg_unfilled',
+  BacktestComboLegUnfilled: /* @__PURE__ */ warningCode(
+    'BacktestComboLegUnfilled',
+  ) as 'backtest.combo_leg_unfilled',
   /** Stage 4.6 (FC8) — maintenance margin breached under forcedLiquidation 'none'. */
-  BacktestMarginBreach: 'backtest.margin_breach',
+  BacktestMarginBreach: /* @__PURE__ */ warningCode(
+    'BacktestMarginBreach',
+  ) as 'backtest.margin_breach',
   /** Stage 4.6 (FC8) — a forced close under the declared liquidation policy (the row names the position and the shortfall). */
-  BacktestForcedLiquidation: 'backtest.forced_liquidation',
-  BacktestDataUnsorted: 'backtest.data_unsorted',
-  BacktestEntrySkipped: 'backtest.entry_skipped',
+  BacktestForcedLiquidation: /* @__PURE__ */ warningCode(
+    'BacktestForcedLiquidation',
+  ) as 'backtest.forced_liquidation',
+  BacktestDataUnsorted: /* @__PURE__ */ warningCode(
+    'BacktestDataUnsorted',
+  ) as 'backtest.data_unsorted',
+  BacktestEntrySkipped: /* @__PURE__ */ warningCode(
+    'BacktestEntrySkipped',
+  ) as 'backtest.entry_skipped',
   /** An open option leg could not be marked from its current-snapshot quote and the request's
    * named missing-mark fallback was applied (Preview P1) — the count of leg-snapshots is carried. */
-  BacktestMarkFallback: 'backtest.mark_fallback',
-  BacktestLookahead: 'backtest.lookahead',
-  BacktestMarginRejected: 'backtest.margin_rejected',
-  BacktestMarkedAtCost: 'backtest.marked_at_cost',
-  BacktestNegativeCash: 'backtest.negative_cash',
-  BacktestShortRejected: 'backtest.short_rejected',
-  BacktestSignalWarmup: 'backtest.signal_warmup',
-  CryptoCarryArbitrage: 'crypto.carry_arbitrage',
-  CryptoExtremeFunding: 'crypto.extreme_funding',
-  EstimateRiskNeutral: 'estimate.risk_neutral',
-  FlowSweepsNotVenueVerified: 'flow.sweeps_not_venue_verified',
-  HestonCosineExpansionUnstable: 'heston.cosine_expansion_unstable',
-  HestonFellerViolated: 'heston.feller_violated',
+  BacktestMarkFallback: /* @__PURE__ */ warningCode(
+    'BacktestMarkFallback',
+  ) as 'backtest.mark_fallback',
+  BacktestLookahead: /* @__PURE__ */ warningCode('BacktestLookahead') as 'backtest.lookahead',
+  BacktestMarginRejected: /* @__PURE__ */ warningCode(
+    'BacktestMarginRejected',
+  ) as 'backtest.margin_rejected',
+  BacktestMarkedAtCost: /* @__PURE__ */ warningCode(
+    'BacktestMarkedAtCost',
+  ) as 'backtest.marked_at_cost',
+  BacktestNegativeCash: /* @__PURE__ */ warningCode(
+    'BacktestNegativeCash',
+  ) as 'backtest.negative_cash',
+  BacktestShortRejected: /* @__PURE__ */ warningCode(
+    'BacktestShortRejected',
+  ) as 'backtest.short_rejected',
+  BacktestSignalWarmup: /* @__PURE__ */ warningCode(
+    'BacktestSignalWarmup',
+  ) as 'backtest.signal_warmup',
+  CryptoCarryArbitrage: /* @__PURE__ */ warningCode(
+    'CryptoCarryArbitrage',
+  ) as 'crypto.carry_arbitrage',
+  CryptoExtremeFunding: /* @__PURE__ */ warningCode(
+    'CryptoExtremeFunding',
+  ) as 'crypto.extreme_funding',
+  EstimateRiskNeutral: /* @__PURE__ */ warningCode(
+    'EstimateRiskNeutral',
+  ) as 'estimate.risk_neutral',
+  FlowSweepsNotVenueVerified: /* @__PURE__ */ warningCode(
+    'FlowSweepsNotVenueVerified',
+  ) as 'flow.sweeps_not_venue_verified',
+  HestonCosineExpansionUnstable: /* @__PURE__ */ warningCode(
+    'HestonCosineExpansionUnstable',
+  ) as 'heston.cosine_expansion_unstable',
+  HestonFellerViolated: /* @__PURE__ */ warningCode(
+    'HestonFellerViolated',
+  ) as 'heston.feller_violated',
   ImpliedVolatilityBracketExpanded: 'implied_volatility.bracket_expanded',
   ImpliedVolatilityFlatHistory: 'implied_volatility.flat_history',
   ImpliedVolatilityLowVega: 'implied_volatility.low_vega',
-  LookbackZeroCarry: 'lookback.zero_carry',
-  MathCovarianceEwmaEffectiveSample: 'math.covariance_ewma_effective_sample',
-  MathCovarianceIllConditioned: 'math.covariance_ill_conditioned',
-  MathCovarianceMethodAuto: 'math.covariance_method_auto',
-  MathCovarianceSingular: 'math.covariance_singular',
+  LookbackZeroCarry: /* @__PURE__ */ warningCode('LookbackZeroCarry') as 'lookback.zero_carry',
+  MathCovarianceEwmaEffectiveSample: /* @__PURE__ */ warningCode(
+    'MathCovarianceEwmaEffectiveSample',
+  ) as 'math.covariance_ewma_effective_sample',
+  MathCovarianceIllConditioned: /* @__PURE__ */ warningCode(
+    'MathCovarianceIllConditioned',
+  ) as 'math.covariance_ill_conditioned',
+  MathCovarianceMethodAuto: /* @__PURE__ */ warningCode(
+    'MathCovarianceMethodAuto',
+  ) as 'math.covariance_method_auto',
+  MathCovarianceSingular: /* @__PURE__ */ warningCode(
+    'MathCovarianceSingular',
+  ) as 'math.covariance_singular',
   MonteCarloQuasiMonteCarloDimensionFallback: 'monte_carlo.quasi_monte_carlo_dimension_fallback',
-  OptimizeNotConverged: 'optimize.not_converged',
+  OptimizeNotConverged: /* @__PURE__ */ warningCode(
+    'OptimizeNotConverged',
+  ) as 'optimize.not_converged',
   /** A library result reported this warning as a bare sentence; the envelope carries it typed. */
-  OperationUntypedWarning: 'operation.untyped_warning',
-  OptionsDividendsNone: 'options.dividends_none',
-  OptionsDividendsPast: 'options.dividends_past',
-  OptionsExerciseDiscreteDividends: 'options.exercise_discrete_dividends',
+  OperationUntypedWarning: /* @__PURE__ */ warningCode(
+    'OperationUntypedWarning',
+  ) as 'operation.untyped_warning',
+  OptionsDividendsNone: /* @__PURE__ */ warningCode(
+    'OptionsDividendsNone',
+  ) as 'options.dividends_none',
+  OptionsDividendsPast: /* @__PURE__ */ warningCode(
+    'OptionsDividendsPast',
+  ) as 'options.dividends_past',
+  OptionsExerciseDiscreteDividends: /* @__PURE__ */ warningCode(
+    'OptionsExerciseDiscreteDividends',
+  ) as 'options.exercise_discrete_dividends',
   /** Quote-only chain health was requested; model bounds and implied volatility are not assessed. */
   OptionsChainHealthModelNotRequested: 'options.chain_health.model_not_requested',
-  PerformanceSuspiciousEquityInput: 'performance.suspicious_equity_input',
-  PerformanceNonFiniteMetric: 'performance.non_finite_metric',
+  PerformanceSuspiciousEquityInput: /* @__PURE__ */ warningCode(
+    'PerformanceSuspiciousEquityInput',
+  ) as 'performance.suspicious_equity_input',
+  PerformanceNonFiniteMetric: /* @__PURE__ */ warningCode(
+    'PerformanceNonFiniteMetric',
+  ) as 'performance.non_finite_metric',
   /** `analyze` on a series with zero return periods: every metric is null (E3 degenerate summary). */
-  PerformanceEmptySeries: 'performance.empty_series',
+  PerformanceEmptySeries: /* @__PURE__ */ warningCode(
+    'PerformanceEmptySeries',
+  ) as 'performance.empty_series',
   /** Zero gross exposure: concentration metrics are undefined and reported as null. */
-  RiskZeroGrossExposure: 'risk.zero_gross_exposure',
+  RiskZeroGrossExposure: /* @__PURE__ */ warningCode(
+    'RiskZeroGrossExposure',
+  ) as 'risk.zero_gross_exposure',
   /** `compareEngines`: one or more engines failed to price (per-row detail on the failed rows). */
-  OptionsEngineFailed: 'options.engine_failed',
+  OptionsEngineFailed: /* @__PURE__ */ warningCode(
+    'OptionsEngineFailed',
+  ) as 'options.engine_failed',
   /** `openingRange`: fewer bars than `periods` — the range covers the whole series. */
   TechnicalAnalysisOpeningRangeTruncated: 'technical_analysis.opening_range_truncated',
   /** `unusualness`: flat baseline — the z-score is undefined and reported null. */
-  StructureFlatBaseline: 'structure.flat_baseline',
+  StructureFlatBaseline: /* @__PURE__ */ warningCode(
+    'StructureFlatBaseline',
+  ) as 'structure.flat_baseline',
   /** Surface/model calibration finished without meeting tolerance — best-effort parameters returned. */
-  VolatilityCalibrationNotConverged: 'volatility.calibration_not_converged',
-  PerformanceUndefinedMetric: 'performance.undefined_metric',
-  ResearchSurvivorshipBias: 'research.survivorship_bias',
-  ResearchTrainTestLeakage: 'research.train_test_leakage',
+  VolatilityCalibrationNotConverged: /* @__PURE__ */ warningCode(
+    'VolatilityCalibrationNotConverged',
+  ) as 'volatility.calibration_not_converged',
+  PerformanceUndefinedMetric: /* @__PURE__ */ warningCode(
+    'PerformanceUndefinedMetric',
+  ) as 'performance.undefined_metric',
+  ResearchSurvivorshipBias: /* @__PURE__ */ warningCode(
+    'ResearchSurvivorshipBias',
+  ) as 'research.survivorship_bias',
+  ResearchTrainTestLeakage: /* @__PURE__ */ warningCode(
+    'ResearchTrainTestLeakage',
+  ) as 'research.train_test_leakage',
   /** `probabilityOfBacktestOverfitting`: the oldest rows were trimmed so T divides into S blocks. */
   ResearchBacktestOverfittingProbabilityTrimmed:
     'research.backtest_overfitting_probability_trimmed',
-  RiskBrinsonWeights: 'risk.brinson_weights',
+  RiskBrinsonWeights: /* @__PURE__ */ warningCode('RiskBrinsonWeights') as 'risk.brinson_weights',
   RiskCornishFisherConditionalValueAtRiskGaussianFallback:
     'risk.cornish_fisher_conditional_value_at_risk_gaussian_fallback',
-  RiskCornishFisherOutOfDomain: 'risk.cornish_fisher_out_of_domain',
-  RiskCostExceedsEdge: 'risk.cost_exceeds_edge',
+  RiskCornishFisherOutOfDomain: /* @__PURE__ */ warningCode(
+    'RiskCornishFisherOutOfDomain',
+  ) as 'risk.cornish_fisher_out_of_domain',
+  RiskCostExceedsEdge: /* @__PURE__ */ warningCode(
+    'RiskCostExceedsEdge',
+  ) as 'risk.cost_exceeds_edge',
   /** FC7 slice 4 (2026-08-29): estimateExpectedReturns received an asOf but no observation
    * timestamps — nothing could be screened for look-ahead. */
-  RiskAsOfUnscreened: 'risk.as_of_unscreened',
+  RiskAsOfUnscreened: /* @__PURE__ */ warningCode('RiskAsOfUnscreened') as 'risk.as_of_unscreened',
   /** A frontier point with zero volatility has no Sharpe ratio (reported null with the reason). */
-  RiskZeroVolatilitySharpe: 'risk.zero_volatility_sharpe',
+  RiskZeroVolatilitySharpe: /* @__PURE__ */ warningCode(
+    'RiskZeroVolatilitySharpe',
+  ) as 'risk.zero_volatility_sharpe',
   /** The constrained maximum return is unbounded (an asset without an upper bound and another
    * without a lower bound); a `points` grid fell back to a risk-aversion grid. */
-  RiskFrontierUnboundedReturn: 'risk.frontier_unbounded_return',
+  RiskFrontierUnboundedReturn: /* @__PURE__ */ warningCode(
+    'RiskFrontierUnboundedReturn',
+  ) as 'risk.frontier_unbounded_return',
   /** Solved frontier points are not monotone in volatility versus expected return. */
-  RiskFrontierNotMonotone: 'risk.frontier_not_monotone',
+  RiskFrontierNotMonotone: /* @__PURE__ */ warningCode(
+    'RiskFrontierNotMonotone',
+  ) as 'risk.frontier_not_monotone',
   /** One or more requested frontier points could not be solved (kept with their reasons). */
-  RiskFrontierPointsFailed: 'risk.frontier_points_failed',
-  RiskExtremeValueConfidenceOutsideTail: 'risk.extreme_value_confidence_outside_tail',
-  RiskExtremeValueDegenerateFit: 'risk.extreme_value_degenerate_fit',
-  RiskExtremeValueFewExceedances: 'risk.extreme_value_few_exceedances',
-  RiskExtremeValueInfiniteMean: 'risk.extreme_value_infinite_mean',
-  RiskExtremeValueInfiniteVariance: 'risk.extreme_value_infinite_variance',
-  RiskExtremeValueMleFallback: 'risk.extreme_value_mle_fallback',
-  RiskHighCostDrag: 'risk.high_cost_drag',
-  RiskInfeasibleConstraints: 'risk.infeasible_constraints',
-  RiskInfeasibleTangency: 'risk.infeasible_tangency',
-  RiskKellyEstimationNoEdge: 'risk.kelly_estimation_no_edge',
-  RiskKellyEstimationThinSample: 'risk.kelly_estimation_thin_sample',
-  RiskKellyFatTails: 'risk.kelly_fat_tails',
-  RiskKellyNaiveOverbet: 'risk.kelly_naive_overbet',
-  RiskKellyNegativeSum: 'risk.kelly_negative_sum',
-  RiskKellyNoEdge: 'risk.kelly_no_edge',
-  RiskKellyOver: 'risk.kelly_over',
-  RiskKellyUnbounded: 'risk.kelly_unbounded',
-  RiskMeanExcessNoLinearRegion: 'risk.mean_excess_no_linear_region',
+  RiskFrontierPointsFailed: /* @__PURE__ */ warningCode(
+    'RiskFrontierPointsFailed',
+  ) as 'risk.frontier_points_failed',
+  RiskExtremeValueConfidenceOutsideTail: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueConfidenceOutsideTail',
+  ) as 'risk.extreme_value_confidence_outside_tail',
+  RiskExtremeValueDegenerateFit: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueDegenerateFit',
+  ) as 'risk.extreme_value_degenerate_fit',
+  RiskExtremeValueFewExceedances: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueFewExceedances',
+  ) as 'risk.extreme_value_few_exceedances',
+  RiskExtremeValueInfiniteMean: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueInfiniteMean',
+  ) as 'risk.extreme_value_infinite_mean',
+  RiskExtremeValueInfiniteVariance: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueInfiniteVariance',
+  ) as 'risk.extreme_value_infinite_variance',
+  RiskExtremeValueMleFallback: /* @__PURE__ */ warningCode(
+    'RiskExtremeValueMleFallback',
+  ) as 'risk.extreme_value_mle_fallback',
+  RiskHighCostDrag: /* @__PURE__ */ warningCode('RiskHighCostDrag') as 'risk.high_cost_drag',
+  RiskInfeasibleConstraints: /* @__PURE__ */ warningCode(
+    'RiskInfeasibleConstraints',
+  ) as 'risk.infeasible_constraints',
+  RiskInfeasibleTangency: /* @__PURE__ */ warningCode(
+    'RiskInfeasibleTangency',
+  ) as 'risk.infeasible_tangency',
+  RiskKellyEstimationNoEdge: /* @__PURE__ */ warningCode(
+    'RiskKellyEstimationNoEdge',
+  ) as 'risk.kelly_estimation_no_edge',
+  RiskKellyEstimationThinSample: /* @__PURE__ */ warningCode(
+    'RiskKellyEstimationThinSample',
+  ) as 'risk.kelly_estimation_thin_sample',
+  RiskKellyFatTails: /* @__PURE__ */ warningCode('RiskKellyFatTails') as 'risk.kelly_fat_tails',
+  RiskKellyNaiveOverbet: /* @__PURE__ */ warningCode(
+    'RiskKellyNaiveOverbet',
+  ) as 'risk.kelly_naive_overbet',
+  RiskKellyNegativeSum: /* @__PURE__ */ warningCode(
+    'RiskKellyNegativeSum',
+  ) as 'risk.kelly_negative_sum',
+  RiskKellyNoEdge: /* @__PURE__ */ warningCode('RiskKellyNoEdge') as 'risk.kelly_no_edge',
+  RiskKellyOver: /* @__PURE__ */ warningCode('RiskKellyOver') as 'risk.kelly_over',
+  RiskKellyUnbounded: /* @__PURE__ */ warningCode('RiskKellyUnbounded') as 'risk.kelly_unbounded',
+  RiskMeanExcessNoLinearRegion: /* @__PURE__ */ warningCode(
+    'RiskMeanExcessNoLinearRegion',
+  ) as 'risk.mean_excess_no_linear_region',
   /** P&L explain: the unexplained residual dominates the total — the greek expansion broke down. */
-  RiskPnlUnexplainedResidual: 'risk.pnl_unexplained_residual',
+  RiskPnlUnexplainedResidual: /* @__PURE__ */ warningCode(
+    'RiskPnlUnexplainedResidual',
+  ) as 'risk.pnl_unexplained_residual',
   /** `optionsMargin`: a net-short call makes the expiration loss unbounded — `maxLoss` is null. */
-  RiskUnboundedLoss: 'risk.unbounded_loss',
-  StrategyVolatilityFloored: 'strategy.volatility_floored',
+  RiskUnboundedLoss: /* @__PURE__ */ warningCode('RiskUnboundedLoss') as 'risk.unbounded_loss',
+  StrategyVolatilityFloored: /* @__PURE__ */ warningCode(
+    'StrategyVolatilityFloored',
+  ) as 'strategy.volatility_floored',
   /** The reward-to-risk ratio is undefined: an unbounded profit or loss, or a zero maximum loss. */
-  StrategyRiskRewardUndefined: 'strategy.risk_reward_undefined',
+  StrategyRiskRewardUndefined: /* @__PURE__ */ warningCode(
+    'StrategyRiskRewardUndefined',
+  ) as 'strategy.risk_reward_undefined',
   /** `optimizeStrategy`: a candidate's capital requirement is zero — `thesisEvPerCapital` is null. */
-  StrategyOptimizerZeroCapital: 'strategy.optimizer_zero_capital',
-  StructureAggressorUnavailable: 'structure.aggressor_unavailable',
-  StructureContractsSkipped: 'structure.contracts_skipped',
+  StrategyOptimizerZeroCapital: /* @__PURE__ */ warningCode(
+    'StrategyOptimizerZeroCapital',
+  ) as 'strategy.optimizer_zero_capital',
+  StructureAggressorUnavailable: /* @__PURE__ */ warningCode(
+    'StructureAggressorUnavailable',
+  ) as 'structure.aggressor_unavailable',
+  StructureContractsSkipped: /* @__PURE__ */ warningCode(
+    'StructureContractsSkipped',
+  ) as 'structure.contracts_skipped',
   /** Repeated contract rows remain additive and may count the same open interest more than once. */
-  StructureDuplicateContractQuotes: 'structure.duplicate_contract_quotes',
+  StructureDuplicateContractQuotes: /* @__PURE__ */ warningCode(
+    'StructureDuplicateContractQuotes',
+  ) as 'structure.duplicate_contract_quotes',
   /** Every supplied quote was excluded; empty sums must not be read as measured zero exposure. */
-  StructureNoEligibleQuotes: 'structure.no_eligible_quotes',
-  VolatilityButterflyArbitrage: 'volatility.butterfly_arbitrage',
-  VolatilityEssviButterfly: 'volatility.essvi_butterfly',
-  VolatilityEssviCalendar: 'volatility.essvi_calendar',
-  VolatilityEssviCalendarData: 'volatility.essvi_calendar_data',
-  VolatilityEssviNotConverged: 'volatility.essvi_not_converged',
-  VolatilityFitInsufficientData: 'volatility.fit_insufficient_data',
-  VolatilityFitUnconverged: 'volatility.fit_unconverged',
-  VolatilityShockDegradedToInterpolated: 'volatility.shock_degraded_to_interpolated',
-  VolatilityShockFloored: 'volatility.shock_floored',
-  VolatilitySkewDeltaExtrapolated: 'volatility.skew_delta_extrapolated',
-  VolatilityObservedSkewUnavailable: 'volatility.observed_skew_unavailable',
-  VolatilityObservedSkewQuoteExcluded: 'volatility.observed_skew_quote_excluded',
+  StructureNoEligibleQuotes: /* @__PURE__ */ warningCode(
+    'StructureNoEligibleQuotes',
+  ) as 'structure.no_eligible_quotes',
+  VolatilityButterflyArbitrage: /* @__PURE__ */ warningCode(
+    'VolatilityButterflyArbitrage',
+  ) as 'volatility.butterfly_arbitrage',
+  VolatilityEssviButterfly: /* @__PURE__ */ warningCode(
+    'VolatilityEssviButterfly',
+  ) as 'volatility.essvi_butterfly',
+  VolatilityEssviCalendar: /* @__PURE__ */ warningCode(
+    'VolatilityEssviCalendar',
+  ) as 'volatility.essvi_calendar',
+  VolatilityEssviCalendarData: /* @__PURE__ */ warningCode(
+    'VolatilityEssviCalendarData',
+  ) as 'volatility.essvi_calendar_data',
+  VolatilityEssviNotConverged: /* @__PURE__ */ warningCode(
+    'VolatilityEssviNotConverged',
+  ) as 'volatility.essvi_not_converged',
+  VolatilityFitInsufficientData: /* @__PURE__ */ warningCode(
+    'VolatilityFitInsufficientData',
+  ) as 'volatility.fit_insufficient_data',
+  VolatilityFitUnconverged: /* @__PURE__ */ warningCode(
+    'VolatilityFitUnconverged',
+  ) as 'volatility.fit_unconverged',
+  VolatilityShockDegradedToInterpolated: /* @__PURE__ */ warningCode(
+    'VolatilityShockDegradedToInterpolated',
+  ) as 'volatility.shock_degraded_to_interpolated',
+  VolatilityShockFloored: /* @__PURE__ */ warningCode(
+    'VolatilityShockFloored',
+  ) as 'volatility.shock_floored',
+  VolatilitySkewDeltaExtrapolated: /* @__PURE__ */ warningCode(
+    'VolatilitySkewDeltaExtrapolated',
+  ) as 'volatility.skew_delta_extrapolated',
+  VolatilityObservedSkewUnavailable: /* @__PURE__ */ warningCode(
+    'VolatilityObservedSkewUnavailable',
+  ) as 'volatility.observed_skew_unavailable',
+  VolatilityObservedSkewQuoteExcluded: /* @__PURE__ */ warningCode(
+    'VolatilityObservedSkewQuoteExcluded',
+  ) as 'volatility.observed_skew_quote_excluded',
   /** C hygiene — a zero-variance edge has no Kelly fraction: the sizing is null, never an input error. */
-  RiskKellyZeroVariance: 'risk.kelly_zero_variance',
+  RiskKellyZeroVariance: /* @__PURE__ */ warningCode(
+    'RiskKellyZeroVariance',
+  ) as 'risk.kelly_zero_variance',
   /** C hygiene — a zero-variance return series has no Sharpe ratio: the statistic is null. */
-  RiskSharpeUndefined: 'risk.sharpe_undefined',
+  RiskSharpeUndefined: /* @__PURE__ */ warningCode(
+    'RiskSharpeUndefined',
+  ) as 'risk.sharpe_undefined',
   /** B7 — `chainGreeks` returned some rows unchanged; `diagnostics.rows` names each reason. */
   OptionsChainGreeksRowsSkipped: 'chain_greeks.rows_skipped',
-  VolatilityObservedSkewMissingDelta: 'volatility.observed_skew_missing_delta',
-  VolatilityObservedSkewDuplicateContract: 'volatility.observed_skew_duplicate_contract',
-  VolatilitySsviButterfly: 'volatility.ssvi_butterfly',
-  VolatilitySsviCalendarData: 'volatility.ssvi_calendar_data',
-  VolatilitySsviNotConverged: 'volatility.ssvi_not_converged',
-  VolatilityStickyIndeterminate: 'volatility.sticky_indeterminate',
-  VolatilityStickyWeakFit: 'volatility.sticky_weak_fit',
-  VolatilitySurfaceQuotesSkipped: 'volatility.surface_quotes_skipped',
-  VolatilitySurfaceSparse: 'volatility.surface_sparse',
-  VolatilitySwaptionCubeExtrapolated: 'volatility.swaption_cube_extrapolated',
-  VolatilitySwaptionNodePoorFit: 'volatility.swaption_node_poor_fit',
+  VolatilityObservedSkewMissingDelta: /* @__PURE__ */ warningCode(
+    'VolatilityObservedSkewMissingDelta',
+  ) as 'volatility.observed_skew_missing_delta',
+  VolatilityObservedSkewDuplicateContract: /* @__PURE__ */ warningCode(
+    'VolatilityObservedSkewDuplicateContract',
+  ) as 'volatility.observed_skew_duplicate_contract',
+  VolatilitySsviButterfly: /* @__PURE__ */ warningCode(
+    'VolatilitySsviButterfly',
+  ) as 'volatility.ssvi_butterfly',
+  VolatilitySsviCalendarData: /* @__PURE__ */ warningCode(
+    'VolatilitySsviCalendarData',
+  ) as 'volatility.ssvi_calendar_data',
+  VolatilitySsviNotConverged: /* @__PURE__ */ warningCode(
+    'VolatilitySsviNotConverged',
+  ) as 'volatility.ssvi_not_converged',
+  VolatilityStickyIndeterminate: /* @__PURE__ */ warningCode(
+    'VolatilityStickyIndeterminate',
+  ) as 'volatility.sticky_indeterminate',
+  VolatilityStickyWeakFit: /* @__PURE__ */ warningCode(
+    'VolatilityStickyWeakFit',
+  ) as 'volatility.sticky_weak_fit',
+  VolatilitySurfaceQuotesSkipped: /* @__PURE__ */ warningCode(
+    'VolatilitySurfaceQuotesSkipped',
+  ) as 'volatility.surface_quotes_skipped',
+  VolatilitySurfaceSparse: /* @__PURE__ */ warningCode(
+    'VolatilitySurfaceSparse',
+  ) as 'volatility.surface_sparse',
+  VolatilitySwaptionCubeExtrapolated: /* @__PURE__ */ warningCode(
+    'VolatilitySwaptionCubeExtrapolated',
+  ) as 'volatility.swaption_cube_extrapolated',
+  VolatilitySwaptionNodePoorFit: /* @__PURE__ */ warningCode(
+    'VolatilitySwaptionNodePoorFit',
+  ) as 'volatility.swaption_node_poor_fit',
   /** Two artifacts under comparison or replay name different producing library versions — a
    * difference may be a library change rather than a market or parameter change (Stage 4.5). */
-  ArtifactLibraryVersionDiffers: 'artifact.library_version_differs',
+  ArtifactLibraryVersionDiffers: /* @__PURE__ */ warningCode(
+    'ArtifactLibraryVersionDiffers',
+  ) as 'artifact.library_version_differs',
   /** Two artifacts under comparison were computed under different market snapshots — still
    * comparable, but the reader is told the market moved (Stage 4.5). */
-  ArtifactComparisonDifferentMarket: 'artifact.comparison_different_market',
+  ArtifactComparisonDifferentMarket: /* @__PURE__ */ warningCode(
+    'ArtifactComparisonDifferentMarket',
+  ) as 'artifact.comparison_different_market',
   /** Two research runs under comparison were computed over different universes or as-of dates —
    * still comparable, but the reader is told the population moved (Stage 4.5). */
-  ArtifactComparisonDifferentUniverse: 'artifact.comparison_different_universe',
+  ArtifactComparisonDifferentUniverse: /* @__PURE__ */ warningCode(
+    'ArtifactComparisonDifferentUniverse',
+  ) as 'artifact.comparison_different_universe',
   /** A restored curve was evaluated outside its calibrated pillar range under its stored
    * extrapolation policy — counted and disclosed, never silent (Stage 4.5). */
-  CurveExtrapolated: 'curve.extrapolated',
+  CurveExtrapolated: /* @__PURE__ */ warningCode('CurveExtrapolated') as 'curve.extrapolated',
 } as const;
 
 export type WarningCode = (typeof WarningCode)[keyof typeof WarningCode];

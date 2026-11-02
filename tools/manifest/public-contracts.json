@@ -16110,11 +16110,11 @@
     "byGuardReachability": {
       "none": 1162,
       "no-implementation": 957,
-      "ambiguous": 347,
+      "ambiguous": 350,
       "direct": 2915,
-      "delegated": 2575
+      "delegated": 2572
     },
-    "ambiguousReachability": 347,
+    "ambiguousReachability": 350,
     "byBoundaryKind": {
       "entry-point": 6368,
       "callback-contract": 957,
@@ -88764,9 +88764,8 @@
       ],
       "inputContract": null,
       "resultContract": null,
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["nearestKey", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/core:ensureNonNegative",
@@ -709035,9 +709034,8 @@
       ],
       "inputContract": null,
       "resultContract": null,
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["nearestKey", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:core.ensureNonNegative",
@@ -764611,9 +764609,8 @@
       ],
       "inputContract": null,
       "resultContract": null,
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["nearestKey", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:ensureNonNegative",

@@ -1,6 +1,6 @@
 # Community connector offline C1 implementation — 2026-11-02
 
-Status: offline C1.1–C1.4 implemented and locally verified; feature remains in progress pending
+Status: offline C1.1–C1.4 review corrections are being finalized; feature remains in progress pending
 hosted checks, technical implementation review and later connected acceptance. This record is updated from actual
 receipts; unchecked live/agent/App acceptance is not certified by offline checks.
 
@@ -61,12 +61,25 @@ causes are excluded. Pre-abort makes no transport call; fetch/body aborts and la
 
 ## Integration corrections and unchanged gates
 
-Initial integration found 22 existing byte-budget failures from the expanded shared error/warning
-catalogs. No budget was raised. The error catalog now materializes its exact declared literal table
-from compact names, avoiding duplicate retained PascalCase/snake_case spellings. The generated
-public type stays an anonymous readonly literal object; a declaration-to-runtime test verifies
-**every** key, value and enumeration position. There is no new public helper or financial computation.
-All 33 existing bundle-budget checks subsequently passed under their original ceilings.
+The first implementation used whole-catalog compaction after the added codes exceeded existing
+whole-entrypoint budgets. Although the 33 whole-entrypoint cases passed, hosted installed-consumer
+and guard-only tests exposed that the computed spread retained unrelated code and prevented Rollup
+property pruning. That implementation is superseded by the review correction below; its earlier
+local pass was not complete bundler acceptance.
+
+The corrected ErrorCode is a static literal table with exactly the prior keys, values and order.
+WarningCode retains static keys and uses pure per-property initializers for regular spellings, so
+unused members can be removed. A captured ordered-entry SHA-256 test verifies all 140 original
+warning entries, and the error declaration/runtime test verifies every error member. There is no
+new public helper. The original byte ceilings, retained-module rules and guard-only tests stay intact.
+
+Supporting shared helpers recover the small remaining whole-entrypoint margins: native ES2022
+subclass prototypes (the existing output/runtime target), identical missing-field text without an
+intermediate array, primitive formatting with identical strings, and a private two-edit-bounded
+Damerau typo search. The search preserves the former matrix algorithm's suggestions and tie order;
+14,520 distinct short-string pairs and explicit case/transposition/tie controls compare it with an
+independent matrix reference. Exact message/context/cause/serialization/prototype tests cover the
+other helpers. No financial algorithm, public request/result shape or supported Node range changed.
 
 The initial enforcement generation also exposed an actual tooling bug: the synchronous producer
 pre-pass accepted a Promise as an object and left a rejected Promise unobserved. Both producer
@@ -188,3 +201,56 @@ They are pending at this documentation checkpoint; the Ri handoff records their 
 head and state after push. No hosted pass or feature merge is inferred from the local suite.
 No local full-CI/coverage repeat was claimed. The feature task and attached execution stay in
 progress for technical implementation review and the separate live/agent/App acceptance.
+
+## Blocking review findings and correction — 2026-11-02
+
+The coordinator reproduced two later-page errors at SDK `aad83f28` / provider `d8ae064`: a daily
+row after the original upper date, and a strike 105 row after a maximum-strike-100 first query.
+The public wrapper validates the continuation envelope, so the provider must retain and validate
+all original bounds/filters itself. The previous implementation retained them for URL mapping but
+omitted later-page validation. This was a concrete adapter defect, not an API-server finding.
+
+Provider correction `bfd0da0` validates every page against original daily/minute bounds, the exact
+requested nextFrom lower bound, chain expiration/strike/rights filters and saved session/id pins.
+Out-of-query rows produce `data.invalid_response`; none are discarded or repaired. Source cursor,
+resource/dataset/snapshot/order checks and one HTTP request per query remain. No public contract
+was expanded.
+
+Failing-then-passing evidence: `/tmp/tf-provider-continuation-before-final.log` has **9 failures /
+53 passes** against the pre-fix dist (62 tests). The corrected source has **63/63 tests passing**,
+including an additional positive filtered-continuation boundary case. Ten negative continuation
+cases cover date/minute upper bounds, nextFrom, both strike bounds, expiration bounds, rights and
+session pins; the existing order check already caught the expiration-lower mutant. Two normalized
+response mutants independently satisfy continuation grammar/order but are rejected specifically by
+the existing shared kit's **expected facts** law. No kit expansion was necessary.
+
+The coordinator independently ran the 62-test correction corpus on pinned Node22.23.2 with no
+skips and provisionally accepted the source correction pending rebuilt artifacts. Independent SDK
+review also passed 60 supporting controls and compared old/new typo suggestions over 20,000 seeded
+candidate sets and 20,000 directed 0–3 edit mutations (seed72682, 17,509 nonempty suggestions), with
+no mismatch. These are separate independent receipts, not substituted for permanent tests.
+
+Hosted run [41516506526](https://github.com/InsiderFinance/totalfinance/actions/runs/41516506526)
+failed at the prior SDK head. Besides the registry/installed-budget issue, it exposed two integration
+checks: the monorepo export sweep needed the established public-specifier mapping for new subpaths,
+and its exact fixture join count needed the two new public fixtures (**1,333 → 1,335**). The sweep
+still imports every enumerated export, and the count assertion increased; no test was removed.
+
+Final local correction receipts so far:
+
+- **100 tests / 10 files**: exact registries, errors, validation, selection, actual public entrypoints,
+  authored-fixture validity and all 33 unchanged whole-entrypoint budgets.
+- **24 tests / 2 files**: exact helpers and independent typo matrix corpus; one matrix test overlaps
+  the 100-test run.
+- **56 tests / 4 files**: data contract/kit, public first-touch and async-producer controls.
+- **130 tests / 7 files**: generated contracts/naming/signatures, public reference, bundle report and
+  documentation checks.
+- **226/226 packed SDK consumer tests**: both bundlers' unchanged byte/module/typed-refusal rules,
+  public examples, browser/worker/store and TypeScript consumers. The installed-byte gates now pass.
+- Build, types, 25 API reports, scoped lint pass. Ordered affected generation reran after the SDK
+  source corrections. Final enforcement remains 2,574 enforced / 2,702 partial / 187 unmeasured /
+  **0 defective** of 5,463; no ceiling, exception, test selection or gate was relaxed.
+
+The earlier tarball hashes and local commits above are historical snapshots. Corrected clean-consumer
+artifacts and exact final hosted head/run results are recorded in the follow-up handoff. No hosted
+success is inferred from these local checks; the PR stays draft and no merge is authorized.

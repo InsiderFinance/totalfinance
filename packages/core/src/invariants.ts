@@ -57,16 +57,12 @@ export function ensureNonNegative(
 function describe(value: unknown): string {
   // Runtime callers can pass non-numbers despite the type: name the actual type so
   // `Received "100" (string)` reads as the bug it is, not as a plausible number.
-  if (value === undefined) return 'undefined';
-  if (value === null) return 'null';
-  if (typeof value === 'string') return `${JSON.stringify(value)} (string)`;
-  if (typeof value === 'boolean') return `${value ? 'true' : 'false'} (boolean)`;
-  if (typeof value === 'bigint') return `${value}n (bigint)`;
-  if (typeof value !== 'number') return typeof value;
-  if (Number.isNaN(value)) return 'NaN';
-  if (value === Infinity) return 'Infinity';
-  if (value === -Infinity) return '-Infinity';
-  return String(value);
+  const type = typeof value;
+  if (type === 'string') return `${JSON.stringify(value)} (string)`;
+  if (type === 'boolean') return `${value} (boolean)`;
+  if (type === 'bigint') return `${value}n (bigint)`;
+  if (value === null || type === 'undefined' || type === 'number') return String(value);
+  return type;
 }
 
 /** Preserve useful primitive context without retaining caller-controlled behavior. */
@@ -276,20 +272,24 @@ export function ensureFiniteWhenPresent(value: unknown, field: string, functionN
 
 /** Damerau–Levenshtein ≤ 2 nearest match — cheap did-you-mean for {@link ensureKnownKeys}. */
 function nearestKey(key: string, allowed: readonly string[]): string | undefined {
-  const dist = (a: string, b: string): number => {
-    if (Math.abs(a.length - b.length) > 2) return 3;
-    const d: number[][] = Array.from({ length: a.length + 1 }, (_, i) => [i]);
-    for (let j = 1; j <= b.length; j++) d[0]![j] = j;
-    for (let i = 1; i <= a.length; i++) {
-      for (let j = 1; j <= b.length; j++) {
-        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-        d[i]![j] = Math.min(d[i - 1]![j]! + 1, d[i]![j - 1]! + 1, d[i - 1]![j - 1]! + cost);
-        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
-          d[i]![j] = Math.min(d[i]![j]!, d[i - 2]![j - 2]! + cost);
-        }
-      }
-    }
-    return d[a.length]![b.length]!;
+  // Only distances up to two can win. Matching prefixes are skipped iteratively, and each
+  // recursive step consumes one of at most two edits (including an adjacent transposition).
+  const dist = (a: string, b: string, remaining = 2): number => {
+    let matched = 0;
+    while (a[matched] && a[matched] === b[matched]) matched++;
+    a = a.slice(matched);
+    b = b.slice(matched);
+    if (!a.length || !b.length) return a.length + b.length;
+    if (!remaining) return 3;
+    return (
+      1 +
+      Math.min(
+        dist(a.slice(1), b, remaining - 1),
+        dist(a, b.slice(1), remaining - 1),
+        dist(a.slice(1), b.slice(1), remaining - 1),
+        a[0] === b[1] && a[1] === b[0] ? dist(a.slice(2), b.slice(2), remaining - 1) : 3,
+      )
+    );
   };
   let best: string | undefined;
   let bestD = 3;

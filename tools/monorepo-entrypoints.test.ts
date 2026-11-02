@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { toPublicSpecifier } from './public-packages.js';
 
 /**
  * DX7.2 — the monorepo-wide entrypoint property test. Generalizes the ta-only
@@ -73,7 +74,10 @@ describe('DX7.2 monorepo-wide entrypoint exhaustiveness', () => {
     for (const { specifiers } of pkgs) {
       for (const specification of specifiers) {
         try {
-          const mod = (await import(/* @vite-ignore */ specification)) as Record<string, unknown>;
+          const mod = (await import(/* @vite-ignore */ toPublicSpecifier(specification))) as Record<
+            string,
+            unknown
+          >;
           const names = Object.keys(mod).filter((n) => n !== 'default');
           if (names.length === 0) failures.push(`${specification}: resolved but exports nothing`);
         } catch (e) {

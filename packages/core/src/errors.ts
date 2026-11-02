@@ -27,8 +27,6 @@ export class QuantError extends Error {
     this.name = new.target.name;
     this.code = options.code;
     if (options.context !== undefined) this.context = options.context;
-    // Preserve the prototype chain when compiled to older targets.
-    Object.setPrototypeOf(this, new.target.prototype);
   }
 
   /**
@@ -88,9 +86,8 @@ export function isQuantError(value: unknown, code?: string): value is QuantError
  * Canonical error codes used in the 0.0.1 surface. The set is open — packages may introduce new
  * codes — but these are documented and stable.
  *
- * Literal readonly declarations preserve the public property order and exact code types. The pure
- * compact initializer below avoids retaining two spellings of every code in compute bundles;
- * guard-only consumers can still discard the catalog while retaining the error classes.
+ * Literal readonly declarations preserve the public property order and exact code types.
+ * Guard-only consumers can discard the catalog while retaining the error classes.
  */
 type ErrorCodeRegistry = {
   readonly InputNaN: 'input.nan';
@@ -368,28 +365,158 @@ type ErrorCodeRegistry = {
   readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible';
 };
 
-/** Materialize the catalog without retaining both PascalCase names and snake_case duplicates.
- * The declaration above is the exact literal contract; the registry test checks every value and
- * enumeration position. This pure initializer performs no I/O or financial computation. */
-function errorCodeRegistry(encoded: string): ErrorCodeRegistry {
-  const registry: Record<string, string> = {};
-  for (const entry of encoded.split(' ')) {
-    const [name, code] = entry.split(':');
-    registry[name!] =
-      code ??
-      name!
-        .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-        .toLowerCase()
-        .replace('_', '.');
-  }
-  return registry as ErrorCodeRegistry;
-}
-
+/** A literal table allows bundlers to discard the registry or unused properties without executing
+ * a catalog constructor. The declared key/value/order contract is checked independently below. */
 export const ErrorCode = {
-  .../* @__PURE__ */ errorCodeRegistry(
-    'InputNaN:input.nan InputNotFinite InputNegativeSpot InputNegativeStrike InputNegativeVolatility InputNegativeTime InputOutOfRange InputInvalidEnum InputMissingField InputUnknownField InputWrongType InputWrongShape ImpliedVolatilityNoConvergence:implied_volatility.no_convergence ImpliedVolatilityBelowIntrinsic:implied_volatility.below_intrinsic ImpliedVolatilityAboveMax:implied_volatility.above_max_bound EngineUnsupportedContract DataCrossedMarket DataUnsupportedCapability DataContractVersionUnsupported DataAuthenticationRequired DataEntitlementRequired DataRateLimited DataAllowanceExhausted DataSnapshotExpired DataInvalidCursor DataNotFound DataInvalidRequest DataInvalidResponse DataUnavailable DataAborted DataNonconformant DataStaleQuote SolverNoConvergence LinalgNoConvergence LinalgNotPositiveDefinite LinalgSingular IntegrationMaxDepth InterpolationOutOfDomain InterpolationDuplicateKnots InterpolationInvalidGrid OptimizeInvalidBounds VolatilityExpiryNotFound VolatilityCalendarArbitrage StrategyInvalidChartRange TimeTimezoneResolutionFailed TimeValuationInstantRequired BacktestDuplicateHandler BacktestMixedSymbols BacktestMarkUnavailable BacktestAmbiguousIntrabar BacktestStaleQuote BacktestAdapterNonconformant BacktestInputTooLarge BacktestDelistingReturnMissing BacktestUniverseMembershipUnknown BacktestLedgerReconciliationFailed EnvironmentNotReset EnvironmentDuplicateOrder EnvironmentLimitBreach EnvironmentActionDisallowed EnvironmentUnknownInstrument EnvironmentOrderInvalid EnvironmentActionInvalid EnvironmentEpisodeOver TradePlanInvalid TradePreflightDenied TradeGrantInvalid TradeGrantExpired TradeGrantConsumed TradeIdempotencyConflict TradeHalted TradeLiveUnavailable TradeJournalTransitionInvalid OperationCapabilityMissing OperationToolFiltered BacktestGridTooLarge BacktestBookTooLarge BacktestUnsupportedCorporateAction OperationUnknown OperationRegistrationRefused OperationInputTooLarge OperationDeadlineExceeded OperationCancelled OperationInternal OperationHandleStoreMissing OperationHandleUnknown OperationHandleKindMismatch InputLengthMismatch InputDuplicateEntry McpDeadlineExceeded McpInputTooLarge McpInternalError PostconditionNonFinite:postcondition.non_finite_result McpUnknownTool PipelineDuplicateAlias PipelineLengthMismatch RegistryAliasConflict RegistryDuplicateAliasRow RegistryDuplicateIndicator RegistryUnknownAliasTarget SignalUnknownReference SnapshotInvalidVersion SnapshotKindMismatch SnapshotUnknownKind SnapshotUnsupportedVersion SnapshotWrongShape StrategyDeltaRequired StrategyMultiExpiryExpirationAnalytics StrategyExpiryConflict StrategyStrikeUnavailable VolatilityForwardUnavailable VolatilitySnapshotVersionMismatch EngineProbabilityOutOfRange EngineResultOutOfBounds EngineDiscretizationInadequate ImpliedVolatilityPriceBelowResolvable:implied_volatility.price_below_resolvable RiskIllConditionedCovariance RiskQuantileBeyondSample VolatilityCalibrationFitDeviation VolatilityNegativeVarianceForecast MathIterationLimit BacktestOrderSplitAdjusted InputSuspiciousCouponRate InputSuspiciousYield ModelFellerConditionViolated PricerRequirementUnsatisfied PricerRequirementInvalid PricerObservationInvalid PricerNonconformant ScenarioInstructionUnmatched ScenarioTargetUnsupported ScenarioCellFailed SerializationUnsupportedValue ArtifactMigrationMissing ArtifactDuplicateMigration ArtifactIdMismatch ArtifactTypeMismatch ArtifactFamilyMismatch ArtifactModelVersionUnsupported ArtifactNotReplayable ArtifactReferencedDataMismatch ArtifactEmbeddedInputTooLarge ArtifactOperationUnsupported PortfolioDuplicateEventConflict PortfolioLotUnavailable PortfolioMarkUnavailable PortfolioReversalTargetMissing PortfolioReversalInfeasible',
-  ),
-} as const;
+  InputNaN: 'input.nan',
+  InputNotFinite: 'input.not_finite',
+  InputNegativeSpot: 'input.negative_spot',
+  InputNegativeStrike: 'input.negative_strike',
+  InputNegativeVolatility: 'input.negative_volatility',
+  InputNegativeTime: 'input.negative_time',
+  InputOutOfRange: ValidationCode.InputOutOfRange,
+  InputInvalidEnum: 'input.invalid_enum',
+  InputMissingField: 'input.missing_field',
+  InputUnknownField: ValidationCode.InputUnknownField,
+  InputWrongType: ValidationCode.InputWrongType,
+  InputWrongShape: 'input.wrong_shape',
+  ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence',
+  ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic',
+  ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound',
+  EngineUnsupportedContract: 'engine.unsupported_contract',
+  DataCrossedMarket: 'data.crossed_market',
+  DataUnsupportedCapability: 'data.unsupported_capability',
+  DataContractVersionUnsupported: 'data.contract_version_unsupported',
+  DataAuthenticationRequired: 'data.authentication_required',
+  DataEntitlementRequired: 'data.entitlement_required',
+  DataRateLimited: 'data.rate_limited',
+  DataAllowanceExhausted: 'data.allowance_exhausted',
+  DataSnapshotExpired: 'data.snapshot_expired',
+  DataInvalidCursor: 'data.invalid_cursor',
+  DataNotFound: 'data.not_found',
+  DataInvalidRequest: 'data.invalid_request',
+  DataInvalidResponse: 'data.invalid_response',
+  DataUnavailable: 'data.unavailable',
+  DataAborted: 'data.aborted',
+  DataNonconformant: 'data.nonconformant',
+  DataStaleQuote: 'data.stale_quote',
+  SolverNoConvergence: 'solver.no_convergence',
+  LinalgNoConvergence: 'linalg.no_convergence',
+  LinalgNotPositiveDefinite: 'linalg.not_positive_definite',
+  LinalgSingular: 'linalg.singular',
+  IntegrationMaxDepth: 'integration.max_depth',
+  InterpolationOutOfDomain: 'interpolation.out_of_domain',
+  InterpolationDuplicateKnots: 'interpolation.duplicate_knots',
+  InterpolationInvalidGrid: 'interpolation.invalid_grid',
+  OptimizeInvalidBounds: 'optimize.invalid_bounds',
+  VolatilityExpiryNotFound: 'volatility.expiry_not_found',
+  VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage',
+  StrategyInvalidChartRange: 'strategy.invalid_chart_range',
+  TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed',
+  TimeValuationInstantRequired: 'time.valuation_instant_required',
+  BacktestDuplicateHandler: 'backtest.duplicate_handler',
+  BacktestMixedSymbols: 'backtest.mixed_symbols',
+  BacktestMarkUnavailable: 'backtest.mark_unavailable',
+  BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar',
+  BacktestStaleQuote: 'backtest.stale_quote',
+  BacktestAdapterNonconformant: 'backtest.adapter_nonconformant',
+  BacktestInputTooLarge: 'backtest.input_too_large',
+  BacktestDelistingReturnMissing: 'backtest.delisting_return_missing',
+  BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown',
+  BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed',
+  EnvironmentNotReset: 'environment.not_reset',
+  EnvironmentDuplicateOrder: 'environment.duplicate_order',
+  EnvironmentLimitBreach: 'environment.limit_breach',
+  EnvironmentActionDisallowed: 'environment.action_disallowed',
+  EnvironmentUnknownInstrument: 'environment.unknown_instrument',
+  EnvironmentOrderInvalid: 'environment.order_invalid',
+  EnvironmentActionInvalid: 'environment.action_invalid',
+  EnvironmentEpisodeOver: 'environment.episode_over',
+  TradePlanInvalid: 'trade.plan_invalid',
+  TradePreflightDenied: 'trade.preflight_denied',
+  TradeGrantInvalid: 'trade.grant_invalid',
+  TradeGrantExpired: 'trade.grant_expired',
+  TradeGrantConsumed: 'trade.grant_consumed',
+  TradeIdempotencyConflict: 'trade.idempotency_conflict',
+  TradeHalted: 'trade.halted',
+  TradeLiveUnavailable: 'trade.live_unavailable',
+  TradeJournalTransitionInvalid: 'trade.journal_transition_invalid',
+  OperationCapabilityMissing: 'operation.capability_missing',
+  OperationToolFiltered: 'operation.tool_filtered',
+  BacktestGridTooLarge: 'backtest.grid_too_large',
+  BacktestBookTooLarge: 'backtest.book_too_large',
+  BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action',
+  OperationUnknown: 'operation.unknown',
+  OperationRegistrationRefused: 'operation.registration_refused',
+  OperationInputTooLarge: 'operation.input_too_large',
+  OperationDeadlineExceeded: 'operation.deadline_exceeded',
+  OperationCancelled: 'operation.cancelled',
+  OperationInternal: 'operation.internal',
+  OperationHandleStoreMissing: 'operation.handle_store_missing',
+  OperationHandleUnknown: 'operation.handle_unknown',
+  OperationHandleKindMismatch: 'operation.handle_kind_mismatch',
+  InputLengthMismatch: 'input.length_mismatch',
+  InputDuplicateEntry: 'input.duplicate_entry',
+  McpDeadlineExceeded: 'mcp.deadline_exceeded',
+  McpInputTooLarge: 'mcp.input_too_large',
+  McpInternalError: 'mcp.internal_error',
+  PostconditionNonFinite: 'postcondition.non_finite_result',
+  McpUnknownTool: 'mcp.unknown_tool',
+  PipelineDuplicateAlias: 'pipeline.duplicate_alias',
+  PipelineLengthMismatch: 'pipeline.length_mismatch',
+  RegistryAliasConflict: 'registry.alias_conflict',
+  RegistryDuplicateAliasRow: 'registry.duplicate_alias_row',
+  RegistryDuplicateIndicator: 'registry.duplicate_indicator',
+  RegistryUnknownAliasTarget: 'registry.unknown_alias_target',
+  SignalUnknownReference: 'signal.unknown_reference',
+  SnapshotInvalidVersion: 'snapshot.invalid_version',
+  SnapshotKindMismatch: 'snapshot.kind_mismatch',
+  SnapshotUnknownKind: 'snapshot.unknown_kind',
+  SnapshotUnsupportedVersion: 'snapshot.unsupported_version',
+  SnapshotWrongShape: 'snapshot.wrong_shape',
+  StrategyDeltaRequired: 'strategy.delta_required',
+  StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics',
+  StrategyExpiryConflict: 'strategy.expiry_conflict',
+  StrategyStrikeUnavailable: 'strategy.strike_unavailable',
+  VolatilityForwardUnavailable: 'volatility.forward_unavailable',
+  VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch',
+  EngineProbabilityOutOfRange: 'engine.probability_out_of_range',
+  EngineResultOutOfBounds: 'engine.result_out_of_bounds',
+  EngineDiscretizationInadequate: 'engine.discretization_inadequate',
+  ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable',
+  RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance',
+  RiskQuantileBeyondSample: 'risk.quantile_beyond_sample',
+  VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation',
+  VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast',
+  MathIterationLimit: 'math.iteration_limit',
+  BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted',
+  InputSuspiciousCouponRate: 'input.suspicious_coupon_rate',
+  InputSuspiciousYield: 'input.suspicious_yield',
+  ModelFellerConditionViolated: 'model.feller_condition_violated',
+  PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied',
+  PricerRequirementInvalid: 'pricer.requirement_invalid',
+  PricerObservationInvalid: 'pricer.observation_invalid',
+  PricerNonconformant: 'pricer.nonconformant',
+  ScenarioInstructionUnmatched: 'scenario.instruction_unmatched',
+  ScenarioTargetUnsupported: 'scenario.target_unsupported',
+  ScenarioCellFailed: 'scenario.cell_failed',
+  SerializationUnsupportedValue: 'serialization.unsupported_value',
+  ArtifactMigrationMissing: 'artifact.migration_missing',
+  ArtifactDuplicateMigration: 'artifact.duplicate_migration',
+  ArtifactIdMismatch: 'artifact.id_mismatch',
+  ArtifactTypeMismatch: 'artifact.type_mismatch',
+  ArtifactFamilyMismatch: 'artifact.family_mismatch',
+  ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported',
+  ArtifactNotReplayable: 'artifact.not_replayable',
+  ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch',
+  ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large',
+  ArtifactOperationUnsupported: 'artifact.operation_unsupported',
+  PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict',
+  PortfolioLotUnavailable: 'portfolio.lot_unavailable',
+  PortfolioMarkUnavailable: 'portfolio.mark_unavailable',
+  PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing',
+  PortfolioReversalInfeasible: 'portfolio.reversal_infeasible',
+} as const satisfies ErrorCodeRegistry;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 
@@ -409,14 +536,13 @@ export function missingFieldError(
   example: string,
   hint?: string,
 ): InputError {
-  const lines = [`${functionName}: ${field} is required.`, `  e.g. ${example}`];
-  // The hint carries what the call shape cannot: a unit trap, a range, a name collision. It is a
-  // SECOND line rather than a replacement, because the example has to stay pasteable.
-  if (hint !== undefined) lines.push(`  ${field}: ${hint}`);
-  return new InputError(lines.join('\n'), {
-    code: ValidationCode.InputMissingField,
-    context: { function: functionName, field, example, ...(hint === undefined ? {} : { hint }) },
-  });
+  return new InputError(
+    `${functionName}: ${field} is required.\n  e.g. ${example}${hint === undefined ? '' : `\n  ${field}: ${hint}`}`,
+    {
+      code: ValidationCode.InputMissingField,
+      context: { function: functionName, field, example, ...(hint === undefined ? {} : { hint }) },
+    },
+  );
 }
 
 /**

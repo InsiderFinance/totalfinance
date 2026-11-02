@@ -40631,44 +40631,32 @@ consumer detect future shape changes.
 - DataError(options).cause?: unknown; default: not declared — Underlying cause, preserved on the standard `Error.cause` chain.
 - DataError(options).code: string; default: not declared — Stable, machine-readable code, e.g. `input.negative_spot`.
 - DataError(options).context?: Record<string, unknown>; default: not declared — Structured context for programmatic handling and good error messages.
-- ErrorCode: { readonly InputNaN: 'input.nan'; readonly InputNotFinite: 'input.not_finite'; readonly InputNegativeSpot: 'input.negative_spot'; readonly InputNegativeStrike: 'input.negative_strike'; readonly InputNegativeVolatility: 'input.negative_volatility'; readonly InputNegativeTime: 'input.negative_time'; readonly InputOutOfRange: 'input.out_of_range'; readonly InputInvalidEnum: 'input.invalid_enum'; readonly InputMissingField: 'input.missing_field'; readonly InputUnknownField: 'input.unknown_field'; readonly InputWrongType: 'input.wrong_type'; readonly InputWrongShape: 'input.wrong_shape'; readonly ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; readonly ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; readonly ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; readonly EngineUnsupportedContract: 'engine.unsupported_contract'; readonly DataCrossedMarket: 'data.crossed_market'; readonly DataUnsupportedCapability: 'data.unsupported_capability'; readonly DataContractVersionUnsupported: 'data.contract_version_unsupported'; readonly DataAuthenticationRequired: 'data.authentication_required'; readonly DataEntitlementRequired: 'data.entitlement_required'; readonly DataRateLimited: 'data.rate_limited'; readonly DataAllowanceExhausted: 'data.allowance_exhausted'; readonly DataSnapshotExpired: 'data.snapshot_expired'; readonly DataInvalidCursor: 'data.invalid_cursor'; readonly DataNotFound: 'data.not_found'; readonly DataInvalidRequest: 'data.invalid_request'; readonly DataInvalidResponse: 'data.invalid_response'; readonly DataUnavailable: 'data.unavailable'; readonly DataAborted: 'data.aborted'; readonly DataNonconformant: 'data.nonconformant'; readonly DataStaleQuote: 'data.stale_quote'; readonly SolverNoConvergence: 'solver.no_convergence'; readonly LinalgNoConvergence: 'linalg.no_convergence'; readonly LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; readonly LinalgSingular: 'linalg.singular'; readonly IntegrationMaxDepth: 'integration.max_depth'; readonly InterpolationOutOfDomain: 'interpolation.out_of_domain'; readonly InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; readonly InterpolationInvalidGrid: 'interpolation.invalid_grid'; readonly OptimizeInvalidBounds: 'optimize.invalid_bounds'; readonly VolatilityExpiryNotFound: 'volatility.expiry_not_found'; readonly VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; readonly StrategyInvalidChartRange: 'strategy.invalid_chart_range'; readonly TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; readonly TimeValuationInstantRequired: 'time.valuation_instant_required'; readonly BacktestDuplicateHandler: 'backtest.duplicate_handler'; readonly BacktestMixedSymbols: 'backtest.mixed_symbols'; readonly BacktestMarkUnavailable: 'backtest.mark_unavailable'; readonly BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; readonly BacktestStaleQuote: 'backtest.stale_quote'; readonly BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; readonly BacktestInputTooLarge: 'backtest.input_too_large'; readonly BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; readonly BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; readonly BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; readonly EnvironmentNotReset: 'environment.not_reset'; readonly EnvironmentDuplicateOrder: 'environment.duplicate_order'; readonly EnvironmentLimitBreach: 'environment.limit_breach'; readonly EnvironmentActionDisallowed: 'environment.action_disallowed'; readonly EnvironmentUnknownInstrument: 'environment.unknown_instrument'; readonly EnvironmentOrderInvalid: 'environment.order_invalid'; readonly EnvironmentActionInvalid: 'environment.action_invalid'; readonly EnvironmentEpisodeOver: 'environment.episode_over'; readonly TradePlanInvalid: 'trade.plan_invalid'; readonly TradePreflightDenied: 'trade.preflight_denied'; readonly TradeGrantInvalid: 'trade.grant_invalid'; readonly TradeGrantExpired: 'trade.grant_expired'; readonly TradeGrantConsumed: 'trade.grant_consumed'; readonly TradeIdempotencyConflict: 'trade.idempotency_conflict'; readonly TradeHalted: 'trade.halted'; readonly TradeLiveUnavailable: 'trade.live_unavailable'; readonly TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; readonly OperationCapabilityMissing: 'operation.capability_missing'; readonly OperationToolFiltered: 'operation.tool_filtered'; readonly BacktestGridTooLarge: 'backtest.grid_too_large'; readonly BacktestBookTooLarge: 'backtest.book_too_large'; readonly BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; readonly OperationUnknown: 'operation.unknown'; readonly OperationRegistrationRefused: 'operation.registration_refused'; readonly OperationInputTooLarge: 'operation.input_too_large'; readonly OperationDeadlineExceeded: 'operation.deadline_exceeded'; readonly OperationCancelled: 'operation.cancelled'; readonly OperationInternal: 'operation.internal'; readonly OperationHandleStoreMissing: 'operation.handle_store_missing'; readonly OperationHandleUnknown: 'operation.handle_unknown'; readonly OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; readonly InputLengthMismatch: 'input.length_mismatch'; readonly InputDuplicateEntry: 'input.duplicate_entry'; readonly McpDeadlineExceeded: 'mcp.deadline_exceeded'; readonly McpInputTooLarge: 'mcp.input_too_large'; readonly McpInternalError: 'mcp.internal_error'; readonly PostconditionNonFinite: 'postcondition.non_finite_result'; readonly McpUnknownTool: 'mcp.unknown_tool'; readonly PipelineDuplicateAlias: 'pipeline.duplicate_alias'; readonly PipelineLengthMismatch: 'pipeline.length_mismatch'; readonly RegistryAliasConflict: 'registry.alias_conflict'; readonly RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; readonly RegistryDuplicateIndicator: 'registry.duplicate_indicator'; readonly RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; readonly SignalUnknownReference: 'signal.unknown_reference'; readonly SnapshotInvalidVersion: 'snapshot.invalid_version'; readonly SnapshotKindMismatch: 'snapshot.kind_mismatch'; readonly SnapshotUnknownKind: 'snapshot.unknown_kind'; readonly SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; readonly SnapshotWrongShape: 'snapshot.wrong_shape'; readonly StrategyDeltaRequired: 'strategy.delta_required'; readonly StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; readonly StrategyExpiryConflict: 'strategy.expiry_conflict'; readonly StrategyStrikeUnavailable: 'strategy.strike_unavailable'; readonly VolatilityForwardUnavailable: 'volatility.forward_unavailable'; readonly VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; readonly EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; readonly EngineResultOutOfBounds: 'engine.result_out_of_bounds'; readonly EngineDiscretizationInadequate: 'engine.discretization_inadequate'; readonly ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; readonly RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; readonly RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; readonly VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; readonly VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; readonly MathIterationLimit: 'math.iteration_limit'; readonly BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; readonly InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; readonly InputSuspiciousYield: 'input.suspicious_yield'; readonly ModelFellerConditionViolated: 'model.feller_condition_violated'; readonly PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; readonly PricerRequirementInvalid: 'pricer.requirement_invalid'; readonly PricerObservationInvalid: 'pricer.observation_invalid'; readonly PricerNonconformant: 'pricer.nonconformant'; readonly ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; readonly ScenarioTargetUnsupported: 'scenario.target_unsupported'; readonly ScenarioCellFailed: 'scenario.cell_failed'; readonly SerializationUnsupportedValue: 'serialization.unsupported_value'; readonly ArtifactMigrationMissing: 'artifact.migration_missing'; readonly ArtifactDuplicateMigration: 'artifact.duplicate_migration'; readonly ArtifactIdMismatch: 'artifact.id_mismatch'; readonly ArtifactTypeMismatch: 'artifact.type_mismatch'; readonly ArtifactFamilyMismatch: 'artifact.family_mismatch'; readonly ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; readonly ArtifactNotReplayable: 'artifact.not_replayable'; readonly ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; readonly ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; readonly ArtifactOperationUnsupported: 'artifact.operation_unsupported'; readonly PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; readonly PortfolioLotUnavailable: 'portfolio.lot_unavailable'; readonly PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; readonly PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; }; default: not declared
-- ErrorCode.ArtifactDuplicateMigration: 'artifact.duplicate_migration'; default: not declared — A second migration was registered for the same `(kind, fromVersion)` — two upgrades for one
-stored shape cannot both be the truth.
-- ErrorCode.ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; default: not declared — An embedded calibration or run input exceeds `maximumEmbeddedBytes`; the teaching says to
-reference the bulk row set through a table handle instead (Stage 4.5 Decision 9).
-- ErrorCode.ArtifactFamilyMismatch: 'artifact.family_mismatch'; default: not declared — A domain artifact verb received an artifact or report of another package, model family, or
-research kind (Stage 4.5) — the teaching names the owner.
-- ErrorCode.ArtifactIdMismatch: 'artifact.id_mismatch'; default: not declared — A saved analysis artifact's `id` does not equal the content hash of its body — the artifact
-was edited after creation (or assembled by hand); its provenance chain cannot be trusted.
-- ErrorCode.ArtifactMigrationMissing: 'artifact.migration_missing'; default: not declared — An older-schema envelope was read with no registered migration covering a required step —
-schema upgrades are explicit, never silent.
-- ErrorCode.ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; default: not declared — A stored fitted-model `modelVersion` / research `runVersion` is newer than this build, or older
-with no registered report migration — evaluating a stored parameter set under different
-semantics is a silent wrong number, so it is refused (Stage 4.5 Decision 5).
-- ErrorCode.ArtifactNotReplayable: 'artifact.not_replayable'; default: not declared — The stored inputs carried a non-serializable callback (a custom predicate or expected-return
-model); replay cannot re-issue the producing call and names the field (Stage 4.5).
-- ErrorCode.ArtifactOperationUnsupported: 'artifact.operation_unsupported'; default: not declared — The model family has no evaluator, warm start, stability, or holdout operation — an exact or
-closed-form fit has no search to start and a statistic has nothing to evaluate (Stage 4.5).
-- ErrorCode.ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; default: not declared — Caller-supplied rows for a referenced table do not hash to the artifact's table handle — a
-replay over different data would be a replay of a different run (Stage 4.5).
-- ErrorCode.ArtifactTypeMismatch: 'artifact.type_mismatch'; default: not declared — `compareAnalysisArtifacts` received two artifacts of different `artifactType`s — a leaf-by-leaf
-comparison across result schemas would compare unrelated numbers under shared names.
-- ErrorCode.BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; default: not declared — Stage 4.6 (FC8) — a caller-supplied fill model or instrument adapter failed its conformance suite.
-- ErrorCode.BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; default: not declared — Stage 4.6 (FC8) — the `reject` intrabar ambiguity policy met a bar where two orders could
-have touched in either sequence; the run refuses rather than pick a sequence silently.
-- ErrorCode.BacktestBookTooLarge: 'backtest.book_too_large'; default: not declared — Stage 4.6 (FC8) — an options book above the open positions one synchronous book may hold.
-- ErrorCode.BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; default: not declared — Stage 4.6 (FC8) — a 'delisted' universe exit with no delistingReturn while a position is open.
+- ErrorCode: { readonly InputNaN: 'input.nan'; readonly InputNotFinite: 'input.not_finite'; readonly InputNegativeSpot: 'input.negative_spot'; readonly InputNegativeStrike: 'input.negative_strike'; readonly InputNegativeVolatility: 'input.negative_volatility'; readonly InputNegativeTime: 'input.negative_time'; readonly InputOutOfRange: 'input.out_of_range'; readonly InputInvalidEnum: 'input.invalid_enum'; readonly InputMissingField: 'input.missing_field'; readonly InputUnknownField: 'input.unknown_field'; readonly InputWrongType: 'input.wrong_type'; readonly InputWrongShape: 'input.wrong_shape'; readonly ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; readonly ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; readonly ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; readonly EngineUnsupportedContract: 'engine.unsupported_contract'; readonly DataCrossedMarket: 'data.crossed_market'; readonly DataUnsupportedCapability: 'data.unsupported_capability'; readonly DataContractVersionUnsupported: 'data.contract_version_unsupported'; readonly DataAuthenticationRequired: 'data.authentication_required'; readonly DataEntitlementRequired: 'data.entitlement_required'; readonly DataRateLimited: 'data.rate_limited'; readonly DataAllowanceExhausted: 'data.allowance_exhausted'; readonly DataSnapshotExpired: 'data.snapshot_expired'; readonly DataInvalidCursor: 'data.invalid_cursor'; readonly DataNotFound: 'data.not_found'; readonly DataInvalidRequest: 'data.invalid_request'; readonly DataInvalidResponse: 'data.invalid_response'; readonly DataUnavailable: 'data.unavailable'; readonly DataAborted: 'data.aborted'; readonly DataNonconformant: 'data.nonconformant'; readonly DataStaleQuote: 'data.stale_quote'; readonly SolverNoConvergence: 'solver.no_convergence'; readonly LinalgNoConvergence: 'linalg.no_convergence'; readonly LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; readonly LinalgSingular: 'linalg.singular'; readonly IntegrationMaxDepth: 'integration.max_depth'; readonly InterpolationOutOfDomain: 'interpolation.out_of_domain'; readonly InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; readonly InterpolationInvalidGrid: 'interpolation.invalid_grid'; readonly OptimizeInvalidBounds: 'optimize.invalid_bounds'; readonly VolatilityExpiryNotFound: 'volatility.expiry_not_found'; readonly VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; readonly StrategyInvalidChartRange: 'strategy.invalid_chart_range'; readonly TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; readonly TimeValuationInstantRequired: 'time.valuation_instant_required'; readonly BacktestDuplicateHandler: 'backtest.duplicate_handler'; readonly BacktestMixedSymbols: 'backtest.mixed_symbols'; readonly BacktestMarkUnavailable: 'backtest.mark_unavailable'; readonly BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; readonly BacktestStaleQuote: 'backtest.stale_quote'; readonly BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; readonly BacktestInputTooLarge: 'backtest.input_too_large'; readonly BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; readonly BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; readonly BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; readonly EnvironmentNotReset: 'environment.not_reset'; readonly EnvironmentDuplicateOrder: 'environment.duplicate_order'; readonly EnvironmentLimitBreach: 'environment.limit_breach'; readonly EnvironmentActionDisallowed: 'environment.action_disallowed'; readonly EnvironmentUnknownInstrument: 'environment.unknown_instrument'; readonly EnvironmentOrderInvalid: 'environment.order_invalid'; readonly EnvironmentActionInvalid: 'environment.action_invalid'; readonly EnvironmentEpisodeOver: 'environment.episode_over'; readonly TradePlanInvalid: 'trade.plan_invalid'; readonly TradePreflightDenied: 'trade.preflight_denied'; readonly TradeGrantInvalid: 'trade.grant_invalid'; readonly TradeGrantExpired: 'trade.grant_expired'; readonly TradeGrantConsumed: 'trade.grant_consumed'; readonly TradeIdempotencyConflict: 'trade.idempotency_conflict'; readonly TradeHalted: 'trade.halted'; readonly TradeLiveUnavailable: 'trade.live_unavailable'; readonly TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; readonly OperationCapabilityMissing: 'operation.capability_missing'; readonly OperationToolFiltered: 'operation.tool_filtered'; readonly BacktestGridTooLarge: 'backtest.grid_too_large'; readonly BacktestBookTooLarge: 'backtest.book_too_large'; readonly BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; readonly OperationUnknown: 'operation.unknown'; readonly OperationRegistrationRefused: 'operation.registration_refused'; readonly OperationInputTooLarge: 'operation.input_too_large'; readonly OperationDeadlineExceeded: 'operation.deadline_exceeded'; readonly OperationCancelled: 'operation.cancelled'; readonly OperationInternal: 'operation.internal'; readonly OperationHandleStoreMissing: 'operation.handle_store_missing'; readonly OperationHandleUnknown: 'operation.handle_unknown'; readonly OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; readonly InputLengthMismatch: 'input.length_mismatch'; readonly InputDuplicateEntry: 'input.duplicate_entry'; readonly McpDeadlineExceeded: 'mcp.deadline_exceeded'; readonly McpInputTooLarge: 'mcp.input_too_large'; readonly McpInternalError: 'mcp.internal_error'; readonly PostconditionNonFinite: 'postcondition.non_finite_result'; readonly McpUnknownTool: 'mcp.unknown_tool'; readonly PipelineDuplicateAlias: 'pipeline.duplicate_alias'; readonly PipelineLengthMismatch: 'pipeline.length_mismatch'; readonly RegistryAliasConflict: 'registry.alias_conflict'; readonly RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; readonly RegistryDuplicateIndicator: 'registry.duplicate_indicator'; readonly RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; readonly SignalUnknownReference: 'signal.unknown_reference'; readonly SnapshotInvalidVersion: 'snapshot.invalid_version'; readonly SnapshotKindMismatch: 'snapshot.kind_mismatch'; readonly SnapshotUnknownKind: 'snapshot.unknown_kind'; readonly SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; readonly SnapshotWrongShape: 'snapshot.wrong_shape'; readonly StrategyDeltaRequired: 'strategy.delta_required'; readonly StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; readonly StrategyExpiryConflict: 'strategy.expiry_conflict'; readonly StrategyStrikeUnavailable: 'strategy.strike_unavailable'; readonly VolatilityForwardUnavailable: 'volatility.forward_unavailable'; readonly VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; readonly EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; readonly EngineResultOutOfBounds: 'engine.result_out_of_bounds'; readonly EngineDiscretizationInadequate: 'engine.discretization_inadequate'; readonly ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; readonly RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; readonly RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; readonly VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; readonly VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; readonly MathIterationLimit: 'math.iteration_limit'; readonly BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; readonly InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; readonly InputSuspiciousYield: 'input.suspicious_yield'; readonly ModelFellerConditionViolated: 'model.feller_condition_violated'; readonly PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; readonly PricerRequirementInvalid: 'pricer.requirement_invalid'; readonly PricerObservationInvalid: 'pricer.observation_invalid'; readonly PricerNonconformant: 'pricer.nonconformant'; readonly ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; readonly ScenarioTargetUnsupported: 'scenario.target_unsupported'; readonly ScenarioCellFailed: 'scenario.cell_failed'; readonly SerializationUnsupportedValue: 'serialization.unsupported_value'; readonly ArtifactMigrationMissing: 'artifact.migration_missing'; readonly ArtifactDuplicateMigration: 'artifact.duplicate_migration'; readonly ArtifactIdMismatch: 'artifact.id_mismatch'; readonly ArtifactTypeMismatch: 'artifact.type_mismatch'; readonly ArtifactFamilyMismatch: 'artifact.family_mismatch'; readonly ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; readonly ArtifactNotReplayable: 'artifact.not_replayable'; readonly ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; readonly ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; readonly ArtifactOperationUnsupported: 'artifact.operation_unsupported'; readonly PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; readonly PortfolioLotUnavailable: 'portfolio.lot_unavailable'; readonly PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; readonly PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; }; default: not declared — A literal table allows bundlers to discard the registry or unused properties without executing
+a catalog constructor. The declared key/value/order contract is checked independently below.
+- ErrorCode.ArtifactDuplicateMigration: 'artifact.duplicate_migration'; default: not declared
+- ErrorCode.ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; default: not declared
+- ErrorCode.ArtifactFamilyMismatch: 'artifact.family_mismatch'; default: not declared
+- ErrorCode.ArtifactIdMismatch: 'artifact.id_mismatch'; default: not declared
+- ErrorCode.ArtifactMigrationMissing: 'artifact.migration_missing'; default: not declared
+- ErrorCode.ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; default: not declared
+- ErrorCode.ArtifactNotReplayable: 'artifact.not_replayable'; default: not declared
+- ErrorCode.ArtifactOperationUnsupported: 'artifact.operation_unsupported'; default: not declared
+- ErrorCode.ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; default: not declared
+- ErrorCode.ArtifactTypeMismatch: 'artifact.type_mismatch'; default: not declared
+- ErrorCode.BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; default: not declared
+- ErrorCode.BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; default: not declared
+- ErrorCode.BacktestBookTooLarge: 'backtest.book_too_large'; default: not declared
+- ErrorCode.BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; default: not declared
 - ErrorCode.BacktestDuplicateHandler: 'backtest.duplicate_handler'; default: not declared
-- ErrorCode.BacktestGridTooLarge: 'backtest.grid_too_large'; default: not declared — Stage 4.6 (FC8) — a grid's cartesian product is above the variations one synchronous sweep may run.
-- ErrorCode.BacktestInputTooLarge: 'backtest.input_too_large'; default: not declared — Stage 4.6 (FC8) — a run's row count is above the ceiling one synchronous run may read.
-- ErrorCode.BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; default: not declared — Stage 4.6 (FC8) — the emitted portfolio events do not fold to the equity the engine reports (an invariant).
-- ErrorCode.BacktestMarkUnavailable: 'backtest.mark_unavailable'; default: not declared — An open option leg has no usable current-snapshot mark (missing, ambiguous, stale, or
-unpriceable contract quote) and the request's missing-mark policy is to refuse (Preview P1).
+- ErrorCode.BacktestGridTooLarge: 'backtest.grid_too_large'; default: not declared
+- ErrorCode.BacktestInputTooLarge: 'backtest.input_too_large'; default: not declared
+- ErrorCode.BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; default: not declared
+- ErrorCode.BacktestMarkUnavailable: 'backtest.mark_unavailable'; default: not declared
 - ErrorCode.BacktestMixedSymbols: 'backtest.mixed_symbols'; default: not declared
-- ErrorCode.BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; default: not declared — Warning: a resting order's prices/quantity were adjusted for a corporate action (split).
-- ErrorCode.BacktestStaleQuote: 'backtest.stale_quote'; default: not declared — Stage 4.6 (FC8) — a quote fill under `staleQuotes.behavior: 'reject'` met a quote older than the policy's maximum age.
-- ErrorCode.BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared — Stage 4.6 (FC8) — a return or feature names an instrument the universe history never lists.
-- ErrorCode.BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared — Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted.
+- ErrorCode.BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; default: not declared
+- ErrorCode.BacktestStaleQuote: 'backtest.stale_quote'; default: not declared
+- ErrorCode.BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared
+- ErrorCode.BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared
 - ErrorCode.DataAborted: 'data.aborted'; default: not declared
 - ErrorCode.DataAllowanceExhausted: 'data.allowance_exhausted'; default: not declared
 - ErrorCode.DataAuthenticationRequired: 'data.authentication_required'; default: not declared
@@ -40685,23 +40673,23 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - ErrorCode.DataStaleQuote: 'data.stale_quote'; default: not declared
 - ErrorCode.DataUnavailable: 'data.unavailable'; default: not declared
 - ErrorCode.DataUnsupportedCapability: 'data.unsupported_capability'; default: not declared
-- ErrorCode.EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared — Warning: the engine's grid/truncation is too coarse for the requested regime.
-- ErrorCode.EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared — A lattice's risk-neutral branch probabilities left [0, 1] (drift outran diffusion).
-- ErrorCode.EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared — A successful engine result violated a no-arbitrage output bound (e.g. C > S·e^{-qT}).
+- ErrorCode.EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared
+- ErrorCode.EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared
+- ErrorCode.EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared
 - ErrorCode.EngineUnsupportedContract: 'engine.unsupported_contract'; default: not declared
-- ErrorCode.EnvironmentActionDisallowed: 'environment.action_disallowed'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order the action mask disallows.
-- ErrorCode.EnvironmentActionInvalid: 'environment.action_invalid'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an action of the wrong shape; the step proceeds as hold.
-- ErrorCode.EnvironmentDuplicateOrder: 'environment.duplicate_order'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order id repeated inside an episode (an idempotent retry).
-- ErrorCode.EnvironmentEpisodeOver: 'environment.episode_over'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: a step after the episode ended.
-- ErrorCode.EnvironmentLimitBreach: 'environment.limit_breach'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order that would breach a declared limit.
-- ErrorCode.EnvironmentNotReset: 'environment.not_reset'; default: not declared — Stage 7B.1 (AT4) — step() or finish() on a trading environment before reset().
-- ErrorCode.EnvironmentOrderInvalid: 'environment.order_invalid'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order or cancellation of the wrong shape.
-- ErrorCode.EnvironmentUnknownInstrument: 'environment.unknown_instrument'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order naming an instrument the environment does not hold.
+- ErrorCode.EnvironmentActionDisallowed: 'environment.action_disallowed'; default: not declared
+- ErrorCode.EnvironmentActionInvalid: 'environment.action_invalid'; default: not declared
+- ErrorCode.EnvironmentDuplicateOrder: 'environment.duplicate_order'; default: not declared
+- ErrorCode.EnvironmentEpisodeOver: 'environment.episode_over'; default: not declared
+- ErrorCode.EnvironmentLimitBreach: 'environment.limit_breach'; default: not declared
+- ErrorCode.EnvironmentNotReset: 'environment.not_reset'; default: not declared
+- ErrorCode.EnvironmentOrderInvalid: 'environment.order_invalid'; default: not declared
+- ErrorCode.EnvironmentUnknownInstrument: 'environment.unknown_instrument'; default: not declared
 - ErrorCode.ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; default: not declared
 - ErrorCode.ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; default: not declared
 - ErrorCode.ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; default: not declared
-- ErrorCode.ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; default: not declared — The target premium is below the smallest price the solver can resolve to a volatility.
-- ErrorCode.InputDuplicateEntry: 'input.duplicate_entry'; default: not declared — A selection list names the same entry twice — a duplicate is never silently collapsed.
+- ErrorCode.ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; default: not declared
+- ErrorCode.InputDuplicateEntry: 'input.duplicate_entry'; default: not declared
 - ErrorCode.InputInvalidEnum: 'input.invalid_enum'; default: not declared
 - ErrorCode.InputLengthMismatch: 'input.length_mismatch'; default: not declared
 - ErrorCode.InputMissingField: 'input.missing_field'; default: not declared
@@ -40712,11 +40700,10 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - ErrorCode.InputNegativeVolatility: 'input.negative_volatility'; default: not declared
 - ErrorCode.InputNotFinite: 'input.not_finite'; default: not declared
 - ErrorCode.InputOutOfRange: 'input.out_of_range'; default: not declared
-- ErrorCode.InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; default: not declared — Warning: a coupon rate looks like a percent typed as a decimal (e.g. 5 for 5%).
-- ErrorCode.InputSuspiciousYield: 'input.suspicious_yield'; default: not declared — Warning: a yield looks like a percent typed as a decimal (e.g. 5 for 5%).
+- ErrorCode.InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; default: not declared
+- ErrorCode.InputSuspiciousYield: 'input.suspicious_yield'; default: not declared
 - ErrorCode.InputUnknownField: 'input.unknown_field'; default: not declared
-- ErrorCode.InputWrongShape: 'input.wrong_shape'; default: not declared — The argument is an object but not the expected SHAPE (right type, wrong slots) — distinct from a
-single missing field. Emitted by {@link wrongShapeError}.
+- ErrorCode.InputWrongShape: 'input.wrong_shape'; default: not declared
 - ErrorCode.InputWrongType: 'input.wrong_type'; default: not declared
 - ErrorCode.IntegrationMaxDepth: 'integration.max_depth'; default: not declared
 - ErrorCode.InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; default: not declared
@@ -40725,14 +40712,14 @@ single missing field. Emitted by {@link wrongShapeError}.
 - ErrorCode.LinalgNoConvergence: 'linalg.no_convergence'; default: not declared
 - ErrorCode.LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; default: not declared
 - ErrorCode.LinalgSingular: 'linalg.singular'; default: not declared
-- ErrorCode.MathIterationLimit: 'math.iteration_limit'; default: not declared — An iterative series/loop hit its budget without converging; the value is not returned.
+- ErrorCode.MathIterationLimit: 'math.iteration_limit'; default: not declared
 - ErrorCode.McpDeadlineExceeded: 'mcp.deadline_exceeded'; default: not declared
 - ErrorCode.McpInputTooLarge: 'mcp.input_too_large'; default: not declared
 - ErrorCode.McpInternalError: 'mcp.internal_error'; default: not declared
 - ErrorCode.McpUnknownTool: 'mcp.unknown_tool'; default: not declared
-- ErrorCode.ModelFellerConditionViolated: 'model.feller_condition_violated'; default: not declared — Warning: model parameters violate the Feller condition; the variance floor is attainable.
+- ErrorCode.ModelFellerConditionViolated: 'model.feller_condition_violated'; default: not declared
 - ErrorCode.OperationCancelled: 'operation.cancelled'; default: not declared
-- ErrorCode.OperationCapabilityMissing: 'operation.capability_missing'; default: not declared — Stage 7B.2 (AT5) — an operation whose required capabilities the caller did not grant.
+- ErrorCode.OperationCapabilityMissing: 'operation.capability_missing'; default: not declared
 - ErrorCode.OperationDeadlineExceeded: 'operation.deadline_exceeded'; default: not declared
 - ErrorCode.OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; default: not declared
 - ErrorCode.OperationHandleStoreMissing: 'operation.handle_store_missing'; default: not declared
@@ -40741,72 +40728,58 @@ single missing field. Emitted by {@link wrongShapeError}.
 - ErrorCode.OperationInternal: 'operation.internal'; default: not declared
 - ErrorCode.OperationRegistrationRefused: 'operation.registration_refused'; default: not declared
 - ErrorCode.OperationToolFiltered: 'operation.tool_filtered'; default: not declared
-- ErrorCode.OperationUnknown: 'operation.unknown'; default: not declared — Stage 7A — the protocol-neutral operation runtime and registry (`@insiderfinance/totalfinance/workflows`).
+- ErrorCode.OperationUnknown: 'operation.unknown'; default: not declared
 - ErrorCode.OptimizeInvalidBounds: 'optimize.invalid_bounds'; default: not declared
 - ErrorCode.PipelineDuplicateAlias: 'pipeline.duplicate_alias'; default: not declared
 - ErrorCode.PipelineLengthMismatch: 'pipeline.length_mismatch'; default: not declared
-- ErrorCode.PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; default: not declared — A `(sourceId, eventId)` pair was replayed with a DIFFERENT event body. The duplicate boundary
-makes replay idempotent for identical deliveries; a changed payload under the same identity is
-a conflict that must be heard, never a silent overwrite or a silent no-op.
-- ErrorCode.PortfolioLotUnavailable: 'portfolio.lot_unavailable'; default: not declared — A `specific-lot` relief selection names a lot that does not exist in the position or carries
-less remaining quantity than the selection claims — lot relief never guesses a substitute.
-- ErrorCode.PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; default: not declared — A valuation needs a mark (an instrument price or a currency-pair quote to the base currency)
-that the supplied market/conversion inputs do not carry. An unavailable mark is a typed
-failure, never an interpolated or stale guess.
-- ErrorCode.PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; default: not declared — The applied fact cannot be reversed exactly: the supplied `original` differs from what was
-applied, it was already reversed, its lots were relieved by later fills, or its family has no
-exact inverse in this build. History is never approximated — record a correcting event.
-- ErrorCode.PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; default: not declared — An `admin.reversal`/`admin.correction` names an `original` the fold never applied under that
-`(sourceId, eventId)` — a reversal repairs an applied fact, never an imagined one.
+- ErrorCode.PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; default: not declared
+- ErrorCode.PortfolioLotUnavailable: 'portfolio.lot_unavailable'; default: not declared
+- ErrorCode.PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; default: not declared
+- ErrorCode.PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; default: not declared
+- ErrorCode.PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; default: not declared
 - ErrorCode.PostconditionNonFinite: 'postcondition.non_finite_result'; default: not declared
-- ErrorCode.PricerNonconformant: 'pricer.nonconformant'; default: not declared — A pricer failed the behavioral conformance kit (`validatePricer`) against its own fixtures.
-- ErrorCode.PricerObservationInvalid: 'pricer.observation_invalid'; default: not declared — A market observation's value has the wrong type/shape for its requirement's kind.
-- ErrorCode.PricerRequirementInvalid: 'pricer.requirement_invalid'; default: not declared — A market-requirement descriptor is malformed (unknown kind, missing/mistyped subject field).
-- ErrorCode.PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; default: not declared — A required market observation is absent from the observations handed to a pricer.
+- ErrorCode.PricerNonconformant: 'pricer.nonconformant'; default: not declared
+- ErrorCode.PricerObservationInvalid: 'pricer.observation_invalid'; default: not declared
+- ErrorCode.PricerRequirementInvalid: 'pricer.requirement_invalid'; default: not declared
+- ErrorCode.PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; default: not declared
 - ErrorCode.RegistryAliasConflict: 'registry.alias_conflict'; default: not declared
 - ErrorCode.RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; default: not declared
 - ErrorCode.RegistryDuplicateIndicator: 'registry.duplicate_indicator'; default: not declared
 - ErrorCode.RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; default: not declared
-- ErrorCode.RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; default: not declared — Warning: covariance condition number too large for the optimizer's answer to be trusted.
-- ErrorCode.RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; default: not declared — Warning: the requested tail quantile lies beyond the sample's resolvable range.
-- ErrorCode.ScenarioCellFailed: 'scenario.cell_failed'; default: not declared — One base/scenario valuation failed after the complete request and execution plan passed.
-- ErrorCode.ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; default: not declared — A scenario override or shock matched no used observation, Taylor factor, FX quote, or handler.
-- ErrorCode.ScenarioTargetUnsupported: 'scenario.target_unsupported'; default: not declared — A target's bound pricer returned false from its one preflight `supports` call.
-- ErrorCode.SerializationUnsupportedValue: 'serialization.unsupported_value'; default: not declared — A value has no canonical JSON form (Date/Map/Set/typed array/class instance/bigint/function
-— or the reserved `{ nonFinite }` wrapper supplied as literal data). The canonical serializer
-refuses rather than guessing a meaning into every content hash.
+- ErrorCode.RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; default: not declared
+- ErrorCode.RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; default: not declared
+- ErrorCode.ScenarioCellFailed: 'scenario.cell_failed'; default: not declared
+- ErrorCode.ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; default: not declared
+- ErrorCode.ScenarioTargetUnsupported: 'scenario.target_unsupported'; default: not declared
+- ErrorCode.SerializationUnsupportedValue: 'serialization.unsupported_value'; default: not declared
 - ErrorCode.SignalUnknownReference: 'signal.unknown_reference'; default: not declared
 - ErrorCode.SnapshotInvalidVersion: 'snapshot.invalid_version'; default: not declared
 - ErrorCode.SnapshotKindMismatch: 'snapshot.kind_mismatch'; default: not declared
 - ErrorCode.SnapshotUnknownKind: 'snapshot.unknown_kind'; default: not declared
 - ErrorCode.SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; default: not declared
-- ErrorCode.SnapshotWrongShape: 'snapshot.wrong_shape'; default: not declared — A value handed to a snapshot restorer is not an envelope. 3B.N7 retired
-`snapshot.reserved_field` in the same change: that code guarded a stream serializing its own `v`
-into a FLAT snapshot, and the `{ kind, schemaVersion, state }` envelope makes the collision
-structurally impossible — indicator state can no longer reach the envelope's own fields.
+- ErrorCode.SnapshotWrongShape: 'snapshot.wrong_shape'; default: not declared
 - ErrorCode.SolverNoConvergence: 'solver.no_convergence'; default: not declared
 - ErrorCode.StrategyDeltaRequired: 'strategy.delta_required'; default: not declared
-- ErrorCode.StrategyExpiryConflict: 'strategy.expiry_conflict'; default: not declared — A call-site `expiry` contradicts the expiry materialized on the position's option legs.
+- ErrorCode.StrategyExpiryConflict: 'strategy.expiry_conflict'; default: not declared
 - ErrorCode.StrategyInvalidChartRange: 'strategy.invalid_chart_range'; default: not declared
 - ErrorCode.StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; default: not declared
 - ErrorCode.StrategyStrikeUnavailable: 'strategy.strike_unavailable'; default: not declared
-- ErrorCode.TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; default: not declared — A calendar/timezone resolution failed (unknown zone, unresolvable local time). Emitted by core's
-time layer, which owns the registry — so it lives here, not as a raw inline literal.
-- ErrorCode.TimeValuationInstantRequired: 'time.valuation_instant_required'; default: not declared — A pricing path was given a date with no time of day; a valuation instant must name one.
-- ErrorCode.TradeGrantConsumed: 'trade.grant_consumed'; default: not declared — Repairs B6 — the grant already licensed a submission; a grant is consumed by its first successful one.
-- ErrorCode.TradeGrantExpired: 'trade.grant_expired'; default: not declared — Stage 7B.2 (AT5) — an authorization grant past its expiry.
-- ErrorCode.TradeGrantInvalid: 'trade.grant_invalid'; default: not declared — Stage 7B.2 (AT5) — an authorization grant that does not cover the execution asked of it (its reasons name the bindings).
-- ErrorCode.TradeHalted: 'trade.halted'; default: not declared — Stage 7B.2 (AT5) — the kill switch is on: every submission refuses until resumed.
-- ErrorCode.TradeIdempotencyConflict: 'trade.idempotency_conflict'; default: not declared — Stage 7B.2 (AT5) — an idempotency key already used for a different plan.
-- ErrorCode.TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; default: not declared — Stage 7B.2 (AT5) — an execution-journal event that the order's state cannot accept.
-- ErrorCode.TradeLiveUnavailable: 'trade.live_unavailable'; default: not declared — Stage 7B.2 (AT5) — live execution is not available in the open library; adapters ship under AT8.
-- ErrorCode.TradePlanInvalid: 'trade.plan_invalid'; default: not declared — Stage 7B.2 (AT5) — a trade intent or plan that cannot be normalized (a duplicate line, an unknown instrument).
-- ErrorCode.TradePreflightDenied: 'trade.preflight_denied'; default: not declared — Stage 7B.2 (AT5) — preflight denied the plan; a grant cannot be minted over it.
+- ErrorCode.TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; default: not declared
+- ErrorCode.TimeValuationInstantRequired: 'time.valuation_instant_required'; default: not declared
+- ErrorCode.TradeGrantConsumed: 'trade.grant_consumed'; default: not declared
+- ErrorCode.TradeGrantExpired: 'trade.grant_expired'; default: not declared
+- ErrorCode.TradeGrantInvalid: 'trade.grant_invalid'; default: not declared
+- ErrorCode.TradeHalted: 'trade.halted'; default: not declared
+- ErrorCode.TradeIdempotencyConflict: 'trade.idempotency_conflict'; default: not declared
+- ErrorCode.TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; default: not declared
+- ErrorCode.TradeLiveUnavailable: 'trade.live_unavailable'; default: not declared
+- ErrorCode.TradePlanInvalid: 'trade.plan_invalid'; default: not declared
+- ErrorCode.TradePreflightDenied: 'trade.preflight_denied'; default: not declared
 - ErrorCode.VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; default: not declared
-- ErrorCode.VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; default: not declared — Warning: a calibrated fit deviates materially from its input data (likely arbitrageable).
+- ErrorCode.VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; default: not declared
 - ErrorCode.VolatilityExpiryNotFound: 'volatility.expiry_not_found'; default: not declared
 - ErrorCode.VolatilityForwardUnavailable: 'volatility.forward_unavailable'; default: not declared
-- ErrorCode.VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; default: not declared — A variance forecast came back negative; the model output cannot be consumed as a variance.
+- ErrorCode.VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; default: not declared
 - ErrorCode.VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; default: not declared
 - InputError: typeof import('@insiderfinance/totalfinance/core').InputError; default: not declared — Invalid or nonsensical input (programmer error or malformed payload).
 - InputError().return.code: string; default: not declared
@@ -109951,49 +109924,39 @@ export type EpochMs = number;
 
 Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
+A literal table allows bundlers to discard the registry or unused properties without executing
+a catalog constructor. The declared key/value/order contract is checked independently below.
+
 ```typescript
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- ArtifactDuplicateMigration: 'artifact.duplicate_migration'; default: not declared — A second migration was registered for the same `(kind, fromVersion)` — two upgrades for one
-stored shape cannot both be the truth.
-- ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; default: not declared — An embedded calibration or run input exceeds `maximumEmbeddedBytes`; the teaching says to
-reference the bulk row set through a table handle instead (Stage 4.5 Decision 9).
-- ArtifactFamilyMismatch: 'artifact.family_mismatch'; default: not declared — A domain artifact verb received an artifact or report of another package, model family, or
-research kind (Stage 4.5) — the teaching names the owner.
-- ArtifactIdMismatch: 'artifact.id_mismatch'; default: not declared — A saved analysis artifact's `id` does not equal the content hash of its body — the artifact
-was edited after creation (or assembled by hand); its provenance chain cannot be trusted.
-- ArtifactMigrationMissing: 'artifact.migration_missing'; default: not declared — An older-schema envelope was read with no registered migration covering a required step —
-schema upgrades are explicit, never silent.
-- ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; default: not declared — A stored fitted-model `modelVersion` / research `runVersion` is newer than this build, or older
-with no registered report migration — evaluating a stored parameter set under different
-semantics is a silent wrong number, so it is refused (Stage 4.5 Decision 5).
-- ArtifactNotReplayable: 'artifact.not_replayable'; default: not declared — The stored inputs carried a non-serializable callback (a custom predicate or expected-return
-model); replay cannot re-issue the producing call and names the field (Stage 4.5).
-- ArtifactOperationUnsupported: 'artifact.operation_unsupported'; default: not declared — The model family has no evaluator, warm start, stability, or holdout operation — an exact or
-closed-form fit has no search to start and a statistic has nothing to evaluate (Stage 4.5).
-- ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; default: not declared — Caller-supplied rows for a referenced table do not hash to the artifact's table handle — a
-replay over different data would be a replay of a different run (Stage 4.5).
-- ArtifactTypeMismatch: 'artifact.type_mismatch'; default: not declared — `compareAnalysisArtifacts` received two artifacts of different `artifactType`s — a leaf-by-leaf
-comparison across result schemas would compare unrelated numbers under shared names.
-- BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; default: not declared — Stage 4.6 (FC8) — a caller-supplied fill model or instrument adapter failed its conformance suite.
-- BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; default: not declared — Stage 4.6 (FC8) — the `reject` intrabar ambiguity policy met a bar where two orders could
-have touched in either sequence; the run refuses rather than pick a sequence silently.
-- BacktestBookTooLarge: 'backtest.book_too_large'; default: not declared — Stage 4.6 (FC8) — an options book above the open positions one synchronous book may hold.
-- BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; default: not declared — Stage 4.6 (FC8) — a 'delisted' universe exit with no delistingReturn while a position is open.
+- ArtifactDuplicateMigration: 'artifact.duplicate_migration'; default: not declared
+- ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; default: not declared
+- ArtifactFamilyMismatch: 'artifact.family_mismatch'; default: not declared
+- ArtifactIdMismatch: 'artifact.id_mismatch'; default: not declared
+- ArtifactMigrationMissing: 'artifact.migration_missing'; default: not declared
+- ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; default: not declared
+- ArtifactNotReplayable: 'artifact.not_replayable'; default: not declared
+- ArtifactOperationUnsupported: 'artifact.operation_unsupported'; default: not declared
+- ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; default: not declared
+- ArtifactTypeMismatch: 'artifact.type_mismatch'; default: not declared
+- BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; default: not declared
+- BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; default: not declared
+- BacktestBookTooLarge: 'backtest.book_too_large'; default: not declared
+- BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; default: not declared
 - BacktestDuplicateHandler: 'backtest.duplicate_handler'; default: not declared
-- BacktestGridTooLarge: 'backtest.grid_too_large'; default: not declared — Stage 4.6 (FC8) — a grid's cartesian product is above the variations one synchronous sweep may run.
-- BacktestInputTooLarge: 'backtest.input_too_large'; default: not declared — Stage 4.6 (FC8) — a run's row count is above the ceiling one synchronous run may read.
-- BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; default: not declared — Stage 4.6 (FC8) — the emitted portfolio events do not fold to the equity the engine reports (an invariant).
-- BacktestMarkUnavailable: 'backtest.mark_unavailable'; default: not declared — An open option leg has no usable current-snapshot mark (missing, ambiguous, stale, or
-unpriceable contract quote) and the request's missing-mark policy is to refuse (Preview P1).
+- BacktestGridTooLarge: 'backtest.grid_too_large'; default: not declared
+- BacktestInputTooLarge: 'backtest.input_too_large'; default: not declared
+- BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; default: not declared
+- BacktestMarkUnavailable: 'backtest.mark_unavailable'; default: not declared
 - BacktestMixedSymbols: 'backtest.mixed_symbols'; default: not declared
-- BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; default: not declared — Warning: a resting order's prices/quantity were adjusted for a corporate action (split).
-- BacktestStaleQuote: 'backtest.stale_quote'; default: not declared — Stage 4.6 (FC8) — a quote fill under `staleQuotes.behavior: 'reject'` met a quote older than the policy's maximum age.
-- BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared — Stage 4.6 (FC8) — a return or feature names an instrument the universe history never lists.
-- BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared — Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted.
+- BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; default: not declared
+- BacktestStaleQuote: 'backtest.stale_quote'; default: not declared
+- BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared
+- BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared
 - DataAborted: 'data.aborted'; default: not declared
 - DataAllowanceExhausted: 'data.allowance_exhausted'; default: not declared
 - DataAuthenticationRequired: 'data.authentication_required'; default: not declared
@@ -110010,23 +109973,23 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - DataStaleQuote: 'data.stale_quote'; default: not declared
 - DataUnavailable: 'data.unavailable'; default: not declared
 - DataUnsupportedCapability: 'data.unsupported_capability'; default: not declared
-- EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared — Warning: the engine's grid/truncation is too coarse for the requested regime.
-- EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared — A lattice's risk-neutral branch probabilities left [0, 1] (drift outran diffusion).
-- EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared — A successful engine result violated a no-arbitrage output bound (e.g. C > S·e^{-qT}).
+- EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared
+- EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared
+- EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared
 - EngineUnsupportedContract: 'engine.unsupported_contract'; default: not declared
-- EnvironmentActionDisallowed: 'environment.action_disallowed'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order the action mask disallows.
-- EnvironmentActionInvalid: 'environment.action_invalid'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an action of the wrong shape; the step proceeds as hold.
-- EnvironmentDuplicateOrder: 'environment.duplicate_order'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order id repeated inside an episode (an idempotent retry).
-- EnvironmentEpisodeOver: 'environment.episode_over'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: a step after the episode ended.
-- EnvironmentLimitBreach: 'environment.limit_breach'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order that would breach a declared limit.
-- EnvironmentNotReset: 'environment.not_reset'; default: not declared — Stage 7B.1 (AT4) — step() or finish() on a trading environment before reset().
-- EnvironmentOrderInvalid: 'environment.order_invalid'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order or cancellation of the wrong shape.
-- EnvironmentUnknownInstrument: 'environment.unknown_instrument'; default: not declared — Stage 7B.1 (AT4) — a rejection row, never thrown: an order naming an instrument the environment does not hold.
+- EnvironmentActionDisallowed: 'environment.action_disallowed'; default: not declared
+- EnvironmentActionInvalid: 'environment.action_invalid'; default: not declared
+- EnvironmentDuplicateOrder: 'environment.duplicate_order'; default: not declared
+- EnvironmentEpisodeOver: 'environment.episode_over'; default: not declared
+- EnvironmentLimitBreach: 'environment.limit_breach'; default: not declared
+- EnvironmentNotReset: 'environment.not_reset'; default: not declared
+- EnvironmentOrderInvalid: 'environment.order_invalid'; default: not declared
+- EnvironmentUnknownInstrument: 'environment.unknown_instrument'; default: not declared
 - ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; default: not declared
 - ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; default: not declared
 - ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; default: not declared
-- ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; default: not declared — The target premium is below the smallest price the solver can resolve to a volatility.
-- InputDuplicateEntry: 'input.duplicate_entry'; default: not declared — A selection list names the same entry twice — a duplicate is never silently collapsed.
+- ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; default: not declared
+- InputDuplicateEntry: 'input.duplicate_entry'; default: not declared
 - InputInvalidEnum: 'input.invalid_enum'; default: not declared
 - InputLengthMismatch: 'input.length_mismatch'; default: not declared
 - InputMissingField: 'input.missing_field'; default: not declared
@@ -110037,11 +110000,10 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - InputNegativeVolatility: 'input.negative_volatility'; default: not declared
 - InputNotFinite: 'input.not_finite'; default: not declared
 - InputOutOfRange: 'input.out_of_range'; default: not declared
-- InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; default: not declared — Warning: a coupon rate looks like a percent typed as a decimal (e.g. 5 for 5%).
-- InputSuspiciousYield: 'input.suspicious_yield'; default: not declared — Warning: a yield looks like a percent typed as a decimal (e.g. 5 for 5%).
+- InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; default: not declared
+- InputSuspiciousYield: 'input.suspicious_yield'; default: not declared
 - InputUnknownField: 'input.unknown_field'; default: not declared
-- InputWrongShape: 'input.wrong_shape'; default: not declared — The argument is an object but not the expected SHAPE (right type, wrong slots) — distinct from a
-single missing field. Emitted by {@link wrongShapeError}.
+- InputWrongShape: 'input.wrong_shape'; default: not declared
 - InputWrongType: 'input.wrong_type'; default: not declared
 - IntegrationMaxDepth: 'integration.max_depth'; default: not declared
 - InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; default: not declared
@@ -110050,14 +110012,14 @@ single missing field. Emitted by {@link wrongShapeError}.
 - LinalgNoConvergence: 'linalg.no_convergence'; default: not declared
 - LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; default: not declared
 - LinalgSingular: 'linalg.singular'; default: not declared
-- MathIterationLimit: 'math.iteration_limit'; default: not declared — An iterative series/loop hit its budget without converging; the value is not returned.
+- MathIterationLimit: 'math.iteration_limit'; default: not declared
 - McpDeadlineExceeded: 'mcp.deadline_exceeded'; default: not declared
 - McpInputTooLarge: 'mcp.input_too_large'; default: not declared
 - McpInternalError: 'mcp.internal_error'; default: not declared
 - McpUnknownTool: 'mcp.unknown_tool'; default: not declared
-- ModelFellerConditionViolated: 'model.feller_condition_violated'; default: not declared — Warning: model parameters violate the Feller condition; the variance floor is attainable.
+- ModelFellerConditionViolated: 'model.feller_condition_violated'; default: not declared
 - OperationCancelled: 'operation.cancelled'; default: not declared
-- OperationCapabilityMissing: 'operation.capability_missing'; default: not declared — Stage 7B.2 (AT5) — an operation whose required capabilities the caller did not grant.
+- OperationCapabilityMissing: 'operation.capability_missing'; default: not declared
 - OperationDeadlineExceeded: 'operation.deadline_exceeded'; default: not declared
 - OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; default: not declared
 - OperationHandleStoreMissing: 'operation.handle_store_missing'; default: not declared
@@ -110066,72 +110028,58 @@ single missing field. Emitted by {@link wrongShapeError}.
 - OperationInternal: 'operation.internal'; default: not declared
 - OperationRegistrationRefused: 'operation.registration_refused'; default: not declared
 - OperationToolFiltered: 'operation.tool_filtered'; default: not declared
-- OperationUnknown: 'operation.unknown'; default: not declared — Stage 7A — the protocol-neutral operation runtime and registry (`@insiderfinance/totalfinance/workflows`).
+- OperationUnknown: 'operation.unknown'; default: not declared
 - OptimizeInvalidBounds: 'optimize.invalid_bounds'; default: not declared
 - PipelineDuplicateAlias: 'pipeline.duplicate_alias'; default: not declared
 - PipelineLengthMismatch: 'pipeline.length_mismatch'; default: not declared
-- PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; default: not declared — A `(sourceId, eventId)` pair was replayed with a DIFFERENT event body. The duplicate boundary
-makes replay idempotent for identical deliveries; a changed payload under the same identity is
-a conflict that must be heard, never a silent overwrite or a silent no-op.
-- PortfolioLotUnavailable: 'portfolio.lot_unavailable'; default: not declared — A `specific-lot` relief selection names a lot that does not exist in the position or carries
-less remaining quantity than the selection claims — lot relief never guesses a substitute.
-- PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; default: not declared — A valuation needs a mark (an instrument price or a currency-pair quote to the base currency)
-that the supplied market/conversion inputs do not carry. An unavailable mark is a typed
-failure, never an interpolated or stale guess.
-- PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; default: not declared — The applied fact cannot be reversed exactly: the supplied `original` differs from what was
-applied, it was already reversed, its lots were relieved by later fills, or its family has no
-exact inverse in this build. History is never approximated — record a correcting event.
-- PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; default: not declared — An `admin.reversal`/`admin.correction` names an `original` the fold never applied under that
-`(sourceId, eventId)` — a reversal repairs an applied fact, never an imagined one.
+- PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; default: not declared
+- PortfolioLotUnavailable: 'portfolio.lot_unavailable'; default: not declared
+- PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; default: not declared
+- PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; default: not declared
+- PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; default: not declared
 - PostconditionNonFinite: 'postcondition.non_finite_result'; default: not declared
-- PricerNonconformant: 'pricer.nonconformant'; default: not declared — A pricer failed the behavioral conformance kit (`validatePricer`) against its own fixtures.
-- PricerObservationInvalid: 'pricer.observation_invalid'; default: not declared — A market observation's value has the wrong type/shape for its requirement's kind.
-- PricerRequirementInvalid: 'pricer.requirement_invalid'; default: not declared — A market-requirement descriptor is malformed (unknown kind, missing/mistyped subject field).
-- PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; default: not declared — A required market observation is absent from the observations handed to a pricer.
+- PricerNonconformant: 'pricer.nonconformant'; default: not declared
+- PricerObservationInvalid: 'pricer.observation_invalid'; default: not declared
+- PricerRequirementInvalid: 'pricer.requirement_invalid'; default: not declared
+- PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; default: not declared
 - RegistryAliasConflict: 'registry.alias_conflict'; default: not declared
 - RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; default: not declared
 - RegistryDuplicateIndicator: 'registry.duplicate_indicator'; default: not declared
 - RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; default: not declared
-- RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; default: not declared — Warning: covariance condition number too large for the optimizer's answer to be trusted.
-- RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; default: not declared — Warning: the requested tail quantile lies beyond the sample's resolvable range.
-- ScenarioCellFailed: 'scenario.cell_failed'; default: not declared — One base/scenario valuation failed after the complete request and execution plan passed.
-- ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; default: not declared — A scenario override or shock matched no used observation, Taylor factor, FX quote, or handler.
-- ScenarioTargetUnsupported: 'scenario.target_unsupported'; default: not declared — A target's bound pricer returned false from its one preflight `supports` call.
-- SerializationUnsupportedValue: 'serialization.unsupported_value'; default: not declared — A value has no canonical JSON form (Date/Map/Set/typed array/class instance/bigint/function
-— or the reserved `{ nonFinite }` wrapper supplied as literal data). The canonical serializer
-refuses rather than guessing a meaning into every content hash.
+- RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; default: not declared
+- RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; default: not declared
+- ScenarioCellFailed: 'scenario.cell_failed'; default: not declared
+- ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; default: not declared
+- ScenarioTargetUnsupported: 'scenario.target_unsupported'; default: not declared
+- SerializationUnsupportedValue: 'serialization.unsupported_value'; default: not declared
 - SignalUnknownReference: 'signal.unknown_reference'; default: not declared
 - SnapshotInvalidVersion: 'snapshot.invalid_version'; default: not declared
 - SnapshotKindMismatch: 'snapshot.kind_mismatch'; default: not declared
 - SnapshotUnknownKind: 'snapshot.unknown_kind'; default: not declared
 - SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; default: not declared
-- SnapshotWrongShape: 'snapshot.wrong_shape'; default: not declared — A value handed to a snapshot restorer is not an envelope. 3B.N7 retired
-`snapshot.reserved_field` in the same change: that code guarded a stream serializing its own `v`
-into a FLAT snapshot, and the `{ kind, schemaVersion, state }` envelope makes the collision
-structurally impossible — indicator state can no longer reach the envelope's own fields.
+- SnapshotWrongShape: 'snapshot.wrong_shape'; default: not declared
 - SolverNoConvergence: 'solver.no_convergence'; default: not declared
 - StrategyDeltaRequired: 'strategy.delta_required'; default: not declared
-- StrategyExpiryConflict: 'strategy.expiry_conflict'; default: not declared — A call-site `expiry` contradicts the expiry materialized on the position's option legs.
+- StrategyExpiryConflict: 'strategy.expiry_conflict'; default: not declared
 - StrategyInvalidChartRange: 'strategy.invalid_chart_range'; default: not declared
 - StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; default: not declared
 - StrategyStrikeUnavailable: 'strategy.strike_unavailable'; default: not declared
-- TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; default: not declared — A calendar/timezone resolution failed (unknown zone, unresolvable local time). Emitted by core's
-time layer, which owns the registry — so it lives here, not as a raw inline literal.
-- TimeValuationInstantRequired: 'time.valuation_instant_required'; default: not declared — A pricing path was given a date with no time of day; a valuation instant must name one.
-- TradeGrantConsumed: 'trade.grant_consumed'; default: not declared — Repairs B6 — the grant already licensed a submission; a grant is consumed by its first successful one.
-- TradeGrantExpired: 'trade.grant_expired'; default: not declared — Stage 7B.2 (AT5) — an authorization grant past its expiry.
-- TradeGrantInvalid: 'trade.grant_invalid'; default: not declared — Stage 7B.2 (AT5) — an authorization grant that does not cover the execution asked of it (its reasons name the bindings).
-- TradeHalted: 'trade.halted'; default: not declared — Stage 7B.2 (AT5) — the kill switch is on: every submission refuses until resumed.
-- TradeIdempotencyConflict: 'trade.idempotency_conflict'; default: not declared — Stage 7B.2 (AT5) — an idempotency key already used for a different plan.
-- TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; default: not declared — Stage 7B.2 (AT5) — an execution-journal event that the order's state cannot accept.
-- TradeLiveUnavailable: 'trade.live_unavailable'; default: not declared — Stage 7B.2 (AT5) — live execution is not available in the open library; adapters ship under AT8.
-- TradePlanInvalid: 'trade.plan_invalid'; default: not declared — Stage 7B.2 (AT5) — a trade intent or plan that cannot be normalized (a duplicate line, an unknown instrument).
-- TradePreflightDenied: 'trade.preflight_denied'; default: not declared — Stage 7B.2 (AT5) — preflight denied the plan; a grant cannot be minted over it.
+- TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; default: not declared
+- TimeValuationInstantRequired: 'time.valuation_instant_required'; default: not declared
+- TradeGrantConsumed: 'trade.grant_consumed'; default: not declared
+- TradeGrantExpired: 'trade.grant_expired'; default: not declared
+- TradeGrantInvalid: 'trade.grant_invalid'; default: not declared
+- TradeHalted: 'trade.halted'; default: not declared
+- TradeIdempotencyConflict: 'trade.idempotency_conflict'; default: not declared
+- TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; default: not declared
+- TradeLiveUnavailable: 'trade.live_unavailable'; default: not declared
+- TradePlanInvalid: 'trade.plan_invalid'; default: not declared
+- TradePreflightDenied: 'trade.preflight_denied'; default: not declared
 - VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; default: not declared
-- VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; default: not declared — Warning: a calibrated fit deviates materially from its input data (likely arbitrageable).
+- VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; default: not declared
 - VolatilityExpiryNotFound: 'volatility.expiry_not_found'; default: not declared
 - VolatilityForwardUnavailable: 'volatility.forward_unavailable'; default: not declared
-- VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; default: not declared — A variance forecast came back negative; the model output cannot be consumed as a variance.
+- VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; default: not declared
 - VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; default: not declared
 
 ### @insiderfinance/totalfinance/core#ExerciseTime
