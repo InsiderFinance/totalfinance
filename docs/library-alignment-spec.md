@@ -727,13 +727,13 @@ Published per the 3B.6 exit checklist; every number below is quoted from the com
 artifacts (`public-contracts.json`, `public-enforcement.json`, `public-naming.json`) and each is bound by an executable
 gate — a manual checkbox cannot waive drift.
 
-**Surface:** 7,956 public paths / 2,723 implementations / 1,593 input contracts / 1,966 result
+**Surface:** 7,959 public paths / 2,726 implementations / 1,593 input contracts / 1,968 result
 contracts / 384 validator identities. **Enforcement:** 2,574 enforced · 2,702 partial (every open
 dimension named) · 0 defective · 187 unmeasured (each with a recorded reason) of 5,463 measured
 candidates. **Ledgers:** helper quant-answers 0 of an initial 36 (all 27 H-decisions implemented);
 34 positional pairs retained with per-entry rationale, 0 migrated; unnameable parameter contracts 8
 (all foreign, none unreachable, as recorded by the current contract inventory);
-naming identities 43,607 with 0 unresolved. These live counts include the September MCP experience
+naming identities 43,656 with 0 unresolved. These live counts include the September MCP experience
 surface, the public `optionFlowDrift` and `observedSkew` APIs, the September 9 signed-leg
 simplification (six direction-specific helpers replaced by three instrument-first constructors),
 the September 16 valuation-instant law (the strict `resolveValuationAsOf` door, the shared US session

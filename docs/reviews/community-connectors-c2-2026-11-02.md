@@ -43,8 +43,8 @@ shared checkouts and linked application source remain untouched.
 Node **22.23.2**, pnpm **10.32.0**. Frozen installs, build, TypeScript, scoped ESLint/Prettier and
 all 25 API reports pass. No dependency graph or release version changes in the SDK.
 
-- **530 distinct SDK tests across 19 files**, counting the corrected naming tracker rerun
-  once: 303 focused/source/generated/docs/bundle tests and 227 packed SDK/fixture tests.
+- **540 distinct SDK tests across 20 files**, counting the corrected naming tracker rerun
+  once: 313 focused/source/generated/docs/bundle tests and 227 packed SDK/fixture tests.
 - **83/83 provider tests locally and all 83 again through a fresh installed package**, none skipped.
 - Exact two-import, API-key-only example runs with independently supplied synthetic HTTP facts;
   closes `[100,101,102]` give last period-2 SMA **101.5**, with original partial quality/null source
@@ -64,7 +64,7 @@ pnpm install --frozen-lockfile
 pnpm build
 pnpm typecheck
 pnpm api:check
-pnpm exec vitest run packages/core/test/data.test.ts packages/core/test/data-view.test.ts packages/core/test/data-conformance.test.ts tools/first-touch/fixtures/core-data.test.ts tools/first-touch/unknown-keys.test.ts tools/bundle-size/budgets.test.ts tools/bundle-size/public-artifacts.test.ts tools/bundle-size/consumer-measure.test.ts tools/bundle-size-doc.test.ts tools/manifest/contract-conformance.test.ts tools/manifest/fixture-validation.test.ts tools/manifest/naming-conformance.test.ts tools/manifest/signature-conformance.test.ts tools/manifest/signature-fixture-conformance.test.ts tools/manifest/public-text-naming.test.ts tools/docs-conformance.test.ts tools/public-reference.test.ts
+pnpm exec vitest run packages/core/test/data.test.ts packages/core/test/data-view.test.ts packages/core/test/data-conformance.test.ts tools/first-touch/fixtures/core-data.test.ts tools/first-touch/unknown-keys.test.ts tools/bundle-size/budgets.test.ts tools/bundle-size/public-artifacts.test.ts tools/bundle-size/consumer-measure.test.ts tools/bundle-size-doc.test.ts tools/manifest/contract-conformance.test.ts tools/manifest/fixture-validation.test.ts tools/manifest/naming-conformance.test.ts tools/manifest/signature-conformance.test.ts tools/manifest/signature-fixture-conformance.test.ts tools/manifest/public-text-naming.test.ts tools/docs-conformance.test.ts tools/public-reference.test.ts tools/review-repair-doc-conformance.test.ts
 pnpm exec vitest run tools/packed-consumer.test.ts tools/community-connectors-consumer.test.ts
 # Provider worktree:
 pnpm install --frozen-lockfile
@@ -110,6 +110,13 @@ these were synchronized to measured artifacts (1,336 fixtures), with their gates
 external factory import in the guide has an exact path/owner/import-line disposition, tested to
 reject an invented SDK-root import. No documentation walker or gate behavior was loosened.
 The first targeted run reported the stale naming counters; the corrected 32-test naming file passes.
+The first C2 hosted head `2875c39` then exposed one more stale live-total sentence in
+`library-alignment-spec.md`; both fast Node22 and full Node26 shard1 refused it. The sentence was
+synchronized to the same generated counts, preserving historical C1 receipts. All10 alignment-doc
+tests now pass. Only documentation changed; runtime and tarball hashes above remain unchanged.
+Superseded hosted runs41540439997/41540496471 are not passing receipts. Fresh fast/full runs are
+required at the correction head.
+
 This is focused verification, not a claim of full local CI or another coverage run.
 
 ## Remaining acceptance
