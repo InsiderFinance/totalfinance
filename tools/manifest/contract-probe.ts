@@ -861,3 +861,42 @@ export function summarize(results: readonly ProbeResult[]): {
   const untyped = results.filter((result) => result.verdict === 'untyped');
   return { enforced: accepted.length === 0 && untyped.length === 0, accepted, untyped };
 }
+
+/** Await the actual outcomes for an explicitly supplied async fixture. Mutation construction and
+ * observation grammar are shared with the synchronous probe; a Promise object is never evidence. */
+export async function probeContractAsync(
+  target: (...args: unknown[]) => unknown,
+  freshArguments: () => unknown[],
+  options: Parameters<typeof probeContract>[2] = {},
+): Promise<ProbeResult[]> {
+  if (options.construct) throw new Error('Async constructor probes are not supported.');
+  const calls: unknown[][] = [];
+  const plan = probeContract(
+    (...args) => {
+      calls.push(args);
+    },
+    freshArguments,
+    options,
+  );
+  if (calls.length !== plan.length)
+    throw new Error('Async mutation plan did not bind each observation to one call.');
+  const results: ProbeResult[] = [];
+  for (const [index, planned] of plan.entries()) {
+    let value: unknown,
+      error: unknown,
+      succeeded = false;
+    try {
+      value = await target(...calls[index]!);
+      succeeded = true;
+    } catch (caught) {
+      error = caught;
+    }
+    const observation = observe(() => {
+      if (!succeeded) throw error;
+      return value;
+    });
+    const { verdict: _verdict, code: _code, returned: _returned, ...metadata } = planned;
+    results.push({ ...metadata, ...observation });
+  }
+  return results;
+}

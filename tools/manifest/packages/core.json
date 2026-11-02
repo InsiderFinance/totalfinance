@@ -1195,6 +1195,24 @@
       "entrypoints": ["."],
       "role": "helper",
       "note": "trusted-tier utility (spec Law 7)"
+    },
+    "DATA_CONTRACT_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./data"],
+      "role": "constant",
+      "note": "Community connector contract v1; independent of dataset/package versions."
+    },
+    "defineDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Reviewed C0: structural binding and request/result validation, immutable copied output; no provider calls at construction."
+    },
+    "validateDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data-conformance"],
+      "role": "helper",
+      "note": "Framework-independent behavioral conformance over explicit caller fixtures, work bounds and cancellation latches; returns void or typed refusal."
     }
   }
 }

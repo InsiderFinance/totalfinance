@@ -95,6 +95,12 @@ export function warning(
  * code string, so no string is duplicated across the two registries (WS2.9).
  */
 export const WarningCode = {
+  DataUnknownTimes: 'data.unknown_times',
+  DataIncompleteTerms: 'data.incomplete_terms',
+  DataCoverageUnverified: 'data.coverage_unverified',
+  DataResearchOnly: 'data.research_only',
+  DataMissingField: 'data.missing_field',
+  DataSourceIssue: 'data.source_issue',
   /** Supplied disclosed holdings do not support some changes, weights or concentration. */
   PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review',
   DataLockedMarket: 'data.locked_market',

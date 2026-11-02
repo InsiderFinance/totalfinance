@@ -2822,10 +2822,10 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5461,
-    "enforced": 2573,
+    "candidates": 5463,
+    "enforced": 2574,
     "defective": 0,
-    "partial": 2701,
+    "partial": 2702,
     "unmeasured": 187,
     "unmeasuredByReason": {
       "no-input": 48,
@@ -2850,26 +2850,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2776,
-      "null-when-nonnullable": 26388,
-      "omit-required": 13446,
-      "wrong-type": 17107,
-      "non-finite": 9483,
+      "unknown-key": 2778,
+      "null-when-nonnullable": 26404,
+      "omit-required": 13462,
+      "wrong-type": 17119,
+      "non-finite": 9488,
       "optional-wrong-type": 8043,
-      "invalid-literal": 1958,
+      "invalid-literal": 1960,
       "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6606,
-      "null-when-nonnullable": 66350,
-      "omit-required": 34313,
-      "wrong-type": 43752,
-      "non-finite": 24726,
+      "unknown-key": 6608,
+      "null-when-nonnullable": 66366,
+      "omit-required": 34329,
+      "wrong-type": 43764,
+      "non-finite": 24731,
       "optional-wrong-type": 19196,
-      "invalid-literal": 5022,
+      "invalid-literal": 5024,
       "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
@@ -2880,20 +2880,21 @@
     "inherited": 3083,
     "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
-      "no-input": 1752,
+      "no-input": 1763,
       "external-callback-contract": 250,
       "branch-not-realized": 628,
       "baseline-rejected": 3442,
       "incomplete-baseline": 491,
+      "async-result-unobserved": 3,
       "callback-input-required": 21
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13177,
-      "enforced": 3953,
+      "total": 13193,
+      "enforced": 3955,
       "partial": 2517,
       "defective": 0,
-      "unmeasured": 6707,
+      "unmeasured": 6721,
       "truncated": 0
     },
     "staticFalsePositives": 0,
@@ -14948,7 +14949,7 @@
       "implementation": "packages/core/dist/facade.d.ts#assertFiniteResult",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "none",
+      "guardReachability": "ambiguous",
       "alternatives": [
         {
           "id": "arg1.assumptions.compounding:absent",
@@ -15263,6 +15264,30 @@
       "synthesized": true
     },
     {
+      "id": "@totalfinance/core:defineDataProvider",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data.d.ts#defineDataProvider",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "wrong-type": 4,
+        "invalid-literal": 1,
+        "non-finite": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "wrong-type": 4,
+        "invalid-literal": 1,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/core:defineDataProvider"
+    },
+    {
       "id": "@totalfinance/core:definePricer",
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/pricing.d.ts#definePricer",
@@ -15356,7 +15381,7 @@
       "implementation": "packages/core/dist/invariants.d.ts#ensureKnownKeys",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous"
+      "guardReachability": "delegated"
     },
     {
       "id": "@totalfinance/core:finalizeResult",
@@ -17326,6 +17351,130 @@
         "defective": 0,
         "unmeasured": 6
       }
+    },
+    {
+      "id": "@totalfinance/core:validateDataProvider",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-conformance.d.ts#validateDataProvider",
+      "verdict": "partial",
+      "guardReachability": "direct",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 10,
+        "omit-required": 10,
+        "wrong-type": 8,
+        "non-finite": 4,
+        "invalid-literal": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 10,
+        "omit-required": 10,
+        "wrong-type": 8,
+        "non-finite": 4,
+        "invalid-literal": 1
+      },
+      "undecided": [
+        "alternative arg0.probes:kind=error (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1d,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1m,kind=price-bars (unmeasured: async-result-unobserved)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#0 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#2 (unmeasured: async-result-unobserved)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=price-bars (unmeasured: async-result-unobserved)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#0 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#2 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#1 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#2 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#1 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#2 (unmeasured: no-input)"
+      ],
+      "alternatives": [
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1d,kind=price-bars",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/core:validateDataProvider"
+        },
+        {
+          "id": "arg0.probes:kind=error",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1d,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "async-result-unobserved"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "async-result-unobserved"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "async-result-unobserved"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 15,
+        "enforced": 1,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 14
+      },
+      "fixtureSource": "@totalfinance/core:validateDataProvider"
     },
     {
       "id": "@totalfinance/core:validatePricer",
@@ -38129,7 +38278,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#determinant",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -38691,7 +38840,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#luDecompose",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -38830,7 +38979,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#matrixMultiply",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 2,
@@ -40213,7 +40362,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#transpose",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -77055,7 +77204,7 @@
       "implementation": "packages/technical-analysis/dist/framework.d.ts#SnapshotState.literal",
       "verdict": "unmeasured",
       "unmeasuredReason": "external-callback-contract",
-      "guardReachability": "none"
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#literals",
@@ -77063,7 +77212,7 @@
       "implementation": "packages/technical-analysis/dist/framework.d.ts#SnapshotState.literals",
       "verdict": "unmeasured",
       "unmeasuredReason": "external-callback-contract",
-      "guardReachability": "none"
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/technical-analysis:SqueezeCore#update",
@@ -126410,7 +126559,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:assertFiniteResult",
       "inheritedFrom": "@totalfinance/core:assertFiniteResult",
-      "guardReachability": "none",
+      "guardReachability": "ambiguous",
       "unmeasuredReason": "no-input",
       "alternatives": [
         {
@@ -140982,7 +141131,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:assertFiniteResult",
       "inheritedFrom": "@totalfinance/core:assertFiniteResult",
-      "guardReachability": "none",
+      "guardReachability": "ambiguous",
       "unmeasuredReason": "no-input",
       "alternatives": [
         {
@@ -141103,7 +141252,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:ensureKnownKeys",
       "inheritedFrom": "@totalfinance/core:ensureKnownKeys",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "unmeasuredReason": "no-input"
     },
     {
@@ -150222,7 +150371,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -153912,7 +154061,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:ensureKnownKeys",
       "inheritedFrom": "@totalfinance/core:ensureKnownKeys",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "unmeasuredReason": "no-input"
     },
     {
@@ -181134,7 +181283,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -182106,7 +182255,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -182577,7 +182726,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -182690,7 +182839,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -183891,7 +184040,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -184190,7 +184339,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -259531,7 +259680,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",

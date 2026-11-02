@@ -51,7 +51,7 @@
 > measured (R7/R12), and MCP contracts are canonical JSON Schema rather than field names (R8)) — but
 > those were different conditions, and clearing them is not this claim.
 >
-> Measured, from `public-enforcement.json`: **enforced 2,573 · partial 2,701 · defective 0 · unmeasured 187** of 5,461 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
+> Measured, from `public-enforcement.json`: **enforced 2,574 · partial 2,702 · defective 0 · unmeasured 187** of 5,463 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
 > `no-input` 48 `external-callback-contract` 53 `callback-input-required` 4
 > `async-result-unobserved` 6 `incomplete-baseline` 20
 > — and each reason is documented with what it
@@ -69,7 +69,7 @@
 > (`contract-conformance.test.ts`); the September 9 source revision is checked locally on Node 26.5.0.
 > Earlier Node 22.13/24/26 evidence does not certify this revision's still-required hosted matrix.
 >
-> The current artifact has 13,177 alternatives (6,707 unmeasured) and 76 receiver-grouping gaps.
+> The current artifact has 13,193 alternatives (6,721 unmeasured) and 76 receiver-grouping gaps.
 > PL6's sixteen named price-level helpers add 80 fully enforced public call/explain paths;
 > they do not increase the partial, defective or unmeasured populations.
 > September R08 adds one genuine external-callback interface, `ExecutionJournalStore#transact`.
@@ -190,8 +190,8 @@ method bag. An unconstrained callback result such as `Array<any>` gets the one u
 structural baseline, `[]`; this restored direct measurement of `register` instead of hiding a
 process-global defective boundary behind `callback-input-required`.
 
-The generated surface is now **7,951 public paths / 2,718 implementations / 1,589 input contracts /
-1,962 result contracts / 385 validator identities**. The measured population is **5,461** records.
+The generated surface is now **7,956 public paths / 2,723 implementations / 1,593 input contracts /
+1,966 result contracts / 384 validator identities**. The measured population is **5,463** records.
 The exact residual branch list shrank by four: three recursive `register` mismatches disappeared and
 the MCP safe-parse projection stopped masquerading as a caller-selectable branch. Every remaining
 entry is still an exact built-versus-named identity and fails both when a new mismatch appears and
@@ -1148,16 +1148,16 @@ resolved it. `summary.mutationsExecuted` now reports what the harness actually R
 
 | mutation                | executed | covered |
 | ----------------------- | -------: | ------: |
-| `omit-required`         |   13,446 |  34,313 |
-| `wrong-type`            |   17,107 |  43,752 |
-| `non-finite`            |    9,483 |  24,726 |
-| `invalid-literal`       |    1,958 |   5,022 |
-| `unknown-key`           |    2,776 |   6,606 |
-| `null-when-nonnullable` |   26,388 |  66,350 |
+| `omit-required`         |   13,462 |  34,329 |
+| `wrong-type`            |   17,119 |  43,764 |
+| `non-finite`            |    9,488 |  24,731 |
+| `invalid-literal`       |    1,960 |   5,024 |
+| `unknown-key`           |    2,778 |   6,608 |
+| `null-when-nonnullable` |   26,404 |  66,366 |
 
 **EXECUTED and COVERED are different facts, and the table this replaces mixed them.** `executed` is
 what physically ran; `covered` is what a path may claim, directly or attributed from an alias twin.
-They diverge by alias fan-out — `unknown-key` ran 2,776 times and is credited across 6,606
+They diverge by alias fan-out — `unknown-key` ran 2,778 times and is credited across 6,608
 route-level mutation checks — so reporting the second as though it were the first would overstate
 execution more than twofold. Failures are split the same way (currently zero direct and zero
 attributed) so a finding count is never read against the wrong denominator, and the ratchets guard
@@ -1368,14 +1368,14 @@ or a rationale for an API decision.
 
 ### 3B.0 — Post-Wave-6 baseline and inventory design
 
-- [x] Verify Phase 3B.N is closed: 43,257 naming identities, 0 unresolved, gated in CI; the packed
+- [x] Verify Phase 3B.N is closed: 43,607 naming identities, 0 unresolved, gated in CI; the packed
       consumer proves the final package/MCP names and every removed alias has executable evidence.
 - [x] Build every public declaration and regenerate runtime/signature manifests after all Wave 6
       and naming-normalization checkboxes are closed.
 - [x] Generate the initial contract-identity graph and report path, implementation, input-contract,
       result-contract, and validator counts separately — `tools/manifest/contract-inventory.ts` →
-      `public-contracts.json`: 7,951 paths / 2,718 implementations / 1,589 input
-      contracts / 1,962 result contracts / 385 validator identities (refreshed for PL6's named
+      `public-contracts.json`: 7,956 paths / 2,723 implementations / 1,593 input
+      contracts / 1,966 result contracts / 384 validator identities (refreshed for PL6's named
       price-level helpers, after the 2026-08-02
       defect-fix wave, which added validators and two fixed-income deep entrypoints, again after
       3B.1a's snapshot reader, and again when intersections were recognized as objects — 996 → 1,034

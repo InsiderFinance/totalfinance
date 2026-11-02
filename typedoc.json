@@ -22,6 +22,8 @@
     "packages/commodities/src/index.ts",
     "packages/commodities/src/term-structure.ts",
     "packages/core/src/artifacts/index.ts",
+    "packages/core/src/data-conformance.ts",
+    "packages/core/src/data.ts",
     "packages/core/src/index.ts",
     "packages/core/src/pricing.ts",
     "packages/core/src/schema/index.ts",

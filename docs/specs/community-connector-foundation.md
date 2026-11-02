@@ -1,6 +1,8 @@
 # Community connector foundation and the external InsiderFinance provider
 
-Status: **C0 proposed for technical review; C1 not started.** Future-target API, not shipped API.
+Status: **C0 approved at `9815f73567ddf235fca7e94d8ee560c1e6bed42a`; offline C1.1–C1.4 implemented and locally verified; hosted/review gates pending.**
+Technical review: coordinating request `b08d8379-d256-8977-8958-f1a9e2248f9e`, 2026-11-02.
+Implemented API and offline receipts are recorded in the linked C1 review; later connected acceptance remains open.
 Date: 2026-11-02. Base: `d50b401ee237006c75c76ef90784e5dcde1439a3` (merged repair PR #25).
 Task: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
 
@@ -601,7 +603,9 @@ signature → naming → contract → enforcement → validation → API → REA
 → docs, omitting generators with no changed inputs only with explicit recorded rationale. Verify
 enforcement defective zero. No gate weakening or manual evidence editing. Hosted clean regeneration
 and current-head fast PR checks own normal landing gates; full hosted checks are required for any
-CI/enforcement/Node-support changes. This feature does not propose those changes. Do not merge
+CI/enforcement/Node-support changes. C1 integration needed a bounded async-fixture measurement
+extension and a rejected-Promise producer fix; the [implementation record](../reviews/community-connectors-c1-2026-11-02.md)
+explains that concrete change. A full hosted run is therefore required before landing. Do not merge
 unrelated work onto red main. No merge is authorized for this feature by PR #25's approval.
 
 ## Existing pilot context, not a new execution policy
@@ -627,17 +631,18 @@ does not exercise or amend the standing paper policy, store, execution journal o
 - [x] Confirm isolated worktree at fetched origin/main including PR #25; preserve linked checkouts.
 - [x] Define public placement, provisional external package, protocol, error/time semantics and exact
       offline compatibility/HTTP proof plan against inspected source.
-- [ ] C0 technical review returned and resolved by the coordinating chat.
-- [ ] C1.1 public contract, runtime validation and generated/installed proofs pass.
-- [ ] C1.2 fixture and shared kit pass; single-defect mutants are rejected.
-- [ ] C1.3 independent provider passes the same kit and HTTP mapping/error/cancellation fixtures.
-- [ ] C1.4 fresh SDK/provider packs install in a clean consumer; research workflow agrees and preserves
+- [x] C0 technical review approved by the coordinating chat at the exact spec commit above.
+- [x] C1.1 public contract, runtime validation and generated/installed proofs pass.
+- [x] C1.2 fixture and shared kit pass; single-defect mutants are rejected.
+- [x] C1.3 independent provider passes the same kit and HTTP mapping/error/cancellation fixtures.
+- [x] C1.4 fresh SDK/provider packs install in a clean consumer; research workflow agrees and preserves
       incomplete terms, EOD limits, unknown time, noncontinuous coverage and provider independence.
 - [ ] Separately authorized staging reads verify actual deployment/access with a bounded new allowance.
 - [ ] Agent glue replaced with installed provider and pinned-input parity; actual agent journey and
       subsequent paper/MCP App acceptance recorded separately.
 
-C0 is a reviewable proposal, not implementation or contract freeze. There is no unresolved product
+C0 records the reviewed design. C1 offline implementation and local proofs are complete; hosted
+checks, technical implementation review and later connected acceptance remain open. There is no unresolved product
 choice required to start the offline slices after technical review. Publication compatibility,
 live access and agent convergence retain explicit later gates rather than invented credentials,
 fabricated financial terms or redundant generic approval prompts.

@@ -44,6 +44,10 @@
       "@insiderfinance/totalfinance/core/schema": ["./packages/core/src/schema/index.ts"],
       "@insiderfinance/totalfinance/core/pricing": ["./packages/core/src/pricing.ts"],
       "@insiderfinance/totalfinance/core/artifacts": ["./packages/core/src/artifacts/index.ts"],
+      "@insiderfinance/totalfinance/core/data": ["./packages/core/src/data.ts"],
+      "@insiderfinance/totalfinance/core/data-conformance": [
+        "./packages/core/src/data-conformance.ts"
+      ],
       "@insiderfinance/totalfinance/crypto": ["./packages/crypto/src/index.ts"],
       "@insiderfinance/totalfinance/crypto/carry": ["./packages/crypto/src/carry.ts"],
       "@insiderfinance/totalfinance/crypto/curve": ["./packages/crypto/src/curve.ts"],

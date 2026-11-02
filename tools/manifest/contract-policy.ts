@@ -361,6 +361,10 @@ export const BOUNDARY_INPUT_POLICIES: Readonly<Record<string, Record<string, str
  * members and container mutations. The REQUEST itself stays closed: typo keys still teach.
  */
 export const ARTIFACT_VALUED_FIELDS: Readonly<Record<string, readonly string[]>> = {
+  // Community C0: provider is a structural extension object, like the Gate-C pricer. The outer
+  // request stays closed; owned identity/version/method fields are validated, vendor state is open.
+  '@totalfinance/core:defineDataProvider#0': ['provider'],
+  '@totalfinance/core:validateDataProvider#0': ['provider'],
   // B2 (2026-09-21): the envelope schema builder takes a caller's JSON Schemas (`structured`, the
   // operation's own output schema; `handle`, a `$ref` or inline handle schema) and embeds them
   // verbatim — foreign artifacts one level down, like a curve bundle; the request itself is closed.

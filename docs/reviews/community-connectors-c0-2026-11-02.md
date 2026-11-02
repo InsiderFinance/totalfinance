@@ -97,3 +97,12 @@ No linked-checkout edits, secrets, licensed raw payloads, new staging reads, req
 keys/grants, private portfolio/journal operations, release versions, publication, remote repository,
 deployment, schedules or live execution were used. The next step is coordinator technical review
 of C0 under CONTRIBUTING.md, then the already intended C1 scope.
+
+## Technical review approval
+
+The coordinating chat approved all C0 decisions at exact spec commit
+`9815f73567ddf235fca7e94d8ee560c1e6bed42a`, through request
+`b08d8379-d256-8977-8958-f1a9e2248f9e` on November 2. It read the full spec/evidence and checked
+public types and actual REST source. Offline C1.1–C1.4 implementation is authorized and active.
+This supersedes the proposed-review status above; that original handoff remains historical evidence.
+No further generic maintainer approval is needed for C1, and no merge/live/release authority follows.

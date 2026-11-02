@@ -17,13 +17,16 @@ bars and option-chain research. Broad provider inventories remain possible commu
       repair PR #25, in an isolated Ri-owned worktree.
 - [x] C0: write the decision-complete proposal against existing public types and inspected REST
       source; exact paths, package metadata, time/error/pagination semantics and proof plan are defined.
-- [ ] C0 technical review by the coordinating chat, before new public implementation.
-- [ ] C1: implement the narrow contract, fixture/shared kit and independent provider; prove packed
-      installation against the public SDK and offline HTTP mapping with synthetic facts.
+- [x] C0 technical review approved at `9815f73567ddf235fca7e94d8ee560c1e6bed42a` before new public implementation.
+- [x] C1.1–C1.4 offline: implement the narrow contract, fixture/shared kit and independent provider;
+      prove packed installation against the public SDK and synthetic HTTP mappings. See the
+      [implementation receipts](./reviews/community-connectors-c1-2026-11-02.md).
+- [ ] Current-head hosted fast/full checks and technical implementation review; no merge authority.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
-The feature is in progress; C0 is proposed, C1 is not implemented. The prior staging allowance is
+The feature is in progress; C0 is approved and offline C1 is implemented and locally verified,
+with hosted checks and technical implementation review pending. The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment
 and live execution remain outside scope. The full post-PR-25 main run
@@ -439,8 +442,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,257 public naming identities are walked and 0 are unresolved; 39,102 are `explicit`,
-3,993 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,607 public naming identities are walked and 0 are unresolved; 39,425 are `explicit`,
+4,020 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

@@ -163,6 +163,16 @@
       "import": "./modules/core/dist/artifacts/index.js",
       "default": "./modules/core/dist/artifacts/index.js"
     },
+    "./core/data": {
+      "types": "./modules/core/dist/data.d.ts",
+      "import": "./modules/core/dist/data.js",
+      "default": "./modules/core/dist/data.js"
+    },
+    "./core/data-conformance": {
+      "types": "./modules/core/dist/data-conformance.d.ts",
+      "import": "./modules/core/dist/data-conformance.js",
+      "default": "./modules/core/dist/data-conformance.js"
+    },
     "./crypto": {
       "types": "./modules/crypto/dist/index.d.ts",
       "import": "./modules/crypto/dist/index.js",

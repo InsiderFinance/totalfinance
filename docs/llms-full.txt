@@ -37366,7 +37366,7 @@ Version: 0.1.2; stability: pre-1.0; component maturity varies (see stability pol
 
 Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
 
-Entrypoints: `@insiderfinance/totalfinance`, `@insiderfinance/totalfinance/backtest`, `@insiderfinance/totalfinance/backtest/artifacts`, `@insiderfinance/totalfinance/backtest/costs`, `@insiderfinance/totalfinance/backtest/cross-sectional`, `@insiderfinance/totalfinance/backtest/environment`, `@insiderfinance/totalfinance/backtest/event-driven`, `@insiderfinance/totalfinance/backtest/execution`, `@insiderfinance/totalfinance/backtest/options`, `@insiderfinance/totalfinance/backtest/paper`, `@insiderfinance/totalfinance/backtest/portfolio`, `@insiderfinance/totalfinance/backtest/tearsheet`, `@insiderfinance/totalfinance/backtest/vectorized`, `@insiderfinance/totalfinance/calendars`, `@insiderfinance/totalfinance/calendars/cboe`, `@insiderfinance/totalfinance/calendars/crypto`, `@insiderfinance/totalfinance/calendars/nyse`, `@insiderfinance/totalfinance/cli`, `@insiderfinance/totalfinance/commodities`, `@insiderfinance/totalfinance/commodities/forwards`, `@insiderfinance/totalfinance/commodities/term-structure`, `@insiderfinance/totalfinance/core`, `@insiderfinance/totalfinance/core/artifacts`, `@insiderfinance/totalfinance/core/pricing`, `@insiderfinance/totalfinance/core/schema`, `@insiderfinance/totalfinance/crypto`, `@insiderfinance/totalfinance/crypto/carry`, `@insiderfinance/totalfinance/crypto/curve`, `@insiderfinance/totalfinance/crypto/inverse`, `@insiderfinance/totalfinance/crypto/liquidation`, `@insiderfinance/totalfinance/fixed-income`, `@insiderfinance/totalfinance/fixed-income/artifacts`, `@insiderfinance/totalfinance/fixed-income/bonds`, `@insiderfinance/totalfinance/fixed-income/conventions`, `@insiderfinance/totalfinance/fixed-income/convertible`, `@insiderfinance/totalfinance/fixed-income/credit`, `@insiderfinance/totalfinance/fixed-income/cross-currency`, `@insiderfinance/totalfinance/fixed-income/curves`, `@insiderfinance/totalfinance/fixed-income/futures`, `@insiderfinance/totalfinance/fixed-income/inflation`, `@insiderfinance/totalfinance/fixed-income/lattice`, `@insiderfinance/totalfinance/fixed-income/models`, `@insiderfinance/totalfinance/fixed-income/pricer`, `@insiderfinance/totalfinance/fixed-income/rates`, `@insiderfinance/totalfinance/fixed-income/xva`, `@insiderfinance/totalfinance/foreign-exchange`, `@insiderfinance/totalfinance/foreign-exchange/forwards`, `@insiderfinance/totalfinance/foreign-exchange/risk`, `@insiderfinance/totalfinance/foreign-exchange/spot`, `@insiderfinance/totalfinance/fundamentals`, `@insiderfinance/totalfinance/fundamentals/ratios`, `@insiderfinance/totalfinance/fundamentals/scores`, `@insiderfinance/totalfinance/fundamentals/statements`, `@insiderfinance/totalfinance/http`, `@insiderfinance/totalfinance/math`, `@insiderfinance/totalfinance/math/bivariate`, `@insiderfinance/totalfinance/math/distributions`, `@insiderfinance/totalfinance/math/filters`, `@insiderfinance/totalfinance/math/integration`, `@insiderfinance/totalfinance/math/interpolation`, `@insiderfinance/totalfinance/math/linalg`, `@insiderfinance/totalfinance/math/lowdiscrepancy`, `@insiderfinance/totalfinance/math/montecarlo`, `@insiderfinance/totalfinance/math/normal`, `@insiderfinance/totalfinance/math/optimize`, `@insiderfinance/totalfinance/math/random`, `@insiderfinance/totalfinance/math/regression`, `@insiderfinance/totalfinance/math/solvers`, `@insiderfinance/totalfinance/math/statistics`, `@insiderfinance/totalfinance/math/timeseries`, `@insiderfinance/totalfinance/options`, `@insiderfinance/totalfinance/options/bachelier`, `@insiderfinance/totalfinance/options/batch`, `@insiderfinance/totalfinance/options/black-scholes`, `@insiderfinance/totalfinance/options/black76`, `@insiderfinance/totalfinance/options/exotics`, `@insiderfinance/totalfinance/options/heston`, `@insiderfinance/totalfinance/options/lattice`, `@insiderfinance/totalfinance/options/local-volatility`, `@insiderfinance/totalfinance/options/monte-carlo`, `@insiderfinance/totalfinance/options/parity`, `@insiderfinance/totalfinance/options/payoff`, `@insiderfinance/totalfinance/options/pricer`, `@insiderfinance/totalfinance/options/sabr`, `@insiderfinance/totalfinance/options/schema`, `@insiderfinance/totalfinance/performance`, `@insiderfinance/totalfinance/performance/activity`, `@insiderfinance/totalfinance/performance/analyze`, `@insiderfinance/totalfinance/performance/drawdown`, `@insiderfinance/totalfinance/performance/flow-aware`, `@insiderfinance/totalfinance/performance/metrics`, `@insiderfinance/totalfinance/performance/ratios`, `@insiderfinance/totalfinance/performance/relative`, `@insiderfinance/totalfinance/performance/returns`, `@insiderfinance/totalfinance/performance/rolling`, `@insiderfinance/totalfinance/performance/sector-performance`, `@insiderfinance/totalfinance/performance/sharpe`, `@insiderfinance/totalfinance/portfolio`, `@insiderfinance/totalfinance/portfolio/disclosed-holding-partitions`, `@insiderfinance/totalfinance/portfolio/disclosed-holdings`, `@insiderfinance/totalfinance/portfolio/events`, `@insiderfinance/totalfinance/portfolio/ledger`, `@insiderfinance/totalfinance/portfolio/performance`, `@insiderfinance/totalfinance/portfolio/policy`, `@insiderfinance/totalfinance/portfolio/reconciliation`, `@insiderfinance/totalfinance/portfolio/trade`, `@insiderfinance/totalfinance/research`, `@insiderfinance/totalfinance/research/artifacts`, `@insiderfinance/totalfinance/research/events`, `@insiderfinance/totalfinance/research/factors`, `@insiderfinance/totalfinance/research/screening`, `@insiderfinance/totalfinance/risk`, `@insiderfinance/totalfinance/risk/factor`, `@insiderfinance/totalfinance/risk/optimize`, `@insiderfinance/totalfinance/risk/portfolio`, `@insiderfinance/totalfinance/risk/research`, `@insiderfinance/totalfinance/risk/scenario`, `@insiderfinance/totalfinance/risk/sizing`, `@insiderfinance/totalfinance/risk/value-at-risk`, `@insiderfinance/totalfinance/scenarios`, `@insiderfinance/totalfinance/scenarios/portfolio`, `@insiderfinance/totalfinance/strategy`, `@insiderfinance/totalfinance/strategy/from-chain`, `@insiderfinance/totalfinance/strategy/probability`, `@insiderfinance/totalfinance/strategy/scanner`, `@insiderfinance/totalfinance/structure`, `@insiderfinance/totalfinance/structure/exposure`, `@insiderfinance/totalfinance/structure/flow`, `@insiderfinance/totalfinance/technical-analysis`, `@insiderfinance/totalfinance/technical-analysis/aliases`, `@insiderfinance/totalfinance/technical-analysis/bands`, `@insiderfinance/totalfinance/technical-analysis/bars`, `@insiderfinance/totalfinance/technical-analysis/candle-aliases`, `@insiderfinance/totalfinance/technical-analysis/candle-talib`, `@insiderfinance/totalfinance/technical-analysis/candlesticks`, `@insiderfinance/totalfinance/technical-analysis/chart-types`, `@insiderfinance/totalfinance/technical-analysis/cycle`, `@insiderfinance/totalfinance/technical-analysis/divergence`, `@insiderfinance/totalfinance/technical-analysis/features`, `@insiderfinance/totalfinance/technical-analysis/framework`, `@insiderfinance/totalfinance/technical-analysis/macd`, `@insiderfinance/totalfinance/technical-analysis/math`, `@insiderfinance/totalfinance/technical-analysis/microstructure`, `@insiderfinance/totalfinance/technical-analysis/momentum`, `@insiderfinance/totalfinance/technical-analysis/moving-averages`, `@insiderfinance/totalfinance/technical-analysis/oscillators`, `@insiderfinance/totalfinance/technical-analysis/overlap`, `@insiderfinance/totalfinance/technical-analysis/pipeline`, `@insiderfinance/totalfinance/technical-analysis/price-action`, `@insiderfinance/totalfinance/technical-analysis/registry`, `@insiderfinance/totalfinance/technical-analysis/resample`, `@insiderfinance/totalfinance/technical-analysis/rsi`, `@insiderfinance/totalfinance/technical-analysis/series`, `@insiderfinance/totalfinance/technical-analysis/signal`, `@insiderfinance/totalfinance/technical-analysis/statistics`, `@insiderfinance/totalfinance/technical-analysis/transforms`, `@insiderfinance/totalfinance/technical-analysis/trend`, `@insiderfinance/totalfinance/technical-analysis/volatility`, `@insiderfinance/totalfinance/technical-analysis/volume`, `@insiderfinance/totalfinance/technical-analysis/warmup`, `@insiderfinance/totalfinance/valuation`, `@insiderfinance/totalfinance/valuation/cash-flows`, `@insiderfinance/totalfinance/valuation/corporate`, `@insiderfinance/totalfinance/valuation/forecasting`, `@insiderfinance/totalfinance/valuation/price-levels`, `@insiderfinance/totalfinance/valuation/schemas`, `@insiderfinance/totalfinance/volatility`, `@insiderfinance/totalfinance/volatility/analytics`, `@insiderfinance/totalfinance/volatility/arbitrage`, `@insiderfinance/totalfinance/volatility/artifacts`, `@insiderfinance/totalfinance/volatility/earnings`, `@insiderfinance/totalfinance/volatility/essvi`, `@insiderfinance/totalfinance/volatility/estimate`, `@insiderfinance/totalfinance/volatility/event`, `@insiderfinance/totalfinance/volatility/forecast`, `@insiderfinance/totalfinance/volatility/heston-surface`, `@insiderfinance/totalfinance/volatility/local-volatility`, `@insiderfinance/totalfinance/volatility/metrics`, `@insiderfinance/totalfinance/volatility/min-variance-delta`, `@insiderfinance/totalfinance/volatility/risk-reversal`, `@insiderfinance/totalfinance/volatility/sabr`, `@insiderfinance/totalfinance/volatility/sabr-delta`, `@insiderfinance/totalfinance/volatility/skew`, `@insiderfinance/totalfinance/volatility/ssvi`, `@insiderfinance/totalfinance/volatility/sticky-regime`, `@insiderfinance/totalfinance/volatility/surface`, `@insiderfinance/totalfinance/volatility/surface-pca`, `@insiderfinance/totalfinance/volatility/svi`, `@insiderfinance/totalfinance/volatility/swaption-cube`, `@insiderfinance/totalfinance/volatility/tail-risk`, `@insiderfinance/totalfinance/volatility/term`, `@insiderfinance/totalfinance/volatility/vanna-volga`, `@insiderfinance/totalfinance/volatility/variance-index`, `@insiderfinance/totalfinance/volatility/volatility-spot-beta`, `@insiderfinance/totalfinance/workflows`, `@insiderfinance/totalfinance/workflows/local`
+Entrypoints: `@insiderfinance/totalfinance`, `@insiderfinance/totalfinance/backtest`, `@insiderfinance/totalfinance/backtest/artifacts`, `@insiderfinance/totalfinance/backtest/costs`, `@insiderfinance/totalfinance/backtest/cross-sectional`, `@insiderfinance/totalfinance/backtest/environment`, `@insiderfinance/totalfinance/backtest/event-driven`, `@insiderfinance/totalfinance/backtest/execution`, `@insiderfinance/totalfinance/backtest/options`, `@insiderfinance/totalfinance/backtest/paper`, `@insiderfinance/totalfinance/backtest/portfolio`, `@insiderfinance/totalfinance/backtest/tearsheet`, `@insiderfinance/totalfinance/backtest/vectorized`, `@insiderfinance/totalfinance/calendars`, `@insiderfinance/totalfinance/calendars/cboe`, `@insiderfinance/totalfinance/calendars/crypto`, `@insiderfinance/totalfinance/calendars/nyse`, `@insiderfinance/totalfinance/cli`, `@insiderfinance/totalfinance/commodities`, `@insiderfinance/totalfinance/commodities/forwards`, `@insiderfinance/totalfinance/commodities/term-structure`, `@insiderfinance/totalfinance/core`, `@insiderfinance/totalfinance/core/artifacts`, `@insiderfinance/totalfinance/core/data`, `@insiderfinance/totalfinance/core/data-conformance`, `@insiderfinance/totalfinance/core/pricing`, `@insiderfinance/totalfinance/core/schema`, `@insiderfinance/totalfinance/crypto`, `@insiderfinance/totalfinance/crypto/carry`, `@insiderfinance/totalfinance/crypto/curve`, `@insiderfinance/totalfinance/crypto/inverse`, `@insiderfinance/totalfinance/crypto/liquidation`, `@insiderfinance/totalfinance/fixed-income`, `@insiderfinance/totalfinance/fixed-income/artifacts`, `@insiderfinance/totalfinance/fixed-income/bonds`, `@insiderfinance/totalfinance/fixed-income/conventions`, `@insiderfinance/totalfinance/fixed-income/convertible`, `@insiderfinance/totalfinance/fixed-income/credit`, `@insiderfinance/totalfinance/fixed-income/cross-currency`, `@insiderfinance/totalfinance/fixed-income/curves`, `@insiderfinance/totalfinance/fixed-income/futures`, `@insiderfinance/totalfinance/fixed-income/inflation`, `@insiderfinance/totalfinance/fixed-income/lattice`, `@insiderfinance/totalfinance/fixed-income/models`, `@insiderfinance/totalfinance/fixed-income/pricer`, `@insiderfinance/totalfinance/fixed-income/rates`, `@insiderfinance/totalfinance/fixed-income/xva`, `@insiderfinance/totalfinance/foreign-exchange`, `@insiderfinance/totalfinance/foreign-exchange/forwards`, `@insiderfinance/totalfinance/foreign-exchange/risk`, `@insiderfinance/totalfinance/foreign-exchange/spot`, `@insiderfinance/totalfinance/fundamentals`, `@insiderfinance/totalfinance/fundamentals/ratios`, `@insiderfinance/totalfinance/fundamentals/scores`, `@insiderfinance/totalfinance/fundamentals/statements`, `@insiderfinance/totalfinance/http`, `@insiderfinance/totalfinance/math`, `@insiderfinance/totalfinance/math/bivariate`, `@insiderfinance/totalfinance/math/distributions`, `@insiderfinance/totalfinance/math/filters`, `@insiderfinance/totalfinance/math/integration`, `@insiderfinance/totalfinance/math/interpolation`, `@insiderfinance/totalfinance/math/linalg`, `@insiderfinance/totalfinance/math/lowdiscrepancy`, `@insiderfinance/totalfinance/math/montecarlo`, `@insiderfinance/totalfinance/math/normal`, `@insiderfinance/totalfinance/math/optimize`, `@insiderfinance/totalfinance/math/random`, `@insiderfinance/totalfinance/math/regression`, `@insiderfinance/totalfinance/math/solvers`, `@insiderfinance/totalfinance/math/statistics`, `@insiderfinance/totalfinance/math/timeseries`, `@insiderfinance/totalfinance/options`, `@insiderfinance/totalfinance/options/bachelier`, `@insiderfinance/totalfinance/options/batch`, `@insiderfinance/totalfinance/options/black-scholes`, `@insiderfinance/totalfinance/options/black76`, `@insiderfinance/totalfinance/options/exotics`, `@insiderfinance/totalfinance/options/heston`, `@insiderfinance/totalfinance/options/lattice`, `@insiderfinance/totalfinance/options/local-volatility`, `@insiderfinance/totalfinance/options/monte-carlo`, `@insiderfinance/totalfinance/options/parity`, `@insiderfinance/totalfinance/options/payoff`, `@insiderfinance/totalfinance/options/pricer`, `@insiderfinance/totalfinance/options/sabr`, `@insiderfinance/totalfinance/options/schema`, `@insiderfinance/totalfinance/performance`, `@insiderfinance/totalfinance/performance/activity`, `@insiderfinance/totalfinance/performance/analyze`, `@insiderfinance/totalfinance/performance/drawdown`, `@insiderfinance/totalfinance/performance/flow-aware`, `@insiderfinance/totalfinance/performance/metrics`, `@insiderfinance/totalfinance/performance/ratios`, `@insiderfinance/totalfinance/performance/relative`, `@insiderfinance/totalfinance/performance/returns`, `@insiderfinance/totalfinance/performance/rolling`, `@insiderfinance/totalfinance/performance/sector-performance`, `@insiderfinance/totalfinance/performance/sharpe`, `@insiderfinance/totalfinance/portfolio`, `@insiderfinance/totalfinance/portfolio/disclosed-holding-partitions`, `@insiderfinance/totalfinance/portfolio/disclosed-holdings`, `@insiderfinance/totalfinance/portfolio/events`, `@insiderfinance/totalfinance/portfolio/ledger`, `@insiderfinance/totalfinance/portfolio/performance`, `@insiderfinance/totalfinance/portfolio/policy`, `@insiderfinance/totalfinance/portfolio/reconciliation`, `@insiderfinance/totalfinance/portfolio/trade`, `@insiderfinance/totalfinance/research`, `@insiderfinance/totalfinance/research/artifacts`, `@insiderfinance/totalfinance/research/events`, `@insiderfinance/totalfinance/research/factors`, `@insiderfinance/totalfinance/research/screening`, `@insiderfinance/totalfinance/risk`, `@insiderfinance/totalfinance/risk/factor`, `@insiderfinance/totalfinance/risk/optimize`, `@insiderfinance/totalfinance/risk/portfolio`, `@insiderfinance/totalfinance/risk/research`, `@insiderfinance/totalfinance/risk/scenario`, `@insiderfinance/totalfinance/risk/sizing`, `@insiderfinance/totalfinance/risk/value-at-risk`, `@insiderfinance/totalfinance/scenarios`, `@insiderfinance/totalfinance/scenarios/portfolio`, `@insiderfinance/totalfinance/strategy`, `@insiderfinance/totalfinance/strategy/from-chain`, `@insiderfinance/totalfinance/strategy/probability`, `@insiderfinance/totalfinance/strategy/scanner`, `@insiderfinance/totalfinance/structure`, `@insiderfinance/totalfinance/structure/exposure`, `@insiderfinance/totalfinance/structure/flow`, `@insiderfinance/totalfinance/technical-analysis`, `@insiderfinance/totalfinance/technical-analysis/aliases`, `@insiderfinance/totalfinance/technical-analysis/bands`, `@insiderfinance/totalfinance/technical-analysis/bars`, `@insiderfinance/totalfinance/technical-analysis/candle-aliases`, `@insiderfinance/totalfinance/technical-analysis/candle-talib`, `@insiderfinance/totalfinance/technical-analysis/candlesticks`, `@insiderfinance/totalfinance/technical-analysis/chart-types`, `@insiderfinance/totalfinance/technical-analysis/cycle`, `@insiderfinance/totalfinance/technical-analysis/divergence`, `@insiderfinance/totalfinance/technical-analysis/features`, `@insiderfinance/totalfinance/technical-analysis/framework`, `@insiderfinance/totalfinance/technical-analysis/macd`, `@insiderfinance/totalfinance/technical-analysis/math`, `@insiderfinance/totalfinance/technical-analysis/microstructure`, `@insiderfinance/totalfinance/technical-analysis/momentum`, `@insiderfinance/totalfinance/technical-analysis/moving-averages`, `@insiderfinance/totalfinance/technical-analysis/oscillators`, `@insiderfinance/totalfinance/technical-analysis/overlap`, `@insiderfinance/totalfinance/technical-analysis/pipeline`, `@insiderfinance/totalfinance/technical-analysis/price-action`, `@insiderfinance/totalfinance/technical-analysis/registry`, `@insiderfinance/totalfinance/technical-analysis/resample`, `@insiderfinance/totalfinance/technical-analysis/rsi`, `@insiderfinance/totalfinance/technical-analysis/series`, `@insiderfinance/totalfinance/technical-analysis/signal`, `@insiderfinance/totalfinance/technical-analysis/statistics`, `@insiderfinance/totalfinance/technical-analysis/transforms`, `@insiderfinance/totalfinance/technical-analysis/trend`, `@insiderfinance/totalfinance/technical-analysis/volatility`, `@insiderfinance/totalfinance/technical-analysis/volume`, `@insiderfinance/totalfinance/technical-analysis/warmup`, `@insiderfinance/totalfinance/valuation`, `@insiderfinance/totalfinance/valuation/cash-flows`, `@insiderfinance/totalfinance/valuation/corporate`, `@insiderfinance/totalfinance/valuation/forecasting`, `@insiderfinance/totalfinance/valuation/price-levels`, `@insiderfinance/totalfinance/valuation/schemas`, `@insiderfinance/totalfinance/volatility`, `@insiderfinance/totalfinance/volatility/analytics`, `@insiderfinance/totalfinance/volatility/arbitrage`, `@insiderfinance/totalfinance/volatility/artifacts`, `@insiderfinance/totalfinance/volatility/earnings`, `@insiderfinance/totalfinance/volatility/essvi`, `@insiderfinance/totalfinance/volatility/estimate`, `@insiderfinance/totalfinance/volatility/event`, `@insiderfinance/totalfinance/volatility/forecast`, `@insiderfinance/totalfinance/volatility/heston-surface`, `@insiderfinance/totalfinance/volatility/local-volatility`, `@insiderfinance/totalfinance/volatility/metrics`, `@insiderfinance/totalfinance/volatility/min-variance-delta`, `@insiderfinance/totalfinance/volatility/risk-reversal`, `@insiderfinance/totalfinance/volatility/sabr`, `@insiderfinance/totalfinance/volatility/sabr-delta`, `@insiderfinance/totalfinance/volatility/skew`, `@insiderfinance/totalfinance/volatility/ssvi`, `@insiderfinance/totalfinance/volatility/sticky-regime`, `@insiderfinance/totalfinance/volatility/surface`, `@insiderfinance/totalfinance/volatility/surface-pca`, `@insiderfinance/totalfinance/volatility/svi`, `@insiderfinance/totalfinance/volatility/swaption-cube`, `@insiderfinance/totalfinance/volatility/tail-risk`, `@insiderfinance/totalfinance/volatility/term`, `@insiderfinance/totalfinance/volatility/vanna-volga`, `@insiderfinance/totalfinance/volatility/variance-index`, `@insiderfinance/totalfinance/volatility/volatility-spot-beta`, `@insiderfinance/totalfinance/workflows`, `@insiderfinance/totalfinance/workflows/local`
 
 ## Entrypoint @insiderfinance/totalfinance
 
@@ -40631,12 +40631,7 @@ consumer detect future shape changes.
 - DataError(options).cause?: unknown; default: not declared — Underlying cause, preserved on the standard `Error.cause` chain.
 - DataError(options).code: string; default: not declared — Stable, machine-readable code, e.g. `input.negative_spot`.
 - DataError(options).context?: Record<string, unknown>; default: not declared — Structured context for programmatic handling and good error messages.
-- ErrorCode: { readonly InputNaN: 'input.nan'; readonly InputNotFinite: 'input.not_finite'; readonly InputNegativeSpot: 'input.negative_spot'; readonly InputNegativeStrike: 'input.negative_strike'; readonly InputNegativeVolatility: 'input.negative_volatility'; readonly InputNegativeTime: 'input.negative_time'; readonly InputOutOfRange: 'input.out_of_range'; readonly InputInvalidEnum: 'input.invalid_enum'; readonly InputMissingField: 'input.missing_field'; readonly InputUnknownField: 'input.unknown_field'; readonly InputWrongType: 'input.wrong_type'; readonly InputWrongShape: 'input.wrong_shape'; readonly ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; readonly ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; readonly ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; readonly EngineUnsupportedContract: 'engine.unsupported_contract'; readonly DataCrossedMarket: 'data.crossed_market'; readonly DataStaleQuote: 'data.stale_quote'; readonly SolverNoConvergence: 'solver.no_convergence'; readonly LinalgNoConvergence: 'linalg.no_convergence'; readonly LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; readonly LinalgSingular: 'linalg.singular'; readonly IntegrationMaxDepth: 'integration.max_depth'; readonly InterpolationOutOfDomain: 'interpolation.out_of_domain'; readonly InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; readonly InterpolationInvalidGrid: 'interpolation.invalid_grid'; readonly OptimizeInvalidBounds: 'optimize.invalid_bounds'; readonly VolatilityExpiryNotFound: 'volatility.expiry_not_found'; readonly VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; readonly StrategyInvalidChartRange: 'strategy.invalid_chart_range'; readonly TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; readonly TimeValuationInstantRequired: 'time.valuation_instant_required'; readonly BacktestDuplicateHandler: 'backtest.duplicate_handler'; readonly BacktestMixedSymbols: 'backtest.mixed_symbols'; readonly BacktestMarkUnavailable: 'backtest.mark_unavailable'; readonly BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; readonly BacktestStaleQuote: 'backtest.stale_quote'; readonly BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; readonly BacktestInputTooLarge: 'backtest.input_too_large'; readonly BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; readonly BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; readonly BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; readonly EnvironmentNotReset: 'environment.not_reset'; readonly EnvironmentDuplicateOrder: 'environment.duplicate_order'; readonly EnvironmentLimitBreach: 'environment.limit_breach'; readonly EnvironmentActionDisallowed: 'environment.action_disallowed'; readonly EnvironmentUnknownInstrument: 'environment.unknown_instrument'; readonly EnvironmentOrderInvalid: 'environment.order_invalid'; readonly EnvironmentActionInvalid: 'environment.action_invalid'; readonly EnvironmentEpisodeOver: 'environment.episode_over'; readonly TradePlanInvalid: 'trade.plan_invalid'; readonly TradePreflightDenied: 'trade.preflight_denied'; readonly TradeGrantInvalid: 'trade.grant_invalid'; readonly TradeGrantExpired: 'trade.grant_expired'; readonly TradeGrantConsumed: 'trade.grant_consumed'; readonly TradeIdempotencyConflict: 'trade.idempotency_conflict'; readonly TradeHalted: 'trade.halted'; readonly TradeLiveUnavailable: 'trade.live_unavailable'; readonly TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; readonly OperationCapabilityMissing: 'operation.capability_missing'; readonly OperationToolFiltered: 'operation.tool_filtered'; readonly BacktestGridTooLarge: 'backtest.grid_too_large'; readonly BacktestBookTooLarge: 'backtest.book_too_large'; readonly BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; readonly OperationUnknown: 'operation.unknown'; readonly OperationRegistrationRefused: 'operation.registration_refused'; readonly OperationInputTooLarge: 'operation.input_too_large'; readonly OperationDeadlineExceeded: 'operation.deadline_exceeded'; readonly OperationCancelled: 'operation.cancelled'; readonly OperationInternal: 'operation.internal'; readonly OperationHandleStoreMissing: 'operation.handle_store_missing'; readonly OperationHandleUnknown: 'operation.handle_unknown'; readonly OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; readonly InputLengthMismatch: 'input.length_mismatch'; readonly InputDuplicateEntry: 'input.duplicate_entry'; readonly McpDeadlineExceeded: 'mcp.deadline_exceeded'; readonly McpInputTooLarge: 'mcp.input_too_large'; readonly McpInternalError: 'mcp.internal_error'; readonly PostconditionNonFinite: 'postcondition.non_finite_result'; readonly McpUnknownTool: 'mcp.unknown_tool'; readonly PipelineDuplicateAlias: 'pipeline.duplicate_alias'; readonly PipelineLengthMismatch: 'pipeline.length_mismatch'; readonly RegistryAliasConflict: 'registry.alias_conflict'; readonly RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; readonly RegistryDuplicateIndicator: 'registry.duplicate_indicator'; readonly RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; readonly SignalUnknownReference: 'signal.unknown_reference'; readonly SnapshotInvalidVersion: 'snapshot.invalid_version'; readonly SnapshotKindMismatch: 'snapshot.kind_mismatch'; readonly SnapshotUnknownKind: 'snapshot.unknown_kind'; readonly SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; readonly SnapshotWrongShape: 'snapshot.wrong_shape'; readonly StrategyDeltaRequired: 'strategy.delta_required'; readonly StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; readonly StrategyExpiryConflict: 'strategy.expiry_conflict'; readonly StrategyStrikeUnavailable: 'strategy.strike_unavailable'; readonly VolatilityForwardUnavailable: 'volatility.forward_unavailable'; readonly VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; readonly EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; readonly EngineResultOutOfBounds: 'engine.result_out_of_bounds'; readonly EngineDiscretizationInadequate: 'engine.discretization_inadequate'; readonly ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; readonly RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; readonly RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; readonly VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; readonly VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; readonly MathIterationLimit: 'math.iteration_limit'; readonly BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; readonly InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; readonly InputSuspiciousYield: 'input.suspicious_yield'; readonly ModelFellerConditionViolated: 'model.feller_condition_violated'; readonly PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; readonly PricerRequirementInvalid: 'pricer.requirement_invalid'; readonly PricerObservationInvalid: 'pricer.observation_invalid'; readonly PricerNonconformant: 'pricer.nonconformant'; readonly ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; readonly ScenarioTargetUnsupported: 'scenario.target_unsupported'; readonly ScenarioCellFailed: 'scenario.cell_failed'; readonly SerializationUnsupportedValue: 'serialization.unsupported_value'; readonly ArtifactMigrationMissing: 'artifact.migration_missing'; readonly ArtifactDuplicateMigration: 'artifact.duplicate_migration'; readonly ArtifactIdMismatch: 'artifact.id_mismatch'; readonly ArtifactTypeMismatch: 'artifact.type_mismatch'; readonly ArtifactFamilyMismatch: 'artifact.family_mismatch'; readonly ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; readonly ArtifactNotReplayable: 'artifact.not_replayable'; readonly ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; readonly ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; readonly ArtifactOperationUnsupported: 'artifact.operation_unsupported'; readonly PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; readonly PortfolioLotUnavailable: 'portfolio.lot_unavailable'; readonly PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; readonly PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; }; default: not declared — Canonical error codes used in the 0.0.1 surface. The set is open — packages may introduce new
-codes — but these are documented and stable.
-
-Static references to package-private constants let guard-only consumers discard this registry
-while retaining the same error classes. Explicit properties preserve the public property order
-and literal readonly types, without a second code object or construction side effects.
+- ErrorCode: { readonly InputNaN: 'input.nan'; readonly InputNotFinite: 'input.not_finite'; readonly InputNegativeSpot: 'input.negative_spot'; readonly InputNegativeStrike: 'input.negative_strike'; readonly InputNegativeVolatility: 'input.negative_volatility'; readonly InputNegativeTime: 'input.negative_time'; readonly InputOutOfRange: 'input.out_of_range'; readonly InputInvalidEnum: 'input.invalid_enum'; readonly InputMissingField: 'input.missing_field'; readonly InputUnknownField: 'input.unknown_field'; readonly InputWrongType: 'input.wrong_type'; readonly InputWrongShape: 'input.wrong_shape'; readonly ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence'; readonly ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic'; readonly ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound'; readonly EngineUnsupportedContract: 'engine.unsupported_contract'; readonly DataCrossedMarket: 'data.crossed_market'; readonly DataUnsupportedCapability: 'data.unsupported_capability'; readonly DataContractVersionUnsupported: 'data.contract_version_unsupported'; readonly DataAuthenticationRequired: 'data.authentication_required'; readonly DataEntitlementRequired: 'data.entitlement_required'; readonly DataRateLimited: 'data.rate_limited'; readonly DataAllowanceExhausted: 'data.allowance_exhausted'; readonly DataSnapshotExpired: 'data.snapshot_expired'; readonly DataInvalidCursor: 'data.invalid_cursor'; readonly DataNotFound: 'data.not_found'; readonly DataInvalidRequest: 'data.invalid_request'; readonly DataInvalidResponse: 'data.invalid_response'; readonly DataUnavailable: 'data.unavailable'; readonly DataAborted: 'data.aborted'; readonly DataNonconformant: 'data.nonconformant'; readonly DataStaleQuote: 'data.stale_quote'; readonly SolverNoConvergence: 'solver.no_convergence'; readonly LinalgNoConvergence: 'linalg.no_convergence'; readonly LinalgNotPositiveDefinite: 'linalg.not_positive_definite'; readonly LinalgSingular: 'linalg.singular'; readonly IntegrationMaxDepth: 'integration.max_depth'; readonly InterpolationOutOfDomain: 'interpolation.out_of_domain'; readonly InterpolationDuplicateKnots: 'interpolation.duplicate_knots'; readonly InterpolationInvalidGrid: 'interpolation.invalid_grid'; readonly OptimizeInvalidBounds: 'optimize.invalid_bounds'; readonly VolatilityExpiryNotFound: 'volatility.expiry_not_found'; readonly VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage'; readonly StrategyInvalidChartRange: 'strategy.invalid_chart_range'; readonly TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed'; readonly TimeValuationInstantRequired: 'time.valuation_instant_required'; readonly BacktestDuplicateHandler: 'backtest.duplicate_handler'; readonly BacktestMixedSymbols: 'backtest.mixed_symbols'; readonly BacktestMarkUnavailable: 'backtest.mark_unavailable'; readonly BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar'; readonly BacktestStaleQuote: 'backtest.stale_quote'; readonly BacktestAdapterNonconformant: 'backtest.adapter_nonconformant'; readonly BacktestInputTooLarge: 'backtest.input_too_large'; readonly BacktestDelistingReturnMissing: 'backtest.delisting_return_missing'; readonly BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; readonly BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed'; readonly EnvironmentNotReset: 'environment.not_reset'; readonly EnvironmentDuplicateOrder: 'environment.duplicate_order'; readonly EnvironmentLimitBreach: 'environment.limit_breach'; readonly EnvironmentActionDisallowed: 'environment.action_disallowed'; readonly EnvironmentUnknownInstrument: 'environment.unknown_instrument'; readonly EnvironmentOrderInvalid: 'environment.order_invalid'; readonly EnvironmentActionInvalid: 'environment.action_invalid'; readonly EnvironmentEpisodeOver: 'environment.episode_over'; readonly TradePlanInvalid: 'trade.plan_invalid'; readonly TradePreflightDenied: 'trade.preflight_denied'; readonly TradeGrantInvalid: 'trade.grant_invalid'; readonly TradeGrantExpired: 'trade.grant_expired'; readonly TradeGrantConsumed: 'trade.grant_consumed'; readonly TradeIdempotencyConflict: 'trade.idempotency_conflict'; readonly TradeHalted: 'trade.halted'; readonly TradeLiveUnavailable: 'trade.live_unavailable'; readonly TradeJournalTransitionInvalid: 'trade.journal_transition_invalid'; readonly OperationCapabilityMissing: 'operation.capability_missing'; readonly OperationToolFiltered: 'operation.tool_filtered'; readonly BacktestGridTooLarge: 'backtest.grid_too_large'; readonly BacktestBookTooLarge: 'backtest.book_too_large'; readonly BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; readonly OperationUnknown: 'operation.unknown'; readonly OperationRegistrationRefused: 'operation.registration_refused'; readonly OperationInputTooLarge: 'operation.input_too_large'; readonly OperationDeadlineExceeded: 'operation.deadline_exceeded'; readonly OperationCancelled: 'operation.cancelled'; readonly OperationInternal: 'operation.internal'; readonly OperationHandleStoreMissing: 'operation.handle_store_missing'; readonly OperationHandleUnknown: 'operation.handle_unknown'; readonly OperationHandleKindMismatch: 'operation.handle_kind_mismatch'; readonly InputLengthMismatch: 'input.length_mismatch'; readonly InputDuplicateEntry: 'input.duplicate_entry'; readonly McpDeadlineExceeded: 'mcp.deadline_exceeded'; readonly McpInputTooLarge: 'mcp.input_too_large'; readonly McpInternalError: 'mcp.internal_error'; readonly PostconditionNonFinite: 'postcondition.non_finite_result'; readonly McpUnknownTool: 'mcp.unknown_tool'; readonly PipelineDuplicateAlias: 'pipeline.duplicate_alias'; readonly PipelineLengthMismatch: 'pipeline.length_mismatch'; readonly RegistryAliasConflict: 'registry.alias_conflict'; readonly RegistryDuplicateAliasRow: 'registry.duplicate_alias_row'; readonly RegistryDuplicateIndicator: 'registry.duplicate_indicator'; readonly RegistryUnknownAliasTarget: 'registry.unknown_alias_target'; readonly SignalUnknownReference: 'signal.unknown_reference'; readonly SnapshotInvalidVersion: 'snapshot.invalid_version'; readonly SnapshotKindMismatch: 'snapshot.kind_mismatch'; readonly SnapshotUnknownKind: 'snapshot.unknown_kind'; readonly SnapshotUnsupportedVersion: 'snapshot.unsupported_version'; readonly SnapshotWrongShape: 'snapshot.wrong_shape'; readonly StrategyDeltaRequired: 'strategy.delta_required'; readonly StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics'; readonly StrategyExpiryConflict: 'strategy.expiry_conflict'; readonly StrategyStrikeUnavailable: 'strategy.strike_unavailable'; readonly VolatilityForwardUnavailable: 'volatility.forward_unavailable'; readonly VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch'; readonly EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; readonly EngineResultOutOfBounds: 'engine.result_out_of_bounds'; readonly EngineDiscretizationInadequate: 'engine.discretization_inadequate'; readonly ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable'; readonly RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance'; readonly RiskQuantileBeyondSample: 'risk.quantile_beyond_sample'; readonly VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation'; readonly VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast'; readonly MathIterationLimit: 'math.iteration_limit'; readonly BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted'; readonly InputSuspiciousCouponRate: 'input.suspicious_coupon_rate'; readonly InputSuspiciousYield: 'input.suspicious_yield'; readonly ModelFellerConditionViolated: 'model.feller_condition_violated'; readonly PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied'; readonly PricerRequirementInvalid: 'pricer.requirement_invalid'; readonly PricerObservationInvalid: 'pricer.observation_invalid'; readonly PricerNonconformant: 'pricer.nonconformant'; readonly ScenarioInstructionUnmatched: 'scenario.instruction_unmatched'; readonly ScenarioTargetUnsupported: 'scenario.target_unsupported'; readonly ScenarioCellFailed: 'scenario.cell_failed'; readonly SerializationUnsupportedValue: 'serialization.unsupported_value'; readonly ArtifactMigrationMissing: 'artifact.migration_missing'; readonly ArtifactDuplicateMigration: 'artifact.duplicate_migration'; readonly ArtifactIdMismatch: 'artifact.id_mismatch'; readonly ArtifactTypeMismatch: 'artifact.type_mismatch'; readonly ArtifactFamilyMismatch: 'artifact.family_mismatch'; readonly ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported'; readonly ArtifactNotReplayable: 'artifact.not_replayable'; readonly ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch'; readonly ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; readonly ArtifactOperationUnsupported: 'artifact.operation_unsupported'; readonly PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict'; readonly PortfolioLotUnavailable: 'portfolio.lot_unavailable'; readonly PortfolioMarkUnavailable: 'portfolio.mark_unavailable'; readonly PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing'; readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible'; }; default: not declared
 - ErrorCode.ArtifactDuplicateMigration: 'artifact.duplicate_migration'; default: not declared — A second migration was registered for the same `(kind, fromVersion)` — two upgrades for one
 stored shape cannot both be the truth.
 - ErrorCode.ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large'; default: not declared — An embedded calibration or run input exceeds `maximumEmbeddedBytes`; the teaching says to
@@ -40674,8 +40669,22 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - ErrorCode.BacktestStaleQuote: 'backtest.stale_quote'; default: not declared — Stage 4.6 (FC8) — a quote fill under `staleQuotes.behavior: 'reject'` met a quote older than the policy's maximum age.
 - ErrorCode.BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared — Stage 4.6 (FC8) — a return or feature names an instrument the universe history never lists.
 - ErrorCode.BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared — Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted.
+- ErrorCode.DataAborted: 'data.aborted'; default: not declared
+- ErrorCode.DataAllowanceExhausted: 'data.allowance_exhausted'; default: not declared
+- ErrorCode.DataAuthenticationRequired: 'data.authentication_required'; default: not declared
+- ErrorCode.DataContractVersionUnsupported: 'data.contract_version_unsupported'; default: not declared
 - ErrorCode.DataCrossedMarket: 'data.crossed_market'; default: not declared
+- ErrorCode.DataEntitlementRequired: 'data.entitlement_required'; default: not declared
+- ErrorCode.DataInvalidCursor: 'data.invalid_cursor'; default: not declared
+- ErrorCode.DataInvalidRequest: 'data.invalid_request'; default: not declared
+- ErrorCode.DataInvalidResponse: 'data.invalid_response'; default: not declared
+- ErrorCode.DataNonconformant: 'data.nonconformant'; default: not declared
+- ErrorCode.DataNotFound: 'data.not_found'; default: not declared
+- ErrorCode.DataRateLimited: 'data.rate_limited'; default: not declared
+- ErrorCode.DataSnapshotExpired: 'data.snapshot_expired'; default: not declared
 - ErrorCode.DataStaleQuote: 'data.stale_quote'; default: not declared
+- ErrorCode.DataUnavailable: 'data.unavailable'; default: not declared
+- ErrorCode.DataUnsupportedCapability: 'data.unsupported_capability'; default: not declared
 - ErrorCode.EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared — Warning: the engine's grid/truncation is too coarse for the requested regime.
 - ErrorCode.EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared — A lattice's risk-neutral branch probabilities left [0, 1] (drift outran diffusion).
 - ErrorCode.EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared — A successful engine result violated a no-arbitrage output bound (e.g. C > S·e^{-qT}).
@@ -40853,7 +40862,7 @@ consumer detect future shape changes.
 - UnsupportedError(options).cause?: unknown; default: not declared — Underlying cause, preserved on the standard `Error.cause` chain.
 - UnsupportedError(options).code: string; default: not declared — Stable, machine-readable code, e.g. `input.negative_spot`.
 - UnsupportedError(options).context?: Record<string, unknown>; default: not declared — Structured context for programmatic handling and good error messages.
-- WarningCode: { readonly PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review'; readonly DataLockedMarket: 'data.locked_market'; readonly DataZeroBidAsk: 'data.zero_bid_ask'; readonly SurfaceExtrapolated: 'volatility.surface_extrapolated'; readonly BinomialStepsRoundedOdd: 'binomial.steps_rounded_odd'; readonly GreeksNotComputed: 'greeks.not_computed'; readonly SuspiciousVolatility: 'input.suspicious_volatility'; readonly SuspiciousTime: 'input.suspicious_time'; readonly SuspiciousRiskFreeRate: 'input.suspicious_risk_free_rate'; readonly SuspiciousReturns: 'input.suspicious_returns'; readonly DegenerateInput: 'input.degenerate'; readonly LambdaUndefined: 'greeks.lambda_undefined'; readonly CompoundingUndefined: 'crypto.compounding_undefined'; readonly CompoundingOverflow: 'crypto.compounding_overflow'; readonly CovarianceFloored: 'math.covariance_floored'; readonly GreeksUnsupportedByEngine: 'greeks.unsupported_by_engine'; readonly ModelLimitation: 'model.limitation'; readonly ScenarioUnusedCurrencyConversion: 'scenario.unused_currency_conversion'; readonly BacktestAssignment: 'backtest.assignment'; readonly BacktestDataDuplicateTimestamp: 'backtest.data_duplicate_timestamp'; readonly BacktestDataNonfinite: 'backtest.data_nonfinite'; readonly BacktestDataMissing: 'backtest.data_missing'; readonly BacktestLimitRejected: 'backtest.limit_rejected'; readonly BacktestComboLegUnfilled: 'backtest.combo_leg_unfilled'; readonly BacktestMarginBreach: 'backtest.margin_breach'; readonly BacktestForcedLiquidation: 'backtest.forced_liquidation'; readonly BacktestDataUnsorted: 'backtest.data_unsorted'; readonly BacktestEntrySkipped: 'backtest.entry_skipped'; readonly BacktestMarkFallback: 'backtest.mark_fallback'; readonly BacktestLookahead: 'backtest.lookahead'; readonly BacktestMarginRejected: 'backtest.margin_rejected'; readonly BacktestMarkedAtCost: 'backtest.marked_at_cost'; readonly BacktestNegativeCash: 'backtest.negative_cash'; readonly BacktestShortRejected: 'backtest.short_rejected'; readonly BacktestSignalWarmup: 'backtest.signal_warmup'; readonly CryptoCarryArbitrage: 'crypto.carry_arbitrage'; readonly CryptoExtremeFunding: 'crypto.extreme_funding'; readonly EstimateRiskNeutral: 'estimate.risk_neutral'; readonly FlowSweepsNotVenueVerified: 'flow.sweeps_not_venue_verified'; readonly HestonCosineExpansionUnstable: 'heston.cosine_expansion_unstable'; readonly HestonFellerViolated: 'heston.feller_violated'; readonly ImpliedVolatilityBracketExpanded: 'implied_volatility.bracket_expanded'; readonly ImpliedVolatilityFlatHistory: 'implied_volatility.flat_history'; readonly ImpliedVolatilityLowVega: 'implied_volatility.low_vega'; readonly LookbackZeroCarry: 'lookback.zero_carry'; readonly MathCovarianceEwmaEffectiveSample: 'math.covariance_ewma_effective_sample'; readonly MathCovarianceIllConditioned: 'math.covariance_ill_conditioned'; readonly MathCovarianceMethodAuto: 'math.covariance_method_auto'; readonly MathCovarianceSingular: 'math.covariance_singular'; readonly MonteCarloQuasiMonteCarloDimensionFallback: 'monte_carlo.quasi_monte_carlo_dimension_fallback'; readonly OptimizeNotConverged: 'optimize.not_converged'; readonly OperationUntypedWarning: 'operation.untyped_warning'; readonly OptionsDividendsNone: 'options.dividends_none'; readonly OptionsDividendsPast: 'options.dividends_past'; readonly OptionsExerciseDiscreteDividends: 'options.exercise_discrete_dividends'; readonly OptionsChainHealthModelNotRequested: 'options.chain_health.model_not_requested'; readonly PerformanceSuspiciousEquityInput: 'performance.suspicious_equity_input'; readonly PerformanceNonFiniteMetric: 'performance.non_finite_metric'; readonly PerformanceEmptySeries: 'performance.empty_series'; readonly RiskZeroGrossExposure: 'risk.zero_gross_exposure'; readonly OptionsEngineFailed: 'options.engine_failed'; readonly TechnicalAnalysisOpeningRangeTruncated: 'technical_analysis.opening_range_truncated'; readonly StructureFlatBaseline: 'structure.flat_baseline'; readonly VolatilityCalibrationNotConverged: 'volatility.calibration_not_converged'; readonly PerformanceUndefinedMetric: 'performance.undefined_metric'; readonly ResearchSurvivorshipBias: 'research.survivorship_bias'; readonly ResearchTrainTestLeakage: 'research.train_test_leakage'; readonly ResearchBacktestOverfittingProbabilityTrimmed: 'research.backtest_overfitting_probability_trimmed'; readonly RiskBrinsonWeights: 'risk.brinson_weights'; readonly RiskCornishFisherConditionalValueAtRiskGaussianFallback: 'risk.cornish_fisher_conditional_value_at_risk_gaussian_fallback'; readonly RiskCornishFisherOutOfDomain: 'risk.cornish_fisher_out_of_domain'; readonly RiskCostExceedsEdge: 'risk.cost_exceeds_edge'; readonly RiskAsOfUnscreened: 'risk.as_of_unscreened'; readonly RiskZeroVolatilitySharpe: 'risk.zero_volatility_sharpe'; readonly RiskFrontierUnboundedReturn: 'risk.frontier_unbounded_return'; readonly RiskFrontierNotMonotone: 'risk.frontier_not_monotone'; readonly RiskFrontierPointsFailed: 'risk.frontier_points_failed'; readonly RiskExtremeValueConfidenceOutsideTail: 'risk.extreme_value_confidence_outside_tail'; readonly RiskExtremeValueDegenerateFit: 'risk.extreme_value_degenerate_fit'; readonly RiskExtremeValueFewExceedances: 'risk.extreme_value_few_exceedances'; readonly RiskExtremeValueInfiniteMean: 'risk.extreme_value_infinite_mean'; readonly RiskExtremeValueInfiniteVariance: 'risk.extreme_value_infinite_variance'; readonly RiskExtremeValueMleFallback: 'risk.extreme_value_mle_fallback'; readonly RiskHighCostDrag: 'risk.high_cost_drag'; readonly RiskInfeasibleConstraints: 'risk.infeasible_constraints'; readonly RiskInfeasibleTangency: 'risk.infeasible_tangency'; readonly RiskKellyEstimationNoEdge: 'risk.kelly_estimation_no_edge'; readonly RiskKellyEstimationThinSample: 'risk.kelly_estimation_thin_sample'; readonly RiskKellyFatTails: 'risk.kelly_fat_tails'; readonly RiskKellyNaiveOverbet: 'risk.kelly_naive_overbet'; readonly RiskKellyNegativeSum: 'risk.kelly_negative_sum'; readonly RiskKellyNoEdge: 'risk.kelly_no_edge'; readonly RiskKellyOver: 'risk.kelly_over'; readonly RiskKellyUnbounded: 'risk.kelly_unbounded'; readonly RiskMeanExcessNoLinearRegion: 'risk.mean_excess_no_linear_region'; readonly RiskPnlUnexplainedResidual: 'risk.pnl_unexplained_residual'; readonly RiskUnboundedLoss: 'risk.unbounded_loss'; readonly StrategyVolatilityFloored: 'strategy.volatility_floored'; readonly StrategyRiskRewardUndefined: 'strategy.risk_reward_undefined'; readonly StrategyOptimizerZeroCapital: 'strategy.optimizer_zero_capital'; readonly StructureAggressorUnavailable: 'structure.aggressor_unavailable'; readonly StructureContractsSkipped: 'structure.contracts_skipped'; readonly StructureDuplicateContractQuotes: 'structure.duplicate_contract_quotes'; readonly StructureNoEligibleQuotes: 'structure.no_eligible_quotes'; readonly VolatilityButterflyArbitrage: 'volatility.butterfly_arbitrage'; readonly VolatilityEssviButterfly: 'volatility.essvi_butterfly'; readonly VolatilityEssviCalendar: 'volatility.essvi_calendar'; readonly VolatilityEssviCalendarData: 'volatility.essvi_calendar_data'; readonly VolatilityEssviNotConverged: 'volatility.essvi_not_converged'; readonly VolatilityFitInsufficientData: 'volatility.fit_insufficient_data'; readonly VolatilityFitUnconverged: 'volatility.fit_unconverged'; readonly VolatilityShockDegradedToInterpolated: 'volatility.shock_degraded_to_interpolated'; readonly VolatilityShockFloored: 'volatility.shock_floored'; readonly VolatilitySkewDeltaExtrapolated: 'volatility.skew_delta_extrapolated'; readonly VolatilityObservedSkewUnavailable: 'volatility.observed_skew_unavailable'; readonly VolatilityObservedSkewQuoteExcluded: 'volatility.observed_skew_quote_excluded'; readonly RiskKellyZeroVariance: 'risk.kelly_zero_variance'; readonly RiskSharpeUndefined: 'risk.sharpe_undefined'; readonly OptionsChainGreeksRowsSkipped: 'chain_greeks.rows_skipped'; readonly VolatilityObservedSkewMissingDelta: 'volatility.observed_skew_missing_delta'; readonly VolatilityObservedSkewDuplicateContract: 'volatility.observed_skew_duplicate_contract'; readonly VolatilitySsviButterfly: 'volatility.ssvi_butterfly'; readonly VolatilitySsviCalendarData: 'volatility.ssvi_calendar_data'; readonly VolatilitySsviNotConverged: 'volatility.ssvi_not_converged'; readonly VolatilityStickyIndeterminate: 'volatility.sticky_indeterminate'; readonly VolatilityStickyWeakFit: 'volatility.sticky_weak_fit'; readonly VolatilitySurfaceQuotesSkipped: 'volatility.surface_quotes_skipped'; readonly VolatilitySurfaceSparse: 'volatility.surface_sparse'; readonly VolatilitySwaptionCubeExtrapolated: 'volatility.swaption_cube_extrapolated'; readonly VolatilitySwaptionNodePoorFit: 'volatility.swaption_node_poor_fit'; readonly ArtifactLibraryVersionDiffers: 'artifact.library_version_differs'; readonly ArtifactComparisonDifferentMarket: 'artifact.comparison_different_market'; readonly ArtifactComparisonDifferentUniverse: 'artifact.comparison_different_universe'; readonly CurveExtrapolated: 'curve.extrapolated'; }; default: not declared — Canonical warning codes. Like error codes, these are stable public API — consumers branch on them.
+- WarningCode: { readonly DataUnknownTimes: 'data.unknown_times'; readonly DataIncompleteTerms: 'data.incomplete_terms'; readonly DataCoverageUnverified: 'data.coverage_unverified'; readonly DataResearchOnly: 'data.research_only'; readonly DataMissingField: 'data.missing_field'; readonly DataSourceIssue: 'data.source_issue'; readonly PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review'; readonly DataLockedMarket: 'data.locked_market'; readonly DataZeroBidAsk: 'data.zero_bid_ask'; readonly SurfaceExtrapolated: 'volatility.surface_extrapolated'; readonly BinomialStepsRoundedOdd: 'binomial.steps_rounded_odd'; readonly GreeksNotComputed: 'greeks.not_computed'; readonly SuspiciousVolatility: 'input.suspicious_volatility'; readonly SuspiciousTime: 'input.suspicious_time'; readonly SuspiciousRiskFreeRate: 'input.suspicious_risk_free_rate'; readonly SuspiciousReturns: 'input.suspicious_returns'; readonly DegenerateInput: 'input.degenerate'; readonly LambdaUndefined: 'greeks.lambda_undefined'; readonly CompoundingUndefined: 'crypto.compounding_undefined'; readonly CompoundingOverflow: 'crypto.compounding_overflow'; readonly CovarianceFloored: 'math.covariance_floored'; readonly GreeksUnsupportedByEngine: 'greeks.unsupported_by_engine'; readonly ModelLimitation: 'model.limitation'; readonly ScenarioUnusedCurrencyConversion: 'scenario.unused_currency_conversion'; readonly BacktestAssignment: 'backtest.assignment'; readonly BacktestDataDuplicateTimestamp: 'backtest.data_duplicate_timestamp'; readonly BacktestDataNonfinite: 'backtest.data_nonfinite'; readonly BacktestDataMissing: 'backtest.data_missing'; readonly BacktestLimitRejected: 'backtest.limit_rejected'; readonly BacktestComboLegUnfilled: 'backtest.combo_leg_unfilled'; readonly BacktestMarginBreach: 'backtest.margin_breach'; readonly BacktestForcedLiquidation: 'backtest.forced_liquidation'; readonly BacktestDataUnsorted: 'backtest.data_unsorted'; readonly BacktestEntrySkipped: 'backtest.entry_skipped'; readonly BacktestMarkFallback: 'backtest.mark_fallback'; readonly BacktestLookahead: 'backtest.lookahead'; readonly BacktestMarginRejected: 'backtest.margin_rejected'; readonly BacktestMarkedAtCost: 'backtest.marked_at_cost'; readonly BacktestNegativeCash: 'backtest.negative_cash'; readonly BacktestShortRejected: 'backtest.short_rejected'; readonly BacktestSignalWarmup: 'backtest.signal_warmup'; readonly CryptoCarryArbitrage: 'crypto.carry_arbitrage'; readonly CryptoExtremeFunding: 'crypto.extreme_funding'; readonly EstimateRiskNeutral: 'estimate.risk_neutral'; readonly FlowSweepsNotVenueVerified: 'flow.sweeps_not_venue_verified'; readonly HestonCosineExpansionUnstable: 'heston.cosine_expansion_unstable'; readonly HestonFellerViolated: 'heston.feller_violated'; readonly ImpliedVolatilityBracketExpanded: 'implied_volatility.bracket_expanded'; readonly ImpliedVolatilityFlatHistory: 'implied_volatility.flat_history'; readonly ImpliedVolatilityLowVega: 'implied_volatility.low_vega'; readonly LookbackZeroCarry: 'lookback.zero_carry'; readonly MathCovarianceEwmaEffectiveSample: 'math.covariance_ewma_effective_sample'; readonly MathCovarianceIllConditioned: 'math.covariance_ill_conditioned'; readonly MathCovarianceMethodAuto: 'math.covariance_method_auto'; readonly MathCovarianceSingular: 'math.covariance_singular'; readonly MonteCarloQuasiMonteCarloDimensionFallback: 'monte_carlo.quasi_monte_carlo_dimension_fallback'; readonly OptimizeNotConverged: 'optimize.not_converged'; readonly OperationUntypedWarning: 'operation.untyped_warning'; readonly OptionsDividendsNone: 'options.dividends_none'; readonly OptionsDividendsPast: 'options.dividends_past'; readonly OptionsExerciseDiscreteDividends: 'options.exercise_discrete_dividends'; readonly OptionsChainHealthModelNotRequested: 'options.chain_health.model_not_requested'; readonly PerformanceSuspiciousEquityInput: 'performance.suspicious_equity_input'; readonly PerformanceNonFiniteMetric: 'performance.non_finite_metric'; readonly PerformanceEmptySeries: 'performance.empty_series'; readonly RiskZeroGrossExposure: 'risk.zero_gross_exposure'; readonly OptionsEngineFailed: 'options.engine_failed'; readonly TechnicalAnalysisOpeningRangeTruncated: 'technical_analysis.opening_range_truncated'; readonly StructureFlatBaseline: 'structure.flat_baseline'; readonly VolatilityCalibrationNotConverged: 'volatility.calibration_not_converged'; readonly PerformanceUndefinedMetric: 'performance.undefined_metric'; readonly ResearchSurvivorshipBias: 'research.survivorship_bias'; readonly ResearchTrainTestLeakage: 'research.train_test_leakage'; readonly ResearchBacktestOverfittingProbabilityTrimmed: 'research.backtest_overfitting_probability_trimmed'; readonly RiskBrinsonWeights: 'risk.brinson_weights'; readonly RiskCornishFisherConditionalValueAtRiskGaussianFallback: 'risk.cornish_fisher_conditional_value_at_risk_gaussian_fallback'; readonly RiskCornishFisherOutOfDomain: 'risk.cornish_fisher_out_of_domain'; readonly RiskCostExceedsEdge: 'risk.cost_exceeds_edge'; readonly RiskAsOfUnscreened: 'risk.as_of_unscreened'; readonly RiskZeroVolatilitySharpe: 'risk.zero_volatility_sharpe'; readonly RiskFrontierUnboundedReturn: 'risk.frontier_unbounded_return'; readonly RiskFrontierNotMonotone: 'risk.frontier_not_monotone'; readonly RiskFrontierPointsFailed: 'risk.frontier_points_failed'; readonly RiskExtremeValueConfidenceOutsideTail: 'risk.extreme_value_confidence_outside_tail'; readonly RiskExtremeValueDegenerateFit: 'risk.extreme_value_degenerate_fit'; readonly RiskExtremeValueFewExceedances: 'risk.extreme_value_few_exceedances'; readonly RiskExtremeValueInfiniteMean: 'risk.extreme_value_infinite_mean'; readonly RiskExtremeValueInfiniteVariance: 'risk.extreme_value_infinite_variance'; readonly RiskExtremeValueMleFallback: 'risk.extreme_value_mle_fallback'; readonly RiskHighCostDrag: 'risk.high_cost_drag'; readonly RiskInfeasibleConstraints: 'risk.infeasible_constraints'; readonly RiskInfeasibleTangency: 'risk.infeasible_tangency'; readonly RiskKellyEstimationNoEdge: 'risk.kelly_estimation_no_edge'; readonly RiskKellyEstimationThinSample: 'risk.kelly_estimation_thin_sample'; readonly RiskKellyFatTails: 'risk.kelly_fat_tails'; readonly RiskKellyNaiveOverbet: 'risk.kelly_naive_overbet'; readonly RiskKellyNegativeSum: 'risk.kelly_negative_sum'; readonly RiskKellyNoEdge: 'risk.kelly_no_edge'; readonly RiskKellyOver: 'risk.kelly_over'; readonly RiskKellyUnbounded: 'risk.kelly_unbounded'; readonly RiskMeanExcessNoLinearRegion: 'risk.mean_excess_no_linear_region'; readonly RiskPnlUnexplainedResidual: 'risk.pnl_unexplained_residual'; readonly RiskUnboundedLoss: 'risk.unbounded_loss'; readonly StrategyVolatilityFloored: 'strategy.volatility_floored'; readonly StrategyRiskRewardUndefined: 'strategy.risk_reward_undefined'; readonly StrategyOptimizerZeroCapital: 'strategy.optimizer_zero_capital'; readonly StructureAggressorUnavailable: 'structure.aggressor_unavailable'; readonly StructureContractsSkipped: 'structure.contracts_skipped'; readonly StructureDuplicateContractQuotes: 'structure.duplicate_contract_quotes'; readonly StructureNoEligibleQuotes: 'structure.no_eligible_quotes'; readonly VolatilityButterflyArbitrage: 'volatility.butterfly_arbitrage'; readonly VolatilityEssviButterfly: 'volatility.essvi_butterfly'; readonly VolatilityEssviCalendar: 'volatility.essvi_calendar'; readonly VolatilityEssviCalendarData: 'volatility.essvi_calendar_data'; readonly VolatilityEssviNotConverged: 'volatility.essvi_not_converged'; readonly VolatilityFitInsufficientData: 'volatility.fit_insufficient_data'; readonly VolatilityFitUnconverged: 'volatility.fit_unconverged'; readonly VolatilityShockDegradedToInterpolated: 'volatility.shock_degraded_to_interpolated'; readonly VolatilityShockFloored: 'volatility.shock_floored'; readonly VolatilitySkewDeltaExtrapolated: 'volatility.skew_delta_extrapolated'; readonly VolatilityObservedSkewUnavailable: 'volatility.observed_skew_unavailable'; readonly VolatilityObservedSkewQuoteExcluded: 'volatility.observed_skew_quote_excluded'; readonly RiskKellyZeroVariance: 'risk.kelly_zero_variance'; readonly RiskSharpeUndefined: 'risk.sharpe_undefined'; readonly OptionsChainGreeksRowsSkipped: 'chain_greeks.rows_skipped'; readonly VolatilityObservedSkewMissingDelta: 'volatility.observed_skew_missing_delta'; readonly VolatilityObservedSkewDuplicateContract: 'volatility.observed_skew_duplicate_contract'; readonly VolatilitySsviButterfly: 'volatility.ssvi_butterfly'; readonly VolatilitySsviCalendarData: 'volatility.ssvi_calendar_data'; readonly VolatilitySsviNotConverged: 'volatility.ssvi_not_converged'; readonly VolatilityStickyIndeterminate: 'volatility.sticky_indeterminate'; readonly VolatilityStickyWeakFit: 'volatility.sticky_weak_fit'; readonly VolatilitySurfaceQuotesSkipped: 'volatility.surface_quotes_skipped'; readonly VolatilitySurfaceSparse: 'volatility.surface_sparse'; readonly VolatilitySwaptionCubeExtrapolated: 'volatility.swaption_cube_extrapolated'; readonly VolatilitySwaptionNodePoorFit: 'volatility.swaption_node_poor_fit'; readonly ArtifactLibraryVersionDiffers: 'artifact.library_version_differs'; readonly ArtifactComparisonDifferentMarket: 'artifact.comparison_different_market'; readonly ArtifactComparisonDifferentUniverse: 'artifact.comparison_different_universe'; readonly CurveExtrapolated: 'curve.extrapolated'; }; default: not declared — Canonical warning codes. Like error codes, these are stable public API — consumers branch on them.
 The set is open; packages may add codes, but documented ones do not change without a major version.
 
 Codes that are BOTH a thrown-error condition and an emitted warning (`implied_volatility.below_intrinsic`,
@@ -40892,7 +40901,13 @@ named missing-mark fallback was applied (Preview P1) — the count of leg-snapsh
 - WarningCode.CryptoExtremeFunding: 'crypto.extreme_funding'; default: not declared
 - WarningCode.CurveExtrapolated: 'curve.extrapolated'; default: not declared — A restored curve was evaluated outside its calibrated pillar range under its stored
 extrapolation policy — counted and disclosed, never silent (Stage 4.5).
+- WarningCode.DataCoverageUnverified: 'data.coverage_unverified'; default: not declared
+- WarningCode.DataIncompleteTerms: 'data.incomplete_terms'; default: not declared
 - WarningCode.DataLockedMarket: 'data.locked_market'; default: not declared
+- WarningCode.DataMissingField: 'data.missing_field'; default: not declared
+- WarningCode.DataResearchOnly: 'data.research_only'; default: not declared
+- WarningCode.DataSourceIssue: 'data.source_issue'; default: not declared
+- WarningCode.DataUnknownTimes: 'data.unknown_times'; default: not declared
 - WarningCode.DataZeroBidAsk: 'data.zero_bid_ask'; default: not declared
 - WarningCode.DegenerateInput: 'input.degenerate'; default: not declared — The result is NaN/degenerate BY DESIGN (empty series, zero variance) — disclosed, not fabricated.
 - WarningCode.EstimateRiskNeutral: 'estimate.risk_neutral'; default: not declared
@@ -109936,13 +109951,6 @@ export type EpochMs = number;
 
 Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
-Canonical error codes used in the 0.0.1 surface. The set is open — packages may introduce new
-codes — but these are documented and stable.
-
-Static references to package-private constants let guard-only consumers discard this registry
-while retaining the same error classes. Explicit properties preserve the public property order
-and literal readonly types, without a second code object or construction side effects.
-
 ```typescript
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 ```
@@ -109986,8 +109994,22 @@ unpriceable contract quote) and the request's missing-mark policy is to refuse (
 - BacktestStaleQuote: 'backtest.stale_quote'; default: not declared — Stage 4.6 (FC8) — a quote fill under `staleQuotes.behavior: 'reject'` met a quote older than the policy's maximum age.
 - BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown'; default: not declared — Stage 4.6 (FC8) — a return or feature names an instrument the universe history never lists.
 - BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action'; default: not declared — Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted.
+- DataAborted: 'data.aborted'; default: not declared
+- DataAllowanceExhausted: 'data.allowance_exhausted'; default: not declared
+- DataAuthenticationRequired: 'data.authentication_required'; default: not declared
+- DataContractVersionUnsupported: 'data.contract_version_unsupported'; default: not declared
 - DataCrossedMarket: 'data.crossed_market'; default: not declared
+- DataEntitlementRequired: 'data.entitlement_required'; default: not declared
+- DataInvalidCursor: 'data.invalid_cursor'; default: not declared
+- DataInvalidRequest: 'data.invalid_request'; default: not declared
+- DataInvalidResponse: 'data.invalid_response'; default: not declared
+- DataNonconformant: 'data.nonconformant'; default: not declared
+- DataNotFound: 'data.not_found'; default: not declared
+- DataRateLimited: 'data.rate_limited'; default: not declared
+- DataSnapshotExpired: 'data.snapshot_expired'; default: not declared
 - DataStaleQuote: 'data.stale_quote'; default: not declared
+- DataUnavailable: 'data.unavailable'; default: not declared
+- DataUnsupportedCapability: 'data.unsupported_capability'; default: not declared
 - EngineDiscretizationInadequate: 'engine.discretization_inadequate'; default: not declared — Warning: the engine's grid/truncation is too coarse for the requested regime.
 - EngineProbabilityOutOfRange: 'engine.probability_out_of_range'; default: not declared — A lattice's risk-neutral branch probabilities left [0, 1] (drift outran diffusion).
 - EngineResultOutOfBounds: 'engine.result_out_of_bounds'; default: not declared — A successful engine result violated a no-arbitrage output bound (e.g. C > S·e^{-qT}).
@@ -111596,7 +111618,13 @@ named missing-mark fallback was applied (Preview P1) — the count of leg-snapsh
 - CryptoExtremeFunding: 'crypto.extreme_funding'; default: not declared
 - CurveExtrapolated: 'curve.extrapolated'; default: not declared — A restored curve was evaluated outside its calibrated pillar range under its stored
 extrapolation policy — counted and disclosed, never silent (Stage 4.5).
+- DataCoverageUnverified: 'data.coverage_unverified'; default: not declared
+- DataIncompleteTerms: 'data.incomplete_terms'; default: not declared
 - DataLockedMarket: 'data.locked_market'; default: not declared
+- DataMissingField: 'data.missing_field'; default: not declared
+- DataResearchOnly: 'data.research_only'; default: not declared
+- DataSourceIssue: 'data.source_issue'; default: not declared
+- DataUnknownTimes: 'data.unknown_times'; default: not declared
 - DataZeroBidAsk: 'data.zero_bid_ask'; default: not declared
 - DegenerateInput: 'input.degenerate'; default: not declared — The result is NaN/degenerate BY DESIGN (empty series, zero variance) — disclosed, not fabricated.
 - EstimateRiskNeutral: 'estimate.risk_neutral'; default: not declared
@@ -115736,6 +115764,837 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).handle: TableHandle; default: not declared
 - (input).label: string; default: not declared
 - (input).rows: unknown; default: not declared
+
+## Entrypoint @insiderfinance/totalfinance/core/data
+
+### @insiderfinance/totalfinance/core/data#DATA_CONTRACT_VERSION
+
+Kind: value; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Research acquisition protocol version, independent of package and dataset versions.
+
+```typescript
+export declare const DATA_CONTRACT_VERSION: 1;
+```
+
+### @insiderfinance/totalfinance/core/data#DataCapabilities
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataCapabilities {
+    readonly contractVersion: 1;
+    readonly providerId: string;
+    readonly providerVersion: string;
+    readonly capabilities: readonly DataCapability[];
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- capabilities: readonly DataCapability[]; default: not declared
+- contractVersion: 1; default: not declared
+- providerId: string; default: not declared
+- providerVersion: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataCapability
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataCapability {
+    readonly kind: DataKind;
+    readonly intervals: readonly ('1d' | '1m')[];
+    readonly maxPageSize: number;
+    readonly consistency: 'snapshot' | 'best-effort';
+    readonly pointInTime: false;
+    readonly access: 'unknown' | 'granted' | 'denied';
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- access: 'unknown' | 'granted' | 'denied'; default: not declared
+- consistency: 'snapshot' | 'best-effort'; default: not declared
+- intervals: readonly ('1m' | '1d')[]; default: not declared
+- kind: DataKind; default: not declared
+- maxPageSize: number; default: not declared
+- pointInTime: false; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataContinuationRequest
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataContinuationRequest {
+    readonly kind: DataKind;
+    readonly symbol: string;
+    readonly cursor: string;
+    readonly limit: number;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- cursor: string; default: not declared
+- kind: DataKind; default: not declared
+- limit: number; default: not declared
+- symbol: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataFor
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataFor<R extends DataRequest> = R['kind'] extends 'price-bars' ? PriceBarRecord : R['kind'] extends 'option-chain-research' ? OptionChainResearchRecord : PriceBarRecord | OptionChainResearchRecord;
+```
+
+### @insiderfinance/totalfinance/core/data#DataKind
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataKind = 'price-bars' | 'option-chain-research';
+```
+
+### @insiderfinance/totalfinance/core/data#DataPage
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataPage<T> {
+    readonly contractVersion: 1;
+    readonly kind: DataKind;
+    readonly symbol: string;
+    readonly data: readonly T[];
+    readonly nextCursor: string | null;
+    readonly provenance: Provenance;
+    readonly metadata: DataPageMetadata;
+    readonly assumptions: Assumptions;
+    readonly diagnostics: Diagnostics;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- assumptions: Assumptions; default: not declared
+- assumptions.asOf?: number; default: not declared
+- assumptions.calendar?: string; default: not declared
+- assumptions.calendarVersion?: string; default: not declared
+- assumptions.compounding?: import('@insiderfinance/totalfinance/core').InterestCompounding; default: not declared
+- assumptions.compounding.periodsPerYear: number; default: not declared
+- assumptions.compounding.type: 'periodic'; default: not declared
+- assumptions.conventionsVersion: string; default: not declared
+- assumptions.dayCount?: import('@insiderfinance/totalfinance/core').DayCount; default: not declared
+- assumptions.dividendModel?: import('@insiderfinance/totalfinance/core').DividendModel; default: not declared
+- assumptions.engine?: string; default: not declared
+- assumptions.expiryConvention?: 'us-equity-close' | 'explicit-instant'; default: not declared — How the contract's expiry label was resolved to an instant: `'us-equity-close'` when a
+date-only `YYYY-MM-DD` expiry resolved to the US equity/options close — 16:00 America/New_York,
+or 13:00 on an early-close day;
+`'explicit-instant'` when the caller supplied a zoned datetime. Named so the convention is
+never silent (alignment spec P1.6); instrument builders own the full story in Phase 3.
+- assumptions.model?: string; default: not declared
+- assumptions.seed?: number; default: not declared — The randomness seed this result was computed under — REQUIRED echo for a
+`randomness: 'seeded'` Pricer (Gate C, 2026-08-23): a stochastic result that does not name
+its seed cannot be replayed from the result alone. Deterministic paths never set it.
+- assumptions.timeToExpiryConvention?: never; default: not declared
+- assumptions.timeToExpiryYears?: number; default: not declared
+- assumptions.units?: import('@insiderfinance/totalfinance/core').GreekUnits; default: not declared
+- assumptions.units.rho: import('@insiderfinance/totalfinance/core').RhoUnit; default: not declared
+- assumptions.units.theta: import('@insiderfinance/totalfinance/core').ThetaUnit; default: not declared
+- assumptions.units.vega: import('@insiderfinance/totalfinance/core').VegaUnit; default: not declared
+- contractVersion: 1; default: not declared
+- data: readonly T[]; default: not declared
+- diagnostics: Diagnostics; default: not declared
+- diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- diagnostics.selection.selected.name: string; default: not declared
+- diagnostics.selection.selected.version?: string; default: not declared
+- diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- kind: DataKind; default: not declared
+- metadata: DataPageMetadata; default: not declared
+- metadata.access: 'unknown' | 'granted' | 'denied'; default: not declared
+- metadata.adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
+- metadata.consistency: 'snapshot' | 'best-effort'; default: not declared
+- metadata.coverage: { readonly status: 'continuous' | 'observed-only' | 'unknown'; readonly start: string | null; readonly end: string | null; }; default: not declared
+- metadata.coverage.end: string | null; default: not declared
+- metadata.coverage.start: string | null; default: not declared
+- metadata.coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
+- metadata.datasetId: string; default: not declared
+- metadata.datasetVersion: string; default: not declared
+- metadata.executionEligibility: 'research-only'; default: not declared
+- metadata.freshness: { readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; }; default: not declared
+- metadata.freshness.configuredDelayMs: number | null; default: not declared
+- metadata.freshness.evaluatedTimestampMs: number | null; default: not declared
+- metadata.freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
+- metadata.quality: { readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; readonly issues: readonly { source: string; code: string; message: string; }[]; }; default: not declared
+- metadata.quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
+- metadata.quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
+- metadata.receivedTimestampMs: number; default: not declared
+- metadata.sessionDate: string | null; default: not declared
+- metadata.snapshotId: string | null; default: not declared
+- metadata.sourceGeneratedTimestampMs: number | null; default: not declared
+- metadata.times: ObservationTimes; default: not declared
+- metadata.times.availableTimestampMs: number | null; default: not declared
+- metadata.times.observedTimestampMs: number | null; default: not declared
+- metadata.times.sourceStoredTimestampMs: number | null; default: not declared
+- nextCursor: string | null; default: not declared
+- provenance: Provenance; default: not declared
+- provenance.asOf?: number; default: not declared
+- provenance.dataset?: string; default: not declared
+- provenance.provider?: string; default: not declared
+- provenance.receivedAt?: number; default: not declared
+- provenance.requestId?: string; default: not declared
+- provenance.sourceVersion?: string; default: not declared
+- provenance.warnings?: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared
+- symbol: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataPageMetadata
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataPageMetadata {
+    readonly datasetId: string;
+    readonly datasetVersion: string;
+    readonly snapshotId: string | null;
+    readonly sessionDate: string | null;
+    readonly sourceGeneratedTimestampMs: number | null;
+    readonly receivedTimestampMs: number;
+    readonly times: ObservationTimes;
+    readonly consistency: 'snapshot' | 'best-effort';
+    readonly freshness: {
+        readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown';
+        readonly configuredDelayMs: number | null;
+        readonly evaluatedTimestampMs: number | null;
+    };
+    readonly coverage: {
+        readonly status: 'continuous' | 'observed-only' | 'unknown';
+        readonly start: string | null;
+        readonly end: string | null;
+    };
+    readonly adjustment: 'unadjusted' | 'split' | 'split-and-dividend' | 'unknown';
+    readonly quality: {
+        readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown';
+        readonly issues: readonly {
+            source: string;
+            code: string;
+            message: string;
+        }[];
+    };
+    readonly access: 'unknown' | 'granted' | 'denied';
+    readonly executionEligibility: 'research-only';
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- access: 'unknown' | 'granted' | 'denied'; default: not declared
+- adjustment: 'unadjusted' | 'unknown' | 'split' | 'split-and-dividend'; default: not declared
+- consistency: 'snapshot' | 'best-effort'; default: not declared
+- coverage: { readonly end: string | null; readonly start: string | null; readonly status: 'continuous' | 'observed-only' | 'unknown'; }; default: not declared
+- coverage.end: string | null; default: not declared
+- coverage.start: string | null; default: not declared
+- coverage.status: 'continuous' | 'unknown' | 'observed-only'; default: not declared
+- datasetId: string; default: not declared
+- datasetVersion: string; default: not declared
+- executionEligibility: 'research-only'; default: not declared
+- freshness: { readonly configuredDelayMs: number | null; readonly evaluatedTimestampMs: number | null; readonly status: 'current' | 'stale' | 'session-closed' | 'historical' | 'end-of-day' | 'stored' | 'unknown'; }; default: not declared
+- freshness.configuredDelayMs: number | null; default: not declared
+- freshness.evaluatedTimestampMs: number | null; default: not declared
+- freshness.status: 'stale' | 'historical' | 'current' | 'unknown' | 'session-closed' | 'end-of-day' | 'stored'; default: not declared
+- quality: { readonly issues: readonly { source: string; code: string; message: string; }[]; readonly status: 'complete' | 'partial' | 'unavailable' | 'unknown'; }; default: not declared
+- quality.issues: readonly { source: string; code: string; message: string; }[]; default: not declared
+- quality.status: 'unavailable' | 'complete' | 'partial' | 'unknown'; default: not declared
+- receivedTimestampMs: number; default: not declared
+- sessionDate: string | null; default: not declared
+- snapshotId: string | null; default: not declared
+- sourceGeneratedTimestampMs: number | null; default: not declared
+- times: ObservationTimes; default: not declared
+- times.availableTimestampMs: number | null; default: not declared
+- times.observedTimestampMs: number | null; default: not declared
+- times.sourceStoredTimestampMs: number | null; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataProvider
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface DataProvider {
+    readonly id: string;
+    readonly version: string;
+    readonly contractVersion: 1;
+    capabilities(input: {
+        signal?: AbortSignal;
+    }): Promise<DataCapabilities>;
+    query<R extends DataRequest>(input: {
+        readonly request: R;
+        readonly signal?: AbortSignal;
+    }): Promise<DataPage<DataFor<R>>>;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- capabilities: (input: { signal?: AbortSignal; }) => Promise<DataCapabilities>; default: not declared
+- capabilities(input): { signal?: AbortSignal; }; default: not declared
+- capabilities(input).signal?: AbortSignal; default: not declared
+- contractVersion: 1; default: not declared
+- id: string; default: not declared
+- query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>; default: not declared
+- query(input): { readonly request: R; readonly signal?: AbortSignal; }; default: not declared
+- query(input).request: R; default: not declared
+- query(input).signal?: AbortSignal; default: not declared
+- version: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#DataRequest
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataRequest = PriceBarsRequest | OptionChainResearchRequest | DataContinuationRequest;
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- cursor: string; default: not declared
+- expirationFrom?: string; default: not declared
+- expirationTo?: string; default: not declared
+- from: string; default: not declared
+- interval: '1m' | '1d'; default: not declared
+- kind: ('option-chain-research') | ('price-bars') | (DataKind); default: not declared
+- limit: number; default: not declared
+- maxStrike?: number; default: not declared
+- minStrike?: number; default: not declared
+- rights?: readonly ('call' | 'put')[]; default: not declared
+- snapshot: { readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }; default: not declared
+- snapshot.kind: ('id') | ('latest') | ('session'); default: not declared
+- snapshot.sessionDate: string; default: not declared
+- snapshot.snapshotId: string; default: not declared
+- symbol: string; default: not declared
+- to: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#ObservationTimes
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface ObservationTimes {
+    readonly observedTimestampMs: number | null;
+    readonly availableTimestampMs: number | null;
+    readonly sourceStoredTimestampMs: number | null;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- availableTimestampMs: number | null; default: not declared
+- observedTimestampMs: number | null; default: not declared
+- sourceStoredTimestampMs: number | null; default: not declared
+
+### @insiderfinance/totalfinance/core/data#OptionChainResearchRecord
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface OptionChainResearchRecord {
+    readonly sourceContractId: string;
+    readonly terms: OptionResearchTerms;
+    readonly times: ObservationTimes;
+    readonly quote: Pick<OptionQuote, 'bid' | 'ask' | 'mid' | 'last' | 'mark' | 'volume' | 'openInterest' | 'underlyingPrice' | 'impliedVolatility'>;
+    readonly greeks: OptionQuoteGreeks | null;
+    readonly theoreticalPrice: number | null;
+    readonly openInterestSessionDate: string | null;
+    readonly diagnostics: Diagnostics;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- diagnostics: Diagnostics; default: not declared
+- diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- diagnostics.selection.selected.name: string; default: not declared
+- diagnostics.selection.selected.version?: string; default: not declared
+- diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- greeks: OptionQuoteGreeks | null; default: not declared
+- greeks.delta: number; default: not declared
+- greeks.gamma?: number; default: not declared
+- greeks.provenance?: import('@insiderfinance/totalfinance/core').OptionQuoteGreeksProvenance; default: not declared
+- greeks.provenance.model?: string; default: not declared — The pricing model behind them when known, e.g. `'black-scholes-merton'`.
+- greeks.provenance.source: string; default: not declared — The provider or model that produced them, e.g. `'vendor-feed-v2'` or `'chainGreeks'`.
+- greeks.provenance.timestampMs?: number; default: not declared — When the Greeks were observed or computed (epoch ms).
+- greeks.rho?: number; default: not declared
+- greeks.theta?: number; default: not declared
+- greeks.vega?: number; default: not declared
+- openInterestSessionDate: string | null; default: not declared
+- quote: Pick<OptionQuote, 'bid' | 'ask' | 'mid' | 'last' | 'mark' | 'impliedVolatility' | 'openInterest' | 'volume' | 'underlyingPrice'>; default: not declared
+- quote.ask?: number; default: not declared
+- quote.bid?: number; default: not declared
+- quote.impliedVolatility?: number; default: not declared
+- quote.last?: number; default: not declared
+- quote.mark?: number; default: not declared
+- quote.mid?: number; default: not declared
+- quote.openInterest?: number; default: not declared
+- quote.underlyingPrice?: number; default: not declared
+- quote.volume?: number; default: not declared
+- sourceContractId: string; default: not declared
+- terms: OptionResearchTerms; default: not declared
+- terms.currency: string | null; default: not declared
+- terms.expiresAt: number | null; default: not declared
+- terms.expiry: string; default: not declared
+- terms.multiplier: number | null; default: not declared
+- terms.occSymbol: string | null; default: not declared
+- terms.root: string | null; default: not declared
+- terms.settlement: NonNullable<import('@insiderfinance/totalfinance/core').Settlement | undefined> | null; default: not declared
+- terms.strike: number; default: not declared
+- terms.style: import('@insiderfinance/totalfinance/core').OptionStyle | null; default: not declared
+- terms.termsStatus: 'verified' | 'incomplete'; default: not declared
+- terms.type: import('@insiderfinance/totalfinance/core').OptionType; default: not declared
+- terms.underlying: string; default: not declared
+- theoreticalPrice: number | null; default: not declared
+- times: ObservationTimes; default: not declared
+- times.availableTimestampMs: number | null; default: not declared
+- times.observedTimestampMs: number | null; default: not declared
+- times.sourceStoredTimestampMs: number | null; default: not declared
+
+### @insiderfinance/totalfinance/core/data#OptionChainResearchRequest
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface OptionChainResearchRequest {
+    readonly kind: 'option-chain-research';
+    readonly symbol: string;
+    readonly snapshot: {
+        readonly kind: 'latest';
+    } | {
+        readonly kind: 'session';
+        readonly sessionDate: string;
+    } | {
+        readonly kind: 'id';
+        readonly snapshotId: string;
+    };
+    readonly expirationFrom?: string;
+    readonly expirationTo?: string;
+    readonly rights?: readonly ('call' | 'put')[];
+    readonly minStrike?: number;
+    readonly maxStrike?: number;
+    readonly limit: number;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- expirationFrom?: string; default: not declared
+- expirationTo?: string; default: not declared
+- kind: 'option-chain-research'; default: not declared
+- limit: number; default: not declared
+- maxStrike?: number; default: not declared
+- minStrike?: number; default: not declared
+- rights?: readonly ('call' | 'put')[]; default: not declared
+- snapshot: { readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }; default: not declared
+- snapshot.kind: ('id') | ('latest') | ('session'); default: not declared
+- snapshot.sessionDate: string; default: not declared
+- snapshot.snapshotId: string; default: not declared
+- symbol: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#OptionResearchTerms
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface OptionResearchTerms {
+    readonly underlying: OptionContract['underlying'];
+    readonly type: OptionContract['type'];
+    readonly strike: OptionContract['strike'];
+    readonly expiry: OptionContract['expiry'];
+    readonly root: string | null;
+    readonly occSymbol: string | null;
+    readonly multiplier: number | null;
+    readonly currency: string | null;
+    readonly style: OptionContract['style'] | null;
+    readonly settlement: NonNullable<OptionContract['settlement']> | null;
+    readonly expiresAt: number | null;
+    readonly termsStatus: 'verified' | 'incomplete';
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- currency: string | null; default: not declared
+- expiresAt: number | null; default: not declared
+- expiry: string; default: not declared
+- multiplier: number | null; default: not declared
+- occSymbol: string | null; default: not declared
+- root: string | null; default: not declared
+- settlement: NonNullable<import('@insiderfinance/totalfinance/core').Settlement | undefined> | null; default: not declared
+- strike: number; default: not declared
+- style: import('@insiderfinance/totalfinance/core').OptionStyle | null; default: not declared
+- termsStatus: 'verified' | 'incomplete'; default: not declared
+- type: import('@insiderfinance/totalfinance/core').OptionType; default: not declared
+- underlying: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#PriceBarRecord
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface PriceBarRecord {
+    readonly bar: Bar;
+    readonly sessionDate: string | null;
+    readonly timestampConvention: 'session-label-midnight-utc' | 'interval-start';
+    readonly times: ObservationTimes;
+    readonly source: string | null;
+    readonly provisional: boolean | null;
+    readonly revision: number | null;
+    readonly diagnostics: Diagnostics;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- bar: Bar; default: not declared
+- bar.adjusted?: boolean; default: not declared
+- bar.close: number; default: not declared
+- bar.high: number; default: not declared
+- bar.low: number; default: not declared
+- bar.open: number; default: not declared
+- bar.symbol: string; default: not declared
+- bar.timestampMs: number; default: not declared
+- bar.volume?: number; default: not declared
+- bar.vwap?: number; default: not declared
+- diagnostics: Diagnostics; default: not declared
+- diagnostics.autoReason?: string; default: not declared — When a meta-engine (e.g. `engines.auto()`) selected a delegate, this is a one-sentence,
+human-readable explanation of WHY that delegate was chosen (`engine` then names the delegate).
+Absent when no auto-selection took place.
+- diagnostics.converged?: boolean; default: not declared — Whether an iterative procedure converged. `false` means the value is not trustworthy.
+- diagnostics.decomposition?: Record<string, number>; default: not declared — Named intermediate quantities the value decomposes into — a par spread's protection leg and
+risky annuity, a forward variance's near/far legs. The H-series explain paths disclose their
+arithmetic here so a caller can audit the ratio, not just receive it (3B.3).
+- diagnostics.engine?: string; default: not declared — Pricing/solver engine name, e.g. `black-scholes-merton`.
+- diagnostics.finiteDifferenceBumps?: Record<string, number>; default: not declared — Finite-difference engines: the ACTUAL bump sizes used for FD Greeks (spec P2.3) — adaptive
+near the vol/time boundaries, so the caller can see exactly what was differenced.
+Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
+`dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
+bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the
+emit sites had moved to the semantic names, so a caller following it read `undefined`.)
+- diagnostics.iterations?: number; default: not declared — Iteration count for iterative methods.
+- diagnostics.method?: string; default: not declared — Numerical method, e.g. `closed-form`, `brent`, `finite-difference`.
+- diagnostics.selection?: import('@insiderfinance/totalfinance/core/pricing').SelectionReport; default: not declared — The structured engine-selection report (Gate C, `@insiderfinance/totalfinance/core/pricing`): who was selected,
+why, and — for automatic selection — every candidate considered with its verdict. This is the
+machine-readable superset of `engine` + `autoReason` (which remain for compatibility);
+`selected.name` always agrees with `engine` when both are present.
+- diagnostics.selection.candidates?: readonly import('@insiderfinance/totalfinance/core/pricing').SelectionCandidate[]; default: not declared — Candidates an automatic selection considered; absent for explicit mode.
+- diagnostics.selection.mode: 'explicit' | 'automatic'; default: not declared
+- diagnostics.selection.reason: string; default: not declared — Why the selected engine answers this request.
+- diagnostics.selection.selected: { name: string; version?: string; }; default: not declared
+- diagnostics.selection.selected.name: string; default: not declared
+- diagnostics.selection.selected.version?: string; default: not declared
+- diagnostics.timingMs?: number; default: not declared — Wall-clock timing in milliseconds, when measured.
+- diagnostics.warmup?: number; default: not declared — Series facades: number of leading output slots that are warmup sentinels (null/NaN) while the
+computation seeds. Equals the input length when the indicator never emitted.
+- diagnostics.warnings: import('@insiderfinance/totalfinance/core').QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
+- provisional: boolean | null; default: not declared
+- revision: number | null; default: not declared
+- sessionDate: string | null; default: not declared
+- source: string | null; default: not declared
+- times: ObservationTimes; default: not declared
+- times.availableTimestampMs: number | null; default: not declared
+- times.observedTimestampMs: number | null; default: not declared
+- times.sourceStoredTimestampMs: number | null; default: not declared
+- timestampConvention: 'session-label-midnight-utc' | 'interval-start'; default: not declared
+
+### @insiderfinance/totalfinance/core/data#PriceBarsRequest
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export interface PriceBarsRequest {
+    readonly kind: 'price-bars';
+    readonly symbol: string;
+    readonly interval: '1d' | '1m';
+    readonly from: string;
+    readonly to: string;
+    readonly limit: number;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- from: string; default: not declared
+- interval: '1m' | '1d'; default: not declared
+- kind: 'price-bars'; default: not declared
+- limit: number; default: not declared
+- symbol: string; default: not declared
+- to: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data#defineDataProvider
+
+Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Validate and bind a provider without calling it. Every call validates requests and observations.
+Valid output is copied/frozen; malformed provider output is refused rather than normalized.
+
+```typescript
+export declare function defineDataProvider(input: { readonly provider: DataProvider; }): DataProvider;
+```
+
+Example (source JSDoc):
+const provider = defineDataProvider({ provider: myProvider });
+const supported = await provider.capabilities({});
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- (input): { readonly provider: DataProvider; }; default: not declared
+- (input).provider: DataProvider; default: not declared
+- return.capabilities: (input: { signal?: AbortSignal; }) => Promise<DataCapabilities>; default: not declared
+- return.contractVersion: 1; default: not declared
+- return.id: string; default: not declared
+- return.query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<DataFor<R>>>; default: not declared
+- return.version: string; default: not declared
+
+## Entrypoint @insiderfinance/totalfinance/core/data-conformance
+
+### @insiderfinance/totalfinance/core/data-conformance#DataAbortProbe
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+In-flight abort; the host supplies only a started latch, never a substitute query result.
+
+```typescript
+/** In-flight abort; the host supplies only a started latch, never a substitute query result. */
+export interface DataAbortProbe {
+    readonly name: string;
+    readonly kind: 'abort';
+    readonly request: DataRequest;
+    readonly waitUntilStarted: () => Promise<void>;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- kind: 'abort'; default: not declared
+- name: string; default: not declared
+- request: DataRequest; default: not declared
+- request.cursor: string; default: not declared
+- request.expirationFrom?: string; default: not declared
+- request.expirationTo?: string; default: not declared
+- request.from: string; default: not declared
+- request.interval: '1m' | '1d'; default: not declared
+- request.kind: ('option-chain-research') | ('price-bars') | (import('@insiderfinance/totalfinance/core/data').DataKind); default: not declared
+- request.limit: number; default: not declared
+- request.maxStrike?: number; default: not declared
+- request.minStrike?: number; default: not declared
+- request.rights?: readonly ('call' | 'put')[]; default: not declared
+- request.snapshot: { readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }; default: not declared
+- request.snapshot.kind: ('id') | ('latest') | ('session'); default: not declared
+- request.snapshot.sessionDate: string; default: not declared
+- request.snapshot.snapshotId: string; default: not declared
+- request.symbol: string; default: not declared
+- request.to: string; default: not declared
+- waitUntilStarted: () => Promise<void>; default: not declared
+
+### @insiderfinance/totalfinance/core/data-conformance#DataErrorProbe
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+A refused call, including deliberately malformed caller input.
+
+```typescript
+/** A refused call, including deliberately malformed caller input. */
+export interface DataErrorProbe {
+    readonly name: string;
+    readonly kind: 'error';
+    readonly request: unknown;
+    readonly expectedCode: string;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- expectedCode: string; default: not declared
+- kind: 'error'; default: not declared
+- name: string; default: not declared
+- request: unknown; default: not declared
+
+### @insiderfinance/totalfinance/core/data-conformance#DataPagesProbe
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Exact expected pages, with receipt clocks and opaque cursor constants pinned by the test host.
+
+```typescript
+/** Exact expected pages, with receipt clocks and opaque cursor constants pinned by the test host. */
+export interface DataPagesProbe {
+    readonly name: string;
+    readonly kind: 'pages';
+    readonly request: DataRequest;
+    readonly expectedPages: readonly DataPage<PriceBarRecord | OptionChainResearchRecord>[];
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- expectedPages: readonly DataPage<PriceBarRecord | OptionChainResearchRecord>[]; default: not declared
+- kind: 'pages'; default: not declared
+- name: string; default: not declared
+- request: DataRequest; default: not declared
+- request.cursor: string; default: not declared
+- request.expirationFrom?: string; default: not declared
+- request.expirationTo?: string; default: not declared
+- request.from: string; default: not declared
+- request.interval: '1m' | '1d'; default: not declared
+- request.kind: ('option-chain-research') | ('price-bars') | (import('@insiderfinance/totalfinance/core/data').DataKind); default: not declared
+- request.limit: number; default: not declared
+- request.maxStrike?: number; default: not declared
+- request.minStrike?: number; default: not declared
+- request.rights?: readonly ('call' | 'put')[]; default: not declared
+- request.snapshot: { readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }; default: not declared
+- request.snapshot.kind: ('id') | ('latest') | ('session'); default: not declared
+- request.snapshot.sessionDate: string; default: not declared
+- request.snapshot.snapshotId: string; default: not declared
+- request.symbol: string; default: not declared
+- request.to: string; default: not declared
+
+### @insiderfinance/totalfinance/core/data-conformance#DataProviderProbe
+
+Kind: type; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+```typescript
+export type DataProviderProbe = DataPagesProbe | DataErrorProbe | DataAbortProbe;
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- expectedCode: string; default: not declared
+- expectedPages: readonly DataPage<PriceBarRecord | OptionChainResearchRecord>[]; default: not declared
+- kind: ('abort') | ('error') | ('pages'); default: not declared
+- name: string; default: not declared
+- request: (DataRequest) | (unknown); default: not declared
+- request.cursor: string; default: not declared
+- request.expirationFrom?: string; default: not declared
+- request.expirationTo?: string; default: not declared
+- request.from: string; default: not declared
+- request.interval: '1m' | '1d'; default: not declared
+- request.kind: ('option-chain-research') | ('price-bars') | (import('@insiderfinance/totalfinance/core/data').DataKind); default: not declared
+- request.limit: number; default: not declared
+- request.maxStrike?: number; default: not declared
+- request.minStrike?: number; default: not declared
+- request.rights?: readonly ('call' | 'put')[]; default: not declared
+- request.snapshot: { readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }; default: not declared
+- request.snapshot.kind: ('id') | ('latest') | ('session'); default: not declared
+- request.snapshot.sessionDate: string; default: not declared
+- request.snapshot.snapshotId: string; default: not declared
+- request.symbol: string; default: not declared
+- request.to: string; default: not declared
+- waitUntilStarted: () => Promise<void>; default: not declared
+
+### @insiderfinance/totalfinance/core/data-conformance#ValidateDataProviderInput
+
+Kind: interface; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Work bounds are verification limits, never financial-time assumptions.
+
+```typescript
+/** Work bounds are verification limits, never financial-time assumptions. */
+export interface ValidateDataProviderInput {
+    readonly provider: DataProvider;
+    readonly probes: readonly DataProviderProbe[];
+    readonly maxPages: number;
+    readonly maxRecords: number;
+    readonly timeoutMs: number;
+}
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- maxPages: number; default: not declared
+- maxRecords: number; default: not declared
+- probes: readonly DataProviderProbe[]; default: not declared
+- provider: DataProvider; default: not declared
+- provider.capabilities: (input: { signal?: AbortSignal; }) => Promise<import('@insiderfinance/totalfinance/core/data').DataCapabilities>; default: not declared
+- provider.capabilities(input): { signal?: AbortSignal; }; default: not declared
+- provider.capabilities(input).signal?: AbortSignal; default: not declared
+- provider.contractVersion: 1; default: not declared
+- provider.id: string; default: not declared
+- provider.query: <R extends DataRequest>(input: { readonly request: R; readonly signal?: AbortSignal; }) => Promise<DataPage<import('@insiderfinance/totalfinance/core/data').DataFor<R>>>; default: not declared
+- provider.query(input): { readonly request: R; readonly signal?: AbortSignal; }; default: not declared
+- provider.query(input).request: R; default: not declared
+- provider.query(input).signal?: AbortSignal; default: not declared
+- provider.version: string; default: not declared
+- timeoutMs: number; default: not declared
+
+### @insiderfinance/totalfinance/core/data-conformance#validateDataProvider
+
+Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
+
+Verify the provider directly. Never wraps, repairs, fetches fixtures or discovers credentials.
+Resolves only when every supplied law passes; malformed fixtures use input errors, provider
+failures use data.nonconformant with a safe probe/law context.
+
+```typescript
+export declare function validateDataProvider(input: ValidateDataProviderInput): Promise<void>;
+```
+
+Members/parameters (default = JSDoc only; not declared means no documented default):
+
+- (input): ValidateDataProviderInput; default: not declared
+- (input).maxPages: number; default: not declared
+- (input).maxRecords: number; default: not declared
+- (input).probes: readonly DataProviderProbe[]; default: not declared
+- (input).provider: DataProvider; default: not declared
+- (input).timeoutMs: number; default: not declared
 
 ## Entrypoint @insiderfinance/totalfinance/core/pricing
 
@@ -122504,10 +123363,10 @@ remains closed. Like every refiner, returns a NEW schema; the receiver stays clo
 - OptionContract.~standard.vendor: string; default: not declared
 - OptionContract.~standard.version: 1; default: not declared
 - OptionQuote: import('@insiderfinance/totalfinance/core/schema').ObjectSchema<{ contract: import('@insiderfinance/totalfinance/core/schema').Schema<{ adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }>; timestampMs: import('@insiderfinance/totalfinance/core/schema').NumberSchema; bid: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; ask: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; bidSize: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; askSize: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; mid: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; last: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; mark: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; volume: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; openInterest: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; underlyingPrice: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; impliedVolatility: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; greeks: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }>; exchange: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<string>; conditions: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<string[]>; }>; default: not declared
-- OptionQuote._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }; }; default: not declared — @internal
+- OptionQuote._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }; }; default: not declared — @internal
 - OptionQuote._check().return.issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; default: not declared
 - OptionQuote._check().return.ok: (false) | (true); default: not declared
-- OptionQuote._check().return.value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }; default: not declared
+- OptionQuote._check().return.value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }; default: not declared
 - OptionQuote._check(context): import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext; default: not declared
 - OptionQuote._check(context).mode: import('@insiderfinance/totalfinance/core/schema').ValidationMode; default: not declared
 - OptionQuote._check(context).path: (string | number)[]; default: not declared
@@ -122580,24 +123439,24 @@ Distinct from parse-time `mode: 'passthrough'` on purpose: openness declared her
 property of the PAYLOAD's contract (every caller, every mode, and the emitted JSON Schema all
 agree), while `passthrough` is one caller's per-parse leniency toward a schema that itself
 remains closed. Like every refiner, returns a NEW schema; the receiver stays closed.
-- OptionQuote.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }>; default: not declared
+- OptionQuote.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }>; default: not declared
 - OptionQuote.optional().return._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined; }; default: not declared — @internal
 - OptionQuote.optional().return._toJSONSchema: () => import('@insiderfinance/totalfinance/core').JSONSchema; default: not declared — @internal
 - OptionQuote.optional().return.describe: (description: string) => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
 - OptionQuote.optional().return.description: string | undefined; default: not declared
 - OptionQuote.optional().return.isOptional: true; default: not declared
 - OptionQuote.optional().return.kind: 'optional'; default: not declared
-- OptionQuote.optional().return.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; } | undefined>; default: not declared
+- OptionQuote.optional().return.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; } | undefined>; default: not declared
 - OptionQuote.optional().return.parse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => { ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined; default: not declared
 - OptionQuote.optional().return.safeParse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => import('@insiderfinance/totalfinance/core/schema').SafeParseResult<{ ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined>; default: not declared
 - OptionQuote.optional().return.toJSONSchema: () => import('@insiderfinance/totalfinance/core').JSONSchema; default: not declared
-- OptionQuote.optional().return.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; } | undefined>; default: not declared
+- OptionQuote.optional().return.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; } | undefined>; default: not declared
 - OptionQuote.parse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => { ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; }; default: not declared
 - OptionQuote.parse(input): unknown; default: not declared
 - OptionQuote.parse(options)?: import('@insiderfinance/totalfinance/core/schema').ParseOptions | undefined; default: not declared
 - OptionQuote.parse(options).mode?: import('@insiderfinance/totalfinance/core/schema').ValidationMode; default: not declared — Validation strictness (spec §6). Defaults to `strict`.
 - OptionQuote.safeParse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => import('@insiderfinance/totalfinance/core/schema').SafeParseResult<{ ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
-- OptionQuote.safeParse().return.data: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }; default: not declared
+- OptionQuote.safeParse().return.data: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }; default: not declared
 - OptionQuote.safeParse().return.error: import('@insiderfinance/totalfinance/core').InputError; default: not declared
 - OptionQuote.safeParse().return.issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; default: not declared
 - OptionQuote.safeParse().return.success: (false) | (true); default: not declared
@@ -122657,7 +123516,7 @@ remains closed. Like every refiner, returns a NEW schema; the receiver stays clo
 - OptionQuote.toJSONSchema().return.required?: string[]; default: not declared
 - OptionQuote.toJSONSchema().return.title?: string; default: not declared
 - OptionQuote.toJSONSchema().return.type?: import('@insiderfinance/totalfinance/core/schema').JSONSchemaTypeName | import('@insiderfinance/totalfinance/core/schema').JSONSchemaTypeName[]; default: not declared
-- OptionQuote.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }>; default: not declared
+- OptionQuote.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }>; default: not declared
 - OptionQuote.~standard.types?: ({
     readonly input: unknown;
     readonly output: {
@@ -122706,26 +123565,26 @@ remains closed. Like every refiner, returns a NEW schema; the receiver stays clo
             };
         };
         volume?: number;
+        underlyingPrice?: number;
         bidSize?: number;
         askSize?: number;
         exchange?: string;
         conditions?: string[];
-        underlyingPrice?: number;
     };
 }) | undefined; default: not declared
 - OptionQuote.~standard.types.input: unknown; default: not declared
-- OptionQuote.~standard.types.output: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }; default: not declared
+- OptionQuote.~standard.types.output: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }; default: not declared
 - OptionQuote.~standard.validate: (value: unknown) => import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Result<{ ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; impliedVolatility?: number; last?: number; mark?: number; mid?: number; openInterest?: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
 - OptionQuote.~standard.validate().return.issues?: (readonly import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Issue[]) | (undefined); default: not declared
-- OptionQuote.~standard.validate().return.value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; underlyingPrice?: number; }; default: not declared
+- OptionQuote.~standard.validate().return.value: { contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; greeks?: { delta: number; gamma?: number; theta?: number; vega?: number; rho?: number; provenance?: { source: string; model?: string; timestampMs?: number; }; }; volume?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; }; default: not declared
 - OptionQuote.~standard.validate(value): unknown; default: not declared
 - OptionQuote.~standard.vendor: string; default: not declared
 - OptionQuote.~standard.version: 1; default: not declared
 - OptionTrade: import('@insiderfinance/totalfinance/core/schema').ObjectSchema<{ contract: import('@insiderfinance/totalfinance/core/schema').Schema<{ adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }>; timestampMs: import('@insiderfinance/totalfinance/core/schema').NumberSchema; bid: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; ask: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; bidSize: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; askSize: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; mid: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; last: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; mark: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; volume: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; openInterest: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; underlyingPrice: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; impliedVolatility: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; exchange: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<string>; conditions: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<string[]>; price: import('@insiderfinance/totalfinance/core/schema').NumberSchema; size: import('@insiderfinance/totalfinance/core/schema').NumberSchema; sequence: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; aggressorSide: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<'buy' | 'sell' | 'unknown'>; premium: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; notional: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<number>; openingLikely: import('@insiderfinance/totalfinance/core/schema').OptionalSchema<boolean>; }>; default: not declared
-- OptionTrade._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; }; default: not declared — @internal
+- OptionTrade._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; }; default: not declared — @internal
 - OptionTrade._check().return.issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; default: not declared
 - OptionTrade._check().return.ok: (false) | (true); default: not declared
-- OptionTrade._check().return.value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
+- OptionTrade._check().return.value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
 - OptionTrade._check(context): import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext; default: not declared
 - OptionTrade._check(context).mode: import('@insiderfinance/totalfinance/core/schema').ValidationMode; default: not declared
 - OptionTrade._check(context).path: (string | number)[]; default: not declared
@@ -122798,24 +123657,24 @@ Distinct from parse-time `mode: 'passthrough'` on purpose: openness declared her
 property of the PAYLOAD's contract (every caller, every mode, and the emitted JSON Schema all
 agree), while `passthrough` is one caller's per-parse leniency toward a schema that itself
 remains closed. Like every refiner, returns a NEW schema; the receiver stays closed.
-- OptionTrade.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }>; default: not declared
+- OptionTrade.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }>; default: not declared
 - OptionTrade.optional().return._check: (input: unknown, context: import('@insiderfinance/totalfinance/core/schema').SchemaCheckContext) => { issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; ok: false; } | { ok: true; value: { aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined; }; default: not declared — @internal
 - OptionTrade.optional().return._toJSONSchema: () => import('@insiderfinance/totalfinance/core').JSONSchema; default: not declared — @internal
 - OptionTrade.optional().return.describe: (description: string) => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
 - OptionTrade.optional().return.description: string | undefined; default: not declared
 - OptionTrade.optional().return.isOptional: true; default: not declared
 - OptionTrade.optional().return.kind: 'optional'; default: not declared
-- OptionTrade.optional().return.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; } | undefined>; default: not declared
+- OptionTrade.optional().return.optional: () => import('@insiderfinance/totalfinance/core/schema').OptionalSchema<{ price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; } | undefined>; default: not declared
 - OptionTrade.optional().return.parse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => { aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined; default: not declared
 - OptionTrade.optional().return.safeParse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => import('@insiderfinance/totalfinance/core/schema').SafeParseResult<{ aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; } | undefined>; default: not declared
 - OptionTrade.optional().return.toJSONSchema: () => import('@insiderfinance/totalfinance/core').JSONSchema; default: not declared
-- OptionTrade.optional().return.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; } | undefined>; default: not declared
+- OptionTrade.optional().return.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; } | undefined>; default: not declared
 - OptionTrade.parse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => { aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; }; default: not declared
 - OptionTrade.parse(input): unknown; default: not declared
 - OptionTrade.parse(options)?: import('@insiderfinance/totalfinance/core/schema').ParseOptions | undefined; default: not declared
 - OptionTrade.parse(options).mode?: import('@insiderfinance/totalfinance/core/schema').ValidationMode; default: not declared — Validation strictness (spec §6). Defaults to `strict`.
 - OptionTrade.safeParse: (input: unknown, options?: import('@insiderfinance/totalfinance/core/schema').ParseOptions) => import('@insiderfinance/totalfinance/core/schema').SafeParseResult<{ aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
-- OptionTrade.safeParse().return.data: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
+- OptionTrade.safeParse().return.data: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
 - OptionTrade.safeParse().return.error: import('@insiderfinance/totalfinance/core').InputError; default: not declared
 - OptionTrade.safeParse().return.issues: import('@insiderfinance/totalfinance/core/schema').SchemaIssue[]; default: not declared
 - OptionTrade.safeParse().return.success: (false) | (true); default: not declared
@@ -122875,7 +123734,7 @@ remains closed. Like every refiner, returns a NEW schema; the receiver stays clo
 - OptionTrade.toJSONSchema().return.required?: string[]; default: not declared
 - OptionTrade.toJSONSchema().return.title?: string; default: not declared
 - OptionTrade.toJSONSchema().return.type?: import('@insiderfinance/totalfinance/core/schema').JSONSchemaTypeName | import('@insiderfinance/totalfinance/core/schema').JSONSchemaTypeName[]; default: not declared
-- OptionTrade.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }>; default: not declared
+- OptionTrade.~standard: import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Props<unknown, { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }>; default: not declared
 - OptionTrade.~standard.types?: ({
     readonly input: unknown;
     readonly output: {
@@ -122916,21 +123775,21 @@ remains closed. Like every refiner, returns a NEW schema; the receiver stays clo
         volume?: number;
         premium?: number;
         notional?: number;
+        underlyingPrice?: number;
         bidSize?: number;
         askSize?: number;
         exchange?: string;
         conditions?: string[];
         sequence?: number;
-        underlyingPrice?: number;
         aggressorSide?: 'buy' | 'sell' | 'unknown';
         openingLikely?: boolean;
     };
 }) | undefined; default: not declared
 - OptionTrade.~standard.types.input: unknown; default: not declared
-- OptionTrade.~standard.types.output: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
+- OptionTrade.~standard.types.output: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
 - OptionTrade.~standard.validate: (value: unknown) => import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Result<{ aggressorSide?: 'buy' | 'sell' | 'unknown'; ask?: number; askSize?: number; bid?: number; bidSize?: number; conditions?: string[]; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; exchange?: string; impliedVolatility?: number; last?: number; mark?: number; mid?: number; notional?: number; openInterest?: number; openingLikely?: boolean; premium?: number; price: number; sequence?: number; size: number; timestampMs: number; underlyingPrice?: number; volume?: number; }>; default: not declared
 - OptionTrade.~standard.validate().return.issues?: (readonly import('@insiderfinance/totalfinance/core/schema').StandardSchemaV1Issue[]) | (undefined); default: not declared
-- OptionTrade.~standard.validate().return.value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; underlyingPrice?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
+- OptionTrade.~standard.validate().return.value: { price: number; contract: { adjusted?: boolean; currency?: string; deliverable?: { cash?: number; shares?: { symbol: string; quantity: number; }[]; notes?: string; }; exerciseTime?: 'AM' | 'PM'; expiresAt: number; expiry: string; expiryConvention: 'us-equity-close' | 'explicit-instant'; multiplier?: number; occSymbol?: string; root?: string; settlement?: 'physical' | 'cash'; strike: number; style: 'european' | 'american'; type: 'call' | 'put'; underlying: string; }; timestampMs: number; size: number; bid?: number; ask?: number; mid?: number; last?: number; mark?: number; impliedVolatility?: number; openInterest?: number; volume?: number; premium?: number; notional?: number; underlyingPrice?: number; bidSize?: number; askSize?: number; exchange?: string; conditions?: string[]; sequence?: number; aggressorSide?: 'buy' | 'sell' | 'unknown'; openingLikely?: boolean; }; default: not declared
 - OptionTrade.~standard.validate(value): unknown; default: not declared
 - OptionTrade.~standard.vendor: string; default: not declared
 - OptionTrade.~standard.version: 1; default: not declared

@@ -88,191 +88,205 @@ export function isQuantError(value: unknown, code?: string): value is QuantError
  * Canonical error codes used in the 0.0.1 surface. The set is open — packages may introduce new
  * codes — but these are documented and stable.
  *
- * Static references to package-private constants let guard-only consumers discard this registry
- * while retaining the same error classes. Explicit properties preserve the public property order
- * and literal readonly types, without a second code object or construction side effects.
+ * Literal readonly declarations preserve the public property order and exact code types. The pure
+ * compact initializer below avoids retaining two spellings of every code in compute bundles;
+ * guard-only consumers can still discard the catalog while retaining the error classes.
  */
-export const ErrorCode = {
-  InputNaN: ValidationCode.InputNaN,
-  InputNotFinite: ValidationCode.InputNotFinite,
-  InputNegativeSpot: ValidationCode.InputNegativeSpot,
-  InputNegativeStrike: ValidationCode.InputNegativeStrike,
-  InputNegativeVolatility: ValidationCode.InputNegativeVolatility,
-  InputNegativeTime: ValidationCode.InputNegativeTime,
-  InputOutOfRange: ValidationCode.InputOutOfRange,
-  InputInvalidEnum: ValidationCode.InputInvalidEnum,
-  InputMissingField: ValidationCode.InputMissingField,
-  InputUnknownField: ValidationCode.InputUnknownField,
-  InputWrongType: ValidationCode.InputWrongType,
+type ErrorCodeRegistry = {
+  readonly InputNaN: 'input.nan';
+  readonly InputNotFinite: 'input.not_finite';
+  readonly InputNegativeSpot: 'input.negative_spot';
+  readonly InputNegativeStrike: 'input.negative_strike';
+  readonly InputNegativeVolatility: 'input.negative_volatility';
+  readonly InputNegativeTime: 'input.negative_time';
+  readonly InputOutOfRange: 'input.out_of_range';
+  readonly InputInvalidEnum: 'input.invalid_enum';
+  readonly InputMissingField: 'input.missing_field';
+  readonly InputUnknownField: 'input.unknown_field';
+  readonly InputWrongType: 'input.wrong_type';
   /** The argument is an object but not the expected SHAPE (right type, wrong slots) — distinct from a
    * single missing field. Emitted by {@link wrongShapeError}. */
-  InputWrongShape: ValidationCode.InputWrongShape,
-  ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence',
-  ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic',
-  ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound',
-  EngineUnsupportedContract: 'engine.unsupported_contract',
+  readonly InputWrongShape: 'input.wrong_shape';
+  readonly ImpliedVolatilityNoConvergence: 'implied_volatility.no_convergence';
+  readonly ImpliedVolatilityBelowIntrinsic: 'implied_volatility.below_intrinsic';
+  readonly ImpliedVolatilityAboveMax: 'implied_volatility.above_max_bound';
+  readonly EngineUnsupportedContract: 'engine.unsupported_contract';
   // Reserved for the Phase-8 data-quality layer (crossed/stale quote rejection); kept intentionally.
-  DataCrossedMarket: 'data.crossed_market',
-  DataStaleQuote: 'data.stale_quote',
-  SolverNoConvergence: 'solver.no_convergence',
-  LinalgNoConvergence: 'linalg.no_convergence',
-  LinalgNotPositiveDefinite: 'linalg.not_positive_definite',
-  LinalgSingular: 'linalg.singular',
-  IntegrationMaxDepth: 'integration.max_depth',
-  InterpolationOutOfDomain: 'interpolation.out_of_domain',
-  InterpolationDuplicateKnots: 'interpolation.duplicate_knots',
-  InterpolationInvalidGrid: 'interpolation.invalid_grid',
-  OptimizeInvalidBounds: 'optimize.invalid_bounds',
-  VolatilityExpiryNotFound: 'volatility.expiry_not_found',
-  VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage',
-  StrategyInvalidChartRange: 'strategy.invalid_chart_range',
+  readonly DataCrossedMarket: 'data.crossed_market';
+  readonly DataUnsupportedCapability: 'data.unsupported_capability';
+  readonly DataContractVersionUnsupported: 'data.contract_version_unsupported';
+  readonly DataAuthenticationRequired: 'data.authentication_required';
+  readonly DataEntitlementRequired: 'data.entitlement_required';
+  readonly DataRateLimited: 'data.rate_limited';
+  readonly DataAllowanceExhausted: 'data.allowance_exhausted';
+  readonly DataSnapshotExpired: 'data.snapshot_expired';
+  readonly DataInvalidCursor: 'data.invalid_cursor';
+  readonly DataNotFound: 'data.not_found';
+  readonly DataInvalidRequest: 'data.invalid_request';
+  readonly DataInvalidResponse: 'data.invalid_response';
+  readonly DataUnavailable: 'data.unavailable';
+  readonly DataAborted: 'data.aborted';
+  readonly DataNonconformant: 'data.nonconformant';
+  readonly DataStaleQuote: 'data.stale_quote';
+  readonly SolverNoConvergence: 'solver.no_convergence';
+  readonly LinalgNoConvergence: 'linalg.no_convergence';
+  readonly LinalgNotPositiveDefinite: 'linalg.not_positive_definite';
+  readonly LinalgSingular: 'linalg.singular';
+  readonly IntegrationMaxDepth: 'integration.max_depth';
+  readonly InterpolationOutOfDomain: 'interpolation.out_of_domain';
+  readonly InterpolationDuplicateKnots: 'interpolation.duplicate_knots';
+  readonly InterpolationInvalidGrid: 'interpolation.invalid_grid';
+  readonly OptimizeInvalidBounds: 'optimize.invalid_bounds';
+  readonly VolatilityExpiryNotFound: 'volatility.expiry_not_found';
+  readonly VolatilityCalendarArbitrage: 'volatility.calendar_arbitrage';
+  readonly StrategyInvalidChartRange: 'strategy.invalid_chart_range';
   /** A calendar/timezone resolution failed (unknown zone, unresolvable local time). Emitted by core's
    * time layer, which owns the registry — so it lives here, not as a raw inline literal. */
-  TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed',
+  readonly TimeTimezoneResolutionFailed: 'time.timezone_resolution_failed';
   /** A pricing path was given a date with no time of day; a valuation instant must name one. */
-  TimeValuationInstantRequired: 'time.valuation_instant_required',
+  readonly TimeValuationInstantRequired: 'time.valuation_instant_required';
 
   // ── Phase 3 registry consolidation (P3.1c) ──────────────────────────────────────────────────
   // Every leaf-package error code, registered centrally: the shrink-only legacy ratchet in
   // tools/codes-conformance.test.ts is now EMPTY and stays empty — an unregistered code anywhere
   // in the monorepo is a CI failure. Call-site classification: these appear only in typed-error
   // constructors. Semantics live at the emit sites; the registry guarantees greppable stability.
-  BacktestDuplicateHandler: 'backtest.duplicate_handler',
-  BacktestMixedSymbols: 'backtest.mixed_symbols',
+  readonly BacktestDuplicateHandler: 'backtest.duplicate_handler';
+  readonly BacktestMixedSymbols: 'backtest.mixed_symbols';
   /** An open option leg has no usable current-snapshot mark (missing, ambiguous, stale, or
    * unpriceable contract quote) and the request's missing-mark policy is to refuse (Preview P1). */
-  BacktestMarkUnavailable: 'backtest.mark_unavailable',
+  readonly BacktestMarkUnavailable: 'backtest.mark_unavailable';
   /** Stage 4.6 (FC8) — the `reject` intrabar ambiguity policy met a bar where two orders could
    * have touched in either sequence; the run refuses rather than pick a sequence silently. */
-  BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar',
+  readonly BacktestAmbiguousIntrabar: 'backtest.ambiguous_intrabar';
   /** Stage 4.6 (FC8) — a quote fill under `staleQuotes.behavior: 'reject'` met a quote older than the policy's maximum age. */
-  BacktestStaleQuote: 'backtest.stale_quote',
+  readonly BacktestStaleQuote: 'backtest.stale_quote';
   /** Stage 4.6 (FC8) — a caller-supplied fill model or instrument adapter failed its conformance suite. */
-  BacktestAdapterNonconformant: 'backtest.adapter_nonconformant',
+  readonly BacktestAdapterNonconformant: 'backtest.adapter_nonconformant';
   /** Stage 4.6 (FC8) — a run's row count is above the ceiling one synchronous run may read. */
-  BacktestInputTooLarge: 'backtest.input_too_large',
+  readonly BacktestInputTooLarge: 'backtest.input_too_large';
   /** Stage 4.6 (FC8) — a 'delisted' universe exit with no delistingReturn while a position is open. */
-  BacktestDelistingReturnMissing: 'backtest.delisting_return_missing',
+  readonly BacktestDelistingReturnMissing: 'backtest.delisting_return_missing';
   /** Stage 4.6 (FC8) — a return or feature names an instrument the universe history never lists. */
-  BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown',
+  readonly BacktestUniverseMembershipUnknown: 'backtest.universe_membership_unknown';
   /** Stage 4.6 (FC8) — the emitted portfolio events do not fold to the equity the engine reports (an invariant). */
-  BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed',
+  readonly BacktestLedgerReconciliationFailed: 'backtest.ledger_reconciliation_failed';
   /** Stage 7B.1 (AT4) — step() or finish() on a trading environment before reset(). */
-  EnvironmentNotReset: 'environment.not_reset',
+  readonly EnvironmentNotReset: 'environment.not_reset';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an order id repeated inside an episode (an idempotent retry). */
-  EnvironmentDuplicateOrder: 'environment.duplicate_order',
+  readonly EnvironmentDuplicateOrder: 'environment.duplicate_order';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an order that would breach a declared limit. */
-  EnvironmentLimitBreach: 'environment.limit_breach',
+  readonly EnvironmentLimitBreach: 'environment.limit_breach';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an order the action mask disallows. */
-  EnvironmentActionDisallowed: 'environment.action_disallowed',
+  readonly EnvironmentActionDisallowed: 'environment.action_disallowed';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an order naming an instrument the environment does not hold. */
-  EnvironmentUnknownInstrument: 'environment.unknown_instrument',
+  readonly EnvironmentUnknownInstrument: 'environment.unknown_instrument';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an order or cancellation of the wrong shape. */
-  EnvironmentOrderInvalid: 'environment.order_invalid',
+  readonly EnvironmentOrderInvalid: 'environment.order_invalid';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: an action of the wrong shape; the step proceeds as hold. */
-  EnvironmentActionInvalid: 'environment.action_invalid',
+  readonly EnvironmentActionInvalid: 'environment.action_invalid';
   /** Stage 7B.1 (AT4) — a rejection row, never thrown: a step after the episode ended. */
-  EnvironmentEpisodeOver: 'environment.episode_over',
+  readonly EnvironmentEpisodeOver: 'environment.episode_over';
   /** Stage 7B.2 (AT5) — a trade intent or plan that cannot be normalized (a duplicate line, an unknown instrument). */
-  TradePlanInvalid: 'trade.plan_invalid',
+  readonly TradePlanInvalid: 'trade.plan_invalid';
   /** Stage 7B.2 (AT5) — preflight denied the plan; a grant cannot be minted over it. */
-  TradePreflightDenied: 'trade.preflight_denied',
+  readonly TradePreflightDenied: 'trade.preflight_denied';
   /** Stage 7B.2 (AT5) — an authorization grant that does not cover the execution asked of it (its reasons name the bindings). */
-  TradeGrantInvalid: 'trade.grant_invalid',
+  readonly TradeGrantInvalid: 'trade.grant_invalid';
   /** Stage 7B.2 (AT5) — an authorization grant past its expiry. */
-  TradeGrantExpired: 'trade.grant_expired',
+  readonly TradeGrantExpired: 'trade.grant_expired';
   /** Repairs B6 — the grant already licensed a submission; a grant is consumed by its first successful one. */
-  TradeGrantConsumed: 'trade.grant_consumed',
+  readonly TradeGrantConsumed: 'trade.grant_consumed';
   /** Stage 7B.2 (AT5) — an idempotency key already used for a different plan. */
-  TradeIdempotencyConflict: 'trade.idempotency_conflict',
+  readonly TradeIdempotencyConflict: 'trade.idempotency_conflict';
   /** Stage 7B.2 (AT5) — the kill switch is on: every submission refuses until resumed. */
-  TradeHalted: 'trade.halted',
+  readonly TradeHalted: 'trade.halted';
   /** Stage 7B.2 (AT5) — live execution is not available in the open library; adapters ship under AT8. */
-  TradeLiveUnavailable: 'trade.live_unavailable',
+  readonly TradeLiveUnavailable: 'trade.live_unavailable';
   /** Stage 7B.2 (AT5) — an execution-journal event that the order's state cannot accept. */
-  TradeJournalTransitionInvalid: 'trade.journal_transition_invalid',
+  readonly TradeJournalTransitionInvalid: 'trade.journal_transition_invalid';
   /** Stage 7B.2 (AT5) — an operation whose required capabilities the caller did not grant. */
-  OperationCapabilityMissing: 'operation.capability_missing',
-  OperationToolFiltered: 'operation.tool_filtered',
+  readonly OperationCapabilityMissing: 'operation.capability_missing';
+  readonly OperationToolFiltered: 'operation.tool_filtered';
   /** Stage 4.6 (FC8) — a grid's cartesian product is above the variations one synchronous sweep may run. */
-  BacktestGridTooLarge: 'backtest.grid_too_large',
+  readonly BacktestGridTooLarge: 'backtest.grid_too_large';
   /** Stage 4.6 (FC8) — an options book above the open positions one synchronous book may hold. */
-  BacktestBookTooLarge: 'backtest.book_too_large',
+  readonly BacktestBookTooLarge: 'backtest.book_too_large';
   /** Stage 4.6 (FC8) — a merger or spin-off on an open option leg; the deliverable cannot be adjusted. */
-  BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action',
+  readonly BacktestUnsupportedCorporateAction: 'backtest.unsupported_corporate_action';
   /** Stage 7A — the protocol-neutral operation runtime and registry (`@insiderfinance/totalfinance/workflows`). */
-  OperationUnknown: 'operation.unknown',
-  OperationRegistrationRefused: 'operation.registration_refused',
-  OperationInputTooLarge: 'operation.input_too_large',
-  OperationDeadlineExceeded: 'operation.deadline_exceeded',
-  OperationCancelled: 'operation.cancelled',
-  OperationInternal: 'operation.internal',
-  OperationHandleStoreMissing: 'operation.handle_store_missing',
-  OperationHandleUnknown: 'operation.handle_unknown',
-  OperationHandleKindMismatch: 'operation.handle_kind_mismatch',
-  InputLengthMismatch: ValidationCode.InputLengthMismatch,
+  readonly OperationUnknown: 'operation.unknown';
+  readonly OperationRegistrationRefused: 'operation.registration_refused';
+  readonly OperationInputTooLarge: 'operation.input_too_large';
+  readonly OperationDeadlineExceeded: 'operation.deadline_exceeded';
+  readonly OperationCancelled: 'operation.cancelled';
+  readonly OperationInternal: 'operation.internal';
+  readonly OperationHandleStoreMissing: 'operation.handle_store_missing';
+  readonly OperationHandleUnknown: 'operation.handle_unknown';
+  readonly OperationHandleKindMismatch: 'operation.handle_kind_mismatch';
+  readonly InputLengthMismatch: 'input.length_mismatch';
   /** A selection list names the same entry twice — a duplicate is never silently collapsed. */
-  InputDuplicateEntry: ValidationCode.InputDuplicateEntry,
-  McpDeadlineExceeded: 'mcp.deadline_exceeded',
-  McpInputTooLarge: 'mcp.input_too_large',
-  McpInternalError: 'mcp.internal_error',
-  PostconditionNonFinite: ValidationCode.PostconditionNonFinite,
-  McpUnknownTool: 'mcp.unknown_tool',
-  PipelineDuplicateAlias: 'pipeline.duplicate_alias',
-  PipelineLengthMismatch: 'pipeline.length_mismatch',
-  RegistryAliasConflict: 'registry.alias_conflict',
-  RegistryDuplicateAliasRow: 'registry.duplicate_alias_row',
-  RegistryDuplicateIndicator: 'registry.duplicate_indicator',
-  RegistryUnknownAliasTarget: 'registry.unknown_alias_target',
-  SignalUnknownReference: 'signal.unknown_reference',
-  SnapshotInvalidVersion: 'snapshot.invalid_version',
-  SnapshotKindMismatch: 'snapshot.kind_mismatch',
-  SnapshotUnknownKind: 'snapshot.unknown_kind',
-  SnapshotUnsupportedVersion: 'snapshot.unsupported_version',
+  readonly InputDuplicateEntry: 'input.duplicate_entry';
+  readonly McpDeadlineExceeded: 'mcp.deadline_exceeded';
+  readonly McpInputTooLarge: 'mcp.input_too_large';
+  readonly McpInternalError: 'mcp.internal_error';
+  readonly PostconditionNonFinite: 'postcondition.non_finite_result';
+  readonly McpUnknownTool: 'mcp.unknown_tool';
+  readonly PipelineDuplicateAlias: 'pipeline.duplicate_alias';
+  readonly PipelineLengthMismatch: 'pipeline.length_mismatch';
+  readonly RegistryAliasConflict: 'registry.alias_conflict';
+  readonly RegistryDuplicateAliasRow: 'registry.duplicate_alias_row';
+  readonly RegistryDuplicateIndicator: 'registry.duplicate_indicator';
+  readonly RegistryUnknownAliasTarget: 'registry.unknown_alias_target';
+  readonly SignalUnknownReference: 'signal.unknown_reference';
+  readonly SnapshotInvalidVersion: 'snapshot.invalid_version';
+  readonly SnapshotKindMismatch: 'snapshot.kind_mismatch';
+  readonly SnapshotUnknownKind: 'snapshot.unknown_kind';
+  readonly SnapshotUnsupportedVersion: 'snapshot.unsupported_version';
   /**
    * A value handed to a snapshot restorer is not an envelope. 3B.N7 retired
    * `snapshot.reserved_field` in the same change: that code guarded a stream serializing its own `v`
    * into a FLAT snapshot, and the `{ kind, schemaVersion, state }` envelope makes the collision
    * structurally impossible — indicator state can no longer reach the envelope's own fields.
    */
-  SnapshotWrongShape: 'snapshot.wrong_shape',
-  StrategyDeltaRequired: 'strategy.delta_required',
-  StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics',
+  readonly SnapshotWrongShape: 'snapshot.wrong_shape';
+  readonly StrategyDeltaRequired: 'strategy.delta_required';
+  readonly StrategyMultiExpiryExpirationAnalytics: 'strategy.multi_expiry_expiration_analytics';
   /** A call-site `expiry` contradicts the expiry materialized on the position's option legs. */
-  StrategyExpiryConflict: 'strategy.expiry_conflict',
-  StrategyStrikeUnavailable: 'strategy.strike_unavailable',
-  VolatilityForwardUnavailable: 'volatility.forward_unavailable',
-  VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch',
+  readonly StrategyExpiryConflict: 'strategy.expiry_conflict';
+  readonly StrategyStrikeUnavailable: 'strategy.strike_unavailable';
+  readonly VolatilityForwardUnavailable: 'volatility.forward_unavailable';
+  readonly VolatilitySnapshotVersionMismatch: 'volatility.snapshot_version_mismatch';
 
   // ── 2026-08-02 defect-fix wave ──────────────────────────────────────────────────────────────
   // Registered ahead of their emit sites (which land in the same PR) so the fix slices cannot race
   // on this registry. Each closes a reviewed silent-wrong-number or fabricated-success defect.
   /** A lattice's risk-neutral branch probabilities left [0, 1] (drift outran diffusion). */
-  EngineProbabilityOutOfRange: 'engine.probability_out_of_range',
+  readonly EngineProbabilityOutOfRange: 'engine.probability_out_of_range';
   /** A successful engine result violated a no-arbitrage output bound (e.g. C > S·e^{-qT}). */
-  EngineResultOutOfBounds: 'engine.result_out_of_bounds',
+  readonly EngineResultOutOfBounds: 'engine.result_out_of_bounds';
   /** Warning: the engine's grid/truncation is too coarse for the requested regime. */
-  EngineDiscretizationInadequate: 'engine.discretization_inadequate',
+  readonly EngineDiscretizationInadequate: 'engine.discretization_inadequate';
   /** The target premium is below the smallest price the solver can resolve to a volatility. */
-  ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable',
+  readonly ImpliedVolatilityPriceBelowResolvable: 'implied_volatility.price_below_resolvable';
   /** Warning: covariance condition number too large for the optimizer's answer to be trusted. */
-  RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance',
+  readonly RiskIllConditionedCovariance: 'risk.ill_conditioned_covariance';
   /** Warning: the requested tail quantile lies beyond the sample's resolvable range. */
-  RiskQuantileBeyondSample: 'risk.quantile_beyond_sample',
+  readonly RiskQuantileBeyondSample: 'risk.quantile_beyond_sample';
   /** Warning: a calibrated fit deviates materially from its input data (likely arbitrageable). */
-  VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation',
+  readonly VolatilityCalibrationFitDeviation: 'volatility.calibration_fit_deviation';
   /** A variance forecast came back negative; the model output cannot be consumed as a variance. */
-  VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast',
+  readonly VolatilityNegativeVarianceForecast: 'volatility.negative_variance_forecast';
   /** An iterative series/loop hit its budget without converging; the value is not returned. */
-  MathIterationLimit: 'math.iteration_limit',
+  readonly MathIterationLimit: 'math.iteration_limit';
   /** Warning: a resting order's prices/quantity were adjusted for a corporate action (split). */
-  BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted',
+  readonly BacktestOrderSplitAdjusted: 'backtest.order_split_adjusted';
   /** Warning: a coupon rate looks like a percent typed as a decimal (e.g. 5 for 5%). */
-  InputSuspiciousCouponRate: ValidationCode.InputSuspiciousCouponRate,
+  readonly InputSuspiciousCouponRate: 'input.suspicious_coupon_rate';
   /** Warning: a yield looks like a percent typed as a decimal (e.g. 5 for 5%). */
-  InputSuspiciousYield: ValidationCode.InputSuspiciousYield,
+  readonly InputSuspiciousYield: 'input.suspicious_yield';
   /** Warning: model parameters violate the Feller condition; the variance floor is attainable. */
-  ModelFellerConditionViolated: 'model.feller_condition_violated',
+  readonly ModelFellerConditionViolated: 'model.feller_condition_violated';
 
   // ── Gate C structural extension contracts (docs/specs/gate-c-extension-contracts.md) ────────
   // The Pricer/requirements protocol in `@insiderfinance/totalfinance/core/pricing` emits these; they are registered
@@ -280,78 +294,101 @@ export const ErrorCode = {
   // `pricer.requirement_unsatisfied` — a third-party pricer must throw exactly this code for a
   // missing required observation, so the code is load-bearing public API from its first commit.
   /** A required market observation is absent from the observations handed to a pricer. */
-  PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied',
+  readonly PricerRequirementUnsatisfied: 'pricer.requirement_unsatisfied';
   /** A market-requirement descriptor is malformed (unknown kind, missing/mistyped subject field). */
-  PricerRequirementInvalid: 'pricer.requirement_invalid',
+  readonly PricerRequirementInvalid: 'pricer.requirement_invalid';
   /** A market observation's value has the wrong type/shape for its requirement's kind. */
-  PricerObservationInvalid: 'pricer.observation_invalid',
+  readonly PricerObservationInvalid: 'pricer.observation_invalid';
   /** A pricer failed the behavioral conformance kit (`validatePricer`) against its own fixtures. */
-  PricerNonconformant: 'pricer.nonconformant',
+  readonly PricerNonconformant: 'pricer.nonconformant';
 
   // ── Stage 4.4b shared cross-domain scenario runner (`@insiderfinance/totalfinance/scenarios`) ────────────────
   /** A scenario override or shock matched no used observation, Taylor factor, FX quote, or handler. */
-  ScenarioInstructionUnmatched: 'scenario.instruction_unmatched',
+  readonly ScenarioInstructionUnmatched: 'scenario.instruction_unmatched';
   /** A target's bound pricer returned false from its one preflight `supports` call. */
-  ScenarioTargetUnsupported: 'scenario.target_unsupported',
+  readonly ScenarioTargetUnsupported: 'scenario.target_unsupported';
   /** One base/scenario valuation failed after the complete request and execution plan passed. */
-  ScenarioCellFailed: 'scenario.cell_failed',
+  readonly ScenarioCellFailed: 'scenario.cell_failed';
 
   // ── Gate B artifact spine (`@insiderfinance/totalfinance/core/artifacts`) ──────────────────────────────────────
   /** A value has no canonical JSON form (Date/Map/Set/typed array/class instance/bigint/function
    * — or the reserved `{ nonFinite }` wrapper supplied as literal data). The canonical serializer
    * refuses rather than guessing a meaning into every content hash. */
-  SerializationUnsupportedValue: 'serialization.unsupported_value',
+  readonly SerializationUnsupportedValue: 'serialization.unsupported_value';
   /** An older-schema envelope was read with no registered migration covering a required step —
    * schema upgrades are explicit, never silent. */
-  ArtifactMigrationMissing: 'artifact.migration_missing',
+  readonly ArtifactMigrationMissing: 'artifact.migration_missing';
   /** A second migration was registered for the same `(kind, fromVersion)` — two upgrades for one
    * stored shape cannot both be the truth. */
-  ArtifactDuplicateMigration: 'artifact.duplicate_migration',
+  readonly ArtifactDuplicateMigration: 'artifact.duplicate_migration';
   /** A saved analysis artifact's `id` does not equal the content hash of its body — the artifact
    * was edited after creation (or assembled by hand); its provenance chain cannot be trusted. */
-  ArtifactIdMismatch: 'artifact.id_mismatch',
+  readonly ArtifactIdMismatch: 'artifact.id_mismatch';
   /** `compareAnalysisArtifacts` received two artifacts of different `artifactType`s — a leaf-by-leaf
    * comparison across result schemas would compare unrelated numbers under shared names. */
-  ArtifactTypeMismatch: 'artifact.type_mismatch',
+  readonly ArtifactTypeMismatch: 'artifact.type_mismatch';
   /** A domain artifact verb received an artifact or report of another package, model family, or
    * research kind (Stage 4.5) — the teaching names the owner. */
-  ArtifactFamilyMismatch: 'artifact.family_mismatch',
+  readonly ArtifactFamilyMismatch: 'artifact.family_mismatch';
   /** A stored fitted-model `modelVersion` / research `runVersion` is newer than this build, or older
    * with no registered report migration — evaluating a stored parameter set under different
    * semantics is a silent wrong number, so it is refused (Stage 4.5 Decision 5). */
-  ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported',
+  readonly ArtifactModelVersionUnsupported: 'artifact.model_version_unsupported';
   /** The stored inputs carried a non-serializable callback (a custom predicate or expected-return
    * model); replay cannot re-issue the producing call and names the field (Stage 4.5). */
-  ArtifactNotReplayable: 'artifact.not_replayable',
+  readonly ArtifactNotReplayable: 'artifact.not_replayable';
   /** Caller-supplied rows for a referenced table do not hash to the artifact's table handle — a
    * replay over different data would be a replay of a different run (Stage 4.5). */
-  ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch',
+  readonly ArtifactReferencedDataMismatch: 'artifact.referenced_data_mismatch';
   /** An embedded calibration or run input exceeds `maximumEmbeddedBytes`; the teaching says to
    * reference the bulk row set through a table handle instead (Stage 4.5 Decision 9). */
-  ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large',
+  readonly ArtifactEmbeddedInputTooLarge: 'artifact.embedded_input_too_large';
   /** The model family has no evaluator, warm start, stability, or holdout operation — an exact or
    * closed-form fit has no search to start and a statistic has nothing to evaluate (Stage 4.5). */
-  ArtifactOperationUnsupported: 'artifact.operation_unsupported',
+  readonly ArtifactOperationUnsupported: 'artifact.operation_unsupported';
 
   // ── FC7 durable portfolio ledger (`@insiderfinance/totalfinance/portfolio`) ────────────────────────────────────
   /** A `(sourceId, eventId)` pair was replayed with a DIFFERENT event body. The duplicate boundary
    * makes replay idempotent for identical deliveries; a changed payload under the same identity is
    * a conflict that must be heard, never a silent overwrite or a silent no-op. */
-  PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict',
+  readonly PortfolioDuplicateEventConflict: 'portfolio.duplicate_event_conflict';
   /** A `specific-lot` relief selection names a lot that does not exist in the position or carries
    * less remaining quantity than the selection claims — lot relief never guesses a substitute. */
-  PortfolioLotUnavailable: 'portfolio.lot_unavailable',
+  readonly PortfolioLotUnavailable: 'portfolio.lot_unavailable';
   /** A valuation needs a mark (an instrument price or a currency-pair quote to the base currency)
    * that the supplied market/conversion inputs do not carry. An unavailable mark is a typed
    * failure, never an interpolated or stale guess. */
-  PortfolioMarkUnavailable: 'portfolio.mark_unavailable',
+  readonly PortfolioMarkUnavailable: 'portfolio.mark_unavailable';
   /** An `admin.reversal`/`admin.correction` names an `original` the fold never applied under that
    * `(sourceId, eventId)` — a reversal repairs an applied fact, never an imagined one. */
-  PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing',
+  readonly PortfolioReversalTargetMissing: 'portfolio.reversal_target_missing';
   /** The applied fact cannot be reversed exactly: the supplied `original` differs from what was
    * applied, it was already reversed, its lots were relieved by later fills, or its family has no
    * exact inverse in this build. History is never approximated — record a correcting event. */
-  PortfolioReversalInfeasible: 'portfolio.reversal_infeasible',
+  readonly PortfolioReversalInfeasible: 'portfolio.reversal_infeasible';
+};
+
+/** Materialize the catalog without retaining both PascalCase names and snake_case duplicates.
+ * The declaration above is the exact literal contract; the registry test checks every value and
+ * enumeration position. This pure initializer performs no I/O or financial computation. */
+function errorCodeRegistry(encoded: string): ErrorCodeRegistry {
+  const registry: Record<string, string> = {};
+  for (const entry of encoded.split(' ')) {
+    const [name, code] = entry.split(':');
+    registry[name!] =
+      code ??
+      name!
+        .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+        .toLowerCase()
+        .replace('_', '.');
+  }
+  return registry as ErrorCodeRegistry;
+}
+
+export const ErrorCode = {
+  .../* @__PURE__ */ errorCodeRegistry(
+    'InputNaN:input.nan InputNotFinite InputNegativeSpot InputNegativeStrike InputNegativeVolatility InputNegativeTime InputOutOfRange InputInvalidEnum InputMissingField InputUnknownField InputWrongType InputWrongShape ImpliedVolatilityNoConvergence:implied_volatility.no_convergence ImpliedVolatilityBelowIntrinsic:implied_volatility.below_intrinsic ImpliedVolatilityAboveMax:implied_volatility.above_max_bound EngineUnsupportedContract DataCrossedMarket DataUnsupportedCapability DataContractVersionUnsupported DataAuthenticationRequired DataEntitlementRequired DataRateLimited DataAllowanceExhausted DataSnapshotExpired DataInvalidCursor DataNotFound DataInvalidRequest DataInvalidResponse DataUnavailable DataAborted DataNonconformant DataStaleQuote SolverNoConvergence LinalgNoConvergence LinalgNotPositiveDefinite LinalgSingular IntegrationMaxDepth InterpolationOutOfDomain InterpolationDuplicateKnots InterpolationInvalidGrid OptimizeInvalidBounds VolatilityExpiryNotFound VolatilityCalendarArbitrage StrategyInvalidChartRange TimeTimezoneResolutionFailed TimeValuationInstantRequired BacktestDuplicateHandler BacktestMixedSymbols BacktestMarkUnavailable BacktestAmbiguousIntrabar BacktestStaleQuote BacktestAdapterNonconformant BacktestInputTooLarge BacktestDelistingReturnMissing BacktestUniverseMembershipUnknown BacktestLedgerReconciliationFailed EnvironmentNotReset EnvironmentDuplicateOrder EnvironmentLimitBreach EnvironmentActionDisallowed EnvironmentUnknownInstrument EnvironmentOrderInvalid EnvironmentActionInvalid EnvironmentEpisodeOver TradePlanInvalid TradePreflightDenied TradeGrantInvalid TradeGrantExpired TradeGrantConsumed TradeIdempotencyConflict TradeHalted TradeLiveUnavailable TradeJournalTransitionInvalid OperationCapabilityMissing OperationToolFiltered BacktestGridTooLarge BacktestBookTooLarge BacktestUnsupportedCorporateAction OperationUnknown OperationRegistrationRefused OperationInputTooLarge OperationDeadlineExceeded OperationCancelled OperationInternal OperationHandleStoreMissing OperationHandleUnknown OperationHandleKindMismatch InputLengthMismatch InputDuplicateEntry McpDeadlineExceeded McpInputTooLarge McpInternalError PostconditionNonFinite:postcondition.non_finite_result McpUnknownTool PipelineDuplicateAlias PipelineLengthMismatch RegistryAliasConflict RegistryDuplicateAliasRow RegistryDuplicateIndicator RegistryUnknownAliasTarget SignalUnknownReference SnapshotInvalidVersion SnapshotKindMismatch SnapshotUnknownKind SnapshotUnsupportedVersion SnapshotWrongShape StrategyDeltaRequired StrategyMultiExpiryExpirationAnalytics StrategyExpiryConflict StrategyStrikeUnavailable VolatilityForwardUnavailable VolatilitySnapshotVersionMismatch EngineProbabilityOutOfRange EngineResultOutOfBounds EngineDiscretizationInadequate ImpliedVolatilityPriceBelowResolvable:implied_volatility.price_below_resolvable RiskIllConditionedCovariance RiskQuantileBeyondSample VolatilityCalibrationFitDeviation VolatilityNegativeVarianceForecast MathIterationLimit BacktestOrderSplitAdjusted InputSuspiciousCouponRate InputSuspiciousYield ModelFellerConditionViolated PricerRequirementUnsatisfied PricerRequirementInvalid PricerObservationInvalid PricerNonconformant ScenarioInstructionUnmatched ScenarioTargetUnsupported ScenarioCellFailed SerializationUnsupportedValue ArtifactMigrationMissing ArtifactDuplicateMigration ArtifactIdMismatch ArtifactTypeMismatch ArtifactFamilyMismatch ArtifactModelVersionUnsupported ArtifactNotReplayable ArtifactReferencedDataMismatch ArtifactEmbeddedInputTooLarge ArtifactOperationUnsupported PortfolioDuplicateEventConflict PortfolioLotUnavailable PortfolioMarkUnavailable PortfolioReversalTargetMissing PortfolioReversalInfeasible',
+  ),
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

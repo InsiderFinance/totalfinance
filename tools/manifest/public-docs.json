@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 240,
+    "surfaces": 242,
     "byClass": {
-      "current-runnable": 92,
-      "future-target": 55,
+      "current-runnable": 93,
+      "future-target": 56,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4603,
-    "checkedUnderTruthfulness": 174,
-    "checkedUnderVocabulary": 55,
-    "shippedNamesWatched": 9730,
+    "executableFences": 4626,
+    "checkedUnderTruthfulness": 175,
+    "checkedUnderVocabulary": 56,
+    "shippedNamesWatched": 9846,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -132,6 +132,13 @@
     },
     {
       "path": "docs/guides/cli.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/guides/community-connectors.md",
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
@@ -317,7 +324,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4331
+      "codeFences": 4354
     },
     {
       "path": "docs/llms.txt",
@@ -594,6 +601,13 @@
     },
     {
       "path": "docs/reviews/community-connectors-c0-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c1-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
