@@ -24,12 +24,17 @@ bars and option-chain research. Broad provider inventories remain possible commu
 - [x] Review correction: retain original bounds/filters on every provider continuation; repeat
       corrected tarball installation and unchanged whole/installed bundle gates. Exact source,
       independent review and artifact receipts are in the implementation record.
-- [ ] Current-head hosted fast/full checks and technical implementation review; no merge authority.
+- [x] C1 exact-head hosted fast/full checks and technical implementation review at `b5c3c83`; no merge authority.
+- [ ] C2: review the [provisional SDK-first addendum](./specs/community-connector-c2-integration.md),
+      settle the primary SDK experience and factory grammar with the coordinator, then approve a
+      decision-complete spec before any C2 implementation. MCP registration remains optional.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
-The feature is in progress; C0 is approved and offline C1 is implemented and locally verified,
-with hosted checks and technical implementation review pending. The prior staging allowance is
+The feature is in progress; C0 is approved and offline C1 source review plus exact-head fast/full
+hosted checks passed. C2 is a provisional spec-only lane on a separate branch; no C2 implementation
+or connected-agent acceptance is claimed. C1 receipt links and review history remain in the Ri task
+and C1 record; this addendum does not alter reviewed PR26. The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment
 and live execution remain outside scope. The full post-PR-25 main run
