@@ -36,7 +36,7 @@ export function dataViewOf(page: DataPage<PriceBarRecord | OptionChainResearchRe
                 const { open, high, low, close, volume } = row.bar;
                 if (volume === undefined)
                   throw new InputError(
-                    'data view: volume is required for OHLCV input; select known closePrices or supply actual volume.',
+                    'ohlcvBars: volume is required for OHLCV input; select known closePrices or supply actual volume.',
                     {
                       code: ErrorCode.InputMissingField,
                       context: { field: 'volume', index },
