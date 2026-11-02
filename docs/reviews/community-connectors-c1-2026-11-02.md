@@ -1,6 +1,6 @@
 # Community connector offline C1 implementation — 2026-11-02
 
-Status: offline C1.1–C1.4 review corrections are being finalized; feature remains in progress pending
+Status: offline C1.1–C1.4 and review corrections are locally verified; feature remains in progress pending
 hosted checks, technical implementation review and later connected acceptance. This record is updated from actual
 receipts; unchecked live/agent/App acceptance is not certified by offline checks.
 
@@ -254,3 +254,34 @@ Final local correction receipts so far:
 The earlier tarball hashes and local commits above are historical snapshots. Corrected clean-consumer
 artifacts and exact final hosted head/run results are recorded in the follow-up handoff. No hosted
 success is inferred from these local checks; the PR stays draft and no merge is authorized.
+
+## Corrected artifact handoff
+
+SDK correction source: `acb300b10ac78f496c5366a550d34cf57db8baae`.
+Provider continuation source: `bfd0da0` (full hash in the external repository); provider lock/receipt
+head: `c492d2d15a1aeeb0ba2104fe55066d017bf66474`. The provider is clean, private/local-only and still has no remote.
+
+| Corrected local artifact                                              | SHA-256                                                            |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| provider repository `.sdk/totalfinance.tgz`                           | `131ae7635f20d421ffd9d10739bac4ab248479c1f5f019a9dc9febc123443ec2` |
+| `.sdk/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz` | `9783eff12962b903f6ae7b856187b8eecaef4684a1c5c7d635badc00cebdb2f8` |
+
+Original artifact snapshots remain under ignored `.sdk/receipts/`; the development lock now pins
+the corrected SDK tarball. Fresh provider frozen install, build, typecheck and **63/63 local tests**
+pass. `tools/community-connectors-provider-smoke.ts` repeated the clean two-tarball install and frozen
+install, then all **63 installed tests**, actual public fixture/HTTP corpus, SMA101.5/missing-market
+refusal, NodeNext/Bundler/ESM and provider-free browser checks passed. Receipt:
+`/tmp/totalfinance-community-corrected-consumer-receipt.json`. No real-data acceptance is claimed.
+
+The final documentation/reference run adds README/llms checks: **84 tests / 4 files** pass.
+Across the named correction runs, after removing overlapping files/tests, **572 distinct SDK tests
+across 25 files** pass. This includes permanent exact helpers (23 cases), the independent 14,520-pair
+matrix corpus, all original whole/installed byte gates and guard-only registry retention. Build,
+types, all 25 API reports, scoped lint/format and diff checks pass. The WarningCode JSDoc was kept
+on its public declaration; final build/public reference and llms output were refreshed accordingly.
+This is focused verification, not a full local CI/coverage repeat.
+
+The source and this receipt will be pushed to draft [PR #26](https://github.com/InsiderFinance/totalfinance/pull/26).
+The final receipt head requires fresh **fast and full hosted** checks; the earlier failed head is not
+an acceptance receipt. Exact final run IDs/head/results are retained in the PR and Ri outcome after
+push. Final implementation review remains open, and no merge, release or connected action is authorized.

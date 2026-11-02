@@ -21,6 +21,9 @@ bars and option-chain research. Broad provider inventories remain possible commu
 - [x] C1.1–C1.4 offline: implement the narrow contract, fixture/shared kit and independent provider;
       prove packed installation against the public SDK and synthetic HTTP mappings. See the
       [implementation receipts](./reviews/community-connectors-c1-2026-11-02.md).
+- [x] Review correction: retain original bounds/filters on every provider continuation; repeat
+      corrected tarball installation and unchanged whole/installed bundle gates. Exact source,
+      independent review and artifact receipts are in the implementation record.
 - [ ] Current-head hosted fast/full checks and technical implementation review; no merge authority.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
