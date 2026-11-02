@@ -43,8 +43,8 @@ shared checkouts and linked application source remain untouched.
 Node **22.23.2**, pnpm **10.32.0**. Frozen installs, build, TypeScript, scoped ESLint/Prettier and
 all 25 API reports pass. No dependency graph or release version changes in the SDK.
 
-- **540 distinct SDK tests across 20 files**, counting the corrected naming tracker rerun
-  once: 313 focused/source/generated/docs/bundle tests and 227 packed SDK/fixture tests.
+- **546 distinct SDK tests across 21 files**, counting the corrected naming tracker rerun
+  once: 319 focused/source/generated/docs/bundle tests and 227 packed SDK/fixture tests.
 - **83/83 provider tests locally and all 83 again through a fresh installed package**, none skipped.
 - Exact two-import, API-key-only example runs with independently supplied synthetic HTTP facts;
   closes `[100,101,102]` give last period-2 SMA **101.5**, with original partial quality/null source
@@ -64,7 +64,7 @@ pnpm install --frozen-lockfile
 pnpm build
 pnpm typecheck
 pnpm api:check
-pnpm exec vitest run packages/core/test/data.test.ts packages/core/test/data-view.test.ts packages/core/test/data-conformance.test.ts tools/first-touch/fixtures/core-data.test.ts tools/first-touch/unknown-keys.test.ts tools/bundle-size/budgets.test.ts tools/bundle-size/public-artifacts.test.ts tools/bundle-size/consumer-measure.test.ts tools/bundle-size-doc.test.ts tools/manifest/contract-conformance.test.ts tools/manifest/fixture-validation.test.ts tools/manifest/naming-conformance.test.ts tools/manifest/signature-conformance.test.ts tools/manifest/signature-fixture-conformance.test.ts tools/manifest/public-text-naming.test.ts tools/docs-conformance.test.ts tools/public-reference.test.ts tools/review-repair-doc-conformance.test.ts
+pnpm exec vitest run packages/core/test/data.test.ts packages/core/test/data-view.test.ts packages/core/test/data-conformance.test.ts tools/first-touch/fixtures/core-data.test.ts tools/first-touch/unknown-keys.test.ts tools/bundle-size/budgets.test.ts tools/bundle-size/public-artifacts.test.ts tools/bundle-size/consumer-measure.test.ts tools/bundle-size-doc.test.ts tools/manifest/contract-conformance.test.ts tools/manifest/fixture-validation.test.ts tools/manifest/naming-conformance.test.ts tools/manifest/signature-conformance.test.ts tools/manifest/signature-fixture-conformance.test.ts tools/manifest/public-text-naming.test.ts tools/docs-conformance.test.ts tools/public-reference.test.ts tools/review-repair-doc-conformance.test.ts tools/codes-conformance.test.ts
 pnpm exec vitest run tools/packed-consumer.test.ts tools/community-connectors-consumer.test.ts
 # Provider worktree:
 pnpm install --frozen-lockfile
@@ -82,7 +82,7 @@ workspace aliases or registry SDK compatibility are assumed. Installed rehearsal
 pnpm exec tsx tools/community-connectors-provider-smoke.ts /Users/agent/ri/.work/worktrees/totalfinance-insiderfinance-connector/connector-c2-view/.sdk/totalfinance.tgz /Users/agent/ri/.work/worktrees/totalfinance-insiderfinance-connector/connector-c2-view/.sdk/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz /Users/agent/ri/.work/worktrees/totalfinance-insiderfinance-connector/connector-c2-view/test /tmp/totalfinance-community-c2-final-consumer-receipt.json
 ```
 
-| Locally tested artifact                                                        | SHA-256                                                            |
+| Initial locally tested artifact                                                | SHA-256                                                            |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
 | SDK `.sdk/totalfinance.tgz`                                                    | `a705cdfdf966444f42b4a2afd31ca4cab6104f98c29262eba1ed4196f2a4995f` |
 | Provider `.sdk/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz` | `442ae93eeee5f48284918f83c4f16ac9b9ca5cb99ebeceaec650da1074ba5b9e` |
@@ -116,6 +116,25 @@ synchronized to the same generated counts, preserving historical C1 receipts. Al
 tests now pass. Only documentation changed; runtime and tarball hashes above remain unchanged.
 Superseded hosted runs41540439997/41540496471 are not passing receipts. Fresh fast/full runs are
 required at the correction head.
+
+The correction head18b38cf then exposed the existing code-hygiene check: the strict-volume
+error started with “data view” instead of naming the selection. Source correction
+`7daa6cde1ff8726a1d59bb085319adf55414bb7e` changes only that prefix to `ohlcvBars`. The6 code
+conformance tests and62 view/kit tests pass. Ordered generation was repeated after final source
+and yielded no derived changes. All226 packed consumers, the installed fixture and33 unchanged
+whole-entrypoint gates pass again (266 tests with code hygiene). Neither failed hosted head
+is accepted. No test or budget was loosened.
+
+The updated SDK was rebuilt/repacked; provider lock/receipt commit
+`075d5951d096828fd8eef01e40d8361359281eca` pins it. Provider source/binary remains47c2883. Frozen
+provider install/build/types/83 tests and all83 fresh installed tests pass again, including the
+exact primary example, shared corpus, NodeNext/Bundler/ESM and provider-free browser proof.
+The initial table above is historical; the current files at the same C2 paths have these hashes:
+
+| Current artifact                                                               | SHA-256                                                            |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| SDK `.sdk/totalfinance.tgz`                                                    | `23193bf720db33cd9ac1780a3f9525e81d021b99f260223ae1d65d883d22d5bf` |
+| Provider `.sdk/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz` | `442ae93eeee5f48284918f83c4f16ac9b9ca5cb99ebeceaec650da1074ba5b9e` |
 
 This is focused verification, not a claim of full local CI or another coverage run.
 
