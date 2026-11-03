@@ -16173,13 +16173,13 @@
     "unnameableUnreachable": 0,
     "unnameableForeign": 8,
     "byGuardReachability": {
-      "none": 1185,
+      "none": 1192,
       "no-implementation": 962,
-      "ambiguous": 346,
+      "ambiguous": 339,
       "direct": 2918,
       "delegated": 2557
     },
-    "ambiguousReachability": 346,
+    "ambiguousReachability": 339,
     "byBoundaryKind": {
       "entry-point": 6375,
       "callback-contract": 962,
@@ -437109,7 +437109,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:T | null",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#child",
@@ -437201,7 +437201,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:boolean",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#integer",
@@ -437547,7 +437547,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:number | undefined",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#optionalNumbers",
@@ -437576,7 +437576,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<number> | undefined",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#record",
@@ -502640,7 +502640,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:boolean",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:heikinAshi",
@@ -706989,7 +706989,10 @@
         "DataProvider.id",
         "DataProvider.version"
       ],
-      "via": ["providerShape", "object"]
+      "via": ["providerShape", "object"],
+      "inputPolicies": {
+        "0": "open"
+      }
     },
     {
       "id": "totalfinance:connorsRsi",
@@ -741405,7 +741408,10 @@
         "DataProvider.id",
         "DataProvider.version"
       ],
-      "via": ["providerShape", "object"]
+      "via": ["providerShape", "object"],
+      "inputPolicies": {
+        "0": "open"
+      }
     },
     {
       "id": "totalfinance:data.createPriceBarsWindowView",
@@ -911022,7 +911028,7 @@
       "inputContract": null,
       "resultContract": "totalfinance:boolean",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:hedgeRatio",
@@ -1219530,7 +1219536,7 @@
       "inputContract": null,
       "resultContract": "totalfinance:boolean",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:technicalAnalysis.heikinAshi",

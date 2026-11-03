@@ -343,29 +343,29 @@ warning removal or weaker structural gate to make it pass. No budget is edited b
 ## Synthetic acceptance and review exit gate
 
 - [x] Technical review approved at f6c99cf by request3fa03c0a, with Proxy/selector precision above.
-- [ ] Fresh installed SDK/provider packs execute the **exact primary root-import/key/connect/window/
+- [x] Fresh installed SDK/provider packs execute the **exact primary root-import/key/connect/window/
       period-20 SMA file above**, using independent synthetic 30-close one-page and multipage HTTP
       facts within the explicit dates, with a hand-calculated last SMA. Inject fake native fetch
       outside that file; test-only synthetic environment key, no real secret/environment inspection.
-- [ ] A separate period-2 three-row [100,101,102] case proves 101.5; same existing SMA.explain and VWAP
+- [x] A separate period-2 three-row [100,101,102] case proves 101.5; same existing SMA.explain and VWAP
       results as independent ordinary arrays. Second fixture provider changes only factory/binding,
       not the data/calculation path. No projection import, mapping glue or server prerequisite.
-- [ ] All existing shared conformance, original continuation bounds/nextFrom/filter/pin and provider
+- [x] All existing shared conformance, original continuation bounds/nextFrom/filter/pin and provider
       error/cancellation cases pass. New one-defect raw/view/selected-array mutants fail specifically;
       kit sees actual outputs and never reconstructs a lie. Independent expected full pages survive.
-- [ ] One/multiple/empty/short terminal windows succeed; nonterminal at page/record ceiling refuses
+- [x] One/multiple/empty/short terminal windows succeed; nonterminal at page/record ceiling refuses
       with exact call counts and no extra call. Terminal exactly at ceilings succeeds. Capability
       discovery cost, explicit override refusal/clamping rules, smaller remaining-record limit,
       cursor cycle/nonadvance, later out-of-bound row, changed adjustment/dataset/pin and order/
       duplicate identities each have independently targeted failing-then-passing regressions.
-- [ ] Pre/in-flight/body/between-page abort and deadline-signal rejection, late-result suppression,
+- [x] Pre/in-flight/body/between-page abort and deadline-signal rejection, late-result suppression,
       listener cleanup, redacted serialization and typed access/allowance/service errors. No retry,
       implicit fetch from getters, silent partial success or incomplete-window result exposed.
-- [ ] Every page's provenance/diagnostics/null clocks/coverage/quality/adjustment remains exact after
+- [x] Every page's provenance/diagnostics/null clocks/coverage/quality/adjustment remains exact after
       collection and canonical persist/restore. Missing first/later volume blocks OHLCV only; zero/
       gaps/partial quality/empty inputs preserve field-specific C2 laws. JSON enumeration calls no
       getters; immutable native arrays and restore/source correspondence pass independent mutants.
-- [ ] Public TypeScript nameability, generics/narrowing/readonly inputs, JS first-touch misuse,
+- [x] Public TypeScript nameability, generics/narrowing/readonly inputs, JS first-touch misuse,
       curated exports/assembler/API/generated/packed consumers and all unaffected bundle ceilings
       pass. Any measured whole-root change has a separate concrete technical review receipt.
 - [ ] Exact final source/artifact hashes, local receipts and new fast/full hosted results recorded;
@@ -379,7 +379,7 @@ proof. Live staging/new allowance, agent glue, paper journey and App remain late
 No staging/secrets/allowance/key/grant/account/paper operations, API-server edits, remote provider
 repository, merge, release/version/publication/deployment, recurring automation or live execution.
 
-## Current implementation checkpoint
+## Historical initial implementation checkpoint
 
 Bounded offline source is implemented and partially verified under approval3fa03c0a. See the
 [measured budget proposal](../reviews/community-connectors-c3-budget-2026-11-02.md) before continuing:
@@ -401,7 +401,26 @@ are `/tmp/tf-c3-coordinator-measurements.json`, `/tmp/tf-c3-coordinator-source-t
 review. Public-door teaching correction retains shared validators/codes/context and is covered by
 an invalid-date JavaScript failing-then-passing regression before provider invocation.
 
-Final-source remeasurement checkpoint: two new installed Rollup cases fail11008B caps at13087/13117B.
+Historical final-source remeasurement checkpoint: two new installed Rollup cases fail11008B caps at13087/13117B.
 All34 whole gates pass; other new data gates pass. The [current source/evidence record](../reviews/community-connectors-c3-2026-11-02.md)
 preserves the required teaching correction and verified40k storage fix. Stop for the explicit
 technical review required by e2fef6ff; no further cap edit or completed implementation claim.
+
+## Final-cap review: narrow local teaching boundary
+
+Coordinator request `a7b9b455-1245-85bd-a12e-ed5a2d99f7cb` identified the broad asynchronous
+priceBars try/catch as the avoidable Rollup retention cause. Removing only the message rewrite
+was insufficient. The independent copied-artifact experiment measured named/root Rollup
+10895/10914B with the catch scoped to local argument/control validation, preserving the public
+priceBars teaching prefix and zero provider calls on malformed dates. Those experiments are
+historical diagnostics, not final generated/artifact acceptance. No further cap increase is
+approved or applied. Source now scopes teaching catches to local request/control validation and
+the discovered pageSize check; acquisition/provider failures retain their typed safe boundary.
+The 40k canonical restoration regression and unchanged individual-page/hard limits remain.
+Final focused window/conformance/whole-budget verification passes130 tests; final packed,
+generated/public and hosted receipts remain pending at this checkpoint.
+
+Final narrow-catch source/installed measurements fit every approved cap. Ordered generation now
+reports zero measured defects. See the [active implementation record](../reviews/community-connectors-c3-2026-11-02.md)
+for exact source/packed receipts and pending final hosted acceptance; earlier stops above record
+review history and have been resolved by requesta7b9b455. Feature remains in progress.

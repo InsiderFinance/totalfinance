@@ -2822,8 +2822,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5463,
-    "enforced": 2574,
+    "candidates": 5466,
+    "enforced": 2577,
     "defective": 0,
     "partial": 2702,
     "unmeasured": 187,
@@ -2850,26 +2850,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2778,
-      "null-when-nonnullable": 26403,
-      "omit-required": 13461,
-      "wrong-type": 17118,
-      "non-finite": 9488,
+      "unknown-key": 2779,
+      "null-when-nonnullable": 26408,
+      "omit-required": 13466,
+      "wrong-type": 17121,
+      "non-finite": 9489,
       "optional-wrong-type": 8043,
-      "invalid-literal": 1960,
+      "invalid-literal": 1961,
       "empty-series": 914,
       "non-finite-element": 842,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6608,
-      "null-when-nonnullable": 66365,
-      "omit-required": 34328,
-      "wrong-type": 43763,
-      "non-finite": 24731,
+      "unknown-key": 6611,
+      "null-when-nonnullable": 66380,
+      "omit-required": 34343,
+      "wrong-type": 43772,
+      "non-finite": 24734,
       "optional-wrong-type": 19196,
-      "invalid-literal": 5024,
+      "invalid-literal": 5027,
       "empty-series": 2414,
       "non-finite-element": 2176,
       "wrong-element-type": 1176,
@@ -2877,7 +2877,7 @@
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3083,
+    "inherited": 3085,
     "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
       "no-input": 1763,
@@ -2890,8 +2890,8 @@
     },
     "receiverGroupingGaps": 76,
     "alternatives": {
-      "total": 13193,
-      "enforced": 3955,
+      "total": 13196,
+      "enforced": 3958,
       "partial": 2517,
       "defective": 0,
       "unmeasured": 6721,
@@ -14949,7 +14949,7 @@
       "implementation": "packages/core/dist/facade.d.ts#assertFiniteResult",
       "verdict": "unmeasured",
       "unmeasuredReason": "no-input",
-      "guardReachability": "ambiguous",
+      "guardReachability": "none",
       "alternatives": [
         {
           "id": "arg1.assumptions.compounding:absent",
@@ -15075,6 +15075,33 @@
         "non-finite": 4
       },
       "fixtureSource": "@totalfinance/core:compareCalculationArtifacts"
+    },
+    {
+      "id": "@totalfinance/core:connect",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
+        "invalid-literal": 1,
+        "wrong-type": 3,
+        "non-finite": 1
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
+        "invalid-literal": 1,
+        "wrong-type": 3,
+        "non-finite": 1
+      },
+      "inputPolicies": {
+        "0": "open"
+      },
+      "fixtureSource": "@totalfinance/core:connect"
     },
     {
       "id": "@totalfinance/core:createAnalysisArtifact",
@@ -38281,7 +38308,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#determinant",
       "verdict": "partial",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -38843,7 +38870,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#luDecompose",
       "verdict": "partial",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -38982,7 +39009,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#matrixMultiply",
       "verdict": "partial",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 2,
@@ -40365,7 +40392,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#transpose",
       "verdict": "partial",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -77207,7 +77234,7 @@
       "implementation": "packages/technical-analysis/dist/framework.d.ts#SnapshotState.literal",
       "verdict": "unmeasured",
       "unmeasuredReason": "external-callback-contract",
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#literals",
@@ -77215,7 +77242,7 @@
       "implementation": "packages/technical-analysis/dist/framework.d.ts#SnapshotState.literals",
       "verdict": "unmeasured",
       "unmeasuredReason": "external-callback-contract",
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SqueezeCore#update",
@@ -126562,7 +126589,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:assertFiniteResult",
       "inheritedFrom": "@totalfinance/core:assertFiniteResult",
-      "guardReachability": "ambiguous",
+      "guardReachability": "none",
       "unmeasuredReason": "no-input",
       "alternatives": [
         {
@@ -140554,6 +140581,27 @@
       "fixtureSource": "@totalfinance/risk:conditionalValueAtRiskOptimize"
     },
     {
+      "id": "totalfinance:connect",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/core:connect",
+      "inheritedFrom": "@totalfinance/core:connect",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
+        "invalid-literal": 1,
+        "wrong-type": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/core:connect",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    {
       "id": "totalfinance:connorsRsi",
       "package": "totalfinance",
       "implementation": "packages/technical-analysis/dist/oscillators.d.ts#connorsRsi",
@@ -141134,7 +141182,7 @@
       "verdict": "unmeasured",
       "measurementSource": "@totalfinance/core:assertFiniteResult",
       "inheritedFrom": "@totalfinance/core:assertFiniteResult",
-      "guardReachability": "ambiguous",
+      "guardReachability": "none",
       "unmeasuredReason": "no-input",
       "alternatives": [
         {
@@ -149554,6 +149602,27 @@
       "fixtureSource": "@totalfinance/technical-analysis:cvd"
     },
     {
+      "id": "totalfinance:data.connect",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "verdict": "enforced",
+      "measurementSource": "@totalfinance/core:connect",
+      "inheritedFrom": "@totalfinance/core:connect",
+      "guardReachability": "delegated",
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 5,
+        "invalid-literal": 1,
+        "wrong-type": 3,
+        "non-finite": 1
+      },
+      "fixtureSource": "@totalfinance/core:connect",
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    {
       "id": "totalfinance:datedInternalRateOfReturn",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/solvers.d.ts#datedInternalRateOfReturn",
@@ -150374,7 +150443,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -181286,7 +181355,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -182258,7 +182327,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -182729,7 +182798,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -182842,7 +182911,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -184043,7 +184112,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -184342,7 +184411,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -259683,7 +259752,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "advisory": [
         {
           "mutation": "empty-series",

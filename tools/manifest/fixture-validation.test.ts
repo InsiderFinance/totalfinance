@@ -187,7 +187,8 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // 1316 → 1317 (PL, 2026-10-12): the reference-price conversion fixture joins its two-method contract.
     // PL6 adds 16 named price-level fixtures, one per direction and pair (1317 → 1333).
     // Community connector wrapper/kit add two fixtures; C2 raw-page restoration adds one (1333 → 1336).
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1336);
+    // C3 connect/window restoration add two independently valid public fixtures (1336 → 1338).
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1338);
   });
 
   it('every matched fixture can be BUILT', () => {

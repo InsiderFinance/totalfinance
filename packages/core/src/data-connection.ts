@@ -164,104 +164,110 @@ export function connect(provider: DataProvider, options?: DataConnectionOptions)
       input: PriceBarsWindowRequest,
       options?: PriceBarsWindowOptions,
     ): Promise<PriceBarsWindowView> {
+      let call: ReturnType<typeof limits>;
+      let original: ReturnType<typeof windowRequest>;
+      const signal = options?.signal;
       try {
-        const call = limits(options, host.values, host.values, true);
-        const signal = options?.signal;
+        call = limits(options, host.values, host.values, true);
         signalField(signal);
-        const original = windowRequest(input, call.values.pageSize);
-        aborted(signal);
-        const declared = await capabilities(signal ? { signal } : undefined);
-        const capability = declared.capabilities.find(
-          (c) => c.kind === 'price-bars' && c.intervals.includes(original.interval),
-        );
-        if (!capability)
-          throw new UnsupportedError(
-            'priceBars: requested interval is not supported by this provider.',
-            { code: ErrorCode.DataUnsupportedCapability, context: { provider: id } },
-          );
-        if (capability.access === 'denied')
-          throw new DataError('priceBars: provider entitlement is required.', {
-            code: ErrorCode.DataEntitlementRequired,
-            context: { provider: id },
-          });
-        const pageSize =
-          host.explicitPageSize || call.explicitPageSize
-            ? call.values.pageSize
-            : Math.min(call.values.pageSize, capability.maxPageSize);
-        numberField(pageSize, 'pageSize', 1, capability.maxPageSize, true);
-        const pages: DataPage<PriceBarRecord>[] = [],
-          views: PriceBarsView[] = [];
-        const sequence = dataSequence();
-        let records = 0,
-          cursor: string | null = null;
-        do {
-          aborted(signal);
-          const limit =
-            pages.length >= call.values.maxPages
-              ? 'maxPages'
-              : records >= call.values.maxRecords
-                ? 'maxRecords'
-                : null;
-          if (limit)
-            throw new DataError(
-              'priceBars: terminal pagination exceeds the configured work budget; use explicit one-page query for manual control.',
-              {
-                code: ErrorCode.DataWindowBudgetExceeded,
-                context: {
-                  provider: id,
-                  kind: 'price-bars',
-                  limit,
-                  pageCalls: pages.length,
-                  records,
-                  maxPages: call.values.maxPages,
-                  maxRecords: call.values.maxRecords,
-                  retryable: false,
-                },
-              },
-            );
-          const count = Math.min(pageSize, call.values.maxRecords - records);
-          const request = pages.length
-            ? {
-                kind: 'price-bars' as const,
-                symbol: original.symbol,
-                cursor: cursor!,
-                limit: count,
-              }
-            : { ...original, limit: count };
-          const view = (await one(request, signal ? { signal } : undefined)) as PriceBarsView;
-          responseData(() => {
-            pageData(view.page, { ...original, limit: count }, identity);
-            if (view.page.metadata.consistency !== capability.consistency) invalidView();
-            sequence(view.page);
-          }, id);
-          pages.push(view.page);
-          views.push(view);
-          records += view.page.data.length;
-          cursor = view.page.nextCursor;
-        } while (cursor !== null);
-        aborted(signal);
-        const request: PriceBarsWindowRequest = Object.freeze({
-          symbol: original.symbol,
-          interval: original.interval,
-          from: original.from,
-          to: original.to,
-        });
-        const window: PriceBarsWindow = Object.freeze({
-          version: 1,
-          kind: 'price-bars-window',
-          request,
-          pages: Object.freeze(pages),
-          pagination: Object.freeze({
-            status: 'terminal',
-            pageSize,
-            pageCalls: pages.length,
-            records,
-          }),
-        });
-        return windowView(window, views);
+        original = windowRequest(input, call.values.pageSize);
       } catch (error) {
         doorError(error, 'priceBars');
       }
+      aborted(signal);
+      const declared = await capabilities(signal ? { signal } : undefined);
+      const capability = declared.capabilities.find(
+        (c) => c.kind === 'price-bars' && c.intervals.includes(original.interval),
+      );
+      if (!capability)
+        throw new UnsupportedError(
+          'priceBars: requested interval is not supported by this provider.',
+          { code: ErrorCode.DataUnsupportedCapability, context: { provider: id } },
+        );
+      if (capability.access === 'denied')
+        throw new DataError('priceBars: provider entitlement is required.', {
+          code: ErrorCode.DataEntitlementRequired,
+          context: { provider: id },
+        });
+      const pageSize =
+        host.explicitPageSize || call.explicitPageSize
+          ? call.values.pageSize
+          : Math.min(call.values.pageSize, capability.maxPageSize);
+      try {
+        numberField(pageSize, 'pageSize', 1, capability.maxPageSize, true);
+      } catch (error) {
+        doorError(error, 'priceBars');
+      }
+      const pages: DataPage<PriceBarRecord>[] = [],
+        views: PriceBarsView[] = [];
+      const sequence = dataSequence();
+      let records = 0,
+        cursor: string | null = null;
+      do {
+        aborted(signal);
+        const limit =
+          pages.length >= call.values.maxPages
+            ? 'maxPages'
+            : records >= call.values.maxRecords
+              ? 'maxRecords'
+              : null;
+        if (limit)
+          throw new DataError(
+            'priceBars: terminal pagination exceeds the configured work budget; use explicit one-page query for manual control.',
+            {
+              code: ErrorCode.DataWindowBudgetExceeded,
+              context: {
+                provider: id,
+                kind: 'price-bars',
+                limit,
+                pageCalls: pages.length,
+                records,
+                maxPages: call.values.maxPages,
+                maxRecords: call.values.maxRecords,
+                retryable: false,
+              },
+            },
+          );
+        const count = Math.min(pageSize, call.values.maxRecords - records);
+        const request = pages.length
+          ? {
+              kind: 'price-bars' as const,
+              symbol: original.symbol,
+              cursor: cursor!,
+              limit: count,
+            }
+          : { ...original, limit: count };
+        const view = (await one(request, signal ? { signal } : undefined)) as PriceBarsView;
+        responseData(() => {
+          pageData(view.page, { ...original, limit: count }, identity);
+          if (view.page.metadata.consistency !== capability.consistency) invalidView();
+          sequence(view.page);
+        }, id);
+        pages.push(view.page);
+        views.push(view);
+        records += view.page.data.length;
+        cursor = view.page.nextCursor;
+      } while (cursor !== null);
+      aborted(signal);
+      const request: PriceBarsWindowRequest = Object.freeze({
+        symbol: original.symbol,
+        interval: original.interval,
+        from: original.from,
+        to: original.to,
+      });
+      const window: PriceBarsWindow = Object.freeze({
+        version: 1,
+        kind: 'price-bars-window',
+        request,
+        pages: Object.freeze(pages),
+        pagination: Object.freeze({
+          status: 'terminal',
+          pageSize,
+          pageCalls: pages.length,
+          records,
+        }),
+      });
+      return windowView(window, views);
     },
   });
 }

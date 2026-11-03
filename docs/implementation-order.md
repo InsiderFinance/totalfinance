@@ -463,8 +463,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,656 public naming identities are walked and 0 are unresolved; 39,470 are `explicit`,
-4,024 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,736 public naming identities are walked and 0 are unresolved; 39,545 are `explicit`,
+4,029 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;
@@ -862,3 +862,17 @@ still exceed their approved11008B ceiling (13087/13117B); all other new data bud
 See [the current verification record](./reviews/community-connectors-c3-2026-11-02.md). Work stops
 at requeste2fef6ff's explicit cap-failure review point: no further cap increase, shared optimization,
 PR push or hosted acceptance. Ordered generation remains incomplete, feature in progress.
+
+## Final-cap review: narrow local teaching boundary
+
+Coordinator request `a7b9b455-1245-85bd-a12e-ed5a2d99f7cb` identified the broad asynchronous
+priceBars try/catch as the avoidable Rollup retention cause. Removing only the message rewrite
+was insufficient. The independent copied-artifact experiment measured named/root Rollup
+10895/10914B with the catch scoped to local argument/control validation, preserving the public
+priceBars teaching prefix and zero provider calls on malformed dates. Those experiments are
+historical diagnostics, not final generated/artifact acceptance. No further cap increase is
+approved or applied. Source now scopes teaching catches to local request/control validation and
+the discovered pageSize check; acquisition/provider failures retain their typed safe boundary.
+The 40k canonical restoration regression and unchanged individual-page/hard limits remain.
+Final focused window/conformance/whole-budget verification passes130 tests; final packed,
+generated/public and hosted receipts remain pending at this checkpoint.

@@ -163,6 +163,7 @@
     "packages/technical-analysis/src/volatility.ts",
     "packages/technical-analysis/src/volume.ts",
     "packages/technical-analysis/src/warmup.ts",
+    "packages/totalfinance/src/data.ts",
     "packages/totalfinance/src/index.ts",
     "packages/valuation/src/cash-flows.ts",
     "packages/valuation/src/corporate.ts",

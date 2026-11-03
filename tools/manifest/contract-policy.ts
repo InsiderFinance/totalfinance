@@ -307,6 +307,9 @@ export const BOUNDARY_INPUT_POLICIES: Readonly<Record<string, Record<string, str
   '@totalfinance/core:defineDataProvider': { '0': 'open' },
   // C3 binds the same open structural provider artifact; financial requests/options stay closed.
   '@totalfinance/core:connect': { '0': 'open' },
+  // The curated /data door and root namespace delegate the identical provider-artifact boundary.
+  'totalfinance:connect': { '0': 'open' },
+  'totalfinance:data.connect': { '0': 'open' },
   // A Calendar ARTIFACT flows in and its decoration flows OUT BY DESIGN: the implementation
   // spreads the instance (`{ ...base, isTradingDay }`), so a decorated calendar keeps its
   // decoration — that is the open-artifact promise kept in both directions, not a Law-12 gap.

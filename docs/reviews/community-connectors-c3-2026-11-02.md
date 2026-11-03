@@ -104,3 +104,73 @@ The documentation gate initially flags the host-owned INSIDERFINANCE_API_KEY nam
 approved example. An exact path/owner/access-position/line disposition documents that environment
 read and a permanent control rejects the same name as an SDK field or declaration. No broad file
 allowlist or scanner change. The example remains the exact approved file; no secret was read.
+
+## Final-cap review: narrow local teaching boundary
+
+Coordinator request `a7b9b455-1245-85bd-a12e-ed5a2d99f7cb` identified the broad asynchronous
+priceBars try/catch as the avoidable Rollup retention cause. Removing only the message rewrite
+was insufficient. The independent copied-artifact experiment measured named/root Rollup
+10895/10914B with the catch scoped to local argument/control validation, preserving the public
+priceBars teaching prefix and zero provider calls on malformed dates. Those experiments are
+historical diagnostics, not final generated/artifact acceptance. No further cap increase is
+approved or applied. Source now scopes teaching catches to local request/control validation and
+the discovered pageSize check; acquisition/provider failures retain their typed safe boundary.
+The 40k canonical restoration regression and unchanged individual-page/hard limits remain.
+Final focused window/conformance/whole-budget verification passes130 tests; final packed,
+generated/public and hosted receipts remain pending at this checkpoint.
+
+## Final source and installed verification after the narrow correction
+
+The local-only teaching catch now covers request/control validation and explicit pageSize against
+capability support. It no longer surrounds discovery, async acquisition or provider errors. Final
+source whole-root gzip is719201B (cap719872B); /data13589B (cap13824B). Repeated measurements
+retain identical module graphs and bytes. The approved three taxonomy-only gates remain
+7570/5007/8981B under7584/5024/8992B. All other caps remain unchanged.
+
+Fresh actual installed data gates measure named connect13055/10895B, root data.connect13701/10914B,
+and restoration11901/11914B (esbuild/Rollup respectively); every value fits its approved cap. No
+Rollup option, registry/helper optimization or further budget increase was used. The old failure
+and the coordinator's independent narrow-catch diagnosis above remain historical evidence.
+
+Ordered signature/naming/contract/enforcement/validation/API/README/llms/public-reference/bundle/
+OpenAPI/docs generation completed. Final inventories have7968 public callables,2729 implementations,
+1596 input and1973 result contracts,385 validator identities,43736 naming identities and zero
+unresolved. Enforcement is2577 enforced,2702 partial,0 defective,187 unmeasured of5466 candidates.
+The two initial alias-policy defects were the same open structural-provider argument as core connect;
+exact boundary dispositions now agree across /data/root, leaving financial controls closed. The
+fixture-contract join is1338 (two new C3 fixtures). Live tracker counters were refreshed from the
+artifacts. New /data source-test aliases and an exact curated root namespace assertion preserve
+all existing domain/flat-hoist laws, while permitting only the technically approved C3 namespace.
+
+Final integrated source/generated/public-reference/fixture/bundle suite:254 tests/13files pass.
+Final public contract/naming/manifest/fixture/garbage-input sweep:1303 tests/5files pass. Earlier
+signature/first-touch/method/unknown-key checks also passed; overlapping totals are not added.
+The first packed attempt accidentally overlapped distribution assembly and packed missing files;
+that invalid verification run was discarded and packing repeated after generation completed.
+
+Fresh SDK tarball /tmp/tf-c3-final-pack/insiderfinance-totalfinance-0.1.2.tgz SHA256
+1eb908c7688a0bd5c046198147e6882fe4282fcc68945d46a4f1ffe409c14013.
+Provider C3 branch connector/sdk-c3-connection, source c11b840, changes only README and exact
+local SDK lock integrity; provider runtime is unchanged from reviewed C2. Frozen offline install,
+build/typecheck and83 local cases pass. Packed provider SHA256
+51860218af5ba921cb1af19cd1b049f03b516dd8a84c947fc2e161bb364bae21.
+
+The exact approved root/key/connect/priceBars/period20 SMA example executes unchanged against
+fresh installed packs and independent synthetic30-close facts:119.5 on both1page and3pages.
+NodeNext/Bundler and namespace identity/no flat connect pass. Clean installed provider rehearsal
+passes83/83, shared public fixture plus HTTP daily/minute/chain corpus, period2 SMA101.5,
+source retention, missing financial input refusal, ESM and provider-free browser compute. The
+separate freshly installed SDK public fixture proves SMA.explain/VWAP parity on literal arrays. Receipts /tmp/tf-c3-final-connected-consumer.json and
+/tmp/tf-c3-final-provider-consumer.json; repeated baseline/candidate graph receipt
+/tmp/tf-c3-final-source-measurements.json. Local tarball compatibility only: the registry0.1.2
+release lacks these new exports. SDK/provider version numbers were not changed.
+
+Final full232 packed suite, final static checks and fresh exact-head hosted fast/full results are
+still pending at this source checkpoint. PR26 remains draft; no merge or connected/live acceptance.
+
+Final local closure: all232 packed cases pass (including six new data cases plus existing
+whole/installed/guard/browser laws). The final public sweep is1303 cases/5files, with the exact
+new consumer namespace allowed and its two runtime exports checked; no flat connect is permitted.
+API reports25/25, typecheck, scoped lint/format and git diff checks pass. Documentation generation
+and its25 permanent conformance cases pass. Only hosted exact-head fast/full and final review
+remain; local full CI, coverage repeat and clean regen:check were delegated to hosted policy.
