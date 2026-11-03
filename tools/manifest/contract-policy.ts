@@ -302,6 +302,14 @@ export const CONTRACT_EXCEPTIONS: Readonly<Record<string, string>> = {};
  * decoration on that argument.
  */
 export const BOUNDARY_INPUT_POLICIES: Readonly<Record<string, Record<string, string>>> = {
+  // C2 takes the structural source directly. Preserve C1's open provider artifact contract:
+  // vendor-owned state is allowed; identity/version/method fields are still validated.
+  '@totalfinance/core:defineDataProvider': { '0': 'open' },
+  // C3 binds the same open structural provider artifact; financial requests/options stay closed.
+  '@totalfinance/core:connect': { '0': 'open' },
+  // The curated /data door and root namespace delegate the identical provider-artifact boundary.
+  'totalfinance:connect': { '0': 'open' },
+  'totalfinance:data.connect': { '0': 'open' },
   // A Calendar ARTIFACT flows in and its decoration flows OUT BY DESIGN: the implementation
   // spreads the instance (`{ ...base, isTradingDay }`), so a decorated calendar keeps its
   // decoration — that is the open-artifact promise kept in both directions, not a Law-12 gap.
@@ -361,6 +369,9 @@ export const BOUNDARY_INPUT_POLICIES: Readonly<Record<string, Record<string, str
  * members and container mutations. The REQUEST itself stays closed: typo keys still teach.
  */
 export const ARTIFACT_VALUED_FIELDS: Readonly<Record<string, readonly string[]>> = {
+  // The conformance request stays closed; its provider is a structural extension object.
+  // defineDataProvider takes that artifact directly and is classified at the argument above.
+  '@totalfinance/core:validateDataProvider#0': ['provider'],
   // B2 (2026-09-21): the envelope schema builder takes a caller's JSON Schemas (`structured`, the
   // operation's own output schema; `handle`, a `$ref` or inline handle schema) and embeds them
   // verbatim — foreign artifacts one level down, like a curve bundle; the request itself is closed.

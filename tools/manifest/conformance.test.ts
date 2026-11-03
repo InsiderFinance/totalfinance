@@ -13,7 +13,7 @@
  *   6. entrypoints ↔ package.json exports maps stay in sync, both directions;
  *   7. MCP: the runtime tool set and the manifest's `mcpTools` declarations are the SAME set —
  *      a new tool must name its backing export, a renamed export can't silently orphan a tool;
- *   8. the umbrella hoist stays frozen to the five ratified names + the 20 domain namespaces;
+ *   8. the umbrella hoist stays frozen to the five ratified names + the 20 domain namespaces + C3 data;
  *   9. fixtures: every facade-role function is exercised by the deep-sweep fixture set (or sits
  *      on its shrink-only ledger) — the manifest can DEMAND fixtures; humans author them.
  */
@@ -257,9 +257,12 @@ describe('manifest conformance (Law 1)', () => {
     ).toEqual([]);
   });
 
-  it('the umbrella hoist is frozen: five ratified names + the 20 domain namespaces, nothing else', () => {
+  it('the umbrella hoist is frozen: five ratified names + the 20 domain namespaces + C3 data, nothing else', () => {
     const names = Object.keys(umbrella).filter((n) => n !== 'default');
-    expect([...names].sort()).toEqual([...RATIFIED_HOIST, ...DOMAINS].sort());
+    expect([...names].sort()).toEqual([...RATIFIED_HOIST, ...DOMAINS, 'data'].sort());
+    // C3 approves only the curated consumer namespace; no flat acquisition hoist.
+    expect(Object.keys(umbrella.data).sort()).toEqual(['connect', 'createPriceBarsWindowView']);
+    expect('connect' in umbrella).toBe(false);
     // The hoisted five are identical to the scoped options exports (pure re-export, no copy).
     const options = MANIFESTS.get('options')!;
     for (const name of RATIFIED_HOIST) {

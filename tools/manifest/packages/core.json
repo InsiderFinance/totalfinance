@@ -1195,6 +1195,42 @@
       "entrypoints": ["."],
       "role": "helper",
       "note": "trusted-tier utility (spec Law 7)"
+    },
+    "DATA_CONTRACT_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./data"],
+      "role": "constant",
+      "note": "Community connector contract v1; independent of dataset/package versions."
+    },
+    "defineDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Reviewed C0: structural binding and request/result validation, immutable copied output; no provider calls at construction."
+    },
+    "createDataView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C2: validate raw normalized page and restore an immutable consumer view with lazy native-array field selection, no I/O or financial computation."
+    },
+    "validateDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data-conformance"],
+      "role": "helper",
+      "note": "Framework-independent behavioral conformance over explicit caller fixtures, work bounds and cancellation latches; returns void or typed refusal."
+    },
+    "connect": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C3: bind an explicit validated provider; bounded terminal window acquisition with retained raw pages and shared lazy selection checks."
+    },
+    "createPriceBarsWindowView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C3: validate canonical retained pages and restore a local immutable research-window view, no I/O."
     }
   }
 }

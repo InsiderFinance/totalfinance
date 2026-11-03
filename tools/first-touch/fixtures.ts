@@ -1,3 +1,4 @@
+import { CORE_DATA_FIXTURES } from './fixtures/core-data.js';
 import { DISCLOSED_HOLDING_PARTITION_FIXTURES } from './fixtures/disclosed-holding-partitions.js';
 import { DISCLOSED_HOLDINGS_FIXTURES } from './fixtures/disclosed-holdings.js';
 /**
@@ -231,6 +232,7 @@ export function allFixtures(): Map<string, FixtureThunk> {
     FOREIGN_EXCHANGE_FIXTURES,
     COMMODITIES_FIXTURES,
     CORE_ARTIFACTS_FIXTURES,
+    CORE_DATA_FIXTURES,
     PERFORMANCE_FLOW_AWARE_FIXTURES,
     SECTOR_PERFORMANCE_FIXTURES,
     ANALYSIS_BACKTEST_CRYPTO_FIXTURES,

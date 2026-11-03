@@ -19,6 +19,10 @@ is not yet published). The release has **two packages**:
 dependencies; MCP depends on the exact main version and the MCP SDK. Calculations run locally;
 paper execution requires explicit capabilities and is not live trading.
 
+**Market data connectors (unreleased):** use independently maintained provider packages to supply
+data to the existing calculations. The [connector guide](./docs/guides/community-connectors.md)
+shows the InsiderFinance reference integration and how to build your own connector.
+
 The current release is `0.1.2`: pre-1.0 software, not a 1.0 stability guarantee.
 [`STABILITY.md`](./STABILITY.md) explains each surface's guarantees. Install the main package from
 npm as below, or use the [source-checkout instructions](#develop). This repository is the canonical

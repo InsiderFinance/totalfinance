@@ -106,7 +106,11 @@ function expectedMetadata(root: string, pkg: Manifest, sources: SourcePackage[])
     if (mcp && source !== main) continue;
     if (!mcp && source.dir === 'mcp') continue;
     for (const [key, target] of Object.entries(source.exports)) {
-      if (typeof target === 'string' || (source.dir === 'totalfinance' && key !== '.')) continue;
+      if (
+        typeof target === 'string' ||
+        (source.dir === 'totalfinance' && key !== '.' && key !== './data')
+      )
+        continue;
       const publicKey = source === main ? key : `./${source.dir}${key === '.' ? '' : key.slice(1)}`;
       const prefix = mcp ? './' : `./modules/${source.dir}/`;
       exports[publicKey] = Object.fromEntries(

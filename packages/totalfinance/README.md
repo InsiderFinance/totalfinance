@@ -49,7 +49,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`totalfinance` exposes **25** runtime exports (**66** including types) across 21 entrypoints (`.`, `./backtest`, `./calendars`, `./commodities`, `./core`, `./crypto`, `./fixed-income`, `./foreign-exchange`, `./fundamentals`, `./math`, `./options`, `./performance`, `./portfolio`, `./research`, `./risk`, `./scenarios`, `./strategy`, `./structure`, `./technical-analysis`, `./valuation`, `./volatility`). See the generated [`etc/totalfinance.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/totalfinance/etc/totalfinance.api.md) for the full surface.
+`totalfinance` exposes **28** runtime exports (**83** including types) across 22 entrypoints (`.`, `./backtest`, `./calendars`, `./commodities`, `./core`, `./crypto`, `./data`, `./fixed-income`, `./foreign-exchange`, `./fundamentals`, `./math`, `./options`, `./performance`, `./portfolio`, `./research`, `./risk`, `./scenarios`, `./strategy`, `./structure`, `./technical-analysis`, `./valuation`, `./volatility`). See the generated [`etc/totalfinance.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/totalfinance/etc/totalfinance.api.md) for the full surface.
 
 ## License
 

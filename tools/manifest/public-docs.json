@@ -1,20 +1,20 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 238,
+    "surfaces": 249,
     "byClass": {
-      "current-runnable": 92,
-      "future-target": 53,
+      "current-runnable": 93,
+      "future-target": 63,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4600,
-    "checkedUnderTruthfulness": 174,
-    "checkedUnderVocabulary": 53,
-    "shippedNamesWatched": 9730,
-    "documentedExceptions": 7,
+    "executableFences": 4650,
+    "checkedUnderTruthfulness": 175,
+    "checkedUnderVocabulary": 63,
+    "shippedNamesWatched": 9871,
+    "documentedExceptions": 9,
     "findings": 0
   },
   "surfaces": [
@@ -136,6 +136,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 0
+    },
+    {
+      "path": "docs/guides/community-connectors.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 1
     },
     {
       "path": "docs/guides/disclosed-holding-partitions.md",
@@ -317,7 +324,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4331
+      "codeFences": 4371
     },
     {
       "path": "docs/llms.txt",
@@ -593,6 +600,55 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c0-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c1-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c2-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c2-spec-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c3-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c3-budget-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c3-spec-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/dogfood-repair-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
@@ -689,6 +745,27 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/community-connector-c2-integration.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/community-connector-c3-connection.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
+    },
+    {
+      "path": "docs/specs/community-connector-foundation.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 3
     },
     {
       "path": "docs/specs/compo-option.md",
