@@ -32,7 +32,8 @@ bars and option-chain research. Broad provider inventories remain possible commu
 - [x] C2 final offline acceptance and exact-head fast/full hosted results at `71da9d1`; draft PR26, no merge.
 - [x] C3: technical approval at `f6c99cf` via request3fa03c0a of the [connection/window spec](./specs/community-connector-c3-connection.md)
       before runtime work; preserve the maintainer-approved root data.connect → priceBars → existing SMA example.
-- [ ] C3 implementation/installed/public/generated/bundle and fresh exact-head fast/full proof after review.
+- [x] C3 implementation/installed/public/generated/bundle proof at source `35a4285`; see the [final local record](./reviews/community-connectors-c3-2026-11-02.md).
+- [ ] C3 fresh exact-head fast/full hosted proof and coordinator review; draft PR26, no merge.
 - [x] C3 measured budget approved via requeste2fef6ff: [root/new-data and separate narrow taxonomy evidence](./reviews/community-connectors-c3-budget-2026-11-02.md); approved caps applied; final remeasurement remains required.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
@@ -46,7 +47,7 @@ and [full23](https://github.com/InsiderFinance/totalfinance/actions/runs/4154264
 the Ri task records final hosted receipts. Those checks certify C2, not C3 or consumer10/10 acceptance.
 The maintainer approved the complete TotalFinance-owned connection example; C3 is now **approved for bounded offline implementation**, with a measured budget checkpoint
 in a new isolated branch based exactly on that green head. Its [review evidence](./reviews/community-connectors-c3-spec-2026-11-02.md)
-records decisions and documentation checks. PR26 and all reviewed C1/C2 trees remain unchanged.
+records decisions and documentation checks. Reviewed C1/C2 trees remain unchanged. C3 may fast-forward draft PR26 only after its final local proofs; hosted results must certify the new head.
 The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment

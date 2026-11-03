@@ -174,3 +174,18 @@ new consumer namespace allowed and its two runtime exports checked; no flat conn
 API reports25/25, typecheck, scoped lint/format and git diff checks pass. Documentation generation
 and its25 permanent conformance cases pass. Only hosted exact-head fast/full and final review
 remain; local full CI, coverage repeat and clean regen:check were delegated to hosted policy.
+
+## Final local source/package provenance before hosted checks
+
+SDK source/generated commit35a4285b2e472ff580a7b6997c714ea9a49f762b; a repeat pack from that
+committed tree has the identical SHA2561eb908c7688a0bd5c046198147e6882fe4282fcc68945d46a4f1ffe409c14013
+at /tmp/tf-c3-source-35a4285-pack/insiderfinance-totalfinance-0.1.2.tgz.
+Provider source/package commit c11b840, verification commit8e21edba93f385ca94d590bd667c1e524298c8ad;
+artifact SHA25651860218af5ba921cb1af19cd1b049f03b516dd8a84c947fc2e161bb364bae21.
+Both worktrees are isolated from reviewed C2, provider has no remote and runtime is unchanged.
+Final receipt-only SDK commit follows this source; fresh hosted runs must name that final head.
+
+Current fetched origin/main remainsd50b401; its latest full run41511802199 is completed success.
+PR26 was verified draft at C2 head71da9d1 immediately before preparing the authorized fast-forward.
+No C3 hosted result is claimed here. Hosted run URLs/outcomes will be recorded on draft PR26 and
+the Ri task after they resolve, without a receipt-only commit invalidating the tested head.
