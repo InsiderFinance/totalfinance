@@ -29,15 +29,24 @@ bars and option-chain research. Broad provider inventories remain possible commu
 - [x] C2 SDK-first implementation and fresh installed/public/generated/bundle proofs; see
       the [approved consumer-view spec](./specs/community-connector-c2-integration.md). Earlier
       rejection remains in the review history; no 10/10 or connected acceptance is inferred.
-- [ ] C2 combined-head technical acceptance and fresh fast/full hosted results on draft PR26.
+- [x] C2 final offline acceptance and exact-head fast/full hosted results at `71da9d1`; draft PR26, no merge.
+- [ ] C3: technical review of the [connection/window spec](./specs/community-connector-c3-connection.md)
+      before runtime work; preserve the maintainer-approved root data.connect → priceBars → existing SMA example.
+- [ ] C3 implementation/installed/public/generated/bundle and fresh exact-head fast/full proof after review.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
-The feature is in progress; C0 is approved and offline C1 source review plus exact-head fast/full
-hosted checks passed. C2 bounded offline implementation is locally verified on separate SDK/provider branches;
-[exact implementation and package evidence](./reviews/community-connectors-c2-2026-11-02.md) is retained.
-Fresh combined-head hosted checks, consumer acceptance and connected-agent acceptance remain open. C1 receipt links and review history remain in the Ri task
-and C1 record; the approved C2 branch will fast-forward the existing draft PR26; its prior C1 checks do not certify the new head. The prior staging allowance is
+The feature is in progress. C0/C1 history and immutable heads remain in the Ri task and C1 record.
+C2 was completed by the coordinator after recovery: SDK `71da9d1fb674932f5fc21a780039aeccd9186d6b`
+and provider `075d5951d096828fd8eef01e40d8361359281eca`, with 546 local SDK cases and 83 provider
+cases locally and installed. Exact-head [fast8](https://github.com/InsiderFinance/totalfinance/actions/runs/41542589873)
+and [full23](https://github.com/InsiderFinance/totalfinance/actions/runs/41542644979) passed. The
+[implementation record](./reviews/community-connectors-c2-2026-11-02.md) retains source/artifact history;
+the Ri task records final hosted receipts. Those checks certify C2, not C3 or consumer10/10 acceptance.
+The maintainer approved the complete TotalFinance-owned connection example; C3 is now **spec only**
+in a new isolated branch based exactly on that green head. Its [review evidence](./reviews/community-connectors-c3-spec-2026-11-02.md)
+records decisions and documentation checks. PR26 and all reviewed C1/C2 trees remain unchanged.
+The prior staging allowance is
 exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
 with its separate app/API task. Publication, release versions, remote-repository creation, deployment
 and live execution remain outside scope. The full post-PR-25 main run
