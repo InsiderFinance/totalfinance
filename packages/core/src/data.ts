@@ -1,5 +1,5 @@
 /** Opt-in structural data contract. No provider, credential, clock or network is loaded here. */
-import { DataError, ErrorCode, QuantError } from './errors.js';
+import { dataCall, dataSignal, invalidResponse } from './data-call.js';
 import type {
   DataProvider,
   DataProviderSource,
@@ -9,10 +9,7 @@ import type {
   DataCallOptions,
 } from './data-types.js';
 import {
-  object,
   providerShape,
-  signalField,
-  aborted,
   requestData,
   capabilityData,
   pageData,
@@ -38,44 +35,19 @@ export function defineDataProvider(source: DataProviderSource): DataProvider {
   const query = raw.query.bind(raw);
   const capabilities = raw.capabilities.bind(raw);
   const identity = { id, version };
-  function responseError(error: unknown): never {
-    if (error instanceof QuantError && error.code === ErrorCode.DataContractVersionUnsupported)
-      throw error;
-    throw new DataError(
-      'defineDataProvider: provider returned invalid data; check its declared contract and diagnostics.',
-      { code: ErrorCode.DataInvalidResponse, context: { provider: id } },
-    );
-  }
-  function callSignal(options: DataCallOptions = {}): AbortSignal | undefined {
-    const args = object(options, 'options', ['signal']);
-    signalField(args['signal']);
-    return args['signal'];
-  }
-  async function call<T>(signal: AbortSignal | undefined, run: () => Promise<T>): Promise<T> {
-    aborted(signal);
-    try {
-      const result = await run();
-      aborted(signal);
-      return result;
-    } catch (error) {
-      aborted(signal);
-      if (error instanceof QuantError) throw error;
-      responseError(error);
-    }
-  }
   return Object.freeze({
     id,
     version,
     contractVersion: DATA_CONTRACT_VERSION,
     async capabilities(options?: DataCallOptions): Promise<DataCapabilities> {
-      const signal = callSignal(options);
-      return call(signal, async () => {
+      const signal = dataSignal(options);
+      return dataCall(signal, async () => {
         const result = await capabilities(signal ? { signal } : undefined);
         try {
           capabilityData(result, identity);
           return copyFrozen(result);
         } catch (error) {
-          responseError(error);
+          invalidResponse(error, id);
         }
       });
     },
@@ -83,18 +55,20 @@ export function defineDataProvider(source: DataProviderSource): DataProvider {
       input: R,
       options?: DataCallOptions,
     ): Promise<DataViewFor<R>> {
-      const signal = callSignal(options);
+      const signal = dataSignal(options);
       requestData(input);
       const request = copyFrozen(input);
-      return call(signal, async () => {
+      return dataCall(signal, async () => {
         const result = await query(request, signal ? { signal } : undefined);
         try {
           pageData(result, request, identity);
           return dataViewOf(copyFrozen(result)) as DataViewFor<R>;
         } catch (error) {
-          responseError(error);
+          invalidResponse(error, id);
         }
       });
     },
   });
 }
+
+export { connect, createPriceBarsWindowView } from './data-connection.js';

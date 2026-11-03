@@ -295,6 +295,7 @@
         "./packages/technical-analysis/src/framework.ts"
       ],
       "@insiderfinance/totalfinance": ["./packages/totalfinance/src/index.ts"],
+      "@insiderfinance/totalfinance/data": ["./packages/totalfinance/src/data.ts"],
       "@insiderfinance/totalfinance/valuation": ["./packages/valuation/src/index.ts"],
       "@insiderfinance/totalfinance/valuation/cash-flows": [
         "./packages/valuation/src/cash-flows.ts"

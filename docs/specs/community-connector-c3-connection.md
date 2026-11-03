@@ -1,6 +1,7 @@
 # Community connector C3: connect, fetch a window, calculate
 
-Status: **proposed, spec only; coordinator technical review required before runtime work**.
+Status: **C3 technical review approved at f6c99cfed38dc44c6ca0cc6279cf5a703014f04e; bounded offline implementation active, measured budget checkpoint pending review**.
+Approval: `3fa03c0a-dcc3-8e42-a19a-63e21bc53649`.
 Date: 2026-11-02. Feature: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
 Request: `3974edf7-0690-81d9-ba59-8f39791dc6da`.
 Base: SDK `71da9d1fb674932f5fc21a780039aeccd9186d6b`; provider C2
@@ -74,7 +75,8 @@ Construction checks identity/version/method shape and captures bound methods wit
 there is no runtime brand/allowlist and no claim that construction proves behavioral conformance.
 
 ConnectedData retains id/version/contractVersion, capabilities(options?) and generic
-query(request, options?) from DataProvider, plus priceBars. Advanced query keeps exactly C2's
+query(request, options?) from DataProvider, plus priceBars. Advanced query delegates the actual provider selectors through the same lazy shared checks as
+windows, never eagerly reads OHLCV or reconstructs a lying selector. It keeps exactly C2's
 explicit kind/resource/limit/cursor grammar and one-page view result, with zero discovery or auto-
 paging. Chains remain available only through this research query; no chain-window or pricing API.
 Provider authors do not implement priceBars, projections, calculations or a second protocol.
@@ -259,7 +261,10 @@ it proves the represented facts, not external coverage. Reuse createDataView/pag
 without fetching or consulting a clock. Persisted window restoration needs no provider binding.
 
 Closes and OHLCV concatenate source selections in retained page/row order; they are frozen, dense
-plain native arrays with no decorations/subclasses/proxies. Each getter is finite local work bounded
+plain native arrays with no decorations/subclasses; SDK-created arrays are never Proxy-created.
+Portable browser validation does not claim to detect every transparent arbitrary provider Proxy or
+prove trap-free behavior: enforce descriptors/prototypes/freeze/correspondence and normative no-I/O
+selector laws, with no Node-only proxy detection. Each getter is finite local work bounded
 by actual collected records, caches on success, and validates full array-to-raw correspondence.
 No getter fetches or reads time. Missing first/later volume refuses only OHLCV using InputMissingField
 with safe field, pageIndex, rowIndex and global index. No zero filling; actual zero survives.
@@ -314,7 +319,7 @@ If the unchanged whole-root ceiling fails solely because the approved namespace 
 new code reachable, stop for a concrete technical budget review: propose **only** that root ceiling,
 with measured bytes/delta and minimal explicit headroom. Add measured new /data used-function/whole
 ceilings at that review. No blanket budget increase, threshold guess, helper/registry optimization,
-warning removal or weaker structural gate to make it pass. This spec-only branch edits no budgets.
+warning removal or weaker structural gate to make it pass. No budget is edited before that technical review; the measured checkpoint is linked below.
 
 ## Ordered implementation slices after review
 
@@ -332,11 +337,12 @@ warning removal or weaker structural gate to make it pass. This spec-only branch
    policies, fresh packs/types/public reference checks. No manual generated evidence changes.
 5. Return reviewable source/receipt commits and exact-head fast/full hosted checks for PR26's combined
    changes (existing enforcement work still requires full). Further branch/PR updates need the
-   implementation review's scope; this spec-only request does not change PR26. No merge authority.
+   implementation approval3fa03c0a permits that update only after source/local/packed/budget review
+   genuinely resolves. This checkpoint does not change PR26. No merge authority.
 
 ## Synthetic acceptance and review exit gate
 
-- [ ] Technical review of this exact spec and concrete defaults/result/boundary decisions before code.
+- [x] Technical review approved at f6c99cf by request3fa03c0a, with Proxy/selector precision above.
 - [ ] Fresh installed SDK/provider packs execute the **exact primary root-import/key/connect/window/
       period-20 SMA file above**, using independent synthetic 30-close one-page and multipage HTTP
       facts within the explicit dates, with a hand-calculated last SMA. Inject fake native fetch
@@ -366,9 +372,19 @@ warning removal or weaker structural gate to make it pass. This spec-only branch
       C2 green is not C3 certification or maintainer acceptance of unshown details.
 
 No unresolved product choice is needed to review this proposal: it recommends one boundary, result
-shape and set of operational defaults. Those details require coordinator technical review. A final
+shape and set of operational defaults. Those details were technically approved by request3fa03c0a. A final
 whole-root byte limit remains deliberately measurement-dependent, not an invented product decision.
 The feature remains in progress and maintainer 10/10 acceptance remains distinct from technical
 proof. Live staging/new allowance, agent glue, paper journey and App remain later separate work.
 No staging/secrets/allowance/key/grant/account/paper operations, API-server edits, remote provider
 repository, merge, release/version/publication/deployment, recurring automation or live execution.
+
+## Current implementation checkpoint
+
+Bounded offline source is implemented and partially verified under approval3fa03c0a. See the
+[measured budget proposal](../reviews/community-connectors-c3-budget-2026-11-02.md) before continuing:
+whole root and three taxonomy-only narrow ceilings fail unchanged; no threshold has been edited.
+Exact primary installed period20 example works on one/three synthetic source pages (119.5), and
+83 installed provider cases plus226 existing packed cases pass. This is not complete C3 acceptance:
+ordered generated/public-contract closure, remaining final proofs and exact-head hosted fast/full
+checks are still open. Reviewed C2 SDK/provider trees and PR26 remain unchanged.

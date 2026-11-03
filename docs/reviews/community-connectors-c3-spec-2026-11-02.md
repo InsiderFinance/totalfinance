@@ -118,3 +118,16 @@ with separately configured access/new allowance, agent glue, paper journey and A
 No secrets/environment-key read, staging request, allowance reset/reuse, key/grant/account/paper
 operation, provider repository edit/remote creation, API-server edit, version/release/publication/
 deployment, recurring automation or live execution occurred.
+
+## C3 technical approval and bounded implementation
+
+Request3fa03c0a-dcc3-8e42-a19a-63e21bc53649 approved spec f6c99cfed38dc44c6ca0cc6279cf5a703014f04e
+after the coordinator read all374 lines and full evidence. Clarifications recorded before code:
+SDK output arrays are ordinary frozen native arrays; browser validation cannot detect every
+transparent provider Proxy. Advanced query stays one-page/zero-discovery, and lazy delegated
+selectors share the window checks without repairing lies or eagerly touching OHLCV.
+
+Root ceiling712960B and all narrower gates remain unmodified. Actual source and installed
+measurements must return for technical review before any threshold edit if they exceed ceilings;
+new /data initial budgets require that measured review too. Source/local checks are intermediate,
+not hosted/complete acceptance. Feature stays in_progress and reviewed C2 trees remain untouched.

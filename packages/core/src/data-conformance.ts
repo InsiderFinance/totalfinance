@@ -1,5 +1,7 @@
 /** Framework-independent, bounded behavioral proof using caller-supplied synthetic facts. */
 import { ErrorCode, DataError, QuantError } from './errors.js';
+import { viewEnvelope, viewSelection } from './data-view-validation.js';
+import { dataSequence } from './data-sequence-validation.js';
 import { canonicalJsonOf } from './canonical-json.js';
 import type {
   DataProvider,
@@ -20,7 +22,6 @@ import {
   pageData,
   copyFrozen,
   frozen,
-  plain,
   rowKey,
   compareKeys,
 } from './data-validation.js';
@@ -119,96 +120,29 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
     raw: DataPage<PriceBarRecord | OptionChainResearchRecord>,
     probe: string,
   ): void {
-    const v = object(view, 'view');
-    if (
-      Object.getPrototypeOf(view) !== Object.prototype ||
-      !Object.isFrozen(view) ||
-      v['kind'] !== raw.kind
-    )
-      violation(probe, 'immutable view kind');
-    const fields =
-      raw.kind === 'price-bars' ? ['kind', 'page', 'closePrices', 'ohlcvBars'] : ['kind', 'page'];
-    if (
-      Reflect.ownKeys(v).length !== fields.length ||
-      Reflect.ownKeys(v).some((k) => typeof k !== 'string' || !fields.includes(k))
-    )
-      violation(probe, 'view fields');
-    for (const key of ['kind', 'page']) {
-      const d = Object.getOwnPropertyDescriptor(v, key);
-      if (!d || !('value' in d) || !d.enumerable || d.writable || d.configurable)
-        violation(probe, 'view source descriptor');
-    }
-    if (JSON.stringify(v) !== JSON.stringify({ kind: raw.kind, page: raw }))
-      violation(probe, 'view serialization');
-    if (raw.kind !== 'price-bars') return;
-    for (const key of ['closePrices', 'ohlcvBars']) {
-      const d = Object.getOwnPropertyDescriptor(v, key);
-      if (
-        !d ||
-        typeof d.get !== 'function' ||
-        d.set !== undefined ||
-        d.enumerable ||
-        d.configurable
-      )
-        violation(probe, 'lazy view selection');
-    }
-    const rows = raw.data as readonly PriceBarRecord[];
-    function selected(value: unknown, expected: unknown, key: string): void {
-      plain(value);
-      if (
-        !Array.isArray(value) ||
-        Object.getPrototypeOf(value) !== Array.prototype ||
-        !frozen(value)
-      )
-        violation(probe, key + ' native immutable array');
-      if (
-        Reflect.ownKeys(value).length !== rows.length + 1 ||
-        Reflect.ownKeys(value).some(
-          (k) => k !== 'length' && (typeof k !== 'string' || !/^(0|[1-9][0-9]*)$/.test(k)),
+    viewEnvelope(view);
+    if (view.page !== raw) violation(probe, 'retained source page');
+    if (view.kind === 'price-bars') {
+      viewSelection(view, 'closePrices');
+      const missing = view.page.data.findIndex((row) => row.bar.volume === undefined);
+      if (missing === -1) viewSelection(view, 'ohlcvBars');
+      else {
+        let error: unknown;
+        try {
+          viewSelection(view, 'ohlcvBars');
+        } catch (caught) {
+          error = caught;
+        }
+        if (
+          !(error instanceof QuantError) ||
+          error.code !== ErrorCode.InputMissingField ||
+          error.context?.['index'] !== missing
         )
-      )
-        violation(probe, key + ' array fields');
-      if (canonicalJsonOf(value) !== canonicalJsonOf(expected))
-        violation(probe, key + ' correspondence');
-    }
-    const closes = v['closePrices'];
-    selected(
-      closes,
-      rows.map((row) => row.bar.close),
-      'closePrices',
-    );
-    if (v['closePrices'] !== closes) violation(probe, 'stable closePrices');
-    const missing = rows.findIndex((row) => row.bar.volume === undefined);
-    if (missing !== -1) {
-      let error: unknown;
-      try {
-        void v['ohlcvBars'];
-      } catch (caught) {
-        error = caught;
+          violation(probe, 'missing OHLCV volume');
       }
-      if (
-        !(error instanceof QuantError) ||
-        error.code !== ErrorCode.InputMissingField ||
-        error.context?.['field'] !== 'volume' ||
-        error.context?.['index'] !== missing
-      )
-        violation(probe, 'missing OHLCV volume');
-    } else {
-      const bars = v['ohlcvBars'];
-      selected(
-        bars,
-        rows.map(({ bar: { open, high, low, close, volume } }) => ({
-          open,
-          high,
-          low,
-          close,
-          volume,
-        })),
-        'ohlcvBars',
-      );
-      if (v['ohlcvBars'] !== bars) violation(probe, 'stable ohlcvBars');
     }
   }
+
   async function bounded<T>(probe: string, law: string, operation: () => Promise<T>): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
@@ -302,6 +236,7 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
     exercised.add(probe.request.kind);
     let request: DataRequest = copyFrozen(probe.request),
       records = 0;
+    const sequence = dataSequence();
     let previous: readonly (string | number)[] | undefined;
     const identities = new Set();
     const cursors = new Set();
@@ -320,6 +255,11 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
         viewFacts(view, raw, probe.name);
         return raw;
       });
+      try {
+        sequence(page);
+      } catch {
+        violation(probe.name, 'page sequence');
+      }
       if (canonicalJsonOf(sent) !== before) violation(probe.name, 'input immutability');
       if (!frozen(page)) violation(probe.name, 'immutable page');
       if (

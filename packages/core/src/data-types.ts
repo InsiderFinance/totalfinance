@@ -217,3 +217,45 @@ export interface DataPageMetadata {
   readonly access: 'unknown' | 'granted' | 'denied';
   readonly executionEligibility: 'research-only';
 }
+
+/** Explicit financial window; page controls are operational options. */
+export interface PriceBarsWindowRequest {
+  readonly symbol: string;
+  readonly interval: '1d' | '1m';
+  readonly from: string;
+  readonly to: string;
+}
+/** Per-connection ceilings; call overrides may only lower them. */
+export interface DataConnectionOptions {
+  readonly pageSize?: number;
+  readonly maxPages?: number;
+  readonly maxRecords?: number;
+}
+export interface PriceBarsWindowOptions extends DataConnectionOptions {
+  readonly signal?: AbortSignal;
+}
+export interface ConnectedData extends DataProvider {
+  priceBars(
+    request: PriceBarsWindowRequest,
+    options?: PriceBarsWindowOptions,
+  ): Promise<PriceBarsWindowView>;
+}
+/** Canonical acquisition record: terminal pagination is not continuous coverage. */
+export interface PriceBarsWindow {
+  readonly version: 1;
+  readonly kind: 'price-bars-window';
+  readonly request: PriceBarsWindowRequest;
+  readonly pages: readonly DataPage<PriceBarRecord>[];
+  readonly pagination: {
+    readonly status: 'terminal';
+    readonly pageSize: number;
+    readonly pageCalls: number;
+    readonly records: number;
+  };
+}
+export interface PriceBarsWindowView {
+  readonly kind: 'price-bars-window';
+  readonly window: PriceBarsWindow;
+  readonly closePrices: readonly number[];
+  readonly ohlcvBars: readonly OhlcvInput[];
+}

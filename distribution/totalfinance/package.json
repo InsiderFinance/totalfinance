@@ -43,6 +43,11 @@
       "import": "./modules/totalfinance/dist/index.js",
       "default": "./modules/totalfinance/dist/index.js"
     },
+    "./data": {
+      "types": "./modules/totalfinance/dist/data.d.ts",
+      "import": "./modules/totalfinance/dist/data.js",
+      "default": "./modules/totalfinance/dist/data.js"
+    },
     "./backtest": {
       "types": "./modules/backtest/dist/index.d.ts",
       "import": "./modules/backtest/dist/index.js",

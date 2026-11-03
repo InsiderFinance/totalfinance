@@ -305,6 +305,8 @@ export const BOUNDARY_INPUT_POLICIES: Readonly<Record<string, Record<string, str
   // C2 takes the structural source directly. Preserve C1's open provider artifact contract:
   // vendor-owned state is allowed; identity/version/method fields are still validated.
   '@totalfinance/core:defineDataProvider': { '0': 'open' },
+  // C3 binds the same open structural provider artifact; financial requests/options stay closed.
+  '@totalfinance/core:connect': { '0': 'open' },
   // A Calendar ARTIFACT flows in and its decoration flows OUT BY DESIGN: the implementation
   // spreads the instance (`{ ...base, isTradingDay }`), so a decorated calendar keeps its
   // decoration — that is the open-artifact promise kept in both directions, not a Law-12 gap.

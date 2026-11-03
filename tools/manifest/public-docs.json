@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 247,
+    "surfaces": 248,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 61,
+      "future-target": 62,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4641,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 61,
+    "checkedUnderVocabulary": 62,
     "shippedNamesWatched": 9857,
     "documentedExceptions": 8,
     "findings": 0
@@ -622,6 +622,13 @@
     },
     {
       "path": "docs/reviews/community-connectors-c2-spec-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c3-budget-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

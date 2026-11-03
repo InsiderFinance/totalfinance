@@ -30,9 +30,10 @@ bars and option-chain research. Broad provider inventories remain possible commu
       the [approved consumer-view spec](./specs/community-connector-c2-integration.md). Earlier
       rejection remains in the review history; no 10/10 or connected acceptance is inferred.
 - [x] C2 final offline acceptance and exact-head fast/full hosted results at `71da9d1`; draft PR26, no merge.
-- [ ] C3: technical review of the [connection/window spec](./specs/community-connector-c3-connection.md)
+- [x] C3: technical approval at `f6c99cf` via request3fa03c0a of the [connection/window spec](./specs/community-connector-c3-connection.md)
       before runtime work; preserve the maintainer-approved root data.connect → priceBars → existing SMA example.
 - [ ] C3 implementation/installed/public/generated/bundle and fresh exact-head fast/full proof after review.
+- [ ] C3 measured budget review: [root/new-data and separate narrow taxonomy evidence](./reviews/community-connectors-c3-budget-2026-11-02.md); no threshold edits, source candidate ready.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
@@ -43,7 +44,7 @@ cases locally and installed. Exact-head [fast8](https://github.com/InsiderFinanc
 and [full23](https://github.com/InsiderFinance/totalfinance/actions/runs/41542644979) passed. The
 [implementation record](./reviews/community-connectors-c2-2026-11-02.md) retains source/artifact history;
 the Ri task records final hosted receipts. Those checks certify C2, not C3 or consumer10/10 acceptance.
-The maintainer approved the complete TotalFinance-owned connection example; C3 is now **spec only**
+The maintainer approved the complete TotalFinance-owned connection example; C3 is now **approved for bounded offline implementation**, with a measured budget checkpoint
 in a new isolated branch based exactly on that green head. Its [review evidence](./reviews/community-connectors-c3-spec-2026-11-02.md)
 records decisions and documentation checks. PR26 and all reviewed C1/C2 trees remain unchanged.
 The prior staging allowance is

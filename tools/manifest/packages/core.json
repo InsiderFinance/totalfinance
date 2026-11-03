@@ -1219,6 +1219,18 @@
       "entrypoints": ["./data-conformance"],
       "role": "helper",
       "note": "Framework-independent behavioral conformance over explicit caller fixtures, work bounds and cancellation latches; returns void or typed refusal."
+    },
+    "connect": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C3: bind an explicit validated provider; bounded terminal window acquisition with retained raw pages and shared lazy selection checks."
+    },
+    "createPriceBarsWindowView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C3: validate canonical retained pages and restore a local immutable research-window view, no I/O."
     }
   }
 }

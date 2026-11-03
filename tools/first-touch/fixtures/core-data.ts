@@ -22,6 +22,16 @@ export const CORE_DATA_FIXTURES: Record<string, FixtureThunk> = {
       query: async () => page(),
     },
   ],
+  'core.connect': () => [provider()],
+  'core.createPriceBarsWindowView': () => [
+    {
+      version: 1,
+      kind: 'price-bars-window',
+      request: { symbol: 'TEST', interval: '1d', from: '2026-10-26', to: '2026-10-28' },
+      pages: [page()],
+      pagination: { status: 'terminal', pageSize: 2, pageCalls: 1, records: 0 },
+    },
+  ],
   'core.createDataView': () => [page()],
   'core.validateDataProvider': Object.assign(
     () => [

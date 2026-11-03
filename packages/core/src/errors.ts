@@ -124,6 +124,7 @@ type ErrorCodeRegistry = {
   readonly DataUnavailable: 'data.unavailable';
   readonly DataAborted: 'data.aborted';
   readonly DataNonconformant: 'data.nonconformant';
+  readonly DataWindowBudgetExceeded: 'data.window_budget_exceeded';
   readonly DataStaleQuote: 'data.stale_quote';
   readonly SolverNoConvergence: 'solver.no_convergence';
   readonly LinalgNoConvergence: 'linalg.no_convergence';
@@ -399,6 +400,7 @@ export const ErrorCode = {
   DataUnavailable: 'data.unavailable',
   DataAborted: 'data.aborted',
   DataNonconformant: 'data.nonconformant',
+  DataWindowBudgetExceeded: 'data.window_budget_exceeded',
   DataStaleQuote: 'data.stale_quote',
   SolverNoConvergence: 'solver.no_convergence',
   LinalgNoConvergence: 'linalg.no_convergence',
