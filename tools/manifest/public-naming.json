@@ -1,33 +1,33 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43656,
+    "identities": 43736,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 4024,
-      "explicit": 39470,
+      "canonical-term": 4029,
+      "explicit": 39545,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
-      "code-string": 294,
-      "enum-member": 294,
-      "export": 7481,
-      "field": 23054,
-      "literal-value": 4746,
+      "code-string": 295,
+      "enum-member": 295,
+      "export": 7506,
+      "field": 23089,
+      "literal-value": 4752,
       "mcp-field": 1520,
       "mcp-tool": 55,
-      "method": 1786,
+      "method": 1789,
       "package": 25,
-      "parameter": 4207,
-      "subpath": 194
+      "parameter": 4215,
+      "subpath": 195
     },
     "byPackage": {
       "@totalfinance/backtest": 5069,
       "@totalfinance/calendars": 158,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3548,
+      "@totalfinance/core": 3610,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
@@ -47,7 +47,7 @@
       "@totalfinance/valuation": 1492,
       "@totalfinance/volatility": 2866,
       "@totalfinance/workflows": 2671,
-      "totalfinance": 3208
+      "totalfinance": 3226
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -43550,6 +43550,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|code-string|data.window_budget_exceeded",
+      "name": "data.window_budget_exceeded",
+      "kind": "code-string",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|code-string|data.zero_bid_ask",
       "name": "data.zero_bid_ask",
       "kind": "code-string",
@@ -45341,6 +45348,13 @@
     {
       "id": "@totalfinance/core|enum-member|ErrorCode.DataUnsupportedCapability",
       "name": "DataUnsupportedCapability",
+      "kind": "enum-member",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|enum-member|ErrorCode.DataWindowBudgetExceeded",
+      "name": "DataWindowBudgetExceeded",
       "kind": "enum-member",
       "position": "serialized",
       "disposition": "explicit"
@@ -47550,6 +47564,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|export|connect",
+      "name": "connect",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|ConnectedData",
+      "name": "ConnectedData",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|export|CONTENT_HASH_PREFIX",
       "name": "CONTENT_HASH_PREFIX",
       "kind": "export",
@@ -47654,6 +47684,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|export|createPriceBarsWindowView",
+      "name": "createPriceBarsWindowView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|export|createRuleCalendar",
       "name": "createRuleCalendar",
       "kind": "export",
@@ -47712,6 +47750,14 @@
     {
       "id": "@totalfinance/core|export|DataCapability",
       "name": "DataCapability",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|DataConnectionOptions",
+      "name": "DataConnectionOptions",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data"],
@@ -48901,6 +48947,38 @@
     {
       "id": "@totalfinance/core|export|PriceBarsView",
       "name": "PriceBarsView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|PriceBarsWindow",
+      "name": "PriceBarsWindow",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|PriceBarsWindowOptions",
+      "name": "PriceBarsWindowOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|PriceBarsWindowRequest",
+      "name": "PriceBarsWindowRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|export|PriceBarsWindowView",
+      "name": "PriceBarsWindowView",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./data"],
@@ -52007,6 +52085,84 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|field|connect(options).maxPages",
+      "name": "maxPages",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|connect(options).maxRecords",
+      "name": "maxRecords",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|connect(options).pageSize",
+      "name": "pageSize",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.capabilities(options).signal",
+      "name": "signal",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.contractVersion",
+      "name": "contractVersion",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.id",
+      "name": "id",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.priceBars(options).maxPages",
+      "name": "maxPages",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.priceBars(options).maxRecords",
+      "name": "maxRecords",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.priceBars(options).pageSize",
+      "name": "pageSize",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.priceBars(options).signal",
+      "name": "signal",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|ConnectedData.version",
+      "name": "version",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|field|ConvergenceError.code",
       "name": "code",
       "kind": "field",
@@ -52500,6 +52656,27 @@
     {
       "id": "@totalfinance/core|field|DataCapability.pointInTime",
       "name": "pointInTime",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataConnectionOptions.maxPages",
+      "name": "maxPages",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataConnectionOptions.maxRecords",
+      "name": "maxRecords",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|DataConnectionOptions.pageSize",
+      "name": "pageSize",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -56411,6 +56588,154 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|field|PriceBarsWindow.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pages",
+      "name": "pages",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pagination",
+      "name": "pagination",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pagination.pageCalls",
+      "name": "pageCalls",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pagination.pageSize",
+      "name": "pageSize",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pagination.records",
+      "name": "records",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.pagination.status",
+      "name": "status",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.request",
+      "name": "request",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindow.version",
+      "name": "version",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowOptions.maxPages",
+      "name": "maxPages",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowOptions.maxRecords",
+      "name": "maxRecords",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowOptions.pageSize",
+      "name": "pageSize",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowOptions.signal",
+      "name": "signal",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowRequest.from",
+      "name": "from",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowRequest.interval",
+      "name": "interval",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowRequest.symbol",
+      "name": "symbol",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowRequest.to",
+      "name": "to",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowView.closePrices",
+      "name": "closePrices",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowView.kind",
+      "name": "kind",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowView.ohlcvBars",
+      "name": "ohlcvBars",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
+      "id": "@totalfinance/core|field|PriceBarsWindowView.window",
+      "name": "window",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|field|Pricer.capabilities",
       "name": "capabilities",
       "kind": "field",
@@ -59842,6 +60167,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|literal-value|ErrorCode:data.window_budget_exceeded",
+      "name": "data.window_budget_exceeded",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|literal-value|ErrorCode:engine.discretization_inadequate",
       "name": "engine.discretization_inadequate",
       "kind": "literal-value",
@@ -61377,6 +61709,43 @@
     {
       "id": "@totalfinance/core|literal-value|PriceBarsView.kind:price-bars",
       "name": "price-bars",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsWindow.kind:price-bars-window",
+      "name": "price-bars-window",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsWindow.pagination.status:terminal",
+      "name": "terminal",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsWindowRequest.interval:1d",
+      "name": "1d",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Bar-interval code (1 day)."
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsWindowRequest.interval:1m",
+      "name": "1m",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Bar-interval code (1 minute) — the vocabulary every market data API publishes."
+    },
+    {
+      "id": "@totalfinance/core|literal-value|PriceBarsWindowView.kind:price-bars-window",
+      "name": "price-bars-window",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -63358,6 +63727,27 @@
       "position": "artifact",
       "disposition": "canonical-term",
       "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/core|method|ConnectedData.capabilities",
+      "name": "capabilities",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|method|ConnectedData.priceBars",
+      "name": "priceBars",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|method|ConnectedData.query",
+      "name": "query",
+      "kind": "method",
+      "position": "result",
+      "disposition": "explicit"
     },
     {
       "id": "@totalfinance/core|method|ConvergenceError.toJSON",
@@ -65525,6 +65915,55 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|parameter|connect(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|connect(provider)",
+      "name": "provider",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|ConnectedData.capabilities(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|ConnectedData.priceBars(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|ConnectedData.priceBars(request)",
+      "name": "request",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|ConnectedData.query(options)",
+      "name": "options",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|ConnectedData.query(request)",
+      "name": "request",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|parameter|contentHash(value)",
       "name": "value",
       "kind": "parameter",
@@ -65610,6 +66049,13 @@
     },
     {
       "id": "@totalfinance/core|parameter|createMarketSnapshot(input)",
+      "name": "input",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|parameter|createPriceBarsWindowView(input)",
       "name": "input",
       "kind": "parameter",
       "position": "signature",
@@ -295675,6 +296121,22 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|connect",
+      "name": "connect",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ConnectedData",
+      "name": "ConnectedData",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|connorsRsi",
       "name": "connorsRsi",
       "kind": "export",
@@ -296255,6 +296717,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./backtest"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|createPriceBarsWindowView",
+      "name": "createPriceBarsWindowView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
       "disposition": "explicit"
     },
     {
@@ -296883,11 +297353,75 @@
       "policy": "Cumulative Volume Delta identity."
     },
     {
+      "id": "totalfinance|export|data",
+      "name": "data",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataCallOptions",
+      "name": "DataCallOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataCapabilities",
+      "name": "DataCapabilities",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataConnectionOptions",
+      "name": "DataConnectionOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|DataError",
       "name": "DataError",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./core"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataPage",
+      "name": "DataPage",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataProvider",
+      "name": "DataProvider",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataRequest",
+      "name": "DataRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DataViewFor",
+      "name": "DataViewFor",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
       "disposition": "explicit"
     },
     {
@@ -305962,6 +306496,15 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|OhlcvInput",
+      "name": "OhlcvInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
       "id": "totalfinance|export|ols",
       "name": "ols",
       "kind": "export",
@@ -308274,6 +308817,46 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./technical-analysis"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceBarRecord",
+      "name": "PriceBarRecord",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceBarsWindow",
+      "name": "PriceBarsWindow",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceBarsWindowOptions",
+      "name": "PriceBarsWindowOptions",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceBarsWindowRequest",
+      "name": "PriceBarsWindowRequest",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|PriceBarsWindowView",
+      "name": "PriceBarsWindowView",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./data"],
       "disposition": "explicit"
     },
     {
@@ -317213,6 +317796,13 @@
     {
       "id": "totalfinance|subpath|./crypto",
       "name": "crypto",
+      "kind": "subpath",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|subpath|./data",
+      "name": "data",
       "kind": "subpath",
       "position": "module",
       "disposition": "explicit"

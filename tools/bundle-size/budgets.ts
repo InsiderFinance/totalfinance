@@ -190,9 +190,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/math/montecarlo',
     entry: 'packages/math/src/montecarlo.ts',
-    budgetKB: 7.375,
+    budgetKB: 7.40625,
     intent: 'Sobol direction numbers are generated, not a vendored table',
     rationale:
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '7.25 → 7.375 KB (installed-consumer repair, 2026-09-21): measured 7,501 B with Node 22.23.2/esbuild 0.25.12. Shared input codes are private named constants so guard-only consumers can drop the complete error registry; whole-registry consumers pay small binding overhead. No added module family; the lean expert-price fixtures independently cap the resulting savings. ' +
       'WS9.5 lifted the 13-dimension Sobol cap to 1111 dimensions. The direction numbers are ' +
       'GENERATED from primitive polynomials at load (a few KB of code), NOT a ~50 KB vendored table, ' +
@@ -222,9 +223,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/calendars/crypto',
     entry: 'packages/calendars/src/crypto.ts',
-    budgetKB: 4.875,
+    budgetKB: 4.90625,
     intent: 'aliases alwaysOpen and pulls in no exchange-holiday dataset',
     rationale:
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '4.75 → 4.875 KB (installed-consumer repair, 2026-09-21): measured 4,934 B with Node 22.23.2/esbuild 0.25.12. The shared validation-code split adds small binding overhead to whole-registry consumers while allowing guard-only kernels to discard unrelated codes. The no-dataset boundary remains enforced. ' +
       '3.5 KB (was 3): the 2026-08-02 defect-fix wave made createRuleCalendar copy its rule arrays ' +
       'and session object at construction and reject an all-weekend configuration, so one calendar ' +
@@ -336,9 +338,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/fixed-income/convertible',
     entry: 'packages/fixed-income/src/convertible.ts',
-    budgetKB: 8.75,
+    budgetKB: 8.78125,
     intent: 'convertible bond pricing, reported separately so a consumer sees what it pays',
     rationale:
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '6.5 KB (was 6), 2026-08-02 defect-fix wave: inherits the anchor-based schedule generation ' +
       'and the expanding yield bracket. Measured 6,370 B; already ~23 B over before the wave. ' +
       '7 KB → 7.5 (2026-08-16 coordinated tail sweep): inherits the endOfMonth schedule ladder ' +
@@ -655,12 +658,30 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
+    specifier: '@insiderfinance/totalfinance/data',
+    entry: 'packages/totalfinance/src/data.ts',
+    budgetKB: 13.5,
+    intent:
+      'provider-neutral bounded research windows and canonical restoration; explicit provider binding',
+    rationale:
+      'C3 initial measured gate approved e2fef6ff:13475 B gzip, cap13824 B. No conformance runner, provider/credential/HTTP implementation or TA engine.',
+    forbidden: [
+      { needle: 'validateDataProvider', why: 'behavioral conformance runner stays opt-in' },
+      { needle: 'INSIDERFINANCE_API_KEY', why: 'credentials belong to external providers/host' },
+      {
+        needle: 'api-staging.insiderfinance',
+        why: 'provider infrastructure defaults stay external',
+      },
+    ],
+  },
+  {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 696.25,
+    budgetKB: 703,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'C3 approved root data connection (e2fef6ff, 2026-11-02): 696.25 -> 703 KiB; baseline712661 -> candidate719087 B gzip. The provider-neutral window/validation/view branch is newly reachable; no provider, credentials, network implementation or copied calculation. Final source remeasured under this same cap. ' +
       '695 → 696.25 KiB (PL6 named pairs, 2026-10-12): 711,393 → 712,699 B gzip (+1,306 B) on Node 22.23.2/esbuild 0.25.12. Sixteen named pair facades and optional generic metadata add no dependencies. Headroom is 261 B; only price-levels also changes its whole-entrypoint ceiling, with single-helper installed tree-shaking tests. Every other narrow limit and structural gate is retained. ' +
       '694.625 → 695 KiB (PL5 numerical/DX review, 2026-10-12): 711,093 → 711,393 B gzip (+300 B), measured on Node 22.23.2/esbuild 0.25.12. The private extreme-range exact-rounding fallback and method-specific examples left 287 B headroom. Only the new price-level subpath ceiling also changed (8.375 KiB); all other narrow limits and structural gates remained intact. ' +
       '693.5 → 694.625 KB (reference-price level conversion, 2026-10-12): base ec6ae2d measured 710,091 B and this addition 711,093 B gzip (+1,002 B) on Node 22.23.2/esbuild 0.25.12. Only the new valuation facade and its private validation boundary join the deliberately whole-surface umbrella; schemas stay isolated. Headroom was 203 B. Every existing narrower limit was preserved, and valuation/price-levels gained its own initial 8.125 KiB ceiling. ' +

@@ -147,3 +147,13 @@ No staging/secret/allowance/key/grant/account/paper operation, API-server edit, 
 release/version/publication/deployment/merge, recurring automation or live execution. PR26 remains
 draft at reviewed C2 head; feature/execution stays linked and in progress. Later maintainer10/10,
 connected-agent/paper/App acceptance is separate.
+
+## Disposition
+
+Coordinator requeste2fef6ff-8d7a-8297-92b4-f50e5d6d8b0f approved the exact caps proposed above,
+including the separately reviewed narrow taxonomy increases and initial data gates. Independent
+source/installed graph/byte repeats match;94 source cases and exact119.5 primary example pass.
+This resolves the budget checkpoint at b0fcbf3. Earlier failures remain historical evidence;
+final source/packed measurements and fresh generated/hosted acceptance must still pass. The
+required actual-door teaching correction is implemented/tested before final verification. No
+merge authority or further threshold increase follows from this technical approval.

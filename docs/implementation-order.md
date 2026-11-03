@@ -33,7 +33,7 @@ bars and option-chain research. Broad provider inventories remain possible commu
 - [x] C3: technical approval at `f6c99cf` via request3fa03c0a of the [connection/window spec](./specs/community-connector-c3-connection.md)
       before runtime work; preserve the maintainer-approved root data.connect → priceBars → existing SMA example.
 - [ ] C3 implementation/installed/public/generated/bundle and fresh exact-head fast/full proof after review.
-- [ ] C3 measured budget review: [root/new-data and separate narrow taxonomy evidence](./reviews/community-connectors-c3-budget-2026-11-02.md); no threshold edits, source candidate ready.
+- [x] C3 measured budget approved via requeste2fef6ff: [root/new-data and separate narrow taxonomy evidence](./reviews/community-connectors-c3-budget-2026-11-02.md); approved caps applied; final remeasurement remains required.
 - [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
       actual paper-journey and MCP App acceptance.
 
@@ -855,3 +855,10 @@ Do not advance to the next row or cutover in the authoritative sequence while th
 
 Within a stage, independent tasks may run in parallel only when they do not settle the same public
 types, package edges, or semantic vocabulary.
+
+C3 current checkpoint: the required public-door teaching correction and larger-window restoration
+regression pass, with192 focused source/fixture/whole-budget cases. Two new installed Rollup cases
+still exceed their approved11008B ceiling (13087/13117B); all other new data budget cases pass.
+See [the current verification record](./reviews/community-connectors-c3-2026-11-02.md). Work stops
+at requeste2fef6ff's explicit cap-failure review point: no further cap increase, shared optimization,
+PR push or hosted acceptance. Ordered generation remains incomplete, feature in progress.

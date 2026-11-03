@@ -1,6 +1,6 @@
 # Community connector C3: connect, fetch a window, calculate
 
-Status: **C3 technical review approved at f6c99cfed38dc44c6ca0cc6279cf5a703014f04e; bounded offline implementation active, measured budget checkpoint pending review**.
+Status: **C3 technical review approved at f6c99cfed38dc44c6ca0cc6279cf5a703014f04e; bounded offline implementation active, measured budget approved; final implementation verification active**.
 Approval: `3fa03c0a-dcc3-8e42-a19a-63e21bc53649`.
 Date: 2026-11-02. Feature: `01a19da0-2a6f-7450-89a4-2e51047b05b5`.
 Request: `3974edf7-0690-81d9-ba59-8f39791dc6da`.
@@ -388,3 +388,20 @@ Exact primary installed period20 example works on one/three synthetic source pag
 83 installed provider cases plus226 existing packed cases pass. This is not complete C3 acceptance:
 ordered generated/public-contract closure, remaining final proofs and exact-head hosted fast/full
 checks are still open. Reviewed C2 SDK/provider trees and PR26 remain unchanged.
+
+## Measured budget approval
+
+Request `e2fef6ff-8d7a-8297-92b4-f50e5d6d8b0f` approved candidateb0fcbf3 measurements and exactly
+root703KiB, montecarlo7.40625KiB, crypto calendar4.90625KiB, convertible8.78125KiB. Initial /data
+whole13.5KiB, installed named connect13/10.75KiB, root data.connect13.5/10.75KiB, restore11.75KiB
+per bundler are approved. Every other cap/structural/guard/browser check is unchanged. Coordinator
+independently repeated94 source cases and installed one/three-page119.5 primary proof; receipts
+are `/tmp/tf-c3-coordinator-measurements.json`, `/tmp/tf-c3-coordinator-source-tests.log` and
+`/tmp/tf-c3-coordinator-installed.json`. Final source must be remeasured; further increases require
+review. Public-door teaching correction retains shared validators/codes/context and is covered by
+an invalid-date JavaScript failing-then-passing regression before provider invocation.
+
+Final-source remeasurement checkpoint: two new installed Rollup cases fail11008B caps at13087/13117B.
+All34 whole gates pass; other new data gates pass. The [current source/evidence record](../reviews/community-connectors-c3-2026-11-02.md)
+preserves the required teaching correction and verified40k storage fix. Stop for the explicit
+technical review required by e2fef6ff; no further cap edit or completed implementation claim.

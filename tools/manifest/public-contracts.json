@@ -1671,6 +1671,14 @@
     "@totalfinance/core:CompareCalculationArtifactsInput": ["baseline", "candidate", "metrics"],
     "@totalfinance/core:ComparisonTolerance": ["absolute", "relative"],
     "@totalfinance/core:Computed": ["assumptions", "diagnostics", "value"],
+    "@totalfinance/core:ConnectedData": [
+      "capabilities",
+      "contractVersion",
+      "id",
+      "priceBars",
+      "query",
+      "version"
+    ],
     "@totalfinance/core:CreateMarketSnapshotInput": ["asOf", "observations"],
     "@totalfinance/core:DataAbortProbe": ["kind", "name", "request", "waitUntilStarted"],
     "@totalfinance/core:DataCapabilities": [
@@ -1842,6 +1850,9 @@
     ],
     "@totalfinance/core:PriceBarsRequest": ["from", "interval", "kind", "limit", "symbol", "to"],
     "@totalfinance/core:PriceBarsView": ["closePrices", "kind", "ohlcvBars", "page"],
+    "@totalfinance/core:PriceBarsWindow": ["kind", "pages", "pagination", "request", "version"],
+    "@totalfinance/core:PriceBarsWindowRequest": ["from", "interval", "symbol", "to"],
+    "@totalfinance/core:PriceBarsWindowView": ["closePrices", "kind", "ohlcvBars", "window"],
     "@totalfinance/core:Pricer": [
       "capabilities",
       "name",
@@ -10432,6 +10443,14 @@
     "totalfinance:ConcentrationValues": ["effectiveCount", "gini", "hhi", "topKShare", "topWeight"],
     "totalfinance:Condition": ["refs"],
     "totalfinance:CondorInput": ["k1", "k2", "k3", "k4"],
+    "totalfinance:ConnectedData": [
+      "capabilities",
+      "contractVersion",
+      "id",
+      "priceBars",
+      "query",
+      "version"
+    ],
     "totalfinance:ContractExposure": [
       "charm",
       "color",
@@ -10774,6 +10793,26 @@
       "sellVolume",
       "sign"
     ],
+    "totalfinance:DataCapabilities": [
+      "capabilities",
+      "contractVersion",
+      "providerId",
+      "providerVersion"
+    ],
+    "totalfinance:DataPage": [
+      "assumptions",
+      "contractVersion",
+      "data",
+      "diagnostics",
+      "kind",
+      "metadata",
+      "nextCursor",
+      "provenance",
+      "symbol"
+    ],
+    "totalfinance:DataProvider": ["capabilities", "contractVersion", "id", "query", "version"],
+    "totalfinance:DataRequest": ["kind", "limit", "symbol"],
+    "totalfinance:DataViewFor": ["kind", "page"],
     "totalfinance:DatedCashFlow": ["amount", "cashFlowDate"],
     "totalfinance:DatedInternalRateOfReturnInput": ["asOf", "cashFlows"],
     "totalfinance:DatedNetPresentValueInput": ["annualDiscountRate", "asOf", "cashFlows"],
@@ -12907,6 +12946,7 @@
       "strike",
       "type"
     ],
+    "totalfinance:OhlcvInput": ["close", "high", "low", "open", "volume"],
     "totalfinance:OlsHacOptions": ["lags"],
     "totalfinance:OlsResult": [
       "adjustedRSquared",
@@ -13820,6 +13860,19 @@
     ],
     "totalfinance:PremiumMarket": ["asOf", "riskFreeRate", "spot", "volatility"],
     "totalfinance:PresentValueInput": ["annualInterestRate", "futureAmount", "timeYears"],
+    "totalfinance:PriceBarRecord": [
+      "bar",
+      "diagnostics",
+      "provisional",
+      "revision",
+      "sessionDate",
+      "source",
+      "times",
+      "timestampConvention"
+    ],
+    "totalfinance:PriceBarsWindow": ["kind", "pages", "pagination", "request", "version"],
+    "totalfinance:PriceBarsWindowRequest": ["from", "interval", "symbol", "to"],
+    "totalfinance:PriceBarsWindowView": ["closePrices", "kind", "ohlcvBars", "window"],
     "totalfinance:PriceFromYieldOptions": ["settlementDate", "yield"],
     "totalfinance:PriceLevelConversionAssumptions": [
       "conversion",
@@ -16098,38 +16151,38 @@
     ]
   },
   "summary": {
-    "publicPaths": 7959,
-    "implementations": 2726,
+    "publicPaths": 7968,
+    "implementations": 2729,
     "maxPathsPerImplementation": 625,
-    "inputContracts": 1593,
-    "resultContracts": 1968,
-    "validatorIdentities": 384,
+    "inputContracts": 1596,
+    "resultContracts": 1973,
+    "validatorIdentities": 385,
     "helperQuantAnswers": 0,
     "highLevelPositionalPairs": 34,
     "byInputShape": {
-      "object-request": 3983,
-      "positional-scalars": 1452,
+      "object-request": 3984,
+      "positional-scalars": 1455,
       "nullary": 419,
-      "subject-options": 334,
+      "subject-options": 339,
       "series-options": 1763,
       "columnar": 8
     },
-    "objectInputPaths": 6082,
+    "objectInputPaths": 6088,
     "unguardedObjectInputs": 326,
     "unnameableParameterContracts": 8,
     "unnameableUnreachable": 0,
     "unnameableForeign": 8,
     "byGuardReachability": {
-      "none": 1162,
-      "no-implementation": 959,
-      "ambiguous": 350,
-      "direct": 2915,
-      "delegated": 2573
+      "none": 1185,
+      "no-implementation": 962,
+      "ambiguous": 346,
+      "direct": 2918,
+      "delegated": 2557
     },
-    "ambiguousReachability": 350,
+    "ambiguousReachability": 346,
     "byBoundaryKind": {
-      "entry-point": 6369,
-      "callback-contract": 959,
+      "entry-point": 6375,
+      "callback-contract": 962,
       "constructor": 157,
       "error": 8,
       "validator": 179,
@@ -78004,6 +78057,469 @@
       ]
     },
     {
+      "id": "@totalfinance/core:ConnectedData#capabilities",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-types.d.ts#DataProvider.capabilities",
+      "role": "unclassified",
+      "grammar": "object",
+      "inputShape": "object-request",
+      "boundaryKind": "callback-contract",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "contract": "@totalfinance/core:DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "signal",
+                  "type": "AbortSignal",
+                  "kind": "object",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "Promise<DataCapabilities>",
+          "resultContract": "@totalfinance/core:Promise<DataCapabilities>"
+        }
+      ],
+      "inputContract": "@totalfinance/core:DataCallOptions | undefined",
+      "resultContract": "@totalfinance/core:Promise<DataCapabilities>",
+      "validators": [],
+      "guardReachability": "no-implementation",
+      "fields": ["DataCallOptions.signal"]
+    },
+    {
+      "id": "@totalfinance/core:ConnectedData#priceBars",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-types.d.ts#ConnectedData.priceBars",
+      "role": "unclassified",
+      "grammar": "subject-options",
+      "inputShape": "subject-options",
+      "boundaryKind": "callback-contract",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "request",
+              "type": "PriceBarsWindowRequest",
+              "contract": "@totalfinance/core:PriceBarsWindowRequest",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#PriceBarsWindowRequest",
+              "optional": false,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "from",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "interval",
+                  "type": "'1d' | '1m'",
+                  "kind": "enum",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": ["1d", "1m"]
+                },
+                {
+                  "name": "symbol",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "to",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "type": "PriceBarsWindowOptions | undefined",
+              "contract": "@totalfinance/core:PriceBarsWindowOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#PriceBarsWindowOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "maxPages",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "maxRecords",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "pageSize",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "signal",
+                  "type": "AbortSignal",
+                  "kind": "object",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "Promise<PriceBarsWindowView>",
+          "resultContract": "@totalfinance/core:Promise<PriceBarsWindowView>"
+        }
+      ],
+      "inputContract": "@totalfinance/core:PriceBarsWindowRequest",
+      "resultContract": "@totalfinance/core:Promise<PriceBarsWindowView>",
+      "validators": [],
+      "guardReachability": "no-implementation",
+      "fields": [
+        "PriceBarsWindowOptions.maxPages",
+        "PriceBarsWindowOptions.maxRecords",
+        "PriceBarsWindowOptions.pageSize",
+        "PriceBarsWindowOptions.signal",
+        "PriceBarsWindowRequest.from",
+        "PriceBarsWindowRequest.interval",
+        "PriceBarsWindowRequest.symbol",
+        "PriceBarsWindowRequest.to"
+      ]
+    },
+    {
+      "id": "@totalfinance/core:ConnectedData#query",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-types.d.ts#DataProvider.query",
+      "role": "unclassified",
+      "grammar": "subject-options",
+      "inputShape": "subject-options",
+      "boundaryKind": "callback-contract",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "request",
+              "type": "R",
+              "contract": "@totalfinance/core:R",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#R",
+              "inferredGeneric": true,
+              "optional": false,
+              "rest": false,
+              "kind": "object",
+              "branches": [
+                {
+                  "type": "PriceBarsRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "from",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "interval",
+                      "type": "'1m' | '1d'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["1d", "1m"]
+                    },
+                    {
+                      "name": "kind",
+                      "type": "'price-bars'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["price-bars"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "to",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                },
+                {
+                  "type": "OptionChainResearchRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "expirationFrom",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "expirationTo",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "'option-chain-research'",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "maxStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "minStrike",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": true,
+                      "nullable": false
+                    },
+                    {
+                      "name": "rights",
+                      "type": "ReadonlyArray<'call' | 'put'>",
+                      "kind": "array",
+                      "optional": true,
+                      "nullable": false,
+                      "element": {
+                        "name": "[]",
+                        "type": "'call' | 'put'",
+                        "kind": "enum",
+                        "optional": false,
+                        "nullable": false,
+                        "literals": ["call", "put"]
+                      }
+                    },
+                    {
+                      "name": "snapshot",
+                      "type": "{ readonly kind: 'latest'; } | { readonly kind: 'session'; readonly sessionDate: string; } | { readonly kind: 'id'; readonly snapshotId: string; }",
+                      "kind": "object",
+                      "optional": false,
+                      "nullable": false,
+                      "branches": [
+                        {
+                          "type": "{ readonly kind: 'latest'; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'latest'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["latest"]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'session'; readonly sessionDate: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'session'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["session"]
+                            },
+                            {
+                              "name": "sessionDate",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        },
+                        {
+                          "type": "{ readonly kind: 'id'; readonly snapshotId: string; }",
+                          "kind": "object",
+                          "nullable": false,
+                          "fields": [
+                            {
+                              "name": "kind",
+                              "type": "'id'",
+                              "kind": "enum",
+                              "optional": false,
+                              "nullable": false,
+                              "literals": ["id"]
+                            },
+                            {
+                              "name": "snapshotId",
+                              "type": "string",
+                              "kind": "string",
+                              "optional": false,
+                              "nullable": false
+                            }
+                          ]
+                        }
+                      ],
+                      "fields": [
+                        {
+                          "name": "kind",
+                          "type": "'latest'",
+                          "kind": "enum",
+                          "optional": false,
+                          "nullable": false,
+                          "literals": ["latest"]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                },
+                {
+                  "type": "DataContinuationRequest",
+                  "kind": "object",
+                  "nullable": false,
+                  "fields": [
+                    {
+                      "name": "cursor",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "kind",
+                      "type": "DataKind",
+                      "kind": "enum",
+                      "optional": false,
+                      "nullable": false,
+                      "literals": ["option-chain-research", "price-bars"]
+                    },
+                    {
+                      "name": "limit",
+                      "type": "number",
+                      "kind": "numeric",
+                      "optional": false,
+                      "nullable": false
+                    },
+                    {
+                      "name": "symbol",
+                      "type": "string",
+                      "kind": "string",
+                      "optional": false,
+                      "nullable": false
+                    }
+                  ]
+                }
+              ],
+              "fieldTree": [
+                {
+                  "name": "kind",
+                  "type": "DataKind",
+                  "kind": "enum",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": ["option-chain-research", "price-bars"]
+                },
+                {
+                  "name": "limit",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "symbol",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "type": "DataCallOptions | undefined",
+              "contract": "@totalfinance/core:DataCallOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataCallOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "signal",
+                  "type": "AbortSignal",
+                  "kind": "object",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "Promise<DataViewFor<R>>",
+          "resultContract": "@totalfinance/core:Promise<DataViewFor<R>>"
+        }
+      ],
+      "inputContract": "@totalfinance/core:R",
+      "resultContract": "@totalfinance/core:Promise<DataViewFor<R>>",
+      "validators": [],
+      "guardReachability": "no-implementation",
+      "fields": ["DataCallOptions.signal", "R.kind", "R.limit", "R.symbol"]
+    },
+    {
       "id": "@totalfinance/core:ConvergenceError#toJSON",
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/errors.d.ts#QuantError.toJSON",
@@ -85342,7 +85858,7 @@
       "inputContract": "@totalfinance/core:Computed<unknown, Record<never, never>>",
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous",
+      "guardReachability": "none",
       "fields": [
         "Computed.assumptions",
         "Computed.diagnostics",
@@ -85385,7 +85901,7 @@
       "inputContract": null,
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/core:between",
@@ -86845,6 +87361,187 @@
       "fields": ["InterestCompounding.periodsPerYear", "InterestCompounding.type"]
     },
     {
+      "id": "@totalfinance/core:connect",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "role": "artifact",
+      "grammar": "subject-options",
+      "inputShape": "subject-options",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "provider",
+              "type": "DataProvider",
+              "contract": "@totalfinance/core:DataProvider",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataProvider",
+              "optional": false,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "capabilities",
+                  "type": "(options?: DataCallOptions | undefined) => Promise<DataCapabilities>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataCapabilities>"
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 1,
+                    "returns": "Promise<DataCapabilities>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataCapabilities>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "contractVersion",
+                  "type": "1",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": [1]
+                },
+                {
+                  "name": "id",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "query",
+                  "type": "<R extends DataRequest>(request: R, options?: DataCallOptions | undefined) => Promise<DataViewFor<R>>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "request",
+                          "type": "R",
+                          "optional": false,
+                          "rest": false
+                        },
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataViewFor<R>>",
+                      "typeParameters": [
+                        {
+                          "name": "R",
+                          "constraint": "DataRequest"
+                        }
+                      ]
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 2,
+                    "returns": "Promise<DataViewFor<R>>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataViewFor<R>>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "version",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "type": "DataConnectionOptions | undefined",
+              "contract": "@totalfinance/core:DataConnectionOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataConnectionOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "maxPages",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "maxRecords",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "pageSize",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "ConnectedData",
+          "resultContract": "@totalfinance/core:ConnectedData"
+        }
+      ],
+      "inputContract": "@totalfinance/core:DataProvider",
+      "resultContract": "@totalfinance/core:ConnectedData",
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
+      "guardReachability": "delegated",
+      "fields": [
+        "ConnectedData.capabilities(options).signal",
+        "ConnectedData.contractVersion",
+        "ConnectedData.id",
+        "ConnectedData.priceBars(options).maxPages",
+        "ConnectedData.priceBars(options).maxRecords",
+        "ConnectedData.priceBars(options).pageSize",
+        "ConnectedData.priceBars(options).signal",
+        "ConnectedData.version",
+        "DataConnectionOptions.maxPages",
+        "DataConnectionOptions.maxRecords",
+        "DataConnectionOptions.pageSize",
+        "DataProvider.capabilities(options).signal",
+        "DataProvider.contractVersion",
+        "DataProvider.id",
+        "DataProvider.version"
+      ],
+      "via": ["providerShape", "object"],
+      "inputPolicies": {
+        "0": "open"
+      }
+    },
+    {
       "id": "@totalfinance/core:contentHash",
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/artifacts/content-hash.d.ts#contentHash",
@@ -87460,6 +88157,41 @@
         "MarketSnapshot.observations",
         "MarketSnapshot.provenance",
         "MarketSnapshot.schemaVersion"
+      ]
+    },
+    {
+      "id": "@totalfinance/core:createPriceBarsWindowView",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-connection.d.ts#createPriceBarsWindowView",
+      "role": "artifact",
+      "grammar": "single-subject",
+      "inputShape": "positional-scalars",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "input",
+              "type": "unknown",
+              "contract": null,
+              "optional": false,
+              "rest": false,
+              "kind": "other"
+            }
+          ],
+          "returns": "PriceBarsWindowView",
+          "resultContract": "@totalfinance/core:PriceBarsWindowView"
+        }
+      ],
+      "inputContract": null,
+      "resultContract": "@totalfinance/core:PriceBarsWindowView",
+      "validators": ["parse"],
+      "guardReachability": "direct",
+      "fields": [
+        "PriceBarsWindowView.closePrices",
+        "PriceBarsWindowView.kind",
+        "PriceBarsWindowView.ohlcvBars",
+        "PriceBarsWindowView.window"
       ]
     },
     {
@@ -96112,7 +96844,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/core:T",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/core:requireSelection",
@@ -246948,9 +247680,9 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "@totalfinance/math:choleskySolve",
@@ -247380,9 +248112,8 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:number",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["luDecompose", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/math:differentialEvolution",
@@ -248455,9 +249186,8 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Array<number>",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/math:haltonSequence",
@@ -248720,9 +249450,8 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/math:jacobiEigen",
@@ -249995,10 +250724,9 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:LuResult",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"],
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous",
+      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"]
     },
     {
       "id": "@totalfinance/math:luSolve",
@@ -250498,9 +251226,8 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/math:matrixVectorProduct",
@@ -251144,9 +251871,9 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
+      "validators": ["requireMathIterationBudgetWhenPresent"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["nearestPsd", "jacobiEigen"]
     },
     {
       "id": "@totalfinance/math:nearestPsd",
@@ -252389,9 +253116,9 @@
       ],
       "inputContract": "@totalfinance/math:{}#b977ae85f2c6",
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "@totalfinance/math:qrDecompose",
@@ -252435,10 +253162,10 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:QrResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
       "fields": ["QrResult.q", "QrResult.r"],
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "@totalfinance/math:qrSolve",
@@ -252515,9 +253242,9 @@
       ],
       "inputContract": "@totalfinance/math:{}#b977ae85f2c6",
       "resultContract": "@totalfinance/math:Array<number>",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["qrDecompose", "from"]
+      "via": ["qrDecompose", "sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "@totalfinance/math:quantile",
@@ -253501,9 +254228,9 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Array<Array<number>>",
-      "validators": ["parse"],
+      "validators": ["ensurePrimitives"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["directionNumbers", "sobolPrimitive"]
     },
     {
       "id": "@totalfinance/math:solveAll",
@@ -254254,10 +254981,10 @@
       ],
       "inputContract": "@totalfinance/math:{}#6f255576a60f",
       "resultContract": "@totalfinance/math:SvdResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
       "fields": ["SvdResult.s", "SvdResult.u", "SvdResult.v"],
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "@totalfinance/math:transpose",
@@ -254301,9 +255028,8 @@
       ],
       "inputContract": null,
       "resultContract": "@totalfinance/math:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "@totalfinance/math:trimmedMean",
@@ -436354,7 +437080,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:boolean",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#cached",
@@ -436412,7 +437138,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:TechnicalAnalysisSnapshot",
       "validators": [],
-      "guardReachability": "ambiguous",
+      "guardReachability": "none",
       "fields": [
         "TechnicalAnalysisSnapshot.kind",
         "TechnicalAnalysisSnapshot.schemaVersion",
@@ -436446,7 +437172,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<TechnicalAnalysisSnapshot>",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#has",
@@ -436561,7 +437287,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:T",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#literals",
@@ -436618,7 +437344,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<T>",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#lookback",
@@ -436676,7 +437402,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:number",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#numberOrNull",
@@ -436705,7 +437431,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:number | null",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#numberRows",
@@ -436734,7 +437460,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<Array<number>>",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#numbers",
@@ -436763,7 +437489,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<number>",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#numbersOrNull",
@@ -436792,7 +437518,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<number> | null",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#optionalNumber",
@@ -436879,7 +437605,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:T",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#recordOrNull",
@@ -436908,7 +437634,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:T | null",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#records",
@@ -436937,7 +437663,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:Array<T>",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SnapshotState#text",
@@ -436966,7 +437692,7 @@
       "inputContract": null,
       "resultContract": "@totalfinance/technical-analysis:string",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "@totalfinance/technical-analysis:SqueezeCore#toJSON",
@@ -612906,9 +613632,8 @@
       ],
       "inputContract": null,
       "resultContract": null,
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"],
+      "validators": [],
+      "guardReachability": "ambiguous",
       "inputPolicies": {
         "0": "open"
       }
@@ -638249,7 +638974,7 @@
       "inputContract": "totalfinance:Computed<unknown, Record<never, never>>",
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:assertFiniteValue",
@@ -638286,7 +639011,7 @@
       "inputContract": null,
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:assetTurnover",
@@ -695733,9 +696458,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:choleskySolve",
@@ -706089,6 +706814,184 @@
       ]
     },
     {
+      "id": "totalfinance:connect",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "role": "unclassified",
+      "grammar": "subject-options",
+      "inputShape": "subject-options",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "provider",
+              "type": "DataProvider",
+              "contract": "totalfinance:DataProvider",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataProvider",
+              "optional": false,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "capabilities",
+                  "type": "(options?: DataCallOptions | undefined) => Promise<DataCapabilities>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataCapabilities>"
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 1,
+                    "returns": "Promise<DataCapabilities>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataCapabilities>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "contractVersion",
+                  "type": "1",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": [1]
+                },
+                {
+                  "name": "id",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "query",
+                  "type": "<R extends DataRequest>(request: R, options?: DataCallOptions | undefined) => Promise<DataViewFor<R>>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "request",
+                          "type": "R",
+                          "optional": false,
+                          "rest": false
+                        },
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataViewFor<R>>",
+                      "typeParameters": [
+                        {
+                          "name": "R",
+                          "constraint": "DataRequest"
+                        }
+                      ]
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 2,
+                    "returns": "Promise<DataViewFor<R>>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataViewFor<R>>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "version",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "type": "DataConnectionOptions | undefined",
+              "contract": "totalfinance:DataConnectionOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataConnectionOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "maxPages",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "maxRecords",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "pageSize",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "ConnectedData",
+          "resultContract": "totalfinance:ConnectedData"
+        }
+      ],
+      "inputContract": "totalfinance:DataProvider",
+      "resultContract": "totalfinance:ConnectedData",
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
+      "guardReachability": "delegated",
+      "fields": [
+        "ConnectedData.capabilities(options).signal",
+        "ConnectedData.contractVersion",
+        "ConnectedData.id",
+        "ConnectedData.priceBars(options).maxPages",
+        "ConnectedData.priceBars(options).maxRecords",
+        "ConnectedData.priceBars(options).pageSize",
+        "ConnectedData.priceBars(options).signal",
+        "ConnectedData.version",
+        "DataConnectionOptions.maxPages",
+        "DataConnectionOptions.maxRecords",
+        "DataConnectionOptions.pageSize",
+        "DataProvider.capabilities(options).signal",
+        "DataProvider.contractVersion",
+        "DataProvider.id",
+        "DataProvider.version"
+      ],
+      "via": ["providerShape", "object"]
+    },
+    {
       "id": "totalfinance:connorsRsi",
       "package": "totalfinance",
       "implementation": "packages/technical-analysis/dist/oscillators.d.ts#connorsRsi",
@@ -708313,7 +709216,7 @@
       "inputContract": "totalfinance:Computed<unknown, Record<never, never>>",
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:core.assertFiniteValue",
@@ -708350,7 +709253,7 @@
       "inputContract": null,
       "resultContract": null,
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:core.between",
@@ -711711,7 +712614,7 @@
       "inputContract": null,
       "resultContract": "totalfinance:T",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:core.requireSelection",
@@ -721129,6 +722032,41 @@
         "PortfolioStepperRequest.window",
         "PortfolioStepperRequest.window.fromTimestampMs",
         "PortfolioStepperRequest.window.toTimestampMs"
+      ]
+    },
+    {
+      "id": "totalfinance:createPriceBarsWindowView",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#createPriceBarsWindowView",
+      "role": "unclassified",
+      "grammar": "single-subject",
+      "inputShape": "positional-scalars",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "input",
+              "type": "unknown",
+              "contract": null,
+              "optional": false,
+              "rest": false,
+              "kind": "other"
+            }
+          ],
+          "returns": "PriceBarsWindowView",
+          "resultContract": "totalfinance:PriceBarsWindowView"
+        }
+      ],
+      "inputContract": null,
+      "resultContract": "totalfinance:PriceBarsWindowView",
+      "validators": ["parse"],
+      "guardReachability": "direct",
+      "fields": [
+        "PriceBarsWindowView.closePrices",
+        "PriceBarsWindowView.kind",
+        "PriceBarsWindowView.ohlcvBars",
+        "PriceBarsWindowView.window"
       ]
     },
     {
@@ -740292,6 +741230,219 @@
       "via": ["makeIndicator"]
     },
     {
+      "id": "totalfinance:data.connect",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#connect",
+      "role": "unclassified",
+      "grammar": "subject-options",
+      "inputShape": "subject-options",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "provider",
+              "type": "DataProvider",
+              "contract": "totalfinance:DataProvider",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataProvider",
+              "optional": false,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "capabilities",
+                  "type": "(options?: DataCallOptions | undefined) => Promise<DataCapabilities>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataCapabilities>"
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 1,
+                    "returns": "Promise<DataCapabilities>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataCapabilities>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "contractVersion",
+                  "type": "1",
+                  "kind": "numeric",
+                  "optional": false,
+                  "nullable": false,
+                  "literals": [1]
+                },
+                {
+                  "name": "id",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                },
+                {
+                  "name": "query",
+                  "type": "<R extends DataRequest>(request: R, options?: DataCallOptions | undefined) => Promise<DataViewFor<R>>",
+                  "kind": "function",
+                  "optional": false,
+                  "nullable": false,
+                  "callSignatures": [
+                    {
+                      "parameters": [
+                        {
+                          "name": "request",
+                          "type": "R",
+                          "optional": false,
+                          "rest": false
+                        },
+                        {
+                          "name": "options",
+                          "type": "DataCallOptions | undefined",
+                          "optional": true,
+                          "rest": false
+                        }
+                      ],
+                      "returns": "Promise<DataViewFor<R>>",
+                      "typeParameters": [
+                        {
+                          "name": "R",
+                          "constraint": "DataRequest"
+                        }
+                      ]
+                    }
+                  ],
+                  "callSignature": {
+                    "parameters": 2,
+                    "returns": "Promise<DataViewFor<R>>"
+                  },
+                  "returns": {
+                    "name": "()",
+                    "type": "Promise<DataViewFor<R>>",
+                    "kind": "object",
+                    "optional": false,
+                    "nullable": false
+                  }
+                },
+                {
+                  "name": "version",
+                  "type": "string",
+                  "kind": "string",
+                  "optional": false,
+                  "nullable": false
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "type": "DataConnectionOptions | undefined",
+              "contract": "totalfinance:DataConnectionOptions | undefined",
+              "typeDeclaration": "packages/core/dist/data-types.d.ts#DataConnectionOptions",
+              "optional": true,
+              "rest": false,
+              "kind": "object",
+              "fieldTree": [
+                {
+                  "name": "maxPages",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "maxRecords",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                },
+                {
+                  "name": "pageSize",
+                  "type": "number",
+                  "kind": "numeric",
+                  "optional": true,
+                  "nullable": false
+                }
+              ]
+            }
+          ],
+          "returns": "ConnectedData",
+          "resultContract": "totalfinance:ConnectedData"
+        }
+      ],
+      "inputContract": "totalfinance:DataProvider",
+      "resultContract": "totalfinance:ConnectedData",
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
+      "guardReachability": "delegated",
+      "fields": [
+        "ConnectedData.capabilities(options).signal",
+        "ConnectedData.contractVersion",
+        "ConnectedData.id",
+        "ConnectedData.priceBars(options).maxPages",
+        "ConnectedData.priceBars(options).maxRecords",
+        "ConnectedData.priceBars(options).pageSize",
+        "ConnectedData.priceBars(options).signal",
+        "ConnectedData.version",
+        "DataConnectionOptions.maxPages",
+        "DataConnectionOptions.maxRecords",
+        "DataConnectionOptions.pageSize",
+        "DataProvider.capabilities(options).signal",
+        "DataProvider.contractVersion",
+        "DataProvider.id",
+        "DataProvider.version"
+      ],
+      "via": ["providerShape", "object"]
+    },
+    {
+      "id": "totalfinance:data.createPriceBarsWindowView",
+      "package": "totalfinance",
+      "implementation": "packages/core/dist/data-connection.d.ts#createPriceBarsWindowView",
+      "role": "unclassified",
+      "grammar": "single-subject",
+      "inputShape": "positional-scalars",
+      "boundaryKind": "entry-point",
+      "signatures": [
+        {
+          "parameters": [
+            {
+              "name": "input",
+              "type": "unknown",
+              "contract": null,
+              "optional": false,
+              "rest": false,
+              "kind": "other"
+            }
+          ],
+          "returns": "PriceBarsWindowView",
+          "resultContract": "totalfinance:PriceBarsWindowView"
+        }
+      ],
+      "inputContract": null,
+      "resultContract": "totalfinance:PriceBarsWindowView",
+      "validators": ["parse"],
+      "guardReachability": "direct",
+      "fields": [
+        "PriceBarsWindowView.closePrices",
+        "PriceBarsWindowView.kind",
+        "PriceBarsWindowView.ohlcvBars",
+        "PriceBarsWindowView.window"
+      ]
+    },
+    {
       "id": "totalfinance:datedInternalRateOfReturn",
       "package": "totalfinance",
       "implementation": "packages/valuation/dist/solvers.d.ts#datedInternalRateOfReturn",
@@ -749167,9 +750318,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:number",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["luDecompose", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:diaToDjiaLevel",
@@ -909539,9 +910689,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Array<number>",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:haltonSequence",
@@ -912753,9 +913902,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:imbalanceBars",
@@ -930349,10 +931497,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:LuResult",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"],
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous",
+      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"]
     },
     {
       "id": "totalfinance:luSolve",
@@ -933381,9 +934528,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:math.choleskySolve",
@@ -933813,9 +934960,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:number",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["luDecompose", "from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:math.differentialEvolution",
@@ -934888,9 +936034,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Array<number>",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:math.haltonSequence",
@@ -935153,9 +936298,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:math.jacobiEigen",
@@ -936428,10 +937572,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:LuResult",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"],
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous",
+      "fields": ["LuResult.lu", "LuResult.pivotIndices", "LuResult.sign"]
     },
     {
       "id": "totalfinance:math.luSolve",
@@ -936931,9 +938074,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:math.matrixVectorProduct",
@@ -937577,9 +938719,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["requireMathIterationBudgetWhenPresent"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["nearestPsd", "jacobiEigen"]
     },
     {
       "id": "totalfinance:math.nearestPsd",
@@ -938822,9 +939964,9 @@
       ],
       "inputContract": "totalfinance:{}#b977ae85f2c6",
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "totalfinance:math.qrDecompose",
@@ -938868,10 +940010,10 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:QrResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
       "fields": ["QrResult.q", "QrResult.r"],
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:math.qrSolve",
@@ -938948,9 +940090,9 @@
       ],
       "inputContract": "totalfinance:{}#b977ae85f2c6",
       "resultContract": "totalfinance:Array<number>",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["qrDecompose", "from"]
+      "via": ["qrDecompose", "sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:math.quantile",
@@ -939934,9 +941076,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Array<Array<number>>",
-      "validators": ["parse"],
+      "validators": ["ensurePrimitives"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["directionNumbers", "sobolPrimitive"]
     },
     {
       "id": "totalfinance:math.solveAll",
@@ -940687,10 +941829,10 @@
       ],
       "inputContract": "totalfinance:{}#6f255576a60f",
       "resultContract": "totalfinance:SvdResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
       "fields": ["SvdResult.s", "SvdResult.u", "SvdResult.v"],
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "totalfinance:math.transpose",
@@ -940734,9 +941876,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:math.trimmedMean",
@@ -941433,9 +942574,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:matrixVectorProduct",
@@ -948225,9 +949365,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["requireMathIterationBudgetWhenPresent"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["nearestPsd", "jacobiEigen"]
     },
     {
       "id": "totalfinance:nearestPsd",
@@ -1061737,9 +1062877,9 @@
       ],
       "inputContract": "totalfinance:{}#b977ae85f2c6",
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "totalfinance:psychologicalLine",
@@ -1063309,10 +1064449,10 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:QrResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
       "fields": ["QrResult.q", "QrResult.r"],
-      "via": ["from"]
+      "via": ["sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:qrSolve",
@@ -1063389,9 +1064529,9 @@
       ],
       "inputContract": "totalfinance:{}#b977ae85f2c6",
       "resultContract": "totalfinance:Array<number>",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys"],
       "guardReachability": "delegated",
-      "via": ["qrDecompose", "from"]
+      "via": ["qrDecompose", "sqrt", "unary", "makeIndicator"]
     },
     {
       "id": "totalfinance:qstick",
@@ -1077294,7 +1078434,7 @@
       "inputContract": null,
       "resultContract": "totalfinance:T",
       "validators": [],
-      "guardReachability": "ambiguous"
+      "guardReachability": "none"
     },
     {
       "id": "totalfinance:requireReturnObservations",
@@ -1124268,9 +1125408,9 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Array<Array<number>>",
-      "validators": ["parse"],
+      "validators": ["ensurePrimitives"],
       "guardReachability": "delegated",
-      "via": ["from"]
+      "via": ["directionNumbers", "sobolPrimitive"]
     },
     {
       "id": "totalfinance:solveAll",
@@ -1174400,10 +1175540,10 @@
       ],
       "inputContract": "totalfinance:{}#6f255576a60f",
       "resultContract": "totalfinance:SvdResult",
-      "validators": ["parse"],
+      "validators": ["ensureKnownKeys", "requireArgumentObject"],
       "guardReachability": "delegated",
       "fields": ["SvdResult.s", "SvdResult.u", "SvdResult.v"],
-      "via": ["from"]
+      "via": ["linalgOptionLadder"]
     },
     {
       "id": "totalfinance:swapRate",
@@ -1285757,9 +1286897,8 @@
       ],
       "inputContract": null,
       "resultContract": "totalfinance:Matrix",
-      "validators": ["parse"],
-      "guardReachability": "delegated",
-      "via": ["from"]
+      "validators": [],
+      "guardReachability": "ambiguous"
     },
     {
       "id": "totalfinance:trendSignals",

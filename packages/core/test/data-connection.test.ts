@@ -554,3 +554,60 @@ it('window VWAP equals the existing engine on independent literal OHLCV facts', 
   expect(prices.ohlcvBars).toEqual(expected);
   expect(vwap(prices.ohlcvBars)).toEqual(vwap(expected));
 });
+
+it('JS invalid-date teaching names priceBars before invoking a provider', async () => {
+  const f = fixture();
+  await expect(connect(f.provider).priceBars({ ...request, from: 'bad' })).rejects.toMatchObject({
+    code: 'input.wrong_type',
+    message: expect.stringMatching(/^priceBars: request.from/),
+    context: { field: 'request.from' },
+  });
+  expect(f.discovery()).toBe(0);
+  expect(f.calls).toHaveLength(0);
+});
+
+it('restores a bounded 40000-row minute window without applying one-page scan work to the aggregate', async () => {
+  const start = Date.parse('2026-10-01T00:00:00Z');
+  const pages = Array.from({ length: 20 }, (_, part) => {
+    const p: any = page();
+    p.nextCursor = part === 19 ? null : `page-${part + 1}`;
+    p.data = Array.from({ length: 2000 }, (_, i) => {
+      const r = bar();
+      return {
+        ...r,
+        bar: { ...r.bar, timestampMs: start + (part * 2000 + i) * 60000 },
+        timestampConvention: 'interval-start' as const,
+        sessionDate: null,
+      };
+    });
+    return p;
+  });
+  const provider = defineDataProvider({
+    id: 'fixture',
+    version: '0.0.0',
+    contractVersion: 1,
+    async capabilities() {
+      return {
+        contractVersion: 1,
+        providerId: 'fixture',
+        providerVersion: '0.0.0',
+        capabilities: [barCapability],
+      };
+    },
+    async query(r) {
+      return pages['cursor' in r ? Number(r.cursor.slice(5)) : 0];
+    },
+  });
+  const prices = await connect(provider, {
+    pageSize: 2000,
+    maxPages: 20,
+    maxRecords: 40000,
+  }).priceBars({
+    symbol: 'TEST',
+    interval: '1m',
+    from: '2026-10-01T00:00:00Z',
+    to: '2026-10-29T00:00:00Z',
+  });
+  expect(prices.closePrices).toHaveLength(40000);
+  expect(createPriceBarsWindowView(prices.window).closePrices).toEqual(prices.closePrices);
+}, 30000);

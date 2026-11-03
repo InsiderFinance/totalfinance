@@ -330,3 +330,37 @@ export function allowedConsumerModule(
     )
   );
 }
+
+/** C3 measured initial ceilings, approved e2fef6ff. Existing consumer fixtures stay unchanged. */
+export const DATA_CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
+  {
+    id: 'data-named',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance/data',
+    style: 'named',
+    source:
+      "import { connect } from '@insiderfinance/totalfinance/data'; globalThis.consumerConnect = connect;",
+    budgetKiB: { esbuild: 13, rollup: 10.75 },
+    reason: 'C3 named connect measured12977/10820B; approved13312/11008B.',
+  },
+  {
+    id: 'data-root',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance',
+    style: 'root namespace',
+    source:
+      "import { data } from '@insiderfinance/totalfinance'; globalThis.consumerConnect = data.connect;",
+    budgetKiB: { esbuild: 13.5, rollup: 10.75 },
+    reason: 'C3 root data namespace measured13589/10839B; approved13824/11008B.',
+  },
+  {
+    id: 'data-restore',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance/data',
+    style: 'named restore',
+    source:
+      "import { createPriceBarsWindowView } from '@insiderfinance/totalfinance/data'; globalThis.consumerRestore = createPriceBarsWindowView;",
+    budgetKiB: { esbuild: 11.75, rollup: 11.75 },
+    reason: 'C3 restore measured11823/11833B; approved12032B each.',
+  },
+];

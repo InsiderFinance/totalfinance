@@ -137,6 +137,16 @@ export const DOCUMENTED_EXCEPTIONS: Readonly<
     }
   >
 > = {
+  'docs/guides/community-connectors.md#INSIDERFINANCE_API_KEY': {
+    disposition: 'illustrative',
+    why: 'The approved complete Node example reads this application-owned environment variable; it is not a TotalFinance field, API key lookup, or secret value. Scope is the exact host read line, never an SDK member.',
+    generatedSource: {
+      owner: 'human',
+      headings: [''],
+      position: 'access',
+      line: 'const apiKey = process.env.INSIDERFINANCE_API_KEY;',
+    },
+  },
   'docs/guides/community-connectors.md#createInsiderFinanceProvider': {
     disposition: 'illustrative',
     why: 'This example imports the maintained external connector factory from @insiderfinance/totalfinance-connector-insiderfinance, not from the TotalFinance SDK. Its exact two-package example is verified with the local tarballs; the guide states that it is unreleased.',

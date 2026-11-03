@@ -6,7 +6,7 @@ TotalFinance inclusion PR, central allowlist or listing is required. Ordinary ca
 accept caller data and load no provider, network client or credential.
 
 This addition is unreleased. The current registry SDK does not contain these subpaths; use the
-fresh local SDK/provider tarballs named in the [implementation evidence](../reviews/community-connectors-c2-2026-11-02.md)
+fresh local SDK/provider tarballs named in the [implementation evidence](../reviews/community-connectors-c3-2026-11-02.md)
 until an SDK release is separately authorized. An external provider's provisional peer version is
 not proof that an older registry artifact contains a new export.
 
@@ -14,40 +14,55 @@ not proof that an older registry artifact contains a new export.
 
 Install the SDK and your chosen connector in the same application. For this unreleased preview,
 install both tested local tarballs; registry SDK 0.1.2 does not yet provide this contract.
-The maintained InsiderFinance connector accepts your API key directly:
+TotalFinance binds your installed connector once, fetches a bounded window and supplies named arrays
+to its existing calculations:
 
 ```ts
+import { data, technicalAnalysis } from '@insiderfinance/totalfinance';
 import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';
-import { sma } from '@insiderfinance/totalfinance/technical-analysis';
-
-const provider = createInsiderFinanceProvider(apiKey);
-const prices = await provider.query({
-  kind: 'price-bars',
+const apiKey = process.env.INSIDERFINANCE_API_KEY;
+if (!apiKey) throw new Error('Set INSIDERFINANCE_API_KEY');
+const marketData = data.connect(createInsiderFinanceProvider(apiKey));
+const prices = await marketData.priceBars({
   symbol: 'SPY',
   interval: '1d',
-  from: '2026-10-26',
+  from: '2026-09-01',
   to: '2026-10-28',
-  limit: 100,
 });
-const average = sma(prices.closePrices, { period: 2 });
+const averages = technicalAnalysis.sma(prices.closePrices, { period: 20 });
+console.log(averages.at(-1));
 ```
 
-The host supplies `apiKey`. This private preview defaults to the documented staging API origin,
-native fetch and the system receipt clock. Optional overrides are for custom hosts and tests;
-construction and discovery make no requests. Configure access and a request allowance before
-using real data. The [exact installed example](../examples/community-connector-sdk.ts) is exercised
-with synthetic HTTP facts, including partial source quality; it is not a live-data receipt.
+The environment variable is read by your application, never by TotalFinance. The private connector
+preview defaults to the documented staging origin, native fetch and response-receipt clock;
+fetch/now/baseUrl overrides remain optional. Construction and local discovery cause no HTTP reads.
+Configure access and a new request allowance before real reads. The
+[exact installed example](../examples/community-connector-connection.ts) is verified with synthetic
+one/multiple-page HTTP facts, not a live-data receipt. There is no MCP/server/pack prerequisite.
 
-`closePrices` is a normal immutable numeric array accepted by existing TotalFinance calculations.
-The same view retains its complete normalized source at `prices.page`, including metadata,
-diagnostics and `nextCursor`. The calculation uses only the returned page's observations; it does
-not fetch more pages or assert continuous history. Ordinary numeric calculation results do not
-automatically inherit source provenance. Keep the view when displaying or saving research.
+`priceBars` completes terminal pagination or refuses explicitly: default pageSize1000, maxPages20,
+maxRecords20000, plus one capability-discovery call. Providers can meter discovery; InsiderFinance's
+is local. These are operational call/record bounds, not financial assumptions or upstream credits.
+Connection options set ceilings; per-call overrides may only lower them. A nonterminal cursor at
+an exhausted ceiling throws `data.window_budget_exceeded`, never a successful truncated sample.
+Manual `marketData.query` retains explicit kind/limit/cursor controls and reads exactly one page
+without discovery. No retries, background reads, automatic smaller query or cursor restart.
 
-For bar indicators, `prices.ohlcvBars` supplies actual OHLCV rows. Selecting it refuses if any row
-has unknown volume, before a calculation can interpret missing volume as zero. Known closes remain
-usable on that same page. Persist `prices.page`; `createDataView(savedRawPage)` restores the common
-view. MCP setup is not required for any of these SDK calls.
+`closePrices` is a normal frozen native array accepted by existing SMA/SMA.explain. The complete
+source remains in **prices.window.pages**, preserving each page's identity, warnings, clocks,
+coverage, quality and adjustment facts. Terminal pagination does not establish continuous history,
+known availability, live liquidity or enough rows for your chosen period. Pure calculation results
+do not automatically inherit provenance; keep the view/window when presenting research.
+
+`prices.ohlcvBars` supplies actual OHLCV rows for existing VWAP and bar indicators. Selecting it
+refuses if any row has unknown volume; known closes remain usable, including partial-quality pages.
+Zero volume stays zero. No selection fetches, reads a clock, fills gaps or changes adjustment basis.
+Persist/hash **prices.window**; `createPriceBarsWindowView(savedWindow)` from `/data` restores it
+without a provider. Serializing the parent view does not trigger strict OHLCV selection.
+
+The root data namespace and named `/data` exports share one SDK implementation. Provider authors'
+advanced `/core/data` entry remains available for raw page types, defineDataProvider and createDataView.
+Ordinary compute imports still accept caller data and contain no provider/network/credential code.
 
 ## Build a community connector
 
@@ -84,8 +99,8 @@ grant account access or redistribution rights. Unsupported kinds/intervals produ
 Price bars require symbol, interval (`1d` or `1m`), from, to and limit. Daily bounds are inclusive real
 session dates; minute bounds are inclusive zoned instants spanning at most 31 days. Chains require
 symbol, an explicit latest/session/snapshot-id selector and limit, with optional expiration, right
-and strike filters. Limits are bounded by both the contract and the provider. Nothing supplies a
-financial default or automatically fetches all pages.
+and strike filters. Limits are bounded by both the contract and the provider. No financial value is defaulted. This low-level query never auto-pages; the higher-level
+priceBars workflow alone walks a bounded window.
 
 A continuation contains only kind, the **same symbol**, cursor and limit. The provider retains the
 original filters and source pin. A cursor is opaque continuation data, not authority. Changing a
