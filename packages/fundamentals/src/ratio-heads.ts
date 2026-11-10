@@ -50,6 +50,7 @@ export const grossMargin: RatioFacade<
   formula: 'grossProfit / revenue',
   keys: ['statements', 'income'],
   requiredStatementFields: ['revenue'],
+  directInputExample: 'grossMargin({ income: { period, revenue: 1000, costOfRevenue: 600 } })',
   compute(input, notes): RatioOutcome {
     const income = input.income ?? input.statements!.income;
     const { grossProfit, derived } = resolveGrossProfit(income);
@@ -76,6 +77,8 @@ export const operatingMargin: RatioFacade<
   formula: 'operatingIncome / revenue',
   keys: ['statements', 'income'],
   requiredStatementFields: ['revenue', 'operatingIncome'],
+  directInputExample:
+    'operatingMargin({ income: { period, revenue: 1000, operatingIncome: 200 } })',
   compute(input): RatioOutcome {
     const income = input.income ?? input.statements!.income;
     return {
@@ -112,6 +115,7 @@ export const netProfitMargin: RatioFacade<
     formula: 'netIncome / revenue',
     keys: ['statements', 'income'],
     requiredStatementFields: ['revenue', 'netIncome'],
+    directInputExample: 'netProfitMargin({ income: { period, revenue: 1000, netIncome: 150 } })',
     compute(input): RatioOutcome {
       const income = input.income ?? input.statements!.income;
       return {
@@ -267,6 +271,8 @@ export const currentRatio: RatioFacade<
   formula: 'currentAssets / currentLiabilities',
   keys: ['statements', 'balance'],
   requiredStatementFields: [],
+  directInputExample:
+    'currentRatio({ balance: { period, currentAssets: 300, currentLiabilities: 150 } })',
   compute(input): RatioOutcome {
     const balance = input.balance ?? input.statements!.balance;
     if (balance.currentAssets === undefined || balance.currentLiabilities === undefined) {
@@ -293,6 +299,8 @@ export const quickRatio: RatioFacade<
   formula: '(currentAssets - inventory) / currentLiabilities',
   keys: ['statements', 'balance'],
   requiredStatementFields: [],
+  directInputExample:
+    'quickRatio({ balance: { period, currentAssets: 300, inventory: 50, currentLiabilities: 150 } })',
   compute(input): RatioOutcome {
     const balance = input.balance ?? input.statements!.balance;
     if (
@@ -326,6 +334,8 @@ export const cashRatio: RatioFacade<
   formula: 'cashAndCashEquivalents / currentLiabilities',
   keys: ['statements', 'balance'],
   requiredStatementFields: ['cashAndCashEquivalents'],
+  directInputExample:
+    'cashRatio({ balance: { period, cashAndCashEquivalents: 100, currentLiabilities: 150 } })',
   compute(input): RatioOutcome {
     const balance = input.balance ?? input.statements!.balance;
     if (balance.currentLiabilities === undefined) {
@@ -356,6 +366,7 @@ export const debtToEquity: RatioFacade<
   formula: 'interest-bearing debt / totalEquity',
   keys: ['statements', 'balance'],
   requiredStatementFields: ['totalEquity'],
+  directInputExample: 'debtToEquity({ balance: { period, totalEquity: 500, totalDebt: 200 } })',
   compute(input, notes): RatioOutcome {
     const balance = input.balance ?? input.statements!.balance;
     const { totalDebt, derived } = resolveTotalDebt(balance);
@@ -386,6 +397,7 @@ export const debtToAssets: RatioFacade<
   formula: 'interest-bearing debt / totalAssets',
   keys: ['statements', 'balance'],
   requiredStatementFields: ['totalAssets'],
+  directInputExample: 'debtToAssets({ balance: { period, totalAssets: 1000, totalDebt: 200 } })',
   compute(input, notes): RatioOutcome {
     const balance = input.balance ?? input.statements!.balance;
     const { totalDebt, derived } = resolveTotalDebt(balance);
@@ -442,6 +454,8 @@ export const interestCoverage: RatioFacade<
   formula: 'operatingIncome / interestExpense',
   keys: ['statements', 'income'],
   requiredStatementFields: ['operatingIncome'],
+  directInputExample:
+    'interestCoverage({ income: { period, operatingIncome: 200, interestExpense: 20 } })',
   compute(input): RatioOutcome {
     const income = input.income ?? input.statements!.income;
     if (income.interestExpense === undefined) {
@@ -463,6 +477,8 @@ export const debtServiceCoverage: RatioFacade<DebtServiceCoverageInput> =
     formula: 'operatingIncome / debtServiceAmount (the exact supplied denominator)',
     keys: ['statements', 'income', 'debtServiceAmount'],
     requiredStatementFields: ['operatingIncome'],
+    directInputExample:
+      'debtServiceCoverage({ income: { period, operatingIncome: 200 }, debtServiceAmount: 100 })',
     compute(input): RatioOutcome {
       return {
         numerator: {
@@ -757,6 +773,8 @@ export const earningsPerShare: RatioFacade<
   formula: 'netIncome / dilutedSharesOutstanding',
   keys: ['statements', 'income'],
   requiredStatementFields: ['netIncome'],
+  directInputExample:
+    'earningsPerShare({ income: { period, netIncome: 150, dilutedSharesOutstanding: 100 } })',
   compute(input, notes): RatioOutcome {
     return perShare(
       'netIncome',
@@ -792,6 +810,8 @@ export const revenuePerShare: RatioFacade<
   formula: 'revenue / dilutedSharesOutstanding',
   keys: ['statements', 'income'],
   requiredStatementFields: ['revenue'],
+  directInputExample:
+    'revenuePerShare({ income: { period, revenue: 1000, dilutedSharesOutstanding: 100 } })',
   compute(input, notes): RatioOutcome {
     return perShare('revenue', (input.income ?? input.statements!.income).revenue, input, notes);
   },

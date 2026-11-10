@@ -19,7 +19,7 @@ export const portfolioCreate = defineOperation({
   id: 'totalfinance.portfolio.create',
   title: 'Create and store an explicitly defined portfolio ledger',
   description:
-    'Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect; subsequent event writes return a new immutable handle. Opt-in (tradePack).',
+    'Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect from portfolioPack (enable both trade and portfolio packs, or use --profile full); subsequent event writes return a new immutable handle. Opt-in (tradePack).',
   inputSchema: tradeInputSchema(
     schema.object({
       portfolioId: schema.string().min(1),
@@ -72,7 +72,7 @@ export const portfolioCreate = defineOperation({
       createdTimestampMs,
     });
     return {
-      summary: `Created ${input.portfolioId}: ${ledger.state.eventCount} explicit events → ${handle.uri}; open with totalfinance.portfolio.inspect`,
+      summary: `Created ${input.portfolioId}: ${ledger.state.eventCount} explicit events → ${handle.uri}; open with totalfinance.portfolio.inspect (portfolio pack; requires portfolio:read)`,
       structured: {
         handle,
         portfolioId: input.portfolioId,

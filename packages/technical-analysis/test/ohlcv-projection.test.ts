@@ -58,3 +58,28 @@ describe('explicit source Bar → indicator OHLCV projection', () => {
     );
   });
 });
+
+it('refuses out-of-order, duplicate or cross-symbol sources before projection', () => {
+  const first = { symbol: 'TEST', timestampMs: 1000, open: 10, high: 12, low: 8, close: 10 };
+  for (const second of [
+    { ...first, timestampMs: 500 },
+    { ...first },
+    { ...first, timestampMs: 2000, symbol: 'OTHER' },
+  ]) {
+    expect(() => ohlcvFromBars([first, second])).toThrow(
+      expect.objectContaining({ name: 'InputError', code: 'input.out_of_range' }),
+    );
+  }
+});
+
+it('validates optional canonical metadata without inventing volume or adjustments', () => {
+  const first = { symbol: 'TEST', timestampMs: 1000, open: 10, high: 12, low: 8, close: 10 };
+  for (const change of [{ vwap: Infinity }, { vwap: '10' }, { adjusted: 'false' }]) {
+    expect(() => ohlcvFromBars([{ ...first, ...change }] as never)).toThrow(
+      expect.objectContaining({ name: 'InputError' }),
+    );
+  }
+  expect(ohlcvFromBars([{ ...first, vwap: 10, adjusted: false }])).toEqual([
+    { open: 10, high: 12, low: 8, close: 10 },
+  ]);
+});

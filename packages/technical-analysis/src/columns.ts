@@ -98,23 +98,65 @@ export function columnsFromBars(bars: readonly BarInput[]): BarColumns {
  * Explicitly project core Bar records to OHLCV indicator rows. Source identity, timestamps,
  * adjustment flags and caller provenance remain in the original records: retain them alongside
  * the calculation. This adapter neither fetches nor relabels observations. Prices may be negative
- * where the instrument permits; finite values and OHLC range relationships are validated.
+ * where the instrument permits; finite values and OHLC range relationships are validated. A source
+ * series must contain one symbol in strictly increasing timestamp order; no sorting or deduplication
+ * is performed before identity/time are projected away.
  */
 export function ohlcvFromBars(bars: readonly Bar[]): BarInput[] {
   const functionName = 'technicalAnalysis.ohlcvFromBars';
   requireArgumentArray(functionName, 'bars', bars);
   requireBars(bars, functionName);
   return bars.map((bar, index) => {
-    requireFiniteFields('technicalAnalysis.ohlcvFromBars', bar, ['open', 'timestampMs'], {
-      path: `bars[${index}]`,
-      exampleCall: 'technicalAnalysis.ohlcvFromBars(sourceBars)',
-    });
+    requireFiniteFields(
+      'technicalAnalysis.ohlcvFromBars',
+      bar,
+      ['open', 'timestampMs', ...(bar.vwap !== undefined ? ['vwap'] : [])],
+      {
+        path: `bars[${index}]`,
+        exampleCall: 'technicalAnalysis.ohlcvFromBars(sourceBars)',
+      },
+    );
     if (typeof bar.symbol !== 'string' || bar.symbol.trim().length === 0) {
       throw new InputError(
         `${functionName}: bars[${index}].symbol must identify the source instrument.`,
         {
           code: ErrorCode.InputWrongType,
           context: { field: `bars[${index}].symbol` },
+        },
+      );
+    }
+    if (bar.adjusted !== undefined && typeof bar.adjusted !== 'boolean') {
+      throw new InputError(
+        `${functionName}: bars[${index}].adjusted must be boolean when provided.`,
+        {
+          code: ErrorCode.InputWrongType,
+          context: { field: `bars[${index}].adjusted` },
+        },
+      );
+    }
+    if (index > 0 && bar.symbol !== bars[0]!.symbol) {
+      throw new InputError(
+        `${functionName}: bars[${index}].symbol differs from bars[0].symbol. Supply one instrument series; retain each source symbol.`,
+        {
+          code: ErrorCode.InputOutOfRange,
+          context: {
+            field: `bars[${index}].symbol`,
+            symbol: bar.symbol,
+            expected: bars[0]!.symbol,
+          },
+        },
+      );
+    }
+    if (index > 0 && bar.timestampMs <= bars[index - 1]!.timestampMs) {
+      throw new InputError(
+        `${functionName}: bars[${index}].timestampMs must strictly follow bars[${index - 1}].timestampMs. Supply chronological observations with unique timestamps; do not relabel source times.`,
+        {
+          code: ErrorCode.InputOutOfRange,
+          context: {
+            field: `bars[${index}].timestampMs`,
+            timestampMs: bar.timestampMs,
+            previousTimestampMs: bars[index - 1]!.timestampMs,
+          },
         },
       );
     }

@@ -125,6 +125,24 @@ describe('cold portfolio create/open/inspect journey', () => {
     },
   );
 
+  it('teaches the additional inspection pack and capability from a trade-only registry', () => {
+    const onlyTrade = createOperationRegistry({ packs: [tradePack()] });
+    const description = JSON.stringify(onlyTrade.describe('totalfinance.portfolio.create'));
+    expect(description).toContain('portfolioPack');
+    expect(description).toContain('both trade and portfolio packs');
+    expect(description).toContain('--profile full');
+    expect(() => onlyTrade.require('totalfinance.portfolio.inspect')).toThrow();
+    const created = onlyTrade.run({
+      id: 'totalfinance.portfolio.create',
+      input: { portfolioId: 'isolated', baseCurrency: 'USD', events: [], createdTimestampMs: at },
+      artifacts: createMemoryArtifactStore(),
+      createdTimestampMs: at,
+      capabilities: ['portfolio:write'],
+    });
+    expect(created.summary).toContain('portfolio pack');
+    expect(created.summary).toContain('portfolio:read');
+  });
+
   it('returns bounded indexed previews and explicit continuation', () => {
     const artifacts = createMemoryArtifactStore();
     const created = run(artifacts, 'create', {

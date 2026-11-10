@@ -131,3 +131,56 @@ S8 is a post-commit gate. [PR #27](https://github.com/InsiderFinance/totalfinanc
 authoritative live checklist and exact-final-head receipt; it records the full supported-Node
 matrix and independent release repeat. Publication remains separately unauthorized regardless of
 that gate's result. A later code commit invalidates earlier release receipts.
+
+## Review follow-up contract (2026-11-10)
+
+The maintainer authorized the necessary review repairs in the same PR. Review probes at 96a786c
+confirmed early full-set availability, an undiscoverable direct repair for incomplete full inputs,
+a direct-input example that supplied illegal top-level statements, and the wire schema still
+rejecting canonical bars. The earlier release receipt attests only that old commit; S8 reopens.
+
+Decisions reviewed before implementation:
+
+- F1: each full statement-set period reports `availabilityOf(set)`; direct inputs report their
+  own period availability. Paired current/prior periods independently use their set maximum.
+  No timestamps are fabricated or changed; no availability-aware research framework is added.
+- F2: full inputs retain all existing validation, error codes and field context. Single-statement
+  heads add their supported direct repair route when full validation fails. Missing required
+  direct facts get head-specific, executable examples including any required scalar controls.
+- F3: direct facts may include other known canonical fields through partial statement types;
+  required facts retain their types/requiredness. Unknown keys and invalid provided fields still fail.
+- F4: the existing TA tool's closed row schema explicitly enumerates optional canonical metadata
+  (symbol, timestampMs, vwap, adjusted). Supplying any source metadata requires complete canonical
+  core Bars on every row; legacy OHLCV-only arrays remain valid. Keeping one closed row schema
+  preserves existing unknown-field error codes and bounded issue counts.
+  Canonical bars delegate to `ohlcvFromBars`, which validates single-symbol, strictly increasing
+  timestamps, source field types and OHLCV invariants before projection. No sort, relabel, fill,
+  price adjustment or calculation is implemented in the transport. SDK structural provenance
+  remains in the retained source records. Legacy row/column calls retain their meanings.
+- F5: create/inspect discovery explicitly names both opt-in packs and read/write capabilities.
+  No catalog or new persistence identity is added. Save and reuse the returned handle.
+- F6: record remaining narrow-fact ratio families as separately queued design work, without claiming
+  them implemented. Keep the existing mark-age policy (including differing/future instants) honest;
+  do not invent a freshness threshold or redesign all warning result contracts in this patch.
+
+Checklist (verify before checking):
+
+- [x] F1: staggered statement availability, all single-set heads and paired periods; direct
+      availability stays exact; no finite-output or financial convention regressions.
+- [x] F2: original failing full calls teach the direct path and retain typed context; every supplied
+      direct missing-fact example executes successfully for its own head.
+- [x] F3: inline extra valid income/balance lines compile and run from installed tarballs in strict
+      NodeNext/Bundler; misspellings, wrong types and missing required facts remain refusals.
+- [x] F4: raw canonical bars succeed through registry/CLI/HTTP/MCP without an SDK preprocessing step;
+      legacy rows/columns remain compatible; mixed symbols, duplicate/reversed timestamps, partial
+      metadata, malformed optional fields, unknown keys and invalid last rows fail repairably.
+      Schema descriptions, SDK projection, source immutability and packed first-use all agree.
+- [x] F5/F6: narrow pack discovery test, public guide and feedback disposition/queue are truthful.
+- [x] Regenerate affected artifacts in order, classify schema/contract changes, and verify bundle
+      measurements without weakening bounds. The same PR branch receives the repair commit.
+- [ ] Repeat S8 at the exact final follow-up head: all current-head PR jobs, full hosted matrix,
+      independent clean CI/API/second coverage, packed smoke and fresh #26 overlap/status assessment.
+
+Scope review: these are compatible repairs to the selected family and existing operation. #26's
+provider package/contracts and blockers remain outside this PR. Version remains prepared 0.1.3;
+no new bump, merge, publication or deployment is authorized or required.

@@ -3250,6 +3250,20 @@ const legacyStatements = {
 };
 const legacyInput: ExistingConsumerDebtServiceInput = { statements: legacyStatements, debtServiceAmount: 10 };
 if (grossMargin({ statements: legacyStatements }) !== 0.4 || currentRatio({ statements: legacyStatements }) !== 2 || debtServiceCoverage(legacyInput) !== 3) throw new Error('Existing full-statement calls changed');
+if (grossMargin({ income: { period, revenue: 200, costOfRevenue: 120, netIncome: 20 } }) !== 0.4) throw new Error('Valid extra income line');
+if (currentRatio({ balance: { period, currentAssets: 90, currentLiabilities: 45, cashAndCashEquivalents: 30 } }) !== 2) throw new Error('Valid extra balance line');
+const laterBalance = { ...legacyStatements.balance, period: { ...period, availableTimestampMs: period.availableTimestampMs + 18 * 86400000 } };
+if (currentRatio.explain({ statements: { ...legacyStatements, balance: laterBalance } }).assumptions.period.availableTimestampMs !== laterBalance.period.availableTimestampMs) throw new Error('Set availability');
+if (false) {
+  // @ts-expect-error unknown canonical income line
+  grossMargin({ income: { period, revenue: 200, costOfRevenue: 120, netIncom: 20 } });
+  // @ts-expect-error provided canonical income lines retain their numeric types
+  grossMargin({ income: { period, revenue: 200, costOfRevenue: 120, netIncome: '20' } });
+  // @ts-expect-error revenue remains required
+  grossMargin({ income: { period, costOfRevenue: 120, netIncome: 20 } });
+  // @ts-expect-error unknown canonical balance line
+  currentRatio({ balance: { period, currentAssets: 90, currentLiabilities: 45, totalAsset: 100 } });
+}
 console.log("DOGFOOD_JOURNEYS_OK");
 `,
     );

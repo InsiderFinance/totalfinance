@@ -1963,6 +1963,20 @@
                 },
                 "volume": {
                   "type": "number"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "Canonical source Bar symbol; include timestampMs and open on every row"
+                },
+                "timestampMs": {
+                  "type": "number",
+                  "description": "Canonical source time in epoch ms; strictly increasing within one symbol"
+                },
+                "vwap": {
+                  "type": "number"
+                },
+                "adjusted": {
+                  "type": "boolean"
                 }
               },
               "additionalProperties": false,
@@ -2069,7 +2083,7 @@
         },
         "required": ["indicator", "value", "assumptions", "diagnostics"]
       },
-      "inputSchemaHash": "ee53195b82442e1b",
+      "inputSchemaHash": "cdec192b636bad73",
       "outputSchemaHash": "812ea03cbc7b74a6",
       "inputFields": ["bars", "closes", "indicator", "parameters", "series", "x", "y"],
       "requiredInputFields": ["indicator"],
@@ -2857,11 +2871,11 @@
     },
     "mutationsExecuted": {
       "unknown-key": 2800,
-      "null-when-nonnullable": 26832,
+      "null-when-nonnullable": 27122,
       "omit-required": 13664,
       "wrong-type": 17325,
       "non-finite": 9581,
-      "optional-wrong-type": 8221,
+      "optional-wrong-type": 8511,
       "invalid-literal": 2006,
       "empty-series": 916,
       "non-finite-element": 844,
@@ -2870,11 +2884,11 @@
     },
     "mutationsCovered": {
       "unknown-key": 6666,
-      "null-when-nonnullable": 67460,
+      "null-when-nonnullable": 68185,
       "omit-required": 34858,
       "wrong-type": 44297,
       "non-finite": 24971,
-      "optional-wrong-type": 19641,
+      "optional-wrong-type": 20366,
       "invalid-literal": 5142,
       "empty-series": 2417,
       "non-finite-element": 2179,
@@ -2884,7 +2898,7 @@
     "failuresDirect": 0,
     "failuresAttributed": 0,
     "inherited": 3084,
-    "fromSynthesizedInput": 2007,
+    "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
       "no-input": 1752,
       "external-callback-contract": 250,
@@ -35139,20 +35153,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35183,20 +35197,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -35304,20 +35318,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35348,20 +35362,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -35547,20 +35561,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35591,20 +35605,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -35634,20 +35648,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35678,20 +35692,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -35721,20 +35735,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35765,20 +35779,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -35860,20 +35874,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -35904,20 +35918,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -36279,20 +36293,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -36323,20 +36337,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -36366,20 +36380,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -36410,20 +36424,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -36583,20 +36597,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -36627,20 +36641,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -36670,20 +36684,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -36714,20 +36728,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -37017,20 +37031,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -37061,20 +37075,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -37544,20 +37558,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -37588,20 +37602,20 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "synthesized": true,
@@ -137053,11 +137067,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -148067,11 +148081,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -150171,11 +150185,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -150208,11 +150222,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -150245,11 +150259,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -153797,11 +153811,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173412,11 +173426,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173449,11 +173463,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173542,11 +173556,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173579,11 +173593,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173729,11 +173743,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173766,11 +173780,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 113,
         "omit-required": 46,
         "wrong-type": 71,
         "non-finite": 47,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173802,11 +173816,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173839,11 +173853,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173875,11 +173889,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173912,11 +173926,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 103,
+        "null-when-nonnullable": 117,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 46,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -173986,11 +174000,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174023,11 +174037,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174303,11 +174317,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174340,11 +174354,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174376,11 +174390,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174413,11 +174427,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174544,11 +174558,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174581,11 +174595,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174617,11 +174631,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174654,11 +174668,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174880,11 +174894,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -174917,11 +174931,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -175275,11 +175289,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -175312,11 +175326,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -176204,11 +176218,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 31,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -178645,11 +178659,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -187061,11 +187075,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -188179,7 +188193,6 @@
         "empty-series": 1,
         "non-finite-element": 1
       },
-      "synthesized": true,
       "inputPolicies": {
         "0": "open"
       },
@@ -188190,7 +188203,8 @@
           "verdict": "accepted",
           "returned": "[]"
         }
-      ]
+      ],
+      "fixtureSource": "totalfinance:ohlcvFromBars"
     },
     {
       "id": "totalfinance:ols",
@@ -188364,11 +188378,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 45,
         "wrong-type": 70,
         "non-finite": 46,
-        "optional-wrong-type": 29,
+        "optional-wrong-type": 39,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -210998,11 +211012,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 102,
+        "null-when-nonnullable": 117,
         "omit-required": 43,
         "wrong-type": 68,
         "non-finite": 44,
-        "optional-wrong-type": 32,
+        "optional-wrong-type": 47,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -214979,11 +214993,11 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 101,
+        "null-when-nonnullable": 111,
         "omit-required": 44,
         "wrong-type": 69,
         "non-finite": 45,
-        "optional-wrong-type": 30,
+        "optional-wrong-type": 40,
         "invalid-literal": 8
       },
       "alternatives": [
@@ -248899,7 +248913,7 @@
         "empty-series": 1,
         "non-finite-element": 1
       },
-      "synthesized": true,
+      "fixtureSource": "totalfinance:ohlcvFromBars",
       "inputPolicies": {
         "0": "open"
       }

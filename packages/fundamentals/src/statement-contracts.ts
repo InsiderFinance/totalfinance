@@ -221,6 +221,7 @@ function requireStatementNumbers(
   statement: Record<string, unknown>,
   required: readonly string[],
   known: readonly string[],
+  exampleCall = statementExample(functionName),
 ): void {
   for (const field of known) {
     if (field === 'period' || field === 'metadata') continue;
@@ -228,7 +229,7 @@ function requireStatementNumbers(
     if (value === undefined) {
       if (!required.includes(field)) continue;
       throw new InputError(
-        `${functionName}: ${label}.${field} is required.\n  e.g. ${statementExample(functionName)}`,
+        `${functionName}: ${label}.${field} is required.\n  e.g. ${exampleCall}`,
         { code: ErrorCode.InputMissingField, context: { field: `${label}.${field}` } },
       );
     }
@@ -263,13 +264,14 @@ export function requireRatioStatementFacts(
   kind: 'income' | 'balance',
   value: unknown,
   requiredFields: readonly string[],
+  exampleCall: string,
 ): void {
   requireArgumentObject(functionName, kind, value);
   const statement = value as Record<string, unknown>;
   const keys = kind === 'income' ? INCOME_KEYS : BALANCE_KEYS;
   ensureKnownKeys(functionName, kind, statement, keys);
   requireFundamentalPeriod(functionName, statement['period'] as FundamentalPeriod);
-  requireStatementNumbers(functionName, kind, statement, requiredFields, keys);
+  requireStatementNumbers(functionName, kind, statement, requiredFields, keys, exampleCall);
 }
 
 /** Validate one {@link IncomeStatement} at a public boundary. */

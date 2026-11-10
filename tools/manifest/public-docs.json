@@ -10,7 +10,7 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4611,
+    "executableFences": 4612,
     "checkedUnderTruthfulness": 175,
     "checkedUnderVocabulary": 55,
     "shippedNamesWatched": 9748,
@@ -156,7 +156,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 6
+      "codeFences": 7
     },
     {
       "path": "docs/guides/end-to-end.md",

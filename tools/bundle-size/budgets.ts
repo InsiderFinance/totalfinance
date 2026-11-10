@@ -485,10 +485,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 506.5,
+    budgetKB: 507.5,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
+      'Review repair (2026-11-10): 506.5 → 507.5 KB from 519,313 B gzip on Node 22.23.2 / esbuild 0.25.12. Canonical-bar metadata/chronology validation, executable ratio recovery and explicit pack discovery add 1,043 B over the initial batch measurement; domain exclusions stay unchanged. ' +
       'Dogfood 0.1.x (2026-11-10): 502.75 → 506.5 KB from 518,270 B gzip on Node 22.23.2 / esbuild 0.25.12. The new create/inspect operations, recursive screen discovery, controls and repair diagnostics add registry payload; no calculation is duplicated. ' +
       '502.5 → 502.75 KB (the New York market day per clock hour, 2026-10-06): measured 514,383 → 514,579 B (+196 B, 19 B over the old line) with Node 22.23.2/esbuild 0.25.12. Core\u2019s usEquityMarketDayIndex now remembers the market day per UTC hour — the hour map, the first-visit mark (an hour asked about once still costs one Intl read) and the check of both ends of the hour — which flow\u2019s 0DTE flag and exposure\u2019s 0DTE buckets reach. flow() over 50,000 prints drops about 5×, with every result unchanged. The cache limit is a literal so bundles that never ask for a market day drop the cache entirely (they move by at most 6 B of gzip noise). 237 B of headroom. ' +
       '502.25 → 502.5 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 514,383 B (+79 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 177 B of headroom. 497.25 → 502.25 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 508,996 B (188 B under the old line), this change 514,035 B (+5,039 B) with Node 22.23.2/esbuild 0.25.12. The exposure operation composes the selective ExposureProfile, which now evaluates through @insiderfinance/totalfinance/options/batch (the validated blackScholesEvaluateManyInto boundary, 4.4 KB minified) and the shared kernel (2.2 KB), and carries the nine single-metric shortcuts and the supplied-Greek selection; core gains requireSelection (its label guard, added when the enforcement run measured the helper, is 302 B of the total; the review fixes on #3 — the batch row-value type check and its error descriptions, per-point color — another 123 B). No new operation, transport or dependency domain. ' +
@@ -662,10 +663,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 697.25,
+    budgetKB: 697.75,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'Review repair (2026-11-10): 697.25 → 697.75 KB from 714,320 B gzip on Node 22.23.2 / esbuild 0.25.12. Validated source-bar identity/time and head-specific repair examples add 696 B over the initial batch measurement; structural exclusions stay unchanged. ' +
       'Dogfood 0.1.x (2026-11-10): 696.25 → 697.25 KB from 713,624 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       '695 → 696.25 KiB (PL6 named pairs, 2026-10-12): 711,393 → 712,699 B gzip (+1,306 B) on Node 22.23.2/esbuild 0.25.12. Sixteen named pair facades and optional generic metadata add no dependencies. Headroom is 261 B; only price-levels also changes its whole-entrypoint ceiling, with single-helper installed tree-shaking tests. Every other narrow limit and structural gate is retained. ' +
       '694.625 → 695 KiB (PL5 numerical/DX review, 2026-10-12): 711,093 → 711,393 B gzip (+300 B), measured on Node 22.23.2/esbuild 0.25.12. The private extreme-range exact-rounding fallback and method-specific examples left 287 B headroom. Only the new price-level subpath ceiling also changed (8.375 KiB); all other narrow limits and structural gates remained intact. ' +

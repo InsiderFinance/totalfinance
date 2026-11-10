@@ -9,7 +9,10 @@
 
 The maintainer authorized one review PR containing the worthwhile compatible dogfood batch and
 next unused 0.1.x metadata (expected 0.1.3), without merge, publication or deployment. The
-[scoped contract and checklist](./specs/dogfood-0.1.x.md) controls S1–S9. Implementation, focused checks and generated contracts are complete. Exact
+[scoped contract and checklist](./specs/dogfood-0.1.x.md) controls S1–S9. The original batch is implemented; the authorized review follow-up F1–F6 is active and reopens
+exact-head release verification. Remaining ratio families (market multiples and average-balance/
+other narrow-fact inputs) need a separate decision-complete contract preserving timing, scaling and
+correspondence; they are not claimed implemented by this batch. Exact
 candidate release verification is recorded in [PR #27](https://github.com/InsiderFinance/totalfinance/pull/27); its current head and full
 receipts are authoritative, and a fast PR check is not a release receipt. Draft #26 and unmerged #12 remain separate; no provider or
 paper-experiment changes are authorized. Main d50b401 already contains LIB-01/02/03 repairs.
@@ -422,8 +425,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,342 public naming identities are walked and 0 are unresolved; 39,176 are `explicit`,
-4,004 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,370 public naming identities are walked and 0 are unresolved; 39,202 are `explicit`,
+4,006 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

@@ -13,7 +13,10 @@ request requires its period and the monetary lines its formula needs; unrelated 
 lines and other statements are not prerequisites. Other supplied canonical fields remain validated. Complete
 `{ statements }` calls remain supported and validate the complete corresponding set. EBITDA,
 market multiples and cross-statement/average-balance ratios still require their stated inputs.
-Do not invent a cash-flow table or call cumulative nine-month flows a quarter.
+Do not invent a cash-flow table or call cumulative nine-month flows a quarter. A full-set report's
+period availability is the latest publication instant of its three statements; a direct statement
+reports its own availability. Paired reports expose both current and prior period availability;
+point-in-time use must respect both (including a later prior-period restatement).
 
 ```ts
 import { grossMargin, currentRatio } from '@insiderfinance/totalfinance/fundamentals';
@@ -26,6 +29,7 @@ import {
   createMemoryArtifactStore,
   portfolioPack,
   tradePack,
+  technicalAnalysisPack,
 } from '@insiderfinance/totalfinance/workflows';
 
 const period = {
@@ -60,7 +64,10 @@ numerator or zero denominator yields `null` with its reason in `.explain()`.
 
 ## Create, open and inspect a portfolio
 
-The `trade` pack exposes creation and the existing event writer. Creation requires
+Enable both the `trade` and `portfolio` packs for create → inspect: creation and the event writer
+live in `trade`, while inspection lives in `portfolio` and requires `portfolio:read`.
+CLI/MCP `--profile full` includes both. A trade-only configuration must enable `portfolio` before
+calling the returned inspection operation. Creation requires
 `portfolio:write`, a writable artifact store, durable identity, currency and explicit initial events.
 An empty event array creates an unfunded ledger. To fund it, supply actual explicit `cash.deposit`
 events through creation or `portfolio.record_events`—there is no implicit deposit.
@@ -125,7 +132,24 @@ if (sourceBars[0]!.timestampMs !== 1000) throw new Error('Unexpected synthetic r
 if ('timestampMs' in indicatorRows[0]! !== false) throw new Error('Unexpected synthetic result');
 ```
 
-MCP `technical_analysis.calculate` accepts those rows under `bars`, or OHLCV columns under `series`.
+MCP `technical_analysis.calculate` accepts canonical `sourceBars` directly under `bars`, including
+`symbol`, `timestampMs` and optional `vwap`/`adjusted`; no SDK preprocessing or field stripping is
+needed. When source metadata is present, every row must have the canonical source fields, one
+symbol and strictly increasing unique timestamps. Neither the tool nor the SDK projection sorts,
+deduplicates, changes adjustment flags or relabels times. Bare OHLCV rows and columns under `series`
+remain supported. Source context stays with the caller, and the operation's input hash covers the
+original canonical input.
+
+```ts
+const technicalOperations = createOperationRegistry({ packs: [technicalAnalysisPack()] });
+const sourceResult = technicalOperations.run({
+  id: 'totalfinance.technical_analysis.calculate',
+  input: { indicator: 'atr', bars: sourceBars, parameters: { period: 1 } },
+});
+if (JSON.stringify(sourceResult.structured['value']) !== JSON.stringify([4, 4]))
+  throw new Error('Unexpected canonical-bar result');
+```
+
 Wire errors report exact total issue counts and at most ten representative indexed issues; fix the
 named fields and retry the original data. All rows are still validated. TA discovery distinguishes
 name search from category browsing: use `{ category: 'momentum' }` with

@@ -137,7 +137,7 @@ export interface RatioPeriodIdentity {
   fiscalYear: number;
   currency: string;
   monetaryScale: number;
-  /** Actual statement availability, distinct from its period end. */
+  /** Direct statement availability, or the latest availability in a complete validated set. */
   availableTimestampMs?: EpochMs;
 }
 
@@ -205,7 +205,8 @@ function periodIdentity(
     fiscalYear: period.fiscalYear,
     currency: period.currency,
     monetaryScale: period.monetaryScale,
-    availableTimestampMs: period.availableTimestampMs,
+    availableTimestampMs:
+      'income' in statements ? availabilityOf(statements) : period.availableTimestampMs,
   };
 }
 
@@ -247,6 +248,8 @@ export interface RatioDefinition {
   keys: readonly (keyof RatioInput)[];
   /** Monetary facts required only on the direct single-statement path. Optional ratio components retain null-with-reason semantics. */
   requiredStatementFields?: readonly string[];
+  /** A runnable synthetic direct-input repair example for this exact head. */
+  directInputExample?: string;
   compute(input: RatioInput, notes: string[]): RatioOutcome;
 }
 
@@ -258,12 +261,14 @@ export interface SingleStatementRatioInput {
 /** Income-only formulas: use the actual income statement or the existing complete set. */
 export type IncomeStatementRatioInput<
   Facts extends Pick<IncomeStatement, 'period'> = IncomeStatement,
-> = (SingleStatementRatioInput & { income?: never }) | { income: Facts; statements?: never };
+> =
+  | (SingleStatementRatioInput & { income?: never })
+  | { income: Facts & Partial<IncomeStatement>; statements?: never };
 
 /** Balance-only formulas: use the actual balance sheet or the existing complete set. */
 export type BalanceSheetRatioInput<Facts extends Pick<BalanceSheet, 'period'> = BalanceSheet> =
   | (SingleStatementRatioInput & { balance?: never })
-  | { balance: Facts; statements?: never };
+  | { balance: Facts & Partial<BalanceSheet>; statements?: never };
 
 /** Average-balance heads: the period being measured and the immediately prior period. */
 export interface PairRatioInput {
@@ -351,6 +356,7 @@ function validateRatioInput(definition: RatioDefinition, input: RatioInput): voi
         direct,
         input[direct],
         definition.requiredStatementFields ?? [],
+        definition.directInputExample ?? `${name}({ ${direct} })`,
       );
     } else {
       if (input.statements === undefined) {
@@ -362,7 +368,20 @@ function validateRatioInput(definition: RatioDefinition, input: RatioInput): voi
           },
         );
       }
-      requireFinancialStatements(name, input.statements);
+      try {
+        requireFinancialStatements(name, input.statements);
+      } catch (error) {
+        if (direct === null || !(error instanceof InputError)) throw error;
+        const problem = error.message.split('\n  e.g. ')[0];
+        throw new InputError(
+          `${problem}\n  statements validates a complete corresponding set. If you only need the ${direct} statement, supply ${direct} instead; keep its actual period, units and availability.\n  e.g. ${definition.directInputExample ?? `${name}({ ${direct} })`}`,
+          {
+            code: error.code,
+            ...(error.context !== undefined ? { context: error.context } : {}),
+            cause: error,
+          },
+        );
+      }
     }
   }
   if (definition.keys.includes('current')) {

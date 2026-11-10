@@ -9751,7 +9751,7 @@ Output JSON Schema:
 
 Create and store an explicitly defined portfolio ledger
 
-Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect; subsequent event writes return a new immutable handle. Opt-in (tradePack).
+Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect from portfolioPack (enable both trade and portfolio packs, or use --profile full); subsequent event writes return a new immutable handle. Opt-in (tradePack).
 
 Version: 1; pack: trade; profiles: `full`; defaultEnabled: false; SDKonly: false.
 
@@ -19845,7 +19845,7 @@ Output JSON Schema:
 
 Calculate a technical indicator
 
-Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Project core Bar records with technicalAnalysis.ohlcvFromBars, retaining the original source/provenance alongside the result; or pass OHLCV columns under series. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.
+Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Pass canonical core Bar records directly under bars; symbol, timestampMs, vwap and adjusted are declared fields. Source records require open, one symbol and strictly increasing unique timestamps; no stripping or SDK preprocessing is needed. Identity/time are validated before OHLCV projection; retain the original source/provenance alongside the result. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.
 
 Version: 1; pack: technical_analysis; profiles: `default`, `full`; defaultEnabled: true; SDKonly: false.
 
@@ -20226,6 +20226,20 @@ Input JSON Schema:
           },
           "volume": {
             "type": "number"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Canonical source Bar symbol; include timestampMs and open on every row"
+          },
+          "timestampMs": {
+            "type": "number",
+            "description": "Canonical source time in epoch ms; strictly increasing within one symbol"
+          },
+          "vwap": {
+            "type": "number"
+          },
+          "adjusted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false,
@@ -47633,10 +47647,27 @@ must be present in both periods — there is NO five-variable fallback, silent o
 - cashFlowToNetIncome.explain(input).statements: import('@insiderfinance/totalfinance/fundamentals').FinancialStatements; default: not declared
 - cashRatio: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>>; default: not declared
 - cashRatio(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>; default: not declared
-- cashRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>; default: not declared
-- cashRatio(input).balance.cashAndCashEquivalents: number; default: not declared
+- cashRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- cashRatio(input).balance.accountsPayable?: number; default: not declared
+- cashRatio(input).balance.accountsReceivable?: number; default: not declared
+- cashRatio(input).balance.cashAndCashEquivalents?: number; default: not declared
+- cashRatio(input).balance.currentAssets?: number; default: not declared
 - cashRatio(input).balance.currentLiabilities?: number; default: not declared
-- cashRatio(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- cashRatio(input).balance.inventory?: number; default: not declared
+- cashRatio(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- cashRatio(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- cashRatio(input).balance.minorityInterest?: number; default: not declared
+- cashRatio(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- cashRatio(input).balance.preferredEquity?: number; default: not declared
+- cashRatio(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- cashRatio(input).balance.retainedEarnings?: number; default: not declared
+- cashRatio(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- cashRatio(input).balance.shortTermInvestments?: number; default: not declared
+- cashRatio(input).balance.totalAssets?: number; default: not declared
+- cashRatio(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- cashRatio(input).balance.totalEquity?: number; default: not declared
+- cashRatio(input).balance.totalLiabilities?: number; default: not declared
 - cashRatio(input).statements?: never; default: not declared
 - cashRatio.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - cashRatio.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -47659,10 +47690,27 @@ must be present in both periods — there is NO five-variable fallback, silent o
 - cashRatio.explain().return.diagnostics.warnings: string[]; default: not declared
 - cashRatio.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - cashRatio.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>; default: not declared
-- cashRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>; default: not declared
-- cashRatio.explain(input).balance.cashAndCashEquivalents: number; default: not declared
+- cashRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- cashRatio.explain(input).balance.accountsPayable?: number; default: not declared
+- cashRatio.explain(input).balance.accountsReceivable?: number; default: not declared
+- cashRatio.explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- cashRatio.explain(input).balance.currentAssets?: number; default: not declared
 - cashRatio.explain(input).balance.currentLiabilities?: number; default: not declared
-- cashRatio.explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- cashRatio.explain(input).balance.inventory?: number; default: not declared
+- cashRatio.explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- cashRatio.explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- cashRatio.explain(input).balance.minorityInterest?: number; default: not declared
+- cashRatio.explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- cashRatio.explain(input).balance.preferredEquity?: number; default: not declared
+- cashRatio.explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- cashRatio.explain(input).balance.retainedEarnings?: number; default: not declared
+- cashRatio.explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- cashRatio.explain(input).balance.shortTermInvestments?: number; default: not declared
+- cashRatio.explain(input).balance.totalAssets?: number; default: not declared
+- cashRatio.explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- cashRatio.explain(input).balance.totalEquity?: number; default: not declared
+- cashRatio.explain(input).balance.totalLiabilities?: number; default: not declared
 - cashRatio.explain(input).statements?: never; default: not declared
 - cashReturnOnAssets: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').PairRatioInput>; default: not declared
 - cashReturnOnAssets(input): import('@insiderfinance/totalfinance/fundamentals').PairRatioInput; default: not declared
@@ -47713,10 +47761,27 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - commonSizeFinancialStatements(input).statements: import('@insiderfinance/totalfinance/fundamentals').FinancialStatements; default: not declared
 - currentRatio: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>>; default: not declared
 - currentRatio(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>; default: not declared
-- currentRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>; default: not declared
+- currentRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- currentRatio(input).balance.accountsPayable?: number; default: not declared
+- currentRatio(input).balance.accountsReceivable?: number; default: not declared
+- currentRatio(input).balance.cashAndCashEquivalents?: number; default: not declared
 - currentRatio(input).balance.currentAssets?: number; default: not declared
 - currentRatio(input).balance.currentLiabilities?: number; default: not declared
-- currentRatio(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- currentRatio(input).balance.inventory?: number; default: not declared
+- currentRatio(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- currentRatio(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- currentRatio(input).balance.minorityInterest?: number; default: not declared
+- currentRatio(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- currentRatio(input).balance.preferredEquity?: number; default: not declared
+- currentRatio(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- currentRatio(input).balance.retainedEarnings?: number; default: not declared
+- currentRatio(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- currentRatio(input).balance.shortTermInvestments?: number; default: not declared
+- currentRatio(input).balance.totalAssets?: number; default: not declared
+- currentRatio(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- currentRatio(input).balance.totalEquity?: number; default: not declared
+- currentRatio(input).balance.totalLiabilities?: number; default: not declared
 - currentRatio(input).statements?: never; default: not declared
 - currentRatio.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - currentRatio.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -47739,10 +47804,27 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - currentRatio.explain().return.diagnostics.warnings: string[]; default: not declared
 - currentRatio.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - currentRatio.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>; default: not declared
-- currentRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>; default: not declared
+- currentRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- currentRatio.explain(input).balance.accountsPayable?: number; default: not declared
+- currentRatio.explain(input).balance.accountsReceivable?: number; default: not declared
+- currentRatio.explain(input).balance.cashAndCashEquivalents?: number; default: not declared
 - currentRatio.explain(input).balance.currentAssets?: number; default: not declared
 - currentRatio.explain(input).balance.currentLiabilities?: number; default: not declared
-- currentRatio.explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- currentRatio.explain(input).balance.inventory?: number; default: not declared
+- currentRatio.explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- currentRatio.explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- currentRatio.explain(input).balance.minorityInterest?: number; default: not declared
+- currentRatio.explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- currentRatio.explain(input).balance.preferredEquity?: number; default: not declared
+- currentRatio.explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- currentRatio.explain(input).balance.retainedEarnings?: number; default: not declared
+- currentRatio.explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- currentRatio.explain(input).balance.shortTermInvestments?: number; default: not declared
+- currentRatio.explain(input).balance.totalAssets?: number; default: not declared
+- currentRatio.explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- currentRatio.explain(input).balance.totalEquity?: number; default: not declared
+- currentRatio.explain(input).balance.totalLiabilities?: number; default: not declared
 - currentRatio.explain(input).statements?: never; default: not declared
 - daysInventoryOutstanding: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').DayMetricRatioInput>; default: not declared
 - daysInventoryOutstanding(input): import('@insiderfinance/totalfinance/fundamentals').DayMetricRatioInput; default: not declared
@@ -47854,17 +47936,31 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - debtServiceCoverage.explain().return.diagnostics.warnings: string[]; default: not declared
 - debtServiceCoverage.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - debtServiceCoverage.explain(input): import('@insiderfinance/totalfinance/fundamentals').DebtServiceCoverageInput; default: not declared
-- debtToAssets: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>>; default: not declared
-- debtToAssets(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>; default: not declared
-- debtToAssets(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>; default: not declared
+- debtToAssets: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>>; default: not declared
+- debtToAssets(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>; default: not declared
+- debtToAssets(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- debtToAssets(input).balance.accountsPayable?: number; default: not declared
+- debtToAssets(input).balance.accountsReceivable?: number; default: not declared
+- debtToAssets(input).balance.cashAndCashEquivalents?: number; default: not declared
+- debtToAssets(input).balance.currentAssets?: number; default: not declared
+- debtToAssets(input).balance.currentLiabilities?: number; default: not declared
+- debtToAssets(input).balance.inventory?: number; default: not declared
 - debtToAssets(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- debtToAssets(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToAssets(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- debtToAssets(input).balance.minorityInterest?: number; default: not declared
+- debtToAssets(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToAssets(input).balance.preferredEquity?: number; default: not declared
+- debtToAssets(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- debtToAssets(input).balance.retainedEarnings?: number; default: not declared
 - debtToAssets(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
-- debtToAssets(input).balance.totalAssets: number; default: not declared
+- debtToAssets(input).balance.shortTermInvestments?: number; default: not declared
+- debtToAssets(input).balance.totalAssets?: number; default: not declared
 - debtToAssets(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- debtToAssets(input).balance.totalEquity?: number; default: not declared
+- debtToAssets(input).balance.totalLiabilities?: number; default: not declared
 - debtToAssets(input).statements?: never; default: not declared
-- debtToAssets.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- debtToAssets.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - debtToAssets.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
 - debtToAssets.explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - debtToAssets.explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -47884,26 +47980,54 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - debtToAssets.explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - debtToAssets.explain().return.diagnostics.warnings: string[]; default: not declared
 - debtToAssets.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- debtToAssets.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>; default: not declared
-- debtToAssets.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>; default: not declared
+- debtToAssets.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>; default: not declared
+- debtToAssets.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- debtToAssets.explain(input).balance.accountsPayable?: number; default: not declared
+- debtToAssets.explain(input).balance.accountsReceivable?: number; default: not declared
+- debtToAssets.explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- debtToAssets.explain(input).balance.currentAssets?: number; default: not declared
+- debtToAssets.explain(input).balance.currentLiabilities?: number; default: not declared
+- debtToAssets.explain(input).balance.inventory?: number; default: not declared
 - debtToAssets.explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- debtToAssets.explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToAssets.explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- debtToAssets.explain(input).balance.minorityInterest?: number; default: not declared
+- debtToAssets.explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToAssets.explain(input).balance.preferredEquity?: number; default: not declared
+- debtToAssets.explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- debtToAssets.explain(input).balance.retainedEarnings?: number; default: not declared
 - debtToAssets.explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
-- debtToAssets.explain(input).balance.totalAssets: number; default: not declared
+- debtToAssets.explain(input).balance.shortTermInvestments?: number; default: not declared
+- debtToAssets.explain(input).balance.totalAssets?: number; default: not declared
 - debtToAssets.explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- debtToAssets.explain(input).balance.totalEquity?: number; default: not declared
+- debtToAssets.explain(input).balance.totalLiabilities?: number; default: not declared
 - debtToAssets.explain(input).statements?: never; default: not declared
-- debtToEquity: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>>; default: not declared
-- debtToEquity(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>; default: not declared
-- debtToEquity(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>; default: not declared
+- debtToEquity: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>>; default: not declared
+- debtToEquity(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>; default: not declared
+- debtToEquity(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- debtToEquity(input).balance.accountsPayable?: number; default: not declared
+- debtToEquity(input).balance.accountsReceivable?: number; default: not declared
+- debtToEquity(input).balance.cashAndCashEquivalents?: number; default: not declared
+- debtToEquity(input).balance.currentAssets?: number; default: not declared
+- debtToEquity(input).balance.currentLiabilities?: number; default: not declared
+- debtToEquity(input).balance.inventory?: number; default: not declared
 - debtToEquity(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- debtToEquity(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToEquity(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- debtToEquity(input).balance.minorityInterest?: number; default: not declared
+- debtToEquity(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToEquity(input).balance.preferredEquity?: number; default: not declared
+- debtToEquity(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- debtToEquity(input).balance.retainedEarnings?: number; default: not declared
 - debtToEquity(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- debtToEquity(input).balance.shortTermInvestments?: number; default: not declared
+- debtToEquity(input).balance.totalAssets?: number; default: not declared
 - debtToEquity(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
-- debtToEquity(input).balance.totalEquity: number; default: not declared
+- debtToEquity(input).balance.totalEquity?: number; default: not declared
+- debtToEquity(input).balance.totalLiabilities?: number; default: not declared
 - debtToEquity(input).statements?: never; default: not declared
-- debtToEquity.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- debtToEquity.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - debtToEquity.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
 - debtToEquity.explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - debtToEquity.explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -47923,14 +48047,28 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - debtToEquity.explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - debtToEquity.explain().return.diagnostics.warnings: string[]; default: not declared
 - debtToEquity.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- debtToEquity.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>; default: not declared
-- debtToEquity.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>; default: not declared
+- debtToEquity.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>; default: not declared
+- debtToEquity.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- debtToEquity.explain(input).balance.accountsPayable?: number; default: not declared
+- debtToEquity.explain(input).balance.accountsReceivable?: number; default: not declared
+- debtToEquity.explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- debtToEquity.explain(input).balance.currentAssets?: number; default: not declared
+- debtToEquity.explain(input).balance.currentLiabilities?: number; default: not declared
+- debtToEquity.explain(input).balance.inventory?: number; default: not declared
 - debtToEquity.explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- debtToEquity.explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToEquity.explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- debtToEquity.explain(input).balance.minorityInterest?: number; default: not declared
+- debtToEquity.explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- debtToEquity.explain(input).balance.preferredEquity?: number; default: not declared
+- debtToEquity.explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- debtToEquity.explain(input).balance.retainedEarnings?: number; default: not declared
 - debtToEquity.explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- debtToEquity.explain(input).balance.shortTermInvestments?: number; default: not declared
+- debtToEquity.explain(input).balance.totalAssets?: number; default: not declared
 - debtToEquity.explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
-- debtToEquity.explain(input).balance.totalEquity: number; default: not declared
+- debtToEquity.explain(input).balance.totalEquity?: number; default: not declared
+- debtToEquity.explain(input).balance.totalLiabilities?: number; default: not declared
 - debtToEquity.explain(input).statements?: never; default: not declared
 - dividendYield: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').MarketMultipleRatioInput>; default: not declared
 - dividendYield(input): import('@insiderfinance/totalfinance/fundamentals').MarketMultipleRatioInput; default: not declared
@@ -47963,10 +48101,20 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - dividendYield.explain(input).statements: import('@insiderfinance/totalfinance/fundamentals').FinancialStatements; default: not declared
 - earningsPerShare: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>>; default: not declared
 - earningsPerShare(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>; default: not declared
-- earningsPerShare(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>; default: not declared
+- earningsPerShare(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- earningsPerShare(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - earningsPerShare(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- earningsPerShare(input).income.netIncome: number; default: not declared
-- earningsPerShare(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- earningsPerShare(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- earningsPerShare(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- earningsPerShare(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- earningsPerShare(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- earningsPerShare(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- earningsPerShare(input).income.netIncome?: number; default: not declared
+- earningsPerShare(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- earningsPerShare(input).income.operatingIncome?: number; default: not declared
+- earningsPerShare(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- earningsPerShare(input).income.revenue?: number; default: not declared
+- earningsPerShare(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - earningsPerShare(input).statements?: never; default: not declared
 - earningsPerShare.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - earningsPerShare.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -47989,10 +48137,20 @@ percentages. A zero base is an error naming itself, not an Infinity.
 - earningsPerShare.explain().return.diagnostics.warnings: string[]; default: not declared
 - earningsPerShare.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - earningsPerShare.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>; default: not declared
-- earningsPerShare.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>; default: not declared
+- earningsPerShare.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- earningsPerShare.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - earningsPerShare.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- earningsPerShare.explain(input).income.netIncome: number; default: not declared
-- earningsPerShare.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- earningsPerShare.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- earningsPerShare.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- earningsPerShare.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- earningsPerShare.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- earningsPerShare.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- earningsPerShare.explain(input).income.netIncome?: number; default: not declared
+- earningsPerShare.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- earningsPerShare.explain(input).income.operatingIncome?: number; default: not declared
+- earningsPerShare.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- earningsPerShare.explain(input).income.revenue?: number; default: not declared
+- earningsPerShare.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - earningsPerShare.explain(input).statements?: never; default: not declared
 - earningsYield: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').MarketMultipleRatioInput>; default: not declared
 - earningsYield(input): import('@insiderfinance/totalfinance/fundamentals').MarketMultipleRatioInput; default: not declared
@@ -48180,15 +48338,24 @@ when the prior amount is zero or the pair crosses sign (a growth rate through ze
 meaningful magnitude).
 - fundamentalGrowth(input): import('@insiderfinance/totalfinance/fundamentals').FundamentalGrowthInput; default: not declared
 - fundamentalGrowth(input).observations: readonly { periodEndDate: string; amount: number; }[]; default: not declared — At least two observations of one amount, period end ascending.
-- grossMargin: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>>; default: not declared
-- grossMargin(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>; default: not declared
-- grossMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>; default: not declared
+- grossMargin: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>>; default: not declared
+- grossMargin(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>; default: not declared
+- grossMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
 - grossMargin(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- grossMargin(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
 - grossMargin(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
-- grossMargin(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- grossMargin(input).income.revenue: number; default: not declared
+- grossMargin(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- grossMargin(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- grossMargin(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- grossMargin(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- grossMargin(input).income.netIncome?: number; default: not declared
+- grossMargin(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- grossMargin(input).income.operatingIncome?: number; default: not declared
+- grossMargin(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- grossMargin(input).income.revenue?: number; default: not declared
+- grossMargin(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - grossMargin(input).statements?: never; default: not declared
-- grossMargin.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- grossMargin.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - grossMargin.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
 - grossMargin.explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - grossMargin.explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -48208,19 +48375,38 @@ meaningful magnitude).
 - grossMargin.explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - grossMargin.explain().return.diagnostics.warnings: string[]; default: not declared
 - grossMargin.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- grossMargin.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>; default: not declared
-- grossMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>; default: not declared
+- grossMargin.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>; default: not declared
+- grossMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
 - grossMargin.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- grossMargin.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
 - grossMargin.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
-- grossMargin.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- grossMargin.explain(input).income.revenue: number; default: not declared
+- grossMargin.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- grossMargin.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- grossMargin.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- grossMargin.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- grossMargin.explain(input).income.netIncome?: number; default: not declared
+- grossMargin.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- grossMargin.explain(input).income.operatingIncome?: number; default: not declared
+- grossMargin.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- grossMargin.explain(input).income.revenue?: number; default: not declared
+- grossMargin.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - grossMargin.explain(input).statements?: never; default: not declared
 - interestCoverage: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>>; default: not declared
 - interestCoverage(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>; default: not declared
-- interestCoverage(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>; default: not declared
+- interestCoverage(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- interestCoverage(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- interestCoverage(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- interestCoverage(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- interestCoverage(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- interestCoverage(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
 - interestCoverage(input).income.interestExpense?: number; default: not declared — Positive magnitude.
-- interestCoverage(input).income.operatingIncome: number; default: not declared
-- interestCoverage(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- interestCoverage(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- interestCoverage(input).income.netIncome?: number; default: not declared
+- interestCoverage(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- interestCoverage(input).income.operatingIncome?: number; default: not declared
+- interestCoverage(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- interestCoverage(input).income.revenue?: number; default: not declared
+- interestCoverage(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - interestCoverage(input).statements?: never; default: not declared
 - interestCoverage.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - interestCoverage.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -48243,10 +48429,20 @@ meaningful magnitude).
 - interestCoverage.explain().return.diagnostics.warnings: string[]; default: not declared
 - interestCoverage.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - interestCoverage.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>; default: not declared
-- interestCoverage.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>; default: not declared
+- interestCoverage.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- interestCoverage.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- interestCoverage.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- interestCoverage.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- interestCoverage.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- interestCoverage.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
 - interestCoverage.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
-- interestCoverage.explain(input).income.operatingIncome: number; default: not declared
-- interestCoverage.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- interestCoverage.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- interestCoverage.explain(input).income.netIncome?: number; default: not declared
+- interestCoverage.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- interestCoverage.explain(input).income.operatingIncome?: number; default: not declared
+- interestCoverage.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- interestCoverage.explain(input).income.revenue?: number; default: not declared
+- interestCoverage.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - interestCoverage.explain(input).statements?: never; default: not declared
 - inventoryTurnover: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').PairRatioInput>; default: not declared
 - inventoryTurnover(input): import('@insiderfinance/totalfinance/fundamentals').PairRatioInput; default: not declared
@@ -48321,10 +48517,20 @@ controls eligibility.
 - netDebtToEbitda.explain(input).statements: import('@insiderfinance/totalfinance/fundamentals').FinancialStatements; default: not declared
 - netProfitMargin: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>>>; default: not declared
 - netProfitMargin(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>>; default: not declared
-- netProfitMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>; default: not declared
-- netProfitMargin(input).income.netIncome: number; default: not declared
-- netProfitMargin(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- netProfitMargin(input).income.revenue: number; default: not declared
+- netProfitMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- netProfitMargin(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- netProfitMargin(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- netProfitMargin(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- netProfitMargin(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- netProfitMargin(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- netProfitMargin(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- netProfitMargin(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- netProfitMargin(input).income.netIncome?: number; default: not declared
+- netProfitMargin(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- netProfitMargin(input).income.operatingIncome?: number; default: not declared
+- netProfitMargin(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- netProfitMargin(input).income.revenue?: number; default: not declared
+- netProfitMargin(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - netProfitMargin(input).statements?: never; default: not declared
 - netProfitMargin.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - netProfitMargin.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -48347,17 +48553,37 @@ controls eligibility.
 - netProfitMargin.explain().return.diagnostics.warnings: string[]; default: not declared
 - netProfitMargin.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - netProfitMargin.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>>; default: not declared
-- netProfitMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'>; default: not declared
-- netProfitMargin.explain(input).income.netIncome: number; default: not declared
-- netProfitMargin.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- netProfitMargin.explain(input).income.revenue: number; default: not declared
+- netProfitMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'netIncome'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- netProfitMargin.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- netProfitMargin.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- netProfitMargin.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- netProfitMargin.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- netProfitMargin.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- netProfitMargin.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- netProfitMargin.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- netProfitMargin.explain(input).income.netIncome?: number; default: not declared
+- netProfitMargin.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- netProfitMargin.explain(input).income.operatingIncome?: number; default: not declared
+- netProfitMargin.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- netProfitMargin.explain(input).income.revenue?: number; default: not declared
+- netProfitMargin.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - netProfitMargin.explain(input).statements?: never; default: not declared
 - operatingMargin: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>>; default: not declared
 - operatingMargin(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>; default: not declared
-- operatingMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>; default: not declared
-- operatingMargin(input).income.operatingIncome: number; default: not declared
-- operatingMargin(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- operatingMargin(input).income.revenue: number; default: not declared
+- operatingMargin(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- operatingMargin(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- operatingMargin(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- operatingMargin(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- operatingMargin(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- operatingMargin(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- operatingMargin(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- operatingMargin(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- operatingMargin(input).income.netIncome?: number; default: not declared
+- operatingMargin(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- operatingMargin(input).income.operatingIncome?: number; default: not declared
+- operatingMargin(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- operatingMargin(input).income.revenue?: number; default: not declared
+- operatingMargin(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - operatingMargin(input).statements?: never; default: not declared
 - operatingMargin.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - operatingMargin.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -48380,10 +48606,20 @@ controls eligibility.
 - operatingMargin.explain().return.diagnostics.warnings: string[]; default: not declared
 - operatingMargin.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - operatingMargin.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>; default: not declared
-- operatingMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>; default: not declared
-- operatingMargin.explain(input).income.operatingIncome: number; default: not declared
-- operatingMargin.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- operatingMargin.explain(input).income.revenue: number; default: not declared
+- operatingMargin.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'operatingIncome'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- operatingMargin.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- operatingMargin.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- operatingMargin.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- operatingMargin.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- operatingMargin.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- operatingMargin.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- operatingMargin.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- operatingMargin.explain(input).income.netIncome?: number; default: not declared
+- operatingMargin.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- operatingMargin.explain(input).income.operatingIncome?: number; default: not declared
+- operatingMargin.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- operatingMargin.explain(input).income.revenue?: number; default: not declared
+- operatingMargin.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - operatingMargin.explain(input).statements?: never; default: not declared
 - payablesTurnover: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').PairRatioInput>; default: not declared
 - payablesTurnover(input): import('@insiderfinance/totalfinance/fundamentals').PairRatioInput; default: not declared
@@ -48538,15 +48774,31 @@ assets, so the prior year's own signal needs the balance sheet one further back.
 - priceToSales.explain(input).marketObservation: import('@insiderfinance/totalfinance/fundamentals').MarketObservation; default: not declared
 - priceToSales.explain(input).maximumStalenessMs?: number; default: not declared
 - priceToSales.explain(input).statements: import('@insiderfinance/totalfinance/fundamentals').FinancialStatements; default: not declared
-- quickRatio: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>>; default: not declared
-- quickRatio(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>; default: not declared
-- quickRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>; default: not declared
+- quickRatio: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>>; default: not declared
+- quickRatio(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>; default: not declared
+- quickRatio(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- quickRatio(input).balance.accountsPayable?: number; default: not declared
+- quickRatio(input).balance.accountsReceivable?: number; default: not declared
+- quickRatio(input).balance.cashAndCashEquivalents?: number; default: not declared
 - quickRatio(input).balance.currentAssets?: number; default: not declared
 - quickRatio(input).balance.currentLiabilities?: number; default: not declared
 - quickRatio(input).balance.inventory?: number; default: not declared
-- quickRatio(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- quickRatio(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- quickRatio(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- quickRatio(input).balance.minorityInterest?: number; default: not declared
+- quickRatio(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- quickRatio(input).balance.preferredEquity?: number; default: not declared
+- quickRatio(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- quickRatio(input).balance.retainedEarnings?: number; default: not declared
+- quickRatio(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- quickRatio(input).balance.shortTermInvestments?: number; default: not declared
+- quickRatio(input).balance.totalAssets?: number; default: not declared
+- quickRatio(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- quickRatio(input).balance.totalEquity?: number; default: not declared
+- quickRatio(input).balance.totalLiabilities?: number; default: not declared
 - quickRatio(input).statements?: never; default: not declared
-- quickRatio.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- quickRatio.explain: (input: import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - quickRatio.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
 - quickRatio.explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - quickRatio.explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -48566,12 +48818,28 @@ assets, so the prior year's own signal needs the balance sheet one further back.
 - quickRatio.explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - quickRatio.explain().return.diagnostics.warnings: string[]; default: not declared
 - quickRatio.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- quickRatio.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>; default: not declared
-- quickRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>; default: not declared
+- quickRatio.explain(input): import('@insiderfinance/totalfinance/fundamentals').BalanceSheetRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>; default: not declared
+- quickRatio.explain(input).balance: Pick<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'> & Partial<import('@insiderfinance/totalfinance/fundamentals').BalanceSheet>; default: not declared
+- quickRatio.explain(input).balance.accountsPayable?: number; default: not declared
+- quickRatio.explain(input).balance.accountsReceivable?: number; default: not declared
+- quickRatio.explain(input).balance.cashAndCashEquivalents?: number; default: not declared
 - quickRatio.explain(input).balance.currentAssets?: number; default: not declared
 - quickRatio.explain(input).balance.currentLiabilities?: number; default: not declared
 - quickRatio.explain(input).balance.inventory?: number; default: not declared
-- quickRatio.explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- quickRatio.explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- quickRatio.explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- quickRatio.explain(input).balance.minorityInterest?: number; default: not declared
+- quickRatio.explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- quickRatio.explain(input).balance.preferredEquity?: number; default: not declared
+- quickRatio.explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- quickRatio.explain(input).balance.retainedEarnings?: number; default: not declared
+- quickRatio.explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- quickRatio.explain(input).balance.shortTermInvestments?: number; default: not declared
+- quickRatio.explain(input).balance.totalAssets?: number; default: not declared
+- quickRatio.explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- quickRatio.explain(input).balance.totalEquity?: number; default: not declared
+- quickRatio.explain(input).balance.totalLiabilities?: number; default: not declared
 - quickRatio.explain(input).statements?: never; default: not declared
 - receivablesTurnover: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').PairRatioInput>; default: not declared
 - receivablesTurnover(input): import('@insiderfinance/totalfinance/fundamentals').PairRatioInput; default: not declared
@@ -48814,10 +49082,20 @@ controls eligibility.
 - returnOnInvestedCapital.explain(input).taxRate?: number; default: not declared
 - revenuePerShare: import('@insiderfinance/totalfinance/fundamentals').RatioFacade<import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>>; default: not declared
 - revenuePerShare(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>; default: not declared
-- revenuePerShare(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>; default: not declared
+- revenuePerShare(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- revenuePerShare(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - revenuePerShare(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- revenuePerShare(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- revenuePerShare(input).income.revenue: number; default: not declared
+- revenuePerShare(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- revenuePerShare(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- revenuePerShare(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- revenuePerShare(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- revenuePerShare(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- revenuePerShare(input).income.netIncome?: number; default: not declared
+- revenuePerShare(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- revenuePerShare(input).income.operatingIncome?: number; default: not declared
+- revenuePerShare(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- revenuePerShare(input).income.revenue?: number; default: not declared
+- revenuePerShare(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - revenuePerShare(input).statements?: never; default: not declared
 - revenuePerShare.explain: (input: import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - revenuePerShare.explain().return.assumptions: { conventionsVersion: string; ratioName: string; category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; }; default: not declared
@@ -48840,10 +49118,20 @@ controls eligibility.
 - revenuePerShare.explain().return.diagnostics.warnings: string[]; default: not declared
 - revenuePerShare.explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - revenuePerShare.explain(input): import('@insiderfinance/totalfinance/fundamentals').IncomeStatementRatioInput<Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>; default: not declared
-- revenuePerShare.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>; default: not declared
+- revenuePerShare.explain(input).income: Pick<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'> & Partial<import('@insiderfinance/totalfinance/fundamentals').IncomeStatement>; default: not declared
+- revenuePerShare.explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - revenuePerShare.explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- revenuePerShare.explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- revenuePerShare.explain(input).income.revenue: number; default: not declared
+- revenuePerShare.explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- revenuePerShare.explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- revenuePerShare.explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- revenuePerShare.explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- revenuePerShare.explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- revenuePerShare.explain(input).income.netIncome?: number; default: not declared
+- revenuePerShare.explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- revenuePerShare.explain(input).income.operatingIncome?: number; default: not declared
+- revenuePerShare.explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- revenuePerShare.explain(input).income.revenue?: number; default: not declared
+- revenuePerShare.explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - revenuePerShare.explain(input).statements?: never; default: not declared
 - selectFundamentalSnapshot: (input: import('@insiderfinance/totalfinance/fundamentals').SelectFundamentalSnapshotInput) => import('@insiderfinance/totalfinance/fundamentals').FundamentalSnapshot; default: not declared — The point-in-time view of a series: availability-gated by `statementsAvailableTimestampMs` (never
 by period end), then resolved to ONE version per (periodType, periodEndDate) under the stated
@@ -78179,7 +78467,9 @@ with an O(1) form later.
 - ohlcvFromBars: (bars: readonly import('@insiderfinance/totalfinance/core').Bar[]) => import('@insiderfinance/totalfinance/technical-analysis').BarInput[]; default: not declared — Explicitly project core Bar records to OHLCV indicator rows. Source identity, timestamps,
 adjustment flags and caller provenance remain in the original records: retain them alongside
 the calculation. This adapter neither fetches nor relabels observations. Prices may be negative
-where the instrument permits; finite values and OHLC range relationships are validated.
+where the instrument permits; finite values and OHLC range relationships are validated. A source
+series must contain one symbol in strictly increasing timestamp order; no sorting or deduplication
+is performed before identity/time are projected away.
 - ohlcvFromBars(bars): readonly import('@insiderfinance/totalfinance/core').Bar[]; default: not declared
 - openingRange: (bars: ArrayLike<import('@insiderfinance/totalfinance/technical-analysis').BarInput>, options: import('@insiderfinance/totalfinance/technical-analysis/price-action').OpeningRangeParameters) => import('@insiderfinance/totalfinance/technical-analysis').OpeningRange; default: not declared — High/low of the first `periods` bars — the opening range.
 - openingRange().return.assumptions: { conventionsVersion: string; periods: number; }; default: not declared — Applied conventions, echoed (Law 2 report grammar).
@@ -142196,14 +142486,48 @@ Balance-only formulas: use the actual balance sheet or the existing complete set
 export type BalanceSheetRatioInput<Facts extends Pick<BalanceSheet, 'period'> = BalanceSheet> = (SingleStatementRatioInput & {
     balance?: never;
 }) | {
-    balance: Facts;
+    balance: Facts & Partial<BalanceSheet>;
     statements?: never;
 };
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- balance: Facts; default: not declared
+- balance: Facts & Partial<BalanceSheet>; default: not declared
+- balance.accountsPayable?: number; default: not declared
+- balance.accountsReceivable?: number; default: not declared
+- balance.cashAndCashEquivalents?: number; default: not declared
+- balance.currentAssets?: number; default: not declared
+- balance.currentLiabilities?: number; default: not declared
+- balance.inventory?: number; default: not declared
+- balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- balance.minorityInterest?: number; default: not declared
+- balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- balance.period.accession?: string; default: not declared — Source accession identifier, when known.
+- balance.period.availableTimestampMs: number; default: not declared — When the data became AVAILABLE to an observer — the point-in-time eligibility instant. A
+backtest or event study must not see this period before this time; `periodEndDate` never
+controls eligibility.
+- balance.period.currency: string; default: not declared — ISO 4217 currency of the monetary figures.
+- balance.period.filedTimestampMs?: number; default: not declared — When the filing was made, when known.
+- balance.period.fiscalQuarter?: 1 | 2 | 3 | 4; default: not declared
+- balance.period.fiscalYear: number; default: not declared
+- balance.period.form?: string; default: not declared — Source form (e.g. `10-Q`), when known.
+- balance.period.monetaryScale: 1 | 1000 | 1000000; default: not declared — Monetary figures are reported in units of this scale.
+- balance.period.periodEndDate: string; default: not declared — Strict `YYYY-MM-DD` calendar date the period ends on.
+- balance.period.periodStartDate?: string; default: not declared — Strict `YYYY-MM-DD` calendar date; optional because some sources report only period ends.
+- balance.period.periodType: 'quarter' | 'year' | 'trailing-twelve-months'; default: not declared
+- balance.period.restatementOf?: string; default: not declared — When this record restates an earlier one, the accession (or identifier) it restates.
+- balance.preferredEquity?: number; default: not declared
+- balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- balance.retainedEarnings?: number; default: not declared
+- balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- balance.shortTermInvestments?: number; default: not declared
+- balance.totalAssets?: number; default: not declared
+- balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- balance.totalEquity?: number; default: not declared
+- balance.totalLiabilities?: number; default: not declared
 - statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#BeneishComponent
@@ -143498,14 +143822,41 @@ Income-only formulas: use the actual income statement or the existing complete s
 export type IncomeStatementRatioInput<Facts extends Pick<IncomeStatement, 'period'> = IncomeStatement> = (SingleStatementRatioInput & {
     income?: never;
 }) | {
-    income: Facts;
+    income: Facts & Partial<IncomeStatement>;
     statements?: never;
 };
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- income: Facts; default: not declared
+- income: Facts & Partial<IncomeStatement>; default: not declared
+- income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- income.interestExpense?: number; default: not declared — Positive magnitude.
+- income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- income.netIncome?: number; default: not declared
+- income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- income.operatingIncome?: number; default: not declared
+- income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- income.period.accession?: string; default: not declared — Source accession identifier, when known.
+- income.period.availableTimestampMs: number; default: not declared — When the data became AVAILABLE to an observer — the point-in-time eligibility instant. A
+backtest or event study must not see this period before this time; `periodEndDate` never
+controls eligibility.
+- income.period.currency: string; default: not declared — ISO 4217 currency of the monetary figures.
+- income.period.filedTimestampMs?: number; default: not declared — When the filing was made, when known.
+- income.period.fiscalQuarter?: 1 | 2 | 3 | 4; default: not declared
+- income.period.fiscalYear: number; default: not declared
+- income.period.form?: string; default: not declared — Source form (e.g. `10-Q`), when known.
+- income.period.monetaryScale: 1 | 1000 | 1000000; default: not declared — Monetary figures are reported in units of this scale.
+- income.period.periodEndDate: string; default: not declared — Strict `YYYY-MM-DD` calendar date the period ends on.
+- income.period.periodStartDate?: string; default: not declared — Strict `YYYY-MM-DD` calendar date; optional because some sources report only period ends.
+- income.period.periodType: 'quarter' | 'year' | 'trailing-twelve-months'; default: not declared
+- income.period.restatementOf?: string; default: not declared — When this record restates an earlier one, the accession (or identifier) it restates.
+- income.revenue?: number; default: not declared
+- income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#InvestedCapitalRatioInput
@@ -145028,14 +145379,14 @@ export interface RatioPeriodIdentity {
     fiscalYear: number;
     currency: string;
     monetaryScale: number;
-    /** Actual statement availability, distinct from its period end. */
+    /** Direct statement availability, or the latest availability in a complete validated set. */
     availableTimestampMs?: EpochMs;
 }
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- availableTimestampMs?: number; default: not declared — Actual statement availability, distinct from its period end.
+- availableTimestampMs?: number; default: not declared — Direct statement availability, or the latest availability in a complete validated set.
 - currency: string; default: not declared
 - fiscalYear: number; default: not declared
 - monetaryScale: number; default: not declared
@@ -145089,14 +145440,14 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - assumptions.conventionsVersion: string; default: not declared
 - assumptions.formula: string; default: not declared — The fixed formula, stated as prose (also in the generated reference documentation).
 - assumptions.period: RatioPeriodIdentity; default: not declared
-- assumptions.period.availableTimestampMs?: number; default: not declared — Actual statement availability, distinct from its period end.
+- assumptions.period.availableTimestampMs?: number; default: not declared — Direct statement availability, or the latest availability in a complete validated set.
 - assumptions.period.currency: string; default: not declared
 - assumptions.period.fiscalYear: number; default: not declared
 - assumptions.period.monetaryScale: number; default: not declared
 - assumptions.period.periodEndDate: string; default: not declared
 - assumptions.period.periodType: string; default: not declared
 - assumptions.priorPeriod?: RatioPeriodIdentity; default: not declared
-- assumptions.priorPeriod.availableTimestampMs?: number; default: not declared — Actual statement availability, distinct from its period end.
+- assumptions.priorPeriod.availableTimestampMs?: number; default: not declared — Direct statement availability, or the latest availability in a complete validated set.
 - assumptions.priorPeriod.currency: string; default: not declared
 - assumptions.priorPeriod.fiscalYear: number; default: not declared
 - assumptions.priorPeriod.monetaryScale: number; default: not declared
@@ -145856,10 +146207,27 @@ export declare const cashRatio: RatioFacade<BalanceSheetRatioInput<Pick<BalanceS
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>; default: not declared
-- (input).balance: Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>; default: not declared
-- (input).balance.cashAndCashEquivalents: number; default: not declared
+- (input).balance: Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'> & Partial<BalanceSheet>; default: not declared
+- (input).balance.accountsPayable?: number; default: not declared
+- (input).balance.accountsReceivable?: number; default: not declared
+- (input).balance.cashAndCashEquivalents?: number; default: not declared
+- (input).balance.currentAssets?: number; default: not declared
 - (input).balance.currentLiabilities?: number; default: not declared
-- (input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.inventory?: number; default: not declared
+- (input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- (input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).balance.minorityInterest?: number; default: not declared
+- (input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.preferredEquity?: number; default: not declared
+- (input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- (input).balance.retainedEarnings?: number; default: not declared
+- (input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- (input).balance.shortTermInvestments?: number; default: not declared
+- (input).balance.totalAssets?: number; default: not declared
+- (input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- (input).balance.totalEquity?: number; default: not declared
+- (input).balance.totalLiabilities?: number; default: not declared
 - (input).statements?: never; default: not declared
 - explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -145882,10 +146250,27 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>>; default: not declared
-- explain(input).balance: Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>; default: not declared
-- explain(input).balance.cashAndCashEquivalents: number; default: not declared
+- explain(input).balance: Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'> & Partial<BalanceSheet>; default: not declared
+- explain(input).balance.accountsPayable?: number; default: not declared
+- explain(input).balance.accountsReceivable?: number; default: not declared
+- explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- explain(input).balance.currentAssets?: number; default: not declared
 - explain(input).balance.currentLiabilities?: number; default: not declared
-- explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.inventory?: number; default: not declared
+- explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).balance.minorityInterest?: number; default: not declared
+- explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.preferredEquity?: number; default: not declared
+- explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- explain(input).balance.retainedEarnings?: number; default: not declared
+- explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- explain(input).balance.shortTermInvestments?: number; default: not declared
+- explain(input).balance.totalAssets?: number; default: not declared
+- explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- explain(input).balance.totalEquity?: number; default: not declared
+- explain(input).balance.totalLiabilities?: number; default: not declared
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#cashReturnOnAssets
@@ -145968,10 +146353,27 @@ export declare const currentRatio: RatioFacade<BalanceSheetRatioInput<Pick<Balan
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>; default: not declared
-- (input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>; default: not declared
+- (input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'> & Partial<BalanceSheet>; default: not declared
+- (input).balance.accountsPayable?: number; default: not declared
+- (input).balance.accountsReceivable?: number; default: not declared
+- (input).balance.cashAndCashEquivalents?: number; default: not declared
 - (input).balance.currentAssets?: number; default: not declared
 - (input).balance.currentLiabilities?: number; default: not declared
-- (input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.inventory?: number; default: not declared
+- (input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- (input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).balance.minorityInterest?: number; default: not declared
+- (input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.preferredEquity?: number; default: not declared
+- (input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- (input).balance.retainedEarnings?: number; default: not declared
+- (input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- (input).balance.shortTermInvestments?: number; default: not declared
+- (input).balance.totalAssets?: number; default: not declared
+- (input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- (input).balance.totalEquity?: number; default: not declared
+- (input).balance.totalLiabilities?: number; default: not declared
 - (input).statements?: never; default: not declared
 - explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -145994,10 +146396,27 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>>; default: not declared
-- explain(input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'>; default: not declared
+- explain(input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets'> & Partial<BalanceSheet>; default: not declared
+- explain(input).balance.accountsPayable?: number; default: not declared
+- explain(input).balance.accountsReceivable?: number; default: not declared
+- explain(input).balance.cashAndCashEquivalents?: number; default: not declared
 - explain(input).balance.currentAssets?: number; default: not declared
 - explain(input).balance.currentLiabilities?: number; default: not declared
-- explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.inventory?: number; default: not declared
+- explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).balance.minorityInterest?: number; default: not declared
+- explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.preferredEquity?: number; default: not declared
+- explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- explain(input).balance.retainedEarnings?: number; default: not declared
+- explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- explain(input).balance.shortTermInvestments?: number; default: not declared
+- explain(input).balance.totalAssets?: number; default: not declared
+- explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- explain(input).balance.totalEquity?: number; default: not declared
+- explain(input).balance.totalLiabilities?: number; default: not declared
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#daysInventoryOutstanding
@@ -146155,21 +146574,35 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
 ```typescript
-export declare const debtToAssets: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>>;
+export declare const debtToAssets: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>>;
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>; default: not declared
-- (input).balance: Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>; default: not declared
+- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>; default: not declared
+- (input).balance: Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'> & Partial<BalanceSheet>; default: not declared
+- (input).balance.accountsPayable?: number; default: not declared
+- (input).balance.accountsReceivable?: number; default: not declared
+- (input).balance.cashAndCashEquivalents?: number; default: not declared
+- (input).balance.currentAssets?: number; default: not declared
+- (input).balance.currentLiabilities?: number; default: not declared
+- (input).balance.inventory?: number; default: not declared
 - (input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- (input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).balance.minorityInterest?: number; default: not declared
+- (input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.preferredEquity?: number; default: not declared
+- (input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- (input).balance.retainedEarnings?: number; default: not declared
 - (input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
-- (input).balance.totalAssets: number; default: not declared
+- (input).balance.shortTermInvestments?: number; default: not declared
+- (input).balance.totalAssets?: number; default: not declared
 - (input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- (input).balance.totalEquity?: number; default: not declared
+- (input).balance.totalLiabilities?: number; default: not declared
 - (input).statements?: never; default: not declared
-- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
 - explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -146189,14 +146622,28 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>>; default: not declared
-- explain(input).balance: Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>; default: not declared
+- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'>>; default: not declared
+- explain(input).balance: Pick<BalanceSheet, 'period' | 'totalAssets' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt'> & Partial<BalanceSheet>; default: not declared
+- explain(input).balance.accountsPayable?: number; default: not declared
+- explain(input).balance.accountsReceivable?: number; default: not declared
+- explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- explain(input).balance.currentAssets?: number; default: not declared
+- explain(input).balance.currentLiabilities?: number; default: not declared
+- explain(input).balance.inventory?: number; default: not declared
 - explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).balance.minorityInterest?: number; default: not declared
+- explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.preferredEquity?: number; default: not declared
+- explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- explain(input).balance.retainedEarnings?: number; default: not declared
 - explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
-- explain(input).balance.totalAssets: number; default: not declared
+- explain(input).balance.shortTermInvestments?: number; default: not declared
+- explain(input).balance.totalAssets?: number; default: not declared
 - explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- explain(input).balance.totalEquity?: number; default: not declared
+- explain(input).balance.totalLiabilities?: number; default: not declared
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#debtToEquity
@@ -146204,21 +146651,35 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
 ```typescript
-export declare const debtToEquity: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>>;
+export declare const debtToEquity: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>>;
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>; default: not declared
-- (input).balance: Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>; default: not declared
+- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>; default: not declared
+- (input).balance: Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'> & Partial<BalanceSheet>; default: not declared
+- (input).balance.accountsPayable?: number; default: not declared
+- (input).balance.accountsReceivable?: number; default: not declared
+- (input).balance.cashAndCashEquivalents?: number; default: not declared
+- (input).balance.currentAssets?: number; default: not declared
+- (input).balance.currentLiabilities?: number; default: not declared
+- (input).balance.inventory?: number; default: not declared
 - (input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- (input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).balance.minorityInterest?: number; default: not declared
+- (input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.preferredEquity?: number; default: not declared
+- (input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- (input).balance.retainedEarnings?: number; default: not declared
 - (input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- (input).balance.shortTermInvestments?: number; default: not declared
+- (input).balance.totalAssets?: number; default: not declared
 - (input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
-- (input).balance.totalEquity: number; default: not declared
+- (input).balance.totalEquity?: number; default: not declared
+- (input).balance.totalLiabilities?: number; default: not declared
 - (input).statements?: never; default: not declared
-- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
 - explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -146238,14 +146699,28 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>>; default: not declared
-- explain(input).balance: Pick<BalanceSheet, 'period' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt' | 'totalEquity'>; default: not declared
+- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'>>; default: not declared
+- explain(input).balance: Pick<BalanceSheet, 'period' | 'shortTermDebt' | 'longTermDebt' | 'totalDebt' | 'totalEquity'> & Partial<BalanceSheet>; default: not declared
+- explain(input).balance.accountsPayable?: number; default: not declared
+- explain(input).balance.accountsReceivable?: number; default: not declared
+- explain(input).balance.cashAndCashEquivalents?: number; default: not declared
+- explain(input).balance.currentAssets?: number; default: not declared
+- explain(input).balance.currentLiabilities?: number; default: not declared
+- explain(input).balance.inventory?: number; default: not declared
 - explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
-- explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).balance.minorityInterest?: number; default: not declared
+- explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.preferredEquity?: number; default: not declared
+- explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- explain(input).balance.retainedEarnings?: number; default: not declared
 - explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- explain(input).balance.shortTermInvestments?: number; default: not declared
+- explain(input).balance.totalAssets?: number; default: not declared
 - explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
 `shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
-- explain(input).balance.totalEquity: number; default: not declared
+- explain(input).balance.totalEquity?: number; default: not declared
+- explain(input).balance.totalLiabilities?: number; default: not declared
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#dividendYield
@@ -146298,10 +146773,20 @@ export declare const earningsPerShare: RatioFacade<IncomeStatementRatioInput<Pic
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'> & Partial<IncomeStatement>; default: not declared
+- (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- (input).income.netIncome: number; default: not declared
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- (input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
 - explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -146324,10 +146809,20 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'> & Partial<IncomeStatement>; default: not declared
+- explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- explain(input).income.netIncome: number; default: not declared
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#earningsYield
@@ -146593,19 +147088,28 @@ meaningful magnitude).
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
 ```typescript
-export declare const grossMargin: RatioFacade<IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>>;
+export declare const grossMargin: RatioFacade<IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>>;
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>; default: not declared
+- (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'> & Partial<IncomeStatement>; default: not declared
 - (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
 - (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- (input).income.revenue: number; default: not declared
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- (input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
-- explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
 - explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -146625,12 +147129,21 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>; default: not declared
+- explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'>>; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'costOfRevenue' | 'grossProfit'> & Partial<IncomeStatement>; default: not declared
 - explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
 - explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- explain(input).income.revenue: number; default: not declared
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#interestCoverage
@@ -146644,10 +147157,20 @@ export declare const interestCoverage: RatioFacade<IncomeStatementRatioInput<Pic
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'> & Partial<IncomeStatement>; default: not declared
+- (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
 - (input).income.interestExpense?: number; default: not declared — Positive magnitude.
-- (input).income.operatingIncome: number; default: not declared
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
 - explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -146670,10 +147193,20 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'> & Partial<IncomeStatement>; default: not declared
+- explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
 - explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
-- explain(input).income.operatingIncome: number; default: not declared
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#inventoryTurnover
@@ -146790,10 +147323,20 @@ export declare const netProfitMargin: RatioFacade<IncomeStatementRatioInput<Pick
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>; default: not declared
-- (input).income.netIncome: number; default: not declared
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- (input).income.revenue: number; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'> & Partial<IncomeStatement>; default: not declared
+- (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- (input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
 - explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -146816,10 +147359,20 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>; default: not declared
-- explain(input).income.netIncome: number; default: not declared
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- explain(input).income.revenue: number; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'> & Partial<IncomeStatement>; default: not declared
+- explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#operatingMargin
@@ -146833,10 +147386,20 @@ export declare const operatingMargin: RatioFacade<IncomeStatementRatioInput<Pick
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>; default: not declared
-- (input).income.operatingIncome: number; default: not declared
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- (input).income.revenue: number; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'> & Partial<IncomeStatement>; default: not declared
+- (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- (input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
 - explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -146859,10 +147422,20 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>; default: not declared
-- explain(input).income.operatingIncome: number; default: not declared
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- explain(input).income.revenue: number; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'> & Partial<IncomeStatement>; default: not declared
+- explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
+- explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
+- explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#payablesTurnover
@@ -147087,19 +147660,35 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
 ```typescript
-export declare const quickRatio: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>>;
+export declare const quickRatio: RatioFacade<BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>>;
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>; default: not declared
-- (input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>; default: not declared
+- (input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>; default: not declared
+- (input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'> & Partial<BalanceSheet>; default: not declared
+- (input).balance.accountsPayable?: number; default: not declared
+- (input).balance.accountsReceivable?: number; default: not declared
+- (input).balance.cashAndCashEquivalents?: number; default: not declared
 - (input).balance.currentAssets?: number; default: not declared
 - (input).balance.currentLiabilities?: number; default: not declared
 - (input).balance.inventory?: number; default: not declared
-- (input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- (input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).balance.minorityInterest?: number; default: not declared
+- (input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).balance.preferredEquity?: number; default: not declared
+- (input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- (input).balance.retainedEarnings?: number; default: not declared
+- (input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- (input).balance.shortTermInvestments?: number; default: not declared
+- (input).balance.totalAssets?: number; default: not declared
+- (input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- (input).balance.totalEquity?: number; default: not declared
+- (input).balance.totalLiabilities?: number; default: not declared
 - (input).statements?: never; default: not declared
-- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
+- explain: (input: BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
 - explain().return.assumptions.category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; default: not declared
 - explain().return.assumptions.conventionsVersion: string; default: not declared
@@ -147119,12 +147708,28 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.reason?: string; default: not declared — Present exactly when `value` is null.
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
-- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>>; default: not declared
-- explain(input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'currentAssets' | 'inventory'>; default: not declared
+- explain(input): BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'>>; default: not declared
+- explain(input).balance: Pick<BalanceSheet, 'period' | 'currentLiabilities' | 'inventory' | 'currentAssets'> & Partial<BalanceSheet>; default: not declared
+- explain(input).balance.accountsPayable?: number; default: not declared
+- explain(input).balance.accountsReceivable?: number; default: not declared
+- explain(input).balance.cashAndCashEquivalents?: number; default: not declared
 - explain(input).balance.currentAssets?: number; default: not declared
 - explain(input).balance.currentLiabilities?: number; default: not declared
 - explain(input).balance.inventory?: number; default: not declared
-- explain(input).balance.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.longTermDebt?: number; default: not declared — Interest-bearing debt due beyond one year.
+- explain(input).balance.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).balance.minorityInterest?: number; default: not declared
+- explain(input).balance.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).balance.preferredEquity?: number; default: not declared
+- explain(input).balance.propertyPlantEquipmentNet?: number; default: not declared — Net property, plant, and equipment.
+- explain(input).balance.retainedEarnings?: number; default: not declared
+- explain(input).balance.shortTermDebt?: number; default: not declared — Interest-bearing debt due within one year.
+- explain(input).balance.shortTermInvestments?: number; default: not declared
+- explain(input).balance.totalAssets?: number; default: not declared
+- explain(input).balance.totalDebt?: number; default: not declared — Total interest-bearing debt. When absent and both maturities are present, consumers may derive
+`shortTermDebt + longTermDebt` and say so; "debt" NEVER silently means total liabilities.
+- explain(input).balance.totalEquity?: number; default: not declared
+- explain(input).balance.totalLiabilities?: number; default: not declared
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#receivablesTurnover
@@ -147511,10 +148116,20 @@ export declare const revenuePerShare: RatioFacade<IncomeStatementRatioInput<Pick
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - (input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>; default: not declared
-- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>; default: not declared
+- (input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'> & Partial<IncomeStatement>; default: not declared
+- (input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - (input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- (input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- (input).income.revenue: number; default: not declared
+- (input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- (input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- (input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- (input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- (input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- (input).income.netIncome?: number; default: not declared
+- (input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- (input).income.operatingIncome?: number; default: not declared
+- (input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- (input).income.revenue?: number; default: not declared
+- (input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - (input).statements?: never; default: not declared
 - explain: (input: IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>) => import('@insiderfinance/totalfinance/fundamentals').RatioReport; default: not declared
 - explain().return.assumptions: { category: import('@insiderfinance/totalfinance/fundamentals').RatioCategory; conventionsVersion: string; formula: string; period: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; priorPeriod?: import('@insiderfinance/totalfinance/fundamentals').RatioPeriodIdentity; ratioName: string; }; default: not declared
@@ -147537,10 +148152,20 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - explain().return.diagnostics.warnings: string[]; default: not declared
 - explain().return.value: number | null; default: not declared — A decimal ratio (never a displayed percentage), or `null` with `diagnostics.reason`.
 - explain(input): IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>>; default: not declared
-- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>; default: not declared
+- explain(input).income: Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'> & Partial<IncomeStatement>; default: not declared
+- explain(input).income.costOfRevenue?: number; default: not declared — Positive magnitude.
 - explain(input).income.dilutedSharesOutstanding?: number; default: not declared — Split-adjusted weighted-average diluted shares for the period.
-- explain(input).income.period: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
-- explain(input).income.revenue: number; default: not declared
+- explain(input).income.grossProfit?: number; default: not declared — Reported gross profit; when absent, consumers may derive `revenue - costOfRevenue` and say so.
+- explain(input).income.incomeFromContinuingOperations?: number; default: not declared — When reported separately from `netIncome` (the Beneish accrual basis prefers it).
+- explain(input).income.incomeTaxExpense?: number; default: not declared — Positive magnitude (a net tax benefit is a negative amount and is stated as such).
+- explain(input).income.interestExpense?: number; default: not declared — Positive magnitude.
+- explain(input).income.metadata?: Record<string, unknown>; default: not declared — Source-specific extras, preserved verbatim and never consumed by compute functions.
+- explain(input).income.netIncome?: number; default: not declared
+- explain(input).income.operatingExpenses?: number; default: not declared — Positive magnitude of total operating expenses below gross profit.
+- explain(input).income.operatingIncome?: number; default: not declared
+- explain(input).income.period?: import('@insiderfinance/totalfinance/fundamentals').FundamentalPeriod; default: not declared
+- explain(input).income.revenue?: number; default: not declared
+- explain(input).income.sellingGeneralAdministrativeExpense?: number; default: not declared — Positive magnitude (Beneish SGAI consumes it).
 - explain(input).statements?: never; default: not declared
 
 ### @insiderfinance/totalfinance/fundamentals#selectFundamentalSnapshot
@@ -238856,7 +239481,9 @@ Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee
 Explicitly project core Bar records to OHLCV indicator rows. Source identity, timestamps,
 adjustment flags and caller provenance remain in the original records: retain them alongside
 the calculation. This adapter neither fetches nor relabels observations. Prices may be negative
-where the instrument permits; finite values and OHLC range relationships are validated.
+where the instrument permits; finite values and OHLC range relationships are validated. A source
+series must contain one symbol in strictly increasing timestamp order; no sorting or deduplication
+is performed before identity/time are projected away.
 
 ```typescript
 export declare function ohlcvFromBars(bars: readonly Bar[]): BarInput[];

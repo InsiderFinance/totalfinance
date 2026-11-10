@@ -13,7 +13,7 @@ import {
 } from '../src/index.js';
 import { PARITY_FIXTURES } from '../../../tools/transport-parity/fixtures.js';
 import { vectorized, fees, slippage } from '@totalfinance/backtest';
-import { ohlcvFromBars } from '@totalfinance/technical-analysis';
+import { ohlcvFromBars, atr } from '@totalfinance/technical-analysis';
 import { NYSE, US_EQUITY_CALENDAR_COVERAGE } from '@totalfinance/calendars';
 
 const registry = () =>
@@ -42,7 +42,12 @@ describe('first-failure recovery and discovery', () => {
   it('bounds repeated row errors and preserves counts and indexed field teaching', () => {
     const r = registry();
     const op = r.require('totalfinance.technical_analysis.calculate');
-    const bars = Array.from({ length: 200 }, () => data()[0]!);
+    const bars = Array.from({ length: 200 }, (_, index) => ({
+      ...data()[0]!,
+      timestampMs: 1000 + index,
+      extraHigh: 2,
+      extraLow: 0,
+    }));
     let mapped;
     try {
       r.run({ id: op.id, input: { indicator: 'atr', bars, parameters: { period: 1 } } });
@@ -57,10 +62,75 @@ describe('first-failure recovery and discovery', () => {
     expect((context['issues'] as { path: unknown[] }[])[0]!.path).toContain(0);
     const fixed = r.run({
       id: op.id,
-      input: { indicator: 'atr', bars: ohlcvFromBars(bars), parameters: { period: 1 } },
+      input: {
+        indicator: 'atr',
+        bars: bars.map(({ extraHigh: _high, extraLow: _low, ...bar }) => bar),
+        parameters: { period: 1 },
+      },
     });
     expect(fixed.structured['value']).toHaveLength(200);
-    expect(JSON.stringify(r.describe(op.id))).toContain('ohlcvFromBars');
+    expect(JSON.stringify(r.describe(op.id))).toContain('canonical');
+  });
+
+  it('accepts raw canonical bars and original OHLCV rows with the same financial result', () => {
+    const bars = [
+      {
+        symbol: 'TEST',
+        timestampMs: 1000,
+        open: 10,
+        high: 12,
+        low: 8,
+        close: 10,
+        vwap: 10,
+        adjusted: false,
+      },
+      {
+        symbol: 'TEST',
+        timestampMs: 2000,
+        open: 12,
+        high: 14,
+        low: 10,
+        close: 12,
+        vwap: 12,
+        adjusted: false,
+      },
+    ];
+    const before = structuredClone(bars);
+    const run = (rows: unknown[]) =>
+      registry().run({
+        id: 'totalfinance.technical_analysis.calculate',
+        input: { indicator: 'atr', bars: rows, parameters: { period: 1 } },
+      });
+    expect(run(bars).structured['value']).toEqual([4, 4]);
+    expect(run(bars).structured).toEqual(run(ohlcvFromBars(bars)).structured);
+    expect(atr(bars, { period: 1 })).toEqual([4, 4]);
+    expect(bars).toEqual(before);
+    const validate = new AjvJsonSchemaValidator().getValidator(
+      registry().require('totalfinance.technical_analysis.calculate').inputSchema.toJSONSchema(),
+    );
+    expect(validate({ indicator: 'atr', bars, parameters: { period: 1 } }).valid).toBe(true);
+  });
+
+  it('refuses malformed source series and unknown keys instead of sorting or discarding them', () => {
+    const bars = data();
+    for (const rows of [
+      [...bars].reverse(),
+      [bars[0], bars[0]],
+      [bars[0], { ...bars[1], symbol: 'OTHER' }],
+      [bars[0], { high: 110, low: 110, close: 110 }],
+      [{ ...bars[0], timestampMs: undefined }],
+      [{ ...bars[0], vwap: '100' }],
+      [{ ...bars[0], adjusted: 'false' }],
+      [...bars.slice(0, -1), { ...bars.at(-1), close: Infinity }],
+      [{ ...bars[0], unexpected: 1 }],
+    ]) {
+      expect(() =>
+        registry().run({
+          id: 'totalfinance.technical_analysis.calculate',
+          input: { indicator: 'atr', bars: rows, parameters: { period: 1 } },
+        }),
+      ).toThrow(expect.objectContaining({ name: 'InputError' }));
+    }
   });
 
   it('makes the category route evident without changing name search', () => {

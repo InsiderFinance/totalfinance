@@ -2150,7 +2150,7 @@
           }
         ],
         "summary": "Create and store an explicitly defined portfolio ledger",
-        "description": "Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect; subsequent event writes return a new immutable handle. Opt-in (tradePack).",
+        "description": "Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect from portfolioPack (enable both trade and portfolio packs, or use --profile full); subsequent event writes return a new immutable handle. Opt-in (tradePack).",
         "requestBody": {
           "required": true,
           "content": {
@@ -4313,7 +4313,7 @@
         "operationId": "run.totalfinance.technical_analysis.calculate",
         "security": [],
         "summary": "Calculate a technical indicator",
-        "description": "Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Project core Bar records with technicalAnalysis.ohlcvFromBars, retaining the original source/provenance alongside the result; or pass OHLCV columns under series. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.",
+        "description": "Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Pass canonical core Bar records directly under bars; symbol, timestampMs, vwap and adjusted are declared fields. Source records require open, one symbol and strictly increasing unique timestamps; no stripping or SDK preprocessing is needed. Identity/time are validated before OHLCV projection; retain the original source/provenance alongside the result. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.",
         "requestBody": {
           "required": true,
           "content": {
@@ -32834,6 +32834,20 @@
                 },
                 "volume": {
                   "type": "number"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "Canonical source Bar symbol; include timestampMs and open on every row"
+                },
+                "timestampMs": {
+                  "type": "number",
+                  "description": "Canonical source time in epoch ms; strictly increasing within one symbol"
+                },
+                "vwap": {
+                  "type": "number"
+                },
+                "adjusted": {
+                  "type": "boolean"
                 }
               },
               "additionalProperties": false,

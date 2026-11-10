@@ -1,11 +1,11 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43342,
+    "identities": 43370,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 4004,
-      "explicit": 39176,
+      "canonical-term": 4006,
+      "explicit": 39202,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
@@ -13,9 +13,9 @@
       "code-string": 276,
       "enum-member": 276,
       "export": 7460,
-      "field": 22871,
+      "field": 22895,
       "literal-value": 4657,
-      "mcp-field": 1549,
+      "mcp-field": 1553,
       "mcp-tool": 57,
       "method": 1780,
       "package": 25,
@@ -31,7 +31,7 @@
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
-      "@totalfinance/fundamentals": 526,
+      "@totalfinance/fundamentals": 550,
       "@totalfinance/http": 393,
       "@totalfinance/math": 923,
       "@totalfinance/mcp": 493,
@@ -46,7 +46,7 @@
       "@totalfinance/technical-analysis": 4958,
       "@totalfinance/valuation": 1492,
       "@totalfinance/volatility": 2866,
-      "@totalfinance/workflows": 2702,
+      "@totalfinance/workflows": 2706,
       "totalfinance": 3213
     },
     "byForbiddenToken": {},
@@ -88052,73 +88052,136 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.accountsPayable",
+      "name": "accountsPayable",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.accountsReceivable",
+      "name": "accountsReceivable",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.cashAndCashEquivalents",
       "name": "cashAndCashEquivalents",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.currentAssets",
       "name": "currentAssets",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.currentLiabilities",
       "name": "currentLiabilities",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.inventory",
       "name": "inventory",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.longTermDebt",
       "name": "longTermDebt",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.metadata",
+      "name": "metadata",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.minorityInterest",
+      "name": "minorityInterest",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.period",
       "name": "period",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.preferredEquity",
+      "name": "preferredEquity",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.propertyPlantEquipmentNet",
+      "name": "propertyPlantEquipmentNet",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.retainedEarnings",
+      "name": "retainedEarnings",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.shortTermDebt",
       "name": "shortTermDebt",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.shortTermInvestments",
+      "name": "shortTermInvestments",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalAssets",
       "name": "totalAssets",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalDebt",
       "name": "totalDebt",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalEquity",
       "name": "totalEquity",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalLiabilities",
+      "name": "totalLiabilities",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -88466,6 +88529,69 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.costOfRevenue",
+      "name": "costOfRevenue",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.dilutedSharesOutstanding",
+      "name": "dilutedSharesOutstanding",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.grossProfit",
+      "name": "grossProfit",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.incomeFromContinuingOperations",
+      "name": "incomeFromContinuingOperations",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.incomeTaxExpense",
+      "name": "incomeTaxExpense",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.interestExpense",
+      "name": "interestExpense",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.metadata",
+      "name": "metadata",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.netIncome",
+      "name": "netIncome",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.operatingExpenses",
+      "name": "operatingExpenses",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.operatingIncome",
       "name": "operatingIncome",
       "kind": "field",
@@ -88475,6 +88601,20 @@
     {
       "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.period",
       "name": "period",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.revenue",
+      "name": "revenue",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.sellingGeneralAdministrativeExpense",
+      "name": "sellingGeneralAdministrativeExpense",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -88525,13 +88665,6 @@
     {
       "id": "@totalfinance/fundamentals|field|EnterpriseMultipleRatioInput.statements",
       "name": "statements",
-      "kind": "field",
-      "position": "artifact",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/fundamentals|field|Facts.period",
-      "name": "period",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -88899,56 +89032,91 @@
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.costOfRevenue",
       "name": "costOfRevenue",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.dilutedSharesOutstanding",
       "name": "dilutedSharesOutstanding",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.grossProfit",
       "name": "grossProfit",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.incomeFromContinuingOperations",
+      "name": "incomeFromContinuingOperations",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.incomeTaxExpense",
+      "name": "incomeTaxExpense",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.interestExpense",
       "name": "interestExpense",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.metadata",
+      "name": "metadata",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.netIncome",
       "name": "netIncome",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.operatingExpenses",
+      "name": "operatingExpenses",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.operatingIncome",
       "name": "operatingIncome",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.period",
       "name": "period",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
       "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.revenue",
       "name": "revenue",
       "kind": "field",
-      "position": "request",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.sellingGeneralAdministrativeExpense",
+      "name": "sellingGeneralAdministrativeExpense",
+      "kind": "field",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -277012,6 +277180,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/workflows|mcp-field|bars.adjusted",
+      "name": "adjusted",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/workflows|mcp-field|bars.close",
       "name": "close",
       "kind": "mcp-field",
@@ -277040,11 +277215,34 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/workflows|mcp-field|bars.symbol",
+      "name": "symbol",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|bars.timestampMs",
+      "name": "timestampMs",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
       "id": "@totalfinance/workflows|mcp-field|bars.volume",
       "name": "volume",
       "kind": "mcp-field",
       "position": "serialized",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|bars.vwap",
+      "name": "vwap",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Dominant execution/indicator term."
     },
     {
       "id": "@totalfinance/workflows|mcp-field|BarSchema.adjusted",
