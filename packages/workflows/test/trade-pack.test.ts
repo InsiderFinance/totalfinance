@@ -117,6 +117,7 @@ const IDS = [
   'totalfinance.trade.cancel',
   'totalfinance.trade.reconcile',
   'totalfinance.portfolio.record_events',
+  'totalfinance.portfolio.create',
 ];
 
 describe('the trade pack in the registry', () => {
@@ -124,7 +125,7 @@ describe('the trade pack in the registry', () => {
     packs: [...defaultPacks(), ...journeyPacks(), tradePack()],
   });
 
-  it('registers the six operations with honest effects, authorization, idempotency, and capabilities', () => {
+  it('registers the trade operations with honest effects, authorization, idempotency, and capabilities', () => {
     const ids = registry.list().map((d) => d.id);
     for (const id of IDS) expect(ids).toContain(id);
     const byId = Object.fromEntries(registry.list().map((d) => [d.id, d]));
@@ -159,6 +160,10 @@ describe('the trade pack in the registry', () => {
     expect(byId['totalfinance.portfolio.record_events']).toMatchObject({
       sideEffect: 'portfolio-state',
       idempotency: 'required',
+      requiredCapabilities: ['portfolio:write'],
+    });
+    expect(byId['totalfinance.portfolio.create']).toMatchObject({
+      sideEffect: 'portfolio-state',
       requiredCapabilities: ['portfolio:write'],
     });
     // annotations derive from the effect fields

@@ -6,10 +6,10 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.2: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.3: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.2
+pnpm add @insiderfinance/totalfinance@0.1.3
 ```
 
 ## Example
@@ -53,7 +53,7 @@ Indicators are addressable by their TotalFinance name and by common TA-Lib / Tra
 
 ## API
 
-`@insiderfinance/totalfinance/technical-analysis` exposes **398** runtime exports (**656** including types) across 32 entrypoints (`.`, `./aliases`, `./bands`, `./bars`, `./candle-aliases`, `./candle-talib`, `./candlesticks`, `./chart-types`, `./cycle`, `./divergence`, `./features`, `./framework`, `./macd`, `./math`, `./microstructure`, `./momentum`, `./moving-averages`, `./oscillators`, `./overlap`, `./pipeline`, `./price-action`, `./registry`, `./resample`, `./rsi`, `./series`, `./signal`, `./statistics`, `./transforms`, `./trend`, `./volatility`, `./volume`, `./warmup`). See the generated [`etc/technical-analysis.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/technical-analysis/etc/technical-analysis.api.md) for the full surface.
+`@insiderfinance/totalfinance/technical-analysis` exposes **399** runtime exports (**657** including types) across 32 entrypoints (`.`, `./aliases`, `./bands`, `./bars`, `./candle-aliases`, `./candle-talib`, `./candlesticks`, `./chart-types`, `./cycle`, `./divergence`, `./features`, `./framework`, `./macd`, `./math`, `./microstructure`, `./momentum`, `./moving-averages`, `./oscillators`, `./overlap`, `./pipeline`, `./price-action`, `./registry`, `./resample`, `./rsi`, `./series`, `./signal`, `./statistics`, `./transforms`, `./trend`, `./volatility`, `./volume`, `./warmup`). See the generated [`etc/technical-analysis.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/technical-analysis/etc/technical-analysis.api.md) for the full surface.
 
 ## License
 

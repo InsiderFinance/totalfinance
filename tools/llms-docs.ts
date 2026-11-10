@@ -104,6 +104,7 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
       'Full/profile selection does not grant writes: required capabilities, writable stores, and explicit write configuration still apply.',
     'Explicit packs are an exact selection, not additions to defaults. Check doctor and totalfinance://capabilities for the effective server, not this full catalog.',
     '- [Agent setup, handles, errors, jobs, and safety](llms-full.txt#journey-connect-agent)',
+    '- [Portfolio bootstrap, statement ratios and first-failure recovery](guides/dogfood-journeys.md)',
     '- [Assumptions and conventions](guides/assumptions.md)',
     '- [Typed errors](guides/errors.md)',
     '- [Technical indicators](guides/ta-indicators.md)',

@@ -3169,7 +3169,7 @@
       "kind": "function",
       "entrypoints": [".", "./framework"],
       "role": "helper",
-      "note": "snapshot envelope boundary; the ONE door into a stored snapshot — validates the closed envelope, the schema version and the indicator identity, decodes the non-finite encoding and refuses a raw one anywhere in state, then returns a SnapshotState (type-only export: a caller names it, never constructs it) whose accessors check each field. Replaced `snapshotState`, which validated the envelope and then handed back the raw state for unchecked casting (3B.1)."
+      "note": "snapshot envelope boundary; the ONE door into a stored snapshot \u2014 validates the closed envelope, the schema version and the indicator identity, decodes the non-finite encoding and refuses a raw one anywhere in state, then returns a SnapshotState (type-only export: a caller names it, never constructs it) whose accessors check each field. Replaced `snapshotState`, which validated the envelope and then handed back the raw state for unchecked casting (3B.1)."
     },
     "realBody": {
       "kind": "function",
@@ -4374,6 +4374,15 @@
       "hasExplain": true,
       "hasStream": true,
       "role": "facade"
+    },
+    "ohlcvFromBars": {
+      "kind": "function",
+      "entrypoints": ["."],
+      "role": "helper",
+      "inputPolicies": {
+        "0": "open"
+      },
+      "note": "Explicit validated projection of structural source Bar records to OHLCV rows; original identity/provenance retained by the caller"
     }
   }
 }

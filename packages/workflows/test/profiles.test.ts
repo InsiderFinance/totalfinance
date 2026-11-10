@@ -11,7 +11,7 @@ describe('task profiles preserve exact selection and grants', () => {
     expect(registryForProfile({ profile: 'default' }).size).toBe(23);
     expect(packsForProfile('options').map((pack) => pack.name)).toEqual(['options', 'volatility']);
     expect(packsForProfile('research').map((pack) => pack.name)).toEqual(['research']);
-    expect(registryForProfile({ profile: 'full' }).size).toBe(46);
+    expect(registryForProfile({ profile: 'full' }).size).toBe(48);
   });
   it.each([
     ['strategies', 'totalfinance.strategy.analyze'],

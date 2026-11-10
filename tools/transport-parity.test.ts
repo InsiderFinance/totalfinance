@@ -137,6 +137,152 @@ describe('transport parity (Stage 7A Decision 9)', () => {
     await http.stop();
   });
 
+  it('portfolio creation refuses missing authority at every transport and HTTP still requires authentication', async () => {
+    const id = 'totalfinance.portfolio.create';
+    const input = PARITY_FIXTURES[id]!();
+    expect(() => registry.run({ id, input, capabilities: [] })).toThrow(
+      expect.objectContaining({ code: 'operation.capability_missing' }),
+    );
+    const deniedCli = spawnSync(
+      process.execPath,
+      [CLI, 'run', id, '--input', '-', '--profile', 'full', '--store', store],
+      { encoding: 'utf8', input: JSON.stringify(input) },
+    );
+    expect(deniedCli.status).toBe(4);
+    expect(JSON.parse(deniedCli.stdout).code).toBe('operation.capability_missing');
+    const unauthenticated = await fetch(`${base}/operations/${id}/run`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', connection: 'close' },
+      body: JSON.stringify(input),
+    });
+    expect(unauthenticated.status).toBe(401);
+    const limitedHttp = createLocalHttpServer({ registry, port: 0, capabilities: [] });
+    const limitedBase = (await limitedHttp.start()).url;
+    try {
+      const denied = await fetch(`${limitedBase}/operations/${id}/run`, {
+        method: 'POST',
+        headers: HTTP_HEADERS,
+        body: JSON.stringify(input),
+      });
+      expect(denied.status).toBe(403);
+      expect(((await denied.json()) as { code: string }).code).toBe('operation.capability_missing');
+    } finally {
+      await limitedHttp.stop();
+    }
+    const limitedMcp = createTotalFinanceMcpServer({
+      packs: [tradePack()],
+      readOnly: false,
+      capabilities: [],
+    });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await limitedMcp.connect(serverTransport);
+    const client = new Client({ name: 'bootstrap-denial', version: '1' });
+    await client.connect(clientTransport);
+    try {
+      const denied = await client.callTool({ name: toolNameFor(id), arguments: input });
+      expect(denied.isError).toBe(true);
+      expect(JSON.parse((denied.content as { text: string }[])[0]!.text).code).toBe(
+        'operation.capability_missing',
+      );
+    } finally {
+      await client.close();
+      await limitedMcp.close();
+    }
+  });
+
+  it('TA source bars cross every transport without SDK preprocessing and retain legacy row parity', async () => {
+    const id = 'totalfinance.technical_analysis.calculate';
+    const bars = [
+      {
+        symbol: 'TEST',
+        timestampMs: 1000,
+        open: 10,
+        high: 12,
+        low: 8,
+        close: 10,
+        vwap: 10,
+        adjusted: false,
+      },
+      {
+        symbol: 'TEST',
+        timestampMs: 2000,
+        open: 12,
+        high: 14,
+        low: 10,
+        close: 12,
+        adjusted: false,
+      },
+    ];
+    const before = structuredClone(bars);
+    const legacy = bars.map(({ open, high, low, close }) => ({ open, high, low, close }));
+    for (const rows of [bars, legacy]) {
+      const input = { indicator: 'atr', bars: rows, parameters: { period: 1 } };
+      const direct = registry.run({ id, input, ...runOptions() });
+      expect(direct.structured['value']).toEqual([4, 4]);
+      const expected = projection(direct);
+      const response = await fetch(`${base}/operations/${id}/run`, {
+        method: 'POST',
+        headers: HTTP_HEADERS,
+        body: JSON.stringify(input),
+      });
+      expect(response.status).toBe(200);
+      expect(projection((await response.json()) as OperationResult)).toBe(expected);
+      const tool = await mcp.callTool({ name: toolNameFor(id), arguments: input });
+      expect(tool.isError).toBeFalsy();
+      expect(projection(tool.structuredContent as OperationResult)).toBe(expected);
+      const cli = cliRun(id, input);
+      expect(cli.status, cli.stderr).toBe(0);
+      expect(projection(JSON.parse(cli.stdout) as OperationResult)).toBe(expected);
+    }
+    expect(bars).toEqual(before);
+  });
+
+  it('TA source ordering, identity and unknown fields fail consistently at every transport', async () => {
+    const id = 'totalfinance.technical_analysis.calculate';
+    const bars = [
+      { symbol: 'TEST', timestampMs: 1000, open: 10, high: 12, low: 8, close: 10 },
+      { symbol: 'TEST', timestampMs: 2000, open: 12, high: 14, low: 10, close: 12 },
+    ];
+    for (const rows of [
+      [...bars].reverse(),
+      [bars[0], bars[0]],
+      [bars[0], { ...bars[1], symbol: 'OTHER' }],
+      [bars[0], { open: 12, high: 14, low: 10, close: 12 }],
+      [bars[0], { ...bars[1], unknownField: 1 }],
+    ]) {
+      const input = { indicator: 'atr', bars: rows, parameters: { period: 1 } };
+      let expected: { code: string; message: string } | undefined;
+      try {
+        registry.run({ id, input, ...runOptions() });
+      } catch (error) {
+        expected = toOperationError(error, registry.require(id));
+      }
+      expect(expected?.code).toMatch(/^input\./);
+      const response = await fetch(`${base}/operations/${id}/run`, {
+        method: 'POST',
+        headers: HTTP_HEADERS,
+        body: JSON.stringify(input),
+      });
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        code: expected!.code,
+        message: expected!.message,
+      });
+      const tool = await mcp.callTool({ name: toolNameFor(id), arguments: input });
+      expect(tool.isError).toBe(true);
+      expect(JSON.parse((tool.content as { text: string }[])[0]!.text)).toMatchObject({
+        code: expected!.code,
+        message: expected!.message,
+      });
+      const cli = cliRun(id, input);
+      expect(cli.status).toBe(3);
+      expect(JSON.parse(cli.stdout)).toMatchObject({
+        code: expected!.code,
+        message: expected!.message,
+      });
+    }
+  }, 60_000);
+
   it('every flagship operation has a canonical fixture and a malformed one', () => {
     expect(Object.keys(PARITY_FIXTURES).sort()).toEqual([...ids].sort());
     expect(Object.keys(PARITY_MALFORMED).sort()).toEqual([...ids].sort());

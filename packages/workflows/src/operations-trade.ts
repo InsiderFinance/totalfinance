@@ -7,6 +7,7 @@
  * Every operation is declarative: plans, policies, observations, and fills travel inline; ledgers
  * and markets inline or by handle; nothing is looked up by session.
  */
+import { portfolioCreate } from './operations-portfolio-store.js';
 import { ErrorCode, InputError } from '@totalfinance/core';
 import { canonicalJsonOf } from '@totalfinance/core/artifacts';
 import { schema } from '@totalfinance/core/schema';
@@ -27,6 +28,7 @@ import {
   type PortfolioLedgerSnapshot,
 } from '@totalfinance/portfolio';
 import {
+  journalOrderStates,
   createAuthorizationGrant,
   normalizeTradePlan,
   preflightTradePlan,
@@ -586,6 +588,7 @@ const tradeSubmit = defineOperation({
     'a retry with the same key and plan (no second order), trade.idempotency_conflict for the same key with another ' +
     "plan, trade.grant_expired for an expired grant. With `observations`, the open orders meet the market through the engines' " +
     'own fill path. Top-level fills/events are only this call’s new deltas; the submission receipt is immutable. ' +
+    '`currentOrders` is the authoritative journal-derived current state and cumulative filled/remaining quantities for this receipt. ' +
     '`recovery: { fills, events }` contains all persisted normalized fills and reproducible ledger envelopes for this ' +
     'receipt’s orders, including this call’s fills. Retry after a lost response and apply recovery.events with ' +
     'portfolio.record_events; identical events fold once. Recovery grows with later fills without replaying the fill engine. The ' +
@@ -654,6 +657,10 @@ const tradeSubmit = defineOperation({
         // This snapshot includes the new batch, but transact exposes it only after that batch commits.
         // Fill events need not carry a key: the immutable receipt identifies exactly its submitted orders.
         const recovery = recoveryForReceipt(broker.journal(), receipt);
+        const receiptOrderIds = new Set(receipt.orders.map((order) => order.orderId));
+        const currentOrders = journalOrderStates(broker.state()).filter((order) =>
+          receiptOrderIds.has(order.orderId),
+        );
         const journal = journalSummary();
         return {
           summary: `${retried ? 'retry: the same receipt' : `receipt ${receipt.receiptId}`} for plan ${receipt.planHash.slice(0, 19)}… (${receipt.orders.length} order${receipt.orders.length === 1 ? '' : 's'}); ${fills.length} fill${fills.length === 1 ? '' : 's'}, ${open.length} open, ${expired.length} expired; journal ${journal.journalId} +${journal.appended}`,
@@ -663,6 +670,7 @@ const tradeSubmit = defineOperation({
             fills,
             events,
             recovery,
+            currentOrders,
             journal,
             open,
             expired,
@@ -943,6 +951,7 @@ export function tradePack(): OperationPack {
       tradeCancel,
       tradeReconcile,
       portfolioRecordEvents,
+      portfolioCreate,
     ],
   };
 }

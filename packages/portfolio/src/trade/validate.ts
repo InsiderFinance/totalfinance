@@ -547,13 +547,22 @@ export function requireTradePolicy(
   for (const key of [
     'maximumOrderQuantity',
     'maximumOrderNotional',
-    'maximumEstimatedCost',
-    'maximumSlippageBps',
     'maximumParticipation',
     'marketMaximumAgeMs',
     'maximumTurnover',
   ] as const)
     if (present(policy, key)) positiveNumber(functionName, `${label}.${key}`, policy[key]);
+  for (const key of ['maximumEstimatedCost', 'maximumSlippageBps'] as const) {
+    if (present(policy, key)) {
+      const value = policy[key];
+      if (typeof value !== 'number' || !Number.isFinite(value) || value < 0)
+        refuse(
+          functionName,
+          `${label}.${key}`,
+          'must be a finite nonnegative ceiling; zero permits no positive cost or slippage.',
+        );
+    }
+  }
   if (present(policy, 'maximumParticipation') && (policy['maximumParticipation'] as number) > 1)
     refuse(functionName, `${label}.maximumParticipation`, 'is a fraction of volume, at most 1.');
   if (

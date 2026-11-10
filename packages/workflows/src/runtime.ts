@@ -186,7 +186,37 @@ export function toOperationError(
   const identity = operation === null ? null : { id: operation.id, version: operation.version };
   if (isQuantError(error)) {
     const context = { ...(error.context as Record<string, unknown>) };
-    const issues = (error as { issues?: OperationError['issues'] }).issues;
+    const rawIssues = (error as { issues?: OperationError['issues'] }).issues ?? context['issues'];
+    let issues = (error as { issues?: OperationError['issues'] }).issues;
+    if (
+      Array.isArray(rawIssues) &&
+      rawIssues.length > 10 &&
+      rawIssues.every(
+        (issue: unknown) =>
+          issue !== null &&
+          typeof issue === 'object' &&
+          Array.isArray((issue as { path?: unknown }).path) &&
+          typeof (issue as { message?: unknown }).message === 'string',
+      )
+    ) {
+      const examples: NonNullable<OperationError['issues']> = [];
+      const groups = new Set<string>();
+      for (const issue of rawIssues as NonNullable<OperationError['issues']>) {
+        const key = JSON.stringify([
+          issue.code,
+          issue.path.map((part) => (typeof part === 'number' ? '*' : part)),
+          issue.message,
+        ]);
+        if (!groups.has(key) && examples.length < 10) examples.push(issue);
+        groups.add(key);
+      }
+      // Do not return hundreds of identical row failures. Validation still checks EVERY row;
+      // counts are exact, and examples retain the actual first failing row/field and teaching text.
+      context['issues'] = examples;
+      context['issueCount'] = rawIssues.length;
+      context['omittedIssueCount'] = rawIssues.length - examples.length;
+      if (issues !== undefined) issues = examples;
+    }
     return {
       code: error.code,
       message: error.message,
@@ -605,10 +635,17 @@ export function runOperation<Input, Output extends Record<string, unknown>>(
     Array.isArray((rawDiagnostics as Record<string, unknown>)['warnings'])
       ? ((rawDiagnostics as Record<string, unknown>)['warnings'] as unknown[]).map((warning) =>
           typeof warning === 'string'
-            ? { code: WarningCode.OperationUntypedWarning, message: warning, severity: 'warn' }
+            ? {
+                code: warning.includes(`${WarningCode.PortfolioMarketMarkAge}:`)
+                  ? WarningCode.PortfolioMarketMarkAge
+                  : WarningCode.OperationUntypedWarning,
+                message: warning,
+                severity: 'warn',
+              }
             : (warning as QuantWarning),
         )
       : [];
+  const seenWarnings = new Set<string>();
   const artifacts = [...(output.artifacts ?? []), ...spilled];
   return {
     operation: { id: operation.id, version: operation.version },
@@ -617,7 +654,12 @@ export function runOperation<Input, Output extends Record<string, unknown>>(
     structured: structured as Output,
     assumptions,
     diagnostics: {
-      warnings,
+      warnings: warnings.filter((warning) => {
+        const key = canonicalJsonOf(warning as unknown as Record<string, unknown>);
+        if (seenWarnings.has(key)) return false;
+        seenWarnings.add(key);
+        return true;
+      }),
       status: output.status ?? 'complete',
       incomplete: [...(output.incomplete ?? [])],
     },

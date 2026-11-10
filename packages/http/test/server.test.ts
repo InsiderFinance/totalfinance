@@ -89,9 +89,9 @@ describe('the local HTTP server', () => {
     expect(openapi.json).toMatchObject({ openapi: '3.1.0' });
     expect(JSON.stringify(openapi.json)).toBe(JSON.stringify(local.document));
     const capabilities = await call('GET', '/capabilities');
-    // 40 → 46 (Stage 7B.2 slice 4, 2026-09-06): the six trade-lifecycle operations join the full profile.
+    // 0.1.3: explicit portfolio creation and bounded inspection join the full profile.
     expect(capabilities.json).toMatchObject({
-      operations: 46,
+      operations: 48,
       jobs: true,
       artifacts: 'writable',
       readOnly: false,
@@ -99,8 +99,8 @@ describe('the local HTTP server', () => {
       budgets: { maxInputBytes: 16_777_216, defaultSeed: 11 },
     });
     const list = await call('GET', '/operations');
-    // 40 → 46 (Stage 7B.2 slice 4, 2026-09-06): the six trade-lifecycle operations join the full profile.
-    expect((list.json as unknown[]).length).toBe(46);
+    // 0.1.3: explicit portfolio creation and bounded inspection join the full profile.
+    expect((list.json as unknown[]).length).toBe(48);
     const one = await call('GET', '/operations/totalfinance.option.price');
     expect(one.json).toMatchObject({
       id: 'totalfinance.option.price',

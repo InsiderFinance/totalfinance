@@ -19,6 +19,15 @@ import { type TradingCalendar, withTradingVocabulary } from './trading-calendar.
 /** Bump when the holiday rules or closure list change. */
 export const CALENDAR_DATA_VERSION = '2026.06.0';
 
+/** Documented closure-data boundary; future ad-hoc closures cannot be predicted from rules. */
+export const US_EQUITY_CALENDAR_COVERAGE = Object.freeze({
+  historicalFloor: '2001-01-01',
+  verifiedThrough: null,
+  dataVersion: CALENDAR_DATA_VERSION,
+  limitations:
+    'One-off closures before 2001 are incomplete. Rules project other dates; future emergency closures and a verified-through endpoint are not guaranteed.' as string,
+});
+
 const MONDAY = 1;
 const THURSDAY = 4;
 

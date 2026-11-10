@@ -1029,6 +1029,8 @@ export const CANONICAL_TOKENS: Readonly<Record<string, string>> = {
  * merely because it is short (Law N7's closing rule).
  */
 export const ORDINARY_TOKENS: readonly string[] = [
+  // Dogfood mark diagnostics: observation age is an ordinary duration noun, not shorthand.
+  'age',
   // Stage 7A (2026-09-03): a JOB is a long-running operation run under the worker-terminated
   // runner (`costClass: 'job'`, a `'job'` resource handle) — an ordinary English word.
   'job',

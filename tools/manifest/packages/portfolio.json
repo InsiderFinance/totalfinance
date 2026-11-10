@@ -20,7 +20,8 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "artifact",
-      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the direct pure reducer \u2014 portfolio truth is a fold over immutable economic events (agent-native Law 1). Classified ARTIFACT, not facade: it returns a deeply-frozen, schema-versioned state object (the artifact grammar), carries no assumptions/diagnostics by design (Law 2 \u2014 P&L and valuation are derived reports from portfolioSnapshot/portfolioTimeline), and a .explain twin would explain a state, not a number."
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the direct pure reducer \u2014 portfolio truth is a fold over immutable economic events (agent-native Law 1). Classified ARTIFACT, not facade: it returns a deeply-frozen, schema-versioned state object (the artifact grammar), carries no assumptions/diagnostics by design (Law 2 \u2014 P&L and valuation are derived reports from portfolioSnapshot/portfolioTimeline), and a .explain twin would explain a state, not a number.",
+      "mcpTools": ["totalfinance_portfolio_record_events"]
     },
     "AUTHORIZATION_GRANT_KIND": {
       "kind": "value",
@@ -45,7 +46,8 @@
       "kind": "function",
       "entrypoints": [".", "./trade"],
       "role": "artifact",
-      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 5 \u2014 human authority bound to one plan, one preflight, the snapshots they were judged against, a mode, an account, a variance envelope, an expiry, and a closed key set; refuses a denied preflight, an unjudged plan, a stale expiry, and 'live'"
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 5 \u2014 human authority bound to one plan, one preflight, the snapshots they were judged against, a mode, an account, a variance envelope, an expiry, and a closed key set; refuses a denied preflight, an unjudged plan, a stale expiry, and 'live'",
+      "mcpTools": ["totalfinance_trade_authorize"]
     },
     "createModelPortfolio": {
       "kind": "function",
@@ -57,7 +59,8 @@
       "kind": "function",
       "entrypoints": [".", "./ledger"],
       "role": "artifact",
-      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the immutable reusable ledger artifact (.apply returns a NEW ledger, .toJSON the versioned events-not-state envelope)"
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): the immutable reusable ledger artifact (.apply returns a NEW ledger, .toJSON the versioned events-not-state envelope)",
+      "mcpTools": ["totalfinance_portfolio_create"]
     },
     "decideFromChecks": {
       "kind": "function",
@@ -272,7 +275,8 @@
       "entrypoints": [".", "./trade"],
       "role": "analysis",
       "shape": "report",
-      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the plan against the ledger, the market, and the policy \u2014 the portfolio before and after (hypothetical fills folded through the ledger's own events), every check with its verdict, the declared-rate cost estimates, the monitor's alerts on the after-state, and one decision; an unverifiable check is never an allow"
+      "note": "Stage 7B.2 slice 1 (AT5, 2026-09-05): the plan against the ledger, the market, and the policy \u2014 the portfolio before and after (hypothetical fills folded through the ledger's own events), every check with its verdict, the declared-rate cost estimates, the monitor's alerts on the after-state, and one decision; an unverifiable check is never an allow",
+      "mcpTools": ["totalfinance_trade_preflight"]
     },
     "proposePortfolioRebalance": {
       "kind": "function",
@@ -286,14 +290,16 @@
       "kind": "function",
       "entrypoints": [".", "./ledger"],
       "role": "helper",
-      "note": "FC7 first slice (Stage 4.4, 2026-08-28): restore + migrate (registered chain only) + validate + re-fold a stored ledger envelope \u2014 readMarketSnapshot symmetry"
+      "note": "FC7 first slice (Stage 4.4, 2026-08-28): restore + migrate (registered chain only) + validate + re-fold a stored ledger envelope \u2014 readMarketSnapshot symmetry",
+      "mcpTools": ["totalfinance_portfolio_inspect"]
     },
     "reconcileExecution": {
       "kind": "function",
       "entrypoints": [".", "./trade"],
       "role": "analysis",
       "shape": "report",
-      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 8 \u2014 the journal joined to the ledger's fills under the execution source, the fills' quantities against the journal, the unresolved orders, and reconcilePortfolio composed verbatim for an external snapshot; reconciled only when every join agrees within the explicit tolerance"
+      "note": "Stage 7B.2 slice 2 (AT5, 2026-09-05): Decision 8 \u2014 the journal joined to the ledger's fills under the execution source, the fills' quantities against the journal, the unresolved orders, and reconcilePortfolio composed verbatim for an external snapshot; reconciled only when every join agrees within the explicit tolerance",
+      "mcpTools": ["totalfinance_trade_reconcile"]
     },
     "reconcilePortfolio": {
       "kind": "function",

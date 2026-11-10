@@ -578,6 +578,7 @@ function resolveRecordCallable(
   program: ts.Program,
   checker: ts.TypeChecker,
   record: ManifestRecord,
+  publicPaths: Record<string, string[]>,
 ): ResolvedCallable | { failure: string } {
   const implementation = record.implementation ?? '';
   const separator = implementation.indexOf('#');
@@ -630,6 +631,40 @@ function resolveRecordCallable(
       .map((statement) => checker.getSymbolAtLocation(statement.name!))
       .find((candidate): candidate is ts.Symbol => candidate !== undefined);
   if (!localSymbol) return { failure: `no declaration of \`${head}\` in ${relativePath}` };
+
+  // A generic interface method is a declaration template. Resolve the concrete public value when
+  // available, so RatioFacade<IncomeFacts>.explain and RatioFacade<BalanceFacts>.explain are audited
+  // against their own input types rather than the shared `Input extends object` constraint.
+  const genericOwner = localSymbol.declarations?.some(
+    (node) => ts.isInterfaceDeclaration(node) && Boolean(node.typeParameters?.length),
+  );
+  if (genericOwner && rest.length === 1) {
+    const templateMember = checker.getDeclaredTypeOfSymbol(localSymbol).getProperty(rest[0]!);
+    const templateDeclaration =
+      templateMember?.valueDeclaration ?? templateMember?.declarations?.[0];
+    const publicRoot = publicPaths[record.id.slice(0, record.id.indexOf(':'))]?.[0];
+    const publicSource = publicRoot ? program.getSourceFile(`${publicRoot}.d.ts`) : undefined;
+    const publicModule = publicSource && checker.getSymbolAtLocation(publicSource);
+    const [publicHead, ...members] = idTail.split('.');
+    let concrete = publicModule
+      ? checker.getExportsOfModule(publicModule).find((candidate) => candidate.name === publicHead)
+      : undefined;
+    for (const member of members) {
+      if (!concrete) break;
+      if (concrete.flags & ts.SymbolFlags.Alias) concrete = checker.getAliasedSymbol(concrete);
+      const declaration = concrete.valueDeclaration ?? concrete.declarations?.[0];
+      concrete = declaration
+        ? checker.getTypeOfSymbolAtLocation(concrete, declaration).getProperty(member)
+        : undefined;
+    }
+    if (concrete) {
+      const declaration = concrete.valueDeclaration ?? concrete.declarations?.[0];
+      const type = declaration && checker.getTypeOfSymbolAtLocation(concrete, declaration);
+      const signatures = type && checker.getSignaturesOfType(type, ts.SignatureKind.Call);
+      if (templateDeclaration && declaration === templateDeclaration && signatures?.length)
+        return { signatures, kind: 'call' };
+    }
+  }
   let symbol: ts.Symbol =
     localSymbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(localSymbol) : localSymbol;
 
@@ -1766,22 +1801,15 @@ describe('the checker and the artifact agree about every union, by route', () =>
   }
 
   /**
-   * The checker walk is memoised on the DECLARATION, not on the record.
+   * The checker walk is memoised on the concrete parameter symbol.
    *
-   * 6,618 records resolve to 2,119 declarations, so without this the same parameter type is walked
-   * an average of three times. The key includes the signature kind and both indices because those
-   * select a different parameter, not a different view of one.
+   * Aliases reuse checker symbols; different generic instantiations get distinct symbols even
+   * when their declarations and parameter positions coincide. Caching only on declaration identity
+   * returned one ratio's union walk for every other ratio using the same facade template.
    */
-  const walkCache = new Map<string, CheckerReach>();
-  const routesFor = (
-    implementation: string,
-    kind: string,
-    signatureIndex: number,
-    argumentIndex: number,
-    parameter: ts.Symbol,
-  ): CheckerReach => {
-    const key = `${implementation}|${kind}|${signatureIndex}|${argumentIndex}`;
-    const cached = walkCache.get(key);
+  const walkCache = new Map<ts.Symbol, CheckerReach>();
+  const routesFor = (parameter: ts.Symbol): CheckerReach => {
+    const cached = walkCache.get(parameter);
     if (cached) return cached;
     const declaration = parameter.valueDeclaration ?? parameter.declarations?.[0];
     /**
@@ -1796,7 +1824,7 @@ describe('the checker and the artifact agree about every union, by route', () =>
       ? checker.getTypeOfSymbolAtLocation(parameter, declaration)
       : checker.getTypeOfSymbol(parameter);
     const reached = checkerUnionRoutes(checker, parameterType);
-    walkCache.set(key, reached);
+    walkCache.set(parameter, reached);
     return reached;
   };
 
@@ -1824,7 +1852,7 @@ describe('the checker and the artifact agree about every union, by route', () =>
     let overloadsCompared = 0;
 
     for (const record of subject.contracts ?? []) {
-      const resolved = resolveRecordCallable(program, checker, record);
+      const resolved = resolveRecordCallable(program, checker, record, paths);
       if ('failure' in resolved) {
         unresolved.push(`${record.id} (${record.implementation}) — ${resolved.failure}`);
         continue;
@@ -1854,13 +1882,7 @@ describe('the checker and the artifact agree about every union, by route', () =>
           const published = recordedSignature.parameters?.[argumentIndex];
           if (!published) return;
 
-          const reached = routesFor(
-            record.implementation ?? '',
-            resolved.kind,
-            signatureIndex,
-            argumentIndex,
-            parameter,
-          );
+          const reached = routesFor(parameter);
           const label = `${record.id}#${signatureIndex}(${parameter.name})`;
           /**
            * A parameter the checker finds NO union in is still examined.
@@ -2383,6 +2405,26 @@ describe('the checker and the artifact agree about every union, by route', () =>
       result.miscounted.filter((entry) => entry.includes('vectorized')),
       'dropping an arm changed nothing — the gate compares presence, not count',
     ).not.toEqual([]);
+  });
+
+  it.each(['grossMargin', 'currentRatio'])(
+    'PLANT: catches missing arms on concrete generic ratio %s.explain',
+    (name) => {
+      const id = `@totalfinance/fundamentals:${name}.explain`;
+      const subject = plant(id, (record) => {
+        delete record.signatures![0]!.parameters![0]!.branches;
+      });
+      expect(compare(subject).missing.filter((entry) => entry.startsWith(id))).not.toEqual([]);
+    },
+  );
+
+  it('PLANT: concrete generic resolution still rejects a false implementation identity', () => {
+    const subject = plant('@totalfinance/fundamentals:grossMargin.explain', (record) => {
+      record.implementation = record.implementation!.replace('.explain', '.nonexistent');
+    });
+    expect(compare(subject).unresolved.some((entry) => entry.includes('grossMargin.explain'))).toBe(
+      true,
+    );
   });
 
   it('PLANT: catches arms stripped from ONE ALIAS of a shared implementation', () => {

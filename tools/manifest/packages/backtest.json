@@ -164,6 +164,7 @@
       "note": "Stage 4.6 slice 3 (FC8, 2026-09-04): typed deltas of two runs of one kind — identity, the performance block name by name (tolerance-aware), final-holding membership, rebalance-by-rebalance turnover and cost deltas, per-variation deltas and whether the best moved (grids), the hygiene verdict, and the structural run diff"
     },
     "createPaperBroker": {
+      "mcpTools": ["totalfinance_trade_submit", "totalfinance_trade_cancel"],
       "kind": "function",
       "entrypoints": ["./paper"],
       "role": "helper",

@@ -120,7 +120,7 @@ describe('profiles', () => {
     // 16 → 17 (Stage 7B.2 slice 4, 2026-09-06): the trade pack joins the full profile.
     expect(packsForProfile('full').map((p) => p.name)).toHaveLength(17);
     // 40 → 46 (Stage 7B.2 slice 4, 2026-09-06): the six trade-lifecycle operations join the full profile.
-    expect(registryForProfile({ profile: 'full' }).size).toBe(46);
+    expect(registryForProfile({ profile: 'full' }).size).toBe(48);
     expect(registryForProfile({ profile: 'full', packs: ['options', 'artifact'] }).size).toBe(5);
     expect(codeOf(() => packsForProfile('nope' as never))).toBe(ErrorCode.InputInvalidEnum);
     expect(codeOf(() => registryForProfile({ profile: 'default', packs: ['artifact'] }))).toBe(

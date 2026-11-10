@@ -22,7 +22,14 @@ import { futuresBasis, perpetualFunding } from '@totalfinance/crypto';
 import { bonds, yieldMetrics, yieldToMaturity } from '@totalfinance/fixed-income';
 import { fees } from '@totalfinance/backtest';
 import * as backtest from '@totalfinance/backtest';
-import { CBOE, NYSE, crypto24x7, expirations, nextExpiry } from '@totalfinance/calendars';
+import {
+  CBOE,
+  NYSE,
+  crypto24x7,
+  expirations,
+  nextExpiry,
+  US_EQUITY_CALENDAR_COVERAGE,
+} from '@totalfinance/calendars';
 import { analyze } from '@totalfinance/performance';
 import {
   type OptimizeConstraints,
@@ -667,7 +674,7 @@ export const calendarSessions = defineOperation({
     'Trading days, holidays, and half days for an exchange calendar over a date range (≤ ~13 ' +
     'months), plus option expirations (weekly Fridays / monthly OPEX / quarterly, shifted off ' +
     'holidays from the calendar data) when `expirationKind` is set, and the next expiry after ' +
-    'the range start.',
+    'the range start. NYSE/CBOE one-off closure coverage begins 2001-01-01; earlier ranges carry a diagnostic. Rules project other dates, not future emergency closures.',
   inputSchema: CalendarSessionsInputSchema,
   outputSchema: {
     type: 'object',
@@ -677,7 +684,14 @@ export const calendarSessions = defineOperation({
       halfDays: { type: 'array', items: { type: 'string' } },
       expirations: { type: 'array', items: { type: 'string' } },
       nextExpiry: { type: 'string' },
-      calendar: { type: 'object', description: 'name/version/timezone' },
+      calendar: {
+        type: 'object',
+        description: 'name/version/timezone and documented closure-data coverage',
+      },
+      diagnostics: {
+        type: 'object',
+        description: 'Warnings when the range crosses the historical coverage floor',
+      },
     },
     required: ['tradingDays', 'holidays', 'halfDays', 'calendar'],
   },
@@ -724,7 +738,30 @@ export const calendarSessions = defineOperation({
               nextExpiry: nextExpiry(cal, input.from, input.expirationKind),
             }
           : {}),
-        calendar: { name: cal.name, version: cal.version, timezone: cal.timezone },
+        calendar: {
+          name: cal.name,
+          version: cal.version,
+          timezone: cal.timezone,
+          ...(input.calendar === 'crypto24x7' ? {} : { coverage: US_EQUITY_CALENDAR_COVERAGE }),
+        },
+        diagnostics: {
+          warnings:
+            input.calendar !== 'crypto24x7' &&
+            input.from < US_EQUITY_CALENDAR_COVERAGE.historicalFloor
+              ? [
+                  warning(
+                    WarningCode.CalendarOutsideHistoricalCoverage,
+                    'NYSE/CBOE one-off closures before 2001-01-01 are incomplete; verify the historical venue schedule before using these sessions in research.',
+                    'warn',
+                    {
+                      from: input.from,
+                      to: input.to,
+                      historicalFloor: US_EQUITY_CALENDAR_COVERAGE.historicalFloor,
+                    },
+                  ),
+                ]
+              : [],
+        },
       },
     };
   },
@@ -984,7 +1021,45 @@ const BacktestVectorizedInputSchema = schema.object({
       'Target position per bar (1 long, 0 flat, -1 short; fractional = sized), aligned to data',
     ),
   initialCapital: schema.number().positive().optional().describe('Opening capital (default 1)'),
-  feeBps: schema.number().optional().describe('Per-trade fee in basis points of traded notional'),
+  feeBps: schema
+    .number()
+    .nonnegative()
+    .optional()
+    .describe('Per-trade fee in basis points of traded notional'),
+  slippageBps: schema
+    .number()
+    .nonnegative()
+    .optional()
+    .describe('Existing slippage.bps model; basis points, zero means no slippage'),
+  executionLag: schema
+    .number()
+    .integer()
+    .nonnegative()
+    .optional()
+    .describe('Signal-to-fill lag in bars (SDK default 1); 0 carries a look-ahead warning'),
+  rebalance: schema
+    .union([
+      schema.enum(['everyBar', 'daily', 'weekly', 'monthly'] as const),
+      schema.number().integer().positive(),
+    ])
+    .optional()
+    .describe(
+      'Existing SDK sampling schedule; samples signal[i - executionLag] only on rebalance bars',
+    ),
+  periodsPerYear: schema
+    .number()
+    .positive()
+    .optional()
+    .describe('Bars per year for metrics (SDK default 252)'),
+  riskFreeRate: schema
+    .number()
+    .optional()
+    .describe('Annual risk-free rate as a decimal (SDK default 0)'),
+  maxLeverage: schema
+    .number()
+    .positive()
+    .optional()
+    .describe('Existing per-asset gross weight cap (SDK default 1)'),
 });
 
 const backtestVectorized = defineOperation({
@@ -996,7 +1071,7 @@ const backtestVectorized = defineOperation({
     'assumed (fill timing, costs, slippage, settlement, calendar, margin) is echoed in ' +
     '`assumptions`, and the implementation-risk warnings (look-ahead, data alignment) ride ' +
     '`diagnostics`. Deliberately opt-in (backtestPack) — payloads and runtime are heavier than ' +
-    'the default tools.',
+    'the default tools. executionLag shifts signal lookup before rebalance sampling; a month-end target can miss the next monthly sample. Use the SDK researchProtocol and selection-hygiene workflow before comparing candidates; see docs/guides/dogfood-journeys.md.',
   inputSchema: BacktestVectorizedInputSchema,
   outputSchema: {
     type: 'object',
@@ -1030,6 +1105,14 @@ const backtestVectorized = defineOperation({
       signal: input.signal,
       ...(input.initialCapital !== undefined ? { initialCapital: input.initialCapital } : {}),
       ...(input.feeBps !== undefined ? { fees: fees.bps(input.feeBps) } : {}),
+      ...(input.slippageBps !== undefined
+        ? { slippage: backtest.slippage.bps(input.slippageBps) }
+        : {}),
+      ...(input.executionLag !== undefined ? { executionLag: input.executionLag } : {}),
+      ...(input.rebalance !== undefined ? { rebalance: input.rebalance } : {}),
+      ...(input.periodsPerYear !== undefined ? { periodsPerYear: input.periodsPerYear } : {}),
+      ...(input.riskFreeRate !== undefined ? { riskFreeRate: input.riskFreeRate } : {}),
+      ...(input.maxLeverage !== undefined ? { maxLeverage: input.maxLeverage } : {}),
     });
     return {
       summary:

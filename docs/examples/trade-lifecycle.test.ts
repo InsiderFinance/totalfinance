@@ -108,6 +108,8 @@ describe('the safe trade lifecycle', () => {
       costs: { commissionBps: 5, slippageBps: 10 },
     });
     expect(preflight.decision.verdict).toBe('allow');
+    // Estimates are not charged fees: 200 × 50 × (5 + 10) basis points = 15.
+    expect(preflight.estimates.totalCost).toBe(15);
     const grant = createAuthorizationGrant({
       plan,
       preflight,
@@ -140,6 +142,8 @@ describe('the safe trade lifecycle', () => {
     expect(stepped.fills.map((f) => [f.quantity, f.pricePerUnit])).toEqual([[200, 50]]);
     const after = applyPortfolioEvents({ previousState: ledger.state, events: stepped.events });
     expect(after.accounts['main']!.positions['BBB']!.quantity).toBe(200);
+    expect(after.accounts['main']!.cashBalances['USD']!.totalAmount).toBe(80_000);
+    expect(after.accounts['main']!.transactionCosts).toEqual({});
     const report = reconcileExecution({
       journal: broker.journal(),
       ledger: after,

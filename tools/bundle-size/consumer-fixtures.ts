@@ -60,7 +60,13 @@ const leanBudgets = {
 } as const;
 // Actual esbuild root namespaces: 41508/105191/95468 B. These are coarse DOMAIN budgets,
 // not permission to pull unrelated packages. Rollup keeps the ordinary lean consumer budgets.
-const coarseBudgets = { normal: 42, rsi: 103, facade: 96 } as const;
+// 0.1.3 canonical installed measurement: RSI root namespace 105586 B gzip (esbuild).
+// The explicit OHLCV adapter and its validation add 395 B; leaf RSI remains under 9 KiB.
+// Raise only the coarse TA ceiling to 103.25 KiB; unrelated-domain exclusions remain binding.
+// Review repair: the installed root namespace is 105817 B gzip on canonical Node 22.23.2.
+// Single-symbol/time and optional-metadata validation add 231 B; only this coarse ceiling moves
+// from 103.25 to 103.5 KiB. Leaf RSI and every unrelated-domain exclusion remain unchanged.
+const coarseBudgets = { normal: 42, rsi: 103.5, facade: 96 } as const;
 
 function calculation(
   canary: Exclude<ConsumerCanary, 'unused' | 'dynamic'>,

@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 238,
+    "surfaces": 241,
     "byClass": {
-      "current-runnable": 92,
-      "future-target": 53,
+      "current-runnable": 93,
+      "future-target": 55,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4600,
-    "checkedUnderTruthfulness": 174,
-    "checkedUnderVocabulary": 53,
-    "shippedNamesWatched": 9730,
+    "executableFences": 4612,
+    "checkedUnderTruthfulness": 175,
+    "checkedUnderVocabulary": 55,
+    "shippedNamesWatched": 9748,
     "documentedExceptions": 7,
     "findings": 0
   },
@@ -150,6 +150,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/guides/dogfood-journeys.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 7
     },
     {
       "path": "docs/guides/end-to-end.md",
@@ -317,7 +324,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4331
+      "codeFences": 4336
     },
     {
       "path": "docs/llms.txt",
@@ -593,6 +600,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/dogfood-0.1.3.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/dogfood-repair-2026-11-02.md",
       "class": "future-target",
       "owner": "human",
@@ -766,6 +780,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/dogfood-0.1.x.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/dogfooding-library-value.md",

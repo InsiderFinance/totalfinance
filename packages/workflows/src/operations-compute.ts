@@ -9,6 +9,7 @@ import { resolvedExpiry, ErrorCode } from '@totalfinance/core';
 import {
   InputError,
   type OptionQuote,
+  type Bar,
   type QuantWarning,
   optionExpiryToMs,
   resolveValuationAsOf,
@@ -28,7 +29,6 @@ import {
 } from '@totalfinance/strategy';
 import { type ExposureConfig, type ExposureMarket, exposure } from '@totalfinance/structure';
 import {
-  type BarInput,
   type IndicatorCategory,
   type TechnicalAnalysisExplain,
 } from '@totalfinance/technical-analysis';
@@ -370,6 +370,16 @@ const TaCalculateInputSchema = schema.object({
         low: schema.number(),
         close: schema.number(),
         volume: schema.number().optional(),
+        symbol: schema
+          .string()
+          .optional()
+          .describe('Canonical source Bar symbol; include timestampMs and open on every row'),
+        timestampMs: schema
+          .number()
+          .optional()
+          .describe('Canonical source time in epoch ms; strictly increasing within one symbol'),
+        vwap: schema.number().optional(),
+        adjusted: schema.boolean().optional(),
       }),
     )
     .optional(),
@@ -415,7 +425,7 @@ function requireField<T>(value: T | undefined, def: RegisteredIndicator, field: 
 }
 
 /** Assemble bar objects from parallel `series` columns when `bars` was not passed directly. */
-function columnsToBars(series: TaInput['series']): BarInput[] | undefined {
+function columnsToBars(series: TaInput['series']): TaInput['bars'] {
   if (!series?.close || !series.high || !series.low) return undefined;
   const { high, low, close, open, volume } = series;
   const n = close.length;
@@ -456,12 +466,17 @@ function indicatorInput(def: RegisteredIndicator, input: TaInput): readonly unkn
         'closes',
         TA_TOOL,
       );
-    case 'bars':
-      return capRows(
+    case 'bars': {
+      const bars = capRows(
         requireField(input.bars ?? columnsToBars(input.series), def, 'bars'),
         'bars',
         TA_TOOL,
       );
+      const hasSourceMetadata = bars.some(
+        (bar) => 'symbol' in bar || 'timestampMs' in bar || 'vwap' in bar || 'adjusted' in bar,
+      );
+      return hasSourceMetadata ? ta.ohlcvFromBars(bars as readonly Bar[]) : bars;
+    }
     case 'pair': {
       const x = capRows(requireField(input.x, def, 'x'), 'x', TA_TOOL);
       const y = capRows(requireField(input.y, def, 'y'), 'y', TA_TOOL);
@@ -494,6 +509,7 @@ const taCalculate = defineOperation({
   title: 'Calculate a technical indicator',
   description:
     'Compute any of TotalFinance’s ~300 registered technical indicators over a price series. ' +
+    'Pass canonical core Bar records directly under bars; symbol, timestampMs, vwap and adjusted are declared fields. Source records require open, one symbol and strictly increasing unique timestamps; no stripping or SDK preprocessing is needed. Identity/time are validated before OHLCV projection; retain the original source/provenance alongside the result. ' +
     'Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV ' +
     'objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take ' +
     '`x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. ' +
@@ -528,7 +544,12 @@ const TaListInputSchema = schema.object({
     .describe(
       'Case-insensitive substring of an indicator name OR a TA-Lib/pandas/TradingView alias',
     ),
-  category: schema.enum(INDICATOR_CATEGORIES).optional(),
+  category: schema
+    .enum(INDICATOR_CATEGORIES)
+    .optional()
+    .describe(
+      'Browse a category here, e.g. momentum; search matches indicator names/aliases and does not expand category words',
+    ),
   limit: schema
     .number()
     .integer()
@@ -590,7 +611,7 @@ const taList = defineOperation({
     'parameters are required. Narrow the ~335-indicator catalog with `search` (matches a name or a ' +
     'TA-Lib/pandas/TradingView alias) and/or `category`, and page it with `limit` (default 50) / `offset` ' +
     '(`total` is the full match count). For one indicator’s full card (including its warmup), use ' +
-    '`totalfinance.technical_analysis.describe`. Then pass a name to `totalfinance.technical_analysis.calculate`.',
+    '`totalfinance.technical_analysis.describe`. To browse momentum, use { category: "momentum" }, rather than searching the name momentum. Then pass a name to `totalfinance.technical_analysis.calculate`.',
   inputSchema: TaListInputSchema,
   outputSchema: TA_LIST_OUTPUT,
   run: (input) => {
