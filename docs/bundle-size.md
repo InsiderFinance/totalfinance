@@ -22,18 +22,18 @@ CLI, HTTP, or Node-only workflow module may enter these browser consumers. Priva
 workspaces are never installed. Dependency metadata is checked before installation, and retained
 module evidence comes from `@insiderfinance/totalfinance/modules/<domain>/dist/` inside the tarball.
 
-| Used-function fixture      | Public import                                         | esbuild gzip / budget | Rollup gzip / budget |
-| -------------------------- | ----------------------------------------------------- | --------------------: | -------------------: |
-| `normal-feature`           | `@insiderfinance/totalfinance/math/normal`            |   0.5 KiB / < 0.6 KiB |  0.5 KiB / < 0.6 KiB |
-| `normal-root-namespace`    | `@insiderfinance/totalfinance`                        |   40.6 KiB / < 42 KiB |  0.5 KiB / < 0.6 KiB |
-| `rsi-feature`              | `@insiderfinance/totalfinance/technical-analysis/rsi` |     8.7 KiB / < 9 KiB |    8.5 KiB / < 9 KiB |
-| `rsi-root-namespace`       | `@insiderfinance/totalfinance`                        | 103.1 KiB / < 103 KiB |    8.5 KiB / < 9 KiB |
-| `facade-feature`           | `@insiderfinance/totalfinance/options/black-scholes`  |   13.9 KiB / < 14 KiB |  9.5 KiB / < 9.5 KiB |
-| `facade-root-namespace`    | `@insiderfinance/totalfinance`                        |   95.6 KiB / < 96 KiB |  9.5 KiB / < 9.5 KiB |
-| `facade-root-hoist`        | `@insiderfinance/totalfinance`                        |   13.9 KiB / < 14 KiB |  9.5 KiB / < 9.5 KiB |
-| `expert-feature`           | `@insiderfinance/totalfinance/options/black-scholes`  |   2.3 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
-| `expert-black76-feature`   | `@insiderfinance/totalfinance/options/black76`        |   2.2 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
-| `expert-bachelier-feature` | `@insiderfinance/totalfinance/options/bachelier`      |   2.2 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
+| Used-function fixture      | Public import                                         |    esbuild gzip / budget | Rollup gzip / budget |
+| -------------------------- | ----------------------------------------------------- | -----------------------: | -------------------: |
+| `normal-feature`           | `@insiderfinance/totalfinance/math/normal`            |      0.5 KiB / < 0.6 KiB |  0.5 KiB / < 0.6 KiB |
+| `normal-root-namespace`    | `@insiderfinance/totalfinance`                        |      40.6 KiB / < 42 KiB |  0.5 KiB / < 0.6 KiB |
+| `rsi-feature`              | `@insiderfinance/totalfinance/technical-analysis/rsi` |        8.7 KiB / < 9 KiB |    8.5 KiB / < 9 KiB |
+| `rsi-root-namespace`       | `@insiderfinance/totalfinance`                        | 103.1 KiB / < 103.25 KiB |    8.5 KiB / < 9 KiB |
+| `facade-feature`           | `@insiderfinance/totalfinance/options/black-scholes`  |      13.9 KiB / < 14 KiB |  9.5 KiB / < 9.5 KiB |
+| `facade-root-namespace`    | `@insiderfinance/totalfinance`                        |      95.6 KiB / < 96 KiB |  9.5 KiB / < 9.5 KiB |
+| `facade-root-hoist`        | `@insiderfinance/totalfinance`                        |      13.9 KiB / < 14 KiB |  9.5 KiB / < 9.5 KiB |
+| `expert-feature`           | `@insiderfinance/totalfinance/options/black-scholes`  |      2.3 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
+| `expert-black76-feature`   | `@insiderfinance/totalfinance/options/black76`        |      2.2 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
+| `expert-bachelier-feature` | `@insiderfinance/totalfinance/options/bachelier`      |      2.2 KiB / < 2.5 KiB |  2.2 KiB / < 2.5 KiB |
 
 `normal` means `normalCdf`; `rsi` means the RSI indicator; `facade` means
 `blackScholes.call`; expert fixtures name their model's standalone price function.

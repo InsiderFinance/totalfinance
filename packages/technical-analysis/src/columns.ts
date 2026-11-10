@@ -105,7 +105,7 @@ export function ohlcvFromBars(bars: readonly Bar[]): BarInput[] {
   requireArgumentArray(functionName, 'bars', bars);
   requireBars(bars, functionName);
   return bars.map((bar, index) => {
-    requireFiniteFields(functionName, bar, ['open', 'timestampMs'], {
+    requireFiniteFields('technicalAnalysis.ohlcvFromBars', bar, ['open', 'timestampMs'], {
       path: `bars[${index}]`,
       exampleCall: 'technicalAnalysis.ohlcvFromBars(sourceBars)',
     });

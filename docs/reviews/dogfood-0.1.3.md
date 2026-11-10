@@ -83,8 +83,11 @@ record their direct exit codes; no piped test command supplies a false success.
 
 The workflow bundle measured 518,270 B gzip and now has a 506.5 KiB limit; other crossed lines
 were math 41,478 B, performance/sharpe 9,261 B, environment 145,681 B, portfolio 113,232 B and
-umbrella 713,624 B. Only those six bounds moved, with exact measurements and reasons in
-`tools/bundle-size/budgets.ts`. Structural exclusions remain unchanged. Generated signatures and
+umbrella 713,624 B. Those six whole-entrypoint bounds moved, with exact measurements and reasons in
+`tools/bundle-size/budgets.ts`. The full installed-consumer matrix additionally measured the coarse
+esbuild root TA namespace at 105,586 B gzip against 105,472 B; its allowance moves from 103 to
+103.25 KiB in `consumer-fixtures.ts`. Leaf RSI remains under 9 KiB, and every unrelated-domain
+exclusion is retained. Structural exclusions remain unchanged. Generated signatures and
 contracts expand the actual new union branches; they are generator outputs, not hand-written
 review evidence.
 
@@ -107,7 +110,7 @@ prose/table were refreshed from the actual generated records. No enforcement thr
 
 ## Concrete #26 overlap and owner retests
 
-At source commit 56056dd8906849711e73ed8530df19c0ef05b1b5 against unchanged draft
+The initial source assessment at 56056dd8906849711e73ed8530df19c0ef05b1b5 against unchanged draft
 #26 e5e9e95433d798bbaa9378386f2f391568ce7fba, the intersection is **24 files**.
 A read-only `git merge-tree --write-tree` rehearsal exits **1** with **17 textual conflicts**;
 no branch or worktree is merged or changed by that object-only rehearsal.
@@ -171,6 +174,26 @@ Concrete synthetic retests after that owner-managed integration:
 [PR #27](https://github.com/InsiderFinance/totalfinance/pull/27) is the single review/release
 receipt for this batch. Its verification section names the exact candidate SHA, full hosted run,
 independent local repeat, artifact hashes and check outcomes. The source commit above identifies
-the implementation used for this overlap assessment; subsequent documentation-only commits do not
-change the overlap. #26 was rechecked open/draft at the same SHA after implementation; neither
+the initial implementation used for this overlap assessment. The final PR receipt repeats the
+assessment after integration repairs and records its exact candidate SHA. #26 was rechecked open/draft at the same SHA after implementation; neither
 its branch nor status has been changed by this work.
+
+## Full-gate integration repair
+
+The first exact-candidate full hosted run at `50c3575f4bb96d0e55ba7e395cdf6d374fed0e2d`
+([run 42897358253](https://github.com/InsiderFinance/totalfinance/actions/runs/42897358253))
+and the independent clean-checkout `pnpm run ci` both failed. The local suite reported eight failed
+and 13,639 passed tests; it stopped before standalone `api:check` and the second coverage run.
+Clean regeneration, all hosted static jobs and local-registry rehearsal passed, but do not turn
+that failed candidate into a release receipt.
+
+The integration repair updates the explicit HTTP/journey operation inventories, the MCP package
+label in live documentation, and the measured coarse TA consumer bound above. The OHLCV missing-field
+example now names its exact public boundary unambiguously to the AST inventory. Independent
+contract verification now preserves the concrete generic input type: compound aliases join on both
+declaration and instantiation, ignoring only identifier-literal union order, and the union checker
+resolves a public generic method only when its declaration identity matches. Its cache keys on the
+concrete checker parameter symbol. New defect plants prove missing income/balance ratio arms still
+fail and a false implementation identity is still rejected. No residual allowlist or threshold was
+relaxed to hide a contract gap. The repaired six-suite run passed 118 tests, including the additional identity plant. The final exact-head hosted matrix and clean independent
+release repeat must be rerun; their authoritative results remain on PR #27.

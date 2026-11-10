@@ -111,7 +111,7 @@ const observations = [
 const universe = { universeId: 'fixture', asOf: AS_OF, observations, fieldDefinitions };
 
 describe('the journey packs', () => {
-  it('are five opt-in packs of twelve operations, registrable beside the defaults, with ids in the wire grammar', () => {
+  it('are five opt-in packs of thirteen operations, registrable beside the defaults, with ids in the wire grammar', () => {
     const packs = journeyPacks();
     expect(packs.map((pack) => pack.name)).toEqual([
       'portfolio',
@@ -121,6 +121,7 @@ describe('the journey packs', () => {
       'valuation',
     ]);
     expect(journeyOperations().map((op) => op.id)).toEqual([
+      'totalfinance.portfolio.inspect',
       'totalfinance.portfolio.snapshot',
       'totalfinance.portfolio.explain_pnl',
       'totalfinance.portfolio.analyze',

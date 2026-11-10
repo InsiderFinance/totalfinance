@@ -751,7 +751,7 @@ or claim hosted-matrix success. The additional unmeasured
 row is the caller-implemented `ExecutionJournalStore#transact` interface, not lost measurement of
 an existing implementation; its memory/file implementations have their own focused evidence.
 
-Package-by-package measured records (total · enforced · partial · unmeasured): backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 52·30·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 96·96·0·0 http 3·0·3·0 math 89·30·51·8 mcp 3·1·2·0 options 188·163·18·7 performance 64·19·44·1 portfolio 33·8·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 23·2·14·7 technical-analysis 1,288·575·688·25 valuation 84·75·9·0 volatility 107·69·20·18 workflows 32·8·13·11 the umbrella 2,994·1,324·1,618·52. These totals reconcile exactly to 5,463 candidates; umbrella aliases inherit
+Package-by-package measured records (total · enforced · partial · unmeasured): backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 52·30·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 96·96·0·0 http 3·0·3·0 math 89·30·51·8 MCP 3·1·2·0 options 188·163·18·7 performance 64·19·44·1 portfolio 33·8·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 23·2·14·7 technical-analysis 1,288·575·688·25 valuation 84·75·9·0 volatility 107·69·20·18 workflows 32·8·13·11 the umbrella 2,994·1,324·1,618·52. These totals reconcile exactly to 5,463 candidates; umbrella aliases inherit
 evidence only when their implementation identity and input policy match.
 
 Ownership closes by reconciliation, not erasure: statically-unattributed object contracts are

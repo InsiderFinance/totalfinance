@@ -120,7 +120,8 @@ decision remains open within this scope; final approval is review of the concret
 
 ## Source closeout and external release receipt
 
-Implementation source: 56056dd8906849711e73ed8530df19c0ef05b1b5. S1–S7 and S9 are backed by
+Initial implementation source: 56056dd8906849711e73ed8530df19c0ef05b1b5, followed by the
+full-gate integration repairs recorded in the review. S1–S7 and S9 are backed by
 the focused, generated-contract and installed-consumer receipts in the
 [review record](../reviews/dogfood-0.1.3.md). The final reconciliation re-read the original delegated
 request: all DX/API/LIB items have dispositions, all selected financial/usability slices are
