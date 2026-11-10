@@ -92,7 +92,7 @@ permissive unknown keys, cumulative-period reinterpretation or fill-engine chang
   pnpm run ci, standalone api:check and second test:coverage; full hosted matrix,
   deterministic generations, clean regen and registry rehearsal at EXACT final candidate
   commit. Record exits, run URLs, artifacts and any failed/skipped checks truthfully.
-- [ ] S9: one pushed branch and one reviewable PR against current main. Record #26 head/draft
+- [x] S9: one pushed branch and one reviewable PR against current main. Record #26 head/draft
       before/after, actual file/public-contract overlap, textual conflicts separately from
       semantic risks, and concrete owner retests. No merge/publication or #26 modification.
 
@@ -117,3 +117,16 @@ journal rather than modify a content-addressed receipt. Direct named statement i
 sections and the existing journal fold satisfy these constraints. A patch override is authorized
 policy, not a claim that the queued additive features are bug fixes. No consequential maintainer
 decision remains open within this scope; final approval is review of the concrete PR.
+
+## Source closeout and external release receipt
+
+Implementation source: 56056dd8906849711e73ed8530df19c0ef05b1b5. S1–S7 and S9 are backed by
+the focused, generated-contract and installed-consumer receipts in the
+[review record](../reviews/dogfood-0.1.3.md). The final reconciliation re-read the original delegated
+request: all DX/API/LIB items have dispositions, all selected financial/usability slices are
+implemented or explicitly docs-only as allowed, and the bounded deferrals remain unchanged.
+
+S8 is a post-commit gate. [PR #27](https://github.com/InsiderFinance/totalfinance/pull/27) is its
+authoritative live checklist and exact-final-head receipt; it records the full supported-Node
+matrix and independent release repeat. Publication remains separately unauthorized regardless of
+that gate's result. A later code commit invalidates earlier release receipts.

@@ -10,7 +10,7 @@
 The maintainer authorized one review PR containing the worthwhile compatible dogfood batch and
 next unused 0.1.x metadata (expected 0.1.3), without merge, publication or deployment. The
 [scoped contract and checklist](./specs/dogfood-0.1.x.md) controls S1–S9. Implementation, focused checks and generated contracts are complete. Exact
-candidate release verification is recorded in the single review PR; its current head and full
+candidate release verification is recorded in [PR #27](https://github.com/InsiderFinance/totalfinance/pull/27); its current head and full
 receipts are authoritative, and a fast PR check is not a release receipt. Draft #26 and unmerged #12 remain separate; no provider or
 paper-experiment changes are authorized. Main d50b401 already contains LIB-01/02/03 repairs.
 

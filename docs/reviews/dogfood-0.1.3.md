@@ -104,3 +104,73 @@ exact input and independent measurement. The three added OHLCV paths are measure
 loss of an executed concrete boundary test. The status-figure helper was repaired to emit zero for
 an absent rejection bucket (the artifact's documented zero convention), and its current numeric
 prose/table were refreshed from the actual generated records. No enforcement threshold was lowered.
+
+## Concrete #26 overlap and owner retests
+
+At source commit 56056dd8906849711e73ed8530df19c0ef05b1b5 against unchanged draft
+#26 e5e9e95433d798bbaa9378386f2f391568ce7fba, the intersection is **24 files**.
+A read-only `git merge-tree --write-tree` rehearsal exits **1** with **17 textual conflicts**;
+no branch or worktree is merged or changed by that object-only rehearsal.
+
+| Shared file                                          | Textual merge assessment     |
+| ---------------------------------------------------- | ---------------------------- |
+| `README.md`                                          | Conflict                     |
+| `distribution/totalfinance/package.json`             | Auto-merges in the rehearsal |
+| `docs/bundle-size.md`                                | Conflict                     |
+| `docs/implementation-order.md`                       | Conflict                     |
+| `docs/library-alignment-spec.md`                     | Conflict                     |
+| `docs/llms-full.txt`                                 | Conflict                     |
+| `docs/llms.txt`                                      | Conflict                     |
+| `docs/reference/fields.md`                           | Conflict                     |
+| `docs/specs/phase-3b-public-naming-normalization.md` | Conflict                     |
+| `docs/specs/phase-3b-runtime-semantic-closeout.md`   | Conflict                     |
+| `packages/core/README.md`                            | Auto-merges in the rehearsal |
+| `packages/core/etc/core.api.md`                      | Conflict                     |
+| `packages/core/package.json`                         | Auto-merges in the rehearsal |
+| `packages/core/src/diagnostics.ts`                   | Conflict                     |
+| `packages/totalfinance/README.md`                    | Auto-merges in the rehearsal |
+| `packages/totalfinance/package.json`                 | Auto-merges in the rehearsal |
+| `tools/bundle-size/budgets.ts`                       | Conflict                     |
+| `tools/manifest/conformance.test.ts`                 | Auto-merges in the rehearsal |
+| `tools/manifest/fixture-validation.test.ts`          | Conflict                     |
+| `tools/manifest/public-contracts.json`               | Conflict                     |
+| `tools/manifest/public-docs.json`                    | Conflict                     |
+| `tools/manifest/public-enforcement.json`             | Conflict                     |
+| `tools/manifest/public-naming.json`                  | Conflict                     |
+| `tools/manifest/public-signatures.json`              | Auto-merges in the rehearsal |
+
+The conflicts are rebase/integration work, not evidence that connector semantics were changed.
+The shared source contract change is two additive warning codes in core diagnostics. Core Bar,
+provider response/ordering, adjustment, window/pagination and connector mapping contracts are
+unchanged by this PR. The new OHLCV projection is additive in technical-analysis and does not
+replace #26's windows/close arrays. Bounded schema-error summaries live at the operation transport
+edge; they do not repair #26's provider wrapper that discards mapping context. Existing complete
+ratio calls and all broker/ledger conventions remain supported.
+
+The owner should rebase #26 only when ready, keep its own unmerged changeset, retain the new
+0.1.3 base metadata and its exact MCP dependency, and resolve source/curation changes before
+regenerating inventories/docs/API reports. Do not choose one side of generated JSON or raise a
+fixture count without deriving the combined value. Remeasure the combined bundle surface; these
+limits do not certify new data infrastructure. No external provider package was modified here.
+
+Concrete synthetic retests after that owner-managed integration:
+
+1. Rebuild/pack on Node 22.23.2 with pnpm 10.32.0 and a frozen install. Install both prepared
+   artifacts outside the monorepo; compile strict NodeNext/Bundler and execute existing 0.1.x calls.
+2. Repeat #26's independently packaged provider/restore/pagination examples and the SMA(20)
+   synthetic 100…129 close fixture (expected 119.5). Verify incomplete OHLCV, warmup and actual
+   observation/availability/provenance remain explicit; do not relabel data to pass.
+3. Keep #26's four review blockers as its own acceptance work: contradictory adjustment metadata,
+   distinct-root option ordering within/across pages, safe mapping field/reason diagnostics, and
+   no-key author onboarding. This patch claims none resolved.
+4. Run the combined generated-contract gates, `tools/transport-parity.test.ts`, the trade recovery
+   tests, bundle budgets and full packed consumers. Preserve both the new create/inspect tool
+   bindings and #26's data exports/curation. Then run a new exact-head full hosted matrix and
+   release verification under that future PR's own authorization.
+
+[PR #27](https://github.com/InsiderFinance/totalfinance/pull/27) is the single review/release
+receipt for this batch. Its verification section names the exact candidate SHA, full hosted run,
+independent local repeat, artifact hashes and check outcomes. The source commit above identifies
+the implementation used for this overlap assessment; subsequent documentation-only commits do not
+change the overlap. #26 was rechecked open/draft at the same SHA after implementation; neither
+its branch nor status has been changed by this work.
