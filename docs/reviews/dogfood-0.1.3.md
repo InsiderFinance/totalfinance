@@ -266,3 +266,20 @@ The corrected naming gate passes all 32 tests. The six other final conformance s
 passed; together all 136 checks are green. Final source typecheck, lint and format checks exit 0.
 The exact follow-up candidate and release-repeat results are recorded externally in PR #27 to
 avoid a self-referential commit receipt; any subsequent code commit requires fresh verification.
+
+Candidate 94a3701's hosted fast shard failed `alias-group.test.ts`: physical probes per root were
+35.001261 against 35. Comparing generated evidence to 96a786c finds exactly 580 additional legitimate
+checks (290 nullability and 290 optional-field type probes), with the same 2,379 roots and 3,084
+inherited aliases. No alias acquired execution counts. The fixed test tightens the inherited
+population check from >1,000 to 3,084 and directly reconciles every mutation total to physical roots, forbids alias
+execution claims and includes defect plants for both duplicate-accounting paths. No probes, source
+validation, coverage floor or enforcement measurement is reduced. This test-only repair does not
+change generator inputs or financial source; its new commit still invalidates prior release
+receipts and requires full exact-head verification.
+
+Independent CI at 94a3701 confirmed exactly that one accounting-heuristic failure: 13,675 passed,
+one failed across 594 files; standalone API and second coverage were not started for that failed
+candidate. Its full hosted run likewise has 17 passing jobs; three test shards failed that same
+assertion and their three coverage merges propagated it. The accounting repair passes all 11 tests,
+including the three defect plants, and typecheck/lint exit 0. A fresh final-head full gate and
+independent repeat are required; 94a3701's clean tarball smoke is historical, not reused approval.

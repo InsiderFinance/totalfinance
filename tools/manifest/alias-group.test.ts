@@ -36,6 +36,40 @@ const artifact = JSON.parse(
 };
 const rows = artifact.enforcement;
 
+/**
+ * Field-rich contracts legitimately add probes without adding roots. A probes/root ceiling crossed
+ * 35 after 290 extra null checks and 290 optional-type checks, while all 3,084 aliases still reused
+ * evidence. Check the accounting directly: no alias executes, and every global counter equals the
+ * sum of physical roots. The inherited-population ratchet tightens from >1,000 to the measured
+ * 3,084 aliases. Defect plants prove aliases cannot lose attribution or double-claim executions.
+ */
+function aliasProbeAccountingErrors(subject: typeof artifact): string[] {
+  const errors: string[] = [];
+  const totals: Record<string, number> = {};
+  let inherited = 0;
+  for (const row of subject.enforcement) {
+    if (row.inheritedFrom) inherited += 1;
+    if (row.inheritedFrom || row.measurementSource) {
+      if (row.mutationsExecuted) errors.push(`${row.id}: alias claims executions`);
+      continue;
+    }
+    for (const [kind, count] of Object.entries(row.mutationsExecuted ?? {})) {
+      totals[kind] = (totals[kind] ?? 0) + count;
+    }
+  }
+  if (inherited !== subject.summary.inherited)
+    errors.push('inherited total differs from alias rows');
+  if (inherited < 3084) errors.push('inherited alias population regressed');
+  for (const kind of new Set([
+    ...Object.keys(totals),
+    ...Object.keys(subject.summary.mutationsExecuted),
+  ])) {
+    if ((totals[kind] ?? 0) !== (subject.summary.mutationsExecuted[kind] ?? 0))
+      errors.push(`${kind}: total differs from physical roots`);
+  }
+  return errors;
+}
+
 describe('pooled fixtures make one callable give one answer', () => {
   it('every `collectAsync` and `streamAsync` spelling reports the same reason', () => {
     // The named case. Three spellings each, and they disagreed 2-to-1 before pooling.
@@ -119,49 +153,46 @@ describe('sharing evidence does not mean re-running it', () => {
     expect(wrong, 'inherited records are claiming physical executions').toEqual([]);
   });
 
-  it('execution total stays far below the record count — aliases do not each re-probe', () => {
-    // 4,400+ public paths against ~2,400 inherited ones: if every alias re-ran its probes, the
-    // executed totals would scale with paths rather than with distinct callables.
-    const executed = Object.values(artifact.summary.mutationsExecuted).reduce((a, b) => a + b, 0);
-    const measuredRows = rows.filter((row) => !row.inheritedFrom).length;
-    expect(artifact.summary.inherited, 'inheritance collapsed').toBeGreaterThan(1000);
-    /**
-     * Re-seated 12 → 17 on 2026-08-14, and the rise is a new probe running, not fan-out returning.
-     * `null-when-nonnullable` fires once per declared non-nullable field (9,205 executions), which
-     * raises probes PER MEASUREMENT — the numerator this ratio was never meant to police. What it
-     * exists to catch is executions scaling with PATHS, and that invariant is held by the two
-     * assertions beside it: inherited rows stay >1000 and carry no `mutationsExecuted` at all.
-     * Measured 16.27 at re-seat; the ceiling sits snug so the next real fan-out regression is
-     * visible, per the gate-closeout rule that slack is what stops a bound seeing the next jump.
-     *
-     * Re-seated 17 → 18 on 2026-08-19 (FC1, measured 17.40): the valuation package's heads carry
-     * closed many-field contracts, so each MEASUREMENT runs more probes — the same numerator class
-     * as the 12 → 17 re-seat. Verified against the invariant this ratio exists to hold before
-     * moving it: all 56 umbrella spellings of the valuation family inherit; only the 29 package
-     * spellings carry `mutationsExecuted`.
-     *
-     * Re-seated 18 → 33 on 2026-08-19 (FC2, measured 32.32 after the declaration-built forecast
-     * baselines landed): the typed statement contracts carry ~45 nested non-nullable fields
-     * across three statements, and every fundamentals head is probed per FIELD — thousands of
-     * physical probes per measurement, the deepest contracts in the library. Same verification
-     * before moving: all 231 umbrella spellings of the fundamentals/valuation family inherit;
-     * only the 143 package spellings execute probes.
-     *
-     * Re-seated 33 → 34 on 2026-09-04 (Stage 4.6 slice 6, measured 33.03): the two out-of-sample
-     * verbs carry the whole grid request (the cross-sectional request one level deeper), so each
-     * MEASUREMENT runs the deepest backtest contracts' probes once more — the same numerator class.
-     * Verified before moving: the umbrella spellings of both verbs inherit; only the package
-     * spellings execute probes.
-     *
-     * Re-seated 34 → 35 on 2026-09-21 (pre-publish repairs B1–B7 + C, measured 34.55): the MCP
-     * envelope doors (`operationResultSchema` 1,307 executions, `spilledResultSchema` 603) are
-     * probed per field of the full OperationResult envelope, and the new chain, contract and
-     * combo doors carry closed many-field requests — the same numerator class as every re-seat
-     * above. Verified before moving: every umbrella spelling of the new doors (chainGreeks,
-     * usEquityOption, portfolioVaR, isTrustworthy, sideOf, signOf) inherits with zero executions;
-     * only the package spellings execute probes.
-     */
-    expect(executed / Math.max(measuredRows, 1)).toBeLessThan(35);
+  it('every physical execution is accounted for once, at a measurement root', () => {
+    expect(aliasProbeAccountingErrors(artifact)).toEqual([]);
+  });
+
+  it('PLANT: detects an inherited alias claiming its own physical probes', () => {
+    const alias = rows.find((row) => row.inheritedFrom)!;
+    const subject = {
+      ...artifact,
+      enforcement: rows.map((row) =>
+        row === alias ? { ...row, mutationsExecuted: { 'wrong-type': 1 } } : row,
+      ),
+    };
+    expect(aliasProbeAccountingErrors(subject)).toContain(`${alias.id}: alias claims executions`);
+  });
+
+  it('PLANT: detects an alias losing attribution even when its summary count is adjusted', () => {
+    const alias = rows.find((row) => row.inheritedFrom)!;
+    const { inheritedFrom: _inherited, measurementSource: _source, ...withoutAttribution } = alias;
+    const subject = {
+      ...artifact,
+      summary: { ...artifact.summary, inherited: artifact.summary.inherited - 1 },
+      enforcement: rows.map((row) => (row === alias ? withoutAttribution : row)),
+    };
+    expect(aliasProbeAccountingErrors(subject)).toContain('inherited alias population regressed');
+  });
+
+  it('PLANT: detects duplicate executions claimed only in the global total', () => {
+    const subject = {
+      ...artifact,
+      summary: {
+        ...artifact.summary,
+        mutationsExecuted: {
+          ...artifact.summary.mutationsExecuted,
+          'wrong-type': artifact.summary.mutationsExecuted['wrong-type']! + 1,
+        },
+      },
+    };
+    expect(aliasProbeAccountingErrors(subject)).toContain(
+      'wrong-type: total differs from physical roots',
+    );
   });
 });
 

@@ -184,3 +184,14 @@ Checklist (verify before checking):
 Scope review: these are compatible repairs to the selected family and existing operation. #26's
 provider package/contracts and blockers remain outside this PR. Version remains prepared 0.1.3;
 no new bump, merge, publication or deployment is authorized or required.
+
+## Follow-up full-gate accounting repair
+
+At candidate 94a3701 the fast hosted shard exposed an obsolete probes-per-root heuristic:
+35.001 against a ceiling of 35. The actual delta is 290 additional nullability probes plus 290
+optional-type probes for newly admitted canonical statement fields. All 3,084 inherited aliases
+still carry no physical executions; every global mutation counter reconciles to physical roots.
+No financial probe or coverage is removed. The test now asserts that exact accounting and tightens
+the inherited-population ratchet from >1,000 to 3,084, with defect plants for alias execution and duplicate summary
+claims. This replaces a field-count-sensitive surrogate with the property the gate was meant to
+protect. A new exact-head full hosted run and independent release repeat remain required.
