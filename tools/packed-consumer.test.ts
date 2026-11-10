@@ -3227,3 +3227,51 @@ vm.runInNewContext(readFileSync(new URL('./bundle.js', import.meta.url), 'utf8')
     expect(sh('node', [join(dir, 'harness.mjs')], consumer)).toContain('PRICE_LEVEL_PUBLIC_OK');
   }, 120_000);
 });
+
+describe('packed 0.1.x dogfood journeys', () => {
+  it('compiles and runs the exact public guide against an installed distribution', () => {
+    const guide = readFileSync(join(ROOT, 'docs/guides/dogfood-journeys.md'), 'utf8');
+    const example = [...guide.matchAll(/```ts\n([\s\S]*?)```/g)]
+      .map((match) => match[1])
+      .join('\n');
+    const dir = join(consumer, 'dogfood-journeys');
+    sh('mkdir', ['-p', dir], consumer);
+    writeFileSync(
+      join(dir, 'consumer.mts'),
+      example +
+        `
+import type { DebtServiceRatioInput } from '@insiderfinance/totalfinance/fundamentals';
+import { debtServiceCoverage } from '@insiderfinance/totalfinance/fundamentals';
+interface ExistingConsumerDebtServiceInput extends DebtServiceRatioInput { consumerLabel?: string }
+const legacyStatements = {
+  income: { ...income, operatingIncome: 30, netIncome: 20 },
+  balance: { ...balance, cashAndCashEquivalents: 30, totalAssets: 300, totalLiabilities: 100, totalEquity: 200 },
+  cashFlow: { period, operatingCashFlow: 25, investingCashFlow: -10, financingCashFlow: -5 },
+};
+const legacyInput: ExistingConsumerDebtServiceInput = { statements: legacyStatements, debtServiceAmount: 10 };
+if (grossMargin({ statements: legacyStatements }) !== 0.4 || currentRatio({ statements: legacyStatements }) !== 2 || debtServiceCoverage(legacyInput) !== 3) throw new Error('Existing full-statement calls changed');
+console.log("DOGFOOD_JOURNEYS_OK");
+`,
+    );
+    for (const mode of ['NodeNext', 'Bundler'] as const) {
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: mode === 'NodeNext' ? 'NodeNext' : 'ESNext',
+            moduleResolution: mode,
+            strict: true,
+            noUncheckedIndexedAccess: true,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+    }
+    expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+      'DOGFOOD_JOURNEYS_OK',
+    );
+  }, 120_000);
+});

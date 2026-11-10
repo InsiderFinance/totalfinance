@@ -221,16 +221,14 @@ describe('manifest conformance (Law 1)', () => {
   });
 
   it('MCP: the runtime tool set equals the manifest mcpTools declarations', async () => {
-    const mcp = (await import('@totalfinance/mcp')) as {
-      defaultTools: () => { name: string }[];
-      backtestPack: () => { tools: { name: string }[] };
-      journeyPacks: () => { tools: { name: string }[] }[];
-    };
+    const mcp = await import('@totalfinance/mcp');
+    const { tradePack } = await import('@totalfinance/workflows');
     // The runtime set is every shipped tool: the defaults, the opt-in backtest pack, and (Stage 7A
-    // slice 2) the four opt-in journey packs — each backed by the compute export it composes.
+    // slice 2) the journey packs, and the explicitly capability-gated trade pack.
     const runtime = new Set<string>([
       ...mcp.defaultTools().map((t) => t.name),
       ...mcp.backtestPack().tools.map((t) => t.name),
+      ...tradePack().operations.map((operation) => mcp.toolFromOperation(operation).name),
       ...mcp.journeyPacks().flatMap((pack) => pack.tools.map((t) => t.name)),
     ]);
     const declared = new Map<string, string>();

@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "TotalFinance local operations",
-    "version": "0.1.2",
-    "description": "The local, read-only-by-default, loopback HTTP transport over the TotalFinance operation registry (46 operations across 17 packs). Host and any Origin must match this server's host and bound port; null/foreign origins are refused. JSON POSTs require application/json. Enabled writes (including trade:approve) and job creation/cancellation require a server-owned bearer credential; read-only analytics and discovery remain unauthenticated. A credential does not grant capabilities. Every request body is the operation's own input schema; every error body is one OperationError. Wire byte budget default 65536."
+    "version": "0.1.3",
+    "description": "The local, read-only-by-default, loopback HTTP transport over the TotalFinance operation registry (48 operations across 17 packs). Host and any Origin must match this server's host and bound port; null/foreign origins are refused. JSON POSTs require application/json. Enabled writes (including trade:approve) and job creation/cancellation require a server-owned bearer credential; read-only analytics and discovery remain unauthenticated. A credential does not grant capabilities. Every request body is the operation's own input schema; every error body is one OperationError. Wire byte budget default 65536."
   },
   "servers": [
     {
@@ -883,7 +883,7 @@
         "operationId": "run.totalfinance.backtest.vectorized_run",
         "security": [],
         "summary": "Run a vectorized backtest",
-        "description": "Run a single-asset vectorized backtest: signal-following fills at close, optional bps fees. Returns final value, turnover, and the performance summary; every hidden policy the run assumed (fill timing, costs, slippage, settlement, calendar, margin) is echoed in `assumptions`, and the implementation-risk warnings (look-ahead, data alignment) ride `diagnostics`. Deliberately opt-in (backtestPack) — payloads and runtime are heavier than the default tools.",
+        "description": "Run a single-asset vectorized backtest: signal-following fills at close, optional bps fees. Returns final value, turnover, and the performance summary; every hidden policy the run assumed (fill timing, costs, slippage, settlement, calendar, margin) is echoed in `assumptions`, and the implementation-risk warnings (look-ahead, data alignment) ride `diagnostics`. Deliberately opt-in (backtestPack) — payloads and runtime are heavier than the default tools. executionLag shifts signal lookup before rebalance sampling; a month-end target can miss the next monthly sample. Use the SDK researchProtocol and selection-hygiene workflow before comparing candidates; see docs/guides/dogfood-journeys.md.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1009,7 +1009,7 @@
         "operationId": "run.totalfinance.calendar.sessions",
         "security": [],
         "summary": "Trading sessions & option expirations",
-        "description": "Trading days, holidays, and half days for an exchange calendar over a date range (≤ ~13 months), plus option expirations (weekly Fridays / monthly OPEX / quarterly, shifted off holidays from the calendar data) when `expirationKind` is set, and the next expiry after the range start.",
+        "description": "Trading days, holidays, and half days for an exchange calendar over a date range (≤ ~13 months), plus option expirations (weekly Fridays / monthly OPEX / quarterly, shifted off holidays from the calendar data) when `expirationKind` is set, and the next expiry after the range start. NYSE/CBOE one-off closure coverage begins 2001-01-01; earlier ranges carry a diagnostic. Rules project other dates, not future emergency closures.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2141,6 +2141,136 @@
         }
       }
     },
+    "/operations/totalfinance.portfolio.create/run": {
+      "post": {
+        "operationId": "run.totalfinance.portfolio.create",
+        "security": [
+          {
+            "localBearer": []
+          }
+        ],
+        "summary": "Create and store an explicitly defined portfolio ledger",
+        "description": "Start here before portfolio.record_events: supply durable portfolioId, baseCurrency and explicit initial events (an empty array creates no cash). Uses the existing artifact store and ledger reducer. Requires portfolio:write and a writable store. Save the returned handle and open it with portfolio.inspect; subsequent event writes return a new immutable handle. Opt-in (tradePack).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/totalfinance.portfolio.create.input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The OperationResult.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/totalfinance.portfolio.create.result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The input was refused (an input.* code).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid bearer credential (operation.capability_missing).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Untrusted Host/Origin, missing server capability, or mutations disabled without a credential.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown operation, job, or handle.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The input exceeds the wire byte budget (operation.input_too_large).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON POST requests require Content-Type: application/json (input.wrong_shape).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The operation failed (any other operation error).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error (operation.internal).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          }
+        },
+        "x-totalfinance": {
+          "sideEffect": "portfolio-state",
+          "authorization": "none",
+          "idempotency": "required",
+          "deterministic": true,
+          "stochastic": false,
+          "costClass": "small",
+          "supportsCancellation": false,
+          "handleFields": [],
+          "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        }
+      }
+    },
     "/operations/totalfinance.portfolio.explain_pnl/run": {
       "post": {
         "operationId": "run.totalfinance.portfolio.explain_pnl",
@@ -2261,6 +2391,134 @@
             "ledger",
             "from.market",
             "to.market"
+          ],
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": false
+          }
+        }
+      }
+    },
+    "/operations/totalfinance.portfolio.inspect/run": {
+      "post": {
+        "operationId": "run.totalfinance.portfolio.inspect",
+        "security": [],
+        "summary": "Open a portfolio ledger or handle and inspect a bounded page",
+        "description": "Open a returned totalfinance://portfolios/... handle through the same configured store, or import an inline serialized ledger for read-only inspection. Revalidates and replays the ledger. Summary returns identity/counts; events, positions and cash return bounded previews (default 20, maximum 100 rows). This does not value the portfolio; use portfolio.snapshot with explicit marks. Opt-in (portfolioPack).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/totalfinance.portfolio.inspect.input"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The OperationResult.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/totalfinance.portfolio.inspect.result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The input was refused (an input.* code).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid bearer credential (operation.capability_missing).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Untrusted Host/Origin, missing server capability, or mutations disabled without a credential.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown operation, job, or handle.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The input exceeds the wire byte budget (operation.input_too_large).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "JSON POST requests require Content-Type: application/json (input.wrong_shape).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The operation failed (any other operation error).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error (operation.internal).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationError"
+                }
+              }
+            }
+          }
+        },
+        "x-totalfinance": {
+          "sideEffect": "none",
+          "authorization": "none",
+          "idempotency": "not-applicable",
+          "deterministic": true,
+          "stochastic": false,
+          "costClass": "small",
+          "supportsCancellation": false,
+          "handleFields": [
+            "portfolio"
           ],
           "annotations": {
             "readOnlyHint": true,
@@ -4055,7 +4313,7 @@
         "operationId": "run.totalfinance.technical_analysis.calculate",
         "security": [],
         "summary": "Calculate a technical indicator",
-        "description": "Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.",
+        "description": "Compute any of TotalFinance’s ~300 registered technical indicators over a price series. Project core Bar records with technicalAnalysis.ohlcvFromBars, retaining the original source/provenance alongside the result; or pass OHLCV columns under series. Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take `x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. Output is aligned to input length with null during warmup; `assumptions.parameters` echoes the parameters actually used (declared defaults merged with yours), and `diagnostics.warmup` is the first real index.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4307,7 +4565,7 @@
         "operationId": "run.totalfinance.technical_analysis.list",
         "security": [],
         "summary": "List technical indicators",
-        "description": "Discover the technical indicators available to `totalfinance.technical_analysis.calculate`. Returns each indicator’s name, category, input kind (series | bars | pair), parameters, defaults, and which parameters are required. Narrow the ~335-indicator catalog with `search` (matches a name or a TA-Lib/pandas/TradingView alias) and/or `category`, and page it with `limit` (default 50) / `offset` (`total` is the full match count). For one indicator’s full card (including its warmup), use `totalfinance.technical_analysis.describe`. Then pass a name to `totalfinance.technical_analysis.calculate`.",
+        "description": "Discover the technical indicators available to `totalfinance.technical_analysis.calculate`. Returns each indicator’s name, category, input kind (series | bars | pair), parameters, defaults, and which parameters are required. Narrow the ~335-indicator catalog with `search` (matches a name or a TA-Lib/pandas/TradingView alias) and/or `category`, and page it with `limit` (default 50) / `offset` (`total` is the full match count). For one indicator’s full card (including its warmup), use `totalfinance.technical_analysis.describe`. To browse momentum, use { category: \"momentum\" }, rather than searching the name momentum. Then pass a name to `totalfinance.technical_analysis.calculate`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4958,7 +5216,7 @@
           }
         ],
         "summary": "Submit an authorized plan to the paper broker",
-        "description": "Verify the grant against the plan, the portfolio and market hashes, the market instant, the account, and the idempotency key; journal submitted and acknowledged; return the content-addressed receipt — the SAME receipt for a retry with the same key and plan (no second order), trade.idempotency_conflict for the same key with another plan, trade.grant_expired for an expired grant. With `observations`, the open orders meet the market through the engines' own fill path. Top-level fills/events are only this call’s new deltas; the submission receipt is immutable. `recovery: { fills, events }` contains all persisted normalized fills and reproducible ledger envelopes for this receipt’s orders, including this call’s fills. Retry after a lost response and apply recovery.events with portfolio.record_events; identical events fold once. Recovery grows with later fills without replaying the fill engine. The journal continues transactionally from the required journal store under `<sourceId>:journal`; retries must retain that store and source. A grant atomically records its exact prepared submission before journal commit: a retry with the same key into the same store/journal recovers those events and reads the same receipt; any other submission of the grant is trade.grant_consumed. Every journal write recovers earlier pending submissions before allocating new identities. Inline history must match persisted history exactly. Inline grants must exist unchanged in the trusted authorization store. Paper only; requires trade:paper. Opt-in (tradePack).",
+        "description": "Verify the grant against the plan, the portfolio and market hashes, the market instant, the account, and the idempotency key; journal submitted and acknowledged; return the content-addressed receipt — the SAME receipt for a retry with the same key and plan (no second order), trade.idempotency_conflict for the same key with another plan, trade.grant_expired for an expired grant. With `observations`, the open orders meet the market through the engines' own fill path. Top-level fills/events are only this call’s new deltas; the submission receipt is immutable. `currentOrders` is the authoritative journal-derived current state and cumulative filled/remaining quantities for this receipt. `recovery: { fills, events }` contains all persisted normalized fills and reproducible ledger envelopes for this receipt’s orders, including this call’s fills. Retry after a lost response and apply recovery.events with portfolio.record_events; identical events fold once. Recovery grows with later fills without replaying the fill engine. The journal continues transactionally from the required journal store under `<sourceId>:journal`; retries must retain that store and source. A grant atomically records its exact prepared submission before journal commit: a retry with the same key into the same store/journal recovers those events and reads the same receipt; any other submission of the grant is trade.grant_consumed. Every journal write recovers earlier pending submissions before allocating new identities. Inline history must match persisted history exactly. Inline grants must exist unchanged in the trusted authorization store. Paper only; requires trade:paper. Opt-in (tradePack).",
         "requestBody": {
           "required": true,
           "content": {
@@ -15613,7 +15871,50 @@
           },
           "feeBps": {
             "type": "number",
+            "minimum": 0,
             "description": "Per-trade fee in basis points of traded notional"
+          },
+          "slippageBps": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Existing slippage.bps model; basis points, zero means no slippage"
+          },
+          "executionLag": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Signal-to-fill lag in bars (SDK default 1); 0 carries a look-ahead warning"
+          },
+          "rebalance": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "everyBar",
+                  "daily",
+                  "weekly",
+                  "monthly"
+                ]
+              },
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0
+              }
+            ],
+            "description": "Existing SDK sampling schedule; samples signal[i - executionLag] only on rebalance bars"
+          },
+          "periodsPerYear": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Bars per year for metrics (SDK default 252)"
+          },
+          "riskFreeRate": {
+            "type": "number",
+            "description": "Annual risk-free rate as a decimal (SDK default 0)"
+          },
+          "maxLeverage": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Existing per-asset gross weight cap (SDK default 1)"
           }
         },
         "additionalProperties": false,
@@ -15916,7 +16217,11 @@
           },
           "calendar": {
             "type": "object",
-            "description": "name/version/timezone"
+            "description": "name/version/timezone and documented closure-data coverage"
+          },
+          "diagnostics": {
+            "type": "object",
+            "description": "Warnings when the range crosses the historical coverage floor"
           }
         },
         "required": [
@@ -19163,6 +19468,1858 @@
           "trace"
         ]
       },
+      "totalfinance.portfolio.create.input": {
+        "type": "object",
+        "properties": {
+          "portfolioId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseCurrency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "lotRelief": {
+            "type": "string",
+            "enum": [
+              "fifo",
+              "lifo",
+              "highest-cost",
+              "specific-lot"
+            ],
+            "description": "Existing ledger default: fifo, echoed in the stored ledger"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PortfolioEventEnvelope"
+            },
+            "maxItems": 100000,
+            "description": "Explicit initial events; [] means an empty, unfunded portfolio"
+          },
+          "provenance": {
+            "$ref": "#/$defs/Provenance"
+          },
+          "createdTimestampMs": {
+            "type": "integer",
+            "description": "Caller clock in epoch milliseconds"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "portfolioId",
+          "baseCurrency",
+          "events",
+          "createdTimestampMs"
+        ],
+        "$id": "https://totalfinance.dev/schemas/portfolio.create.input",
+        "$defs": {
+          "PortfolioEventEnvelope": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "eventId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "schemaVersion": {
+                    "const": 1,
+                    "type": "number"
+                  },
+                  "sourceId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accountId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "effectiveTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "recordedTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "correlationId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "causationId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reversesEventId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "provenance": {
+                    "$ref": "#/$defs/Provenance"
+                  },
+                  "eventType": {},
+                  "event": {}
+                },
+                "additionalProperties": false,
+                "required": [
+                  "eventId",
+                  "schemaVersion",
+                  "sourceId",
+                  "accountId",
+                  "effectiveTimestampMs",
+                  "recordedTimestampMs",
+                  "provenance",
+                  "eventType",
+                  "event"
+                ]
+              },
+              {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.deposit",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashDeposit"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.withdrawal",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashWithdrawal"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.transfer",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashTransfer"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.conversion",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashConversion"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "trade.fill",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/TradeFill"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cost.charge",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CostCharge"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "income.received",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/IncomeReceived"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "financing.charge",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/FinancingCharge"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.split",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSplit"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.exercise",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeExercise"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.assignment",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeAssignment"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.expiration",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeExpiration"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.multiplier-change",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeMultiplierChange"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.variation-margin",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeVariationMargin"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.roll",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeRoll"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "fixed-income.redemption",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/FixedIncomeRedemption"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.symbol-change",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSymbolChange"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.merger",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateMerger"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.spin-off",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSpinOff"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.return-of-capital",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateReturnOfCapital"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.cash-in-lieu",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateCashInLieu"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "position.transfer",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/PositionTransfer"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.reversal",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.reversal",
+                            "type": "string"
+                          },
+                          "original": {
+                            "$ref": "#/$defs/PortfolioEventEnvelope"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "original"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "reversesEventId"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.correction",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.correction",
+                            "type": "string"
+                          },
+                          "original": {
+                            "$ref": "#/$defs/PortfolioEventEnvelope"
+                          },
+                          "replacement": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/$defs/CashDeposit"
+                              },
+                              {
+                                "$ref": "#/$defs/CashWithdrawal"
+                              },
+                              {
+                                "$ref": "#/$defs/CashTransfer"
+                              },
+                              {
+                                "$ref": "#/$defs/CashConversion"
+                              },
+                              {
+                                "$ref": "#/$defs/TradeFill"
+                              },
+                              {
+                                "$ref": "#/$defs/CostCharge"
+                              },
+                              {
+                                "$ref": "#/$defs/IncomeReceived"
+                              },
+                              {
+                                "$ref": "#/$defs/FinancingCharge"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSplit"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeExercise"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeAssignment"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeExpiration"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeMultiplierChange"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeVariationMargin"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeRoll"
+                              },
+                              {
+                                "$ref": "#/$defs/FixedIncomeRedemption"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSymbolChange"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateMerger"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSpinOff"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateReturnOfCapital"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateCashInLieu"
+                              },
+                              {
+                                "$ref": "#/$defs/PositionTransfer"
+                              }
+                            ]
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "original",
+                          "replacement"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "reversesEventId"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.account-migration",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.account-migration",
+                            "type": "string"
+                          },
+                          "fromAccountId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "toAccountId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "fromAccountId",
+                          "toAccountId"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "Provenance": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "dataset": {
+                "type": "string"
+              },
+              "asOf": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "receivedAt": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "sourceVersion": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "info",
+                        "warn",
+                        "error"
+                      ]
+                    },
+                    "context": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "code",
+                    "message",
+                    "severity"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "CashDeposit": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.deposit",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CashWithdrawal": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.withdrawal",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CashTransfer": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.transfer",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "fromAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toAccountId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency",
+              "fromAccountId",
+              "toAccountId"
+            ]
+          },
+          "CashConversion": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.conversion",
+                "type": "string"
+              },
+              "fromCurrency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "toCurrency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "fromAmount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "toAmount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromCurrency",
+              "toCurrency",
+              "fromAmount",
+              "toAmount"
+            ]
+          },
+          "TradeFill": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "trade.fill",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "side": {
+                "type": "string",
+                "enum": [
+                  "buy",
+                  "sell"
+                ]
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "pricePerUnit": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              },
+              "contractMultiplier": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlementStyle": {
+                "type": "string",
+                "enum": [
+                  "cash-on-trade",
+                  "variation-margin"
+                ]
+              },
+              "contract": {
+                "$ref": "#/$defs/Contract"
+              },
+              "accruedInterest": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "side",
+              "quantity",
+              "pricePerUnit",
+              "currency"
+            ]
+          },
+          "LotSelections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lotId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "lotId",
+                "quantity"
+              ]
+            },
+            "minItems": 1
+          },
+          "Contract": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "option",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "call",
+                      "put"
+                    ]
+                  },
+                  "strikePricePerUnit": {
+                    "type": "number"
+                  },
+                  "expiryTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId",
+                  "type",
+                  "strikePricePerUnit",
+                  "expiryTimestampMs"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "future",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "expiryTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId",
+                  "expiryTimestampMs"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "perpetual",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId"
+                ]
+              }
+            ]
+          },
+          "CostCharge": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cost.charge",
+                "type": "string"
+              },
+              "costType": {
+                "type": "string",
+                "enum": [
+                  "commission",
+                  "exchange-fee",
+                  "regulatory-fee",
+                  "slippage-adjustment"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "relatesToEventId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "costType",
+              "amount",
+              "currency"
+            ]
+          },
+          "IncomeReceived": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "income.received",
+                "type": "string"
+              },
+              "incomeType": {
+                "type": "string",
+                "enum": [
+                  "dividend",
+                  "coupon",
+                  "interest",
+                  "staking-reward",
+                  "funding-receipt"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "incomeType",
+              "amount",
+              "currency"
+            ]
+          },
+          "FinancingCharge": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "financing.charge",
+                "type": "string"
+              },
+              "financingType": {
+                "type": "string",
+                "enum": [
+                  "margin-interest",
+                  "borrow-charge",
+                  "funding-payment"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "financingType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CorporateSplit": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.split",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesAfterSplit": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sharesBeforeSplit": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "sharesAfterSplit",
+              "sharesBeforeSplit"
+            ]
+          },
+          "DerivativeExercise": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.exercise",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlement": {
+                "$ref": "#/$defs/Settlement"
+              },
+              "premiumTreatment": {
+                "type": "string",
+                "enum": [
+                  "fold-into-underlying-basis",
+                  "realize"
+                ]
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "settlement",
+              "premiumTreatment"
+            ]
+          },
+          "Settlement": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "physical",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "cash",
+                    "type": "string"
+                  },
+                  "settlementPricePerUnit": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "settlementPricePerUnit"
+                ]
+              }
+            ]
+          },
+          "DerivativeAssignment": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.assignment",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlement": {
+                "$ref": "#/$defs/Settlement"
+              },
+              "premiumTreatment": {
+                "type": "string",
+                "enum": [
+                  "fold-into-underlying-basis",
+                  "realize"
+                ]
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "settlement",
+              "premiumTreatment"
+            ]
+          },
+          "DerivativeExpiration": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.expiration",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity"
+            ]
+          },
+          "DerivativeMultiplierChange": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.multiplier-change",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contractMultiplierAfter": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "strikePricePerUnitAfter": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "contractMultiplierAfter"
+            ]
+          },
+          "DerivativeVariationMargin": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.variation-margin",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settlementPricePerUnit": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "settlementPricePerUnit"
+            ]
+          },
+          "DerivativeRoll": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.roll",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "closePricePerUnit": {
+                "type": "number"
+              },
+              "openPricePerUnit": {
+                "type": "number"
+              },
+              "contract": {
+                "$ref": "#/$defs/Contract"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId",
+              "toInstrumentId",
+              "quantity",
+              "closePricePerUnit",
+              "openPricePerUnit"
+            ]
+          },
+          "FixedIncomeRedemption": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "fixed-income.redemption",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "redemptionType": {
+                "type": "string",
+                "enum": [
+                  "maturity",
+                  "call",
+                  "principal-paydown",
+                  "sinking-fund"
+                ]
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "pricePerUnit": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "redemptionType",
+              "quantity",
+              "pricePerUnit",
+              "currency"
+            ]
+          },
+          "CorporateSymbolChange": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.symbol-change",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId",
+              "toInstrumentId"
+            ]
+          },
+          "CorporateMerger": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.merger",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesPerShare": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "cashPerShare": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId"
+            ]
+          },
+          "CorporateSpinOff": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.spin-off",
+                "type": "string"
+              },
+              "parentInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "childInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesPerParentShare": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "basisAllocationFraction": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "parentInstrumentId",
+              "childInstrumentId",
+              "sharesPerParentShare",
+              "basisAllocationFraction"
+            ]
+          },
+          "CorporateReturnOfCapital": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.return-of-capital",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "amountPerShare": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "amountPerShare",
+              "currency"
+            ]
+          },
+          "CorporateCashInLieu": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.cash-in-lieu",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "relatesToEventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "amount",
+              "currency"
+            ]
+          },
+          "PositionTransfer": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "position.transfer",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "fromAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "fromAccountId",
+              "toAccountId"
+            ]
+          }
+        }
+      },
+      "totalfinance.portfolio.create.output": {
+        "type": "object",
+        "properties": {
+          "handle": {
+            "type": "object",
+            "properties": {
+              "uri": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "report",
+                  "job",
+                  "portfolio",
+                  "scenario",
+                  "market",
+                  "authorization",
+                  "journal"
+                ]
+              },
+              "schema": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string"
+              },
+              "contentHash": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "createdTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "expiresTimestampMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "provenance": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string"
+                  },
+                  "dataset": {
+                    "type": "string"
+                  },
+                  "asOf": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "receivedAt": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "sourceVersion": {
+                    "type": "string"
+                  },
+                  "requestId": {
+                    "type": "string"
+                  },
+                  "warnings": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "severity": {
+                          "type": "string",
+                          "enum": [
+                            "info",
+                            "warn",
+                            "error"
+                          ]
+                        },
+                        "context": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "code",
+                        "message",
+                        "severity"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "uri",
+              "kind",
+              "schema",
+              "version",
+              "contentHash",
+              "createdTimestampMs",
+              "expiresTimestampMs",
+              "provenance"
+            ]
+          },
+          "portfolioId": {
+            "type": "string"
+          },
+          "baseCurrency": {
+            "type": "string"
+          },
+          "eventCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lotRelief": {
+            "type": "string",
+            "enum": [
+              "fifo",
+              "lifo",
+              "highest-cost",
+              "specific-lot"
+            ]
+          },
+          "inspectOperation": {
+            "const": "totalfinance.portfolio.inspect",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "handle",
+          "portfolioId",
+          "baseCurrency",
+          "eventCount",
+          "lotRelief",
+          "inspectOperation"
+        ],
+        "$id": "https://totalfinance.dev/schemas/portfolio.create.output"
+      },
+      "totalfinance.portfolio.create.result": {
+        "type": "object",
+        "description": "runOperation(...) — identity, the structured output (or its spilled handle), assumptions, diagnostics, usage.",
+        "properties": {
+          "operation": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "version"
+            ]
+          },
+          "library": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "structured": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/totalfinance.portfolio.create.output"
+              },
+              {
+                "type": "object",
+                "description": "The structured output exceeded the inline byte budget and was stored as a report; read `handle.uri` for the full result.",
+                "properties": {
+                  "spilled": {
+                    "const": true
+                  },
+                  "handle": {
+                    "$ref": "#/components/schemas/ResourceHandle"
+                  },
+                  "preview": {
+                    "type": "object",
+                    "description": "Top-level keys with scalars inline and containers summarized by size."
+                  }
+                },
+                "required": [
+                  "spilled",
+                  "handle",
+                  "preview"
+                ]
+              }
+            ]
+          },
+          "assumptions": {
+            "type": "object"
+          },
+          "diagnostics": {
+            "type": "object",
+            "properties": {
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "info",
+                        "warn",
+                        "error"
+                      ]
+                    },
+                    "context": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "severity"
+                  ]
+                }
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "partial"
+                ]
+              },
+              "incomplete": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "warnings",
+              "status",
+              "incomplete"
+            ]
+          },
+          "identity": {
+            "type": "object",
+            "properties": {
+              "inputsHash": {
+                "type": "string"
+              },
+              "artifactIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "snapshotHash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "inputsHash",
+              "artifactIds",
+              "snapshotHash"
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceHandle"
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "inputBytes": {
+                "type": "integer"
+              },
+              "elapsedMs": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "inputBytes",
+              "elapsedMs"
+            ]
+          },
+          "trace": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "operation",
+          "library",
+          "summary",
+          "structured",
+          "assumptions",
+          "diagnostics",
+          "identity",
+          "artifacts",
+          "usage",
+          "trace"
+        ]
+      },
       "totalfinance.portfolio.explain_pnl.input": {
         "type": "object",
         "properties": {
@@ -19735,6 +21892,1899 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/totalfinance.portfolio.explain_pnl.output"
+              },
+              {
+                "type": "object",
+                "description": "The structured output exceeded the inline byte budget and was stored as a report; read `handle.uri` for the full result.",
+                "properties": {
+                  "spilled": {
+                    "const": true
+                  },
+                  "handle": {
+                    "$ref": "#/components/schemas/ResourceHandle"
+                  },
+                  "preview": {
+                    "type": "object",
+                    "description": "Top-level keys with scalars inline and containers summarized by size."
+                  }
+                },
+                "required": [
+                  "spilled",
+                  "handle",
+                  "preview"
+                ]
+              }
+            ]
+          },
+          "assumptions": {
+            "type": "object"
+          },
+          "diagnostics": {
+            "type": "object",
+            "properties": {
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "info",
+                        "warn",
+                        "error"
+                      ]
+                    },
+                    "context": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "severity"
+                  ]
+                }
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "partial"
+                ]
+              },
+              "incomplete": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "warnings",
+              "status",
+              "incomplete"
+            ]
+          },
+          "identity": {
+            "type": "object",
+            "properties": {
+              "inputsHash": {
+                "type": "string"
+              },
+              "artifactIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "snapshotHash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "inputsHash",
+              "artifactIds",
+              "snapshotHash"
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceHandle"
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "inputBytes": {
+                "type": "integer"
+              },
+              "elapsedMs": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "inputBytes",
+              "elapsedMs"
+            ]
+          },
+          "trace": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "operation",
+          "library",
+          "summary",
+          "structured",
+          "assumptions",
+          "diagnostics",
+          "identity",
+          "artifacts",
+          "usage",
+          "trace"
+        ]
+      },
+      "totalfinance.portfolio.inspect.input": {
+        "type": "object",
+        "properties": {
+          "portfolio": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "totalfinance.portfolio-ledger",
+                    "type": "string"
+                  },
+                  "schemaVersion": {
+                    "const": 1,
+                    "type": "number"
+                  },
+                  "portfolioId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "baseCurrency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                  },
+                  "lotRelief": {
+                    "type": "string",
+                    "enum": [
+                      "fifo",
+                      "lifo",
+                      "highest-cost",
+                      "specific-lot"
+                    ]
+                  },
+                  "events": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PortfolioEventEnvelope"
+                    }
+                  },
+                  "provenance": {
+                    "$ref": "#/$defs/Provenance"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "schemaVersion",
+                  "baseCurrency",
+                  "lotRelief",
+                  "events"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^totalfinance:\\/\\/portfolios\\/"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "uri": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "report",
+                      "job",
+                      "portfolio",
+                      "scenario",
+                      "market",
+                      "authorization",
+                      "journal"
+                    ]
+                  },
+                  "schema": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "contentHash": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "expiresTimestampMs": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provenance": {
+                    "$ref": "#/$defs/Provenance"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "uri",
+                  "kind",
+                  "schema",
+                  "version",
+                  "contentHash",
+                  "createdTimestampMs",
+                  "expiresTimestampMs",
+                  "provenance"
+                ]
+              }
+            ]
+          },
+          "section": {
+            "type": "string",
+            "enum": [
+              "summary",
+              "events",
+              "positions",
+              "cash"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "portfolio"
+        ],
+        "$id": "https://totalfinance.dev/schemas/portfolio.inspect.input",
+        "$defs": {
+          "PortfolioEventEnvelope": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "eventId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "schemaVersion": {
+                    "const": 1,
+                    "type": "number"
+                  },
+                  "sourceId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accountId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "effectiveTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "recordedTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  },
+                  "correlationId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "causationId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reversesEventId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "provenance": {
+                    "$ref": "#/$defs/Provenance"
+                  },
+                  "eventType": {},
+                  "event": {}
+                },
+                "additionalProperties": false,
+                "required": [
+                  "eventId",
+                  "schemaVersion",
+                  "sourceId",
+                  "accountId",
+                  "effectiveTimestampMs",
+                  "recordedTimestampMs",
+                  "provenance",
+                  "eventType",
+                  "event"
+                ]
+              },
+              {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.deposit",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashDeposit"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.withdrawal",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashWithdrawal"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.transfer",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashTransfer"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cash.conversion",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CashConversion"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "trade.fill",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/TradeFill"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "cost.charge",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CostCharge"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "income.received",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/IncomeReceived"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "financing.charge",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/FinancingCharge"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.split",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSplit"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.exercise",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeExercise"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.assignment",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeAssignment"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.expiration",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeExpiration"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.multiplier-change",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeMultiplierChange"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.variation-margin",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeVariationMargin"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "derivative.roll",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/DerivativeRoll"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "fixed-income.redemption",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/FixedIncomeRedemption"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.symbol-change",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSymbolChange"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.merger",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateMerger"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.spin-off",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateSpinOff"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.return-of-capital",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateReturnOfCapital"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "corporate.cash-in-lieu",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/CorporateCashInLieu"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "position.transfer",
+                        "type": "string"
+                      },
+                      "event": {
+                        "$ref": "#/$defs/PositionTransfer"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.reversal",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.reversal",
+                            "type": "string"
+                          },
+                          "original": {
+                            "$ref": "#/$defs/PortfolioEventEnvelope"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "original"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "reversesEventId"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.correction",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.correction",
+                            "type": "string"
+                          },
+                          "original": {
+                            "$ref": "#/$defs/PortfolioEventEnvelope"
+                          },
+                          "replacement": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/$defs/CashDeposit"
+                              },
+                              {
+                                "$ref": "#/$defs/CashWithdrawal"
+                              },
+                              {
+                                "$ref": "#/$defs/CashTransfer"
+                              },
+                              {
+                                "$ref": "#/$defs/CashConversion"
+                              },
+                              {
+                                "$ref": "#/$defs/TradeFill"
+                              },
+                              {
+                                "$ref": "#/$defs/CostCharge"
+                              },
+                              {
+                                "$ref": "#/$defs/IncomeReceived"
+                              },
+                              {
+                                "$ref": "#/$defs/FinancingCharge"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSplit"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeExercise"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeAssignment"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeExpiration"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeMultiplierChange"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeVariationMargin"
+                              },
+                              {
+                                "$ref": "#/$defs/DerivativeRoll"
+                              },
+                              {
+                                "$ref": "#/$defs/FixedIncomeRedemption"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSymbolChange"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateMerger"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateSpinOff"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateReturnOfCapital"
+                              },
+                              {
+                                "$ref": "#/$defs/CorporateCashInLieu"
+                              },
+                              {
+                                "$ref": "#/$defs/PositionTransfer"
+                              }
+                            ]
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "original",
+                          "replacement"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "reversesEventId"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "eventType": {
+                        "const": "admin.account-migration",
+                        "type": "string"
+                      },
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "eventType": {
+                            "const": "admin.account-migration",
+                            "type": "string"
+                          },
+                          "fromAccountId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "toAccountId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "eventType",
+                          "fromAccountId",
+                          "toAccountId"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "Provenance": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "dataset": {
+                "type": "string"
+              },
+              "asOf": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "receivedAt": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "sourceVersion": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "info",
+                        "warn",
+                        "error"
+                      ]
+                    },
+                    "context": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "code",
+                    "message",
+                    "severity"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "CashDeposit": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.deposit",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CashWithdrawal": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.withdrawal",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CashTransfer": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.transfer",
+                "type": "string"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "fromAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toAccountId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "amount",
+              "currency",
+              "fromAccountId",
+              "toAccountId"
+            ]
+          },
+          "CashConversion": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cash.conversion",
+                "type": "string"
+              },
+              "fromCurrency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "toCurrency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "fromAmount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "toAmount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromCurrency",
+              "toCurrency",
+              "fromAmount",
+              "toAmount"
+            ]
+          },
+          "TradeFill": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "trade.fill",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "side": {
+                "type": "string",
+                "enum": [
+                  "buy",
+                  "sell"
+                ]
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "pricePerUnit": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              },
+              "contractMultiplier": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlementStyle": {
+                "type": "string",
+                "enum": [
+                  "cash-on-trade",
+                  "variation-margin"
+                ]
+              },
+              "contract": {
+                "$ref": "#/$defs/Contract"
+              },
+              "accruedInterest": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "side",
+              "quantity",
+              "pricePerUnit",
+              "currency"
+            ]
+          },
+          "LotSelections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lotId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quantity": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "lotId",
+                "quantity"
+              ]
+            },
+            "minItems": 1
+          },
+          "Contract": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "option",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "call",
+                      "put"
+                    ]
+                  },
+                  "strikePricePerUnit": {
+                    "type": "number"
+                  },
+                  "expiryTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId",
+                  "type",
+                  "strikePricePerUnit",
+                  "expiryTimestampMs"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "future",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "expiryTimestampMs": {
+                    "type": "number",
+                    "description": "Epoch milliseconds"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId",
+                  "expiryTimestampMs"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "perpetual",
+                    "type": "string"
+                  },
+                  "underlyingInstrumentId": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "underlyingInstrumentId"
+                ]
+              }
+            ]
+          },
+          "CostCharge": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "cost.charge",
+                "type": "string"
+              },
+              "costType": {
+                "type": "string",
+                "enum": [
+                  "commission",
+                  "exchange-fee",
+                  "regulatory-fee",
+                  "slippage-adjustment"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "relatesToEventId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "costType",
+              "amount",
+              "currency"
+            ]
+          },
+          "IncomeReceived": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "income.received",
+                "type": "string"
+              },
+              "incomeType": {
+                "type": "string",
+                "enum": [
+                  "dividend",
+                  "coupon",
+                  "interest",
+                  "staking-reward",
+                  "funding-receipt"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "incomeType",
+              "amount",
+              "currency"
+            ]
+          },
+          "FinancingCharge": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "financing.charge",
+                "type": "string"
+              },
+              "financingType": {
+                "type": "string",
+                "enum": [
+                  "margin-interest",
+                  "borrow-charge",
+                  "funding-payment"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "financingType",
+              "amount",
+              "currency"
+            ]
+          },
+          "CorporateSplit": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.split",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesAfterSplit": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sharesBeforeSplit": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "sharesAfterSplit",
+              "sharesBeforeSplit"
+            ]
+          },
+          "DerivativeExercise": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.exercise",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlement": {
+                "$ref": "#/$defs/Settlement"
+              },
+              "premiumTreatment": {
+                "type": "string",
+                "enum": [
+                  "fold-into-underlying-basis",
+                  "realize"
+                ]
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "settlement",
+              "premiumTreatment"
+            ]
+          },
+          "Settlement": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "physical",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "cash",
+                    "type": "string"
+                  },
+                  "settlementPricePerUnit": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "settlementPricePerUnit"
+                ]
+              }
+            ]
+          },
+          "DerivativeAssignment": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.assignment",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "settlement": {
+                "$ref": "#/$defs/Settlement"
+              },
+              "premiumTreatment": {
+                "type": "string",
+                "enum": [
+                  "fold-into-underlying-basis",
+                  "realize"
+                ]
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "settlement",
+              "premiumTreatment"
+            ]
+          },
+          "DerivativeExpiration": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.expiration",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity"
+            ]
+          },
+          "DerivativeMultiplierChange": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.multiplier-change",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contractMultiplierAfter": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "strikePricePerUnitAfter": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "contractMultiplierAfter"
+            ]
+          },
+          "DerivativeVariationMargin": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.variation-margin",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settlementPricePerUnit": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "settlementPricePerUnit"
+            ]
+          },
+          "DerivativeRoll": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "derivative.roll",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "closePricePerUnit": {
+                "type": "number"
+              },
+              "openPricePerUnit": {
+                "type": "number"
+              },
+              "contract": {
+                "$ref": "#/$defs/Contract"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId",
+              "toInstrumentId",
+              "quantity",
+              "closePricePerUnit",
+              "openPricePerUnit"
+            ]
+          },
+          "FixedIncomeRedemption": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "fixed-income.redemption",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "redemptionType": {
+                "type": "string",
+                "enum": [
+                  "maturity",
+                  "call",
+                  "principal-paydown",
+                  "sinking-fund"
+                ]
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "pricePerUnit": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "redemptionType",
+              "quantity",
+              "pricePerUnit",
+              "currency"
+            ]
+          },
+          "CorporateSymbolChange": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.symbol-change",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId",
+              "toInstrumentId"
+            ]
+          },
+          "CorporateMerger": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.merger",
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesPerShare": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "cashPerShare": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "fromInstrumentId"
+            ]
+          },
+          "CorporateSpinOff": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.spin-off",
+                "type": "string"
+              },
+              "parentInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "childInstrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sharesPerParentShare": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "basisAllocationFraction": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "parentInstrumentId",
+              "childInstrumentId",
+              "sharesPerParentShare",
+              "basisAllocationFraction"
+            ]
+          },
+          "CorporateReturnOfCapital": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.return-of-capital",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "amountPerShare": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "amountPerShare",
+              "currency"
+            ]
+          },
+          "CorporateCashInLieu": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "corporate.cash-in-lieu",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              "relatesToEventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "settleTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "amount",
+              "currency"
+            ]
+          },
+          "PositionTransfer": {
+            "type": "object",
+            "properties": {
+              "eventType": {
+                "const": "position.transfer",
+                "type": "string"
+              },
+              "instrumentId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quantity": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "fromAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "toAccountId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lotSelections": {
+                "$ref": "#/$defs/LotSelections"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "instrumentId",
+              "quantity",
+              "fromAccountId",
+              "toAccountId"
+            ]
+          }
+        }
+      },
+      "totalfinance.portfolio.inspect.output": {
+        "type": "object",
+        "properties": {
+          "portfolioId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "baseCurrency": {
+            "type": "string"
+          },
+          "lotRelief": {
+            "type": "string",
+            "enum": [
+              "fifo",
+              "lifo",
+              "highest-cost",
+              "specific-lot"
+            ]
+          },
+          "eventCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "accountCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastEffectiveTimestampMs": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "section": {
+            "type": "string",
+            "enum": [
+              "summary",
+              "events",
+              "positions",
+              "cash"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "nextOffset": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "portfolioId",
+          "baseCurrency",
+          "lotRelief",
+          "eventCount",
+          "accountCount",
+          "lastEffectiveTimestampMs",
+          "section",
+          "offset",
+          "limit",
+          "total",
+          "nextOffset",
+          "rows"
+        ]
+      },
+      "totalfinance.portfolio.inspect.result": {
+        "type": "object",
+        "description": "runOperation(...) — identity, the structured output (or its spilled handle), assumptions, diagnostics, usage.",
+        "properties": {
+          "operation": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "version"
+            ]
+          },
+          "library": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "structured": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/totalfinance.portfolio.inspect.output"
               },
               {
                 "type": "object",
@@ -24791,9 +28841,186 @@
             "minItems": 1
           },
           "filter": {
-            "type": "object",
-            "additionalProperties": {},
-            "description": "A ScreenFilter tree — { all: [...] } | { any: [...] } | { not: ... } | { field, operator, value } | { field, operator: 'between', from, to } | { field, operator: 'in' | 'notIn', values } | { field, operator: 'isPresent' | 'isMissing' } — validated node by node by screenUniverse; omitted = every eligible row passes"
+            "$id": "https://totalfinance.dev/schemas/research/screen-filter",
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "https://totalfinance.dev/schemas/research/screen-filter"
+                    }
+                  }
+                },
+                "required": [
+                  "all"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "any": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "https://totalfinance.dev/schemas/research/screen-filter"
+                    }
+                  }
+                },
+                "required": [
+                  "any"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "not": {
+                    "$ref": "https://totalfinance.dev/schemas/research/screen-filter"
+                  }
+                },
+                "required": [
+                  "not"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "greaterThan",
+                      "greaterThanOrEqual",
+                      "lessThan",
+                      "lessThanOrEqual"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "equals",
+                      "notEquals"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "number",
+                      "string",
+                      "boolean"
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "between"
+                    ]
+                  },
+                  "from": {
+                    "type": "number"
+                  },
+                  "to": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "from",
+                  "to"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "in",
+                      "notIn"
+                    ]
+                  },
+                  "values": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": [
+                        "number",
+                        "string"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "isPresent",
+                      "isMissing"
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator"
+                ],
+                "additionalProperties": false
+              }
+            ],
+            "description": "Complete ScreenFilter grammar (executable examples: docs/guides/dogfood-journeys.md): ordering operators greaterThan | greaterThanOrEqual | lessThan | lessThanOrEqual require numeric value; equals | notEquals use a number/string/boolean value. No gt/gte aliases. A ScreenFilter tree — { all: [...] } | { any: [...] } | { not: ... } | { field, operator, value } | { field, operator: 'between', from, to } | { field, operator: 'in' | 'notIn', values } | { field, operator: 'isPresent' | 'isMissing' } — validated node by node by screenUniverse; omitted = every eligible row passes"
           },
           "missingValuePolicy": {
             "type": "string",
@@ -29215,7 +33442,8 @@
               "performance",
               "candlestick",
               "price-action"
-            ]
+            ],
+            "description": "Browse a category here, e.g. momentum; search matches indicator names/aliases and does not expand category words"
           },
           "limit": {
             "type": "integer",
@@ -35409,11 +39637,13 @@
               },
               "maximumEstimatedCost": {
                 "type": "number",
-                "exclusiveMinimum": 0
+                "minimum": 0,
+                "description": "Absolute base-currency estimated-cost ceiling; zero is a binding zero ceiling"
               },
               "maximumSlippageBps": {
                 "type": "number",
-                "exclusiveMinimum": 0
+                "minimum": 0,
+                "description": "Slippage ceiling in basis points; zero permits no positive estimated slippage"
               },
               "maximumParticipation": {
                 "type": "number",
@@ -46882,127 +51112,7 @@
               "orders": {
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "properties": {
-                    "orderId": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "planHash": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "state": {
-                      "type": "string",
-                      "enum": [
-                        "submitted",
-                        "acknowledged",
-                        "partially-filled",
-                        "filled",
-                        "cancelled",
-                        "rejected",
-                        "expired",
-                        "unresolved"
-                      ]
-                    },
-                    "submittedQuantity": {
-                      "type": "number",
-                      "minimum": 0
-                    },
-                    "filledQuantity": {
-                      "type": "number",
-                      "minimum": 0
-                    },
-                    "remainingQuantity": {
-                      "type": "number",
-                      "minimum": 0
-                    },
-                    "averageFillPrice": {
-                      "anyOf": [
-                        {
-                          "type": "number"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "fillIds": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "lateFillIds": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "lastEventId": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "lastTimestampMs": {
-                      "type": "number",
-                      "description": "Epoch milliseconds"
-                    },
-                    "terminal": {
-                      "type": "boolean"
-                    },
-                    "cancelRequested": {
-                      "type": "boolean"
-                    },
-                    "reason": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "replacedBy": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "reconciledEventId": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "orderId",
-                    "planHash",
-                    "state",
-                    "submittedQuantity",
-                    "filledQuantity",
-                    "remainingQuantity",
-                    "averageFillPrice",
-                    "fillIds",
-                    "lateFillIds",
-                    "lastEventId",
-                    "lastTimestampMs",
-                    "terminal",
-                    "cancelRequested",
-                    "reason",
-                    "replacedBy",
-                    "reconciledEventId"
-                  ]
+                  "$ref": "#/$defs/Orders"
                 }
               },
               "fills": {
@@ -47357,6 +51467,13 @@
               "contentHash"
             ]
           },
+          "currentOrders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Orders"
+            },
+            "description": "Authoritative journal-derived state and cumulative fills for this receipt, distinct from the immutable submission receipt"
+          },
           "retried": {
             "type": "boolean"
           },
@@ -47463,6 +51580,7 @@
         "additionalProperties": false,
         "required": [
           "receipt",
+          "currentOrders",
           "retried",
           "fills",
           "events",
@@ -48003,6 +52121,129 @@
                   }
                 ]
               }
+            ]
+          },
+          "Orders": {
+            "type": "object",
+            "properties": {
+              "orderId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "planHash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "submitted",
+                  "acknowledged",
+                  "partially-filled",
+                  "filled",
+                  "cancelled",
+                  "rejected",
+                  "expired",
+                  "unresolved"
+                ]
+              },
+              "submittedQuantity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "filledQuantity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "remainingQuantity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "averageFillPrice": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fillIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lateFillIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lastEventId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lastTimestampMs": {
+                "type": "number",
+                "description": "Epoch milliseconds"
+              },
+              "terminal": {
+                "type": "boolean"
+              },
+              "cancelRequested": {
+                "type": "boolean"
+              },
+              "reason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "replacedBy": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reconciledEventId": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "orderId",
+              "planHash",
+              "state",
+              "submittedQuantity",
+              "filledQuantity",
+              "remainingQuantity",
+              "averageFillPrice",
+              "fillIds",
+              "lateFillIds",
+              "lastEventId",
+              "lastTimestampMs",
+              "terminal",
+              "cancelRequested",
+              "reason",
+              "replacedBy",
+              "reconciledEventId"
             ]
           },
           "Fills": {

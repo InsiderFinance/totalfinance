@@ -195,6 +195,11 @@ describe('trade.submit receipt-scoped recovery', () => {
       events: [],
       journal: { appended: 0, total: 3 },
     });
+    expect(retry.currentOrders).toMatchObject([
+      { state: 'filled', filledQuantity: 10, remainingQuantity: 0, terminal: true },
+    ]);
+    expect(retry.currentOrders).toEqual(first.currentOrders);
+    expect(retry.receipt.orders).toMatchObject([{ state: 'acknowledged', filledQuantity: 0 }]);
     expect(retry.receipt).toEqual(first.receipt);
     expect(retry.receipt.fills).toEqual([]);
     expect(retry.recovery).toEqual(first.recovery);
@@ -245,6 +250,8 @@ describe('trade.submit receipt-scoped recovery', () => {
     const initial = submit(withoutObservation(a));
     expect(initial.recovery).toEqual({ fills: [], events: [] });
     const second = submit(b);
+    expect(second.currentOrders).toHaveLength(1);
+    expect(second.currentOrders[0]!.orderId).toBe(b.plan.orders[0]!.orderId);
     expect(second.fills).toHaveLength(2); // Delta semantics still include every order stepped this call.
     expect(second.recovery.fills).toMatchObject([
       { orderId: b.plan.orders[0]!.orderId, quantity: 3 },
@@ -319,6 +326,9 @@ describe('trade.submit receipt-scoped recovery', () => {
     stores().journal.append({ events: broker.journal().slice(prior.length) });
     const partial = submit(withoutObservation(input));
     expect(partial).toMatchObject({ retried: true, fills: [], events: [] });
+    expect(partial.currentOrders).toMatchObject([
+      { state: 'partially-filled', filledQuantity: 4, remainingQuantity: 6 },
+    ]);
     expect(partial.recovery).toEqual({ fills: [fill], events: delivered.events });
     expect(partial.recovery.events).toHaveLength(3); // One fill, two actual cost charges.
     const recorded = record(openingLedger().toJSON(), partial.recovery.events);
@@ -334,6 +344,9 @@ describe('trade.submit receipt-scoped recovery', () => {
       fills: [fill, ...completed.fills],
       events: [...delivered.events, ...completed.events],
     });
+    expect(completed.currentOrders).toMatchObject([
+      { state: 'filled', filledQuantity: 10, remainingQuantity: 0 },
+    ]);
     expect(completed.receipt).toEqual(initial.receipt);
     expect(submit(completionInput)).toMatchObject({
       fills: [],
@@ -349,6 +362,45 @@ describe('trade.submit receipt-scoped recovery', () => {
     ]!;
     expect(account.positions['AAA']!.quantity).toBe(10);
     expect(account.cashBalances['USD']!.totalAmount).toBe(9018.25); // 10000 - 4*95 - 6*100 - 1.75.
+  });
+
+  it('shows cancellation after restart without changing the acknowledged receipt', () => {
+    const { approve, submit, stores, registry } = setup();
+    const input = approve();
+    const first = submit(withoutObservation(input));
+    registry().run({
+      id: 'totalfinance.trade.cancel',
+      input: {
+        orderId: input.plan.orders[0]!.orderId,
+        sourceId: SOURCE,
+        accountId: 'main',
+        baseCurrency: 'USD',
+        now: NOW + 2000,
+      },
+      stores: stores(),
+      capabilities: ['trade:paper'],
+    });
+    const recovered = submit({ ...withoutObservation(input), now: NOW + 3000 });
+    expect(recovered.receipt).toEqual(first.receipt);
+    expect(recovered.currentOrders).toMatchObject([
+      { state: 'cancelled', terminal: true, filledQuantity: 0, remainingQuantity: 10 },
+    ]);
+    expect(recovered.journal.appended).toBe(0);
+  });
+
+  it('teaches omit-and-reuse for persisted instrument terms without changing identity', () => {
+    const { approve, submit } = setup();
+    const input = approve();
+    const original = submit(withoutObservation(input));
+    const { instruments: _instruments, ...reuse } = withoutObservation(input);
+    expect(submit(reuse).receipt).toEqual(original.receipt);
+    expect(() =>
+      submit({
+        ...reuse,
+        instruments: { AAA: { currency: 'USD', settlementLag: 2, contractMultiplier: 1 } },
+      }),
+    ).toThrow(expect.objectContaining({ name: 'InputError' }));
+    expect(submit(reuse).receipt).toEqual(original.receipt);
   });
 
   it('refuses missing persisted normalized fills rather than reconstructing legacy accounting facts', () => {

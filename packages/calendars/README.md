@@ -6,10 +6,10 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.2: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.3: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.2
+pnpm add @insiderfinance/totalfinance@0.1.3
 ```
 
 ## Example
@@ -31,7 +31,7 @@ See [Imports and bundles](https://github.com/InsiderFinance/totalfinance/blob/ma
 
 ## API
 
-`@insiderfinance/totalfinance/calendars` exposes **12** runtime exports (**15** including types) across 4 entrypoints (`.`, `./cboe`, `./crypto`, `./nyse`). See the generated [`etc/calendars.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/calendars/etc/calendars.api.md) for the full surface.
+`@insiderfinance/totalfinance/calendars` exposes **13** runtime exports (**16** including types) across 4 entrypoints (`.`, `./cboe`, `./crypto`, `./nyse`). See the generated [`etc/calendars.api.md`](https://github.com/InsiderFinance/totalfinance/blob/main/packages/calendars/etc/calendars.api.md) for the full surface.
 
 ## License
 

@@ -257,6 +257,21 @@ function requireStatementNumbers(
   }
 }
 
+/** Package-internal ratio door: retain canonical field validation without requiring unused lines. */
+export function requireRatioStatementFacts(
+  functionName: string,
+  kind: 'income' | 'balance',
+  value: unknown,
+  requiredFields: readonly string[],
+): void {
+  requireArgumentObject(functionName, kind, value);
+  const statement = value as Record<string, unknown>;
+  const keys = kind === 'income' ? INCOME_KEYS : BALANCE_KEYS;
+  ensureKnownKeys(functionName, kind, statement, keys);
+  requireFundamentalPeriod(functionName, statement['period'] as FundamentalPeriod);
+  requireStatementNumbers(functionName, kind, statement, requiredFields, keys);
+}
+
 /** Validate one {@link IncomeStatement} at a public boundary. */
 export function requireIncomeStatement(functionName: string, income: IncomeStatement): void {
   requireArgumentObject(functionName, 'income', income);

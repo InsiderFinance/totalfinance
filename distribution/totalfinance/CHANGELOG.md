@@ -1,5 +1,40 @@
 # @insiderfinance/totalfinance
 
+## 0.1.3
+
+### Patch Changes
+
+- 8a8c8f8: Use supplied asset classification when preflighting a held instrument while preserving ledger economic terms. Reconcile selected plans without treating other plans' journaled fills as missing, retaining orphan detection. Report only newly applied portfolio events on retries and mixed duplicate batches.
+- Add narrow income/balance inputs for single-statement ratios while preserving complete-statement calls and cross-statement validation. Add explicit portfolio creation and bounded handle inspection, and expose journal-derived currentOrders alongside immutable paper submission receipts.
+
+  Add an explicit source-bar to OHLCV projection, bounded repeated-row error summaries, stable deduplicated mark-age warnings, recursive screen-predicate discovery, category guidance and calendar coverage diagnostics. Support real zero estimated-cost/slippage ceilings. Expose compatible declarative vectorized SDK controls and executable task-first recovery/research/cost/lag guidance.
+
+  Release policy: the maintainer explicitly selected continued 0.1.x releases. This cut retains the already merged additive reference-price helpers and disclosed-holdings partitions as additions; their pending minor intents are released under the authorized patch override, not reclassified as bug fixes. Existing supported calls and result meanings remain compatible. Draft connector PR #26 and performance PR #12 are excluded. This is release preparation, with no merge, publication or deployment authorization.
+
+- 67134bf: Faster New York market-day lookups, and so faster flow analysis, with every result unchanged.
+
+  `usEquityMarketDayIndex` (and `usEquityMarketDateUtcMs`) read the New York calendar date from
+  `Intl` on every call, and `flow()` asks for it twice per print to flag 0DTE trades: on a
+  50,000-print session that was about three quarters of `flow()`. The day is now remembered per UTC
+  clock hour. The first instant asked about in an hour is read exactly, as before; the second visit
+  reads the hour's two ends and, when they agree, stores the date. A session of prints reads `Intl`
+  three times per cacheable hour while its entry remains resident, instead of twice per print. A
+  one-off call keeps the same Intl-read count, with added cache bookkeeping. An hour whose New York
+  date changes inside it (before 1883, under local mean time) is still answered exactly every time:
+  its second visit costs three reads (both ends plus the requested instant), and later visits cost
+  one. The 8,192-entry cache is private to each module instance, including each worker's own instance;
+  eviction restarts the first-visit/confirmation sequence. Invalid input still throws the same error.
+  `flow()`, `optionFlowDrift()`, exposure's 0DTE buckets, earnings day counts and the backtest option
+  chain all share the gain.
+
+- 51599ae: Avoid rebuilding the freshly parsed JSON tree when restoring canonical artifacts. Non-finite
+  wrappers, prototype-sensitive keys, independent decoded results, and serialization rules are unchanged.
+- 2189afe: Add `valuation.convertPriceLevel` and the focused `valuation/price-levels` import for approximate two-way price-level mapping using explicit reference prices or a directed target-per-source ratio. The browser-safe facade includes `.explain()`, optional descriptive unit labels, typed boundary validation, numeric overflow/underflow refusals, and an optional schema import at `valuation/schemas`. No ticker ratios, quote retrieval or instrument economics are inferred.
+
+  Add three-price named helpers in both directions for ES/SPY, NQ/QQQ, YM/DIA, RTY/IWM, SPX/SPY, NDX/QQQ, RUT/IWM and DJIA/DIA. Helpers include `.explain()` and separate closed schemas, share the generic arithmetic, and supply descriptive units without hardcoding market ratios. Generic unit labels are optional metadata; an unlabeled explained result reports `resultUnit: null`. DJIA means the full Dow Jones Industrial Average, not DJX.
+
+- 538163a: Add compareDisclosedHoldingPartitions for caller-supplied common-stock reporting partitions, exact reported changes on stable no-reference bases, and complete-universe partition weights/concentration. Reference-bearing or changed-basis groups remain explicit uncompared observations; the existing disclosed-holdings API is preserved.
+
 ## 0.1.2
 
 ### Patch Changes

@@ -17,6 +17,7 @@ export { expirations, nextExpiry, tradingDaysToExpiry } from './expirations.js';
 export type { ExpirationKind } from './expirations.js';
 export {
   CALENDAR_DATA_VERSION,
+  US_EQUITY_CALENDAR_COVERAGE,
   usMarketHolidayRules,
   usMarketHalfDayRules,
   usMarketClosures,

@@ -804,3 +804,44 @@ describe('contract multipliers never fall back silently', () => {
     expect(refusal.message).toMatch(/^preflightTradePlan: instruments\['AAPL260918C00200000'\]/);
   });
 });
+
+describe('binding zero cost/slippage ceilings (DX-09)', () => {
+  it('permits real zero estimates and rejects positive costs or slippage', () => {
+    const portfolio = ledger().state;
+    const snapshot = market();
+    const plan = normalizeTradePlan({
+      intent: intent(),
+      portfolio,
+      market: snapshot,
+      asOf: T0 + 2 * DAY,
+    });
+    const check = (costs: { commissionBps?: number; slippageBps?: number }) =>
+      preflightTradePlan({
+        plan,
+        portfolio,
+        market: snapshot,
+        asOf: T0 + 2 * DAY,
+        policy: policy({ maximumEstimatedCost: 0, maximumSlippageBps: 0 }),
+        costs,
+      });
+    expect(check({ commissionBps: 0, slippageBps: 0 }).decision.verdict).toBe('allow');
+    expect(check({ commissionBps: 1 }).checks).toContainEqual(
+      expect.objectContaining({ name: 'estimated-cost', verdict: 'fail', limit: 0 }),
+    );
+    expect(check({ slippageBps: 1 }).checks).toContainEqual(
+      expect.objectContaining({ name: 'slippage', verdict: 'fail', limit: 0 }),
+    );
+    expect(
+      mergeTradePolicies({
+        policies: [policy({ maximumEstimatedCost: 2 }), policy({ maximumEstimatedCost: 0 })],
+      }).maximumEstimatedCost,
+    ).toBe(0);
+  });
+  it.each([-1, NaN, Infinity, null, '0'])('rejects invalid ceiling %s', (value) => {
+    for (const field of ['maximumEstimatedCost', 'maximumSlippageBps']) {
+      expect(() =>
+        requireTradePolicy('example', 'policy', { mode: 'paper', [field]: value }),
+      ).toThrow(expect.objectContaining({ name: 'InputError' }));
+    }
+  });
+});

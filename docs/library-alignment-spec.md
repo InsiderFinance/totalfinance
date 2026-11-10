@@ -727,13 +727,13 @@ Published per the 3B.6 exit checklist; every number below is quoted from the com
 artifacts (`public-contracts.json`, `public-enforcement.json`, `public-naming.json`) and each is bound by an executable
 gate — a manual checkbox cannot waive drift.
 
-**Surface:** 7,951 public paths / 2,718 implementations / 1,589 input contracts / 1,962 result
-contracts / 385 validator identities. **Enforcement:** 2,573 enforced · 2,701 partial (every open
-dimension named) · 0 defective · 187 unmeasured (each with a recorded reason) of 5,461 measured
+**Surface:** 7,954 public paths / 2,719 implementations / 1,610 input contracts / 1,962 result
+contracts / 386 validator identities. **Enforcement:** 2,573 enforced · 2,704 partial (every open
+dimension named) · 0 defective · 186 unmeasured (each with a recorded reason) of 5,463 measured
 candidates. **Ledgers:** helper quant-answers 0 of an initial 36 (all 27 H-decisions implemented);
 34 positional pairs retained with per-entry rationale, 0 migrated; unnameable parameter contracts 8
 (all foreign, none unreachable, as recorded by the current contract inventory);
-naming identities 43,257 with 0 unresolved. These live counts include the September MCP experience
+naming identities 43,342 with 0 unresolved. These live counts include the September MCP experience
 surface, the public `optionFlowDrift` and `observedSkew` APIs, the September 9 signed-leg
 simplification (six direction-specific helpers replaced by three instrument-first constructors),
 the September 16 valuation-instant law (the strict `resolveValuationAsOf` door, the shared US session
@@ -751,7 +751,7 @@ or claim hosted-matrix success. The additional unmeasured
 row is the caller-implemented `ExecutionJournalStore#transact` interface, not lost measurement of
 an existing implementation; its memory/file implementations have their own focused evidence.
 
-Package-by-package measured records (total · enforced · partial · unmeasured): MCP 3·1·2·0 backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 52·30·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 97·96·0·1 http 3·0·3·0 math 89·30·51·8 options 188·163·18·7 performance 64·19·44·1 portfolio 33·8·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 23·2·14·7 technical-analysis 1,287·575·687·25 valuation 84·75·9·0 volatility 107·69·20·18 workflows 32·8·13·11 and the umbrella 2,992·1,324·1,616·52. These totals reconcile exactly to 5,461 candidates; umbrella aliases inherit
+Package-by-package measured records (total · enforced · partial · unmeasured): backtest 68·26·35·7 calendars 4·4·0·0 cli 12·4·3·5 commodities 14·14·0·0 core 52·30·11·11 crypto 9·9·0·0 fixed-income 100·36·47·17 foreign-exchange 13·12·1·0 fundamentals 96·96·0·0 http 3·0·3·0 math 89·30·51·8 mcp 3·1·2·0 options 188·163·18·7 performance 64·19·44·1 portfolio 33·8·22·3 research 30·23·6·1 risk 69·39·29·1 scenarios 6·0·2·4 strategy 82·6·68·8 structure 23·2·14·7 technical-analysis 1,288·575·688·25 valuation 84·75·9·0 volatility 107·69·20·18 workflows 32·8·13·11 the umbrella 2,994·1,324·1,618·52. These totals reconcile exactly to 5,463 candidates; umbrella aliases inherit
 evidence only when their implementation identity and input policy match.
 
 Ownership closes by reconciliation, not erasure: statically-unattributed object contracts are

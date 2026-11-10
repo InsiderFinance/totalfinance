@@ -17,6 +17,9 @@ import {
 } from '@totalfinance/core';
 import {
   type FinancialStatements,
+  type IncomeStatement,
+  type BalanceSheet,
+  requireRatioStatementFacts,
   availabilityOf,
   requireFinancialStatements,
 } from './statement-contracts.js';
@@ -134,6 +137,8 @@ export interface RatioPeriodIdentity {
   fiscalYear: number;
   currency: string;
   monetaryScale: number;
+  /** Actual statement availability, distinct from its period end. */
+  availableTimestampMs?: EpochMs;
 }
 
 /** What `.explain()` returns for every ratio head — the ONE `Computed` envelope (dx §7.2). */
@@ -178,25 +183,29 @@ export interface RatioOutcome {
  * leaks into the ratio. The conversion is disclosed once per call when the scale is not 1.
  */
 export function absoluteAmount(
-  statements: FinancialStatements,
+  statements: FinancialStatements | IncomeStatement,
   amount: number,
   notes: string[],
 ): number {
-  const scale = statements.income.period.monetaryScale;
+  const scale = ('income' in statements ? statements.income.period : statements.period)
+    .monetaryScale;
   if (scale === 1) return amount;
   const note = `statement amounts converted to absolute currency (× monetaryScale ${scale}) to match the market/per-share basis`;
   if (!notes.includes(note)) notes.push(note);
   return amount * scale;
 }
 
-function periodIdentity(statements: FinancialStatements): RatioPeriodIdentity {
-  const period = statements.income.period;
+function periodIdentity(
+  statements: FinancialStatements | IncomeStatement | BalanceSheet,
+): RatioPeriodIdentity {
+  const period = 'income' in statements ? statements.income.period : statements.period;
   return {
     periodEndDate: period.periodEndDate,
     periodType: period.periodType,
     fiscalYear: period.fiscalYear,
     currency: period.currency,
     monetaryScale: period.monetaryScale,
+    availableTimestampMs: period.availableTimestampMs,
   };
 }
 
@@ -208,6 +217,10 @@ function periodIdentity(statements: FinancialStatements): RatioPeriodIdentity {
 export interface RatioInput {
   /** Single-period heads. */
   statements?: FinancialStatements;
+  /** Additive direct path for an income-only formula. */
+  income?: IncomeStatement;
+  /** Additive direct path for a balance-only formula. */
+  balance?: BalanceSheet;
   /** Average-denominator heads: the period being measured… */
   current?: FinancialStatements;
   /** …and the immediately prior period (average balances need both endpoints). */
@@ -232,6 +245,8 @@ export interface RatioDefinition {
   formula: string;
   /** Which of the common inputs this head accepts (its Law-12 closed key set). */
   keys: readonly (keyof RatioInput)[];
+  /** Monetary facts required only on the direct single-statement path. Optional ratio components retain null-with-reason semantics. */
+  requiredStatementFields?: readonly string[];
   compute(input: RatioInput, notes: string[]): RatioOutcome;
 }
 
@@ -239,6 +254,16 @@ export interface RatioDefinition {
 export interface SingleStatementRatioInput {
   statements: FinancialStatements;
 }
+
+/** Income-only formulas: use the actual income statement or the existing complete set. */
+export type IncomeStatementRatioInput<
+  Facts extends Pick<IncomeStatement, 'period'> = IncomeStatement,
+> = (SingleStatementRatioInput & { income?: never }) | { income: Facts; statements?: never };
+
+/** Balance-only formulas: use the actual balance sheet or the existing complete set. */
+export type BalanceSheetRatioInput<Facts extends Pick<BalanceSheet, 'period'> = BalanceSheet> =
+  | (SingleStatementRatioInput & { balance?: never })
+  | { balance: Facts; statements?: never };
 
 /** Average-balance heads: the period being measured and the immediately prior period. */
 export interface PairRatioInput {
@@ -261,6 +286,13 @@ export interface DebtServiceRatioInput extends SingleStatementRatioInput {
   debtServiceAmount: number;
 }
 
+/** Additive income-only coverage request; the existing extendable full-set interface is preserved. */
+export type DebtServiceCoverageInput = IncomeStatementRatioInput<
+  Pick<IncomeStatement, 'period' | 'operatingIncome'>
+> & {
+  debtServiceAmount: number;
+};
+
 /** Market multiples: the market side plus the optional freshness bound. */
 export interface MarketMultipleRatioInput extends SingleStatementRatioInput {
   marketObservation: MarketObservation;
@@ -276,7 +308,7 @@ export interface EnterpriseMultipleRatioInput extends MarketMultipleRatioInput {
  * A ratio head: plain value + `.explain`. The DECLARED input is the head's exact shape — the
  * declaration never licenses a key the runtime refuses (the shared bag stays kernel-internal).
  */
-export interface RatioFacade<Input extends RatioInput = RatioInput> {
+export interface RatioFacade<Input extends object = RatioInput> {
   (input: Input): number | null;
   explain(input: Input): RatioReport;
 }
@@ -299,13 +331,39 @@ function validateRatioInput(definition: RatioDefinition, input: RatioInput): voi
   requireArgumentObject(name, 'input', input);
   ensureKnownKeys(name, 'input', input, definition.keys);
   if (definition.keys.includes('statements')) {
-    if (input.statements === undefined) {
-      throw new InputError(`${name}: statements is required.\n  e.g. ${name}({ statements })`, {
-        code: ErrorCode.InputMissingField,
-        context: { field: 'statements' },
-      });
+    const direct = definition.keys.includes('income')
+      ? 'income'
+      : definition.keys.includes('balance')
+        ? 'balance'
+        : null;
+    if (direct !== null && input[direct] !== undefined) {
+      if (input.statements !== undefined) {
+        throw new InputError(
+          `${name}: supply exactly one of ${direct} or statements, so the statement source is unambiguous.`,
+          {
+            code: ErrorCode.InputWrongShape,
+            context: { field: direct },
+          },
+        );
+      }
+      requireRatioStatementFacts(
+        name,
+        direct,
+        input[direct],
+        definition.requiredStatementFields ?? [],
+      );
+    } else {
+      if (input.statements === undefined) {
+        throw new InputError(
+          `${name}: ${direct === null ? 'statements is' : `${direct} or statements is`} required.\n  e.g. ${name}({ ${direct ?? 'statements'} })`,
+          {
+            code: ErrorCode.InputMissingField,
+            context: { field: direct ?? 'statements' },
+          },
+        );
+      }
+      requireFinancialStatements(name, input.statements);
     }
-    requireFinancialStatements(name, input.statements);
   }
   if (definition.keys.includes('current')) {
     for (const field of ['current', 'prior'] as const) {
@@ -413,7 +471,7 @@ function checkMarketTiming(
 }
 
 /** Build one ratio head from its definition, declared at the head's EXACT input shape. */
-export function makeRatio<Input extends RatioInput = RatioInput>(
+export function makeRatio<Input extends object = RatioInput>(
   definition: RatioDefinition,
 ): RatioFacade<Input> {
   const explain = (input: RatioInput): RatioReport => {
@@ -425,7 +483,11 @@ export function makeRatio<Input extends RatioInput = RatioInput>(
       marketStalenessMs = checkMarketTiming(definition, input, warnings).stalenessMs;
     }
     const outcome = definition.compute(input, notes);
-    const base = input.statements ?? input.current!;
+    const invalidNumerator =
+      outcome.numerator !== undefined && !Number.isFinite(outcome.numerator.amount);
+    const invalidDenominator =
+      outcome.denominator !== undefined && !Number.isFinite(outcome.denominator.amount);
+    const base = input.income ?? input.balance ?? input.statements ?? input.current!;
     const report: RatioReport = {
       value: null,
       assumptions: {
@@ -438,12 +500,16 @@ export function makeRatio<Input extends RatioInput = RatioInput>(
       },
       diagnostics: {
         warnings,
-        numerator: outcome.numerator ?? null,
-        denominator: outcome.denominator ?? null,
+        numerator: invalidNumerator ? null : (outcome.numerator ?? null),
+        denominator: invalidDenominator ? null : (outcome.denominator ?? null),
         notes,
         ...(marketStalenessMs !== undefined ? { marketStalenessMs } : {}),
       },
     };
+    if (invalidNumerator || invalidDenominator) {
+      report.diagnostics.reason = `${invalidNumerator ? outcome.numerator!.label : outcome.denominator!.label} is not representable in IEEE-754 double precision — the derived amount overflows the arithmetic`;
+      return report;
+    }
     if (outcome.reason !== undefined) {
       report.diagnostics.reason = outcome.reason;
       return report;

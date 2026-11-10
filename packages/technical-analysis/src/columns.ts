@@ -6,8 +6,16 @@
  * `barsFromColumns` instead of silently emitting garbage.
  */
 
-import { ensureKnownKeys, ErrorCode, InputError } from '@totalfinance/core';
+import {
+  type Bar,
+  requireArgumentArray,
+  requireFiniteFields,
+  ensureKnownKeys,
+  ErrorCode,
+  InputError,
+} from '@totalfinance/core';
 import type { BarInput } from './framework.js';
+import { requireBars } from './validate.js';
 
 export interface BarColumns {
   open?: readonly number[];
@@ -84,4 +92,38 @@ export function columnsFromBars(bars: readonly BarInput[]): BarColumns {
   const out: Record<string, number[]> = {};
   for (const key of present) out[key] = bars.map((b) => (b as Record<string, number>)[key]!);
   return out as BarColumns;
+}
+
+/**
+ * Explicitly project core Bar records to OHLCV indicator rows. Source identity, timestamps,
+ * adjustment flags and caller provenance remain in the original records: retain them alongside
+ * the calculation. This adapter neither fetches nor relabels observations. Prices may be negative
+ * where the instrument permits; finite values and OHLC range relationships are validated.
+ */
+export function ohlcvFromBars(bars: readonly Bar[]): BarInput[] {
+  const functionName = 'technicalAnalysis.ohlcvFromBars';
+  requireArgumentArray(functionName, 'bars', bars);
+  requireBars(bars, functionName);
+  return bars.map((bar, index) => {
+    requireFiniteFields(functionName, bar, ['open', 'timestampMs'], {
+      path: `bars[${index}]`,
+      exampleCall: 'technicalAnalysis.ohlcvFromBars(sourceBars)',
+    });
+    if (typeof bar.symbol !== 'string' || bar.symbol.trim().length === 0) {
+      throw new InputError(
+        `${functionName}: bars[${index}].symbol must identify the source instrument.`,
+        {
+          code: ErrorCode.InputWrongType,
+          context: { field: `bars[${index}].symbol` },
+        },
+      );
+    }
+    return {
+      open: bar.open,
+      high: bar.high,
+      low: bar.low,
+      close: bar.close,
+      ...(bar.volume !== undefined ? { volume: bar.volume } : {}),
+    };
+  });
 }

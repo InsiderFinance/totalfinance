@@ -95,6 +95,10 @@ export function warning(
  * code string, so no string is duplicated across the two registries (WS2.9).
  */
 export const WarningCode = {
+  /** Observation and valuation clocks differ; never relabel a source mark. */
+  PortfolioMarketMarkAge: 'portfolio.market_mark_age',
+  /** Rules/closures do not certify historical sessions before the documented floor. */
+  CalendarOutsideHistoricalCoverage: 'calendar.outside_historical_coverage',
   /** Supplied disclosed holdings do not support some changes, weights or concentration. */
   PortfolioDisclosedHoldingsReview: 'portfolio.disclosed_holdings_review',
   DataLockedMarket: 'data.locked_market',

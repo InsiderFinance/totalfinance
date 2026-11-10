@@ -285,6 +285,12 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper"
+    },
+    "US_EQUITY_CALENDAR_COVERAGE": {
+      "kind": "object",
+      "entrypoints": ["."],
+      "role": "constant",
+      "note": "Documented historical closure-data floor and rule-projection limitations; no certified future endpoint"
     }
   }
 }

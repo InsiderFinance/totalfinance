@@ -494,6 +494,7 @@ const taCalculate = defineOperation({
   title: 'Calculate a technical indicator',
   description:
     'Compute any of TotalFinance’s ~300 registered technical indicators over a price series. ' +
+    'Project core Bar records with technicalAnalysis.ohlcvFromBars, retaining the original source/provenance alongside the result; or pass OHLCV columns under series. ' +
     'Close-based (`series`) indicators take `closes`; bar-based indicators take `bars` (OHLCV ' +
     'objects) or parallel column arrays under `series`; pair indicators (e.g. beta, correl) take ' +
     '`x` and `y`. Use `totalfinance.technical_analysis.list` to discover indicator names, input kinds, and parameters. ' +
@@ -528,7 +529,12 @@ const TaListInputSchema = schema.object({
     .describe(
       'Case-insensitive substring of an indicator name OR a TA-Lib/pandas/TradingView alias',
     ),
-  category: schema.enum(INDICATOR_CATEGORIES).optional(),
+  category: schema
+    .enum(INDICATOR_CATEGORIES)
+    .optional()
+    .describe(
+      'Browse a category here, e.g. momentum; search matches indicator names/aliases and does not expand category words',
+    ),
   limit: schema
     .number()
     .integer()
@@ -590,7 +596,7 @@ const taList = defineOperation({
     'parameters are required. Narrow the ~335-indicator catalog with `search` (matches a name or a ' +
     'TA-Lib/pandas/TradingView alias) and/or `category`, and page it with `limit` (default 50) / `offset` ' +
     '(`total` is the full match count). For one indicator’s full card (including its warmup), use ' +
-    '`totalfinance.technical_analysis.describe`. Then pass a name to `totalfinance.technical_analysis.calculate`.',
+    '`totalfinance.technical_analysis.describe`. To browse momentum, use { category: "momentum" }, rather than searching the name momentum. Then pass a name to `totalfinance.technical_analysis.calculate`.',
   inputSchema: TaListInputSchema,
   outputSchema: TA_LIST_OUTPUT,
   run: (input) => {

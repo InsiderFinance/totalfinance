@@ -5,8 +5,11 @@
  */
 
 export type {
+  IncomeStatementRatioInput,
+  BalanceSheetRatioInput,
   DayMetricRatioInput,
   DebtServiceRatioInput,
+  DebtServiceCoverageInput,
   EnterpriseMultipleRatioInput,
   InvestedCapitalRatioInput,
   MarketMultipleRatioInput,

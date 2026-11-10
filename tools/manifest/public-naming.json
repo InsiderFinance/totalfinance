@@ -1,37 +1,37 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43257,
+    "identities": 43342,
     "unresolved": 0,
     "byDisposition": {
-      "canonical-term": 3993,
-      "explicit": 39102,
+      "canonical-term": 4004,
+      "explicit": 39176,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
     "byKind": {
-      "code-string": 274,
-      "enum-member": 274,
-      "export": 7450,
-      "field": 22836,
-      "literal-value": 4653,
-      "mcp-field": 1520,
-      "mcp-tool": 55,
+      "code-string": 276,
+      "enum-member": 276,
+      "export": 7460,
+      "field": 22871,
+      "literal-value": 4657,
+      "mcp-field": 1549,
+      "mcp-tool": 57,
       "method": 1780,
       "package": 25,
-      "parameter": 4198,
+      "parameter": 4199,
       "subpath": 192
     },
     "byPackage": {
       "@totalfinance/backtest": 5069,
-      "@totalfinance/calendars": 158,
+      "@totalfinance/calendars": 165,
       "@totalfinance/cli": 526,
       "@totalfinance/commodities": 255,
-      "@totalfinance/core": 3149,
+      "@totalfinance/core": 3155,
       "@totalfinance/crypto": 278,
       "@totalfinance/fixed-income": 2394,
       "@totalfinance/foreign-exchange": 248,
-      "@totalfinance/fundamentals": 501,
+      "@totalfinance/fundamentals": 526,
       "@totalfinance/http": 393,
       "@totalfinance/math": 923,
       "@totalfinance/mcp": 493,
@@ -43,11 +43,11 @@
       "@totalfinance/scenarios": 1375,
       "@totalfinance/strategy": 1751,
       "@totalfinance/structure": 1132,
-      "@totalfinance/technical-analysis": 4947,
+      "@totalfinance/technical-analysis": 4958,
       "@totalfinance/valuation": 1492,
       "@totalfinance/volatility": 2866,
-      "@totalfinance/workflows": 2671,
-      "totalfinance": 3208
+      "@totalfinance/workflows": 2702,
+      "totalfinance": 3213
     },
     "byForbiddenToken": {},
     "directions": {}
@@ -36401,6 +36401,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/calendars|export|US_EQUITY_CALENDAR_COVERAGE",
+      "name": "US_EQUITY_CALENDAR_COVERAGE",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/calendars|export|usMarketClosures",
       "name": "usMarketClosures",
       "kind": "export",
@@ -36594,6 +36602,34 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/calendars|field|US_EQUITY_CALENDAR_COVERAGE.dataVersion",
+      "name": "dataVersion",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/calendars|field|US_EQUITY_CALENDAR_COVERAGE.historicalFloor",
+      "name": "historicalFloor",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/calendars|field|US_EQUITY_CALENDAR_COVERAGE.limitations",
+      "name": "limitations",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/calendars|field|US_EQUITY_CALENDAR_COVERAGE.verifiedThrough",
+      "name": "verifiedThrough",
+      "kind": "field",
+      "position": "module",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/calendars|literal-value|CALENDAR_DATA_VERSION:2026.06.0",
       "name": "2026.06.0",
       "kind": "literal-value",
@@ -36638,6 +36674,20 @@
     {
       "id": "@totalfinance/calendars|literal-value|nextExpiry(kind):weekly",
       "name": "weekly",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/calendars|literal-value|US_EQUITY_CALENDAR_COVERAGE.dataVersion:2026.06.0",
+      "name": "2026.06.0",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/calendars|literal-value|US_EQUITY_CALENDAR_COVERAGE.historicalFloor:2001-01-01",
+      "name": "2001-01-01",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -43347,6 +43397,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|code-string|calendar.outside_historical_coverage",
+      "name": "calendar.outside_historical_coverage",
+      "kind": "code-string",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|code-string|chain_greeks.rows_skipped",
       "name": "chain_greeks.rows_skipped",
       "kind": "code-string",
@@ -44099,6 +44156,13 @@
     {
       "id": "@totalfinance/core|code-string|portfolio.mark_unavailable",
       "name": "portfolio.mark_unavailable",
+      "kind": "code-string",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|code-string|portfolio.market_mark_age",
+      "name": "portfolio.market_mark_age",
       "kind": "code-string",
       "position": "serialized",
       "disposition": "explicit"
@@ -46016,6 +46080,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|enum-member|WarningCode.CalendarOutsideHistoricalCoverage",
+      "name": "CalendarOutsideHistoricalCoverage",
+      "kind": "enum-member",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|enum-member|WarningCode.CompoundingOverflow",
       "name": "CompoundingOverflow",
       "kind": "enum-member",
@@ -46287,6 +46358,13 @@
     {
       "id": "@totalfinance/core|enum-member|WarningCode.PortfolioDisclosedHoldingsReview",
       "name": "PortfolioDisclosedHoldingsReview",
+      "kind": "enum-member",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|enum-member|WarningCode.PortfolioMarketMarkAge",
+      "name": "PortfolioMarketMarkAge",
       "kind": "enum-member",
       "position": "serialized",
       "disposition": "explicit"
@@ -59395,6 +59473,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/core|literal-value|WarningCode:calendar.outside_historical_coverage",
+      "name": "calendar.outside_historical_coverage",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/core|literal-value|WarningCode:chain_greeks.rows_skipped",
       "name": "chain_greeks.rows_skipped",
       "kind": "literal-value",
@@ -59694,6 +59779,13 @@
     {
       "id": "@totalfinance/core|literal-value|WarningCode:portfolio.disclosed_holdings_review",
       "name": "portfolio.disclosed_holdings_review",
+      "kind": "literal-value",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/core|literal-value|WarningCode:portfolio.market_mark_age",
+      "name": "portfolio.market_mark_age",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -86636,6 +86728,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|export|BalanceSheetRatioInput",
+      "name": "BalanceSheetRatioInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./ratios"],
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|export|BeneishComponent",
       "name": "BeneishComponent",
       "kind": "export",
@@ -86783,6 +86883,14 @@
     {
       "id": "@totalfinance/fundamentals|export|debtServiceCoverage",
       "name": "debtServiceCoverage",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./ratios"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|export|DebtServiceCoverageInput",
+      "name": "DebtServiceCoverageInput",
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./ratios"],
@@ -86954,6 +87062,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": [".", "./statements"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|export|IncomeStatementRatioInput",
+      "name": "IncomeStatementRatioInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": [".", "./ratios"],
       "disposition": "explicit"
     },
     {
@@ -87929,6 +88045,90 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance",
+      "name": "balance",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.cashAndCashEquivalents",
+      "name": "cashAndCashEquivalents",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.currentAssets",
+      "name": "currentAssets",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.currentLiabilities",
+      "name": "currentLiabilities",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.inventory",
+      "name": "inventory",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.longTermDebt",
+      "name": "longTermDebt",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.period",
+      "name": "period",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.shortTermDebt",
+      "name": "shortTermDebt",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalAssets",
+      "name": "totalAssets",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalDebt",
+      "name": "totalDebt",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.balance.totalEquity",
+      "name": "totalEquity",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|BalanceSheetRatioInput.statements",
+      "name": "statements",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|field|BeneishComponent.coefficient",
       "name": "coefficient",
       "kind": "field",
@@ -88252,6 +88452,41 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.debtServiceAmount",
+      "name": "debtServiceAmount",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income",
+      "name": "income",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.operatingIncome",
+      "name": "operatingIncome",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.income.period",
+      "name": "period",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|DebtServiceCoverageInput.statements",
+      "name": "statements",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|field|DebtServiceRatioInput.debtServiceAmount",
       "name": "debtServiceAmount",
       "kind": "field",
@@ -88290,6 +88525,13 @@
     {
       "id": "@totalfinance/fundamentals|field|EnterpriseMultipleRatioInput.statements",
       "name": "statements",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|Facts.period",
+      "name": "period",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -88647,67 +88889,73 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.current",
-      "name": "current",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income",
+      "name": "income",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.costOfRevenue",
+      "name": "costOfRevenue",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.debtServiceAmount",
-      "name": "debtServiceAmount",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.dilutedSharesOutstanding",
+      "name": "dilutedSharesOutstanding",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.marketObservation",
-      "name": "marketObservation",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.grossProfit",
+      "name": "grossProfit",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.maximumStalenessMs",
-      "name": "maximumStalenessMs",
-      "kind": "field",
-      "position": "request",
-      "disposition": "canonical-term",
-      "policy": "Milliseconds - the unit suffix this library uses throughout."
-    },
-    {
-      "id": "@totalfinance/fundamentals|field|Input.nonOperatingAssets",
-      "name": "nonOperatingAssets",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.interestExpense",
+      "name": "interestExpense",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.periodDays",
-      "name": "periodDays",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.netIncome",
+      "name": "netIncome",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.prior",
-      "name": "prior",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.operatingIncome",
+      "name": "operatingIncome",
       "kind": "field",
       "position": "request",
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/fundamentals|field|Input.statements",
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.period",
+      "name": "period",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.income.revenue",
+      "name": "revenue",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|IncomeStatementRatioInput.statements",
       "name": "statements",
       "kind": "field",
-      "position": "request",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/fundamentals|field|Input.taxRate",
-      "name": "taxRate",
-      "kind": "field",
-      "position": "request",
+      "position": "artifact",
       "disposition": "explicit"
     },
     {
@@ -89008,6 +89256,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/fundamentals|field|RatioInput.balance",
+      "name": "balance",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/fundamentals|field|RatioInput.current",
       "name": "current",
       "kind": "field",
@@ -89017,6 +89272,13 @@
     {
       "id": "@totalfinance/fundamentals|field|RatioInput.debtServiceAmount",
       "name": "debtServiceAmount",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|RatioInput.income",
+      "name": "income",
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
@@ -89070,6 +89332,14 @@
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/fundamentals|field|RatioPeriodIdentity.availableTimestampMs",
+      "name": "availableTimestampMs",
+      "kind": "field",
+      "position": "result",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
     },
     {
       "id": "@totalfinance/fundamentals|field|RatioPeriodIdentity.currency",
@@ -205425,6 +205695,15 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/technical-analysis|export|ohlcvFromBars",
+      "name": "ohlcvFromBars",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["."],
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
+    },
+    {
       "id": "@totalfinance/technical-analysis|export|openingRange",
       "name": "openingRange",
       "kind": "export",
@@ -209264,6 +209543,71 @@
       "kind": "field",
       "position": "artifact",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.adjusted",
+      "name": "adjusted",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.close",
+      "name": "close",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.high",
+      "name": "high",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.low",
+      "name": "low",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.open",
+      "name": "open",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.symbol",
+      "name": "symbol",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.timestampMs",
+      "name": "timestampMs",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.volume",
+      "name": "volume",
+      "kind": "field",
+      "position": "request",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|field|Bar.vwap",
+      "name": "vwap",
+      "kind": "field",
+      "position": "request",
+      "disposition": "canonical-term",
+      "policy": "Dominant execution/indicator term."
     },
     {
       "id": "@totalfinance/technical-analysis|field|BarAggregator.constructor.kind",
@@ -233442,6 +233786,13 @@
     {
       "id": "@totalfinance/technical-analysis|parameter|ohlc4(parameters)",
       "name": "parameters",
+      "kind": "parameter",
+      "position": "signature",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/technical-analysis|parameter|ohlcvFromBars(bars)",
+      "name": "bars",
       "kind": "parameter",
       "position": "signature",
       "disposition": "explicit"
@@ -275957,8 +276308,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.2",
-      "name": "0.1.2",
+      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.3",
+      "name": "0.1.3",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -276440,6 +276791,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.executionLag",
+      "name": "executionLag",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.feeBps",
       "name": "feeBps",
       "kind": "mcp-field",
@@ -276455,11 +276813,47 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.maxLeverage",
+      "name": "maxLeverage",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.periodsPerYear",
+      "name": "periodsPerYear",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.rebalance",
+      "name": "rebalance",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.riskFreeRate",
+      "name": "riskFreeRate",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.signal",
       "name": "signal",
       "kind": "mcp-field",
       "position": "serialized",
       "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|BacktestVectorizedInputSchema.slippageBps",
+      "name": "slippageBps",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Basis points - universal fixed-income unit."
     },
     {
       "id": "@totalfinance/workflows|mcp-field|BacktestWindowSchema.fromTimestampMs",
@@ -285571,6 +285965,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.calendar.sessions.diagnostics",
+      "name": "diagnostics",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/workflows|mcp-field|totalfinance.calendar.sessions.expirations",
       "name": "expirations",
       "kind": "mcp-field",
@@ -285636,6 +286037,164 @@
     {
       "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.analyze.timeline",
       "name": "timeline",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.baseCurrency",
+      "name": "baseCurrency",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.createdTimestampMs",
+      "name": "createdTimestampMs",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.eventCount",
+      "name": "eventCount",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.events",
+      "name": "events",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.handle",
+      "name": "handle",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.inspectOperation",
+      "name": "inspectOperation",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.lotRelief",
+      "name": "lotRelief",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.portfolioId",
+      "name": "portfolioId",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.create.provenance",
+      "name": "provenance",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.accountCount",
+      "name": "accountCount",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.baseCurrency",
+      "name": "baseCurrency",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.eventCount",
+      "name": "eventCount",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.lastEffectiveTimestampMs",
+      "name": "lastEffectiveTimestampMs",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Milliseconds - the unit suffix this library uses throughout."
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.limit",
+      "name": "limit",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.lotRelief",
+      "name": "lotRelief",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.nextOffset",
+      "name": "nextOffset",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.offset",
+      "name": "offset",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.portfolio",
+      "name": "portfolio",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.portfolioId",
+      "name": "portfolioId",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "Universal."
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.rows",
+      "name": "rows",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.section",
+      "name": "section",
+      "kind": "mcp-field",
+      "position": "serialized",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-field|totalfinance.portfolio.inspect.total",
+      "name": "total",
       "kind": "mcp-field",
       "position": "serialized",
       "disposition": "explicit"
@@ -286843,8 +287402,24 @@
       "policy": "The library own namespace prefix."
     },
     {
+      "id": "@totalfinance/workflows|mcp-tool|totalfinance.portfolio.create",
+      "name": "totalfinance.portfolio.create",
+      "kind": "mcp-tool",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "The library own namespace prefix."
+    },
+    {
       "id": "@totalfinance/workflows|mcp-tool|totalfinance.portfolio.explain_pnl",
       "name": "totalfinance.portfolio.explain_pnl",
+      "kind": "mcp-tool",
+      "position": "serialized",
+      "disposition": "canonical-term",
+      "policy": "The library own namespace prefix."
+    },
+    {
+      "id": "@totalfinance/workflows|mcp-tool|totalfinance.portfolio.inspect",
+      "name": "totalfinance.portfolio.inspect",
       "kind": "mcp-tool",
       "position": "serialized",
       "disposition": "canonical-term",
@@ -289800,6 +290375,14 @@
     {
       "id": "totalfinance|export|BalanceSheet",
       "name": "BalanceSheet",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./fundamentals"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|BalanceSheetRatioInput",
+      "name": "BalanceSheetRatioInput",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./fundamentals"],
@@ -294150,6 +294733,14 @@
     {
       "id": "totalfinance|export|debtServiceCoverage",
       "name": "debtServiceCoverage",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./fundamentals"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|DebtServiceCoverageInput",
+      "name": "DebtServiceCoverageInput",
       "kind": "export",
       "position": "module",
       "entrypoints": ["./fundamentals"],
@@ -299302,6 +299893,14 @@
       "disposition": "explicit"
     },
     {
+      "id": "totalfinance|export|IncomeStatementRatioInput",
+      "name": "IncomeStatementRatioInput",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./fundamentals"],
+      "disposition": "explicit"
+    },
+    {
       "id": "totalfinance|export|IncomeType",
       "name": "IncomeType",
       "kind": "export",
@@ -303105,6 +303704,15 @@
       "position": "module",
       "entrypoints": ["./technical-analysis"],
       "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|ohlcvFromBars",
+      "name": "ohlcvFromBars",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./technical-analysis"],
+      "disposition": "canonical-term",
+      "policy": "Dominant bar term."
     },
     {
       "id": "totalfinance|export|ols",
@@ -312784,6 +313392,14 @@
       "kind": "export",
       "position": "module",
       "entrypoints": ["./technical-analysis"],
+      "disposition": "explicit"
+    },
+    {
+      "id": "totalfinance|export|US_EQUITY_CALENDAR_COVERAGE",
+      "name": "US_EQUITY_CALENDAR_COVERAGE",
+      "kind": "export",
+      "position": "module",
+      "entrypoints": ["./calendars"],
       "disposition": "explicit"
     },
     {

@@ -137,6 +137,59 @@ describe('transport parity (Stage 7A Decision 9)', () => {
     await http.stop();
   });
 
+  it('portfolio creation refuses missing authority at every transport and HTTP still requires authentication', async () => {
+    const id = 'totalfinance.portfolio.create';
+    const input = PARITY_FIXTURES[id]!();
+    expect(() => registry.run({ id, input, capabilities: [] })).toThrow(
+      expect.objectContaining({ code: 'operation.capability_missing' }),
+    );
+    const deniedCli = spawnSync(
+      process.execPath,
+      [CLI, 'run', id, '--input', '-', '--profile', 'full', '--store', store],
+      { encoding: 'utf8', input: JSON.stringify(input) },
+    );
+    expect(deniedCli.status).toBe(4);
+    expect(JSON.parse(deniedCli.stdout).code).toBe('operation.capability_missing');
+    const unauthenticated = await fetch(`${base}/operations/${id}/run`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', connection: 'close' },
+      body: JSON.stringify(input),
+    });
+    expect(unauthenticated.status).toBe(401);
+    const limitedHttp = createLocalHttpServer({ registry, port: 0, capabilities: [] });
+    const limitedBase = (await limitedHttp.start()).url;
+    try {
+      const denied = await fetch(`${limitedBase}/operations/${id}/run`, {
+        method: 'POST',
+        headers: HTTP_HEADERS,
+        body: JSON.stringify(input),
+      });
+      expect(denied.status).toBe(403);
+      expect(((await denied.json()) as { code: string }).code).toBe('operation.capability_missing');
+    } finally {
+      await limitedHttp.stop();
+    }
+    const limitedMcp = createTotalFinanceMcpServer({
+      packs: [tradePack()],
+      readOnly: false,
+      capabilities: [],
+    });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await limitedMcp.connect(serverTransport);
+    const client = new Client({ name: 'bootstrap-denial', version: '1' });
+    await client.connect(clientTransport);
+    try {
+      const denied = await client.callTool({ name: toolNameFor(id), arguments: input });
+      expect(denied.isError).toBe(true);
+      expect(JSON.parse((denied.content as { text: string }[])[0]!.text).code).toBe(
+        'operation.capability_missing',
+      );
+    } finally {
+      await client.close();
+      await limitedMcp.close();
+    }
+  });
+
   it('every flagship operation has a canonical fixture and a malformed one', () => {
     expect(Object.keys(PARITY_FIXTURES).sort()).toEqual([...ids].sort());
     expect(Object.keys(PARITY_MALFORMED).sort()).toEqual([...ids].sort());

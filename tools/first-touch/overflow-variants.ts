@@ -144,3 +144,33 @@ export const VARIANT_FIXTURES: Record<string, FixtureThunk> = {
   // continuation (the `evaluationCount` resource coordinate lives only on that arm).
   ...PORTFOLIO_TRADE_VARIANTS,
 };
+
+for (const name of [
+  'grossMargin',
+  'operatingMargin',
+  'netProfitMargin',
+  'interestCoverage',
+  'debtServiceCoverage',
+  'earningsPerShare',
+  'revenuePerShare',
+  'currentRatio',
+  'quickRatio',
+  'cashRatio',
+  'debtToEquity',
+  'debtToAssets',
+]) {
+  const field = [
+    'currentRatio',
+    'quickRatio',
+    'cashRatio',
+    'debtToEquity',
+    'debtToAssets',
+  ].includes(name)
+    ? 'balance'
+    : 'income';
+  VARIANT_FIXTURES[`fundamentals.${name}#${field}`] = () => {
+    const [source] = allFixtures().get(`fundamentals.${name}`)!();
+    const { statements, ...rest } = source as Record<string, unknown>;
+    return [{ ...rest, [field]: (statements as Record<string, unknown>)[field] }];
+  };
+}

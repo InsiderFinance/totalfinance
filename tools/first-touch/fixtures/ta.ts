@@ -50,6 +50,9 @@ async function* asyncCloses(): AsyncGenerator<number> {
 // ── fixtures ─────────────────────────────────────────────────────────────────────────────────────
 
 export const TA_FIXTURES: Record<string, FixtureThunk> = {
+  'technical-analysis.ohlcvFromBars': () => [
+    timeBars(5, 60_000).map((bar) => ({ ...bar, symbol: 'TEST' })),
+  ],
   // chart types & information-driven bars: (bars, parameters)
   'technical-analysis.renko': () => [BARS(), { brickSize: 2 }],
   'technical-analysis.kagi': () => [BARS(), { reversal: 2 }],

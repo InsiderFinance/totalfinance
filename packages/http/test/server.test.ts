@@ -100,7 +100,7 @@ describe('the local HTTP server', () => {
     });
     const list = await call('GET', '/operations');
     // 40 → 46 (Stage 7B.2 slice 4, 2026-09-06): the six trade-lifecycle operations join the full profile.
-    expect((list.json as unknown[]).length).toBe(46);
+    expect((list.json as unknown[]).length).toBe(48);
     const one = await call('GET', '/operations/totalfinance.option.price');
     expect(one.json).toMatchObject({
       id: 'totalfinance.option.price',

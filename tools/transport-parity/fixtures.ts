@@ -982,6 +982,17 @@ export const PARITY_PREREQUISITES: Record<string, () => { id: string; input: Fix
 };
 
 export const PARITY_FIXTURES: Record<string, FixtureThunk> = {
+  'totalfinance.portfolio.create': () => ({
+    portfolioId: 'synthetic',
+    baseCurrency: 'USD',
+    events: [],
+    createdTimestampMs: TRADE_NOW,
+  }),
+  'totalfinance.portfolio.inspect': () => ({
+    portfolio: ledgerEnvelope(),
+    section: 'events',
+    limit: 2,
+  }),
   // trade pack (Stage 7B.2 slice 4) — the lifecycle's six operations
   'totalfinance.trade.preflight': () =>
     wire({
@@ -989,8 +1000,8 @@ export const PARITY_FIXTURES: Record<string, FixtureThunk> = {
       portfolio: tradeLedger().toJSON(),
       market: tradeMarket(),
       asOf: TRADE_NOW,
-      policy: tradePolicy(),
-      costs: { commissionBps: 5, slippageBps: 10 },
+      policy: { ...tradePolicy(), maximumEstimatedCost: 0, maximumSlippageBps: 0 },
+      costs: { commissionBps: 0, slippageBps: 0 },
     }),
   'totalfinance.trade.authorize': () =>
     wire({
@@ -1145,6 +1156,12 @@ export const PARITY_FIXTURES: Record<string, FixtureThunk> = {
  * line. Each is a single, deliberate defect on top of the valid fixture — never a second fixture.
  */
 export const PARITY_MALFORMED: Record<string, FixtureThunk> = {
+  'totalfinance.portfolio.create': () => ({
+    portfolioId: 'synthetic',
+    baseCurrency: 'USD',
+    createdTimestampMs: TRADE_NOW,
+  }),
+  'totalfinance.portfolio.inspect': () => ({ portfolio: ledgerEnvelope(), limit: 101 }),
   'totalfinance.trade.preflight': () =>
     wire({
       intent: tradeIntent(),

@@ -193,7 +193,7 @@ export function portfolioSnapshot(input: PortfolioSnapshotInput): PortfolioSnaps
   const warnings: string[] = [];
   if (market.asOf !== asOf) {
     warnings.push(
-      `${functionName}: the market snapshot is observed at ${market.asOf} but the valuation asOf is ${asOf} — marks from another instant are being applied; supply a snapshot at the valuation instant to remove this warning.`,
+      `${functionName}: portfolio.market_mark_age: the market snapshot is observed at ${market.asOf} but the valuation asOf is ${asOf} — marks from another instant are being applied; mark age is ${asOf - market.asOf} ms (negative means a future observation). Obtain an observation appropriate to the valuation clock; preserve its actual source timestamp.`,
     );
   }
 

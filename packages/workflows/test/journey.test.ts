@@ -135,7 +135,7 @@ describe('the journey packs', () => {
       'totalfinance.valuation.company',
     ]);
     const registry = createOperationRegistry({ packs: [...journeyPacks()] });
-    expect(registry.size).toBe(12);
+    expect(registry.size).toBe(13);
     for (const op of journeyOperations()) {
       expect(op.sideEffect).toBe('none');
       expect(op.authorization).toBe('none');
