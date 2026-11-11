@@ -59,7 +59,11 @@ Node 22.13.0. This preserves the supported consumer runtime while meeting npm's 
 5. The environment-protected publish job downloads those bytes, checks all hashes/metadata and
    source identity again, and uploads **only the SDK** with provenance, public access and `latest`.
    It neither rebuilds approved bytes nor uses an npm-token fallback. SDK publication is immediately
-   public; a later smoke failure does not automatically unpublish or roll back discovery.
+   accepted; npm can report asynchronous processing before the version and latest tag become public.
+   Readback polls every 15 seconds up to a 15-minute polling deadline, retaining the existing HTTP
+   request timeouts, until exact approved bytes and latest match. It never repeats the upload.
+   Integrity/metadata/HTTP errors and a newer latest fail immediately. A later smoke failure does
+   not automatically unpublish or roll back discovery.
 6. Registry smoke matches the SDK's downloaded tarball to approval and installs its exact version.
    Existing numerical SDK/CLI/HTTP journeys and all strict site examples must match committed
    expectations. Optional MCP is installed from its approved local tarball solely as a test witness.

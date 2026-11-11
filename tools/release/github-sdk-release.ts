@@ -20,6 +20,7 @@ import {
   requireFullMainCi,
   requireReleaseCheckout,
 } from './github-sdk-policy.js';
+import { waitForSdkReadback } from './github-sdk-readback.js';
 import { assertPublishToolchain, assertReleaseSource, rehearsalToken } from './publish-tarballs.js';
 import { registryTags, releaseRegistry, verifyRegistryArtifact } from './registry-policy.js';
 import {
@@ -180,11 +181,7 @@ export async function publishSdk(dir: string, registryValue = NPMJS): Promise<vo
       rmSync(home, { recursive: true, force: true });
     }
   }
-  const after = await registryTags(sdk.package, registry);
-  if (after['latest'] !== manifest.version || !(await verifyRegistryArtifact(sdk, registry)))
-    throw new Error(
-      'SDK upload/latest readback does not match approval; preserve artifacts and recover the original job',
-    );
+  const after = await waitForSdkReadback(sdk, registry);
   retain(join(dir, 'SDK_PUBLISH_RECEIPT.json'), {
     kind: loopback ? 'loopback-rehearsal' : 'sdk-publication',
     commit: manifest.commit,

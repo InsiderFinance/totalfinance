@@ -7,6 +7,15 @@
 
 ### Active: GitHub Release → SDK publication (2026-11-10)
 
+Bounded production follow-up G7 (2026-11-11): PR #29 is merged at `59a2833`; full main CI and both
+release coverage passes succeeded. npm accepted the authorized SDK 0.1.3 upload with signed
+provenance, but the immediate registry readback failed while npm processed it. Add a bounded,
+read-only readiness wait under the same [contract](./specs/github-release-npm.md#g7-accepted-uploads-awaiting-npm-processing-2026-11-11).
+Recover the current release from its retained original run; never rebuild, retag or republish it.
+SDK 0.1.3 is now public and its original run's verified resume/consumer smoke is green. The release
+and [issue #30](https://github.com/InsiderFinance/totalfinance/issues/30)/active follow-up PR own
+actual current verification and npm readiness receipts. No SDK bytes/version or tag is changed.
+
 The maintainer wants GitHub Release publication to replace local npm commands. Follow the
 [scoped release automation contract](./specs/github-release-npm.md), G1–G6. This prepares one review
 PR, preserving SDK-only publication, exact-commit full verification and explicit npm/GitHub setup.
