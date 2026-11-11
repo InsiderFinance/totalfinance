@@ -75,6 +75,32 @@ Final-head hosted runs rehearse this again from their own clean checkout and rem
 
 ## External setup and release boundary
 
+### G7: accepted uploads awaiting npm processing (2026-11-11)
+
+The first authorized 0.1.3 upload in run 42935946287 succeeded with signed provenance at
+01:46:07 UTC. npm explicitly reported that processing could take a few minutes. The immediate
+readback then failed because the public registry still served 0.1.2 and returned 404 for 0.1.3.
+This is a concrete readiness defect in the new SDK path, not failed publish authentication.
+
+- Poll only public registry reads, every 15 seconds, with a 15-minute polling deadline and the
+  existing bounded HTTP request timeouts. Never repeat `npm publish` in this polling loop.
+- Require the original approved SDK bytes and exact latest tag before success. Preserve immediate
+  refusal of changed bytes, invalid metadata, authorization/network/server errors and a newer latest.
+- A deadline failure retains the original same-run/artifact recovery instructions. It never bumps
+  a version, rebuilds approval, moves a tag, changes a dist-tag or substitutes a token.
+- The already uploaded 0.1.3 is recovered from its original run after registry visibility; this
+  tooling-only correction applies to future release commits. The 0.1.3 tag/bytes remain immutable.
+- [x] Prove ready/processing/stale-tag/missing-version/deadline/integrity/HTTP/newer-latest cases
+      with synthetic responses and a fake clock: 9 new readiness tests and all 214 focused release/
+      standalone/audit checks pass; build, typecheck, changed-file lint/format and docs regeneration
+      pass. Final-head fast/full hosted results are the follow-up PR's external landing gate.
+
+Tracked in issue #30. The active follow-up PR owns final-head receipts. SDK 0.1.3 became publicly
+readable at 01:54:19 UTC; its original release run resumed only after the registry bytes matched.
+The current release is verified green, including SDK consumer smoke, without a rebuild/re-upload.
+Successful recovery/publication evidence remains with the original release run and GitHub Release.
+No local test is a replacement public receipt.
+
 The owner configures npm's trusted publisher for `InsiderFinance/totalfinance`, workflow filename
 `totalfinance-release.yml`, environment `npm-publish`, and direct `npm publish`. GitHub environment
 tag policy and `TOTALFINANCE_RELEASE_ENABLED=true` are required before first use. npm does not
