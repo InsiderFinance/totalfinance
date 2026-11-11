@@ -10,7 +10,9 @@
 The maintainer wants GitHub Release publication to replace local npm commands. Follow the
 [scoped release automation contract](./specs/github-release-npm.md), G1–G6. This prepares one review
 PR, preserving SDK-only publication, exact-commit full verification and explicit npm/GitHub setup.
-Tracked in [issue #28](https://github.com/InsiderFinance/totalfinance/issues/28).
+Tracked in [issue #28](https://github.com/InsiderFinance/totalfinance/issues/28) and
+[PR #29](https://github.com/InsiderFinance/totalfinance/pull/29). G1–G5 implementation/local verification
+is complete; G6 exact-head fast/full hosted status and receipts are owned by that PR.
 Publication stays disabled. No npm upload, version bump, optional MCP publication, deployment or
 draft #26 change is part of preparation.
 

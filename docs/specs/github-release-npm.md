@@ -1,6 +1,8 @@
 # GitHub Release → SDK publication
 
-Status: scoped design reviewed; implementation in progress. This changes release automation only.
+Status: scoped design reviewed; implementation and local verification complete. Final exact-head
+hosted results are owned by [PR #29](https://github.com/InsiderFinance/totalfinance/pull/29), not an
+embedded self-referential commit receipt. This changes release automation only.
 The maintainer wants publishing a GitHub Release to replace local npm commands. No current npm
 upload, version bump, MCP publication, site deployment or change to draft PR #26 is authorized.
 
@@ -47,18 +49,29 @@ financial implementation, generalized publishing framework or automatic token fa
 ## Ordered acceptance checklist
 
 - [x] G1: event/tag/version/main/full-CI policy, with valid and refused synthetic release cases.
-- [ ] G2: SDK-only exact-byte OIDC publication/resume and registry smoke, preserving pair tools.
+- [x] G2: SDK-only exact-byte OIDC publication/resume and registry smoke, preserving pair tools.
 - [x] G3: release-event workflow, minimum job permissions, immutable artifacts, evidence attachment.
-- [ ] G4: loopback rehearsal proves SDK-only publication and full consumer parity before pair resume.
+- [x] G4: loopback rehearsal proves SDK-only publication and full consumer parity before pair resume.
 - [x] G5: current runbook/setup/recovery guidance and controlling workflow assertions agree.
-- [ ] G6: focused tests, types/lint/format, and exact-head fast + full hosted checks pass; PR records
-      actual receipts and unverified external setup. No version bump or generated SDK/API change.
+
+G6 is the external landing gate: focused tests/types/lint/format and exact-head fast + full hosted
+checks must pass. PR #29 records the actual final SHA, run URLs/results and unverified account
+setup. A later source commit invalidates those receipts. No version bump or generated SDK/API
+change is part of this PR; no local result substitutes for the hosted full gate or an OIDC handshake.
 
 Local G1/G3/G5 evidence: 205 tests across eight release/standalone/audit files pass; typecheck,
 changed-file ESLint/Prettier and actionlint 1.7.12 pass. `pnpm docs:update` reports zero findings;
 only the added documentation surfaces change its inventory. SDK runtime/API/generated contracts
-and all numerical smoke expectations are unchanged. Loopback and final-head hosted checks remain
-pending; no local result is an OIDC/public-registry publication receipt.
+and all numerical smoke expectations are unchanged.
+
+At implementation `ad1678d87cc2f104a2d25d4b9ca0cf2a8407cc15`, a clean-source 0.1.3 pack and
+all five loopback commands exit 0: SDK publish, SDK resume, SDK registry smoke, pair resume, and
+pair registry smoke. SDK resume proves existing bytes match; MCP is 404 before and after SDK smoke.
+All 24 strict NodeNext/Bundler site examples and numerical consumer expectations match. The SDK
+receipt names only the SDK as registry-published and MCP as a local tarball witness. SDK/MCP packed
+bytes remain identical to the reviewed 0.1.3 preparation. The host retains command exit codes/logs
+at `/tmp/totalfinance-sdk-automation-rehearsal.json`. That is loopback evidence, not a public upload.
+Final-head hosted runs rehearse this again from their own clean checkout and remain a separate gate.
 
 ## External setup and release boundary
 
