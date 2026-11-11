@@ -5,6 +5,19 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active connector review repairs (2026-11-11)
+
+The independent first-consumer review supersedes the earlier no-blocker C3 acceptance. Preserve
+that acceptance and e5 green receipts as history. The maintainer authorized the corrections.
+The [C4 addendum](./specs/community-connector-c4-review-updates.md) defines adjustment/identity,
+safe diagnostics, natural author typing, premium policy and no-key onboarding. Coordinator
+technical review is required before public runtime changes. Feature stays in progress, PR26 draft.
+
+- [x] Read current task, prior specs and complete public independent evidence in a new isolated tree.
+- [x] Fetch main ca122ab; attempt integration and identify authored/derived conflicts (not completed).
+- [ ] Coordinator C4 contract review, then complete main integration preserving 0.1.3 and upstream proof.
+- [ ] C4 runtime/author/starter repairs, fresh installed/generated/bundle and exact-head fast/full proof.
+
 ### Active community connector foundation (2026-11-02)
 
 The maintainer agreed to community-owned independent provider packages. The next feature is the
