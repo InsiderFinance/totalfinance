@@ -413,25 +413,25 @@ describe('FC9 row 6 — release plumbing (Decisions 6 and 9): the every-public-p
     expect(readFileSync(join(ROOT, '.gitignore'), 'utf8').split('\n')).toContain('/release/');
   });
 
-  it('the release workflow is dispatch-only, gated by the npm-publish environment, attests provenance, tags, and releases', () => {
-    const candidates = [join(ROOT, '.github', 'workflows', 'totalfinance-release.yml')];
-    const path = candidates.find((candidate) => existsSync(candidate));
-    expect(
-      path,
-      'totalfinance-release.yml must exist in the standalone repository root',
-    ).toBeDefined();
-    const workflow = readFileSync(path!, 'utf8');
-    expect(workflow).toContain('workflow_dispatch:');
-    expect(workflow).not.toMatch(/^on:\n\s+push:/m);
+  it('the release workflow verifies and publishes only the SDK after a normal published release', () => {
+    const workflow = readFileSync(join(ROOT, '.github/workflows/totalfinance-release.yml'), 'utf8');
+    expect(workflow).toContain('types: [published]');
+    expect(workflow).not.toContain('workflow_dispatch:');
+    expect(workflow).toContain('github.event.release.prerelease == false');
     expect(workflow).toContain('name: npm-publish');
     expect(workflow).toContain('id-token: write');
-    expect(workflow).toContain('pnpm release:publish --dir release/approved --tag candidate');
+    expect(workflow).toContain('github-sdk-release.ts verify');
+    expect(workflow).toContain('github-sdk-release.ts publish --dir release/approved');
     expect(workflow).toContain('TOTALFINANCE_RELEASE_ENABLED');
     expect(workflow).not.toContain('pnpm -r');
     expect(workflow).toContain('--expect-version "$RELEASE_VERSION"');
-    expect(workflow).toContain('tools/release/finalize-github-release.ts');
-    expect(workflow).toContain('--expect-version "$RELEASE_VERSION" --finalize');
-    expect(workflow).toContain('pnpm release:smoke --version "$RELEASE_VERSION"');
+    expect(workflow).toContain('pnpm run ci');
+    expect(workflow).toContain('pnpm api:check');
+    expect(workflow).toContain('pnpm test:coverage');
+    expect(workflow).toContain('github-sdk-release.ts smoke --dir release/approved');
+    expect(workflow).toContain('gh release upload "$RELEASE_TAG"');
+    expect(workflow).not.toContain('tools/release/finalize-github-release.ts');
+    expect(workflow).not.toContain('--clobber');
   });
 
   it('the CI workflow rehearses the publish against a local registry on every push', () => {

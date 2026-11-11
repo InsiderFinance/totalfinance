@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 241,
+    "surfaces": 243,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 55,
+      "future-target": 57,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4612,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 55,
+    "checkedUnderVocabulary": 57,
     "shippedNamesWatched": 9748,
     "documentedExceptions": 7,
     "findings": 0
@@ -628,6 +628,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/runbooks/release-pair-legacy.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/runbooks/release-rollback.md",
       "class": "future-target",
       "owner": "human",
@@ -899,6 +906,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 3
+    },
+    {
+      "path": "docs/specs/github-release-npm.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/h10-h12-report-design-note.md",

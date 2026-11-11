@@ -1,0 +1,69 @@
+# GitHub Release → SDK publication
+
+Status: scoped design reviewed; implementation in progress. This changes release automation only.
+The maintainer wants publishing a GitHub Release to replace local npm commands. No current npm
+upload, version bump, MCP publication, site deployment or change to draft PR #26 is authorized.
+
+## Decisions and review
+
+1. A normal `release.published` event for `totalfinance-v<major>.<minor>.<patch>` is the release
+   owner's authorization to publish that exact SDK version to npm `latest`. Drafts and prereleases
+   do not publish. Version metadata is prepared/reviewed before tagging; automation never bumps it.
+2. Keep the existing SDK-only scope used for 0.1.1/0.1.2. Packing still validates the complete
+   SDK/MCP distribution pair using the existing artifact policy, but only the SDK may be uploaded.
+   Existing pair/candidate/promotion tools remain available and retain their stricter contracts.
+3. The tag must resolve to the checkout commit on `main`; tag version and distribution versions
+   agree. Require a successful exact-SHA full `totalfinance-ci.yml` main run, including all supported
+   Node shards, coverage merges, static checks, clean regeneration and registry rehearsal. A fast PR
+   run cannot satisfy this gate. Then run CI, standalone API checks and independent coverage again
+   in the release verification job before packing immutable artifacts.
+4. Use npm OIDC trusted publishing on GitHub-hosted runners, the existing publishing Node 24 pin,
+   npm >=11.5.1, and the `npm-publish` environment. Keep explicit release enablement disabled until
+   account configuration is complete. No stored npm token or local OTP fallback is introduced.
+   Environment tag protection must allow `totalfinance-v*`; the source/CI gate enforces main ancestry.
+5. Publish previously verified clean-source bytes with provenance, public access and `latest`.
+   A rerun skips an existing version only after its downloaded bytes match approval. A newer
+   existing `latest` prevents an old release rerun from moving discovery backwards. There is no
+   automatic rollback or deletion if upload succeeds and a later check fails.
+6. Public smoke verifies the SDK's registry bytes and installs the exact SDK version. Reuse the
+   existing consumer journeys and all strict site examples. Those include optional MCP, so install
+   the verified local MCP tarball as an explicitly identified test witness, without uploading it.
+   The new SDK-specific receipt identifies this mixed origin and cannot masquerade as the existing
+   two-package public-registry/site-release receipt. Retain the manifest, tarballs and receipts in
+   Actions; attach SDK evidence to the already published GitHub Release without replacing assets.
+7. Rehearse the same SDK publish/smoke path against a disposable loopback registry before the
+   existing pair rehearsal. Prove MCP is absent at the SDK-only stage, then complete the existing
+   pair rehearsal with byte-verified resume. No public npm budget or credentials are used for tests.
+8. Keep release enablement and npm authorization as explicit setup steps. Preparing this PR never
+   creates a public release or flips publication on. A successful local rehearsal/full CI is not a
+   successful OIDC handshake or public release.
+
+Design review: changing only `on:` is insufficient: the old workflow rejects tag refs and existing
+tags, publishes the pair under candidate, and creates a release afterwards. Replace those workflow
+assumptions while preserving artifact inspection, full verification and recovery. Reuse existing
+packing, registry hash checks, consumer comparisons and numerical expectations; add no second
+financial implementation, generalized publishing framework or automatic token fallback.
+
+## Ordered acceptance checklist
+
+- [x] G1: event/tag/version/main/full-CI policy, with valid and refused synthetic release cases.
+- [ ] G2: SDK-only exact-byte OIDC publication/resume and registry smoke, preserving pair tools.
+- [x] G3: release-event workflow, minimum job permissions, immutable artifacts, evidence attachment.
+- [ ] G4: loopback rehearsal proves SDK-only publication and full consumer parity before pair resume.
+- [x] G5: current runbook/setup/recovery guidance and controlling workflow assertions agree.
+- [ ] G6: focused tests, types/lint/format, and exact-head fast + full hosted checks pass; PR records
+      actual receipts and unverified external setup. No version bump or generated SDK/API change.
+
+Local G1/G3/G5 evidence: 205 tests across eight release/standalone/audit files pass; typecheck,
+changed-file ESLint/Prettier and actionlint 1.7.12 pass. `pnpm docs:update` reports zero findings;
+only the added documentation surfaces change its inventory. SDK runtime/API/generated contracts
+and all numerical smoke expectations are unchanged. Loopback and final-head hosted checks remain
+pending; no local result is an OIDC/public-registry publication receipt.
+
+## External setup and release boundary
+
+The owner configures npm's trusted publisher for `InsiderFinance/totalfinance`, workflow filename
+`totalfinance-release.yml`, environment `npm-publish`, and direct `npm publish`. GitHub environment
+tag policy and `TOTALFINANCE_RELEASE_ENABLED=true` are required before first use. npm does not
+validate that connection on save; the first explicitly authorized release establishes the live
+handshake. The implementation PR and its checks are reviewed before this external enablement.
