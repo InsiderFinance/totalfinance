@@ -132,24 +132,28 @@ describe('the standalone TotalFinance repository', () => {
     expect(ci).toContain('git diff --no-ext-diff -- tools/manifest/public-enforcement.json');
   });
 
-  it('keeps npm publication disabled until separately enabled and approved', () => {
+  it('keeps SDK release publication explicit, enabled and tag/source verified', () => {
     const release = read('.github/workflows/totalfinance-release.yml');
-    expect(release).toContain('workflow_dispatch:');
+    const tool = read('tools/release/github-sdk-release.ts');
+    expect(release).toContain('types: [published]');
+    expect(release).toContain('github.event.release.prerelease == false');
     expect(release).toContain('vars.TOTALFINANCE_RELEASE_ENABLED');
-    expect(release).toContain('refs/heads/main');
+    expect(tool).toContain('origin/main');
     expect(release).toContain('name: npm-publish');
-    expect(release).not.toContain('steps.where');
+    expect(release).not.toContain('workflow_dispatch:');
     expect(release).not.toContain('working-directory:');
     expect(release).toContain('package_json_file: package.json');
-    expect(release).toContain('pnpm release:publish --dir release/approved --tag candidate');
-    expect(release).toContain('distribution/${dir}/package.json');
+    expect(release).toContain('github-sdk-release.ts verify');
+    expect(release).toContain('github-sdk-release.ts publish --dir release/approved');
+    expect(tool).toContain("['totalfinance', 'mcp']");
     expect(release).toContain("node-version: '24.21.0'");
     expect(release).toContain('id-token: write');
-    expect(release).toContain('--expect-version "$RELEASE_VERSION" --resume');
-    expect(release).toContain('--registry https://registry.npmjs.org --approved release/approved');
-    expect(release).toContain('NPM_BOOTSTRAP_TOKEN');
-    expect(release).toContain('default: false');
-    expect(release).not.toContain('--tag latest');
+    expect(release).toContain('pnpm run ci');
+    expect(release).toContain('pnpm api:check');
+    expect(release).toContain('pnpm test:coverage');
+    expect(release).toContain('github-sdk-release.ts smoke --dir release/approved');
+    expect(release).not.toContain('NPM_BOOTSTRAP_TOKEN');
+    expect(release).not.toContain('secrets.NPM_TOKEN');
     expect(release).not.toContain('npm dist-tag add');
     expect(read('.github/workflows/totalfinance-ci.yml')).toContain(
       "require('./distribution/totalfinance/package.json').version",

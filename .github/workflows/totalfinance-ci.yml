@@ -231,8 +231,16 @@ jobs:
           done
           echo "::error::verdaccio did not start"; cat release/verdaccio.log; exit 1
 
-      - name: publish the tarballs into the local registry (provenance off — a loopback registry cannot attest)
-        run: pnpm release:publish --registry http://localhost:4873
+      - name: rehearse SDK-only publication before the optional MCP exists
+        run: |
+          pnpm exec tsx tools/release/github-sdk-release.ts publish --dir release --registry http://localhost:4873
+          pnpm exec tsx tools/release/github-sdk-release.ts publish --dir release --registry http://localhost:4873
+          node --input-type=module -e 'import fs from "node:fs"; if (JSON.parse(fs.readFileSync("release/SDK_PUBLISH_RECEIPT.json")).resumed !== true) throw Error("SDK-only resume did not verify existing bytes");'
+          pnpm exec tsx tools/release/github-sdk-release.ts smoke --dir release --registry http://localhost:4873
+          node --input-type=module -e 'const response = await fetch("http://localhost:4873/@insiderfinance%2ftotalfinance-mcp"); if (response.status !== 404) throw Error("SDK-only rehearsal unexpectedly published MCP");'
+
+      - name: publish the remaining pair into the local registry (resume verifies the existing SDK bytes)
+        run: pnpm release:publish --registry http://localhost:4873 --resume
 
       - name: registry smoke — install from the local registry and run the consumer journeys
         run: pnpm release:smoke --version "$(node -p "require('./distribution/totalfinance/package.json').version")" --registry http://localhost:4873 --approved release

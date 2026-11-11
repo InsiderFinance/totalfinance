@@ -358,18 +358,19 @@ describe('fail-closed GitHub candidate finalization', () => {
     },
   );
 
-  it('the workflow delegates finalization and cannot silently skip existing releases', () => {
+  it('the SDK release workflow attaches evidence without recreating or replacing a published release', () => {
     const workflow = readFileSync(
       new URL('../../.github/workflows/totalfinance-release.yml', import.meta.url),
       'utf8',
     );
-    expect(workflow).toContain('tools/release/finalize-github-release.ts');
-    expect(workflow).toContain('--expect-version "$RELEASE_VERSION" --finalize');
+    expect(workflow).toContain('gh release upload "$RELEASE_TAG"');
+    expect(workflow).toContain('SDK_SMOKE_RECEIPT-$RELEASE_VERSION.json');
     expect(workflow).toContain(
-      'name: totalfinance-registry-smoke-${{ inputs.version }}-attempt-${{ github.run_attempt }}',
+      'name: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}',
     );
     expect(workflow).not.toContain('overwrite: true');
-    expect(workflow).not.toContain('if ! gh release view');
+    expect(workflow).not.toContain('--clobber');
+    expect(workflow).not.toContain('tools/release/finalize-github-release.ts');
     const tool = readFileSync(new URL('./finalize-github-release.ts', import.meta.url), 'utf8');
     expect(tool).not.toContain('--clobber');
     expect(tool).not.toContain("'DELETE'");

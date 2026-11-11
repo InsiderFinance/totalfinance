@@ -5,7 +5,23 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-### Active: compatible dogfood improvements and 0.1.x preparation (2026-11-10)
+### Active: GitHub Release → SDK publication (2026-11-10)
+
+The maintainer wants GitHub Release publication to replace local npm commands. Follow the
+[scoped release automation contract](./specs/github-release-npm.md), G1–G6. This prepares one review
+PR, preserving SDK-only publication, exact-commit full verification and explicit npm/GitHub setup.
+Tracked in [issue #28](https://github.com/InsiderFinance/totalfinance/issues/28) and
+[PR #29](https://github.com/InsiderFinance/totalfinance/pull/29). G1–G5 implementation/local verification
+is complete; G6 exact-head fast/full hosted status and receipts are owned by that PR.
+Publication stays disabled. No npm upload, version bump, optional MCP publication, deployment or
+draft #26 change is part of preparation.
+
+### Completed: compatible dogfood improvements and 0.1.x preparation (2026-11-10)
+
+PR #27 merged at `fa2f78d49881de5d7eaf125b261152e7eb29b44c`; its full main CI passed in
+[run 42927388893](https://github.com/InsiderFinance/totalfinance/actions/runs/42927388893).
+The release remains unpublished. The paragraphs below retain the original authorized scope and
+candidate verification history.
 
 The maintainer authorized one review PR containing the worthwhile compatible dogfood batch and
 next unused 0.1.x metadata (expected 0.1.3), without merge, publication or deployment. The
