@@ -322,15 +322,20 @@ function conditioningWarning(covariance: Matrix, functionName: string): QuantWar
     if (v > lambdaMax) lambdaMax = v;
     if (v < lambdaMin) lambdaMin = v;
   }
-  if (!Number.isFinite(lambdaMax) || !Number.isFinite(lambdaMin) || lambdaMax <= 0)
-    return undefined;
+  if (!Number.isFinite(lambdaMax) || !Number.isFinite(lambdaMin)) return undefined;
   const condition = lambdaMin > 0 ? lambdaMax / lambdaMin : Infinity;
+  const reason = lambdaMin <= 0 ? 'singular_covariance' : 'condition_number_overflow';
   if (condition <= MAX_COVARIANCE_CONDITION_NUMBER) return undefined;
   return warning(
     ErrorCode.RiskIllConditionedCovariance,
-    `${functionName}: the covariance matrix is ill-conditioned (condition number ${condition.toExponential(2)} > ${MAX_COVARIANCE_CONDITION_NUMBER.toExponential(0)}; smallest eigenvalue ${lambdaMin.toExponential(2)}) — Σ⁻¹ amplifies estimation noise into extreme offsetting weights, so the returned portfolio is reported with converged: false. Shrink the covariance (see \`shrunkCovariance\`), drop collinear assets, or use a longer sample.`,
+    `${functionName}: the covariance matrix is ill-conditioned (condition number ${Number.isFinite(condition) ? condition.toExponential(2) : 'undefined'}; threshold ${MAX_COVARIANCE_CONDITION_NUMBER.toExponential(0)}; smallest eigenvalue ${lambdaMin.toExponential(2)}) — Σ⁻¹ amplifies estimation noise into extreme offsetting weights, so the returned portfolio is reported with converged: false. Shrink the covariance (see \`shrunkCovariance\`), drop collinear assets, or use a longer sample.`,
     'warn',
-    { conditionNumber: condition, smallestEigenvalue: lambdaMin, largestEigenvalue: lambdaMax },
+    {
+      conditionNumber: Number.isFinite(condition) ? condition : null,
+      ...(!Number.isFinite(condition) ? { reason } : {}),
+      smallestEigenvalue: lambdaMin,
+      largestEigenvalue: lambdaMax,
+    },
   );
 }
 

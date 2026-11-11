@@ -219,7 +219,12 @@ describe('FC1 law: the amortization schedule reconciles exactly', () => {
     for (const row of [rows[0]!, rows[179]!, rows[359]!]) {
       expect(row.closingBalance).toBeCloseTo(row.openingBalance - row.principal, 8);
       expect(row.payment).toBeCloseTo(row.interest + row.principal, 8);
-      expect(row.payment).toBeCloseTo(payment, 12);
+      // The final installment reconciles only measured binary64 accumulation drift.
+      if (row.period < terms.numberOfPeriods) expect(row.payment).toBeCloseTo(payment, 12);
+      else
+        expect(Math.abs(row.payment - payment) / terms.principal).toBeLessThan(
+          8 * Number.EPSILON * terms.numberOfPeriods,
+        );
     }
     // Cumulative heads agree with the schedule's own sums.
     expect(cumulativeLoanInterest({ ...terms, fromPeriod: 1, toPeriod: 360 })).toBeCloseTo(
@@ -800,13 +805,26 @@ describe('loan inverse round-trip laws across the (principal, rate, n, timing, b
       // reproduces the payment to machine precision (the residual check proves it). Beginning
       // timing stays fully covered at n = 12 and n = 360 across every rate in the grid.
       if (c.periods === 1 && c.timing === 'beginning') continue;
-      const payment = annuityPayment({
+      const terms = {
         principal: c.principal,
         periodicInterestRate: c.rate,
         numberOfPeriods: c.periods,
         paymentTiming: c.timing,
         balloon: c.balloon,
-      });
+      };
+      let payment: number;
+      try {
+        payment = annuityPayment(terms);
+      } catch (error) {
+        // Beyond this growth, the payment can round to interest alone. The corrected
+        // forward head refuses the lost amortization instead of certifying a term-free payment.
+        expect(error).toMatchObject({
+          code: 'solver.no_convergence',
+          context: { reason: 'unrepresentable_principal_reduction' },
+        });
+        expect(Math.pow(1 + c.rate, c.periods)).toBeGreaterThan(1e14);
+        continue;
+      }
       // A negative rate can shrink the principal below the balloon on its own — the level
       // "payment" is negative there, outside the rate solver's positive-magnitude domain.
       if (payment <= 0) continue;

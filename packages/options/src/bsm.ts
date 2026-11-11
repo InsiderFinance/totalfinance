@@ -1,3 +1,4 @@
+import { analyticPremium, analyticTrial } from './analytic-premium.js';
 /**
  * The pure Black–Scholes–Merton kernel (spec §9.3 analytical engine).
  *
@@ -158,8 +159,13 @@ const BSM_HINTS: Record<string, string> = {
 export function blackScholesPriceUnchecked(input: BlackScholesKernelInput): number {
   const { type, spot: S, strike: K } = input;
   const { d1, d2, discountFactor, dq } = d1d2(input);
-  if (type === 'call') return S * dq * normalCdf(d1) - K * discountFactor * normalCdf(d2);
-  return K * discountFactor * normalCdf(-d2) - S * dq * normalCdf(-d1);
+  return analyticPremium({
+    positiveLeg: type === 'call' ? S * dq * normalCdf(d1) : K * discountFactor * normalCdf(-d2),
+    negativeLeg: type === 'call' ? K * discountFactor * normalCdf(d2) : S * dq * normalCdf(-d1),
+    atTheMoney: S === K && input.riskFreeRate === input.dividendYield,
+    discountedScale: S * dq,
+    standardDeviation: input.volatility * Math.sqrt(input.timeToExpiryYears),
+  });
 }
 
 /**
@@ -494,15 +500,18 @@ export function blackScholesImpliedVolatility(
 
   // Unchecked: every field was validated at the boundary above, and this runs per Brent iteration.
   const f = (sigma: number): number =>
-    blackScholesPriceUnchecked({
-      type,
-      spot: S,
-      strike: K,
-      timeToExpiryYears: T,
-      riskFreeRate: r,
-      dividendYield: q,
-      volatility: sigma,
-    }) - price;
+    analyticTrial(
+      () =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: sigma,
+        }) - price,
+    );
 
   // Endpoint acceptance: when the target matches the model price at a bracket endpoint to within a
   // RELATIVE tolerance, that endpoint's volatility is a legitimate root (deep ITM/OTM contracts

@@ -111,6 +111,32 @@ describe('the local HTTP server', () => {
     expect(missing.json).toMatchObject({ code: 'operation.unknown' });
   });
 
+  it('preserves tiny ATM premiums and typed precision refusals over HTTP (#19)', async () => {
+    const input = {
+      type: 'call',
+      spot: 100,
+      strike: 100,
+      timeToExpiryYears: 1,
+      riskFreeRate: 0,
+      dividendYield: 0,
+      volatility: 1e-17,
+    };
+    const ok = await call('POST', '/operations/totalfinance.option.price/run', input);
+    expect(ok.status).toBe(200);
+    expect(
+      (ok.json as { structured: { value: number } }).structured.value / 3.989422804014327e-16,
+    ).toBeCloseTo(1, 13);
+    const refused = await call('POST', '/operations/totalfinance.option.price/run', {
+      ...input,
+      spot: 99.99999999999999,
+    });
+    expect(refused.status).toBe(400);
+    expect(refused.json).toMatchObject({
+      code: 'input.out_of_range',
+      message: expect.stringContaining('cancellation'),
+    });
+  });
+
   it('runs an operation; refusals map to statuses with the OperationError body; X-Request-Id round-trips', async () => {
     const ok = await call('POST', '/operations/totalfinance.option.price/run', PRICE, {
       'x-request-id': 'req-42',

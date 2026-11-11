@@ -1,3 +1,4 @@
+import { analyticTrial } from './analytic-premium.js';
 /**
  * Implied-volatility method suite (spec §9.5).
  *
@@ -143,6 +144,7 @@ function impliedVolatilityDerivatives(input: {
     dividendYield: q,
     volatility: sigma,
   } = input;
+  if (!(sigma > 0)) return { f: NaN, df: NaN, d2f: NaN, d3f: NaN };
   const sqrtT = Math.sqrt(T);
   const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
   const d2 = d1 - sigma * sqrtT;
@@ -154,15 +156,17 @@ function impliedVolatilityDerivatives(input: {
     // its boundary, and this runs once per Newton/Halley/Householder iteration. Routing it through
     // the guarded facade re-checked six fields per iteration for no added safety.
     f:
-      blackScholesPriceUnchecked({
-        type,
-        spot: S,
-        strike: K,
-        timeToExpiryYears: T,
-        riskFreeRate: r,
-        dividendYield: q,
-        volatility: sigma,
-      }) - target,
+      analyticTrial(() =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: sigma,
+        }),
+      ) - target,
     df: vega,
     d2f: vomma,
     d3f: d3,
@@ -411,15 +415,17 @@ export function impliedVolatility(
     v > 0 &&
     Math.abs(
       // Unchecked for the same reason: acceptance runs per candidate root, behind that same boundary.
-      blackScholesPriceUnchecked({
-        type,
-        spot: S,
-        strike: K,
-        timeToExpiryYears: T,
-        riskFreeRate: r,
-        dividendYield: q,
-        volatility: v,
-      }) - price,
+      analyticTrial(() =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: v,
+        }),
+      ) - price,
     ) <=
       // Relative to the target for the same reason as `residualTolerance` above: an absolute floor
       // accepts any σ once the price is small enough.

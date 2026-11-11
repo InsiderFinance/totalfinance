@@ -1,3 +1,4 @@
+import { analyticPremium } from './analytic-premium.js';
 /**
  * The ONE selective Black–Scholes–Merton evaluation kernel (selective Greeks and exposure spec,
  * decisions 1–3).
@@ -199,9 +200,13 @@ export function evaluateBlackScholesRowsUnchecked(
     const nd2 = wantNd2 ? normalCdf(isCall ? d2 : -d2) : 0;
 
     if (outPrice !== undefined) {
-      outPrice[i] = isCall
-        ? S * dq * nd1 - K * discountFactor * nd2
-        : K * discountFactor * nd2 - S * dq * nd1;
+      outPrice[i] = analyticPremium({
+        positiveLeg: isCall ? S * dq * nd1 : K * discountFactor * nd2,
+        negativeLeg: isCall ? K * discountFactor * nd2 : S * dq * nd1,
+        atTheMoney: S === K && r === q,
+        discountedScale: S * dq,
+        standardDeviation: sigma * sqrtT,
+      });
     }
     if (outDelta !== undefined) outDelta[i] = isCall ? dq * nd1 : -dq * nd1;
     const gamma = wantGamma ? (dq * pdf) / (S * sigma * sqrtT) : 0;

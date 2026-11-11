@@ -52954,7 +52954,7 @@ same functions; prefer the namespace over the deprecated flat exports.
 - heston.impliedVolatility(request).parameters: import('@insiderfinance/totalfinance/options').HestonParameters; default: not declared
 - heston.impliedVolatility(request).type: import('@insiderfinance/totalfinance/core').OptionType; default: not declared
 - heston.monteCarloEstimate: (input: import('@insiderfinance/totalfinance/options/heston').HestonMonteCarloEstimateInput) => import('@insiderfinance/totalfinance/options').MonteCarloEstimate; default: not declared
-- heston.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- heston.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - heston.monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - heston.monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - heston.monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -53245,7 +53245,7 @@ functions; prefer the namespace over the deprecated flat exports.
 - localVolatility.grid(specification).levels: number[]; default: not declared — Underlying levels, ascending (e.g. 0.4·S₀ … 2.5·S₀).
 - localVolatility.grid(specification).times: number[]; default: not declared — Times in years, ascending (e.g. up to the longest expiry priced).
 - localVolatility.monteCarloEstimate: (input: import('@insiderfinance/totalfinance/options/local-volatility').LocalVolatilityMonteCarloEstimateInput) => import('@insiderfinance/totalfinance/options').MonteCarloEstimate; default: not declared
-- localVolatility.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- localVolatility.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - localVolatility.monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - localVolatility.monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - localVolatility.monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -53896,7 +53896,7 @@ beside a diagnostic that says why (Law 7 — a warning never licenses a non-fini
 `sabr.volatility` / `sabr.price` / `sabr.monteCarloPrice` / `sabr.monteCarloEstimate` are the same functions; prefer the
 namespace over the deprecated flat exports.
 - sabr.monteCarloEstimate: (input: import('@insiderfinance/totalfinance/options/sabr').SabrMonteCarloEstimateInput) => import('@insiderfinance/totalfinance/options').MonteCarloEstimate; default: not declared
-- sabr.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- sabr.monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - sabr.monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - sabr.monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - sabr.monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -87037,9 +87037,12 @@ unusable-tax-shield adjustment.
 cannot use — supplied, never inferred from losses or carryforwards.
 - amortizationSchedule: (input: import('@insiderfinance/totalfinance/valuation').AmortizationScheduleInput) => import('@insiderfinance/totalfinance/valuation').AmortizationScheduleResult; default: not declared — The full amortization schedule. Unrounded by design — the rows reconcile exactly (each closing
 balance = opening − principal; Σ principal = principal − balloon) and any display rounding is
-the caller's explicit, documented policy applied afterwards.
-- amortizationSchedule().return.balloon: number; default: not declared — The explicit residual after the final payment (equals the requested balloon).
-- amortizationSchedule().return.payment: number; default: not declared
+the caller's explicit, documented policy applied afterwards. The final installment may absorb
+arithmetic drift only within `8 * Number.EPSILON * numberOfPeriods * principal`; larger drift
+is refused. The `payment` headline is the level installment; inspect the final row's payment
+for its explicit roundoff reconciliation.
+- amortizationSchedule().return.balloon: number; default: not declared — The requested residual after the final, roundoff-adjusted installment.
+- amortizationSchedule().return.payment: number; default: not declared — Level payment; the final row may differ by the documented binary64 reconciliation drift.
 - amortizationSchedule().return.rounding: 'none'; default: not declared — This schedule is UNROUNDED: display rounding is the caller's explicit policy.
 - amortizationSchedule().return.rows: import('@insiderfinance/totalfinance/valuation').AmortizationRow[]; default: not declared
 - amortizationSchedule().return.totalInterest: number; default: not declared
@@ -88646,7 +88649,8 @@ beside a diagnostic that says why (Law 7 — a warning never licenses a non-fini
 The conditional variance follows `σ²ₜ = ω + α·r²ₜ₋₁ + β·σ²ₜ₋₁`, seeded with the sample second moment
 `E[r²]`. The optimizer works in the unconstrained space `θ = (log ω, logit p, logit f)` where
 `p = α+β` and `f = α/(α+β)`, so `ω>0, α≥0, β≥0, α+β<1` hold at every evaluation. A degenerate
-(constant / zero-variance) series has no variance process to fit and returns `converged: false`.
+zero-second-moment series returns `converged: false`. Exact constants are degenerate in sample
+mode; in zero mode a nonzero constant retains its second moment about the declared zero mean.
 - fitGarch().return.alpha: number; default: not declared — ARCH coefficient on the lagged squared return (`≥ 0`).
 - fitGarch().return.assumptions: { conventionsVersion: string; initialParameters: 'supplied' | 'default'; mean: 'zero' | 'sample'; observations: number; }; default: not declared — Applied conventions, echoed (Law 2 report grammar).
 - fitGarch().return.assumptions.conventionsVersion: string; default: not declared
@@ -88667,7 +88671,7 @@ The conditional variance follows `σ²ₜ = ω + α·r²ₜ₋₁ + β·σ²ₜ�
 is derived by variance targeting and is not a start. The seeded restarts still run.
 - fitGarch(options).initialParameters.alpha: number; default: not declared
 - fitGarch(options).initialParameters.beta: number; default: not declared
-- fitGarch(options).mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first.
+- fitGarch(options).mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode.
 - fitGarch(options).seed?: number; default: not declared — Seed for the deterministic multi-start of the optimizer (default `0x61726368`).
 - fitGarch(returns): number[]; default: not declared
 - fitHarRv: (realizedVariances: number[], options?: import('@insiderfinance/totalfinance/volatility').HarRvOptions) => import('@insiderfinance/totalfinance/volatility').HarRvFit; default: not declared — Fit a HAR-RV (heterogeneous autoregressive) model to a realized-variance series by OLS.
@@ -150626,14 +150630,14 @@ Newey–West HAC configuration: Bartlett-kernel bandwidth (number of lags).
 ```typescript
 /** Newey–West HAC configuration: Bartlett-kernel bandwidth (number of lags). */
 export interface OlsHacOptions {
-    /** Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. `L = 0` ⇒ White (HC0). */
+    /** Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. The covariance includes the finite-sample factor n/(n−k) at every bandwidth; `L = 0` ⇒ HC1. */
     lags: number;
 }
 ```
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- lags: number; default: not declared — Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. `L = 0` ⇒ White (HC0).
+- lags: number; default: not declared — Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. The covariance includes the finite-sample factor n/(n−k) at every bandwidth; `L = 0` ⇒ HC1.
 
 ### @insiderfinance/totalfinance/math#OlsOptions
 
@@ -150651,7 +150655,7 @@ export interface OlsOptions {
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - hac?: OlsHacOptions; default: not declared — Replace the classical covariance with the Newey–West HAC estimator.
-- hac.lags: number; default: not declared — Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. `L = 0` ⇒ White (HC0).
+- hac.lags: number; default: not declared — Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. The covariance includes the finite-sample factor n/(n−k) at every bandwidth; `L = 0` ⇒ HC1.
 - intercept?: boolean; default: not declared — Prepend an intercept column of ones (default `true`).
 
 ### @insiderfinance/totalfinance/math#OlsResult
@@ -157026,7 +157030,7 @@ machine-readable superset of `engine` + `autoReason` (which remain for compatibi
 computation seeds. Equals the input length when the indicator never emitted.
 - diagnostics.warnings: QuantWarning[]; default: not declared — Structured warnings; always present (possibly empty).
 - monteCarlo: MonteCarloStatistics; default: not declared
-- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarlo.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarlo.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - monteCarlo.seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -157524,7 +157528,7 @@ a `greeks.lambda_undefined` warning on explained paths — never NaN/Infinity (L
 - greeks.vomma: number; default: not declared
 - greeks.zomma: number; default: not declared — `∂Γ/∂σ = ∂³V/∂S²∂σ` (raw, per 1.00 σ).
 - monteCarlo: MonteCarloStatistics; default: not declared
-- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarlo.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarlo.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - monteCarlo.seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -158413,7 +158417,7 @@ a `greeks.lambda_undefined` warning on explained paths — never NaN/Infinity (L
 - greeks.vomma: number; default: not declared
 - greeks.zomma: number; default: not declared — `∂Γ/∂σ = ∂³V/∂S²∂σ` (raw, per 1.00 σ).
 - monteCarlo: MonteCarloStatistics; default: not declared
-- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarlo.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarlo.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - monteCarlo.seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -158523,7 +158527,7 @@ export interface MonteCarloEstimate extends MonteCarloStatistics {
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - method: MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -158681,7 +158685,7 @@ a `greeks.lambda_undefined` warning on explained paths — never NaN/Infinity (L
 - greeks.vomma: number; default: not declared
 - greeks.zomma: number; default: not declared — `∂Γ/∂σ = ∂³V/∂S²∂σ` (raw, per 1.00 σ).
 - monteCarlo: MonteCarloStatistics; default: not declared — Standard error, confidence interval, path count, seed, method, and variance-reduction flags.
-- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarlo.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarlo.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - monteCarlo.seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -158775,7 +158779,7 @@ export interface MonteCarloStatistics {
      * independent randomizations — which this estimator does not do, so it reports `null` and says so.
      */
     standardError: number | null;
-    /** Confidence interval at the requested level (default 95%); `null` whenever `standardError` is. */
+    /** Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive. */
     confidenceInterval: [
         number,
         number
@@ -158793,7 +158797,7 @@ export interface MonteCarloStatistics {
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - method: MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -160684,7 +160688,7 @@ a `greeks.lambda_undefined` warning on explained paths — never NaN/Infinity (L
 - greeks.vomma: number; default: not declared
 - greeks.zomma: number; default: not declared — `∂Γ/∂σ = ∂³V/∂S²∂σ` (raw, per 1.00 σ).
 - monteCarlo: MonteCarloStatistics; default: not declared
-- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarlo.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarlo.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarlo.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
 - monteCarlo.seed: number; default: not declared — The seed, echoed for reproducibility.
@@ -162303,7 +162307,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - impliedVolatility(request).parameters: HestonParameters; default: not declared
 - impliedVolatility(request).type: OptionType; default: not declared
 - monteCarloEstimate: (input: HestonMonteCarloEstimateInput) => MonteCarloEstimate; default: not declared
-- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -162647,7 +162651,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - grid(specification).levels: number[]; default: not declared — Underlying levels, ascending (e.g. 0.4·S₀ … 2.5·S₀).
 - grid(specification).times: number[]; default: not declared — Times in years, ascending (e.g. up to the longest expiry priced).
 - monteCarloEstimate: (input: LocalVolatilityMonteCarloEstimateInput) => MonteCarloEstimate; default: not declared
-- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -163139,7 +163143,7 @@ export declare const sabr: { readonly monteCarloEstimate: (input: SabrMonteCarlo
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
 - monteCarloEstimate: (input: SabrMonteCarloEstimateInput) => MonteCarloEstimate; default: not declared
-- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- monteCarloEstimate().return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - monteCarloEstimate().return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - monteCarloEstimate().return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - monteCarloEstimate().return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -165528,7 +165532,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).strike: number; default: not declared
 - (input).timeToExpiryYears: number; default: not declared
 - (input).type: OptionType; default: not declared
-- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -165796,7 +165800,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).strike: number; default: not declared
 - (input).timeToExpiryYears: number; default: not declared
 - (input).type: OptionType; default: not declared
-- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -166084,7 +166088,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).timeToExpiryYears: number; default: not declared
 - (input).type: OptionType; default: not declared
 - (input).volatility: number; default: not declared
-- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -166486,7 +166490,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).strike: number; default: not declared
 - (input).timeToExpiryYears: number; default: not declared
 - (input).type: OptionType; default: not declared
-- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); `null` whenever `standardError` is.
+- return.confidenceInterval: [number, number] | null; default: not declared — Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive.
 - return.converged: boolean; default: not declared — Whether the estimate is trustworthy (finite value and standard error).
 - return.method: import('@insiderfinance/totalfinance/options').MonteCarloMethod; default: not declared — The sampling method actually used (may differ from the request if QMC fell back to pseudo).
 - return.paths: number; default: not declared — Number of paths actually evaluated (antithetic pairs count as one path).
@@ -261227,10 +261231,11 @@ The schedule plus its reconciliation facts — the unrounded rows reconcile exac
 /** The schedule plus its reconciliation facts — the unrounded rows reconcile exactly. */
 export interface AmortizationScheduleResult {
     rows: AmortizationRow[];
+    /** Level payment; the final row may differ by the documented binary64 reconciliation drift. */
     payment: number;
     totalInterest: number;
     totalPrincipal: number;
-    /** The explicit residual after the final payment (equals the requested balloon). */
+    /** The requested residual after the final, roundoff-adjusted installment. */
     balloon: number;
     /** This schedule is UNROUNDED: display rounding is the caller's explicit policy. */
     rounding: 'none';
@@ -261239,8 +261244,8 @@ export interface AmortizationScheduleResult {
 
 Members/parameters (default = JSDoc only; not declared means no documented default):
 
-- balloon: number; default: not declared — The explicit residual after the final payment (equals the requested balloon).
-- payment: number; default: not declared
+- balloon: number; default: not declared — The requested residual after the final, roundoff-adjusted installment.
+- payment: number; default: not declared — Level payment; the final row may differ by the documented binary64 reconciliation drift.
 - rounding: 'none'; default: not declared — This schedule is UNROUNDED: display rounding is the caller's explicit policy.
 - rows: AmortizationRow[]; default: not declared
 - totalInterest: number; default: not declared
@@ -265342,7 +265347,10 @@ Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee
 
 The full amortization schedule. Unrounded by design — the rows reconcile exactly (each closing
 balance = opening − principal; Σ principal = principal − balloon) and any display rounding is
-the caller's explicit, documented policy applied afterwards.
+the caller's explicit, documented policy applied afterwards. The final installment may absorb
+arithmetic drift only within `8 * Number.EPSILON * numberOfPeriods * principal`; larger drift
+is refused. The `payment` headline is the level installment; inspect the final row's payment
+for its explicit roundoff reconciliation.
 
 ```typescript
 export declare function amortizationSchedule(input: AmortizationScheduleInput): AmortizationScheduleResult;
@@ -265357,8 +265365,8 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).periodicFee?: number; default: not declared — A flat per-period fee, reported per row (never folded into interest).
 - (input).periodicInterestRate: number; default: not declared — Per-period interest rate (decimal) — callers convert annual rates explicitly.
 - (input).principal: number; default: not declared — Amount borrowed (positive).
-- return.balloon: number; default: not declared — The explicit residual after the final payment (equals the requested balloon).
-- return.payment: number; default: not declared
+- return.balloon: number; default: not declared — The requested residual after the final, roundoff-adjusted installment.
+- return.payment: number; default: not declared — Level payment; the final row may differ by the documented binary64 reconciliation drift.
 - return.rounding: 'none'; default: not declared — This schedule is UNROUNDED: display rounding is the caller's explicit policy.
 - return.rows: AmortizationRow[]; default: not declared
 - return.totalInterest: number; default: not declared
@@ -271397,7 +271405,7 @@ Options for {@link fitGarch}.
 export interface GarchFitOptions {
     /** Seed for the deterministic multi-start of the optimizer (default `0x61726368`). */
     seed?: number;
-    /** `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first. */
+    /** `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode. */
     mean?: 'zero' | 'sample';
     /**
      * Warm start for the `(α, β)` search (Stage 4.5): replaces the primary `(0.05, 0.90)` start; `ω`
@@ -271416,7 +271424,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 is derived by variance targeting and is not a start. The seeded restarts still run.
 - initialParameters.alpha: number; default: not declared
 - initialParameters.beta: number; default: not declared
-- mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first.
+- mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode.
 - seed?: number; default: not declared — Seed for the deterministic multi-start of the optimizer (default `0x61726368`).
 
 ### @insiderfinance/totalfinance/volatility#GarchForecast
@@ -277301,7 +277309,8 @@ Fit a GARCH(1,1) model to a returns series by Gaussian MLE.
 The conditional variance follows `σ²ₜ = ω + α·r²ₜ₋₁ + β·σ²ₜ₋₁`, seeded with the sample second moment
 `E[r²]`. The optimizer works in the unconstrained space `θ = (log ω, logit p, logit f)` where
 `p = α+β` and `f = α/(α+β)`, so `ω>0, α≥0, β≥0, α+β<1` hold at every evaluation. A degenerate
-(constant / zero-variance) series has no variance process to fit and returns `converged: false`.
+zero-second-moment series returns `converged: false`. Exact constants are degenerate in sample
+mode; in zero mode a nonzero constant retains its second moment about the declared zero mean.
 
 ```typescript
 export declare function fitGarch(returns: number[], options?: GarchFitOptions): GarchFit;
@@ -277314,7 +277323,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 is derived by variance targeting and is not a start. The seeded restarts still run.
 - (options).initialParameters.alpha: number; default: not declared
 - (options).initialParameters.beta: number; default: not declared
-- (options).mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first.
+- (options).mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode.
 - (options).seed?: number; default: not declared — Seed for the deterministic multi-start of the optimizer (default `0x61726368`).
 - (returns): number[]; default: not declared
 - return.alpha: number; default: not declared — ARCH coefficient on the lagged squared return (`≥ 0`).
@@ -279595,7 +279604,7 @@ through the SSVI warm-start too.
 is derived by variance targeting and is not a start. The seeded restarts still run.
 - garch.options.initialParameters.alpha: number; default: not declared
 - garch.options.initialParameters.beta: number; default: not declared
-- garch.options.mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first.
+- garch.options.mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode.
 - garch.options.seed?: number; default: not declared — Seed for the deterministic multi-start of the optimizer (default `0x61726368`).
 - garch.returns: number[]; default: not declared
 - har-rv: { realizedVariances: number[]; options?: HarRvOptions; }; default: not declared
@@ -280556,7 +280565,7 @@ through the SSVI warm-start too.
 is derived by variance targeting and is not a start. The seeded restarts still run.
 - garch.options.initialParameters.alpha: number; default: not declared
 - garch.options.initialParameters.beta: number; default: not declared
-- garch.options.mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first.
+- garch.options.mean?: 'zero' | 'sample'; default: not declared — `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode.
 - garch.options.seed?: number; default: not declared — Seed for the deterministic multi-start of the optimizer (default `0x61726368`).
 - garch.returns: number[] | TableHandle; default: not declared
 - garch.returns.columnCount: number; default: not declared

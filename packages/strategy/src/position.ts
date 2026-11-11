@@ -966,41 +966,44 @@ export class Position {
     }
 
     const pnl = kinks.map((k) => this.pnlAtExpiry(k));
-    const leftSlope = this.slopeAt(kinks[0]! - 1);
-    const rightSlope = this.slopeAt(kinks[kinks.length - 1]! + 1);
+    const leftSlope = this.slopeAt(-Infinity);
+    const rightSlope = this.slopeAt(Infinity);
 
     // The payoff is linear on [0, k₀], between consecutive kinks, and on [kₙ, ∞). Its extremes occur
     // at a kink, at S=0, or at ±∞ per the right-tail slope (S ≥ 0, so the left tail is bounded).
     const pnl0 = this.pnlAtExpiry(0);
     // An unbounded tail is `null` with its `bounded` flag false (B3) — never `Infinity`, which
     // JSON drops and which read as "the best trade" in a ratio.
-    const bounded = { profit: !(rightSlope > EPS), loss: !(rightSlope < -EPS) };
+    const bounded = { profit: !(rightSlope > 0), loss: !(rightSlope < 0) };
     const maxProfit = bounded.profit ? Math.max(pnl0, ...pnl) : null;
     const maxLoss = bounded.loss ? Math.min(pnl0, ...pnl) : null;
 
     const breakevens: number[] = [];
     const add = (x: number): void => {
-      if (Number.isFinite(x) && !breakevens.some((b) => Math.abs(b - x) < 1e-9)) breakevens.push(x);
+      if (Number.isFinite(x) && !breakevens.includes(x)) breakevens.push(x);
     };
-    // A kink sitting exactly on zero is itself a breakeven (e.g. a lone long stock at its entry).
+    const everywhereZero = leftSlope === 0 && rightSlope === 0 && pnl.every((value) => value === 0);
+    // Zero-interval boundaries are useful partitions; an everywhere-zero payoff has no isolated root.
     kinks.forEach((k, i) => {
-      if (Math.abs(pnl[i]!) < 1e-9) add(k);
+      if (pnl[i] === 0 && !everywhereZero) add(k);
     });
     // Interior segments: an exact root wherever consecutive kinks straddle zero.
     for (let i = 0; i < kinks.length - 1; i++) {
       const a = pnl[i]!;
       const b = pnl[i + 1]!;
       if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
-        add(kinks[i]! + ((kinks[i + 1]! - kinks[i]!) * (0 - a)) / (b - a));
+        const scale = Math.max(Math.abs(a), Math.abs(b));
+        const weight = Math.abs(a) / scale / (Math.abs(a) / scale + Math.abs(b) / scale);
+        add(kinks[i]! + (kinks[i + 1]! - kinks[i]!) * weight);
       }
     }
     // Left tail (0 ≤ x < k₀): crossing off the first kink using the analytic left slope.
-    if (Math.abs(leftSlope) > EPS) {
+    if (leftSlope !== 0) {
       const x = kinks[0]! - pnl[0]! / leftSlope;
       if (x >= 0 && x < kinks[0]!) add(x);
     }
     // Right tail (x > kₙ): crossing off the last kink using the analytic right slope.
-    if (Math.abs(rightSlope) > EPS) {
+    if (rightSlope !== 0) {
       const last = kinks.length - 1;
       const x = kinks[last]! - pnl[last]! / rightSlope;
       if (x > kinks[last]!) add(x);

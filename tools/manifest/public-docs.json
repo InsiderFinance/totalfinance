@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 243,
+    "surfaces": 245,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 57,
+      "future-target": 59,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4612,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 57,
+    "checkedUnderVocabulary": 59,
     "shippedNamesWatched": 9748,
     "documentedExceptions": 7,
     "findings": 0
@@ -614,6 +614,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/numerical-repairs-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/sector-performance-readiness.md",
       "class": "future-target",
       "owner": "human",
@@ -1011,6 +1018,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/numerical-correctness-16-24.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/oas-analytics.md",

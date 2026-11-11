@@ -1,3 +1,4 @@
+import { analyticPremium, analyticTrial } from './analytic-premium.js';
 /**
  * `@insiderfinance/totalfinance/options/black76` — the Black-76 model for options on forwards/futures (spec §9.3).
  *
@@ -111,9 +112,13 @@ function black76PriceUnchecked(input: Black76TypedInput): number {
   const { type, forward: F, strike: K, timeToExpiryYears: T, riskFreeRate: r } = input;
   const { d1, d2 } = d1d2(input);
   const df = Math.exp(-r * T);
-  return type === 'call'
-    ? df * (F * normalCdf(d1) - K * normalCdf(d2))
-    : df * (K * normalCdf(-d2) - F * normalCdf(-d1));
+  return analyticPremium({
+    positiveLeg: df * (type === 'call' ? F * normalCdf(d1) : K * normalCdf(-d2)),
+    negativeLeg: df * (type === 'call' ? K * normalCdf(d2) : F * normalCdf(-d1)),
+    atTheMoney: F === K,
+    discountedScale: df * F,
+    standardDeviation: input.volatility * Math.sqrt(T),
+  });
 }
 
 /**
@@ -283,14 +288,17 @@ export function black76ImpliedVolatility(
 
   // Unchecked: the solver validated its own legs at the boundary; this runs per Brent iteration.
   const f = (sigma: number): number =>
-    black76PriceUnchecked({
-      type,
-      forward: F,
-      strike: K,
-      timeToExpiryYears: T,
-      riskFreeRate: r,
-      volatility: sigma,
-    }) - price;
+    analyticTrial(
+      () =>
+        black76PriceUnchecked({
+          type,
+          forward: F,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          volatility: sigma,
+        }) - price,
+    );
   const lo = 1e-7;
   let hi = 5;
   const ptol = impliedVolatilityPriceTolerance(price);

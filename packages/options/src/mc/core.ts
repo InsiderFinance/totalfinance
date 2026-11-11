@@ -92,7 +92,7 @@ export interface MonteCarloStatistics {
    * independent randomizations — which this estimator does not do, so it reports `null` and says so.
    */
   standardError: number | null;
-  /** Confidence interval at the requested level (default 95%); `null` whenever `standardError` is. */
+  /** Confidence interval at the requested level (default 95%); null for unsupported QMC uncertainty or unrepresentable endpoints (disclosed with nonconvergence), even when standardError is positive. */
   confidenceInterval: [number, number] | null;
   /** Number of paths actually evaluated (antithetic pairs count as one path). */
   paths: number;
@@ -311,14 +311,19 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
   const antithetic = method === 'pseudo' && (options.antithetic ?? true);
   const hasControl = control !== undefined;
 
-  // Online sums for the mean, variance, and (with a control) the control's variance and covariance.
+  // Center at the first observation so a large payoff level cannot swallow its
+  // dispersion. Welford innovations give centered rows; incremental Givens rotations
+  // regress those rows without subtracting nearly equal variances. O(1) memory.
   let n = 0;
-  let sY = 0;
-  let sYY = 0;
-  let sX = 0;
-  let sXX = 0;
-  let sXY = 0;
-
+  let originY = 0,
+    originX = 0,
+    meanY = 0,
+    meanX = 0;
+  let normY = 0,
+    normX = 0,
+    projectedY = 0,
+    residualNorm = 0;
+  let identityControl = hasControl;
   const accumulate = (y: number, x: number): void => {
     if (!Number.isFinite(y) || (hasControl && !Number.isFinite(x))) {
       throw new InputError(
@@ -326,13 +331,30 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
         { code: ErrorCode.InputNotFinite, context: { value: y } },
       );
     }
+    if (n === 0) {
+      originY = y;
+      originX = x;
+    }
+    identityControl = identityControl && y === x;
     n++;
-    sY += y;
-    sYY += y * y;
+    const dy = y - originY - meanY;
+    const dx = x - originX - meanX;
+    meanY += dy / n;
+    meanX += dx / n;
+    const weight = Math.sqrt((n - 1) / n);
+    const rowY = weight * dy,
+      rowX = weight * dx;
+    normY = Math.hypot(normY, rowY);
     if (hasControl) {
-      sX += x;
-      sXX += x * x;
-      sXY += x * y;
+      const nextNorm = Math.hypot(normX, rowX);
+      if (nextNorm > 0) {
+        const cosine = normX / nextNorm,
+          sine = rowX / nextNorm;
+        const innovation = cosine * rowY - sine * projectedY;
+        projectedY = cosine * projectedY + sine * rowY;
+        residualNorm = Math.hypot(residualNorm, innovation);
+        normX = nextNorm;
+      } else residualNorm = Math.hypot(residualNorm, rowY);
     }
   };
 
@@ -365,28 +387,24 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
     }
   }
 
-  const meanY = sY / n;
-  const varY = n > 1 ? (sYY - n * meanY * meanY) / (n - 1) : NaN;
-
-  let value = meanY;
-  let resVar = varY;
-  let usedControl = false;
-  if (hasControl && n > 1) {
-    const meanX = sX / n;
-    const varX = (sXX - n * meanX * meanX) / (n - 1);
-    if (varX > 0) {
-      const covXY = (sXY - n * meanX * meanY) / (n - 1);
-      const c = covXY / varX;
-      value = meanY - c * (meanX - control.mean);
-      resVar = Math.max(0, varY - 2 * c * covXY + c * c * varX);
-      usedControl = true;
+  let value = originY + meanY;
+  let errorNorm = normY;
+  const usedControl = hasControl && normX > 0;
+  if (usedControl) {
+    const beta = projectedY / normX;
+    value -= beta * (originX - control.mean + meanX);
+    errorNorm = residualNorm;
+    // An exact identity is known from the actual paired observations, not a tolerance.
+    if (identityControl) {
+      value = control.mean;
+      errorNorm = 0;
     }
   }
 
   // An iid standard error is meaningless for a deterministic low-discrepancy sequence (see
   // MonteCarloStatistics.standardError): report null with the reason, never a 75×-overstated number.
   const quasiRandom = method !== 'pseudo';
-  const se = quasiRandom ? null : Math.sqrt(resVar / n);
+  const se = quasiRandom ? null : errorNorm / Math.sqrt(n - 1) / Math.sqrt(n);
   if (quasiRandom) {
     warnings.push(
       warning(
@@ -401,11 +419,33 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
       ),
     );
   }
-  const converged = Number.isFinite(value) && (se === null || Number.isFinite(se));
+  let converged = Number.isFinite(value) && (se === null || Number.isFinite(se));
+  let confidenceInterval: [number, number] | null =
+    se === null ? null : [value - z * se, value + z * se];
+  if (
+    se !== null &&
+    se > 0 &&
+    confidenceInterval !== null &&
+    (!Number.isFinite(confidenceInterval[0]) ||
+      !Number.isFinite(confidenceInterval[1]) ||
+      confidenceInterval[0] >= value ||
+      confidenceInterval[1] <= value)
+  ) {
+    confidenceInterval = null;
+    converged = false;
+    warnings.push(
+      warning(
+        WarningCode.ModelLimitation,
+        'positive sampling standard error was resolved, but the confidence interval endpoints cannot be represented around this value in binary64 precision; confidenceInterval is null. Inspect standardError separately or use higher-precision reporting.',
+        'warn',
+        { reason: 'confidence_interval_unrepresentable' },
+      ),
+    );
+  }
   return {
     value,
     standardError: se,
-    confidenceInterval: se === null ? null : [value - z * se, value + z * se],
+    confidenceInterval,
     paths: n,
     seed: options.seed >>> 0,
     method,

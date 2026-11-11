@@ -5,7 +5,18 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-### Active: GitHub Release → SDK publication (2026-11-10)
+### Active: numerical correctness repairs, issues 16–24 (2026-11-11)
+
+The maintainer authorized fixing all nine independently reproduced findings and opening one PR.
+Follow [the scoped contract](./specs/numerical-correctness-16-24.md), A–H, preserving existing
+financial conventions and call shapes. Implementation and local verification are complete (82 new regressions, 3,268 combined affected tests and all 229 packed consumers). Exact-head hosted gates remain with the PR. The source
+baseline is current main `ca122ab`; published SDK 0.1.3 also reproduces the symptoms. These are
+separate from PR #27's DX/LIB batch and draft #26. No version bump, merge, publication, provider
+work or app mitigation removal is authorized. Exact-head hosted evidence belongs to the PR.
+
+### Completed: GitHub Release → SDK publication (2026-11-11)
+
+SDK 0.1.3 is public; main `ca122ab` and the original release run are green. The paragraphs below preserve the initial preparation scope and its bounded production follow-up.
 
 Bounded production follow-up G7 (2026-11-11): PR #29 is merged at `59a2833`; full main CI and both
 release coverage passes succeeded. npm accepted the authorized SDK 0.1.3 upload with signed

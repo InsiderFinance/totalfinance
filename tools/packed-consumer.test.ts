@@ -1899,6 +1899,40 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
     expect(cliStructured).toBe(sdkStructured);
   }, 120_000);
 
+  it.each(['nodenext', 'bundler'] as const)(
+    'numerical repairs 16–24 compile and execute from installed artifacts: %s',
+    (resolution) => {
+      const dir = join(consumer, `numerical-repairs-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(
+        join(dir, 'consumer.mts'),
+        readFileSync(join(ROOT, 'tools/numerical-regression-consumer.ts'), 'utf8') +
+          '\nassertNumericalRepairs(); console.log("NUMERICAL_REPAIRS_OK");\n',
+      );
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'NUMERICAL_REPAIRS_OK',
+      );
+    },
+    120_000,
+  );
+
   it.each(['classification', 'reconciliation', 'retries'])(
     'dogfood repair: %s through the installed public SDK',
     (finding) => {

@@ -1,3 +1,4 @@
+import { analyticPremium, AnalyticPrecisionError } from './analytic-premium.js';
 /**
  * Exotic option engines (spec §9.3): barrier, Asian, and lookback options.
  *
@@ -502,6 +503,7 @@ export const asian = {
         timeToExpiryYears: T,
         shocks: z,
       });
+      if (m === 1) return { arith: path[1]!, geo: path[1]! };
       let sum = 0;
       let logSum = 0;
       for (let i = 1; i <= m; i++) {
@@ -1043,18 +1045,20 @@ function kirkSpread(input: {
   }
   const disc = Math.exp(-r * T);
   const a = F2 / (F2 + K);
-  const sk = Math.sqrt(Math.max(0, v1 * v1 - 2 * rho * v1 * v2 * a + v2 * v2 * a * a));
+  const effectiveV2 = v2 * a;
+  const sk = Math.hypot(v1 - rho * effectiveV2, Math.sqrt((1 - rho) * (1 + rho)) * effectiveV2);
   const sd = sk * Math.sqrt(T);
-  let call: number;
-  if (sd <= 0) {
-    call = disc * Math.max(F1 - (F2 + K), 0);
-  } else {
-    const d1 = (Math.log(F1 / (F2 + K)) + 0.5 * sd * sd) / sd;
-    const d2 = d1 - sd;
-    call = disc * (F1 * N(d1) - (F2 + K) * N(d2));
-  }
-  // Spread put–call parity: C − P = disc·(F1 − F2 − K).
-  return type === 'call' ? call : call - disc * (F1 - F2 - K);
+  if (sk === 0) return disc * Math.max(type === 'call' ? F1 - (F2 + K) : F2 + K - F1, 0);
+  if (sd === 0) throw new AnalyticPrecisionError();
+  const d1 = (Math.log(F1 / (F2 + K)) + 0.5 * sd * sd) / sd;
+  const d2 = d1 - sd;
+  return analyticPremium({
+    positiveLeg: disc * (type === 'call' ? F1 * N(d1) : (F2 + K) * N(-d2)),
+    negativeLeg: disc * (type === 'call' ? (F2 + K) * N(d2) : F1 * N(-d1)),
+    atTheMoney: F1 === F2 + K,
+    discountedScale: disc * F1,
+    standardDeviation: sd,
+  });
 }
 
 const SPREAD_PRICE_SPEC = specOf('spread.price#0');
