@@ -1,4 +1,4 @@
-import { analyticPremium, AnalyticPrecisionError } from './analytic-premium.js';
+import { analyticPremium } from './analytic-premium.js';
 /**
  * Exotic option engines (spec §9.3): barrier, Asian, and lookback options.
  *
@@ -1049,7 +1049,15 @@ function kirkSpread(input: {
   const sk = Math.hypot(v1 - rho * effectiveV2, Math.sqrt((1 - rho) * (1 + rho)) * effectiveV2);
   const sd = sk * Math.sqrt(T);
   if (sk === 0) return disc * Math.max(type === 'call' ? F1 - (F2 + K) : F2 + K - F1, 0);
-  if (sd === 0) throw new AnalyticPrecisionError();
+  if (sd === 0) {
+    throw new InputError(
+      'spread.price: effective volatility is positive, but its product with sqrt(timeToExpiryYears) underflows binary64 precision. Use a higher-precision calculation for these inputs; this is different from exact zero effective volatility.',
+      {
+        code: ErrorCode.InputOutOfRange,
+        context: { field: 'timeToExpiryYears', reason: 'horizon_volatility_underflow' },
+      },
+    );
+  }
   const d1 = (Math.log(F1 / (F2 + K)) + 0.5 * sd * sd) / sd;
   const d2 = d1 - sd;
   return analyticPremium({

@@ -9,7 +9,7 @@
 
 The maintainer authorized fixing all nine independently reproduced findings and opening one PR.
 Follow [the scoped contract](./specs/numerical-correctness-16-24.md), A–H, preserving existing
-financial conventions and call shapes. Implementation and local verification are complete (82 new regressions, 3,268 combined affected tests and all 229 packed consumers). Exact-head hosted gates remain with the PR. The source
+financial conventions and call shapes. Implementation and local verification are complete (84 new regressions, 3,270 combined affected tests and all 229 packed consumers). Exact-head hosted gates remain with the PR. The source
 baseline is current main `ca122ab`; published SDK 0.1.3 also reproduces the symptoms. These are
 separate from PR #27's DX/LIB batch and draft #26. No version bump, merge, publication, provider
 work or app mitigation removal is authorized. Exact-head hosted evidence belongs to the PR.

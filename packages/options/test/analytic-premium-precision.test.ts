@@ -90,3 +90,31 @@ it('keeps deterministic OTM spread put exactly zero', () => {
     }).value,
   ).toBe(0);
 });
+
+const tinySpread = {
+  type: 'call' as const,
+  spot1: 1,
+  spot2: 1,
+  strike: 0,
+  timeToExpiryYears: Number.MIN_VALUE,
+  riskFreeRate: 0,
+  dividendYield1: 0,
+  dividendYield2: 0,
+  volatility1: Number.MIN_VALUE,
+  volatility2: Number.MIN_VALUE,
+  correlation: 0,
+};
+it('distinguishes positive horizon-volatility underflow from premium subtraction cancellation', () => {
+  expect(() => spread.price(tinySpread)).toThrowError(
+    expect.objectContaining({
+      code: 'input.out_of_range',
+      context: { field: 'timeToExpiryYears', reason: 'horizon_volatility_underflow' },
+      message: expect.stringContaining('underflows'),
+    }),
+  );
+});
+it('retains a genuinely deterministic zero spread at the same tiny horizon', () => {
+  const result = spread.price({ ...tinySpread, correlation: 1 });
+  expect(result.value).toBe(0);
+  expect(result.diagnostics.converged).toBe(true);
+});

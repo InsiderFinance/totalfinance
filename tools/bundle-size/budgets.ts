@@ -669,7 +669,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
-      'Numerical precision repairs #16–24 (2026-11-11): measured 714,320 → 715,951 B gzip on Node 22.23.2/esbuild 0.25.12. Shared stable annuities/IRR/MC, strategy roots and honest diagnostics add 1,631 B; 699.5 KiB leaves 337 B. No new exports/dependencies; all structural and installed leaf-import budgets remain enforced. ' +
+      'Numerical precision repairs #16–24 (2026-11-11): measured 714,320 → 716,058 B gzip on Node 22.23.2/esbuild 0.25.12. Shared stable annuities/IRR/MC, strategy roots and honest diagnostics add 1,738 B; 699.5 KiB leaves 230 B. No new exports/dependencies; all structural and installed leaf-import budgets remain enforced. ' +
       'Review repair (2026-11-10): 697.25 → 697.75 KB from 714,320 B gzip on Node 22.23.2 / esbuild 0.25.12. Validated source-bar identity/time and head-specific repair examples add 696 B over the initial batch measurement; structural exclusions stay unchanged. ' +
       'Dogfood 0.1.x (2026-11-10): 696.25 → 697.25 KB from 713,624 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       '695 → 696.25 KiB (PL6 named pairs, 2026-10-12): 711,393 → 712,699 B gzip (+1,306 B) on Node 22.23.2/esbuild 0.25.12. Sixteen named pair facades and optional generic metadata add no dependencies. Headroom is 261 B; only price-levels also changes its whole-entrypoint ceiling, with single-helper installed tree-shaking tests. Every other narrow limit and structural gate is retained. ' +
