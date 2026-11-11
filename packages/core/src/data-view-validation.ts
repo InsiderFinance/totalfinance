@@ -1,12 +1,19 @@
+import { responseIssue } from './data-response-issue.js';
 /** Shared read-door checks. Never repairs a provider's source page or selected values. */
-import { DataError, ErrorCode, InputError, QuantError } from './errors.js';
+import { ErrorCode, InputError, QuantError } from './errors.js';
 import type { DataProvider, DataRequest, DataView, OhlcvInput } from './data-types.js';
 import { pageData, plain, frozen } from './data-validation.js';
 
 export function invalidView(): never {
-  throw new DataError('connect: provider returned an invalid research view or selection.', {
-    code: ErrorCode.DataInvalidResponse,
-  });
+  responseIssue(
+    {
+      phase: 'view',
+      path: 'view',
+      reason: 'invalid_structure',
+      validationCode: ErrorCode.DataInvalidResponse,
+    },
+    'connect',
+  );
 }
 /** Check descriptors before reading source fields; no selector is invoked here. */
 export function viewEnvelope(

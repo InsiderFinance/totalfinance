@@ -1,3 +1,4 @@
+import { scanIssue, atResponse, issueOf, responseIssue } from './data-response-issue.js';
 /** Bounded explicit research acquisition. HTTP/authentication and upstream metering belong to providers. */
 import { scanCanonicalData } from './artifacts/canonical-scan.js';
 import { canonicalJsonOf } from './canonical-json.js';
@@ -133,10 +134,14 @@ export function connect(provider: DataProvider, options?: DataConnectionOptions)
     const signal = dataSignal(options);
     return dataCall(signal, async () => {
       const result = await discovery(signal ? { signal } : undefined);
-      return responseData(() => {
+      try {
         capabilityData(result, identity);
         return copyFrozen(result);
-      }, id);
+      } catch (error) {
+        const detail = issueOf(error);
+        if (detail) responseIssue(detail, 'connect.capabilities');
+        throw error;
+      }
     });
   }
   async function one<R extends DataRequest>(
@@ -237,7 +242,12 @@ export function connect(provider: DataProvider, options?: DataConnectionOptions)
               limit: count,
             }
           : { ...original, limit: count };
-        const view = (await one(request, signal ? { signal } : undefined)) as PriceBarsView;
+        let view: PriceBarsView;
+        try {
+          view = (await one(request, signal ? { signal } : undefined)) as PriceBarsView;
+        } catch (error) {
+          atResponse(error, { pageIndex: pages.length }, 'priceBars');
+        }
         responseData(() => {
           pageData(view.page, { ...original, limit: count }, identity);
           if (view.page.metadata.consistency !== capability.consistency) invalidView();
@@ -280,12 +290,16 @@ export function createPriceBarsWindowView(input: unknown): PriceBarsWindowView {
     return responseData(() => {
       // A window contains up to100 individually bounded pages plus its header. The per-page
       // 2M scan remains enforced by pageData/createDataView below; do not apply it to their sum.
-      scanCanonicalData(input, {
-        functionName: 'createPriceBarsWindowView',
-        label: 'window',
-        requireFiniteNumbers: true,
-        maximumWorkUnits: 2_000_000 * 101,
-      });
+      try {
+        scanCanonicalData(input, {
+          functionName: 'createPriceBarsWindowView',
+          label: 'window',
+          requireFiniteNumbers: true,
+          maximumWorkUnits: 2_000_000 * 101,
+        });
+      } catch (error) {
+        scanIssue(error, input);
+      }
       const args = object(input, 'window', ['version', 'kind', 'request', 'pages', 'pagination']);
       version(args['version']);
       if (args['kind'] !== 'price-bars-window') invalidView();
@@ -310,7 +324,11 @@ export function createPriceBarsWindowView(input: unknown): PriceBarsWindowView {
       let records = 0;
       for (let i = 0; i < args['pages'].length; i++) {
         const p = args['pages'][i];
-        pageData(p, original);
+        try {
+          pageData(p, original);
+        } catch (error) {
+          atResponse(error, { pageIndex: i }, 'createPriceBarsWindowView');
+        }
         if ((p.nextCursor === null) !== (i === args['pages'].length - 1)) invalidView();
         sequence(p);
         records += p.data.length;

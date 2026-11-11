@@ -22,6 +22,11 @@ export const barCapability: DataCapability = {
   pointInTime: false,
   access: 'unknown',
 };
+export function page(kind?: 'price-bars'): DataPage<PriceBarRecord>;
+export function page(kind: 'option-chain-research'): DataPage<OptionChainResearchRecord>;
+export function page(
+  kind: 'price-bars' | 'option-chain-research',
+): DataPage<PriceBarRecord> | DataPage<OptionChainResearchRecord>;
 export function page(
   kind: 'price-bars' | 'option-chain-research' = 'price-bars',
 ): DataPage<PriceBarRecord | OptionChainResearchRecord> {

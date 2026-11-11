@@ -1,5 +1,7 @@
 # TotalFinance Docs
 
+[No-key first success and connector author journey](./guides/community-connector-first-success.md).
+
 TotalFinance `0.1.0` is pre-1.0 software, not a 1.0 stability guarantee. Its two public packages are
 `@insiderfinance/totalfinance` (all domains, workflows, CLI and HTTP) and the optional
 `@insiderfinance/totalfinance-mcp`. The 25 source workspaces are private implementation details.
@@ -37,6 +39,7 @@ server.
 - [Agent-native portfolio and trading platform — durable state, workflows, simulation, and safe execution](./agent-native-portfolio-and-trading-platform.md)
 - [Roadmap — the ambitious surface](./roadmap.md)
 - [MCP, acceleration, and data-growth strategy](./mcp-acceleration-data-growth-strategy.md)
+- [First useful results, portfolio bootstrap and first-failure recovery](./guides/dogfood-journeys.md)
 - [Levels: raw, facade, analysis, artifact, batch, workflow](./guides/levels.md)
 - [Compute only what you need: selective Greeks and exposure](./guides/selective-greeks-and-exposure.md)
 - [Convert futures/index levels to ETF levels: named pairs and custom mappings](./guides/price-level-conversion.md)

@@ -9,6 +9,8 @@
  * keeps them side by side under one `assumptions`.
  */
 
+import { ScreenFilterSchema } from './screen-filter-schema.js';
+import { portfolioInspect } from './operations-portfolio-store.js';
 import {
   compareAnalysisArtifacts,
   readAnalysisArtifact,
@@ -980,14 +982,11 @@ const MissingValuePolicySchema = schema.enum(['exclude', 'evaluate-as-false'] as
 
 const ScreenInputSchema = schema.object({
   ...UniverseSchema,
-  filter: schema
-    .record(schema.unknown())
-    .optional()
-    .describe(
-      'A ScreenFilter tree — { all: [...] } | { any: [...] } | { not: ... } | { field, operator, value } | ' +
-        "{ field, operator: 'between', from, to } | { field, operator: 'in' | 'notIn', values } | " +
-        "{ field, operator: 'isPresent' | 'isMissing' } — validated node by node by screenUniverse; omitted = every eligible row passes",
-    ),
+  filter: ScreenFilterSchema.optional().describe(
+    'Complete ScreenFilter grammar (executable examples: docs/guides/dogfood-journeys.md): ordering operators greaterThan | greaterThanOrEqual | lessThan | lessThanOrEqual require numeric value; equals | notEquals use a number/string/boolean value. No gt/gte aliases. A ScreenFilter tree — { all: [...] } | { any: [...] } | { not: ... } | { field, operator, value } | ' +
+      "{ field, operator: 'between', from, to } | { field, operator: 'in' | 'notIn', values } | " +
+      "{ field, operator: 'isPresent' | 'isMissing' } — validated node by node by screenUniverse; omitted = every eligible row passes",
+  ),
   missingValuePolicy: MissingValuePolicySchema,
   orderBy: schema.array(
     schema.object({
@@ -1524,6 +1523,7 @@ export function portfolioPack(): OperationPack {
   return {
     name: 'portfolio',
     operations: [
+      portfolioInspect,
       portfolioSnapshotOperation,
       portfolioExplainPnl,
       portfolioAnalyze,

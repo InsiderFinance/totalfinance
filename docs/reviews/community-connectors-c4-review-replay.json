@@ -1,0 +1,251 @@
+{
+  "note": "Original observations unchanged. Copied author migrated only raw query typing/removed conditional assertion and SDK peer0.1.3; all original probes unchanged.",
+  "sdkSha256": "4e850776f20da789e908ee9818556df56320830bea377750b136848d4c8cabf6",
+  "results": {
+    "independentConformance": {
+      "accepted": true
+    },
+    "missingVolume": {
+      "accepted": false,
+      "error": {
+        "name": "InputError",
+        "code": "input.missing_field",
+        "message": "ohlcvBars: actual volume is required on every selected row.",
+        "context": {
+          "field": "volume",
+          "pageIndex": 1,
+          "rowIndex": 0,
+          "index": 2
+        }
+      }
+    },
+    "budget": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.window_budget_exceeded",
+        "message": "priceBars: terminal pagination exceeds the configured work budget; use explicit one-page query for manual control.",
+        "context": {
+          "provider": "independent-synthetic",
+          "kind": "price-bars",
+          "limit": "maxPages",
+          "pageCalls": 1,
+          "records": 2,
+          "maxPages": 1,
+          "maxRecords": 20000,
+          "retryable": false
+        }
+      }
+    },
+    "preAbort": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.aborted",
+        "message": "defineDataProvider: request cancelled by the caller."
+      }
+    },
+    "badFromDate": {
+      "accepted": false,
+      "error": {
+        "name": "InputError",
+        "code": "input.out_of_range",
+        "message": "priceBars: \"2026-02-30\" is not a valid calendar date.",
+        "context": {
+          "field": "date",
+          "value": "2026-02-30"
+        }
+      }
+    },
+    "shortHistory": {
+      "accepted": true,
+      "value": {
+        "last": "NaN",
+        "count": 3
+      }
+    },
+    "invalidCloseAuthorError": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.invalid_response",
+        "message": "defineDataProvider.query: invalid research data at data[].bar.close (not_finite).",
+        "context": {
+          "phase": "page",
+          "path": "data[].bar.close",
+          "reason": "not_finite",
+          "validationCode": "input.not_finite",
+          "rowIndex": 0
+        }
+      }
+    },
+    "missingMetadataAuthorError": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.invalid_response",
+        "message": "defineDataProvider.query: invalid research data at metadata.datasetId (missing_field).",
+        "context": {
+          "phase": "page",
+          "path": "metadata.datasetId",
+          "reason": "missing_field",
+          "validationCode": "input.missing_field"
+        }
+      }
+    },
+    "contradictoryAdjustment": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.invalid_response",
+        "message": "priceBars: invalid research data at data[].bar.adjusted (inconsistent).",
+        "context": {
+          "phase": "page",
+          "path": "data[].bar.adjusted",
+          "reason": "inconsistent",
+          "validationCode": "data.invalid_response",
+          "rowIndex": 0,
+          "pageIndex": 0
+        }
+      }
+    },
+    "distinctOptionContractsSameTerms": {
+      "accepted": true,
+      "value": {
+        "kind": "option-chain-research",
+        "page": {
+          "assumptions": {
+            "conventionsVersion": "0.0.1"
+          },
+          "contractVersion": 1,
+          "data": [
+            {
+              "diagnostics": {
+                "warnings": []
+              },
+              "greeks": null,
+              "openInterestSessionDate": null,
+              "quote": {
+                "ask": 1,
+                "bid": 0,
+                "openInterest": 0
+              },
+              "sourceContractId": "TEST-20261120-C100-standard",
+              "terms": {
+                "currency": "USD",
+                "expiresAt": null,
+                "expiry": "2026-11-20",
+                "multiplier": null,
+                "occSymbol": null,
+                "root": "TEST",
+                "settlement": null,
+                "strike": 100,
+                "style": null,
+                "termsStatus": "incomplete",
+                "type": "call",
+                "underlying": "TEST"
+              },
+              "theoreticalPrice": null,
+              "times": {
+                "availableTimestampMs": null,
+                "observedTimestampMs": null,
+                "sourceStoredTimestampMs": null
+              }
+            },
+            {
+              "diagnostics": {
+                "warnings": []
+              },
+              "greeks": null,
+              "openInterestSessionDate": null,
+              "quote": {
+                "ask": 1,
+                "bid": 0,
+                "openInterest": 0
+              },
+              "sourceContractId": "TEST1-20261120-C100-adjusted",
+              "terms": {
+                "currency": "USD",
+                "expiresAt": null,
+                "expiry": "2026-11-20",
+                "multiplier": null,
+                "occSymbol": null,
+                "root": "TEST1",
+                "settlement": null,
+                "strike": 100,
+                "style": null,
+                "termsStatus": "incomplete",
+                "type": "call",
+                "underlying": "TEST"
+              },
+              "theoreticalPrice": null,
+              "times": {
+                "availableTimestampMs": null,
+                "observedTimestampMs": null,
+                "sourceStoredTimestampMs": null
+              }
+            }
+          ],
+          "diagnostics": {
+            "warnings": []
+          },
+          "kind": "option-chain-research",
+          "metadata": {
+            "access": "unknown",
+            "adjustment": "split",
+            "consistency": "best-effort",
+            "coverage": {
+              "end": null,
+              "start": null,
+              "status": "unknown"
+            },
+            "datasetId": "synthetic",
+            "datasetVersion": "1",
+            "executionEligibility": "research-only",
+            "freshness": {
+              "configuredDelayMs": 0,
+              "evaluatedTimestampMs": null,
+              "status": "end-of-day"
+            },
+            "quality": {
+              "issues": [],
+              "status": "complete"
+            },
+            "receivedTimestampMs": 1793203200000,
+            "sessionDate": null,
+            "snapshotId": null,
+            "sourceGeneratedTimestampMs": null,
+            "times": {
+              "availableTimestampMs": null,
+              "observedTimestampMs": null,
+              "sourceStoredTimestampMs": null
+            }
+          },
+          "nextCursor": null,
+          "provenance": {
+            "dataset": "synthetic",
+            "provider": "fixture",
+            "receivedAt": 1793203200000,
+            "sourceVersion": "1"
+          },
+          "symbol": "TEST"
+        }
+      }
+    },
+    "negativeOptionAsk": {
+      "accepted": false,
+      "error": {
+        "name": "DataError",
+        "code": "data.invalid_response",
+        "message": "createDataView: invalid research data at data[].quote.bid (out_of_range).",
+        "context": {
+          "phase": "page",
+          "path": "data[].quote.bid",
+          "reason": "out_of_range",
+          "validationCode": "input.out_of_range",
+          "rowIndex": 0
+        }
+      }
+    }
+  }
+}

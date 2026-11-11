@@ -1,5 +1,6 @@
+import { issueOf } from './data-response-issue.js';
 /** Framework-independent, bounded behavioral proof using caller-supplied synthetic facts. */
-import { ErrorCode, DataError, QuantError } from './errors.js';
+import { ErrorCode, DataError, QuantError, InputError } from './errors.js';
 import { viewEnvelope, viewSelection } from './data-view-validation.js';
 import { dataSequence } from './data-sequence-validation.js';
 import { canonicalJsonOf } from './canonical-json.js';
@@ -104,15 +105,42 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
     if (probe.kind === 'pages') {
       if (!Array.isArray(probe.expectedPages) || !probe.expectedPages.length)
         fail('probe.expectedPages');
-      for (const page of probe.expectedPages) pageData(page, probe.request, provider);
+      for (let pageIndex = 0; pageIndex < probe.expectedPages.length; pageIndex++) {
+        try {
+          pageData(probe.expectedPages[pageIndex], probe.request, provider);
+        } catch (error) {
+          const detail = issueOf(error);
+          throw new InputError('validateDataProvider: invalid expected research page.', {
+            code: detail?.validationCode.startsWith('input.')
+              ? detail.validationCode
+              : ErrorCode.InputWrongShape,
+            context: { ...(detail ?? {}), field: 'probes[].expectedPages', pageIndex },
+          });
+        }
+      }
     }
     if (probe.kind === 'abort' && typeof probe.waitUntilStarted !== 'function')
       fail('probe.waitUntilStarted');
   }
-  function violation(probe: string, law: string): never {
+  function violation(probe: string, law: string, error?: unknown, pageIndex?: number): never {
     throw new DataError(
       `validateDataProvider: ${probe} failed ${law}; fix the provider or its capability claim.`,
-      { code: ErrorCode.DataNonconformant, context: { provider: provider.id, probe, law } },
+      {
+        code: ErrorCode.DataNonconformant,
+        context: {
+          provider: provider.id,
+          probe,
+          law,
+          ...(issueOf(error)
+            ? {
+                validation: {
+                  ...issueOf(error),
+                  ...(pageIndex === undefined ? {} : { pageIndex }),
+                },
+              }
+            : {}),
+        },
+      },
     );
   }
   function viewFacts(
@@ -143,7 +171,12 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
     }
   }
 
-  async function bounded<T>(probe: string, law: string, operation: () => Promise<T>): Promise<T> {
+  async function bounded<T>(
+    probe: string,
+    law: string,
+    operation: () => Promise<T>,
+    pageIndex?: number,
+  ): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       return await Promise.race([
@@ -160,8 +193,8 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
           );
         }),
       ]);
-    } catch {
-      violation(probe, law);
+    } catch (error) {
+      violation(probe, law, error, pageIndex);
     } finally {
       clearTimeout(timer);
     }
@@ -247,18 +280,23 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
     for (let index = 0; index < probe.expectedPages.length; index++) {
       const sent = JSON.parse(canonicalJsonOf(request)) as DataRequest;
       const before = canonicalJsonOf(sent);
-      const page = await bounded(probe.name, 'page grammar', async () => {
-        const view = await provider.query(sent);
-        const value = object(view, 'view');
-        pageData(value['page'], request, provider);
-        const raw = value['page'];
-        viewFacts(view, raw, probe.name);
-        return raw;
-      });
+      const page = await bounded(
+        probe.name,
+        'page grammar',
+        async () => {
+          const view = await provider.query(sent);
+          const value = object(view, 'view');
+          pageData(value['page'], request, provider);
+          const raw = value['page'];
+          viewFacts(view, raw, probe.name);
+          return raw;
+        },
+        index,
+      );
       try {
         sequence(page);
-      } catch {
-        violation(probe.name, 'page sequence');
+      } catch (error) {
+        violation(probe.name, 'page sequence', error);
       }
       if (canonicalJsonOf(sent) !== before) violation(probe.name, 'input immutability');
       if (!frozen(page)) violation(probe.name, 'immutable page');

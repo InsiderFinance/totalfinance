@@ -42,7 +42,7 @@ for (const [reason, count] of Object.entries(summary.unmeasuredByReason)) {
 for (const code of ['input.out_of_range', 'input.missing_field', 'input.wrong_type']) {
   sub(
     String.raw`(\`${code.replace('.', String.raw`\.`)}\` )${NUM}`,
-    `$1${n(summary.rejectionsByCode[code])}`,
+    `$1${n(summary.rejectionsByCode[code] ?? 0)}`,
   );
 }
 sub(
@@ -54,11 +54,11 @@ sub(
   `$1${n(summary.defectiveMeasurementTargets)}$2`,
 );
 sub(
-  String.raw`(\`unknown-key\` ran )${NUM}( times and is attributed to )${NUM}`,
+  String.raw`(\`unknown-key\` ran )${NUM}( times and is attributed to\s+)${NUM}`,
   `$1${n(summary.mutationsExecuted['unknown-key'])}$2${n(summary.mutationsCovered['unknown-key'])}`,
 );
 sub(
-  String.raw`(split the same way \()${NUM}( direct, )${NUM}`,
+  String.raw`(split the same way \()${NUM}( direct,\s+)${NUM}`,
   `$1${n(summary.failuresDirect)}$2${n(summary.failuresAttributed)}`,
 );
 sub(

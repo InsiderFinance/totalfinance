@@ -164,9 +164,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/math',
     entry: 'packages/math/src/index.ts',
-    budgetKB: 40.5,
+    budgetKB: 40.75,
     intent: 'the whole numerical suite; consumers tree-shake to far less via deep entrypoints',
     rationale:
+      'Dogfood 0.1.x (2026-11-10): 40.5 → 40.75 KB from 41,478 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       'Measures the kitchen-sink import of the whole index; real consumers import deep/used symbols ' +
       'and pay far less. 12 KB in Phase 1 → 14 KB when Phase 2 grew math into the full numerical ' +
       'foundation → 16 KB with LU/QR/SVD + pseudoinverse, differential evolution and bicubic ' +
@@ -262,9 +263,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/performance/sharpe',
     entry: 'packages/performance/src/sharpe.ts',
-    budgetKB: 9,
+    budgetKB: 9.25,
     intent: 'verified to pull in no option pricing',
     rationale:
+      'Dogfood 0.1.x (2026-11-10): 9 → 9.25 KB from 9,261 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       'Pre-publish interface repairs C (2026-09-21, hygiene): 8.75 -> 9 KB, measured 8.8 KB. An empty series is refused by the drawdown door through the shared InputError, and the core registries ride whole. ' +
       '7.75 KB (was 7.5), FC7 slice 3 (2026-08-28): two portfolio repair codes ' +
       '(reversal_target_missing, reversal_infeasible) joined core’s central ErrorCode table, which ' +
@@ -430,10 +432,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/backtest/environment',
     entry: 'packages/backtest/src/environment/index.ts',
-    budgetKB: 142.25,
+    budgetKB: 142.5,
     intent:
       'Stage 7B.1 createTradingEnvironment: the deterministic trading-agent environment over the portfolio engine — reset/step, open orders, typed rejections, the trace identity — a subpath so a backtest never pays for the environment and the environment pays only for the engine it drives',
     rationale:
+      'Dogfood 0.1.x (2026-11-10): 142.25 → 142.5 KB from 145,681 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       "142 → 142.25 KB (0.1.2 speed, 2026-10-05): measured 145,443 B, 35 B over the old line — core's remembered expiry-label parses and path-on-hit finiteness walk, which every result here passes through; 221 B of headroom. 141 → 142 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the environment features require an annualization (no per-bar volatility feeding annualized consumers), the bench baseline and episodes name theirs, and the paper broker and plan it composes refuse an OCC option symbol without a declared multiplier through the core OCC grammar predicate; measured 144,489 B, 105 B over the 141 KB line. " +
       'September 2026 R01–R05: 129 → 141 KB, measured 142,528 B. Inherits the corrected portfolio engine and existing fixed-income calendar owner; adds explicit currency funding in the multi-currency episode. The engine/environment split and hot-path exclusions remain intact. ' +
       'Stage 7B.1 slice 1 (2026-09-05): the environment core (the definition and action guards, reset/step over the stepper seam, open-order carry-forward and cancel/replace, idempotent retry, the trace hash) on top of the multi-asset engine it composes — the engine with its eight adapters is ~99 KB of the whole. Measured 103,352 B (100.9 KB) at landing; the budget is 103 KB so slice 2 (limits, the mask, the reward, features) reconciles its growth rather than absorbs it.' +
@@ -485,10 +488,12 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 502.75,
+    budgetKB: 507.5,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
+      'Review repair (2026-11-10): 506.5 → 507.5 KB from 519,313 B gzip on Node 22.23.2 / esbuild 0.25.12. Canonical-bar metadata/chronology validation, executable ratio recovery and explicit pack discovery add 1,043 B over the initial batch measurement; domain exclusions stay unchanged. ' +
+      'Dogfood 0.1.x (2026-11-10): 502.75 → 506.5 KB from 518,270 B gzip on Node 22.23.2 / esbuild 0.25.12. The new create/inspect operations, recursive screen discovery, controls and repair diagnostics add registry payload; no calculation is duplicated. ' +
       '502.5 → 502.75 KB (the New York market day per clock hour, 2026-10-06): measured 514,383 → 514,579 B (+196 B, 19 B over the old line) with Node 22.23.2/esbuild 0.25.12. Core\u2019s usEquityMarketDayIndex now remembers the market day per UTC hour — the hour map, the first-visit mark (an hour asked about once still costs one Intl read) and the check of both ends of the hour — which flow\u2019s 0DTE flag and exposure\u2019s 0DTE buckets reach. flow() over 50,000 prints drops about 5×, with every result unchanged. The cache limit is a literal so bundles that never ask for a market day drop the cache entirely (they move by at most 6 B of gzip noise). 237 B of headroom. ' +
       '502.25 → 502.5 KB (0.1.2 speed and exposureFromGreeks breakdowns, 2026-10-05): measured 514,383 B (+79 B over the old line) — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade), and the supplied-exposure `breakdowns` flag; 177 B of headroom. 497.25 → 502.25 KB (selective Greeks and exposure, 2026-10-01): origin/main measured 508,996 B (188 B under the old line), this change 514,035 B (+5,039 B) with Node 22.23.2/esbuild 0.25.12. The exposure operation composes the selective ExposureProfile, which now evaluates through @insiderfinance/totalfinance/options/batch (the validated blackScholesEvaluateManyInto boundary, 4.4 KB minified) and the shared kernel (2.2 KB), and carries the nine single-metric shortcuts and the supplied-Greek selection; core gains requireSelection (its label guard, added when the enforcement run measured the helper, is 302 B of the total; the review fixes on #3 — the batch row-value type check and its error descriptions, per-point color — another 123 B). No new operation, transport or dependency domain. ' +
       '495 → 497.25 KB (installed-consumer correctness repair, 2026-09-21): measured 508,947 B with Node 22.23.2/esbuild 0.25.12. All built-in TA facades now bind their own shared metadata before registry import. The complete operation catalog includes that construction code and shared named declarations; narrow consumers are separately budgeted, and no runtime dependency or financial calculation changed. ' +
@@ -580,10 +585,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/portfolio',
     entry: 'packages/portfolio/src/index.ts',
-    budgetKB: 110.5,
+    budgetKB: 110.75,
     intent:
       'the FC7 event-derived ledger and independent disclosed-holdings comparison; events, reducer, serialization, valuation, FC4 seam',
     rationale:
+      'Dogfood 0.1.x (2026-11-10): 110.5 → 110.75 KB from 113,232 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       '108.125 → 110.5 KB (reported holding partitions, 2026-10-06): measured 110,715 → 112,927 B gzip (+2,212 B) on Node 22.23.2/esbuild 0.25.12. The additive calculator/validator reuse the existing private exact-decimal module; no dependency family is added. The dedicated partition import measures 11,449 B and has its own cap. Headroom is 225 B; all narrow installed-consumer canaries remain unchanged. ' +
       '104 → 108.125 KB (disclosed holdings, 2026-09-25): isolated 009f223/current measurements are 106,352 → 110,554 B gzip (+4,202 B), with Node 22.23.2/esbuild 0.25.12. The only newly retained modules are disclosed-holdings, its boundary and its private exact-decimal arithmetic; no dependency family is added. The named domain export adds the requested API; its dedicated 10.5 KB subpath is independently capped. Headroom is 166 B. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21): 102 -> 104 KB, measured 103.1 KB. Combos on the trade grammar, the core order vocabulary, and the option terms spelled as type. ' +
@@ -660,11 +666,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/data',
     entry: 'packages/totalfinance/src/data.ts',
-    budgetKB: 13.5,
+    budgetKB: 15.5,
     intent:
       'provider-neutral bounded research windows and canonical restoration; explicit provider binding',
     rationale:
-      'C3 initial measured gate approved e2fef6ff:13475 B gzip, cap13824 B. No conformance runner, provider/credential/HTTP implementation or TA engine.',
+      'C4 ae690e3f approved (2026-11-11): final15663B, cap15872B (209B headroom); finite controlled schema/guard diagnostics, unchanged module set and structural exclusions. C3 initial measured gate approved e2fef6ff:13475 B gzip, cap13824 B. No conformance runner, provider/credential/HTTP implementation or TA engine.',
     forbidden: [
       { needle: 'validateDataProvider', why: 'behavioral conformance runner stays opt-in' },
       { needle: 'INSIDERFINANCE_API_KEY', why: 'credentials belong to external providers/host' },
@@ -677,11 +683,14 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 703,
+    budgetKB: 706.25,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'C4 ae690e3f approved (2026-11-11) root723200B: main714320 -> integrated720687 -> scoped721811 -> controlled known-schema correction722908B;292B headroom. Opt-in guard/schema cost, unchanged retained module sets. Only the eight reviewed whole/data installed caps change. ' +
       'C3 approved root data connection (e2fef6ff, 2026-11-02): 696.25 -> 703 KiB; baseline712661 -> candidate719087 B gzip. The provider-neutral window/validation/view branch is newly reachable; no provider, credentials, network implementation or copied calculation. Final source remeasured under this same cap. ' +
+      'Review repair (2026-11-10): 697.25 → 697.75 KB from 714,320 B gzip on Node 22.23.2 / esbuild 0.25.12. Validated source-bar identity/time and head-specific repair examples add 696 B over the initial batch measurement; structural exclusions stay unchanged. ' +
+      'Dogfood 0.1.x (2026-11-10): 696.25 → 697.25 KB from 713,624 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +
       '695 → 696.25 KiB (PL6 named pairs, 2026-10-12): 711,393 → 712,699 B gzip (+1,306 B) on Node 22.23.2/esbuild 0.25.12. Sixteen named pair facades and optional generic metadata add no dependencies. Headroom is 261 B; only price-levels also changes its whole-entrypoint ceiling, with single-helper installed tree-shaking tests. Every other narrow limit and structural gate is retained. ' +
       '694.625 → 695 KiB (PL5 numerical/DX review, 2026-10-12): 711,093 → 711,393 B gzip (+300 B), measured on Node 22.23.2/esbuild 0.25.12. The private extreme-range exact-rounding fallback and method-specific examples left 287 B headroom. Only the new price-level subpath ceiling also changed (8.375 KiB); all other narrow limits and structural gates remained intact. ' +
       '693.5 → 694.625 KB (reference-price level conversion, 2026-10-12): base ec6ae2d measured 710,091 B and this addition 711,093 B gzip (+1,002 B) on Node 22.23.2/esbuild 0.25.12. Only the new valuation facade and its private validation boundary join the deliberately whole-surface umbrella; schemas stay isolated. Headroom was 203 B. Every existing narrower limit was preserved, and valuation/price-levels gained its own initial 8.125 KiB ceiling. ' +

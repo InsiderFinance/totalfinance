@@ -4,6 +4,29 @@
 If unavailable, the repository owner explicitly takes over in the release thread before acting.
 All commands below require separate maintainer authorization; they are not automatic remediation.
 
+## Current SDK-only GitHub Release path
+
+For [release.md](./release.md), only the SDK was uploaded. Stop announcement and site work; retain
+that run's `SDK_PUBLISH_RECEIPT.json`, original tarballs/hash manifest, tag/commit, source/full-CI
+receipt and `SDK_SMOKE_RECEIPT-<version>.json`. Read the SDK's current registry bytes and `latest`.
+The publication receipt records its prior `latest`; use an actual previously verified version,
+never a guessed predecessor. Optional MCP was a local smoke witness and must not be rolled back,
+published or retagged to resolve an SDK-only incident.
+
+Rerun failed jobs from the original run for transient/authentication failures. Existing SDK bytes
+must match before resume skips upload. A newer latest is an explicit stop, not permission to roll
+it back. If code/metadata or published bytes differ, preserve the evidence and prepare a new version.
+For a bad SDK already on latest, the release owner separately approves restoring the SDK's prior
+verified latest and/or deprecating the affected version. Hosted release jobs never automatically
+perform that rollback. Preserve the GitHub release/tag and mark its notes withdrawn if appropriate.
+Existing receipt assets remain immutable; recover attachment by comparing original bytes and
+uploading only missing original files. No clobber, deletion, re-tag or repack is authorized.
+
+## Historical candidate-pair path
+
+The remaining sections apply only to an explicitly authorized two-package candidate/promotion
+incident, not the SDK-only release workflow.
+
 The complete public roster is `@insiderfinance/totalfinance` and
 `@insiderfinance/totalfinance-mcp`, at one exact version. Main has no runtime dependencies; MCP
 requires that exact main version. Uploads and dist-tag changes are **not atomic**. Candidate is

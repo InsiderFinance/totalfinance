@@ -1423,17 +1423,16 @@ identities without adding or removing a public identity; the historical naming p
 
 | Final measure                                            |      Count |
 | -------------------------------------------------------- | ---------: |
-| Public naming identities walked                          |     43,736 |
+| Public naming identities walked                          |     43,849 |
 | **Unresolved (the migration queue)**                     |      **0** |
-| `explicit`                                               |     39,545 |
-| `canonical-term` (allowlisted, each with a rationale)    |      4,029 |
+| `explicit`                                               |     39,645 |
+| `canonical-term` (allowlisted, each with a rationale)    |      4,042 |
 | `scoped-symbol` (approved notation inside a named scope) |        159 |
 | `opaque-state` (round-trip payload interiors)            |          3 |
 | Retired forms with executable removal evidence           | 115 of 115 |
 | Packages, including the umbrella                         |         25 |
 
-Identity kinds walked: 23,089 fields, 7,506 exports, 4,215 parameters, 4,752 string-literal values, 1,789 methods, 1,520 MCP schema
-fields, 295 stable codes, 295 enum members, 195 subpaths, 55 MCP tools, 25 packages. The MCP schema
+Identity kinds walked: 23,148 fields, 7,516 exports, 4,216 parameters, 4,756 string-literal values, 1,789 methods, 1,553 MCP schema fields, 297 stable codes, 297 enum members, 195 subpaths, 57 MCP tools, 25 packages. The MCP schema
 fields and the array-element and method-signature walks were added during N7 after the inventory was
 found to be reporting zero unresolved over an incomplete traversal — 18,077 identities became 19,209
 without a single name changing, which is the reason the count is quoted with the walk that produced

@@ -96,7 +96,7 @@ export {
 } from './oscillators.js';
 export { bbands } from './bands.js';
 export { atr, stochastic, adx, vwap, obv } from './bars.js';
-export { barsFromColumns, columnsFromBars } from './columns.js';
+export { barsFromColumns, columnsFromBars, ohlcvFromBars } from './columns.js';
 export type { BarColumns } from './columns.js';
 
 // The classic TA-Lib / pandas-ta spellings, exported as real bindings so the name a user reaches for

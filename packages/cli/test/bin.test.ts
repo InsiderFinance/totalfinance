@@ -89,7 +89,7 @@ describe('the totalfinance binary', () => {
     expect((defaults.json as unknown[]).length).toBe(23);
     const full = totalfinance(['operations', 'list', '--profile', 'full'], { store });
     // 40 → 46 (Stage 7B.2 slice 4, 2026-09-06): the six trade-lifecycle operations join the full profile.
-    expect((full.json as unknown[]).length).toBe(46);
+    expect((full.json as unknown[]).length).toBe(48);
     const narrowed = totalfinance(
       ['operations', 'list', '--profile', 'full', '--packs', 'artifact,options'],
       { store },

@@ -5,10 +5,15 @@
  * layer may render percentages, this library does not.
  */
 
-import { resolveGrossProfit, resolveTotalDebt } from './statement-contracts.js';
+import {
+  type IncomeStatement,
+  type BalanceSheet,
+  resolveGrossProfit,
+  resolveTotalDebt,
+} from './statement-contracts.js';
 import {
   type DayMetricRatioInput,
-  type DebtServiceRatioInput,
+  type DebtServiceCoverageInput,
   type EnterpriseMultipleRatioInput,
   type InvestedCapitalRatioInput,
   type MarketMultipleRatioInput,
@@ -17,6 +22,8 @@ import {
   type RatioInput,
   type RatioOutcome,
   type SingleStatementRatioInput,
+  type IncomeStatementRatioInput,
+  type BalanceSheetRatioInput,
   absoluteAmount,
   averageBalance,
   makeRatio,
@@ -29,42 +36,57 @@ import {
 // Profitability
 // ---------------------------------------------------------------------------------------------------
 
-export const grossMargin: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'grossMargin',
-    category: 'profitability',
-    formula: 'grossProfit / revenue',
-    keys: ['statements'],
-    compute(input, notes): RatioOutcome {
-      const income = input.statements!.income;
-      const { grossProfit, derived } = resolveGrossProfit(income);
-      if (grossProfit === null) {
-        return {
-          reason: 'neither grossProfit nor costOfRevenue is stated — gross profit cannot be formed',
-        };
-      }
-      if (derived) notes.push('grossProfit derived as revenue - costOfRevenue');
+export const grossMargin: RatioFacade<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>
+  >
+> = makeRatio<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'revenue' | 'grossProfit' | 'costOfRevenue'>
+  >
+>({
+  ratioName: 'grossMargin',
+  category: 'profitability',
+  formula: 'grossProfit / revenue',
+  keys: ['statements', 'income'],
+  requiredStatementFields: ['revenue'],
+  directInputExample: 'grossMargin({ income: { period, revenue: 1000, costOfRevenue: 600 } })',
+  compute(input, notes): RatioOutcome {
+    const income = input.income ?? input.statements!.income;
+    const { grossProfit, derived } = resolveGrossProfit(income);
+    if (grossProfit === null) {
       return {
-        numerator: { label: 'grossProfit', amount: grossProfit },
-        denominator: { label: 'revenue', amount: income.revenue },
+        reason: 'neither grossProfit nor costOfRevenue is stated — gross profit cannot be formed',
       };
-    },
-  });
+    }
+    if (derived) notes.push('grossProfit derived as revenue - costOfRevenue');
+    return {
+      numerator: { label: 'grossProfit', amount: grossProfit },
+      denominator: { label: 'revenue', amount: income.revenue },
+    };
+  },
+});
 
-export const operatingMargin: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'operatingMargin',
-    category: 'profitability',
-    formula: 'operatingIncome / revenue',
-    keys: ['statements'],
-    compute(input): RatioOutcome {
-      const income = input.statements!.income;
-      return {
-        numerator: { label: 'operatingIncome', amount: income.operatingIncome },
-        denominator: { label: 'revenue', amount: income.revenue },
-      };
-    },
-  });
+export const operatingMargin: RatioFacade<
+  IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>
+> = makeRatio<
+  IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'operatingIncome'>>
+>({
+  ratioName: 'operatingMargin',
+  category: 'profitability',
+  formula: 'operatingIncome / revenue',
+  keys: ['statements', 'income'],
+  requiredStatementFields: ['revenue', 'operatingIncome'],
+  directInputExample:
+    'operatingMargin({ income: { period, revenue: 1000, operatingIncome: 200 } })',
+  compute(input): RatioOutcome {
+    const income = input.income ?? input.statements!.income;
+    return {
+      numerator: { label: 'operatingIncome', amount: income.operatingIncome },
+      denominator: { label: 'revenue', amount: income.revenue },
+    };
+  },
+});
 
 export const ebitdaMargin: RatioFacade<SingleStatementRatioInput> =
   makeRatio<SingleStatementRatioInput>({
@@ -84,20 +106,25 @@ export const ebitdaMargin: RatioFacade<SingleStatementRatioInput> =
     },
   });
 
-export const netProfitMargin: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
+export const netProfitMargin: RatioFacade<
+  IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>>
+> = makeRatio<IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'revenue' | 'netIncome'>>>(
+  {
     ratioName: 'netProfitMargin',
     category: 'profitability',
     formula: 'netIncome / revenue',
-    keys: ['statements'],
+    keys: ['statements', 'income'],
+    requiredStatementFields: ['revenue', 'netIncome'],
+    directInputExample: 'netProfitMargin({ income: { period, revenue: 1000, netIncome: 150 } })',
     compute(input): RatioOutcome {
-      const income = input.statements!.income;
+      const income = input.income ?? input.statements!.income;
       return {
         numerator: { label: 'netIncome', amount: income.netIncome },
         denominator: { label: 'revenue', amount: income.revenue },
       };
     },
-  });
+  },
+);
 
 // ---------------------------------------------------------------------------------------------------
 // Returns (average balance denominators)
@@ -234,116 +261,158 @@ export const returnOnCapitalEmployed: RatioFacade<PairRatioInput> = makeRatio<Pa
 // Liquidity
 // ---------------------------------------------------------------------------------------------------
 
-export const currentRatio: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'currentRatio',
-    category: 'liquidity',
-    formula: 'currentAssets / currentLiabilities',
-    keys: ['statements'],
-    compute(input): RatioOutcome {
-      const balance = input.statements!.balance;
-      if (balance.currentAssets === undefined || balance.currentLiabilities === undefined) {
-        return { reason: 'currentAssets and currentLiabilities are both required' };
-      }
-      return {
-        numerator: { label: 'currentAssets', amount: balance.currentAssets },
-        denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
-      };
-    },
-  });
+export const currentRatio: RatioFacade<
+  BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentAssets' | 'currentLiabilities'>>
+> = makeRatio<
+  BalanceSheetRatioInput<Pick<BalanceSheet, 'period' | 'currentAssets' | 'currentLiabilities'>>
+>({
+  ratioName: 'currentRatio',
+  category: 'liquidity',
+  formula: 'currentAssets / currentLiabilities',
+  keys: ['statements', 'balance'],
+  requiredStatementFields: [],
+  directInputExample:
+    'currentRatio({ balance: { period, currentAssets: 300, currentLiabilities: 150 } })',
+  compute(input): RatioOutcome {
+    const balance = input.balance ?? input.statements!.balance;
+    if (balance.currentAssets === undefined || balance.currentLiabilities === undefined) {
+      return { reason: 'currentAssets and currentLiabilities are both required' };
+    }
+    return {
+      numerator: { label: 'currentAssets', amount: balance.currentAssets },
+      denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
+    };
+  },
+});
 
-export const quickRatio: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'quickRatio',
-    category: 'liquidity',
-    formula: '(currentAssets - inventory) / currentLiabilities',
-    keys: ['statements'],
-    compute(input): RatioOutcome {
-      const balance = input.statements!.balance;
-      if (
-        balance.currentAssets === undefined ||
-        balance.inventory === undefined ||
-        balance.currentLiabilities === undefined
-      ) {
-        return { reason: 'currentAssets, inventory, and currentLiabilities are all required' };
-      }
-      return {
-        numerator: {
-          label: 'currentAssets - inventory',
-          amount: balance.currentAssets - balance.inventory,
-        },
-        denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
-      };
-    },
-  });
+export const quickRatio: RatioFacade<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'currentAssets' | 'inventory' | 'currentLiabilities'>
+  >
+> = makeRatio<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'currentAssets' | 'inventory' | 'currentLiabilities'>
+  >
+>({
+  ratioName: 'quickRatio',
+  category: 'liquidity',
+  formula: '(currentAssets - inventory) / currentLiabilities',
+  keys: ['statements', 'balance'],
+  requiredStatementFields: [],
+  directInputExample:
+    'quickRatio({ balance: { period, currentAssets: 300, inventory: 50, currentLiabilities: 150 } })',
+  compute(input): RatioOutcome {
+    const balance = input.balance ?? input.statements!.balance;
+    if (
+      balance.currentAssets === undefined ||
+      balance.inventory === undefined ||
+      balance.currentLiabilities === undefined
+    ) {
+      return { reason: 'currentAssets, inventory, and currentLiabilities are all required' };
+    }
+    return {
+      numerator: {
+        label: 'currentAssets - inventory',
+        amount: balance.currentAssets - balance.inventory,
+      },
+      denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
+    };
+  },
+});
 
-export const cashRatio: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'cashRatio',
-    category: 'liquidity',
-    formula: 'cashAndCashEquivalents / currentLiabilities',
-    keys: ['statements'],
-    compute(input): RatioOutcome {
-      const balance = input.statements!.balance;
-      if (balance.currentLiabilities === undefined) {
-        return { reason: 'currentLiabilities is required' };
-      }
-      return {
-        numerator: { label: 'cashAndCashEquivalents', amount: balance.cashAndCashEquivalents },
-        denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
-      };
-    },
-  });
+export const cashRatio: RatioFacade<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>
+  >
+> = makeRatio<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'cashAndCashEquivalents' | 'currentLiabilities'>
+  >
+>({
+  ratioName: 'cashRatio',
+  category: 'liquidity',
+  formula: 'cashAndCashEquivalents / currentLiabilities',
+  keys: ['statements', 'balance'],
+  requiredStatementFields: ['cashAndCashEquivalents'],
+  directInputExample:
+    'cashRatio({ balance: { period, cashAndCashEquivalents: 100, currentLiabilities: 150 } })',
+  compute(input): RatioOutcome {
+    const balance = input.balance ?? input.statements!.balance;
+    if (balance.currentLiabilities === undefined) {
+      return { reason: 'currentLiabilities is required' };
+    }
+    return {
+      numerator: { label: 'cashAndCashEquivalents', amount: balance.cashAndCashEquivalents },
+      denominator: { label: 'currentLiabilities', amount: balance.currentLiabilities },
+    };
+  },
+});
 
 // ---------------------------------------------------------------------------------------------------
 // Leverage and coverage
 // ---------------------------------------------------------------------------------------------------
 
-export const debtToEquity: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'debtToEquity',
-    category: 'leverage',
-    formula: 'interest-bearing debt / totalEquity',
-    keys: ['statements'],
-    compute(input, notes): RatioOutcome {
-      const balance = input.statements!.balance;
-      const { totalDebt, derived } = resolveTotalDebt(balance);
-      if (totalDebt === null) {
-        return {
-          reason:
-            'no interest-bearing debt figure — totalDebt or the stated maturities are required',
-        };
-      }
-      if (derived) notes.push('totalDebt derived from the stated debt maturities');
+export const debtToEquity: RatioFacade<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'totalEquity' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>
+  >
+> = makeRatio<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'totalEquity' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>
+  >
+>({
+  ratioName: 'debtToEquity',
+  category: 'leverage',
+  formula: 'interest-bearing debt / totalEquity',
+  keys: ['statements', 'balance'],
+  requiredStatementFields: ['totalEquity'],
+  directInputExample: 'debtToEquity({ balance: { period, totalEquity: 500, totalDebt: 200 } })',
+  compute(input, notes): RatioOutcome {
+    const balance = input.balance ?? input.statements!.balance;
+    const { totalDebt, derived } = resolveTotalDebt(balance);
+    if (totalDebt === null) {
       return {
-        numerator: { label: 'totalDebt', amount: totalDebt },
-        denominator: { label: 'totalEquity', amount: balance.totalEquity },
+        reason: 'no interest-bearing debt figure — totalDebt or the stated maturities are required',
       };
-    },
-  });
+    }
+    if (derived) notes.push('totalDebt derived from the stated debt maturities');
+    return {
+      numerator: { label: 'totalDebt', amount: totalDebt },
+      denominator: { label: 'totalEquity', amount: balance.totalEquity },
+    };
+  },
+});
 
-export const debtToAssets: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'debtToAssets',
-    category: 'leverage',
-    formula: 'interest-bearing debt / totalAssets',
-    keys: ['statements'],
-    compute(input, notes): RatioOutcome {
-      const balance = input.statements!.balance;
-      const { totalDebt, derived } = resolveTotalDebt(balance);
-      if (totalDebt === null) {
-        return {
-          reason:
-            'no interest-bearing debt figure — totalDebt or the stated maturities are required',
-        };
-      }
-      if (derived) notes.push('totalDebt derived from the stated debt maturities');
+export const debtToAssets: RatioFacade<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>
+  >
+> = makeRatio<
+  BalanceSheetRatioInput<
+    Pick<BalanceSheet, 'period' | 'totalAssets' | 'totalDebt' | 'shortTermDebt' | 'longTermDebt'>
+  >
+>({
+  ratioName: 'debtToAssets',
+  category: 'leverage',
+  formula: 'interest-bearing debt / totalAssets',
+  keys: ['statements', 'balance'],
+  requiredStatementFields: ['totalAssets'],
+  directInputExample: 'debtToAssets({ balance: { period, totalAssets: 1000, totalDebt: 200 } })',
+  compute(input, notes): RatioOutcome {
+    const balance = input.balance ?? input.statements!.balance;
+    const { totalDebt, derived } = resolveTotalDebt(balance);
+    if (totalDebt === null) {
       return {
-        numerator: { label: 'totalDebt', amount: totalDebt },
-        denominator: { label: 'totalAssets', amount: balance.totalAssets },
+        reason: 'no interest-bearing debt figure — totalDebt or the stated maturities are required',
       };
-    },
-  });
+    }
+    if (derived) notes.push('totalDebt derived from the stated debt maturities');
+    return {
+      numerator: { label: 'totalDebt', amount: totalDebt },
+      denominator: { label: 'totalAssets', amount: balance.totalAssets },
+    };
+  },
+});
 
 export const netDebtToEbitda: RatioFacade<SingleStatementRatioInput> =
   makeRatio<SingleStatementRatioInput>({
@@ -375,36 +444,47 @@ export const netDebtToEbitda: RatioFacade<SingleStatementRatioInput> =
     },
   });
 
-export const interestCoverage: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'interestCoverage',
-    category: 'leverage',
-    formula: 'operatingIncome / interestExpense',
-    keys: ['statements'],
-    compute(input): RatioOutcome {
-      const income = input.statements!.income;
-      if (income.interestExpense === undefined) {
-        return {
-          reason:
-            'interestExpense is absent — coverage uses the exact interest denominator supplied',
-        };
-      }
+export const interestCoverage: RatioFacade<
+  IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>
+> = makeRatio<
+  IncomeStatementRatioInput<Pick<IncomeStatement, 'period' | 'operatingIncome' | 'interestExpense'>>
+>({
+  ratioName: 'interestCoverage',
+  category: 'leverage',
+  formula: 'operatingIncome / interestExpense',
+  keys: ['statements', 'income'],
+  requiredStatementFields: ['operatingIncome'],
+  directInputExample:
+    'interestCoverage({ income: { period, operatingIncome: 200, interestExpense: 20 } })',
+  compute(input): RatioOutcome {
+    const income = input.income ?? input.statements!.income;
+    if (income.interestExpense === undefined) {
       return {
-        numerator: { label: 'operatingIncome', amount: income.operatingIncome },
-        denominator: { label: 'interestExpense', amount: income.interestExpense },
+        reason: 'interestExpense is absent — coverage uses the exact interest denominator supplied',
       };
-    },
-  });
+    }
+    return {
+      numerator: { label: 'operatingIncome', amount: income.operatingIncome },
+      denominator: { label: 'interestExpense', amount: income.interestExpense },
+    };
+  },
+});
 
-export const debtServiceCoverage: RatioFacade<DebtServiceRatioInput> =
-  makeRatio<DebtServiceRatioInput>({
+export const debtServiceCoverage: RatioFacade<DebtServiceCoverageInput> =
+  makeRatio<DebtServiceCoverageInput>({
     ratioName: 'debtServiceCoverage',
     category: 'leverage',
     formula: 'operatingIncome / debtServiceAmount (the exact supplied denominator)',
-    keys: ['statements', 'debtServiceAmount'],
+    keys: ['statements', 'income', 'debtServiceAmount'],
+    requiredStatementFields: ['operatingIncome'],
+    directInputExample:
+      'debtServiceCoverage({ income: { period, operatingIncome: 200 }, debtServiceAmount: 100 })',
     compute(input): RatioOutcome {
       return {
-        numerator: { label: 'operatingIncome', amount: input.statements!.income.operatingIncome },
+        numerator: {
+          label: 'operatingIncome',
+          amount: (input.income ?? input.statements!.income).operatingIncome,
+        },
         denominator: { label: 'debtServiceAmount', amount: input.debtServiceAmount! },
       };
     },
@@ -664,7 +744,8 @@ function perShare(
   input: RatioInput,
   notes: string[],
 ): RatioOutcome {
-  const shares = input.statements!.income.dilutedSharesOutstanding;
+  const income = input.income ?? input.statements!.income;
+  const shares = income.dilutedSharesOutstanding;
   if (shares === undefined || shares <= 0) {
     return {
       reason:
@@ -673,21 +754,36 @@ function perShare(
   }
   // Absolute currency per share — a share count is a count, so the amount alone carries the scale.
   return {
-    numerator: { label: numeratorLabel, amount: absoluteAmount(input.statements!, amount, notes) },
+    numerator: { label: numeratorLabel, amount: absoluteAmount(income, amount, notes) },
     denominator: { label: 'dilutedSharesOutstanding', amount: shares },
   };
 }
 
-export const earningsPerShare: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'earningsPerShare',
-    category: 'per-share',
-    formula: 'netIncome / dilutedSharesOutstanding',
-    keys: ['statements'],
-    compute(input, notes): RatioOutcome {
-      return perShare('netIncome', input.statements!.income.netIncome, input, notes);
-    },
-  });
+export const earningsPerShare: RatioFacade<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>
+  >
+> = makeRatio<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'netIncome' | 'dilutedSharesOutstanding'>
+  >
+>({
+  ratioName: 'earningsPerShare',
+  category: 'per-share',
+  formula: 'netIncome / dilutedSharesOutstanding',
+  keys: ['statements', 'income'],
+  requiredStatementFields: ['netIncome'],
+  directInputExample:
+    'earningsPerShare({ income: { period, netIncome: 150, dilutedSharesOutstanding: 100 } })',
+  compute(input, notes): RatioOutcome {
+    return perShare(
+      'netIncome',
+      (input.income ?? input.statements!.income).netIncome,
+      input,
+      notes,
+    );
+  },
+});
 
 export const bookValuePerShare: RatioFacade<SingleStatementRatioInput> =
   makeRatio<SingleStatementRatioInput>({
@@ -700,16 +796,26 @@ export const bookValuePerShare: RatioFacade<SingleStatementRatioInput> =
     },
   });
 
-export const revenuePerShare: RatioFacade<SingleStatementRatioInput> =
-  makeRatio<SingleStatementRatioInput>({
-    ratioName: 'revenuePerShare',
-    category: 'per-share',
-    formula: 'revenue / dilutedSharesOutstanding',
-    keys: ['statements'],
-    compute(input, notes): RatioOutcome {
-      return perShare('revenue', input.statements!.income.revenue, input, notes);
-    },
-  });
+export const revenuePerShare: RatioFacade<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>
+  >
+> = makeRatio<
+  IncomeStatementRatioInput<
+    Pick<IncomeStatement, 'period' | 'revenue' | 'dilutedSharesOutstanding'>
+  >
+>({
+  ratioName: 'revenuePerShare',
+  category: 'per-share',
+  formula: 'revenue / dilutedSharesOutstanding',
+  keys: ['statements', 'income'],
+  requiredStatementFields: ['revenue'],
+  directInputExample:
+    'revenuePerShare({ income: { period, revenue: 1000, dilutedSharesOutstanding: 100 } })',
+  compute(input, notes): RatioOutcome {
+    return perShare('revenue', (input.income ?? input.statements!.income).revenue, input, notes);
+  },
+});
 
 export const freeCashFlowPerShare: RatioFacade<SingleStatementRatioInput> =
   makeRatio<SingleStatementRatioInput>({

@@ -1,5 +1,6 @@
+import { issueOf, responseIssue } from './data-response-issue.js';
 /** Provider-neutral error/cancellation boundaries; no financial or wall-clock defaults. */
-import { DataError, ErrorCode, QuantError } from './errors.js';
+import { DataError, ErrorCode, QuantError, InputError } from './errors.js';
 import type { DataCallOptions } from './data-types.js';
 import { aborted, object, signalField } from './data-validation.js';
 export function dataSignal(options: DataCallOptions = {}): AbortSignal | undefined {
@@ -7,7 +8,13 @@ export function dataSignal(options: DataCallOptions = {}): AbortSignal | undefin
   signalField(args['signal']);
   return args['signal'];
 }
-export function invalidResponse(error?: unknown, provider?: string): never {
+export function invalidResponse(
+  error?: unknown,
+  provider?: string,
+  door = 'defineDataProvider.query',
+): never {
+  const detail = issueOf(error);
+  if (detail) responseIssue(detail, door);
   if (error instanceof QuantError && error.code === ErrorCode.DataContractVersionUnsupported)
     throw error;
   throw new DataError(
@@ -54,6 +61,11 @@ export async function dataCall<T>(
     return result;
   } catch (error) {
     aborted(signal);
+    if (issueOf(error)) throw error;
+    if (error instanceof InputError && error.code.startsWith('input.'))
+      throw new InputError('query: provider refused the supplied request.', { code: error.code });
+    if (error instanceof QuantError && error.code === ErrorCode.DataInvalidResponse)
+      invalidResponse();
     if (error instanceof QuantError) throw error;
     invalidResponse();
   } finally {

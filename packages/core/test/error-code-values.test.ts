@@ -36,12 +36,20 @@ it('static error catalog exactly preserves the declared keys, values and order',
   expect(Object.entries(ErrorCode)).toEqual(entries);
 });
 
-it('warning initializers preserve every pre-correction key, value and enumeration position', () => {
+it('warning initializers preserve prior order with the two explicit upstream additions', () => {
   // Captured from aad83f28's literal registry before changing its representation.
-  expect(Object.keys(WarningCode)).toHaveLength(140);
-  expect(
-    createHash('sha256')
-      .update(JSON.stringify(Object.entries(WarningCode)))
-      .digest('hex'),
-  ).toBe('14ae05e11a30125358037fcbed63e4698bf0e111c6388e83477c913c4084d21a');
+  const added = ['PortfolioMarketMarkAge', 'CalendarOutsideHistoricalCoverage'];
+  expect(Object.keys(WarningCode)).toHaveLength(142);
+  expect(Object.keys(WarningCode).slice(6, 8)).toEqual(added);
+  expect(added.map((name) => WarningCode[name as keyof typeof WarningCode])).toEqual([
+    'portfolio.market_mark_age',
+    'calendar.outside_historical_coverage',
+  ]);
+  // Main ca122ab adds these warnings. Retain the exact historical fingerprint for every
+  // existing key/value and relative enumeration position; never recapture a changed baseline.
+  const previous = Object.entries(WarningCode).filter(([name]) => !added.includes(name));
+  expect(previous).toHaveLength(140);
+  expect(createHash('sha256').update(JSON.stringify(previous)).digest('hex')).toBe(
+    '14ae05e11a30125358037fcbed63e4698bf0e111c6388e83477c913c4084d21a',
+  );
 });

@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 251,
+    "surfaces": 260,
     "byClass": {
-      "current-runnable": 93,
-      "future-target": 65,
+      "current-runnable": 95,
+      "future-target": 72,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4652,
-    "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 65,
-    "shippedNamesWatched": 9871,
+    "executableFences": 4668,
+    "checkedUnderTruthfulness": 177,
+    "checkedUnderVocabulary": 72,
+    "shippedNamesWatched": 9889,
     "documentedExceptions": 9,
     "findings": 0
   },
@@ -138,6 +138,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/guides/community-connector-first-success.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 2
+    },
+    {
       "path": "docs/guides/community-connectors.md",
       "class": "current-runnable",
       "owner": "human",
@@ -157,6 +164,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/guides/dogfood-journeys.md",
+      "class": "current-runnable",
+      "owner": "human",
+      "rule": "truthfulness",
+      "codeFences": 7
     },
     {
       "path": "docs/guides/end-to-end.md",
@@ -324,7 +338,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4371
+      "codeFences": 4378
     },
     {
       "path": "docs/llms.txt",
@@ -649,7 +663,35 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c4-final-budget-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c4-integration-budget-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c4-known-guard-budget-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/community-connectors-c4-spec-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/dogfood-0.1.3.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
@@ -671,6 +713,13 @@
     },
     {
       "path": "docs/roadmap.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/runbooks/release-pair-legacy.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
@@ -859,6 +908,13 @@
       "codeFences": 1
     },
     {
+      "path": "docs/specs/dogfood-0.1.x.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/specs/dogfooding-library-value.md",
       "class": "future-target",
       "owner": "human",
@@ -969,6 +1025,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 3
+    },
+    {
+      "path": "docs/specs/github-release-npm.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/h10-h12-report-design-note.md",

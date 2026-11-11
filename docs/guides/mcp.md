@@ -165,7 +165,7 @@ heavy, deliberately not defaults) on top of the standard 23.
 
 **Journey packs:** five
 opt-in packs compose whole workflows from the same public functions — `portfolioPack()`
-(`totalfinance_portfolio_snapshot`, `totalfinance_portfolio_explain_pnl`, `totalfinance_portfolio_analyze`,
+(`totalfinance_portfolio_inspect`, `totalfinance_portfolio_snapshot`, `totalfinance_portfolio_explain_pnl`, `totalfinance_portfolio_analyze`,
 `totalfinance_portfolio_rebalance_proposal`), `scenarioPack()` (`totalfinance_scenario_run`),
 `researchPack()` (`totalfinance_research_screen`, `totalfinance_research_rank`, `totalfinance_research_score`,
 `totalfinance_research_event_study`), `artifactPack()` (`totalfinance_artifact_read`,
@@ -178,7 +178,11 @@ expected-return function, a callback entry/exit rule, or a custom pricer target 
 
 **Trade lifecycle:** the opt-in `trade` pack (from `@insiderfinance/totalfinance/workflows`, also in `full`) contains
 `totalfinance_trade_preflight`, `totalfinance_trade_authorize`, `totalfinance_trade_submit`,
-`totalfinance_trade_cancel`, `totalfinance_trade_reconcile`, and `totalfinance_portfolio_record_events`.
+`totalfinance_trade_cancel`, `totalfinance_trade_reconcile`, `totalfinance_portfolio_create`, and `totalfinance_portfolio_record_events`.
+Start an unfunded or explicitly funded ledger with `totalfinance_portfolio_create`, then open its
+returned handle with `totalfinance_portfolio_inspect` in the portfolio pack. Creation requires
+portfolio:write and explicit identity/currency/events; inspection uses bounded section pages. See
+[the executable first-use and recovery guide](./dogfood-journeys.md).
 These support preflight, explicit grants, paper execution, reconciliation, and ledger writes—not
 live brokerage routing. Use the effective capability report to see required grants and exclusions.
 

@@ -22,7 +22,7 @@ export function createFixtureDataProvider(input: {
   capabilities: readonly DataCapability[];
   entries: readonly {
     request: DataRequest;
-    page: DataPage<PriceBarRecord | OptionChainResearchRecord>;
+    page: DataPage<PriceBarRecord> | DataPage<OptionChainResearchRecord>;
   }[];
   beforeQuery?: (input: { signal?: AbortSignal }) => Promise<void>;
 }): DataProvider {
@@ -61,7 +61,7 @@ export function createFixtureDataProvider(input: {
         throw new DataError('fixture: no page supplied for this request.', {
           code: ErrorCode.DataNotFound,
         });
-      return found.page as DataPage<never>;
+      return found.page;
     },
   });
 }

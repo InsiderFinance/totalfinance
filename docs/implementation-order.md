@@ -5,13 +5,19 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
+request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
+7,971 public paths and43,849 naming identities/zero unresolved. Final public, packed, guide and
+hosted verification is active. PR26 remains draft; earlier reports/checks are historical. Feature
+in_progress; no merge/release/connected acceptance.
+
 ### Active connector review repairs (2026-11-11)
 
 The independent first-consumer review supersedes the earlier no-blocker C3 acceptance. Preserve
 that acceptance and e5 green receipts as history. The maintainer authorized the corrections.
 The [C4 addendum](./specs/community-connector-c4-review-updates.md) defines adjustment/identity,
 safe diagnostics, natural author typing, premium policy and no-key onboarding. Coordinator
-technical review is required before public runtime changes. Feature stays in progress, PR26 draft.
+technical review approved the bounded runtime repairs at d6cc42b (a55531a4), with recorded packaging/diagnostic corrections. Feature stays in progress, PR26 draft.
 
 - [x] Read current task, prior specs and complete public independent evidence in a new isolated tree.
 - [x] Fetch main ca122ab; attempt integration and identify authored/derived conflicts (not completed).
@@ -68,6 +74,43 @@ and live execution remain outside scope. The full post-PR-25 main run
 [41504979418](https://github.com/InsiderFinance/totalfinance/actions/runs/41504979418) was verified
 completed successfully at `d50b401ee237006c75c76ef90784e5dcde1439a3` on November 2; future landing
 still requires current-head checks and review. No feature merge is authorized by that receipt.
+
+### Active: GitHub Release → SDK publication (2026-11-10)
+
+Bounded production follow-up G7 (2026-11-11): PR #29 is merged at `59a2833`; full main CI and both
+release coverage passes succeeded. npm accepted the authorized SDK 0.1.3 upload with signed
+provenance, but the immediate registry readback failed while npm processed it. Add a bounded,
+read-only readiness wait under the same [contract](./specs/github-release-npm.md#g7-accepted-uploads-awaiting-npm-processing-2026-11-11).
+Recover the current release from its retained original run; never rebuild, retag or republish it.
+SDK 0.1.3 is now public and its original run's verified resume/consumer smoke is green. The release
+and [issue #30](https://github.com/InsiderFinance/totalfinance/issues/30)/active follow-up PR own
+actual current verification and npm readiness receipts. No SDK bytes/version or tag is changed.
+
+The maintainer wants GitHub Release publication to replace local npm commands. Follow the
+[scoped release automation contract](./specs/github-release-npm.md), G1–G6. This prepares one review
+PR, preserving SDK-only publication, exact-commit full verification and explicit npm/GitHub setup.
+Tracked in [issue #28](https://github.com/InsiderFinance/totalfinance/issues/28) and
+[PR #29](https://github.com/InsiderFinance/totalfinance/pull/29). G1–G5 implementation/local verification
+is complete; G6 exact-head fast/full hosted status and receipts are owned by that PR.
+Publication stays disabled. No npm upload, version bump, optional MCP publication, deployment or
+draft #26 change is part of preparation.
+
+### Completed: compatible dogfood improvements and 0.1.x preparation (2026-11-10)
+
+PR #27 merged at `fa2f78d49881de5d7eaf125b261152e7eb29b44c`; its full main CI passed in
+[run 42927388893](https://github.com/InsiderFinance/totalfinance/actions/runs/42927388893).
+The release remains unpublished. The paragraphs below retain the original authorized scope and
+candidate verification history.
+
+The maintainer authorized one review PR containing the worthwhile compatible dogfood batch and
+next unused 0.1.x metadata (expected 0.1.3), without merge, publication or deployment. The
+[scoped contract and checklist](./specs/dogfood-0.1.x.md) controls S1–S9. The original batch is implemented; the authorized review follow-up F1–F6 is active and reopens
+exact-head release verification. Remaining ratio families (market multiples and average-balance/
+other narrow-fact inputs) need a separate decision-complete contract preserving timing, scaling and
+correspondence; they are not claimed implemented by this batch. Exact
+candidate release verification is recorded in [PR #27](https://github.com/InsiderFinance/totalfinance/pull/27); its current head and full
+receipts are authoritative, and a fast PR check is not a release receipt. Draft #26 and unmerged #12 remain separate; no provider or
+paper-experiment changes are authorized. Main d50b401 already contains LIB-01/02/03 repairs.
 
 ### Immediate dogfood correctness repairs (2026-11-02)
 
@@ -477,8 +520,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,736 public naming identities are walked and 0 are unresolved; 39,545 are `explicit`,
-4,029 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+43,849 public naming identities are walked and 0 are unresolved; 39,645 are `explicit`,
+4,042 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;

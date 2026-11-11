@@ -1,19 +1,22 @@
 # Community data connectors
 
+[No-key first success and connector author journey](./community-connector-first-success.md).
+
 TotalFinance's opt-in research contract lets independently maintained provider packages supply price
 bars and option-chain research. Provider authors own their packages, releases and support. No
 TotalFinance inclusion PR, central allowlist or listing is required. Ordinary calculations still
 accept caller data and load no provider, network client or credential.
 
-This addition is unreleased. The current registry SDK does not contain these subpaths; use the
-fresh local SDK/provider tarballs named in the [implementation evidence](../reviews/community-connectors-c3-2026-11-02.md)
-until an SDK release is separately authorized. An external provider's provisional peer version is
-not proof that an older registry artifact contains a new export.
+This connector contract is unreleased; registry SDK0.1.3 does not contain these subpaths.
+Start with the [no-key source-checkout journey](./community-connector-first-success.md), which
+builds the local SDK and an independently packed cents-based provider without internal receipts,
+maintainer paths or credentials. Then use the reference connector with separately configured access.
+An external provider's provisional peer version alone never proves registry compatibility.
 
 ## Fetch data and calculate
 
 Install the SDK and your chosen connector in the same application. For this unreleased preview,
-install both tested local tarballs; registry SDK 0.1.2 does not yet provide this contract.
+install both tested local tarballs; registry SDK 0.1.3 does not yet provide this contract.
 TotalFinance binds your installed connector once, fetches a bounded window and supplies named arrays
 to its existing calculations:
 

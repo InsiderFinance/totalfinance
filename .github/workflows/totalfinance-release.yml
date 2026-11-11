@@ -1,20 +1,10 @@
-# Disabled unless the maintainer explicitly enables TOTALFINANCE_RELEASE_ENABLED.
-# Approve exact artifacts -> publish main then MCP under candidate -> public registry smoke.
-# latest promotion is a separate authenticated maintainer command, never inferred from dispatch.
+# SDK-only publication. Enable only after npm trusted publishing and tag protection are configured.
+# Publishing a normal GitHub Release authorizes this exact SDK version to npm latest.
 name: TotalFinance release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Exact public distribution version at this commit (first release: 0.1.0)'
-        required: true
-        type: string
-      bootstrap:
-        description: 'Explicit first-publication bootstrap using the approval-environment NPM_BOOTSTRAP_TOKEN; no automatic fallback'
-        required: true
-        type: boolean
-        default: false
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -23,22 +13,19 @@ concurrency:
   group: totalfinance-release
   cancel-in-progress: false
 
-env:
-  RELEASE_VERSION: ${{ inputs.version }}
-
 jobs:
   verify:
-    name: verify ${{ inputs.version }}
+    name: verify released SDK
+    if: ${{ github.event.release.prerelease == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      version: ${{ steps.source.outputs.version }}
+      tag: ${{ steps.source.outputs.tag }}
     steps:
-      - name: require explicit release enablement on main
-        env:
-          RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
-        run: |
-          if [ "$GITHUB_REF" != refs/heads/main ] || [ "$RELEASE_ENABLED" != true ]; then
-            echo "::error::Publishing is disabled. Verify ownership, trusted publishers and npm-publish reviewers before enabling TOTALFINANCE_RELEASE_ENABLED."; exit 2
-          fi
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -48,28 +35,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - name: require the exact distribution version and an unused release tag
-        run: |
-          node --input-type=module -e 'import fs from "node:fs"; const v = process.env.RELEASE_VERSION; if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(v)) throw Error("Invalid release version"); for (const dir of ["totalfinance", "mcp"]) { const p = JSON.parse(fs.readFileSync(`distribution/${dir}/package.json`)); if (p.version !== v) throw Error("Distribution version mismatch"); }'
-          if git ls-remote --tags origin "refs/tags/totalfinance-v$RELEASE_VERSION" | grep -q .; then
-            echo "::error::Release tag already exists. Recover the original run; never repack an approved release."; exit 2
-          fi
       - run: pnpm install --frozen-lockfile
-      - name: landing standard, independent repeat, then approved-artifact manifest
-        run: |
-          pnpm run ci
-          pnpm api:check
-          pnpm test:coverage
-          pnpm release:dry-run --skip-ci --expect-version "$RELEASE_VERSION"
+      - name: verify published tag, prepared versions, main ancestry and exact full CI
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
+        run: pnpm exec tsx tools/release/github-sdk-release.ts verify
+      - name: full local CI at the release commit
+        run: pnpm run ci
+      - name: independent API check
+        run: pnpm api:check
+      - name: independent second coverage pass
+        run: pnpm test:coverage
+      - name: pack clean-source artifacts without changing versions
+        env:
+          RELEASE_VERSION: ${{ steps.source.outputs.version }}
+        run: pnpm release:dry-run --skip-ci --expect-version "$RELEASE_VERSION"
       - uses: actions/upload-artifact@v4
         with:
-          name: totalfinance-release-${{ inputs.version }}
+          name: totalfinance-release-${{ steps.source.outputs.version }}
           path: release/
           if-no-files-found: error
           retention-days: 30
 
   publish:
-    name: candidate ${{ inputs.version }} (artifact approval required)
+    name: publish approved SDK bytes
     needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -81,38 +72,37 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: package.json
-      # Node 24.21.0 is the current pinned LTS; npm OIDC requires >=11.5.1.
-      # No registry-url/token injection: npm uses the workflow's OIDC credentials.
       - uses: actions/setup-node@v4
         with:
           node-version: '24.21.0'
       - uses: actions/download-artifact@v4
         with:
-          name: totalfinance-release-${{ inputs.version }}
+          name: totalfinance-release-${{ needs.verify.outputs.version }}
           path: release/approved/
       - run: pnpm install --frozen-lockfile
-      - name: publish the approved candidate bytes with provenance, main before MCP
+      - name: publish SDK to latest with OIDC and provenance; never upload MCP
         env:
           TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
-          BOOTSTRAP: ${{ inputs.bootstrap }}
-          NODE_AUTH_TOKEN: ${{ inputs.bootstrap && secrets.NPM_BOOTSTRAP_TOKEN || '' }}
-        # --resume permits rerunning THIS failed job with THIS retained artifact. Existing
-        # versions are skipped only after their downloaded bytes match approval exactly.
-        run: |
-          auth=()
-          if [ "$BOOTSTRAP" = true ]; then auth+=(--bootstrap-token); fi
-          pnpm release:publish --dir release/approved --tag candidate --expect-version "$RELEASE_VERSION" --resume "${auth[@]}"
+        run: pnpm exec tsx tools/release/github-sdk-release.ts publish --dir release/approved
+      - uses: actions/upload-artifact@v4
+        with:
+          name: totalfinance-sdk-publication-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
+          path: release/approved/SDK_PUBLISH_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 30
 
   smoke:
-    name: public registry smoke ${{ inputs.version }}
-    needs: publish
+    name: verify public SDK consumers
+    needs: [verify, publish]
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    permissions:
-      contents: write
+    outputs:
+      receipt-artifact: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -120,34 +110,54 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: package.json
-      # Consumer minimum is distinct from the publishing runtime.
       - uses: actions/setup-node@v4
         with:
           node-version: '22.13.0'
       - run: pnpm install --frozen-lockfile
       - uses: actions/download-artifact@v4
         with:
-          name: totalfinance-release-${{ inputs.version }}
+          name: totalfinance-release-${{ needs.verify.outputs.version }}
           path: release/approved/
-      - name: match public tarball hashes and run clean installed consumer journeys
+      - name: match SDK registry bytes and run existing installed-consumer journeys
         run: |
           for attempt in 1 2 3 4 5; do
-            if pnpm release:smoke --version "$RELEASE_VERSION" --registry https://registry.npmjs.org --approved release/approved; then exit 0; fi
-            echo "attempt $attempt failed; waiting 30s"; sleep 30
+            if pnpm exec tsx tools/release/github-sdk-release.ts smoke --dir release/approved; then exit 0; fi
+            echo "Registry smoke attempt $attempt failed; waiting 30s"; sleep 30
           done
           exit 1
       - uses: actions/upload-artifact@v4
         with:
-          # Preserve every attempt's receipt; a new verifiedAt must not replace old evidence.
-          name: totalfinance-registry-smoke-${{ inputs.version }}-attempt-${{ github.run_attempt }}
-          path: release/SMOKE_RECEIPT-${{ inputs.version }}.json
+          name: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
+          path: release/approved/SDK_SMOKE_RECEIPT-*.json
           if-no-files-found: error
-      - name: retain the candidate release and immutable evidence after public smoke
+          retention-days: 30
+
+  evidence:
+    name: attach SDK evidence to existing GitHub Release
+    needs: [verify, smoke]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: totalfinance-release-${{ needs.verify.outputs.version }}
+          path: release/approved/
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.smoke.outputs.receipt-artifact }}
+          path: release/approved/
+      - name: retain approved SDK bytes and honest SDK-only smoke evidence
         env:
           GH_TOKEN: ${{ github.token }}
-          TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
+          GH_REPO: InsiderFinance/totalfinance
+          RELEASE_TAG: ${{ needs.verify.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.verify.outputs.version }}
+        # No clobber: conflicting preexisting assets require explicit recovery, never replacement.
         run: |
-          pnpm exec tsx tools/release/finalize-github-release.ts \
-            --dir release/approved --receipt "release/SMOKE_RECEIPT-$RELEASE_VERSION.json" \
-            --expect-version "$RELEASE_VERSION" --finalize
-          echo 'Latest is unchanged. Follow docs/runbooks/release.md for explicit promotion and separate website approval.'
+          gh release upload "$RELEASE_TAG" \
+            "release/approved/insiderfinance-totalfinance-$RELEASE_VERSION.tgz" \
+            release/approved/RELEASE_HASHES.json \
+            release/approved/SDK_RELEASE_SOURCE.json \
+            "release/approved/SDK_SMOKE_RECEIPT-$RELEASE_VERSION.json"

@@ -1,225 +1,101 @@
-# Runbook — releasing the two scoped TotalFinance artifacts
+# Runbook — publish the SDK from a GitHub Release
 
-The accepted [0.1.0 contract](../specs/scoped-single-package-release.md) supersedes the old
-twenty-five-package/preview release mechanics. Publish exactly these artifacts, in dependency order:
+Publishing a normal GitHub Release tagged `totalfinance-v<version>` authorizes that exact prepared
+SDK version to npm `latest`. Actions verifies the release commit, builds and publishes on
+GitHub-hosted runners, and checks public consumers. Local npm commands are unnecessary.
 
-| Order | Workspace                   | Public package                     | Initial version |
-| ----- | --------------------------- | ---------------------------------- | --------------- |
-| 1     | `distribution/totalfinance` | `@insiderfinance/totalfinance`     | `0.1.0`         |
-| 2     | `distribution/mcp`          | `@insiderfinance/totalfinance-mcp` | `0.1.0`         |
+Only `@insiderfinance/totalfinance` is uploaded. Optional MCP metadata/tarballs remain coherent and
+are validated/tested locally, but `@insiderfinance/totalfinance-mcp` is not published by this path.
+The [scoped contract](../specs/github-release-npm.md) controls this automation. It does not authorize
+creating a release, publishing a version, changing npm settings or deploying the website during PR
+preparation. Older [candidate-pair instructions](./release-pair-legacy.md) are historical, not the
+current workflow.
 
-Main has zero runtime dependencies. MCP has the exact main version plus the MCP SDK. All
-`packages/*` workspaces, `@totalfinance/*` aliases and the old `totalfinance` package identity are
-private implementation details. Never use recursive workspace publishing. This release is
-pre-1.0 software; neither `latest` nor a GitHub non-prerelease flag is a 1.0 stability promise.
+## One-time setup
 
-The sequence is **approved bytes → candidate → public-registry smoke → explicit latest promotion**.
-`candidate` is a public npm dist-tag, not npm's separate `npm stage publish` service, and does not
-hide the uploaded versions. Publication and tag promotion are not atomic. Read
-[partial-publish recovery](./release-rollback.md#1-partial-publication-main-succeeded-mcp-failed)
-before approving the first package.
+Complete this after reviewing/merging the automation PR, before creating the first release:
 
-## 0. External gates — still maintainer-held
+1. In npm's `@insiderfinance/totalfinance` package settings, add a GitHub Actions trusted publisher:
 
-Nothing in this runbook enables publishing, creates credentials, changes npm settings, or deploys
-a website. Keep `TOTALFINANCE_RELEASE_ENABLED` unset/false until a maintainer explicitly authorizes
-the exact release commit and verifies all of the following:
+   | Field             | Exact value                |
+   | ----------------- | -------------------------- |
+   | Organization/user | `InsiderFinance`           |
+   | Repository        | `totalfinance`             |
+   | Workflow filename | `totalfinance-release.yml` |
+   | Environment       | `npm-publish`              |
+   | Allowed action    | Direct `npm publish`       |
 
-- Public repository `InsiderFinance/totalfinance`, protected `main`, green current hosted Node
-  matrix, complete clean-tree landing standard, deterministic regeneration and installed-artifact
-  rehearsal at that commit.
-- Actual rights to create/publish **both** names in the `@insiderfinance` npm organization. A
-  public `npm view` 404 proves no visible version, **not** ownership, name availability or token rights.
-- GitHub `npm-publish` environment with required reviewers and main-only deployment protection.
-  Reviewers inspect the retained artifact's two names, version, commit, sizes and full SHA-256 hashes.
-- An explicit authentication route for both artifacts. The normal route is trusted publishing:
-  GitHub owner `InsiderFinance`, repository `totalfinance`, workflow filename
-  `totalfinance-release.yml`, environment `npm-publish`, with direct `npm publish` permitted.
-  Saved settings alone do not prove a successful authentication handshake.
-- A separately authorized operator and npm login/2FA for later dist-tag promotion/recovery. Do not
-  assume the publication OIDC identity can mutate dist-tags.
+   No npm token, OTP, dist-tag permission or MCP publisher is needed. npm does not verify these
+   settings on save; the first explicitly authorized release proves the actual OIDC handshake.
+   See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
-Publication uses pinned **Node 24.21.0** and checks **npm ≥11.5.1** before uploading. Building uses
-the canonical `.nvmrc` runtime (22.23.2); public smoke tests the consumer floor (22.13.0).
-These are deliberately different. See the [Node release](https://nodejs.org/en/blog/release/v24.21.0)
-and [npm trusted-publishing requirements](https://docs.npmjs.com/trusted-publishers/).
+2. Create the GitHub `npm-publish` environment. Its selected deployment tag rule allows
+   `totalfinance-v*`; a main-only branch rule would reject release events because they use tag refs.
+   The workflow separately requires the tagged commit to belong to `main`. Additional required
+   reviewers are optional; without them, clicking Publish release is the release owner's approval.
+3. After checking both settings, set repository Actions variable `TOTALFINANCE_RELEASE_ENABLED=true`.
+   Leave it unset/false during preparation. This is not an npm credential. Keep the existing full
+   CI and main protection policies; do not bypass them to make a release proceed.
 
-### First-pair bootstrap when the package names do not yet exist
+Building uses `.nvmrc` and pinned pnpm with a frozen lockfile. Publishing uses the existing Node
+24.21.0 pin, verifies npm >=11.5.1 and requests OIDC only in the publish job. Consumer smoke uses
+Node 22.13.0. This preserves the supported consumer runtime while meeting npm's publisher floor.
 
-Both names were reported as public-registry 404s during preparation. Ownership and credential
-rights remain unverified. Per-package trusted-publisher setup may require the packages to exist;
-do not claim that OIDC alone has solved first publication.
+## For each version
 
-An authorized maintainer must first confirm npm's current first-publication requirements. If a
-bootstrap granular access token is needed, explicitly approve a short-lived, minimally scoped token
-able to create **both** package names, place it only in the protected `npm-publish` environment as
-`NPM_BOOTSTRAP_TOKEN`, and dispatch with `bootstrap=true`. This selected route still runs the full
-verification and artifact approval gate, pins the publishing toolchain, publishes approved tarballs
-with provenance under `candidate`, and smokes the public registry. It never silently falls back
-from OIDC to a token. Do not put credentials in the repository or terminal transcripts.
+1. Prepare/review/merge version, changelog and derived metadata through the normal PR process.
+   For 0.1.3 this is already done: do not run `release.sh` or `changeset version` again.
+2. Wait for the **full main CI at the exact release commit** to pass. The release checks require
+   every supported Node shard, coverage merge, static job, clean regeneration and registry rehearsal;
+   a fast PR run cannot substitute. Creating the release early produces a clear refusal; rerun its
+   failed verification job once main CI is green.
+3. In GitHub → Releases → Draft a new release, select/create `totalfinance-v0.1.3` at the prepared
+   main commit, enter the reviewed release notes, and click **Publish release**. Drafts do nothing;
+   prereleases are skipped and never advance npm `latest`. Stable tags must match both prepared
+   distribution versions. Publishing does not invent or bump a version.
+4. Watch **TotalFinance release**. Verification checks the real tag/commit/main ancestry and exact
+   full-CI evidence, then runs `pnpm run ci`, standalone `pnpm api:check`, and a second
+   `pnpm test:coverage`. It packs the validated distribution pair once and retains clean-source hashes.
+5. The environment-protected publish job downloads those bytes, checks all hashes/metadata and
+   source identity again, and uploads **only the SDK** with provenance, public access and `latest`.
+   It neither rebuilds approved bytes nor uses an npm-token fallback. SDK publication is immediately
+   accepted; npm can report asynchronous processing before the version and latest tag become public.
+   Readback polls every 15 seconds up to a 15-minute polling deadline, retaining the existing HTTP
+   request timeouts, until exact approved bytes and latest match. It never repeats the upload.
+   Integrity/metadata/HTTP errors and a newer latest fail immediately. A later smoke failure does
+   not automatically unpublish or roll back discovery.
+6. Registry smoke matches the SDK's downloaded tarball to approval and installs its exact version.
+   Existing numerical SDK/CLI/HTTP journeys and all strict site examples must match committed
+   expectations. Optional MCP is installed from its approved local tarball solely as a test witness.
+   `SDK_SMOKE_RECEIPT-<version>.json` explicitly distinguishes the registry SDK from that witness.
+   It is not a two-package public-registry receipt and must not be imported as a site-release receipt.
+7. Actions retains the source/pack/publication/smoke artifacts for 30 days. After smoke passes, it
+   attaches the SDK tarball, pair hash manifest, source/full-CI receipt and SDK smoke receipt to the
+   existing GitHub Release. It never creates another release, moves the tag or overwrites assets.
+   Preserve a durable copy before Actions artifacts expire. Site publication remains separately
+   authorized and is not performed here.
 
-After both names exist, configure/verify their trusted publishers and revoke/remove the bootstrap
-token under separate maintainer authority. Future dispatches use `bootstrap=false` (the default).
-If only main succeeded, retain the token only as needed for the explicitly approved MCP recovery;
-follow the rollback runbook. Do not bootstrap by publishing dummy versions or unrelated packages.
+## Rehearsal and recovery
 
-## 0. The one-command release (maintainer's machine)
+Ordinary CI rehearses SDK-only publishing into a disposable Verdaccio registry, proves optional MCP
+is still absent, and runs the same consumer smoke. It then completes the existing pair rehearsal
+using verified resume. The scoped registry has no public fallback. No test upload reaches npmjs.org.
 
-From a clean, up-to-date `main` with pending changesets, and with version-change authorization:
+If a publish response is ambiguous or smoke fails, retain the original Actions run and artifacts.
+Rerun **failed jobs in that same run**; do not start another release, rebuild under a used version,
+move/delete a tag, overwrite evidence or silently relax a check. An existing SDK version is skipped
+only after its downloaded bytes match approval. A newer npm `latest` makes an old release rerun
+refuse instead of moving discovery backwards. A metadata/byte mismatch requires owner-led recovery.
 
-```sh
-tools/release/release.sh            # the bump the changesets ask for
-tools/release/release.sh --patch    # or release every pending change as a patch (--minor likewise)
-```
+Evidence attachment refuses conflicting existing assets. If an upload partly succeeded, retain the
+original successful smoke receipt, compare existing assets to those original files, and have the
+release owner upload only missing originals. Never use `--clobber` or regenerate timestamps to make
+receipts match. [Rollback guidance](./release-rollback.md) distinguishes SDK recovery from historical
+pair recovery; an SDK incident never authorizes changing optional MCP's tags or versions.
 
-It versions the public pair (`changeset version`, `publication:update`, the lockfile), rewrites the
-version in README, SECURITY and STABILITY, rebuilds, regenerates what carries the version (naming
-manifest, API reports, package READMEs, llms docs, OpenAPI), runs the release-pin checks, commits
-`Release <version>`, pushes `main`, and publishes the main package with
-`tools/release/publish-npm.sh` (a clean build, `release:dry-run --skip-ci --expect-version`, then
-`npm publish ./release/<tarball> --provenance=false`). npm may ask for a one-time password.
-`--no-publish` stops after the push; `--dry-run` stops before committing. A rehearsal took about a
-minute end to end. Hosted CI runs the full suites and `regen:check` on the pushed commit.
+## Local fallback
 
-The sections below are the hosted, provenance-attested release path and its checks.
-
-## 1. Prepare one reviewed release commit
-
-The initial distributions and runtime version metadata are **0.1.0** already. Changesets has one
-fixed two-package group, no pre-mode, and does not version/tag private packages. Initial development
-entries were consolidated into `.changeset/.release-0.1.0.md` (not a pending changeset); do **not** run `changeset version`
-again for this cut and accidentally create 0.2.0.
-
-For future releases only, with version-change authorization:
-
-```sh
-pnpm exec changeset status
-pnpm exec changeset version
-pnpm publication:update
-pnpm install --offline
-```
-
-Review the two public versions, MCP's exact main dependency, synchronized private/runtime versions,
-generated manifests and lockfile. Future notes come from
-`distribution/totalfinance/CHANGELOG.md`; initial notes come from the reviewed initial ledger.
-Do not perform versioning or rebuilding after artifact approval.
-
-The release commit meets the release standard in
-[`CONTRIBUTING.md`](../../CONTRIBUTING.md#local-full-verification-and-releases). Before publication,
-require a green full hosted run at that exact commit: all supported Node versions, coverage floors,
-determinism, clean-tree regeneration, and the installed-artifact rehearsal. A pending `main` run
-or green fast PR run is not release approval.
-
-The release verification job also runs `pnpm run ci`, a standalone `pnpm api:check`, and an
-independent second `pnpm test:coverage`. These may instead run locally with their exit codes
-checked directly and receipts recorded for the exact release commit. Ordinary PRs do not require
-this local repetition; release candidates still require the complete evidence before any upload.
-
-Commit/review/land through the normal maintainer process. Publication requires a clean checkout and
-the manifest's exact HEAD. `--allow-dirty` marks a rehearsal and can never become public approval
-evidence merely by committing later.
-
-## 2. Local rehearsal — not public release proof
-
-Use Node from `.nvmrc`, pinned pnpm, and a fresh output directory. Packing refuses to overwrite
-existing tarballs or manifests. It packs only the distributions, validates packed metadata,
-dependencies, archive paths/types, exports, declarations/maps, licenses, stability and README,
-then records `RELEASE_HASHES.json` with names, version, commit, source cleanliness, lengths and hashes.
-
-```sh
-pnpm release:dry-run --expect-version 0.1.0
-pnpm release:smoke --version 0.1.0 --tarballs release
-```
-
-CI also runs a local Verdaccio publish/install rehearsal. Its `@insiderfinance/*` rule has **no
-public-registry fallback**; a missing artifact cannot be filled from npm. Legacy private aliases
-also have no fallback. Verdaccio 6 synthesizes a `latest` tag when absent, even for a first
-`candidate` upload, so local tag state does not certify npm's promotion boundary. Public publishing
-separately reads tags before/after, verifies `candidate`, and refuses unexpected `latest` changes;
-it never automatically repairs tags. The following publishes only to a disposable local registry:
-
-```sh
-pnpm dlx verdaccio@6 --config tools/release/verdaccio.yaml --listen 4873
-# In a second terminal, after the dry-run:
-pnpm release:publish --registry http://localhost:4873
-pnpm release:smoke --version 0.1.0 --registry http://localhost:4873 --approved release
-```
-
-`--dry-run` on `release:publish` invokes npm's non-uploading check; it does not log in to or create
-a loopback registry account. No local receipt proves public publication. `--write-expected` is
-restricted to local tarballs and emits `expectations.matched=false`; review behavioral differences,
-commit the generated baseline, then rerun normally. Never normalize away numeric results, contract
-versions, operation counts, OpenAPI paths or MCP tool-name hashes to obtain a pass.
-
-## 3. Dispatch and approve the exact pair
-
-After all external gates and explicit enablement, dispatch **TotalFinance release** on `main` with
-`version=0.1.0` and the explicitly selected bootstrap mode. The verify job rejects version mismatch
-and an existing release tag, runs CI plus independent API/coverage checks, and uploads
-`totalfinance-release-0.1.0` (retained for 30 days). Retain a durable copy before expiration.
-
-The `npm-publish` reviewer approves **those artifacts**, not merely a version number. The publish
-job downloads into ignored `release/approved/`, rejects a dirty/mismatched checkout or dirty-source
-manifest, validates the exact ordered pair, filenames, metadata, dependency rules, sizes and all
-hashes **before any upload**, and uploads main before MCP with provenance under `candidate`.
-It does not rebuild, repack, advance `latest`, or create a release before registry smoke.
-
-The workflow uses `--resume` so rerunning the original failed publish job is safe: a remotely
-existing version is skipped only after its metadata and downloaded bytes match the original approved
-artifact. A mismatch aborts the entire attempt. It is not permission to dispatch a new run that
-rebuilds the same version. Preserve the original artifact and approval record.
-
-## 4. Public registry smoke and candidate evidence
-
-The smoke job explicitly targets `https://registry.npmjs.org`. It downloads the registry's tarballs
-and matches the approved lengths/hashes, then installs the two exact versions into a fresh consumer.
-It compares SDK/CLI outputs, HTTP OpenAPI, MCP tools and all committed smoke expectations; the site's
-exact copied examples compile in strict NodeNext and bundler modes and execute against the installed
-artifacts. Public scope resolution is pinned to the same registry.
-
-A successful job retains `totalfinance-registry-smoke-0.1.0-attempt-<github.run_attempt>` with
-`SMOKE_RECEIPT-0.1.0.json`, then creates `totalfinance-v0.1.0` and a **candidate/prerelease** GitHub
-release attaching the manifest, both tarballs and smoke receipt. Failure leaves any already uploaded
-versions public under candidate; follow recovery, never report the pair as promoted.
-
-## 5. Explicit latest promotion — separate approval
-
-Download the original artifacts and public smoke receipt under ignored `release/` in a clean checkout
-of the approved commit. Record the release owner's explicit promotion approval and current dist-tags.
-Use an authorized npm login/2FA; OIDC publishing is not dist-tag authorization.
-
-```sh
-# Read-only verification; checks source, original bytes, current registry bytes and smoke provenance.
-pnpm release:promote --dir release/approved --receipt release/SMOKE_RECEIPT-0.1.0.json --expect-version 0.1.0
-
-# ONLY after explicit maintainer approval: advances main then MCP and reads both latest tags back.
-pnpm release:promote --dir release/approved --receipt release/SMOKE_RECEIPT-0.1.0.json --expect-version 0.1.0 --approve-latest
-
-npm view @insiderfinance/totalfinance dist-tags --json --registry https://registry.npmjs.org
-npm view @insiderfinance/totalfinance-mcp dist-tags --json --registry https://registry.npmjs.org
-```
-
-Tag mutations can fail between packages. Keep the incident open until both tags are coherent; the
-rollback runbook owns recovery. After verified promotion, the maintainer may explicitly change the
-GitHub candidate release's title/status. Preserve all original evidence; do not recreate tarballs.
-
-## 6. Record and separately publish matching documentation
-
-The release evidence note identifies the exact commit, full commands/results, both tarball names,
-sizes/hashes, bootstrap versus OIDC authentication, reviewer, public-smoke receipt, promotion approval
-and tag readback. State which external gates were actually verified. Never label local tests as a
-public release or hosted-matrix result.
-
-The separately approved site release imports **only** the real public-registry receipt:
-
-```sh
-pnpm site:record-release /absolute/path/to/SMOKE_RECEIPT-0.1.0.json preview
-pnpm site:build
-pnpm site:test
-```
-
-`preview` here is the site's pre-1.0 stability classification, not the obsolete npm dist-tag. Follow
-[the site guide](../../site/README.md) for ledger review, immutable version archives, host/security
-settings and real browser/keyboard/mobile checks. Deploy only `site/dist/` after separate authority.
-Keep development labeling when public evidence is missing. Announce only after package promotion,
-public smoke and the matching separately approved hosted site acceptance are complete.
+The existing `tools/release/publish-npm.sh` remains a separately authorized SDK-only operator path.
+It builds/packs from clean current main and publishes directly to npm latest without CI provenance,
+using interactive npm authentication. It skips CI itself, so the same exact-commit release gates
+must have passed first. Prefer the hosted path above; do not race local and hosted publication.

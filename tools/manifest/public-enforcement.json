@@ -60,17 +60,22 @@
           },
           "calendar": {
             "type": "object",
-            "description": "name/version/timezone"
+            "description": "name/version/timezone and documented closure-data coverage"
+          },
+          "diagnostics": {
+            "type": "object",
+            "description": "Warnings when the range crosses the historical coverage floor"
           }
         },
         "required": ["tradingDays", "holidays", "halfDays", "calendar"]
       },
       "inputSchemaHash": "890ec9a8a67f5ec5",
-      "outputSchemaHash": "61a7af9dc404b34b",
+      "outputSchemaHash": "ce63a2965789b58b",
       "inputFields": ["calendar", "expirationKind", "from", "to"],
       "requiredInputFields": ["calendar", "from", "to"],
       "outputFields": [
         "calendar",
+        "diagnostics",
         "expirations",
         "halfDays",
         "holidays",
@@ -1958,6 +1963,20 @@
                 },
                 "volume": {
                   "type": "number"
+                },
+                "symbol": {
+                  "type": "string",
+                  "description": "Canonical source Bar symbol; include timestampMs and open on every row"
+                },
+                "timestampMs": {
+                  "type": "number",
+                  "description": "Canonical source time in epoch ms; strictly increasing within one symbol"
+                },
+                "vwap": {
+                  "type": "number"
+                },
+                "adjusted": {
+                  "type": "boolean"
                 }
               },
               "additionalProperties": false,
@@ -2064,7 +2083,7 @@
         },
         "required": ["indicator", "value", "assumptions", "diagnostics"]
       },
-      "inputSchemaHash": "ee53195b82442e1b",
+      "inputSchemaHash": "cdec192b636bad73",
       "outputSchemaHash": "812ea03cbc7b74a6",
       "inputFields": ["bars", "closes", "indicator", "parameters", "series", "x", "y"],
       "requiredInputFields": ["indicator"],
@@ -2182,7 +2201,8 @@
               "performance",
               "candlestick",
               "price-action"
-            ]
+            ],
+            "description": "Browse a category here, e.g. momentum; search matches indicator names/aliases and does not expand category words"
           },
           "limit": {
             "type": "integer",
@@ -2250,7 +2270,7 @@
         },
         "required": ["count", "indicators"]
       },
-      "inputSchemaHash": "360a5d90ed7e7115",
+      "inputSchemaHash": "c19fcc585a565e2b",
       "outputSchemaHash": "1548198ddd202b46",
       "inputFields": ["category", "limit", "offset", "search"],
       "requiredInputFields": [],
@@ -2822,15 +2842,15 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5466,
+    "candidates": 5468,
     "enforced": 2577,
     "defective": 0,
-    "partial": 2702,
-    "unmeasured": 187,
+    "partial": 2705,
+    "unmeasured": 186,
     "unmeasuredByReason": {
       "no-input": 48,
       "baseline-rejected": 56,
-      "external-callback-contract": 53,
+      "external-callback-contract": 52,
       "incomplete-baseline": 20,
       "callback-input-required": 4,
       "async-result-unobserved": 6
@@ -2850,34 +2870,34 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2779,
-      "null-when-nonnullable": 26408,
-      "omit-required": 13466,
-      "wrong-type": 17121,
-      "non-finite": 9489,
-      "optional-wrong-type": 8043,
-      "invalid-literal": 1961,
-      "empty-series": 914,
-      "non-finite-element": 842,
+      "unknown-key": 2803,
+      "null-when-nonnullable": 27142,
+      "omit-required": 13684,
+      "wrong-type": 17339,
+      "non-finite": 9587,
+      "optional-wrong-type": 8511,
+      "invalid-literal": 2009,
+      "empty-series": 916,
+      "non-finite-element": 844,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6611,
-      "null-when-nonnullable": 66380,
-      "omit-required": 34343,
-      "wrong-type": 43772,
-      "non-finite": 24734,
-      "optional-wrong-type": 19196,
-      "invalid-literal": 5027,
-      "empty-series": 2414,
-      "non-finite-element": 2176,
+      "unknown-key": 6671,
+      "null-when-nonnullable": 68215,
+      "omit-required": 34888,
+      "wrong-type": 44317,
+      "non-finite": 24979,
+      "optional-wrong-type": 20366,
+      "invalid-literal": 5147,
+      "empty-series": 2417,
+      "non-finite-element": 2179,
       "wrong-element-type": 1176,
       "ragged-matrix": 204
     },
     "failuresDirect": 0,
     "failuresAttributed": 0,
-    "inherited": 3085,
+    "inherited": 3086,
     "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
       "no-input": 1763,
@@ -2888,13 +2908,13 @@
       "async-result-unobserved": 3,
       "callback-input-required": 21
     },
-    "receiverGroupingGaps": 76,
+    "receiverGroupingGaps": 75,
     "alternatives": {
-      "total": 13196,
-      "enforced": 3958,
-      "partial": 2517,
+      "total": 13258,
+      "enforced": 4018,
+      "partial": 2520,
       "defective": 0,
-      "unmeasured": 6721,
+      "unmeasured": 6720,
       "truncated": 0
     },
     "staticFalsePositives": 0,
@@ -34967,14 +34987,6 @@
       "fixtureSource": "@totalfinance/foreign-exchange:spotForwardHedgedProfitAndLoss"
     },
     {
-      "id": "@totalfinance/fundamentals:RatioFacade#explain",
-      "package": "@totalfinance/fundamentals",
-      "implementation": "packages/fundamentals/dist/ratio-internals.d.ts#RatioFacade.explain",
-      "verdict": "unmeasured",
-      "unmeasuredReason": "external-callback-contract",
-      "guardReachability": "delegated"
-    },
-    {
       "id": "@totalfinance/fundamentals:accrualRatio",
       "package": "@totalfinance/fundamentals",
       "implementation": "packages/fundamentals/dist/ratio-heads.d.ts#accrualRatio",
@@ -35319,22 +35331,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:cashRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:cashRatio"
     },
@@ -35345,24 +35375,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:cashReturnOnAssets",
@@ -35449,22 +35496,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:currentRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:currentRatio"
     },
@@ -35475,24 +35540,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:daysInventoryOutstanding",
@@ -35657,22 +35739,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
     },
@@ -35683,24 +35783,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:debtToAssets",
@@ -35709,22 +35826,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
     },
@@ -35735,24 +35870,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:debtToEquity",
@@ -35761,22 +35913,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
     },
@@ -35787,24 +35957,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:dividendYield",
@@ -35865,22 +36052,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
     },
@@ -35891,24 +36096,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:earningsYield",
@@ -36249,22 +36471,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:grossMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:grossMargin"
     },
@@ -36275,24 +36515,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:interestCoverage",
@@ -36301,22 +36558,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
     },
@@ -36327,24 +36602,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:inventoryTurnover",
@@ -36483,22 +36775,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
     },
@@ -36509,24 +36819,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:operatingMargin",
@@ -36535,22 +36862,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
     },
@@ -36561,24 +36906,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:payablesTurnover",
@@ -36847,22 +37209,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:quickRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:quickRatio"
     },
@@ -36873,24 +37253,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:receivablesTurnover",
@@ -37339,22 +37736,40 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
     },
@@ -37365,24 +37780,41 @@
       "verdict": "enforced",
       "guardReachability": "delegated",
       "mutationsExecuted": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
       },
-      "synthesized": true
+      "synthesized": true,
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
+      }
     },
     {
       "id": "@totalfinance/fundamentals:selectFundamentalSnapshot",
@@ -98216,6 +98648,34 @@
       "synthesized": true
     },
     {
+      "id": "@totalfinance/technical-analysis:ohlcvFromBars",
+      "package": "@totalfinance/technical-analysis",
+      "implementation": "packages/technical-analysis/dist/columns.d.ts#ohlcvFromBars",
+      "verdict": "partial",
+      "guardReachability": "direct",
+      "undecided": ["empty-series", "no-authoritative-dimension-tested"],
+      "mutationsExecuted": {
+        "empty-series": 1,
+        "non-finite-element": 1
+      },
+      "mutationsCovered": {
+        "empty-series": 1,
+        "non-finite-element": 1
+      },
+      "inputPolicies": {
+        "0": "open"
+      },
+      "advisory": [
+        {
+          "mutation": "empty-series",
+          "argumentIndex": 0,
+          "verdict": "accepted",
+          "returned": "[]"
+        }
+      ],
+      "fixtureSource": "@totalfinance/technical-analysis:ohlcvFromBars"
+    },
+    {
       "id": "@totalfinance/technical-analysis:openingRange",
       "package": "@totalfinance/technical-analysis",
       "implementation": "packages/technical-analysis/dist/price-action.d.ts#openingRange",
@@ -136785,13 +137245,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:cashRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:cashRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:cashRatio"
     },
@@ -147802,13 +148280,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:currentRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:currentRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:currentRatio"
     },
@@ -149909,13 +150405,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtServiceCoverage",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
     },
@@ -149928,13 +150442,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToAssets",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
     },
@@ -149947,13 +150479,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToEquity",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
     },
@@ -153481,13 +154031,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:earningsPerShare",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
     },
@@ -173078,13 +173646,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:cashRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:cashRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:cashRatio"
     },
@@ -173097,13 +173683,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:cashRatio.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173173,13 +173776,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:currentRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:currentRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:currentRatio"
     },
@@ -173192,13 +173813,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:currentRatio.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173325,13 +173963,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtServiceCoverage",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtServiceCoverage"
     },
@@ -173344,13 +174000,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtServiceCoverage.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 84,
-        "omit-required": 36,
-        "wrong-type": 61,
-        "non-finite": 42,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 113,
+        "omit-required": 46,
+        "wrong-type": 71,
+        "non-finite": 47,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173363,13 +174036,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToAssets",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToAssets"
     },
@@ -173382,13 +174073,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToAssets.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173401,13 +174109,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToEquity",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:debtToEquity"
     },
@@ -173420,13 +174146,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:debtToEquity.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 46,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173477,13 +174220,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:earningsPerShare",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:earningsPerShare"
     },
@@ -173496,13 +174257,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:earningsPerShare.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173759,13 +174537,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:grossMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:grossMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:grossMargin"
     },
@@ -173778,13 +174574,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:grossMargin.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173797,13 +174610,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:interestCoverage",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
     },
@@ -173816,13 +174647,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:interestCoverage.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173930,13 +174778,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:netProfitMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
     },
@@ -173949,13 +174815,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:netProfitMargin.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -173968,13 +174851,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:operatingMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
     },
@@ -173987,13 +174888,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:operatingMargin.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -174196,13 +175114,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:quickRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:quickRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:quickRatio"
     },
@@ -174215,13 +175151,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:quickRatio.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -174556,13 +175509,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:revenuePerShare",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
     },
@@ -174575,13 +175546,30 @@
       "inheritedFrom": "@totalfinance/fundamentals:revenuePerShare.explain",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "synthesized": true
     },
@@ -175450,13 +176438,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:grossMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:grossMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:grossMargin"
     },
@@ -177873,13 +178879,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:interestCoverage",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:interestCoverage"
     },
@@ -186271,13 +187295,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:netProfitMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:netProfitMargin"
     },
@@ -187358,6 +188400,34 @@
       "fixtureSource": "@totalfinance/technical-analysis:averagePrice"
     },
     {
+      "id": "totalfinance:ohlcvFromBars",
+      "package": "totalfinance",
+      "implementation": "packages/technical-analysis/dist/columns.d.ts#ohlcvFromBars",
+      "verdict": "partial",
+      "guardReachability": "direct",
+      "undecided": ["empty-series", "no-authoritative-dimension-tested"],
+      "mutationsExecuted": {
+        "empty-series": 1,
+        "non-finite-element": 1
+      },
+      "mutationsCovered": {
+        "empty-series": 1,
+        "non-finite-element": 1
+      },
+      "inputPolicies": {
+        "0": "open"
+      },
+      "advisory": [
+        {
+          "mutation": "empty-series",
+          "argumentIndex": 0,
+          "verdict": "accepted",
+          "returned": "[]"
+        }
+      ],
+      "fixtureSource": "totalfinance:ohlcvFromBars"
+    },
+    {
       "id": "totalfinance:ols",
       "package": "totalfinance",
       "implementation": "packages/math/dist/regression.d.ts#ols",
@@ -187528,13 +188598,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:operatingMargin",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 45,
+        "wrong-type": 70,
+        "non-finite": 46,
+        "optional-wrong-type": 39,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:operatingMargin"
     },
@@ -210144,13 +211232,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:quickRatio",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 117,
+        "omit-required": 43,
+        "wrong-type": 68,
+        "non-finite": 44,
+        "optional-wrong-type": 47,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:quickRatio"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:quickRatio"
     },
@@ -214107,13 +215213,31 @@
       "inheritedFrom": "@totalfinance/fundamentals:revenuePerShare",
       "guardReachability": "delegated",
       "mutationsCovered": {
-        "unknown-key": 1,
-        "null-when-nonnullable": 83,
-        "omit-required": 35,
-        "wrong-type": 60,
-        "non-finite": 41,
-        "optional-wrong-type": 23,
-        "invalid-literal": 6
+        "unknown-key": 2,
+        "null-when-nonnullable": 111,
+        "omit-required": 44,
+        "wrong-type": 69,
+        "non-finite": 45,
+        "optional-wrong-type": 40,
+        "invalid-literal": 8
+      },
+      "alternatives": [
+        {
+          "id": "arg0#0",
+          "verdict": "enforced",
+          "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
+        },
+        {
+          "id": "arg0#1",
+          "verdict": "enforced"
+        }
+      ],
+      "alternativeSummary": {
+        "total": 2,
+        "enforced": 2,
+        "partial": 0,
+        "defective": 0,
+        "unmeasured": 0
       },
       "fixtureSource": "@totalfinance/fundamentals:revenuePerShare"
     },
@@ -247988,6 +249112,32 @@
         "unknown-key": 1
       },
       "synthesized": true
+    },
+    {
+      "id": "totalfinance:technicalAnalysis.ohlcvFromBars",
+      "package": "totalfinance",
+      "implementation": "packages/technical-analysis/dist/columns.d.ts#ohlcvFromBars",
+      "verdict": "partial",
+      "measurementSource": "totalfinance:ohlcvFromBars",
+      "inheritedFrom": "totalfinance:ohlcvFromBars",
+      "guardReachability": "direct",
+      "advisory": [
+        {
+          "mutation": "empty-series",
+          "argumentIndex": 0,
+          "verdict": "accepted",
+          "returned": "[]"
+        }
+      ],
+      "undecided": ["empty-series", "no-authoritative-dimension-tested"],
+      "mutationsCovered": {
+        "empty-series": 1,
+        "non-finite-element": 1
+      },
+      "fixtureSource": "totalfinance:ohlcvFromBars",
+      "inputPolicies": {
+        "0": "open"
+      }
     },
     {
       "id": "totalfinance:technicalAnalysis.openingRange",

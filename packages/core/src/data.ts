@@ -47,7 +47,7 @@ export function defineDataProvider(source: DataProviderSource): DataProvider {
           capabilityData(result, identity);
           return copyFrozen(result);
         } catch (error) {
-          invalidResponse(error, id);
+          invalidResponse(error, id, 'defineDataProvider.capabilities');
         }
       });
     },

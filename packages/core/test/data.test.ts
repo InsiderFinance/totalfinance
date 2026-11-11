@@ -1,5 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
-import { defineDataProvider, DATA_CONTRACT_VERSION, type DataProviderSource } from '../src/data.js';
+import {
+  defineDataProvider,
+  DATA_CONTRACT_VERSION,
+  type DataProviderSource,
+  type DataPage,
+  type PriceBarRecord,
+  type OptionChainResearchRecord,
+} from '../src/data.js';
 import { ErrorCode, QuantError } from '../src/errors.js';
 import { createFixtureDataProvider } from '../../../docs/examples/community-connector-fixture.js';
 import {
@@ -9,7 +16,9 @@ import {
   dailyRequest,
   barCapability,
 } from '../../../docs/examples/community-connector-facts.js';
-function raw(value = page()): DataProviderSource {
+function raw(
+  value: DataPage<PriceBarRecord> | DataPage<OptionChainResearchRecord> = page(),
+): DataProviderSource {
   return {
     id: 'fixture',
     version: '0.0.0',

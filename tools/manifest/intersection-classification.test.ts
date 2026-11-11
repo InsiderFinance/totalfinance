@@ -48,6 +48,17 @@ const shapeIsEmpty = (shape: Shape): boolean =>
 const shapeKey = (shape: Shape): string =>
   `${shape.common.join(',')}||${shape.branches.map((b) => b.join(',')).join(' | ')}`;
 
+// Pick<T, 'fieldA' | 'fieldB'> identifies the same instantiation in either key order. Independent
+// checker programs can print those literal unions in different orders. Normalize identifier-only
+// literal runs, leaving type arguments, optionality and every other part of the type intact.
+const instantiationKey = (type: string): string =>
+  type.replace(/'[A-Za-z_][A-Za-z0-9_]*'(?:\s*\|\s*'[A-Za-z_][A-Za-z0-9_]*')+/g, (run) =>
+    run
+      .split(/\s*\|\s*/)
+      .sort()
+      .join(' | '),
+  );
+
 interface ContractParameter {
   name: string;
   type?: string;
@@ -212,6 +223,7 @@ describe('generated intersection field trees match the checker', () => {
   function discoverFromChecker(): {
     shapes: Map<string, Shape>;
     implementations: Map<string, string>;
+    parameterTypes: Map<string, string>;
   } {
     const entrypoints = entrypointFiles();
     const program = ts.createProgram(
@@ -228,6 +240,7 @@ describe('generated intersection field trees match the checker', () => {
     const found = new Map<string, Shape>();
     /** Public parameter occurrence -> implementation parameter occurrence, derived from the AST. */
     const implementations = new Map<string, string>();
+    const parameterTypes = new Map<string, string>();
 
     /**
      * The declaration site a parameter belongs to, spelled the way the generator spells it:
@@ -309,7 +322,18 @@ describe('generated intersection field trees match the checker', () => {
           const parameterDeclaration = parameter.valueDeclaration ?? parameter.declarations?.[0];
           if (!parameterDeclaration) continue;
           const key = publicParameterOccurrence(owner, signatureIndex, parameterIndex);
-          record(key, checker.getTypeOfSymbolAtLocation(parameter, parameterDeclaration));
+          const parameterType = checker.getTypeOfSymbolAtLocation(parameter, parameterDeclaration);
+          record(key, parameterType);
+          parameterTypes.set(
+            key,
+            checker.typeToString(
+              parameterType,
+              parameterDeclaration,
+              ts.TypeFormatFlags.NoTruncation |
+                ts.TypeFormatFlags.WriteArrayAsGenericType |
+                ts.TypeFormatFlags.UseSingleQuotesForStringLiteralType,
+            ),
+          );
           const implementation = implementationOf(parameterDeclaration);
           if (found.has(key) && implementation)
             implementations.set(
@@ -396,10 +420,14 @@ describe('generated intersection field trees match the checker', () => {
         }
       }
     }
-    return { shapes: found, implementations };
+    return { shapes: found, implementations, parameterTypes };
   }
 
-  const { shapes: fromChecker, implementations: checkerImplementations } = discoverFromChecker();
+  const {
+    shapes: fromChecker,
+    implementations: checkerImplementations,
+    parameterTypes: checkerParameterTypes,
+  } = discoverFromChecker();
 
   const artifact = JSON.parse(
     readFileSync(fileURLToPath(new URL('./public-contracts.json', import.meta.url)), 'utf8'),
@@ -498,6 +526,7 @@ describe('generated intersection field trees match the checker', () => {
    * which is what makes "first one wins" safe rather than arbitrary.
    */
   const artifactByImplementation = new Map<string, Shape>();
+  const artifactByInstantiation = new Map<string, Shape>();
   {
     /**
      * ONE SHAPE PER IMPLEMENTATION, OR NO FALLBACK AT ALL.
@@ -505,10 +534,9 @@ describe('generated intersection field trees match the checker', () => {
      * "First one wins" was justified here by the consistency test below — but that test keys on
      * implementation AND instantiation, a strictly finer key, so it permits one implementation
      * occurrence to carry different contracts at different instantiations. `Facade.explain` is
-     * exactly that: one declaration, fourteen contracts. Taking the first would hand a lookup the
-     * wrong one and call it agreement. Where an implementation is ambiguous the fallback simply
-     * declines, which costs nothing — the only callers are the ten public paths the artifact spells
-     * differently, and every one of them is unambiguous.
+     * exactly that: one declaration, multiple contracts. Taking the first would hand a lookup the
+     * wrong one and call it agreement. Ambiguous implementations require the concrete instantiation
+     * key below; the implementation-only fallback remains available for unambiguous aliases.
      */
     const shapesFor = new Map<string, Set<string>>();
     for (const [publicOccurrence, implementation] of publicToImplementation) {
@@ -519,6 +547,13 @@ describe('generated intersection field trees match the checker', () => {
       shapesFor.set(implementation, seenShapes);
       if (!artifactByImplementation.has(implementation))
         artifactByImplementation.set(implementation, shape);
+      // Alias spellings can share a generic method declaration while accepting different facts.
+      // Match its concrete declared input as well; choosing by the expected field shape would hide
+      // a broken artifact. The consistency checks below reject divergent shapes for this key.
+      artifactByInstantiation.set(
+        `${implementation}|${instantiationKey(renderedType.get(publicOccurrence) ?? '')}`,
+        shape,
+      );
     }
     for (const [implementation, seenShapes] of shapesFor) {
       if (seenShapes.size > 1) artifactByImplementation.delete(implementation);
@@ -538,7 +573,12 @@ describe('generated intersection field trees match the checker', () => {
   const recordedFor = (key: string): Shape | undefined => {
     if (fromArtifact.has(key)) return fromArtifact.get(key);
     const implementation = checkerImplementations.get(key);
-    return implementation ? artifactByImplementation.get(implementation) : undefined;
+    if (!implementation) return undefined;
+    return (
+      artifactByInstantiation.get(
+        `${implementation}|${instantiationKey(checkerParameterTypes.get(key) ?? '')}`,
+      ) ?? artifactByImplementation.get(implementation)
+    );
   };
 
   const checkerOnly = [...fromChecker.keys()]
@@ -671,7 +711,7 @@ describe('generated intersection field trees match the checker', () => {
       if (!recorded || shapeIsEmpty(recorded)) {
         if (!checkerOnly.includes(key))
           mismatches.push(
-            `${key}: the generator records ${recorded ? 'an EMPTY contract' : 'no contract'} for a compound parameter`,
+            `${key}: the generator records ${recorded ? 'an EMPTY contract' : 'no contract'} for a compound parameter (${checkerParameterTypes.get(key)})`,
           );
         continue;
       }
@@ -777,7 +817,7 @@ describe('generated intersection field trees match the checker', () => {
     (publicOccurrence) => {
       const implementation = publicToImplementation.get(publicOccurrence);
       return implementation
-        ? `${implementation}|${renderedType.get(publicOccurrence) ?? ''}`
+        ? `${implementation}|${instantiationKey(renderedType.get(publicOccurrence) ?? '')}`
         : null;
     },
     2120,

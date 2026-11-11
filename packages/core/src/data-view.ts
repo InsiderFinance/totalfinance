@@ -1,3 +1,4 @@
+import { issueOf, responseIssue } from './data-response-issue.js';
 /** SDK-owned data handoff. Native arrays are page samples; context stays on the parent view. */
 import { DataError, ErrorCode, InputError, QuantError, UnsupportedError } from './errors.js';
 import type {
@@ -74,6 +75,8 @@ export function createDataView(page: unknown): DataView {
     pageData(page);
     return dataViewOf(copyFrozen(page));
   } catch (error) {
+    const detail = issueOf(error);
+    if (detail) responseIssue(detail, 'createDataView');
     if (
       error instanceof QuantError &&
       (error.code === ErrorCode.DataContractVersionUnsupported ||

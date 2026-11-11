@@ -73,10 +73,10 @@ export interface DataProviderSource {
   readonly version: string;
   readonly contractVersion: 1;
   capabilities(options?: DataCallOptions): Promise<DataCapabilities>;
-  query<R extends DataRequest>(
-    request: R,
+  query(
+    request: DataRequest,
     options?: DataCallOptions,
-  ): Promise<DataPage<DataFor<R>>>;
+  ): Promise<DataPage<PriceBarRecord> | DataPage<OptionChainResearchRecord>>;
 }
 
 /** Complete actual OHLCV inputs: unknown volume is never supplied as zero. */

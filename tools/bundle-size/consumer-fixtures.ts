@@ -60,7 +60,13 @@ const leanBudgets = {
 } as const;
 // Actual esbuild root namespaces: 41508/105191/95468 B. These are coarse DOMAIN budgets,
 // not permission to pull unrelated packages. Rollup keeps the ordinary lean consumer budgets.
-const coarseBudgets = { normal: 42, rsi: 103, facade: 96 } as const;
+// 0.1.3 canonical installed measurement: RSI root namespace 105586 B gzip (esbuild).
+// The explicit OHLCV adapter and its validation add 395 B; leaf RSI remains under 9 KiB.
+// Raise only the coarse TA ceiling to 103.25 KiB; unrelated-domain exclusions remain binding.
+// Review repair: the installed root namespace is 105817 B gzip on canonical Node 22.23.2.
+// Single-symbol/time and optional-metadata validation add 231 B; only this coarse ceiling moves
+// from 103.25 to 103.5 KiB. Leaf RSI and every unrelated-domain exclusion remain unchanged.
+const coarseBudgets = { normal: 42, rsi: 103.5, facade: 96 } as const;
 
 function calculation(
   canary: Exclude<ConsumerCanary, 'unused' | 'dynamic'>,
@@ -340,8 +346,9 @@ export const DATA_CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
     style: 'named',
     source:
       "import { connect } from '@insiderfinance/totalfinance/data'; globalThis.consumerConnect = connect;",
-    budgetKiB: { esbuild: 13, rollup: 10.75 },
-    reason: 'C3 named connect measured12977/10820B; approved13312/11008B.',
+    budgetKiB: { esbuild: 15, rollup: 13 },
+    reason:
+      'C4 ae690e3f approved15102/13009B within15360/13312B: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 named connect measured12977/10820B; approved13312/11008B.',
   },
   {
     id: 'data-root',
@@ -350,8 +357,9 @@ export const DATA_CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
     style: 'root namespace',
     source:
       "import { data } from '@insiderfinance/totalfinance'; globalThis.consumerConnect = data.connect;",
-    budgetKiB: { esbuild: 13.5, rollup: 10.75 },
-    reason: 'C3 root data namespace measured13589/10839B; approved13824/11008B.',
+    budgetKiB: { esbuild: 15.5, rollup: 13 },
+    reason:
+      'C4 ae690e3f approved15759/12990B within15872/13312B: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 root data namespace measured13589/10839B; approved13824/11008B.',
   },
   {
     id: 'data-restore',
@@ -360,7 +368,8 @@ export const DATA_CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
     style: 'named restore',
     source:
       "import { createPriceBarsWindowView } from '@insiderfinance/totalfinance/data'; globalThis.consumerRestore = createPriceBarsWindowView;",
-    budgetKiB: { esbuild: 11.75, rollup: 11.75 },
-    reason: 'C3 restore measured11823/11833B; approved12032B each.',
+    budgetKiB: { esbuild: 13.75, rollup: 13.75 },
+    reason:
+      'C4 ae690e3f approved13884/13897B within14080B each: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 restore measured11823/11833B; approved12032B each.',
   },
 ];

@@ -1,3 +1,10 @@
+import {
+  responseIssue,
+  scanIssue,
+  guardFailure,
+  guardResponse,
+  schemaPath,
+} from './data-response-issue.js';
 /** Internal validation shared by the structural wrapper and independent conformance kit. */
 import {
   ErrorCode,
@@ -23,18 +30,28 @@ import type {
 
 type RecordValue = Record<string, unknown>;
 const FUNCTION = 'defineDataProvider';
+// Resolve the registered response code outside row teaching catches so Rollup can retain only used codes.
+const RESPONSE_CODE = ErrorCode.DataInvalidResponse;
 export function object(value: unknown, path: string, keys?: readonly string[]): RecordValue {
-  requireArgumentObject(FUNCTION, path, value);
-  if (keys) ensureKnownKeys(FUNCTION, path, value as object, keys);
+  try {
+    requireArgumentObject(FUNCTION, path, value);
+    if (keys) ensureKnownKeys(FUNCTION, path, value as object, keys);
+  } catch (error) {
+    guardFailure(error, path, value === undefined ? ErrorCode.InputMissingField : undefined);
+  }
   return value as RecordValue;
 }
 export function fail(path: string, code: string = ErrorCode.InputWrongType): never {
-  throw new InputError(
-    `${FUNCTION}: ${path} is missing or invalid; supply the declared field type and units.`,
-    { code, context: { field: path } },
+  guardFailure(
+    new InputError(
+      `${FUNCTION}: ${path} is missing or invalid; supply the declared field type and units.`,
+      { code, context: { field: path } },
+    ),
+    path,
   );
 }
 export function textField(value: unknown, path: string, maximum = 2048): asserts value is string {
+  if (value === undefined) fail(path, ErrorCode.InputMissingField);
   if (typeof value !== 'string' || value.trim().length === 0 || value.length > maximum) fail(path);
 }
 export function numberField(
@@ -44,12 +61,14 @@ export function numberField(
   maximum = Infinity,
   integer = false,
 ): asserts value is number {
+  if (value === undefined) fail(path, ErrorCode.InputMissingField);
   if (typeof value !== 'number') fail(path);
   if (!Number.isFinite(value)) fail(path, ErrorCode.InputNotFinite);
   if (value < minimum || value > maximum || (integer && !Number.isSafeInteger(value)))
     fail(path, ErrorCode.InputOutOfRange);
 }
 export function enumField(value: unknown, path: string, values: readonly unknown[]): void {
+  if (value === undefined) fail(path, ErrorCode.InputMissingField);
   if (!values.includes(value)) fail(path, ErrorCode.InputInvalidEnum);
 }
 function nullableText(value: unknown, path: string): void {
@@ -64,7 +83,11 @@ function nullableInstant(value: unknown, path: string): void {
 export function calendarDate(value: unknown, path: string): number {
   textField(value, path, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) fail(path);
-  return isoDateToEpochMs(value);
+  try {
+    return isoDateToEpochMs(value);
+  } catch (error) {
+    guardFailure(error, path);
+  }
 }
 function nullableDate(value: unknown, path: string): void {
   if (value !== null) calendarDate(value, path);
@@ -80,13 +103,17 @@ function zonedInstant(value: unknown, path: string): number {
   if (!Number.isFinite(parsed)) fail(path);
   return parsed;
 }
-export function plain(value: unknown): void {
-  scanCanonicalData(value, {
-    functionName: FUNCTION,
-    label: 'data',
-    requireFiniteNumbers: true,
-    maximumWorkUnits: 2_000_000,
-  });
+export function plain(value: unknown, phase: 'page' | 'capabilities' = 'page'): void {
+  try {
+    scanCanonicalData(value, {
+      functionName: FUNCTION,
+      label: 'data',
+      requireFiniteNumbers: true,
+      maximumWorkUnits: 2_000_000,
+    });
+  } catch (error) {
+    scanIssue(error, value, phase);
+  }
 }
 export function copyFrozen<T>(value: T): T {
   plain(value);
@@ -100,6 +127,7 @@ export function frozen(value: unknown): boolean {
   );
 }
 function array(value: unknown, path: string): unknown[] {
+  if (value === undefined) fail(path, ErrorCode.InputMissingField);
   if (!Array.isArray(value)) fail(path);
   return value;
 }
@@ -195,11 +223,11 @@ export function requestData(value: unknown): asserts value is DataRequest {
     }
   }
 }
-export function capabilityData(
+function capabilityDataUnchecked(
   value: unknown,
   provider: Pick<DataProvider, 'id' | 'version'>,
 ): asserts value is DataCapabilities {
-  plain(value);
+  plain(value, 'capabilities');
   const c = object(value, 'capabilities', [
     'contractVersion',
     'providerId',
@@ -207,8 +235,8 @@ export function capabilityData(
     'capabilities',
   ]);
   version(c['contractVersion']);
-  if (c['providerId'] !== provider.id || c['providerVersion'] !== provider.version)
-    fail('capabilities.identity');
+  if (c['providerId'] !== provider.id) fail('capabilities.providerId');
+  if (c['providerVersion'] !== provider.version) fail('capabilities.providerVersion');
   const seen = new Set();
   for (const item of array(c['capabilities'], 'capabilities.capabilities')) {
     const a = object(item, 'capability', [
@@ -328,7 +356,18 @@ function chainData(value: unknown, symbol: string): void {
       numberField(
         q[k],
         `quote.${k}`,
-        ['volume', 'openInterest', 'impliedVolatility'].includes(k) ? 0 : -Infinity,
+        [
+          'bid',
+          'ask',
+          'mid',
+          'last',
+          'mark',
+          'volume',
+          'openInterest',
+          'impliedVolatility',
+        ].includes(k)
+          ? 0
+          : -Infinity,
       );
   if (r['greeks'] !== null) {
     const g = object(r['greeks'], 'row.greeks');
@@ -343,7 +382,7 @@ function chainData(value: unknown, symbol: string): void {
         instant(p['timestampMs'], 'greeks.provenance.timestampMs');
     }
   }
-  if (r['theoreticalPrice'] !== null) numberField(r['theoreticalPrice'], 'row.theoreticalPrice');
+  if (r['theoreticalPrice'] !== null) numberField(r['theoreticalPrice'], 'row.theoreticalPrice', 0);
   nullableDate(r['openInterestSessionDate'], 'row.openInterestSessionDate');
   times(r['times'], 'row.times');
   diagnostics(r['diagnostics'], 'row.diagnostics');
@@ -355,7 +394,7 @@ export function rowKey(
 ): readonly (string | number)[] {
   if (kind === 'price-bars') return [(row as PriceBarRecord).bar.timestampMs];
   const r = row as OptionChainResearchRecord;
-  return [r.terms.expiry, r.terms.strike, r.terms.type === 'call' ? 0 : 1];
+  return [r.terms.expiry, r.terms.strike, r.terms.type === 'call' ? 0 : 1, r.sourceContractId];
 }
 export function compareKeys(
   a: readonly (string | number)[],
@@ -366,7 +405,7 @@ export function compareKeys(
   }
   return 0;
 }
-export function pageData(
+function pageDataUnchecked(
   value: unknown,
   request?: DataRequest,
   provider?: Pick<DataProvider, 'id' | 'version'>,
@@ -376,8 +415,8 @@ export function pageData(
   version(p['contractVersion']);
   enumField(p['kind'], 'page.kind', ['price-bars', 'option-chain-research']);
   textField(p['symbol'], 'page.symbol', 128);
-  if (request && (p['kind'] !== request.kind || p['symbol'] !== request.symbol))
-    fail('page.resource');
+  if (request && p['kind'] !== request.kind) fail('page.kind');
+  if (request && p['symbol'] !== request.symbol) fail('page.symbol');
   const rows = array(p['data'], 'page.data');
   if (rows.length > (request?.limit ?? 2000)) fail('page.data.length');
   if (p['nextCursor'] !== null) textField(p['nextCursor'], 'page.nextCursor', 16384);
@@ -386,7 +425,12 @@ export function pageData(
     (!rows.length || (request && 'cursor' in request && p['nextCursor'] === request.cursor))
   )
     fail('page.nextCursor');
-  requireProvenance(FUNCTION, 'page.provenance', p['provenance']);
+  try {
+    requireProvenance(FUNCTION, 'page.provenance', p['provenance']);
+  } catch (error) {
+    const field = error instanceof InputError ? error.context?.['field'] : undefined;
+    guardFailure(error, typeof field === 'string' && schemaPath(field) ? field : 'provenance');
+  }
   const provenance = p['provenance'] as RecordValue;
   textField(provenance['provider'], 'page.provenance.provider');
   if (provider && provenance['provider'] !== provider.id) fail('page.provenance.provider');
@@ -457,47 +501,114 @@ export function pageData(
   }
   let previous: readonly (string | number)[] | undefined;
   const ids = new Set();
-  for (const row of rows) {
-    if (p['kind'] === 'price-bars') barData(row, p['symbol'] as string);
-    else chainData(row, p['symbol'] as string);
-    const r = row as PriceBarRecord | OptionChainResearchRecord;
-    const rowTimes = r.times as unknown as RecordValue;
-    for (const clock of ['observedTimestampMs', 'availableTimestampMs', 'sourceStoredTimestampMs'])
-      if (mt[clock] !== null && rowTimes[clock] !== mt[clock]) fail('metadata.times.' + clock);
-    if (request && !('cursor' in request)) {
-      if (request.kind === 'price-bars') {
-        const record = r as PriceBarRecord;
-        const parse = request.interval === '1d' ? calendarDate : zonedInstant;
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const row = rows[rowIndex];
+    try {
+      if (p['kind'] === 'price-bars') {
+        barData(row, p['symbol'] as string);
+        const flag = (row as PriceBarRecord).bar.adjusted;
         if (
-          record.bar.timestampMs < parse(request.from, 'from') ||
-          record.bar.timestampMs > parse(request.to, 'to')
+          flag !== undefined &&
+          m['adjustment'] !== 'unknown' &&
+          flag !== (m['adjustment'] !== 'unadjusted')
         )
-          fail('row.bar.timestampMs');
-        if (
-          record.timestampConvention !==
-          (request.interval === '1d' ? 'session-label-midnight-utc' : 'interval-start')
-        )
-          fail('row.timestampConvention');
-      } else {
-        const terms = (r as OptionChainResearchRecord).terms;
-        if (
-          (request.expirationFrom !== undefined && terms.expiry < request.expirationFrom) ||
-          (request.expirationTo !== undefined && terms.expiry > request.expirationTo) ||
-          (request.minStrike !== undefined && terms.strike < request.minStrike) ||
-          (request.maxStrike !== undefined && terms.strike > request.maxStrike) ||
-          (request.rights !== undefined && !request.rights.includes(terms.type))
-        )
-          fail('row.terms.filters');
+          responseIssue({
+            phase: 'page',
+            path: 'data[].bar.adjusted',
+            reason: 'inconsistent',
+            validationCode: RESPONSE_CODE,
+          });
+      } else chainData(row, p['symbol'] as string);
+      const r = row as PriceBarRecord | OptionChainResearchRecord;
+      const rowTimes = r.times as unknown as RecordValue;
+      for (const clock of [
+        'observedTimestampMs',
+        'availableTimestampMs',
+        'sourceStoredTimestampMs',
+      ])
+        if (mt[clock] !== null && rowTimes[clock] !== mt[clock]) fail('metadata.times.' + clock);
+      if (request && !('cursor' in request)) {
+        if (request.kind === 'price-bars') {
+          const record = r as PriceBarRecord;
+          const parse = request.interval === '1d' ? calendarDate : zonedInstant;
+          if (
+            record.bar.timestampMs < parse(request.from, 'from') ||
+            record.bar.timestampMs > parse(request.to, 'to')
+          )
+            fail('row.bar.timestampMs');
+          if (
+            record.timestampConvention !==
+            (request.interval === '1d' ? 'session-label-midnight-utc' : 'interval-start')
+          )
+            fail('row.timestampConvention');
+        } else {
+          const terms = (r as OptionChainResearchRecord).terms;
+          if (
+            (request.expirationFrom !== undefined && terms.expiry < request.expirationFrom) ||
+            (request.expirationTo !== undefined && terms.expiry > request.expirationTo) ||
+            (request.minStrike !== undefined && terms.strike < request.minStrike) ||
+            (request.maxStrike !== undefined && terms.strike > request.maxStrike) ||
+            (request.rights !== undefined && !request.rights.includes(terms.type))
+          )
+            fail('row.terms.filters');
+        }
       }
+      const key = rowKey(p['kind'] as string, r);
+      if (previous && compareKeys(previous, key) >= 0)
+        responseIssue({
+          phase: 'page',
+          path: 'data.order',
+          reason: 'out_of_order',
+          validationCode: RESPONSE_CODE,
+        });
+      previous = key;
+      const id =
+        p['kind'] === 'price-bars'
+          ? String(key[0])
+          : (r as OptionChainResearchRecord).sourceContractId;
+      if (ids.has(id))
+        responseIssue({
+          phase: 'page',
+          path: 'data[].sourceContractId',
+          reason: 'duplicate_identity',
+          validationCode: RESPONSE_CODE,
+        });
+      ids.add(id);
+    } catch (error) {
+      guardResponse(error, 'page', { rowIndex });
     }
-    const key = rowKey(p['kind'] as string, r);
-    if (previous && compareKeys(previous, key) >= 0) fail('page.data.order');
-    previous = key;
-    const id =
-      p['kind'] === 'price-bars'
-        ? String(key[0])
-        : (r as OptionChainResearchRecord).sourceContractId;
-    if (ids.has(id)) fail('page.data.identity');
-    ids.add(id);
+  }
+}
+
+/** Keep caller-input guards distinct from SDK response diagnostics. */
+export function pageData(
+  value: unknown,
+  request?: DataRequest,
+  provider?: Pick<DataProvider, 'id' | 'version'>,
+): asserts value is DataPage<PriceBarRecord | OptionChainResearchRecord> {
+  try {
+    pageDataUnchecked(value, request, provider);
+  } catch (error) {
+    if (
+      error instanceof ConfigurationError &&
+      error.code === ErrorCode.DataContractVersionUnsupported
+    )
+      throw error;
+    guardResponse(error, 'page');
+  }
+}
+export function capabilityData(
+  value: unknown,
+  provider: Pick<DataProvider, 'id' | 'version'>,
+): asserts value is DataCapabilities {
+  try {
+    capabilityDataUnchecked(value, provider);
+  } catch (error) {
+    if (
+      error instanceof ConfigurationError &&
+      error.code === ErrorCode.DataContractVersionUnsupported
+    )
+      throw error;
+    guardResponse(error, 'capabilities');
   }
 }

@@ -16,4 +16,9 @@ C3 adds the TotalFinance-owned `data.connect(provider)` research workflow at the
 and `/data`, with bounded terminal price-bar windows, retained source pages and lazy strict native
 array views for existing calculations. Advanced provider query remains one page. New workflow
 budget refusal is distinct from upstream allowance exhaustion; no provider, credential or HTTP
-implementation enters ordinary compute. C3 budget and final generated/hosted acceptance remain pending.
+implementation enters ordinary compute. Terminal pagination does not assert continuous coverage, source freshness or trade eligibility.
+
+Improve connector authoring with a natural homogeneous raw-page return type, controlled actionable
+mapping diagnostics and an independently installed no-key starter. Reject contradictory adjustment
+facts and negative normalized option premiums; order same-term contracts by actual source IDs without
+inventing identities. Preserve unknown financial inputs, caller-fixture blame and source metadata.

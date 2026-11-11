@@ -15,3 +15,5 @@ docs/api/
 /distribution/*/LICENSE
 /distribution/*/STABILITY.md
 .vitest-reports/
+
+/.local-connector-artifacts/

@@ -115,6 +115,10 @@ export const WarningCode = {
   DataResearchOnly: /* @__PURE__ */ warningCode('DataResearchOnly') as 'data.research_only',
   DataMissingField: /* @__PURE__ */ warningCode('DataMissingField') as 'data.missing_field',
   DataSourceIssue: /* @__PURE__ */ warningCode('DataSourceIssue') as 'data.source_issue',
+  /** Observation and valuation clocks differ; never relabel a source mark. */
+  PortfolioMarketMarkAge: 'portfolio.market_mark_age',
+  /** Rules/closures do not certify historical sessions before the documented floor. */
+  CalendarOutsideHistoricalCoverage: 'calendar.outside_historical_coverage',
   /** Supplied disclosed holdings do not support some changes, weights or concentration. */
   PortfolioDisclosedHoldingsReview: /* @__PURE__ */ warningCode(
     'PortfolioDisclosedHoldingsReview',

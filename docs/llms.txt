@@ -11,8 +11,9 @@ For portable browser tree shaking, use named imports from `@insiderfinance/total
 
 - [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.
 
-## Six task journeys
+## Task journeys
 
+- [Connect data and author a provider without a key](llms-full.txt#journey-community-connectors)
 - [Price options and inspect Greeks](llms-full.txt#journey-options)
 - [Build and analyze option strategies](llms-full.txt#journey-strategies)
 - [Explain portfolio P&L](llms-full.txt#journey-portfolio-pnl)
@@ -22,9 +23,10 @@ For portable browser tree shaking, use named imports from `@insiderfinance/total
 
 ## Scope and setup
 
-23 default compute operations; 46 operations in the full registry. Read-only is the server default. Full/profile selection does not grant writes: required capabilities, writable stores, and explicit write configuration still apply.
+23 default compute operations; 48 operations in the full registry. Read-only is the server default. Full/profile selection does not grant writes: required capabilities, writable stores, and explicit write configuration still apply.
 Explicit packs are an exact selection, not additions to defaults. Check doctor and totalfinance://capabilities for the effective server, not this full catalog.
 - [Agent setup, handles, errors, jobs, and safety](llms-full.txt#journey-connect-agent)
+- [Portfolio bootstrap, statement ratios and first-failure recovery](guides/dogfood-journeys.md)
 - [Assumptions and conventions](guides/assumptions.md)
 - [Typed errors](guides/errors.md)
 - [Technical indicators](guides/ta-indicators.md)
@@ -32,6 +34,6 @@ Explicit packs are an exact selection, not additions to defaults. Check doctor a
 
 ## Packages
 
-- @insiderfinance/totalfinance @ 0.1.2 — pre-1.0; component maturity varies (see stability policy); 199 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
-- @insiderfinance/totalfinance-mcp @ 0.1.2 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
+- @insiderfinance/totalfinance @ 0.1.3 — pre-1.0; component maturity varies (see stability policy); 199 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
+- @insiderfinance/totalfinance-mcp @ 0.1.3 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
 

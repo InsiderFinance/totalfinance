@@ -238,8 +238,12 @@ const TradePolicyGrammar = schema.object({
   allowedOrderTypes: schema.array(orderTypes).optional(),
   maximumOrderQuantity: positive.optional(),
   maximumOrderNotional: positive.optional(),
-  maximumEstimatedCost: positive.optional(),
-  maximumSlippageBps: positive.optional(),
+  maximumEstimatedCost: nonnegative
+    .optional()
+    .describe('Absolute base-currency estimated-cost ceiling; zero is a binding zero ceiling'),
+  maximumSlippageBps: nonnegative
+    .optional()
+    .describe('Slippage ceiling in basis points; zero permits no positive estimated slippage'),
   maximumParticipation: positive.max(1).optional(),
   allowUndefinedRiskOptions: schema
     .boolean()
@@ -712,11 +716,17 @@ export const ReceiptSchema = schema.object({
 export type TradeSubmitOutput = Omit<PaperStepResult, 'asOf' | 'journal'> & {
   receipt: ExecutionReceipt;
   retried: boolean;
+  currentOrders: ExecutionOrderState[];
   recovery: Pick<PaperStepResult, 'fills' | 'events'>;
   journal: { journalId: string; appended: number; total: number };
 };
 export const SubmitOutputSchema = schema.object({
   receipt: ReceiptSchema,
+  currentOrders: schema
+    .array(OrderStateSchema)
+    .describe(
+      'Authoritative journal-derived state and cumulative fills for this receipt, distinct from the immutable submission receipt',
+    ),
   retried: schema.boolean(),
   fills: schema.array(FillSchema),
   events: schema.array(PortfolioEventEnvelopeSchema),
