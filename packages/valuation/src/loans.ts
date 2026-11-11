@@ -221,7 +221,7 @@ export function annuityPayment(input: LoanTermsInput): number {
     (payment === 0 && balloon === 0)
   ) {
     throw new ConvergenceError(
-      'annuityPayment: binary64 precision cannot represent the principal reduction required by these terms. Use a shorter horizon or a higher-precision calculation; a zero-balloon schedule cannot be claimed fully repaid.',
+      'annuityPayment: binary64 precision cannot represent the principal reduction required by these terms. Use a shorter horizon or a higher-precision calculation; the requested residual cannot be claimed reached.',
       {
         code: ErrorCode.SolverNoConvergence,
         context: { field: 'numberOfPeriods', reason: 'unrepresentable_principal_reduction' },
@@ -274,10 +274,11 @@ export interface AmortizationScheduleResult {
 }
 
 /**
- * The full amortization schedule. Unrounded by design — the rows reconcile exactly (each closing
- * balance = opening − principal; Σ principal = principal − balloon) and any display rounding is
+ * The full amortization schedule. Unrounded binary64 values reconcile within arithmetic precision (closing
+ * balance = opening − principal; Σ principal ≈ principal − balloon) and any display rounding is
  * the caller's explicit, documented policy applied afterwards. The final installment may absorb
- * arithmetic drift only within `8 * Number.EPSILON * numberOfPeriods * principal`; larger drift
+ * arithmetic drift only within a compounding-propagated roundoff allowance, capped at
+ * 1e-10 of the principal being amortized; larger drift
  * is refused. The `payment` headline is the level installment; inspect the final row's payment
  * for its explicit roundoff reconciliation.
  */
@@ -300,6 +301,8 @@ export function amortizationSchedule(input: AmortizationScheduleInput): Amortiza
   const rows: AmortizationRow[] = [];
   let balance = input.principal;
   let totalInterest = 0;
+  let driftBudget = 0;
+  const correctionCap = 1e-10 * ((input.principal - balloon) / input.principal);
   for (let period = 1; period <= input.numberOfPeriods; period++) {
     // Beginning-timing payments reduce the balance BEFORE the period accrues interest.
     const interestBase = input.paymentTiming === 'beginning' ? balance - payment : balance;
@@ -314,14 +317,23 @@ export function amortizationSchedule(input: AmortizationScheduleInput): Amortiza
       ...(periodicFee !== undefined ? { fee: periodicFee } : {}),
       closingBalance: closing,
     });
+    // Propagate each row's rounding through the same recurrence as the balance. The cap
+    // prevents an ill-conditioned schedule from calling a material write-off "roundoff".
+    driftBudget = Math.min(
+      correctionCap,
+      driftBudget * Math.abs(1 + rate) +
+        8 *
+          Number.EPSILON *
+          (Math.abs(balance / input.principal) +
+            Math.abs(payment / input.principal) +
+            Math.abs(interest / input.principal)),
+    );
     totalInterest += interest;
     balance = closing;
   }
   requireRepresentableResult('amortizationSchedule', { rows, totalInterest });
-  // Eight elementary rounding allowances per row, relative to original principal. This is
-  // an arithmetic drift budget, not a monetary rounding policy or a balloon write-off.
+  // An arithmetic error bound, never a monetary rounding policy or balloon write-off.
   const relativeDrift = Math.abs((balance - balloon) / input.principal);
-  const driftBudget = 8 * Number.EPSILON * input.numberOfPeriods;
   if (!(relativeDrift <= driftBudget)) {
     throw new ConvergenceError(
       'amortizationSchedule: the computed final balance does not reconcile with the requested balloon within the binary64 rounding budget. No final payment adjustment was applied. Use a shorter horizon or higher precision.',
@@ -553,23 +565,35 @@ export function loanNumberOfPeriods(input: LoanNumberOfPeriodsInput): number {
         { code: ErrorCode.InputOutOfRange, context: { field: 'payment' } },
       );
     }
+    const u = effectivePayment / input.principal;
+    const b = balloon / input.principal;
+    const relativeChange = ((1 - b) * rate) / (u - rate);
     periods =
-      Math.log1p(
-        ((1 - balloon / input.principal) * rate) / (effectivePayment / input.principal - rate),
-      ) / Math.log1p(rate);
+      (rate < 0 && relativeChange < -0.5
+        ? Math.log(u - b * rate) - Math.log(u - rate)
+        : Math.log1p(relativeChange)) / Math.log1p(rate);
   }
   // Verify before returning: the result must be a finite positive period count AND satisfy the
   // amortization identity `principal·(1+r)^n − effectivePayment·((1+r)^n − 1)/r = balloon`
   // (rate 0: `principal − n·payment = balloon`). A closed form fed degenerate-but-finite inputs
   // can emit a plausible wrong number — a solver refuses instead.
   const logGrowth = periods * Math.log1p(rate);
+  const growth = Math.exp(logGrowth);
+  const accumulatedPayments = ((effectivePayment / input.principal) * Math.expm1(logGrowth)) / rate;
+  const residual = balloon / input.principal;
   const normalizedPresentValue =
     rate === 0
       ? (input.payment / input.principal) * periods + balloon / input.principal
       : (effectivePayment / input.principal) * (-Math.expm1(-logGrowth) / rate) +
         (balloon / input.principal) * Math.exp(-logGrowth);
   const identityHolds =
-    Number.isFinite(periods) && periods > 0 && Math.abs(normalizedPresentValue - 1) <= 1e-10;
+    Number.isFinite(periods) &&
+    periods > 0 &&
+    (rate < 0
+      ? Math.max(Math.abs(growth), Math.abs(accumulatedPayments), residual) > 0 &&
+        Math.abs(growth - accumulatedPayments - residual) <=
+          1e-10 * Math.max(Math.abs(growth), Math.abs(accumulatedPayments), residual)
+      : Math.abs(normalizedPresentValue - 1) <= 1e-10);
   if (!identityHolds) {
     throw new ConvergenceError(
       `loanNumberOfPeriods: no positive, finite number of periods satisfies the amortization identity for these terms (the closed form produced ${periods}) — the payment cannot amortize this principal down to the balloon at this rate. Check the payment against the principal, rate, and balloon.\n  e.g. loanNumberOfPeriods({ principal: 250_000, periodicInterestRate: 0.06 / 12, payment: 1_498.88, paymentTiming: 'end' })`,

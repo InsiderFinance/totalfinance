@@ -191,7 +191,7 @@ structural baseline, `[]`; this restored direct measurement of `register` instea
 process-global defective boundary behind `callback-input-required`.
 
 The generated surface is now **7,954 public paths / 2,719 implementations / 1,610 input contracts /
-1,962 result contracts / 386 validator identities**. The measured population is **5,463** records.
+1,962 result contracts / 387 validator identities**. The measured population is **5,463** records.
 The exact residual branch list shrank by four: three recursive `register` mismatches disappeared and
 the MCP safe-parse projection stopped masquerading as a caller-selectable branch. Every remaining
 entry is still an exact built-versus-named identity and fails both when a new mismatch appears and
@@ -1367,14 +1367,14 @@ or a rationale for an API decision.
 
 ### 3B.0 — Post-Wave-6 baseline and inventory design
 
-- [x] Verify Phase 3B.N is closed: 43,370 naming identities, 0 unresolved, gated in CI; the packed
+- [x] Verify Phase 3B.N is closed: 43,373 naming identities, 0 unresolved, gated in CI; the packed
       consumer proves the final package/MCP names and every removed alias has executable evidence.
 - [x] Build every public declaration and regenerate runtime/signature manifests after all Wave 6
       and naming-normalization checkboxes are closed.
 - [x] Generate the initial contract-identity graph and report path, implementation, input-contract,
       result-contract, and validator counts separately — `tools/manifest/contract-inventory.ts` →
       `public-contracts.json`: 7,954 paths / 2,719 implementations / 1,610 input
-      contracts / 1,962 result contracts / 386 validator identities (refreshed for PL6's named
+      contracts / 1,962 result contracts / 387 validator identities (refreshed for PL6's named
       price-level helpers, after the 2026-08-02
       defect-fix wave, which added validators and two fixed-income deep entrypoints, again after
       3B.1a's snapshot reader, and again when intersections were recognized as objects — 996 → 1,034

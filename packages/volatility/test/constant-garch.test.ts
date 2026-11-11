@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { fitGarch } from '@totalfinance/volatility/forecast';
-for (const value of [0.0023, -0.0011, 0.1])
+for (const value of [0.0007, 0.0014, 0.0035, 0.0023, -0.0011, 0.1])
   for (const length of [60, 127])
     it(`keeps exact constant ${value}/${length} degenerate in sample mode (#20)`, () => {
       const result = fitGarch(Array(length).fill(value), { mean: 'sample', seed: 42 });

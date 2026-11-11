@@ -64,7 +64,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/options/black-scholes',
     entry: 'packages/options/src/black-scholes.ts',
-    budgetKB: 14.5,
+    budgetKB: 15.125,
     intent: 'all model exports; runtime guards included, schema/JSON-Schema machinery excluded',
     forbidden: [
       {
@@ -77,6 +77,7 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
       },
     ],
     rationale:
+      'PR32 review corrections (2026-11-11): measured 14,642 → 15,357 B gzip with canonical Node 22.23.2/esbuild 0.25.12. Stable non-ATM Gaussian time value, typed horizon-underflow and honest IV trial diagnostics add 715 B. The 15.125 KiB ceiling leaves 131 B; no dependency or forbidden-module rule changes. ' +
       'Numerical precision repairs #19 (2026-11-11): measured 14,259 → 14,642 B gzip on Node 22.23.2/esbuild 0.25.12. Shared ATM Gaussian-integral expansion and cancellation-specific typed refusal/IV trial handling add 383 B; 14.5 KiB leaves 206 B. No dependency or structural sentinel change. ' +
       '13.75 → 14 KB (0.1.2 speed, 2026-10-05): measured 14,208 B (0.1.1 measured 13,929 B) with Node 22.23.2/esbuild 0.25.12 — the gamma-only Black–Scholes row loop (a 1.6× faster gamma sweep), the remembered expiry-label parses and the finiteness walk that formats a path only for a hit (both in core, shared by every facade). Results are unchanged bit for bit; 128 B of headroom. 11.75 → 11.875 KB (disclosed-holdings warning registration, 2026-09-25): isolated Node 22.23.2/esbuild 0.25.12 measurements against 009f223 are 12,029 → 12,058 B gzip (+29 B), with an identical retained-module set. The one new public WarningCode member grows the shared catalog; no holdings or schema implementation enters pricing. The installed expert kernel remains 2,321 B. All forbidden-dependency and installed-consumer canaries stay unchanged; headroom is 102 B. ' +
       '8 KB → 8.5 KB in Phase 3B.N2. The stable diagnostic codes this entrypoint carries became ' +
@@ -486,10 +487,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 508,
+    budgetKB: 509.25,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
+      'PR32 review corrections (2026-11-11): measured 519,793 → 521,207 B gzip, canonical Node 22.23.2/esbuild 0.25.12. Propagated loan error bounds, term-relative IRR, PSD checks and stable option tails add 1,414 B through existing operation owners; 509.25 KiB leaves 265 B. No registry or domain exclusion is removed. ' +
       'Numerical precision repairs #16–24 (2026-11-11): measured 519,313 → 519,793 B gzip on Node 22.23.2/esbuild 0.25.12. Existing registry delegates to repaired calculation owners; +480 B, 508 KiB leaves 399 B. No transport computation or new dependency. ' +
       'Review repair (2026-11-10): 506.5 → 507.5 KB from 519,313 B gzip on Node 22.23.2 / esbuild 0.25.12. Canonical-bar metadata/chronology validation, executable ratio recovery and explicit pack discovery add 1,043 B over the initial batch measurement; domain exclusions stay unchanged. ' +
       'Dogfood 0.1.x (2026-11-10): 502.75 → 506.5 KB from 518,270 B gzip on Node 22.23.2 / esbuild 0.25.12. The new create/inspect operations, recursive screen discovery, controls and repair diagnostics add registry payload; no calculation is duplicated. ' +
@@ -665,10 +667,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 699.5,
+    budgetKB: 701,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'PR32 review corrections (2026-11-11): measured 716,058 → 717,551 B gzip, canonical Node 22.23.2/esbuild 0.25.12. Review regression fixes add 1,493 B across existing owners; 701 KiB leaves 273 B. Public signatures remain compatible and dependency/module boundaries remain enforced. ' +
       'Numerical precision repairs #16–24 (2026-11-11): measured 714,320 → 716,058 B gzip on Node 22.23.2/esbuild 0.25.12. Shared stable annuities/IRR/MC, strategy roots and honest diagnostics add 1,738 B; 699.5 KiB leaves 230 B. No new exports/dependencies; all structural and installed leaf-import budgets remain enforced. ' +
       'Review repair (2026-11-10): 697.25 → 697.75 KB from 714,320 B gzip on Node 22.23.2 / esbuild 0.25.12. Validated source-bar identity/time and head-specific repair examples add 696 B over the initial batch measurement; structural exclusions stay unchanged. ' +
       'Dogfood 0.1.x (2026-11-10): 696.25 → 697.25 KB from 713,624 B gzip on Node 22.23.2 / esbuild 0.25.12. Additive statement/projection disclosures and the two registered warning codes ride this entrypoint; structural exclusions are unchanged. ' +

@@ -1,4 +1,10 @@
-import { analyticPremium, analyticTrial } from './analytic-premium.js';
+import {
+  analyticPremium,
+  analyticTrial,
+  analyticLowerTrial,
+  logPriceRatio,
+  requireHorizonVolatility,
+} from './analytic-premium.js';
 /**
  * `@insiderfinance/totalfinance/options/black76` — the Black-76 model for options on forwards/futures (spec §9.3).
  *
@@ -68,7 +74,10 @@ function d1d2({
   volatility: sigma,
 }: Pick<Black76Input, 'forward' | 'strike' | 'timeToExpiryYears' | 'volatility'>) {
   const sqrtT = Math.sqrt(T);
-  const d1 = (Math.log(F / K) + 0.5 * sigma * sigma * T) / (sigma * sqrtT);
+  if (sigma > 0 && T > 0) requireHorizonVolatility(sigma * sqrtT);
+  const d1 =
+    ((sigma * sqrtT < 1e-4 ? logPriceRatio(F, K) : Math.log(F / K)) + 0.5 * sigma * sigma * T) /
+    (sigma * sqrtT);
   return { d1, d2: d1 - sigma * sqrtT, sqrtT };
 }
 
@@ -117,6 +126,9 @@ function black76PriceUnchecked(input: Black76TypedInput): number {
     negativeLeg: df * (type === 'call' ? K * normalCdf(d2) : F * normalCdf(-d1)),
     atTheMoney: F === K,
     discountedScale: df * F,
+    discountedStrike: df * K,
+    type,
+    logMoneyness: logPriceRatio(F, K),
     standardDeviation: input.volatility * Math.sqrt(T),
   });
 }
@@ -245,7 +257,8 @@ export interface Black76ImpliedVolatilityResult {
     | 'above_max_bound'
     | 'price_below_resolvable'
     | 'no_bracket'
-    | 'max_iterations';
+    | 'max_iterations'
+    | 'precision_limit';
 }
 
 /**
@@ -299,14 +312,23 @@ export function black76ImpliedVolatility(
           volatility: sigma,
         }) - price,
     );
-  const lo = 1e-7;
+  let lo = 1e-7;
   let hi = 5;
   const ptol = impliedVolatilityPriceTolerance(price);
-  const flo = f(lo);
+  const lowerTrial = analyticLowerTrial(f, lo, hi);
+  lo = lowerTrial.lower;
+  const flo = lowerTrial.value;
+  if (!Number.isFinite(flo))
+    return { value: NaN, converged: false, iterations: 0, reason: 'precision_limit' };
   if (Math.abs(flo) <= ptol) return { value: lo, converged: true, iterations: 0 };
   // Target below the model price at the lowest representable σ ⇒ no σ ≥ lo reproduces it.
   if (flo > 0)
-    return { value: NaN, converged: false, iterations: 0, reason: 'price_below_resolvable' };
+    return {
+      value: NaN,
+      converged: false,
+      iterations: 0,
+      reason: lowerTrial.adjusted ? 'precision_limit' : 'price_below_resolvable',
+    };
   let fhi = f(hi);
   let exp = 0;
   while (fhi < 0 && exp < 12) {
@@ -319,7 +341,15 @@ export function black76ImpliedVolatility(
   const res = brent(f, lo, hi, { tolerance: 1e-12, maximumIterations: 100 });
   return res.converged
     ? { value: res.value, converged: true, iterations: res.iterations }
-    : { value: NaN, converged: false, iterations: res.iterations, reason: 'max_iterations' };
+    : {
+        value: NaN,
+        converged: false,
+        iterations: res.iterations,
+        reason:
+          res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
+            ? 'precision_limit'
+            : 'max_iterations',
+      };
 }
 
 // ---- facade ----

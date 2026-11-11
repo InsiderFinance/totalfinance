@@ -15990,7 +15990,7 @@
     "maxPathsPerImplementation": 625,
     "inputContracts": 1610,
     "resultContracts": 1962,
-    "validatorIdentities": 386,
+    "validatorIdentities": 387,
     "helperQuantAnswers": 0,
     "highLevelPositionalPairs": 34,
     "byInputShape": {
@@ -373114,6 +373114,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -375471,6 +375472,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",
@@ -689808,6 +689810,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -791211,6 +791214,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",
@@ -1152913,6 +1152917,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -1155270,6 +1155275,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",

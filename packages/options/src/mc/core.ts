@@ -419,7 +419,7 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
       ),
     );
   }
-  let converged = Number.isFinite(value) && (se === null || Number.isFinite(se));
+  const converged = Number.isFinite(value) && (se === null || Number.isFinite(se));
   let confidenceInterval: [number, number] | null =
     se === null ? null : [value - z * se, value + z * se];
   if (
@@ -432,11 +432,10 @@ export function monteCarloEstimate(input: MonteCarloEstimateInput): MonteCarloEs
       confidenceInterval[1] <= value)
   ) {
     confidenceInterval = null;
-    converged = false;
     warnings.push(
       warning(
         WarningCode.ModelLimitation,
-        'positive sampling standard error was resolved, but the confidence interval endpoints cannot be represented around this value in binary64 precision; confidenceInterval is null. Inspect standardError separately or use higher-precision reporting.',
+        'the confidence interval endpoints cannot be represented around this value at binary64 resolution; confidenceInterval is null. A finite standardError remains available separately, and this reporting limit does not change estimator convergence.',
         'warn',
         { reason: 'confidence_interval_unrepresentable' },
       ),

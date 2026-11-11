@@ -1,4 +1,4 @@
-import { analyticTrial } from './analytic-premium.js';
+import { analyticTrial, logPriceRatio } from './analytic-premium.js';
 /**
  * Implied-volatility method suite (spec §9.5).
  *
@@ -146,7 +146,10 @@ function impliedVolatilityDerivatives(input: {
   } = input;
   if (!(sigma > 0)) return { f: NaN, df: NaN, d2f: NaN, d3f: NaN };
   const sqrtT = Math.sqrt(T);
-  const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+  const d1 =
+    ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
+      (r - q + 0.5 * sigma * sigma) * T) /
+    (sigma * sqrtT);
   const d2 = d1 - sigma * sqrtT;
   const vega = S * Math.exp(-q * T) * normalPdf(d1) * sqrtT;
   const vomma = (vega * d1 * d2) / sigma;
@@ -376,6 +379,14 @@ export function impliedVolatility(
    */
   const brentFailure = (reason: ImpliedVolatilityReason | undefined): QuantWarning => {
     switch (reason) {
+      case 'precision_limit':
+        return {
+          code: ErrorCode.ImpliedVolatilityNoConvergence,
+          severity: 'error',
+          message:
+            'brent: a pricing trial could not resolve this premium in binary64 precision; use higher precision or a resolvable bracket',
+          context: { reason },
+        };
       case 'below_intrinsic':
         return {
           code: ErrorCode.ImpliedVolatilityBelowIntrinsic,

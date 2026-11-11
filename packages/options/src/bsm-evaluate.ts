@@ -1,4 +1,9 @@
-import { analyticPremium } from './analytic-premium.js';
+import {
+  AnalyticPrecisionError,
+  analyticPremium,
+  logPriceRatio,
+  requireHorizonVolatility,
+} from './analytic-premium.js';
 /**
  * The ONE selective Black–Scholes–Merton evaluation kernel (selective Greeks and exposure spec,
  * decisions 1–3).
@@ -151,9 +156,10 @@ export function evaluateBlackScholesRowsUnchecked(
   columns: BlackScholesColumnsView,
   rows: number,
   targets: readonly (Float64Array | undefined)[],
+  batch = false,
 ): void {
   if (plan.outputs.length === 1 && plan.requested[GAMMA]) {
-    evaluateGammaRows(columns, rows, targets[GAMMA]!);
+    evaluateGammaRows(columns, rows, targets[GAMMA]!, batch);
     return;
   }
   const { spot, strike, timeToExpiryYears, riskFreeRate, volatility, type, dividendYield } =
@@ -189,7 +195,19 @@ export function evaluateBlackScholesRowsUnchecked(
     const q = dividendYield === undefined ? 0 : dividendYield[i]!;
     const sigma = volatility[i]!;
     const sqrtT = Math.sqrt(T);
-    const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+    try {
+      requireHorizonVolatility(sigma * sqrtT);
+    } catch (error) {
+      if (batch && error instanceof AnalyticPrecisionError) {
+        Object.assign(error.context!, { contractIndex: i });
+        error.message = `contracts[${i}]: ${error.message}`;
+      }
+      throw error;
+    }
+    const d1 =
+      ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
+        (r - q + 0.5 * sigma * sigma) * T) /
+      (sigma * sqrtT);
     const d2 = wantD2 ? d1 - sigma * sqrtT : 0;
     // A zero rate or yield discounts by exactly 1 (`Math.exp(-0)`), so the exponential is skipped
     // without changing a bit: GEX sweeps run with q = 0, and paid an extra `exp` per row for it.
@@ -200,13 +218,26 @@ export function evaluateBlackScholesRowsUnchecked(
     const nd2 = wantNd2 ? normalCdf(isCall ? d2 : -d2) : 0;
 
     if (outPrice !== undefined) {
-      outPrice[i] = analyticPremium({
-        positiveLeg: isCall ? S * dq * nd1 : K * discountFactor * nd2,
-        negativeLeg: isCall ? K * discountFactor * nd2 : S * dq * nd1,
-        atTheMoney: S === K && r === q,
-        discountedScale: S * dq,
-        standardDeviation: sigma * sqrtT,
-      });
+      try {
+        outPrice[i] = analyticPremium({
+          positiveLeg: isCall ? S * dq * nd1 : K * discountFactor * nd2,
+          negativeLeg: isCall ? K * discountFactor * nd2 : S * dq * nd1,
+          atTheMoney: S === K && r === q,
+          discountedScale: S * dq,
+          discountedStrike: K * discountFactor,
+          type: isCall ? 'call' : 'put',
+          logMoneyness: logPriceRatio(S, K) + (r - q) * T,
+          logMoneynessError:
+            8 * Number.EPSILON * (Math.abs(logPriceRatio(S, K)) + Math.abs((r - q) * T)),
+          standardDeviation: sigma * sqrtT,
+        });
+      } catch (error) {
+        if (batch && error instanceof AnalyticPrecisionError) {
+          Object.assign(error.context!, { contractIndex: i });
+          error.message = `contracts[${i}]: ${error.message}`;
+        }
+        throw error;
+      }
     }
     if (outDelta !== undefined) outDelta[i] = isCall ? dq * nd1 : -dq * nd1;
     const gamma = wantGamma ? (dq * pdf) / (S * sigma * sqrtT) : 0;
@@ -248,6 +279,7 @@ function evaluateGammaRows(
   columns: BlackScholesColumnsView,
   rows: number,
   out: Float64Array,
+  batch = false,
 ): void {
   const { spot, strike, timeToExpiryYears, riskFreeRate, volatility, dividendYield } = columns;
   for (let i = 0; i < rows; i++) {
@@ -258,7 +290,19 @@ function evaluateGammaRows(
     const q = dividendYield === undefined ? 0 : dividendYield[i]!;
     const sigma = volatility[i]!;
     const sqrtT = Math.sqrt(T);
-    const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+    try {
+      requireHorizonVolatility(sigma * sqrtT);
+    } catch (error) {
+      if (batch && error instanceof AnalyticPrecisionError) {
+        Object.assign(error.context!, { contractIndex: i });
+        error.message = `contracts[${i}]: ${error.message}`;
+      }
+      throw error;
+    }
+    const d1 =
+      ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
+        (r - q + 0.5 * sigma * sigma) * T) /
+      (sigma * sqrtT);
     const dq = q === 0 ? 1 : Math.exp(-q * T);
     const pdf = normalPdf(d1);
     out[i] = (dq * pdf) / (S * sigma * sqrtT);

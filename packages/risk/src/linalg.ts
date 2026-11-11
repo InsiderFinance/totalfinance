@@ -5,7 +5,7 @@
  */
 
 import { InputError, ErrorCode } from '@totalfinance/core';
-import { type Matrix, cholesky, choleskySolve } from '@totalfinance/math';
+import { type Matrix, cholesky, choleskySolve, jacobiEigen } from '@totalfinance/math';
 
 /** Dot product of two equal-length vectors. */
 export function dot(a: ArrayLike<number>, b: ArrayLike<number>): number {
@@ -32,6 +32,36 @@ export function assertSquare(A: Matrix, n: number, functionName: string): void {
       context: { functionName, expected: n, got: A.length },
     });
   }
+}
+
+/** Validate covariance before optimization, independent of weights and solver constraints. */
+export function requireCovariance(A: Matrix, n: number, functionName: string): void {
+  assertSquare(A, n, functionName);
+  requireFiniteSymmetric(A, functionName);
+  const scale = A.reduce(
+    (largest, row) => row.reduce((m, x) => Math.max(m, Math.abs(x)), largest),
+    0,
+  );
+  if (scale === 0 || n === 0) return;
+  // Normalize before the eigensolve: a covariance's units must not determine validity.
+  const eigenvalues = jacobiEigen(A.map((row) => row.map((x) => x / scale))).values;
+  const largest = Math.max(...eigenvalues.map(Math.abs));
+  const smallest = Math.min(...eigenvalues);
+  const tolerance = 64 * n * Number.EPSILON * largest;
+  if (smallest < -tolerance)
+    throw new InputError(
+      `${functionName}: covariance must be positive semidefinite; the matrix implies negative portfolio variance. Check variances, correlations and units.`,
+      {
+        code: ErrorCode.InputOutOfRange,
+        context: {
+          functionName,
+          field: 'covariance',
+          reason: 'indefinite_covariance',
+          normalizedSmallestEigenvalue: smallest,
+          tolerance,
+        },
+      },
+    );
 }
 
 /**

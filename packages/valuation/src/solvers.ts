@@ -67,71 +67,95 @@ export interface InternalRateOfReturnReport {
   roots: InternalRateRoot[];
 }
 
+interface RootTrial {
+  /** Dimensionless signed NPV / sum(abs(discounted terms)). */
+  value: number;
+  residual: number;
+  exact: boolean;
+}
 interface SolveOutcome {
   roots: InternalRateRoot[];
   iterations: number;
   signChanges: number;
+  unresolved: { from: number; to: number; reason: string }[];
 }
 
-/** Scan the admissible range for sign changes, then bisect each to a root. */
-function solveRoots(net: (rate: number) => number, monetaryScale: number): SolveOutcome {
+/** Scan for sign changes; no detected bracket may disappear silently. */
+function solveRoots(net: (rate: number) => RootTrial, monetaryScale: number): SolveOutcome {
   const roots: InternalRateRoot[] = [];
+  const unresolved: SolveOutcome['unresolved'] = [];
   let iterations = 0;
   let signChanges = 0;
+  const accept = (rate: number, trial: RootTrial): boolean => {
+    const residual = trial.residual * monetaryScale;
+    if (!Number.isFinite(residual)) return false;
+    roots.push({ annualRate: rate, residualNetPresentValue: residual });
+    return true;
+  };
   let previousRate = RATE_FLOOR;
-  let previousValue = net(previousRate);
+  let previous = net(previousRate);
   for (let step = 1; step <= SCAN_STEPS; step++) {
     const rate = RATE_FLOOR + ((RATE_CEILING - RATE_FLOOR) * step) / SCAN_STEPS;
-    const value = net(rate);
+    const trial = net(rate);
     iterations++;
-    if (previousValue === 0) {
-      roots.push({ annualRate: previousRate, residualNetPresentValue: 0 });
+    if (previous.exact) {
+      if (!accept(previousRate, previous))
+        unresolved.push({
+          from: previousRate,
+          to: previousRate,
+          reason: 'residual_unrepresentable',
+        });
       signChanges++;
     } else if (
-      Number.isFinite(previousValue) &&
-      Number.isFinite(value) &&
-      previousValue < 0 !== value < 0
+      Number.isFinite(previous.value) &&
+      Number.isFinite(trial.value) &&
+      previous.value < 0 !== trial.value < 0
     ) {
       signChanges++;
       let lowRate = previousRate;
       let highRate = rate;
-      let lowValue = previousValue;
+      let lowValue = previous.value;
+      let resolved = false;
+      let reason = 'precision_limit';
       for (let i = 0; i < MAX_ITERATIONS; i++) {
         iterations++;
-        const midRate = (lowRate + highRate) / 2;
-        const midValue = net(midRate);
-        if (
-          midValue === 0 ||
-          (Math.abs(midValue) <= BISECTION_TOLERANCE && highRate - lowRate <= BISECTION_TOLERANCE)
-        ) {
-          roots.push({ annualRate: midRate, residualNetPresentValue: midValue });
+        const midRate = lowRate + (highRate - lowRate) / 2;
+        const mid = net(midRate);
+        if (!Number.isFinite(mid.value)) {
+          reason = 'unavailable_trial';
           break;
         }
-        if (lowValue < 0 !== midValue < 0) {
-          highRate = midRate;
-        } else {
+        if (
+          mid.exact ||
+          (Math.abs(mid.value) <= BISECTION_TOLERANCE && highRate - lowRate <= BISECTION_TOLERANCE)
+        ) {
+          resolved = accept(midRate, mid);
+          if (!resolved) reason = 'residual_unrepresentable';
+          break;
+        }
+        if (midRate === lowRate || midRate === highRate) break;
+        if (lowValue < 0 !== mid.value < 0) highRate = midRate;
+        else {
           lowRate = midRate;
-          lowValue = midValue;
+          lowValue = mid.value;
         }
       }
+      if (!resolved) unresolved.push({ from: previousRate, to: rate, reason });
     }
     previousRate = rate;
-    previousValue = value;
+    previous = trial;
   }
-  if (previousValue === 0) {
-    roots.push({ annualRate: RATE_CEILING, residualNetPresentValue: 0 });
+  if (previous.exact) {
+    if (!accept(RATE_CEILING, previous))
+      unresolved.push({ from: RATE_CEILING, to: RATE_CEILING, reason: 'residual_unrepresentable' });
     signChanges++;
   }
-  // Restore the residual to the caller's monetary units only after normalized convergence.
-  for (const root of roots) root.residualNetPresentValue *= monetaryScale;
-  // Deduplicate near-identical roots from adjacent scan cells.
   const deduped: InternalRateRoot[] = [];
   for (const root of roots) {
-    if (!deduped.some((existing) => Math.abs(existing.annualRate - root.annualRate) < 1e-9)) {
+    if (!deduped.some((existing) => Math.abs(existing.annualRate - root.annualRate) < 1e-9))
       deduped.push(root);
-    }
   }
-  return { roots: deduped, iterations, signChanges };
+  return { roots: deduped, iterations, signChanges, unresolved };
 }
 
 function buildReport(
@@ -148,6 +172,14 @@ function buildReport(
       context: { roots: outcome.roots.map((root) => root.annualRate) },
     });
   }
+  if (outcome.unresolved.length > 0)
+    warnings.push({
+      code: WarningCode.DegenerateInput,
+      message:
+        'detected internal-rate sign-change brackets could not be resolved in binary64 precision; the plain call returns null. Inspect unresolvedBrackets or use higher precision.',
+      severity: 'warn',
+      context: { unresolvedBrackets: outcome.unresolved },
+    });
   if (outcome.roots.length === 0) {
     warnings.push({
       code: WarningCode.DegenerateInput,
@@ -167,11 +199,14 @@ function buildReport(
     },
     diagnostics: {
       method: 'scan-bisect',
-      converged: outcome.roots.length > 0,
+      converged: outcome.roots.length > 0 && outcome.unresolved.length === 0,
       iterations: outcome.iterations,
       warnings,
     },
-    value: outcome.roots.length === 1 ? outcome.roots[0]!.annualRate : null,
+    value:
+      outcome.roots.length === 1 && outcome.unresolved.length === 0
+        ? outcome.roots[0]!.annualRate
+        : null,
     roots: outcome.roots,
   };
 }
@@ -208,29 +243,27 @@ function validateIrrInput(
   return input.compounding ?? 'annual';
 }
 
-/** A zero after normalizing a nonzero flow has lost economic information. */
-function normalizedAmounts(
-  amounts: readonly number[],
-  monetaryScale: number,
-  functionName: string,
-): number[] {
-  return amounts.map((amount) => {
-    const normalized = amount / monetaryScale;
-    if (amount !== 0 && normalized === 0)
-      throw new InputError(
-        `${functionName}: the relative cash-flow magnitudes cannot be represented together in binary64 precision. Use a higher-precision calculation; changing all monetary units together cannot restore this dynamic range.`,
-        {
-          code: ErrorCode.InputOutOfRange,
-          context: { field: 'cashFlows', reason: 'cash_flow_normalization_underflow' },
-        },
-      );
-    return normalized;
-  });
+/** Avoid erasing a nonzero flow; original finite amounts remain a supported fallback. */
+function cashScale(amounts: readonly number[]): number {
+  const maximum = amounts.reduce((a, b) => Math.max(a, Math.abs(b)), 0);
+  return amounts.some((amount) => amount !== 0 && amount / maximum === 0) ? 1 : maximum;
 }
 
-/** Discount underflow of every term is an unavailable trial, not an exact NPV root. */
-function trialNet(terms: number[]): number {
-  return terms.some((term) => term !== 0) ? stableSum(terms) : NaN;
+/** Sum at the caller's time convention, then judge residual against its actual term scale. */
+function trialNet(terms: number[]): RootTrial {
+  const maximum = terms.reduce((a, b) => Math.max(a, Math.abs(b)), 0);
+  if (!(maximum > 0) || !Number.isFinite(maximum))
+    return { value: NaN, residual: NaN, exact: false };
+  const scaled = terms.map((term) => term / maximum);
+  const residual = stableSum(terms);
+  const relative =
+    (Number.isFinite(residual) ? residual / maximum : stableSum(scaled)) /
+    stableSum(scaled.map(Math.abs));
+  return {
+    value: relative === 0 && residual !== 0 ? Math.sign(residual) * Number.MIN_VALUE : relative,
+    residual,
+    exact: residual === 0,
+  };
 }
 
 /** Scale the cash objective, never the financial rate or compounding convention. */
@@ -238,18 +271,11 @@ function timedNet(
   input: InternalRateOfReturnInput,
   compounding: InterestCompounding,
 ): {
-  net: (rate: number) => number;
+  net: (rate: number) => RootTrial;
   monetaryScale: number;
 } {
-  const monetaryScale = input.cashFlows.reduce(
-    (largest, flow) => Math.max(largest, Math.abs(flow.amount)),
-    0,
-  );
-  const amounts = normalizedAmounts(
-    input.cashFlows.map((flow) => flow.amount),
-    monetaryScale,
-    'internalRateOfReturn',
-  );
+  const monetaryScale = cashScale(input.cashFlows.map((flow) => flow.amount));
+  const amounts = input.cashFlows.map((flow) => flow.amount / monetaryScale);
   const flows = input.cashFlows.map((flow, index) => ({ ...flow, amount: amounts[index]! }));
   return {
     monetaryScale,
@@ -277,7 +303,9 @@ export const internalRateOfReturn = Object.assign(
     const compounding = validateIrrInput('internalRateOfReturn', input);
     const { net, monetaryScale } = timedNet(input, compounding);
     const outcome = solveRoots(net, monetaryScale);
-    return outcome.roots.length === 1 ? outcome.roots[0]!.annualRate : null;
+    return outcome.roots.length === 1 && outcome.unresolved.length === 0
+      ? outcome.roots[0]!.annualRate
+      : null;
   },
   { explain: explainInternalRateOfReturn },
 );
@@ -344,16 +372,9 @@ function datedNet(
   input: DatedInternalRateOfReturnInput,
   compounding: InterestCompounding,
   dayCount: DayCount,
-): { net: (rate: number) => number; monetaryScale: number } {
-  const monetaryScale = input.cashFlows.reduce(
-    (largest, flow) => Math.max(largest, Math.abs(flow.amount)),
-    0,
-  );
-  const amounts = normalizedAmounts(
-    input.cashFlows.map((flow) => flow.amount),
-    monetaryScale,
-    'datedInternalRateOfReturn',
-  );
+): { net: (rate: number) => RootTrial; monetaryScale: number } {
+  const monetaryScale = cashScale(input.cashFlows.map((flow) => flow.amount));
+  const amounts = input.cashFlows.map((flow) => flow.amount / monetaryScale);
   const offsets = input.cashFlows.map((flow) =>
     yearFraction(input.asOf, flow.cashFlowDate, dayCount),
   );
@@ -396,7 +417,9 @@ export const datedInternalRateOfReturn = Object.assign(
     const { compounding, dayCount } = validateDatedIrrInput('datedInternalRateOfReturn', input);
     const { net, monetaryScale } = datedNet(input, compounding, dayCount);
     const outcome = solveRoots(net, monetaryScale);
-    return outcome.roots.length === 1 ? outcome.roots[0]!.annualRate : null;
+    return outcome.roots.length === 1 && outcome.unresolved.length === 0
+      ? outcome.roots[0]!.annualRate
+      : null;
   },
   { explain: explainDatedInternalRateOfReturn },
 );

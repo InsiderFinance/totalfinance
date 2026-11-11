@@ -143,7 +143,7 @@ describe('the totalfinance binary', () => {
     ).toBeCloseTo(1, 13);
     const refused = totalfinance(['run', 'totalfinance.option.price', '--input', '-'], {
       store,
-      stdin: JSON.stringify({ ...input, spot: 99.99999999999999 }),
+      stdin: JSON.stringify({ ...input, strike: 100 * Math.exp(0.01), riskFreeRate: 0.01 }),
     });
     expect(refused.code).toBe(CLI_EXIT_CODES.inputRefused);
     expect(refused.json).toMatchObject({

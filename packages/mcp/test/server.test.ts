@@ -71,7 +71,7 @@ describe('TotalFinance MCP server', () => {
     );
     const refused = await client.callTool({
       name: 'totalfinance_option_price',
-      arguments: { ...input, spot: 99.99999999999999 },
+      arguments: { ...input, strike: 100 * Math.exp(0.01), riskFreeRate: 0.01 },
     });
     expect(refused.isError).toBe(true);
     expect(JSON.stringify(refused)).toContain('input.out_of_range');

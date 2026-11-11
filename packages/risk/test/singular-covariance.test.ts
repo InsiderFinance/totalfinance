@@ -1,5 +1,12 @@
 import { expect, it } from 'vitest';
-import { minVariance, efficientFrontier } from '@totalfinance/risk';
+import {
+  minVariance,
+  efficientFrontier,
+  maxSharpe,
+  meanVariance,
+  kelly,
+  blackLitterman,
+} from '@totalfinance/risk';
 const constraints = {
   budget: 1,
   bounds: [
@@ -45,3 +52,69 @@ for (const covariance of [
     expect(JSON.stringify(frontier)).not.toMatch(/NaN|Infinity/);
   });
 }
+
+for (const covariance of [
+  [
+    [-0.04, 0],
+    [0, 0.01],
+  ],
+  [
+    [0.04, 0.05],
+    [0.05, 0.01],
+  ],
+])
+  for (const [name, run] of Object.entries({
+    minVariance: () => minVariance(covariance, constraints),
+    costAware: () =>
+      minVariance(covariance, {
+        ...constraints,
+        transactionCosts: { perUnitTurnover: 0.01, previousWeights: [0.5, 0.5] },
+      }),
+    blackLitterman: () =>
+      blackLitterman({
+        covariance,
+        marketWeights: [0.5, 0.5],
+        riskAversion: 2.5,
+        views: [{ pick: [1, 0], view: 0.1 }],
+      }),
+    maxSharpe: () =>
+      maxSharpe({
+        mean: [0.08, 0.03],
+        covariance,
+        options: { riskFreeRatePerPeriod: 0, ...constraints },
+      }),
+    meanVariance: () =>
+      meanVariance({
+        mean: [0.08, 0.03],
+        covariance,
+        options: { riskAversion: 1, ...constraints },
+      }),
+    kelly: () => kelly({ mean: [0.08, 0.03], covariance, options: constraints }),
+    frontier: () =>
+      efficientFrontier({
+        mean: [0.08, 0.03],
+        covariance,
+        constraints,
+        grid: { kind: 'points', count: 3 },
+      }),
+  }))
+    it(`refuses invalid covariance before ${name}`, () =>
+      expect(run).toThrowError(expect.objectContaining({ code: 'input.out_of_range' })));
+
+for (const scale of [1e-200, 1, 1e200])
+  it(`checks covariance validity independently of currency scale ${scale}`, () => {
+    expect(() =>
+      minVariance(
+        [
+          [0.04 * scale, 0.05 * scale],
+          [0.05 * scale, 0.01 * scale],
+        ],
+        constraints,
+      ),
+    ).toThrowError(
+      expect.objectContaining({
+        code: 'input.out_of_range',
+        context: expect.objectContaining({ reason: 'indefinite_covariance' }),
+      }),
+    );
+  });

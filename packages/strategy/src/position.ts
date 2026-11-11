@@ -8,6 +8,7 @@
 
 import {
   ensureFiniteWhenPresent,
+  stableSum,
   type Assumptions,
   CONVENTIONS_VERSION,
   DEFAULT_GREEK_UNITS,
@@ -616,6 +617,13 @@ function optionExpiries(legs: readonly Leg[]): Set<string | undefined> {
   return new Set(legs.filter((leg) => leg.kind !== 'stock').map((leg) => leg.expiry));
 }
 
+/** Stable aggregation with a scale-relative allowance for cancellation of supplied terms. */
+function roundoffSum(terms: number[], arithmeticAllowance = 0): number {
+  const total = stableSum(terms);
+  const budget = 8 * (Number.EPSILON * stableSum(terms.map(Math.abs)) + arithmeticAllowance);
+  return Number.isFinite(budget) && Math.abs(total) <= budget ? 0 : total;
+}
+
 export class Position {
   /**
    * The resolved legs — a frozen snapshot (deep-copied at construction, `Object.freeze`d per leg
@@ -886,46 +894,56 @@ export class Position {
     }
   }
 
-  /** Expiration P&L at an underlying price. */
+  /** Expiration P&L at an underlying price, allowing only relative arithmetic roundoff. */
   pnlAtExpiry(underlyingPrice: number): number {
-    // A single terminal payoff is meaningless for a calendar/diagonal (legs expire at different
-    // times); refuse it here rather than fabricate a flat curve (the guard `metrics()`/`payoff()`
-    // already enforce, extended to the public payoff primitive and to `chartData(expirationPnl)`).
     this.assertSingleExpiry('pnlAtExpiry');
-    let total = 0;
+    const terms: number[] = [];
+    const allowances: number[] = [];
     for (const leg of this.legs) {
+      const quantity = leg.quantity * (leg.kind === 'stock' ? 1 : this.multiplier);
+      const roundingScale = Number.EPSILON * Math.abs(quantity);
       if (leg.kind === 'stock') {
-        total += leg.quantity * (underlyingPrice - leg.price);
+        // Retain the price difference before scaling: the gross cash legs can
+        // overflow even when the actual P&L is finite (including exactly zero).
+        terms.push(quantity * (underlyingPrice - leg.price));
+        allowances.push(
+          roundingScale * Math.abs(underlyingPrice),
+          roundingScale * Math.abs(leg.price),
+        );
       } else {
         const intrinsic =
           leg.kind === 'call'
             ? Math.max(underlyingPrice - leg.strike, 0)
             : Math.max(leg.strike - underlyingPrice, 0);
-        total += leg.quantity * this.multiplier * (intrinsic - leg.premium);
+        terms.push(quantity * (intrinsic - leg.premium));
+        allowances.push(roundingScale * Math.abs(leg.premium));
+        if (intrinsic > 0)
+          allowances.push(
+            roundingScale * Math.abs(underlyingPrice),
+            roundingScale * Math.abs(leg.strike),
+          );
       }
     }
-    return total;
+    return roundoffSum(terms, stableSum(allowances));
   }
 
-  /** Slope of the expiration payoff at an underlying price (used for asymptotic analysis). */
+  /** Quantity-relative cancellation preserves a genuinely small standalone tail slope. */
   private slopeAt(underlyingPrice: number): number {
-    let slope = 0;
-    for (const leg of this.legs) {
-      if (leg.kind === 'stock') {
-        slope += leg.quantity;
-      } else {
-        const d =
-          leg.kind === 'call'
-            ? underlyingPrice > leg.strike
-              ? 1
-              : 0
-            : underlyingPrice < leg.strike
-              ? -1
-              : 0;
-        slope += leg.quantity * this.multiplier * d;
-      }
-    }
-    return slope;
+    return roundoffSum(
+      this.legs.map((leg) =>
+        leg.kind === 'stock'
+          ? leg.quantity
+          : leg.quantity *
+            this.multiplier *
+            (leg.kind === 'call'
+              ? underlyingPrice > leg.strike
+                ? 1
+                : 0
+              : underlyingPrice < leg.strike
+                ? -1
+                : 0),
+      ),
+    );
   }
 
   /** Net cash to enter (positive = debit, negative = credit). */

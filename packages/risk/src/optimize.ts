@@ -23,7 +23,7 @@ import {
   WarningCode,
 } from '@totalfinance/core';
 import { type Matrix, jacobiEigen } from '@totalfinance/math';
-import { dot, matVec, quadForm, assertSquare, spdInverse } from './linalg.js';
+import { dot, matVec, quadForm, requireCovariance, spdInverse } from './linalg.js';
 import { snapshotFiniteVector } from './numeric-vector.js';
 import { describeInputValue } from './input-description.js';
 import {
@@ -613,7 +613,7 @@ function projectedQp(input: {
 
 /** Global minimum-variance portfolio. Objective = portfolio variance. */
 function minVarianceSolve(covariance: Matrix, constraints: OptimizeConstraints = {}): SolverOutput {
-  assertSquare(covariance, covariance.length, 'minVariance');
+  requireCovariance(covariance, covariance.length, 'minVariance');
   validateConstraints(constraints, 'minVariance', covariance.length);
   const budget = constraints.budget ?? 1;
   if (!hasInequality(constraints)) {
@@ -685,7 +685,7 @@ function maxSharpeSolve(
   options: MaxSharpeOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'maxSharpe');
+  requireCovariance(covariance, n, 'maxSharpe');
   validateConstraints(options, 'maxSharpe', n);
   const mu = requireMeanVector(mean, n, 'maxSharpe');
   ensureFiniteWhenPresent(options.riskFreeRatePerPeriod, 'riskFreeRatePerPeriod', 'maxSharpe');
@@ -856,7 +856,7 @@ function meanVarianceSolve(
   options: MeanVarianceOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'meanVariance');
+  requireCovariance(covariance, n, 'meanVariance');
   validateConstraints(options, 'meanVariance', n);
   const mu = requireMeanVector(mean, n, 'meanVariance');
   ensureFiniteWhenPresent(options.riskAversion, 'riskAversion', 'optimize');
@@ -941,7 +941,7 @@ function riskParitySolve(
   options: { budget?: number; maximumIterations?: number; tolerance?: number } = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'riskParity');
+  requireCovariance(covariance, n, 'riskParity');
   validateConstraints(options, 'riskParity');
   const budget = options.budget ?? 1;
   const maximumIterations = options.maximumIterations ?? 10000;
@@ -1042,7 +1042,7 @@ function hrpSolve(covariance: Matrix, options: { budget?: number } = {}): Solver
     });
   }
   const n = covariance.length;
-  assertSquare(covariance, n, 'hrp');
+  requireCovariance(covariance, n, 'hrp');
   validateConstraints(options, 'hrp');
   const budget = options.budget ?? 1;
   const order = quasiDiagonalOrder(covToCorr(covariance));
@@ -1100,7 +1100,7 @@ function kellySolve(
   options: KellyOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'kelly');
+  requireCovariance(covariance, n, 'kelly');
   validateConstraints(options, 'kelly', n);
   const mu = requireMeanVector(mean, n, 'kelly');
   ensureFiniteWhenPresent(options.fraction, 'fraction', 'kelly');
@@ -1234,7 +1234,7 @@ export function blackLitterman(options: BlackLittermanOptions): BlackLittermanRe
   const functionName = 'blackLitterman';
   const covariance = options.covariance;
   const n = covariance.length;
-  assertSquare(covariance, n, functionName);
+  requireCovariance(covariance, n, functionName);
   ensureFiniteWhenPresent(options.riskAversion, 'riskAversion', 'blackLitterman');
   const delta = options.riskAversion ?? 2.5;
   ensureFinite(delta, 'riskAversion', functionName);

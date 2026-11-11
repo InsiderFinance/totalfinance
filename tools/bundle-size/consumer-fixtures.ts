@@ -57,12 +57,17 @@ const NAMESPACE_REASON =
 // conformance and record that cost without adding a new public error API.
 // Bachelier remains 2242/2227 B. Only the exact shared analytic-premium module is
 // admitted for BSM/Black76; unrelated-module exclusions and all validation checks remain binding.
+// PR32 review corrections (2026-11-11), installed canonical Node 22.23.2:
+// esbuild expert BSM/Black76 5475/5338 B; facade 15347–15348 B; coarse facade 99609 B.
+// Rollup expert 3106/2999 B, facade 10835 B. Positive Gaussian tail evaluation,
+// field-specific precision errors and IV diagnostics account for the growth. Ceilings
+// leave at least 94 B headroom; exact retained-module exclusions are unchanged.
 const leanBudgets = {
   normal: 0.6,
   rsi: 9,
-  facade: 14.5,
-  expert: 2.75,
-  'expert-black76': 2.625,
+  facade: 15.125,
+  expert: 3.125,
+  'expert-black76': 3.0625,
   'expert-bachelier': 2.5,
 } as const;
 // Actual esbuild root namespaces: 41508/105191/95468 B. These are coarse DOMAIN budgets,
@@ -73,7 +78,7 @@ const leanBudgets = {
 // Review repair: the installed root namespace is 105817 B gzip on canonical Node 22.23.2.
 // Single-symbol/time and optional-metadata validation add 231 B; only this coarse ceiling moves
 // from 103.25 to 103.5 KiB. Leaf RSI and every unrelated-domain exclusion remain unchanged.
-const coarseBudgets = { normal: 42, rsi: 103.5, facade: 96.5 } as const;
+const coarseBudgets = { normal: 42, rsi: 103.5, facade: 97.5 } as const;
 
 function calculation(
   canary: Exclude<ConsumerCanary, 'unused' | 'dynamic'>,
@@ -103,11 +108,11 @@ function calculation(
     budgetKiB: {
       esbuild:
         canary === 'expert' || canary === 'expert-black76'
-          ? 5
+          ? 5.5
           : rootNamespace
             ? coarseBudgets[canary as keyof typeof coarseBudgets]
             : leanBudgets[canary],
-      rollup: canary === 'facade' ? 10 : leanBudgets[canary],
+      rollup: canary === 'facade' ? 10.75 : leanBudgets[canary],
     },
     ...(style === 'feature' ? {} : { parityWith: `${canary}-feature` }),
     ...(rootNamespace ? { rootNamespace: true } : {}),

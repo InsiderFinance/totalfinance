@@ -31,7 +31,7 @@ import {
 } from '@totalfinance/core';
 import type { Matrix } from '@totalfinance/math';
 import { describeInputValue } from './input-description.js';
-import { assertSquare, dot, quadForm } from './linalg.js';
+import { requireCovariance, dot, quadForm } from './linalg.js';
 import { snapshotFiniteVector } from './numeric-vector.js';
 import { OPTIMIZE_CONSTRAINTS_KEYS, validateOptimizeConstraints } from './optimizer-validation.js';
 import {
@@ -1364,7 +1364,7 @@ export function efficientFrontier(input: EfficientFrontierInput): EfficientFront
       { rows: n },
     );
   }
-  assertSquare(covariance, n, FUNCTION_NAME);
+  requireCovariance(covariance, n, FUNCTION_NAME);
   const mu = requireMeanVector(mean, n);
   if (rawConstraints !== undefined) {
     requireDataObject('constraints', rawConstraints, OPTIMIZE_CONSTRAINTS_KEYS);

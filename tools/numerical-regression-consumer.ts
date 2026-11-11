@@ -7,8 +7,10 @@ import {
 import { minVariance } from '@insiderfinance/totalfinance/risk';
 import { strategy, legs } from '@insiderfinance/totalfinance/strategy';
 import { blackScholes } from '@insiderfinance/totalfinance/options/black-scholes';
+import { blackScholesPriceManyInto } from '@insiderfinance/totalfinance/options/batch';
 import { black76 } from '@insiderfinance/totalfinance/options/black76';
-import { asian, spread } from '@insiderfinance/totalfinance/options';
+import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carlo';
+import { option as optionContracts, asian, spread } from '@insiderfinance/totalfinance/options';
 import { fitGarch } from '@insiderfinance/totalfinance/volatility/forecast';
 import { ols } from '@insiderfinance/totalfinance/math';
 
@@ -129,6 +131,109 @@ export function assertNumericalRepairs(): void {
   );
   const regression = ols([1, 2, 2, 4], [[0], [1], [2], [3]], { intercept: true, hac: { lags: 0 } });
   check(Math.abs(regression.standardErrors[0]! ** 2 - 113 / 2500) < 1e-14, '#24 HC1 convention');
+  const ordinarySchedule = amortizationSchedule({
+    principal: 100000,
+    periodicInterestRate: 0.15,
+    numberOfPeriods: 50,
+    paymentTiming: 'end',
+  });
+  check(
+    ordinarySchedule.rows.at(-1)!.closingBalance === 0,
+    'review B1 ordinary compounded schedule',
+  );
+  check(
+    Math.abs(
+      internalRateOfReturn({
+        cashFlows: [
+          { timeYears: 27, amount: -100 },
+          { timeYears: 30, amount: 34.3 },
+        ],
+      })! + 0.3,
+    ) < 1e-10,
+    'review B2 negative offset IRR',
+  );
+  const a = 1 / 1.1,
+    b = 1 / 0.7;
+  check(
+    internalRateOfReturn({
+      cashFlows: [
+        { timeYears: 40, amount: a * b },
+        { timeYears: 41, amount: -(a + b) },
+        { timeYears: 42, amount: 1 },
+      ],
+    }) === null,
+    'review B2 no silent root choice',
+  );
+  let invalidCovarianceRefused = false;
+  try {
+    minVariance(
+      [
+        [0.04, 0.05],
+        [0.05, 0.01],
+      ],
+      {
+        budget: 1,
+        bounds: [
+          [0, 1],
+          [0, 1],
+        ],
+      },
+    );
+  } catch (error) {
+    invalidCovarianceRefused =
+      error instanceof Error && 'code' in error && error.code === 'input.out_of_range';
+  }
+  check(invalidCovarianceRefused, 'review B3 invalid covariance');
+  const tinyTail = blackScholes.price({ ...option, strike: 100.00000004, volatility: 2e-11 });
+  check(
+    Math.abs(tinyTail / 2.73993407744911265788e-99 - 1) < 1e-10,
+    'review accepted tail precision',
+  );
+  const columns = {
+    spot: new Float64Array([100, 101, 100]),
+    strike: new Float64Array([100, 100, 100 * Math.exp(0.01)]),
+    timeToExpiryYears: new Float64Array([1, 1, 1]),
+    riskFreeRate: new Float64Array([0, 0, 0.01]),
+    volatility: new Float64Array([0.2, 0.2, 1e-17]),
+    type: new Int8Array([1, 1, 1]),
+  };
+  const before = columns.spot.slice();
+  let indexedRefusal = false;
+  try {
+    blackScholesPriceManyInto(columns, columns.spot);
+  } catch (error) {
+    indexedRefusal =
+      error instanceof Error &&
+      'context' in error &&
+      (error.context as { contractIndex?: number })?.contractIndex === 2;
+  }
+  check(
+    indexedRefusal && before.every((value, i) => value === columns.spot[i]),
+    'review B5 atomic aliasing',
+  );
+  const european = monteCarloPrice({
+    contract: optionContracts.call({
+      underlying: 'TEST',
+      convention: 'us-equity-close',
+      strike: 80,
+      expiry: '2026-04-02',
+      style: 'european',
+    }),
+    market: {
+      spot: 100,
+      riskFreeRate: 0.04,
+      dividendYield: 0,
+      volatility: 0.05,
+      asOf: Date.UTC(2026, 0, 1),
+    },
+    options: { paths: 50000, seed: 7, greeks: false },
+  });
+  check(
+    european.diagnostics.converged === true &&
+      european.monteCarlo.standardError! > 0 &&
+      european.monteCarlo.confidenceInterval === null,
+    'review B4 finite estimator, sub-ULP reporting',
+  );
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

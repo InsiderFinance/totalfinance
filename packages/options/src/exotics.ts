@@ -1,4 +1,4 @@
-import { analyticPremium } from './analytic-premium.js';
+import { analyticPremium, logPriceRatio } from './analytic-premium.js';
 /**
  * Exotic option engines (spec §9.3): barrier, Asian, and lookback options.
  *
@@ -1058,13 +1058,16 @@ function kirkSpread(input: {
       },
     );
   }
-  const d1 = (Math.log(F1 / (F2 + K)) + 0.5 * sd * sd) / sd;
+  const d1 = (logPriceRatio(F1, F2 + K) + 0.5 * sd * sd) / sd;
   const d2 = d1 - sd;
   return analyticPremium({
     positiveLeg: disc * (type === 'call' ? F1 * N(d1) : (F2 + K) * N(-d2)),
     negativeLeg: disc * (type === 'call' ? (F2 + K) * N(d2) : F1 * N(-d1)),
     atTheMoney: F1 === F2 + K,
     discountedScale: disc * F1,
+    discountedStrike: disc * (F2 + K),
+    type,
+    logMoneyness: logPriceRatio(F1, F2 + K),
     standardDeviation: sd,
   });
 }

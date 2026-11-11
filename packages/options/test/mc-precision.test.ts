@@ -1,6 +1,8 @@
 import { expect, it } from 'vitest';
 import { monteCarloEstimate } from '../src/mc/core.js';
-import { asian } from '@totalfinance/options';
+import { monteCarloEuropean } from '../src/monte-carlo.js';
+import { monteCarloPrice } from '@totalfinance/options/monte-carlo';
+import { option, asian } from '@totalfinance/options';
 it('matches independent centered fitted residuals with a high offset (#22)', () => {
   const observations: [number, number][] = [];
   const result = monteCarloEstimate({
@@ -89,14 +91,11 @@ it('does not advertise a point confidence interval for the reported twelve-fixin
   );
   // Independent 80-digit two-pass fit on these same binary64 payoff/control samples.
   expect(r.monteCarlo.standardError! / 1.91594991165564953148e-11).toBeCloseTo(1, 12);
-  if (r.monteCarlo.confidenceInterval !== null)
-    expect(r.monteCarlo.confidenceInterval[1]).toBeGreaterThan(r.monteCarlo.confidenceInterval[0]);
-  else {
-    expect(r.diagnostics.converged).toBe(false);
-    expect(r.diagnostics.warnings).toContainEqual(
-      expect.objectContaining({ code: 'model.limitation' }),
-    );
-  }
+  expect(r.monteCarlo.confidenceInterval).toBeNull();
+  expect(r.diagnostics.converged).toBe(true);
+  expect(r.diagnostics.warnings).toContainEqual(
+    expect.objectContaining({ code: 'model.limitation' }),
+  );
 });
 it('retains constant payoff and constant-control semantics', () => {
   const r = monteCarloEstimate({
@@ -145,3 +144,46 @@ for (const scale of [1e-150, 1e150])
       });
     expect(estimate(scale).standardError! / scale / estimate(1).standardError!).toBeCloseTo(1, 12);
   });
+
+it('keeps an ordinary deep-ITM European estimate converged when its interval is below value resolution', () => {
+  const result = monteCarloEuropean({
+    type: 'call',
+    spot: 100,
+    strike: 80,
+    timeToExpiryYears: 0.25,
+    riskFreeRate: 0.04,
+    dividendYield: 0,
+    volatility: 0.05,
+    options: { paths: 50000, seed: 7 },
+  });
+  expect(result.value).toBeCloseTo(100 - 80 * Math.exp(-0.01), 12);
+  expect(result.converged).toBe(true);
+  expect(result.standardError).toBeGreaterThan(0);
+  expect(result.confidenceInterval).toBeNull();
+  expect(result.warnings).toContainEqual(
+    expect.objectContaining({ message: expect.stringMatching(/resolution/) }),
+  );
+});
+
+it('keeps the public European MC facade converged at sub-ULP interval width', () => {
+  const result = monteCarloPrice({
+    contract: option.call({
+      underlying: 'TEST',
+      convention: 'us-equity-close',
+      strike: 80,
+      expiry: '2026-04-02',
+      style: 'european',
+    }),
+    market: {
+      spot: 100,
+      riskFreeRate: 0.04,
+      dividendYield: 0,
+      volatility: 0.05,
+      asOf: Date.UTC(2026, 0, 1),
+    },
+    options: { paths: 50000, seed: 7, greeks: false },
+  });
+  expect(result.diagnostics.converged).toBe(true);
+  expect(result.monteCarlo.standardError).toBeGreaterThan(0);
+  expect(result.monteCarlo.confidenceInterval).toBeNull();
+});

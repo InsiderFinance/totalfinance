@@ -128,7 +128,8 @@ describe('the local HTTP server', () => {
     ).toBeCloseTo(1, 13);
     const refused = await call('POST', '/operations/totalfinance.option.price/run', {
       ...input,
-      spot: 99.99999999999999,
+      strike: 100 * Math.exp(0.01),
+      riskFreeRate: 0.01,
     });
     expect(refused.status).toBe(400);
     expect(refused.json).toMatchObject({
