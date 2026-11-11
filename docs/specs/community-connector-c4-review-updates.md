@@ -229,10 +229,10 @@ fundamentals/flow/other intervals need a reviewed capability, not a universal ex
       reject malicious key/value/URL/cursor/text/context leakage. Kit retains useful safe detail.
 - [x] Change only raw author signature; migrate fixtures/kit/provider and compile natural daily-only
       author under strict NodeNext/Bundler, consumer inference/readonly and wrong-kind refusal.
-- [ ] Build the independent starter and execute the written recipe verbatim from a clean checkout;
+- [x] Build the independent starter and execute the written recipe verbatim from a clean checkout;
       shared independent expected pages, SMA103/VWAP102, intentional-error repair, insufficient history,
       warnings/storage and provider-binding interchangeability. Copy only public synthetic review material.
-- [ ] Separate provider worktree based exactly8e21edb if needed; no remote. Build/typecheck/frozen
+- [x] Separate provider worktree based exactly8e21edb if needed; no remote. Build/typecheck/frozen
       install/test/pack against actual new SDK. Preserve all83 existing provider tests and corpus.
 - [x] Measure unchanged whole/installed/guard/browser caps on main alone, integrated pre-repair
       source and final candidate to separate upstream growth from C4. Retain the C3 703KiB root cap
@@ -300,7 +300,17 @@ counters and fresh installed/hosted evidence; no merge or release authority.
 Final source generation: signature/naming/contract/enforcement/validation/API/README/LLM/public-reference/
 bundle/OpenAPI/docs ran from combined source. Nine derived conflicts are generator-resolved; no unmerged
 entries remain. Enforcement defective0, paths7971, inputs1618, results1973, validators386;
-naming43849/unresolved0; docs260 surfaces/4668 executable fences/findings0. The new no-key journey is
+naming43849/unresolved0; docs261 surfaces/4669 executable fences/findings0. The new no-key journey is
 rendered in full LLM output from its guide source. Public tracker figures were refreshed and gated.
 Local full267 whole/packed gates pass. Final artifact/guide/hosted closure remains pending at this
 source checkpoint; source and earlier corrected-byte receipts are not final hosted acceptance.
+
+Final local closure: SDK combined-source6162130, provider29b02e0, fresh SDK/provider/starter packs,
+verbatim no-key recipe from clean detached6162130, author NodeNext/Bundler and original independent
+replay pass. All approved final caps fit actual source/packs; see
+[final local receipts](../reviews/community-connectors-c4-closure-2026-11-11.md). Source/public379,
+whole/packed267, selected upstream105 and additional public231 batches passed after documented
+stale counter/journey/accounting corrections (batches overlap; no inflated aggregate claimed).
+Only remaining offline gate is fresh exact-head fast/full hosted CI on the draft feature branch;
+results will be attached in PR/task to avoid a post-green commit invalidating head verification.
+Later consumer/connected-agent/App acceptance remains separate; feature in_progress/no merge.

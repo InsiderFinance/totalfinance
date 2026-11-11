@@ -7,8 +7,9 @@
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
-7,971 public paths and43,849 naming identities/zero unresolved. Final public, packed, guide and
-hosted verification is active. PR26 remains draft; earlier reports/checks are historical. Feature
+7,971 public paths and43,849 naming identities/zero unresolved. Final public/packed/guide verification passes at source6162130;
+[local receipts](./reviews/community-connectors-c4-closure-2026-11-11.md) record exact packs/caps.
+Fresh final-head fast/full hosted verification remains required. PR26 remains draft; earlier reports/checks are historical. Feature
 in_progress; no merge/release/connected acceptance.
 
 ### Active connector review repairs (2026-11-11)
@@ -21,8 +22,9 @@ technical review approved the bounded runtime repairs at d6cc42b (a55531a4), wit
 
 - [x] Read current task, prior specs and complete public independent evidence in a new isolated tree.
 - [x] Fetch main ca122ab; attempt integration and identify authored/derived conflicts (not completed).
-- [ ] Coordinator C4 contract review, then complete main integration preserving 0.1.3 and upstream proof.
-- [ ] C4 runtime/author/starter repairs, fresh installed/generated/bundle and exact-head fast/full proof.
+- [x] Coordinator C4 contract review and committed main integration preserving 0.1.3/upstream proof.
+- [x] C4 runtime/author/starter repairs, source/generated/static and fresh installed/whole budget proofs.
+- [ ] Fresh exact-head fast/full hosted proof; attach final tested head/results to draft PR26 and Ri task.
 
 ### Active community connector foundation (2026-11-02)
 

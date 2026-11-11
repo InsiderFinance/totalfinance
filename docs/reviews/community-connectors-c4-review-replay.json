@@ -1,6 +1,6 @@
 {
   "note": "Original observations unchanged. Copied author migrated only raw query typing/removed conditional assertion and SDK peer0.1.3; all original probes unchanged.",
-  "sdkSha256": "4e850776f20da789e908ee9818556df56320830bea377750b136848d4c8cabf6",
+  "sdkSha256": "8cc221b4c86e35222b620f3ea1ab3ce10f6fbf5f95089ed6fb973ded427f0b4c",
   "results": {
     "independentConformance": {
       "accepted": true
@@ -247,5 +247,7 @@
         }
       }
     }
-  }
+  },
+  "sourceCommit": "6162130e8a9556a86eae3eaacacf45885d662fdb",
+  "rawReceipt": "/tmp/tf-c4-closure-final-review-replay.log"
 }
