@@ -14,6 +14,7 @@ export const SITE_URL = `${SITE_ORIGIN}${BASE_PATH}`;
 
 export const REPOSITORY_URL = 'https://github.com/InsiderFinance/totalfinance';
 export const PACKAGE_NAME = '@insiderfinance/totalfinance';
+export const PACKAGE_URL = `https://www.npmjs.com/package/${PACKAGE_NAME}`;
 export const MCP_PACKAGE_NAME = '@insiderfinance/totalfinance-mcp';
 
 /**
@@ -46,7 +47,7 @@ export const FAMILY = {
   home: FAMILY_ORIGIN,
   docs: `${FAMILY_ORIGIN}/docs`,
   links: [
-    { id: 'totalfinance', label: 'TotalFinance', href: '/', external: false },
+    { id: 'totalfinance', label: 'View Docs', href: '/start', external: false },
     ...(API_DOCS_PUBLIC
       ? [
           { id: 'api', label: 'API', href: `${FAMILY_ORIGIN}/docs/api`, external: true },

@@ -96,16 +96,37 @@ product page and public docs address are still the next, separate integration.
 In `insiderfinance-app`, create the native `/totalfinance` landing page and link it from the desired
 navigation. This page has not been built by the TotalFinance homepage change.
 
-Append this rule to the app's existing `rewrites()` array in `next.config.js`; retain all other rules:
+Add this entry rule to the app's existing `redirects()` array in `next.config.js`; retain all other rules:
+
+```js
+{
+  source: '/docs/totalfinance',
+  destination: '/docs/totalfinance/start',
+  permanent: false,
+}
+```
+
+Then append this rule to the existing `rewrites()` array:
 
 ```js
 {
   source: '/docs/totalfinance/:path*',
-  destination: 'https://totalfinance.io/docs/totalfinance/:path*',
+  destination: 'https://www.totalfinance.io/docs/totalfinance/:path*',
 }
 ```
 
-The source URL on `totalfinance.io` must continue serving docs files directly. Redirecting that
+Keep `/docs/totalfinance` as the docs prefix on both hosts for this shared build. Next.js embeds its
+`basePath` in links and client assets at build time. Matching paths let the proxy forward the same
+HTML, scripts and navigation without rewriting response bodies. `/docs/*` on TotalFinance is possible
+with a separate build, but changing the proxy's destination path alone does not remount the client.
+Use the canonical `www.totalfinance.io` source above to avoid a host redirect through the proxy.
+
+The local entry redirect is required on Vercel: an empty wildcard capture can send the upstream
+request to `/docs/totalfinance/`. The upstream removes that slash and returns the browser to the
+same public entry URL, which repeats the rewrite forever. Enter `/start` before proxying; keep
+nested pages and assets on the wildcard rewrite. Check both the entry and a nested page after deployment.
+
+The source URL on `www.totalfinance.io` must continue serving docs files directly. Redirecting that
 source back to InsiderFinance creates a proxy loop. Keep the asset paths under the same docs mount;
 the wildcard forwards scripts, icons, styles, search and version snapshots as well as HTML.
 
@@ -150,3 +171,4 @@ can cache previews, so request a refresh in the service's preview debugger after
 - [Vercel Node version selection](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)
 - [Custom domain and DNS setup](https://vercel.com/docs/domains/set-up-custom-domain)
 - [Next.js external rewrites](https://nextjs.org/docs/14/pages/api-reference/next-config-js/rewrites)
+- [Next.js build-time base path](https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath)

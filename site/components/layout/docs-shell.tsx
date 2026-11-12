@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { siteVersion } from '@/lib/data';
 import { navigation, type NavTab } from '@/lib/navigation';
-import { BASE_PATH, FAMILY, REPOSITORY_URL } from '@/lib/site';
+import { BASE_PATH, FAMILY, PACKAGE_URL, REPOSITORY_URL } from '@/lib/site';
 import { Sidebar } from './sidebar';
 import { SiteFooter } from './site-footer';
 
@@ -26,6 +26,7 @@ export function DocsShell({
         groups={active.groups}
         versionLabel={`v${version.version}`}
         repositoryUrl={REPOSITORY_URL}
+        packageUrl={PACKAGE_URL}
         data={FAMILY.data}
         llmsUrl={`${BASE_PATH}/llms.txt`}
         desktop={sidebarOnDesktop}

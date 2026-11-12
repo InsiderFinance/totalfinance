@@ -8,7 +8,7 @@
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
 [Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
 projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
-main23fbf06 plus3555f93 authored/site/README changes are reconciled (inherited0.1.4). Prior225c1bb exact-head FAST/FULL passed; ca176773 identified one remaining continuation preflight ordering repair, now locally corrected and awaiting fresh hosted acceptance. Latest fetched9828b0a is site/docs-only relative to the integrated package/runtime/budget paths; no site redesign or unrelated reconciliation is part of this narrow fix. C4 fast/full green and coordinator acceptance remain
+main23fbf06/3555f93 and current71ffb42 site/sidebar/header/navigation/deployment-doc changes are integrated (inherited0.1.4). The bounded cursor repair at7b24305 was independently accepted fdfb464b after exact-head FAST8/FULL23 green; that is accepted SOURCE evidence, not certification of this new docs-only merge head. SDK source fingerprint and packed artifact identity remain unchanged. The only generated merge conflict is recreated from combined authored sources. C4 and earlier green receipts remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 
 - [x] Read current task, independent second-provider review/probes and existing contracts.
@@ -18,7 +18,9 @@ historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged
 - [x] Source-final affected generation aligns actual inherited0.1.4 inputs: defective0, naming unresolved0, fixture join1343; source/type/API/public checks pass.
 - [x] Clean committed-source no-key recipe, all86 reference cases, independent author/starter, primary119.5,236 packed checks and approved whole/installed bounds pass; [local receipts](./reviews/community-connectors-c5-closure-2026-11-12.md).
 - [x] ca176773 bounded continuation preflight precedes canonical copying; cycle/accessor/work-limit controls refuse with zero source calls, while mutation/cross-copy laws pass against fresh packs.
-- [ ] New exact-head hosted fast/full and coordinator review after the preflight repair; later maintainer/connected-agent/App acceptance separate.
+- [x] Bounded repair7b24305 exact-head FAST43309751937/FULL43309736347 and coordinator acceptance; source/provider/packed receipts retained.
+- [x] Integrate current main71ffb42 in this C5 tree and regenerate its sole docs-inventory conflict; source/artifact inputs unchanged; [integration record](./reviews/community-connectors-c5-integration-2026-11-12.md).
+- [ ] Fresh integrated-head FAST/FULL and coordinator closure; later maintainer/connected-agent/App acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
@@ -99,6 +101,13 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
 ### Completed bounded site work: recover the original homepage and branding (2026-11-12)
+
+Chrome follow-up locally complete: [N1–N3](./specs/homepage-and-docs-routing.md) remove duplicate sidebar
+branding, group version/GitHub/npm, and label the shared docs link View Docs. The shared
+`/docs/totalfinance` mount is retained; the deployment guide explains why and uses the canonical
+source host in its proxy example. No InsiderFinance application or deployment settings change.
+The static build, 202 site tests, 30 documentation checks, site types and changed-source lint pass;
+documentation regeneration leaves the inventory unchanged.
 
 Presentation follow-up locally complete: [U1–U4](./specs/homepage-and-docs-routing.md) cover the finance headline,
 removing Discord, an always-expanded Library list, neutral code panels, clearer full-reference

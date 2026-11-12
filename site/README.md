@@ -129,11 +129,11 @@ for the runtime bundles (the runner's origin is opaque), `noindex` for archived 
 security headers a `<meta>` CSP cannot carry: `frame-ancestors 'none'` everywhere except the
 runner, which only these docs may frame. HTML, manifests and indexes revalidate.
 
-**Inside insiderfinance.io (multi-zone).** The main app forwards `/docs/totalfinance` and
-`/docs/totalfinance/:path+` to this deployment with two rewrites in its `next.config.js`, off
-unless its `TOTALFINANCE_DOCS_ZONE_ORIGIN` names this deployment's production domain (see that
-repository's `docs/runbooks/totalfinance-docs-zone.md`). Do not confuse it with this site's
-`TOTALFINANCE_DOCS_ORIGIN`, which stays the public origin. Clean URLs are required there: the
+**Inside insiderfinance.io (multi-zone).** The main app redirects `/docs/totalfinance` to
+`/docs/totalfinance/start`, then forwards `/docs/totalfinance/:path*` to this deployment with a
+rewrite in its `next.config.js`. Use the canonical `www.totalfinance.io` source host; see the
+[deployment guide](../docs/runbooks/deploy-totalfinance-site.md) for both rules. This site's
+`TOTALFINANCE_DOCS_ORIGIN` controls the public origin. Clean URLs are required there: the
 app's Next.js redirects `/x/` to `/x` before rewrites run, so a trailing-slash zone would
 redirect forever. Readers and search engines see one site; the main domain's `/robots.txt`
 governs crawling, and every page also carries its own robots meta tag. Under the zone, these

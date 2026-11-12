@@ -1,11 +1,10 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronRight, Star, X } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { NavGroup, NavTab } from '@/lib/navigation';
 import { sitePath } from '@/src/routes';
-import { TotalFinanceMark } from '../brand/totalfinance-mark';
 import { useNav } from './nav-context';
 
 export interface SidebarProps {
@@ -14,6 +13,7 @@ export interface SidebarProps {
   groups: NavGroup[];
   versionLabel: string;
   repositoryUrl: string;
+  packageUrl: string;
   data: { label: string; href: string };
   llmsUrl: string;
   /** Render the fixed desktop sidebar (pages like the home page use only the mobile drawer). */
@@ -90,6 +90,7 @@ function SidebarContent({
   groups,
   versionLabel,
   repositoryUrl,
+  packageUrl,
   data,
   llmsUrl,
   onNavigate,
@@ -110,31 +111,29 @@ function SidebarContent({
   }, [pathname]);
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-fd-border px-4 pb-4 pt-5">
-        <Link
-          href="/"
-          onClick={onNavigate}
-          className="flex items-center gap-2.5"
-          aria-label="TotalFinance documentation home"
+      <div className="border-b border-fd-border px-4 py-4">
+        <nav
+          aria-label="Project resources"
+          className="flex flex-wrap items-center gap-x-3 gap-y-2 pr-10 text-xs text-fd-muted-foreground lg:pr-0"
         >
-          <TotalFinanceMark className="size-8 shrink-0" />
-          <span className="min-w-0">
-            <span className="block font-display text-[1.0625rem] font-semibold leading-tight tracking-tight text-fd-foreground">
-              TotalFinance
-            </span>
-            <span className="block text-xs text-fd-muted-foreground">
-              by InsiderFinance · open source
-            </span>
-          </span>
-        </Link>
-        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[0.6875rem]">
-          <span className="rounded-full bg-fd-secondary px-2 py-0.5 font-medium text-fd-muted-foreground">
+          <Link
+            href="/versions"
+            onClick={onNavigate}
+            className="rounded-full bg-fd-secondary px-2 py-0.5 font-medium hover:text-fd-primary"
+            aria-label={`TotalFinance versions (${versionLabel})`}
+          >
             {versionLabel}
-          </span>
-        </div>
+          </Link>
+          <a href={repositoryUrl} className="hover:text-fd-primary">
+            GitHub
+          </a>
+          <a href={packageUrl} className="hover:text-fd-primary">
+            npm
+          </a>
+        </nav>
         <nav
           aria-label="Documentation areas"
-          className="mt-4 grid grid-cols-3 gap-1 rounded-xl bg-fd-secondary p-1"
+          className="mt-3 grid grid-cols-3 gap-1 rounded-xl bg-fd-secondary p-1"
         >
           {tabs.map((candidate) => (
             <Link
@@ -177,12 +176,9 @@ function SidebarContent({
             and market data. ↗
           </span>
         </a>
-        <div className="flex items-center justify-between text-fd-muted-foreground">
+        <div className="text-fd-muted-foreground">
           <a href={llmsUrl} className="hover:text-fd-primary">
             llms.txt
-          </a>
-          <a href={repositoryUrl} className="inline-flex items-center gap-1 hover:text-fd-primary">
-            <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden /> Star on GitHub
           </a>
         </div>
       </div>

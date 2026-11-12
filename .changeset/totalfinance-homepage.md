@@ -23,3 +23,6 @@ startup, with a cold emitted-module regression and a Web Request entrypoint for 
 Use finance in the headline, remove the unlaunched Discord link, expose the Library navigation,
 clarify complete API-reference links, and use neutral code-panel colors. README documentation
 links target InsiderFinance and include its linked credit.
+
+Keep one header brand, group version/GitHub/npm links in the sidebar, and label the homepage's
+documentation navigation View Docs. Explain the shared docs prefix in the deployment guide.

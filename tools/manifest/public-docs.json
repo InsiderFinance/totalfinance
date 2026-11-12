@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 272,
+    "surfaces": 273,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 84,
+      "future-target": 85,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4707,
+    "executableFences": 4708,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 84,
+    "checkedUnderVocabulary": 85,
     "shippedNamesWatched": 10110,
     "documentedExceptions": 9,
     "findings": 0
@@ -726,6 +726,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c5-integration-2026-11-12.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/community-connectors-c5-spec-2026-11-12.md",
       "class": "future-target",
       "owner": "human",
@@ -772,7 +779,7 @@
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
-      "codeFences": 1
+      "codeFences": 2
     },
     {
       "path": "docs/runbooks/release-pair-legacy.md",
