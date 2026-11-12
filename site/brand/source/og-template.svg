@@ -1,0 +1,34 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+>
+  <title>TotalFinance — The most complete finance toolkit.</title>
+  <rect width="1200" height="630" fill="#fafbf8" />
+  <path d="M0 0h1200v9H0Z" fill="#078754" />
+  <g transform="translate(55 39) scale(.067)"><!-- LOGO --></g>
+  <g fill="#15282b" font-family="Arial, Helvetica, sans-serif">
+    <text x="139" y="86" font-size="29" font-weight="700" letter-spacing="-.8">TotalFinance</text>
+    <text x="1136" y="78" text-anchor="end" font-size="12" letter-spacing="2" fill="#57676a">
+      BY INSIDERFINANCE
+    </text>
+    <text x="64" y="225" font-size="68" font-weight="700" letter-spacing="-2.2">
+      The most complete
+    </text>
+    <text x="64" y="303" font-size="68" font-weight="700" letter-spacing="-2.2" fill="#078754">
+      finance toolkit.
+    </text>
+    <text x="68" y="375" font-size="27" font-weight="700">For developers and AI agents.</text>
+    <text x="68" y="418" font-size="23" fill="#57676a">Built with TypeScript. Run anywhere.</text>
+    <text x="68" y="473" font-size="18" fill="#57676a">Options · Portfolios · Research · Risk</text>
+    <path d="M64 523h1072" stroke="#d6e1d7" />
+    <text x="66" y="577" font-size="22" font-weight="700" fill="#078754">totalfinance.io</text>
+    <text x="1136" y="577" text-anchor="end" font-size="17" fill="#57676a">
+      Open source · Apache-2.0
+    </text>
+  </g>
+  <rect x="795" y="161" width="340" height="340" rx="28" fill="#edf4eb" />
+  <g transform="translate(811 175) scale(.303)"><!-- LOGO --></g>
+</svg>

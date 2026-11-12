@@ -1,12 +1,13 @@
-# TotalFinance public developer workbench
+# TotalFinance homepage and developer documentation
 
-This is the public learning surface, not the implementation tracker. It is a static TypeScript site
-with real, local library calculations. No API keys, remote compute, market feeds, brokerage access,
-analytics beacon, or account sign-in is required. Publishing decisions still belong to the maintainer.
+This static TypeScript site contains the standalone TotalFinance homepage and public developer
+workbench, with real, local library calculations. No API keys, remote compute, market feeds,
+brokerage access, analytics beacon, or account sign-in is required. Publishing decisions still
+belong to the maintainer.
 
 ## Build and preview
 
-From the `@insiderfinance/totalfinance` directory (Node ≥22.13, pinned pnpm):
+From the repository root, select Node from `.nvmrc` and pnpm from `package.json`:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -20,11 +21,35 @@ pnpm site:dev
 The preview binds only to `http://127.0.0.1:4173`. Rebuild after source changes; the server serves
 `site/dist` without a development framework or hidden hosted service. Stop it with Ctrl+C.
 
+- Homepage: `http://127.0.0.1:4173/`
+- Documentation: `http://127.0.0.1:4173/docs/totalfinance/`
+- Example: `http://127.0.0.1:4173/docs/totalfinance/learn/price-an-option/`
+- Search: `http://127.0.0.1:4173/docs/totalfinance/search/?q=black+scholes`
+
+## Routes and hosting handoff
+
+Follow the numbered [deployment runbook](../docs/runbooks/deploy-totalfinance-site.md) for Vercel,
+DNS, preview review and the separately pending InsiderFinance integration. The checked-in root
+`vercel.json` serves `site/dist` and calls `site/vercel.sh` for the exact Node/pnpm versions already
+selected by `.nvmrc`/`package.json`. No package version or supported Node range is changed.
+
+The standalone homepage lives at `/`. All documentation, including its assets, search index,
+reference coverage, machine-readable discovery and version snapshots, lives under `/docs/totalfinance/`.
+`paths.ts` owns that mount. The homepage's example is the exact option-playground first call;
+its displayed price and chart come from that same calculation, not a second implementation.
+
+InsiderFinance's separate product landing page is planned for `/totalfinance` in the app repo. Its
+future rewrite should forward only `/docs/totalfinance/:path*` to the same path on this build's
+deployment origin. The origin must serve those files directly, rather than forwarding them back to
+InsiderFinance. The complete docs HTML is served by the rewrite; it does not inherit the app's shell.
+Production domain selection, cross-domain homepage links, canonical URLs/sitemaps and the external
+rewrite are separate integration work. This local split configures none of those services.
+
 Deploy **only `site/dist/`**, using a static host with directory-index routing and `404.html` fallback.
 Do not use an SPA fallback that returns the home page for unknown reference URLs. Enable HTTPS and
 Brotli/gzip compression. HTML, version manifests, and search indexes should revalidate; immutable
 version snapshots may be cached permanently once released. Hashed JavaScript chunks may be immutable;
-`client.js`, `calculation-worker.js`, and `styles.css` are not content-hashed and must revalidate.
+`client.js`, `calculation-worker.js`, `styles.css`, and `homepage.css` are not content-hashed and must revalidate.
 Suggested security headers: `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, and
 `Content-Security-Policy: default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self';
 img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`.
@@ -32,6 +57,10 @@ There are no inline scripts or styles requiring an unsafe-inline exception.
 
 ## Content and ownership
 
+- `src/homepage.ts` and `src/homepage.css`: the standalone homepage. Homepage styles are scoped
+  separately from the task-first documentation layout.
+- `brand/`: original supplied PNG, editable vector recreation, favicon/Apple icons and social card.
+  See [asset sources and regeneration](./brand/README.md). The site build copies the reviewed exports.
 - `content/`: task-first starting and agent guides. Other public guides come from `docs/guides/`.
 - `src/playgrounds/`: six calculators. Every financial operation delegates to a package API.
   `controls`, displayed results, chart data, warnings, and copied TypeScript describe the same input.
@@ -83,7 +112,7 @@ rehearsal, dirty source, mismatched expectations, wrong version, or changed copi
 also checks package-source equality with the receipt commit. Changed source stays labeled development
 even if someone forgot to bump the package version. This command does not publish or deploy anything.
 
-Preserve `site/dist/versions/<version>/` as an immutable build artifact for each actual release.
+Preserve `site/dist/docs/totalfinance/versions/<version>/` as an immutable build artifact for each actual release.
 For later builds, restore those directories into an archive root and set
 `TOTALFINANCE_DOCS_ARCHIVES=/absolute/path/to/archive-root`. The build copies the original pages, assets,
 search and version manifest; it does not regenerate historical docs from current source. Published
@@ -103,8 +132,10 @@ illustrative recording is never a model benchmark. See that directory's README f
 
 ## Maintainer handoff
 
-Use `docs/implementation-order.md` for the internal queue. Public learners start at `/`, not that file.
+Use `docs/implementation-order.md` for the internal queue. Public learners start at
+`/docs/totalfinance/`; the standalone homepage is `/`.
 Before deployment, perform a real browser/keyboard/mobile review and a supported-host WebMCP check
-where available. Browser access was declined during this implementation, so those visual/host checks
-are explicitly unverified—not substituted with unit tests. Domain, public repository, npm rights,
+where available. The original workbench implementation had no browser signoff. During the homepage
+split, Ri's browser refused loopback preview URLs; visual/mobile/keyboard and supported-host checks
+remain explicitly unverified. Domain, public repository, npm rights,
 release approvals and actual deployment remain maintainer-held.

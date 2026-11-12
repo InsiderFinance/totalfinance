@@ -21,9 +21,14 @@ import { restoreReleaseArchives } from './archives.js';
 import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/local/profiles.js';
 import { unitByName } from '../tools/fields-doc.js';
 import type { SearchRecord } from './src/search.js';
+import { DOCS_BASE, docsUrl, mountDocsHtml } from './paths.js';
+import { renderHomepage } from './src/homepage.js';
+import { brandMetadata } from './src/brand.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = join(ROOT, 'site/dist');
+const DOCS_OUT = join(OUT, DOCS_BASE);
+const BRAND_ASSETS = join(ROOT, 'site/brand/assets');
 const release = readSiteVersion(ROOT);
 export const tasks = [
   ['price-an-option', 'Price an option', 'Price, Greeks, and explicit model assumptions.'],
@@ -51,16 +56,22 @@ export const tasks = [
 ] as const;
 
 export function layout(title: string, body: string, active = ''): string {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${escapeHtml(title)} · TotalFinance</title><meta name="description" content="${escapeHtml(title)}: real finance calculations, explicit assumptions, and a complete TypeScript API reference. Learn TotalFinance with runnable examples."/><link rel="stylesheet" href="/assets/styles.css"/><script type="module" src="/assets/client.js"></script></head><body><a class="skip" href="#main">Skip to content</a><aside class="sidebar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">TF</span>TotalFinance</a><p class="version">${escapeHtml(release.label)}</p><nav aria-label="Documentation"><span class="nav-label">Start with a task</span>${tasks.map(([slug, label]) => `<a href="/learn/${slug}/"${slug === active ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a>`).join('')}<span class="nav-label">Go deeper</span><a href="/reference/">API reference</a><a href="/playgrounds/explore-scenarios/">Scenario playground</a><a href="/agents/">Agent handbook</a><a href="/guides/">Guides & conventions</a><a href="/versions/">Versions & stability</a></nav><p class="note">Local calculations.<br/>Explicit assumptions.<br/>Your data stays yours.</p></aside><div class="shell"><header class="topbar"><span class="eyebrow">The finance developer workbench</span><a class="button quiet" href="/search/">Search the reference <span aria-hidden="true">⌕</span></a><span class="version-badge">${escapeHtml(release.label)}</span></header><main id="main">${body}<footer><span>TotalFinance · Apache-2.0</span><a href="/versions/">Version & stability</a><a href="/agents/">For agents</a><span>Sample data is hypothetical. Analytics are not investment advice.</span></footer></main></div></body></html>`;
+  const description = `${title}: real finance calculations, explicit assumptions, and a complete TypeScript API reference. Learn TotalFinance with runnable examples.`;
+  const metadata = brandMetadata({
+    title: `${title} · TotalFinance`,
+    description,
+    assetBase: '/assets/brand',
+  });
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${escapeHtml(title)} · TotalFinance</title><meta name="description" content="${escapeHtml(description)}"/>${metadata}<link rel="stylesheet" href="/assets/styles.css"/><script type="module" src="/assets/client.js"></script></head><body><a class="skip" href="#main">Skip to content</a><aside class="sidebar"><a class="brand" href="/"><img class="brand-mark" src="/assets/brand/favicon.svg" width="36" height="36" alt=""/>TotalFinance</a><p class="version">${escapeHtml(release.label)}</p><nav aria-label="Documentation"><span class="nav-label">Start with a task</span>${tasks.map(([slug, label]) => `<a href="/learn/${slug}/"${slug === active ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a>`).join('')}<span class="nav-label">Go deeper</span><a href="/reference/">API reference</a><a href="/playgrounds/explore-scenarios/">Scenario playground</a><a href="/agents/">Agent handbook</a><a href="/guides/">Guides & conventions</a><a href="/versions/">Versions & stability</a></nav><p class="note">Local calculations.<br/>Explicit assumptions.<br/>Your data stays yours.</p></aside><div class="shell"><header class="topbar"><span class="eyebrow">The finance developer workbench</span><a class="button quiet" href="/search/">Search the reference <span aria-hidden="true">⌕</span></a><span class="version-badge">${escapeHtml(release.label)}</span></header><main id="main">${body}<footer><span>TotalFinance · Apache-2.0</span><a href="/versions/">Version & stability</a><a href="/agents/">For agents</a><span>Sample data is hypothetical. Analytics are not investment advice.</span></footer></main></div></body></html>`;
 }
 
 const pages = new Map<string, string>();
 const memberPages = new Map<string, { url: string; first: string; last: string }[]>();
 function page(path: string, title: string, body: string, active = ''): void {
-  const directory = join(OUT, path);
+  const directory = join(DOCS_OUT, path);
   mkdirSync(directory, { recursive: true });
   const html = layout(title, body, active);
-  writeFileSync(join(directory, 'index.html'), html);
+  writeFileSync(join(directory, 'index.html'), mountDocsHtml(html));
   pages.set(path ? `/${path}/` : '/', html);
 }
 
@@ -95,16 +106,20 @@ export async function buildSite(): Promise<void> {
   rmSync(OUT, { recursive: true, force: true });
   pages.clear();
   memberPages.clear();
-  mkdirSync(join(OUT, 'assets'), { recursive: true });
+  mkdirSync(join(DOCS_OUT, 'assets'), { recursive: true });
+  cpSync(BRAND_ASSETS, join(DOCS_OUT, 'assets/brand'), { recursive: true });
   const archivedVersions = restoreReleaseArchives(
     process.env['TOTALFINANCE_DOCS_ARCHIVES'],
-    OUT,
+    DOCS_OUT,
     release,
   );
-  writeFileSync(join(OUT, 'assets/styles.css'), readFileSync(join(ROOT, 'site/src/styles.css')));
+  writeFileSync(
+    join(DOCS_OUT, 'assets/styles.css'),
+    readFileSync(join(ROOT, 'site/src/styles.css')),
+  );
   await build({
     entryPoints: [join(ROOT, 'site/src/client.ts'), join(ROOT, 'site/src/calculation-worker.ts')],
-    outdir: join(OUT, 'assets'),
+    outdir: join(DOCS_OUT, 'assets'),
     bundle: true,
     splitting: true,
     format: 'esm',
@@ -434,21 +449,24 @@ export async function buildSite(): Promise<void> {
     </div>`,
   );
 
-  writeFileSync(join(OUT, 'search-index.json'), JSON.stringify(searchRecords));
-  writeFileSync(join(OUT, 'version.json'), JSON.stringify(release, null, 2));
-  writeFileSync(join(OUT, 'operation-catalog.json'), JSON.stringify(reference.operations));
-  cpSync(join(ROOT, 'packages/http/etc/openapi.json'), join(OUT, 'openapi.json'));
+  writeFileSync(
+    join(DOCS_OUT, 'search-index.json'),
+    JSON.stringify(searchRecords.map((record) => ({ ...record, url: docsUrl(record.url) }))),
+  );
+  writeFileSync(join(DOCS_OUT, 'version.json'), JSON.stringify(release, null, 2));
+  writeFileSync(join(DOCS_OUT, 'operation-catalog.json'), JSON.stringify(reference.operations));
+  cpSync(join(ROOT, 'packages/http/etc/openapi.json'), join(DOCS_OUT, 'openapi.json'));
   const entrypointInventory = reference.packages.map((pkg) => ({
     package: pkg.name,
     entrypoints: pkg.entrypoints,
   }));
   writeFileSync(
-    join(OUT, 'reference-coverage.json'),
+    join(DOCS_OUT, 'reference-coverage.json'),
     JSON.stringify({
       packages: entrypointInventory,
       exportPaths: reference.entries.map((entry) => ({
         id: entry.id,
-        url: exportUrls.get(entry.id)!,
+        url: docsUrl(exportUrls.get(entry.id)!),
       })),
     }),
   );
@@ -461,28 +479,27 @@ export async function buildSite(): Promise<void> {
           return path ? `](/${path}/${fragment ?? ''})` : `](/guides/)`;
         },
       );
-      writeFileSync(join(OUT, name), text);
+      writeFileSync(join(DOCS_OUT, name), text.replace(/\]\(\/(?!\/)/g, `](${DOCS_BASE}/`));
     }
   // A complete self-contained version snapshot, not a selector that silently serves today's API.
-  const versionBase = `/versions/${release.version}`;
+  const versionBase = docsUrl(`/versions/${release.version}`);
   for (const [url, html] of pages) {
     const target = join(OUT, versionBase, url);
     mkdirSync(target, { recursive: true });
-    writeFileSync(
-      join(target, 'index.html'),
-      html
-        .replace('<html lang="en">', `<html lang="en" data-base="${versionBase}">`)
-        .replace(/(href|src|action)="\/(?!versions\/)/g, `$1="${versionBase}/`),
-    );
+    writeFileSync(join(target, 'index.html'), mountDocsHtml(html, versionBase));
   }
-  cpSync(join(OUT, 'assets'), join(OUT, versionBase, 'assets'), { recursive: true });
+  cpSync(join(DOCS_OUT, 'assets'), join(OUT, versionBase, 'assets'), { recursive: true });
   for (const name of ['version.json', 'operation-catalog.json', 'openapi.json'])
-    if (existsSync(join(OUT, name))) cpSync(join(OUT, name), join(OUT, versionBase, name));
+    if (existsSync(join(DOCS_OUT, name)))
+      cpSync(join(DOCS_OUT, name), join(OUT, versionBase, name));
   for (const name of ['llms.txt', 'llms-full.txt'])
-    if (existsSync(join(OUT, name)))
+    if (existsSync(join(DOCS_OUT, name)))
       writeFileSync(
         join(OUT, versionBase, name),
-        readFileSync(join(OUT, name), 'utf8').replace(/\]\(\/(?!versions\/)/g, `](${versionBase}/`),
+        readFileSync(join(DOCS_OUT, name), 'utf8').replaceAll(
+          `](${DOCS_BASE}/`,
+          `](${versionBase}/`,
+        ),
       );
   writeFileSync(
     join(OUT, versionBase, 'reference-coverage.json'),
@@ -501,20 +518,36 @@ export async function buildSite(): Promise<void> {
     ),
   );
   writeFileSync(
-    join(OUT, 'available-versions.json'),
+    join(DOCS_OUT, 'available-versions.json'),
     JSON.stringify({ current: release.version, archived: archivedVersions }),
   );
-  writeFileSync(join(OUT, 'routes.json'), JSON.stringify([...pages.keys()]));
+  const routes = [
+    '/',
+    ...[...pages.keys()].map((url) => docsUrl(url)),
+    ...[...pages.keys()].map((url) => docsUrl(url, versionBase)),
+  ];
+  writeFileSync(join(DOCS_OUT, 'routes.json'), JSON.stringify(routes));
+  mkdirSync(join(OUT, 'assets'), { recursive: true });
+  cpSync(BRAND_ASSETS, join(OUT, 'assets/brand'), { recursive: true });
+  for (const name of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png'])
+    cpSync(join(BRAND_ASSETS, name), join(OUT, name));
+  writeFileSync(
+    join(OUT, 'assets/homepage.css'),
+    readFileSync(join(ROOT, 'site/src/homepage.css')),
+  );
+  writeFileSync(join(OUT, 'index.html'), renderHomepage());
   writeFileSync(join(OUT, 'robots.txt'), 'User-agent: *\nAllow: /\n');
   writeFileSync(
     join(OUT, '404.html'),
-    layout(
-      'Page not found',
-      '<h1>That page is not here.</h1><p>Try <a href="/search/">search</a>, the <a href="/reference/">API reference</a>, or <a href="/">start with a task</a>.</p>',
+    mountDocsHtml(
+      layout(
+        'Page not found',
+        '<h1>That page is not here.</h1><p>Try <a href="/search/">search</a>, the <a href="/reference/">API reference</a>, or <a href="/">start with a task</a>.</p>',
+      ),
     ),
   );
   console.log(
-    `TotalFinance site built: ${pages.size} routes, ${reference.entries.length} export paths, ${reference.operations.length} operations. Output: ${OUT}`,
+    `TotalFinance site built: ${routes.length} routes, ${reference.entries.length} export paths, ${reference.operations.length} operations. Output: ${OUT}`,
   );
 }
 

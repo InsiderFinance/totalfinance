@@ -5,12 +5,71 @@ import { describe, expect, it } from 'vitest';
 import { gzipSync } from 'node:zlib';
 import { readSiteVersion } from '../version.js';
 import { search, type SearchRecord } from '../src/search.js';
+import { DOCS_BASE, docsUrl } from '../paths.js';
+import { options } from '../src/playgrounds/options.js';
+import { escapeHtml, formatNumber, renderChart } from '../src/render.js';
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = join(ROOT, 'site/dist');
+const SITE_OUT = join(ROOT, 'site/dist');
+const OUT = join(SITE_OUT, DOCS_BASE);
 const version = readSiteVersion(ROOT);
+const versionBase = docsUrl(`/versions/${version.version}`);
 
 describe('built public documentation', () => {
+  it('ships vector branding, real favicon/social files, and sharing metadata through every docs mount', () => {
+    const homepage = readFileSync(join(SITE_OUT, 'index.html'), 'utf8');
+    expect(homepage).toContain('href="https://totalfinance.io/"');
+    expect(homepage).toContain('property="og:url" content="https://totalfinance.io/"');
+    expect(homepage).toContain('name="twitter:card" content="summary_large_image"');
+    expect(homepage).toContain(
+      'property="og:image" content="https://totalfinance.io/assets/brand/og.png"',
+    );
+    const logo = readFileSync(join(SITE_OUT, 'assets/brand/logo.svg'), 'utf8');
+    expect(logo).toContain('<path');
+    expect(logo).not.toMatch(/<image|data:image|<script/);
+    const png = readFileSync(join(SITE_OUT, 'assets/brand/og.png'));
+    expect(png.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
+    const touch = readFileSync(join(SITE_OUT, 'apple-touch-icon.png'));
+    expect([touch.readUInt32BE(16), touch.readUInt32BE(20)]).toEqual([180, 180]);
+    const ico = readFileSync(join(SITE_OUT, 'favicon.ico'));
+    expect(ico.readUInt16LE(2)).toBe(1);
+    expect(ico.readUInt16LE(4)).toBe(3);
+    for (const base of [DOCS_BASE, versionBase]) {
+      const html = readFileSync(join(SITE_OUT, base, 'learn/price-an-option/index.html'), 'utf8');
+      expect(html).toContain(`href="${base}/assets/brand/favicon.svg"`);
+      expect(html).toContain(`src="${base}/assets/brand/favicon.svg"`);
+      expect(html).toContain('property="og:title" content="Price a European call · TotalFinance"');
+      expect(readFileSync(join(SITE_OUT, base, 'assets/brand/og.png'))).toEqual(png);
+      expect(readFileSync(join(SITE_OUT, base, 'assets/brand/logo.svg'), 'utf8')).toBe(logo);
+    }
+  });
+
+  it('separates the homepage from the workbench and reuses the installed-consumer-proven example', () => {
+    const homepage = readFileSync(join(SITE_OUT, 'index.html'), 'utf8');
+    const workbench = readFileSync(join(OUT, 'index.html'), 'utf8');
+    const calculation = options.run(
+      Object.fromEntries(options.controls.map((control) => [control.name, control.value])),
+    );
+    expect(homepage).toContain('Finance,<br/>in your <span>code.</span>');
+    expect(homepage).not.toContain('class="sidebar"');
+    expect(homepage).toContain(`href="${docsUrl('/guides/start/')}"`);
+    expect(homepage).toContain(`href="${docsUrl('/reference/')}"`);
+    expect(homepage).toContain(
+      `id="homepage-example">${escapeHtml(calculation.example.code)}</code>`,
+    );
+    expect(homepage).toContain(
+      `${formatNumber(calculation.example.result as number)}<small> USD / share`,
+    );
+    expect(homepage).toContain(renderChart(calculation.chart));
+    expect(homepage).toContain('Hypothetical inputs');
+    expect(homepage).toContain('Pre-1.0 software');
+    expect(workbench).toContain('What do you want<br/>to calculate?');
+    expect(workbench).toContain(`data-base="${DOCS_BASE}"`);
+    expect(existsSync(join(SITE_OUT, 'reference'))).toBe(false);
+    expect(existsSync(join(SITE_OUT, 'learn'))).toBe(false);
+  });
+
   it('keeps natural task/function searches useful against the complete generated index', () => {
     const records = JSON.parse(
       readFileSync(join(OUT, 'search-index.json'), 'utf8'),
@@ -39,7 +98,7 @@ describe('built public documentation', () => {
       ['backtest a strategy', '/learn/backtest-a-strategy/'],
       ['connect an agent', '/agents/'],
     ])
-      expect(search(records, query!)[0]!.url, query).toBe(url);
+      expect(search(records, query!)[0]!.url, query).toBe(docsUrl(url!));
     // #336 is integrated: missing sector exports must fail, not silently skip this gate.
     expect(search(records, 'sector performance')[0]!.title).toBe('sectorPerformance');
 
@@ -47,7 +106,7 @@ describe('built public documentation', () => {
       readFileSync(join(OUT, 'versions', version.version, 'search-index.json'), 'utf8'),
     ) as SearchRecord[];
     expect(search(pinned, 'black scholes').map((record) => record.url)).toEqual(
-      blackScholes.map((record) => `/versions/${version.version}${record.url}`),
+      blackScholes.map((record) => `${versionBase}${record.url.slice(DOCS_BASE.length)}`),
     );
   });
 
@@ -89,13 +148,13 @@ describe('built public documentation', () => {
     const routes = JSON.parse(readFileSync(join(OUT, 'routes.json'), 'utf8')) as string[];
     const missing = new Set<string>();
     for (const route of routes) {
-      const html = readFileSync(join(OUT, route, 'index.html'), 'utf8');
+      const html = readFileSync(join(SITE_OUT, route, 'index.html'), 'utf8');
       expect(
         Buffer.byteLength(html),
         `${route}: split large contracts into bounded pages`,
       ).toBeLessThan(350_000);
-      for (const match of html.matchAll(/(?:href|src)="(\/[^"#?]*)(?:[?#][^"]*)?"/g)) {
-        const path = join(OUT, decodeURIComponent(match[1]!));
+      for (const match of html.matchAll(/(?:href|src|action)="(\/[^"#?]*)(?:[?#][^"]*)?"/g)) {
+        const path = join(SITE_OUT, decodeURIComponent(match[1]!));
         if (
           !existsSync(path) ||
           (statSync(path).isDirectory() && !existsSync(join(path, 'index.html')))
@@ -125,7 +184,7 @@ describe('built public documentation', () => {
       const [url, anchor] = exported.url.split('#');
       let text = cache.get(url!);
       if (!text) {
-        text = readFileSync(join(OUT, url!, 'index.html'), 'utf8');
+        text = readFileSync(join(SITE_OUT, url!, 'index.html'), 'utf8');
         cache.set(url!, text);
       }
       expect(text.includes(`id="${decodeURIComponent(anchor!)}"`), exported.id).toBe(true);
@@ -137,14 +196,14 @@ describe('built public documentation', () => {
       join(OUT, 'versions', version.version, 'learn/price-an-option/index.html'),
       'utf8',
     );
-    expect(pinned).toContain(`data-base="/versions/${version.version}"`);
-    expect(pinned).toContain(`href="/versions/${version.version}/reference/"`);
-    expect(pinned).toContain(`src="/versions/${version.version}/assets/client.js"`);
+    expect(pinned).toContain(`data-base="${versionBase}"`);
+    expect(pinned).toContain(`href="${versionBase}/reference/"`);
+    expect(pinned).toContain(`src="${versionBase}/assets/client.js"`);
     expect(
       readFileSync(join(OUT, 'versions', version.version, 'reference/index.html'), 'utf8'),
-    ).toContain(`action="/versions/${version.version}/search/"`);
+    ).toContain(`action="${versionBase}/search/"`);
     expect(readFileSync(join(OUT, 'versions', version.version, 'llms.txt'), 'utf8')).toContain(
-      `](/versions/${version.version}/guides/assumptions/)`,
+      `](${versionBase}/guides/assumptions/)`,
     );
     expect(readFileSync(join(OUT, 'versions', version.version, 'assets/client.js'))).toEqual(
       readFileSync(join(OUT, 'assets/client.js')),
@@ -161,6 +220,6 @@ describe('built public documentation', () => {
     expect(JSON.parse(readFileSync(join(OUT, 'version.json'), 'utf8'))).toEqual(version);
     expect(existsSync(join(OUT, '.git'))).toBe(false);
     expect(existsSync(join(OUT, 'implementation-order.md'))).toBe(false);
-    expect(resolve(OUT)).toBe(join(ROOT, 'site/dist'));
+    expect(resolve(SITE_OUT)).toBe(join(ROOT, 'site/dist'));
   });
 });

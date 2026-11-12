@@ -32,7 +32,7 @@ export function restoreReleaseArchives(
       if (stat.isSymbolicLink())
         throw new Error('Documentation archives must not contain symlinks.');
       if (stat.isDirectory()) for (const child of readdirSync(path)) walk(join(path, child));
-      else if (!/\.(?:html|css|js|json|txt)$/.test(path))
+      else if (!/\.(?:html|css|js|json|txt|svg|png|ico)$/.test(path))
         throw new Error(`Unexpected documentation archive asset: ${path}`);
     };
     walk(source);

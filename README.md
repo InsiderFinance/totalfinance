@@ -8,9 +8,10 @@ TotalFinance aims to be the best TypeScript-native alternative to the combined p
 QuantLib, TA-Lib, py_vollib, vectorbt, and modern options-flow dashboards — without leaving the
 JavaScript ecosystem.
 
-Start with the [public developer workbench](./site/README.md): task guides, runnable calculators,
-searchable API reference, and the agent handbook. Its source is checked in under `site/`;
-the preview instructions work from any checkout of this branch. Public hosting is not yet enabled.
+The [TotalFinance website](./site/README.md) includes a standalone homepage at `/` and the developer
+workbench at `/docs/totalfinance/`: task guides, runnable calculators, searchable API reference, and
+the agent handbook. Its source is checked in under `site/`; the preview instructions work from any
+checkout of this branch. Public hosting is not yet enabled.
 
 **Status: pre-1.0, published to npm as `@insiderfinance/totalfinance`** (the optional MCP package
 is not yet published). The release has **two packages**:

@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 245,
+    "surfaces": 247,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 59,
+      "future-target": 61,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4612,
+    "executableFences": 4613,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 59,
+    "checkedUnderVocabulary": 61,
     "shippedNamesWatched": 9748,
     "documentedExceptions": 7,
     "findings": 0
@@ -635,6 +635,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/runbooks/deploy-totalfinance-site.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 1
+    },
+    {
       "path": "docs/runbooks/release-pair-legacy.md",
       "class": "future-target",
       "owner": "human",
@@ -927,6 +934,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 3
+    },
+    {
+      "path": "docs/specs/homepage-and-docs-routing.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/inflation.md",

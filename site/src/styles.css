@@ -129,13 +129,10 @@
     align-items: center;
   }
   .brand-mark {
-    border: 1px solid #607b9e;
     border-radius: 6px;
-    width: 29px;
-    height: 29px;
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 450;
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
   }
   .sidebar .version {
     color: #adbed4;

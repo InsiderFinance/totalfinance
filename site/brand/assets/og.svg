@@ -1,0 +1,234 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+>
+  <title>TotalFinance — The most complete finance toolkit.</title>
+  <rect width="1200" height="630" fill="#fafbf8" />
+  <path d="M0 0h1200v9H0Z" fill="#078754" />
+  <g transform="translate(55 39) scale(.067)">
+    <title>TotalFinance</title>
+    <desc>
+      Editable vector recreation of the supplied green code braces and ascending financial bars.
+    </desc>
+    <defs>
+      <linearGradient
+        id="mark0-left-green"
+        x1="160"
+        y1="135"
+        x2="305"
+        y2="890"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#22cd80" />
+        <stop offset=".5" stop-color="#07a866" />
+        <stop offset="1" stop-color="#099d60" />
+      </linearGradient>
+      <linearGradient
+        id="mark0-right-green"
+        x1="720"
+        y1="135"
+        x2="905"
+        y2="890"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#008a4a" />
+        <stop offset=".5" stop-color="#006d40" />
+        <stop offset="1" stop-color="#00864a" />
+      </linearGradient>
+      <linearGradient
+        id="mark0-bars-green"
+        x1="285"
+        y1="510"
+        x2="760"
+        y2="640"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#38d992" />
+        <stop offset=".55" stop-color="#24bc7b" />
+        <stop offset="1" stop-color="#00874c" />
+      </linearGradient>
+      <linearGradient
+        id="mark0-ribbon-green"
+        x1="256"
+        y1="640"
+        x2="765"
+        y2="820"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#009b61" />
+        <stop offset="1" stop-color="#00623d" />
+      </linearGradient>
+      <path
+        id="mark0-left-brace"
+        d="M292 135h30a8 8 0 0 1 8 8v55a8 8 0 0 1-8 8h-19c-58 0-96 40-96 97v101c0 49-23 85-68 108 45 22 68 58 68 108v101c0 57 38 97 96 97h19a8 8 0 0 1 8 8v55a8 8 0 0 1-8 8h-30c-93 0-169-71-169-165v-97c0-44-21-76-60-82a8 8 0 0 1-7-8v-50a8 8 0 0 1 7-8c39-6 60-38 60-82v-97c0-94 76-165 169-165Z"
+      />
+      <clipPath id="mark0-left-clip"><use xlink:href="#mark0-left-brace" /></clipPath>
+      <clipPath id="mark0-right-clip">
+        <use xlink:href="#mark0-left-brace" transform="translate(1024 0) scale(-1 1)" />
+      </clipPath>
+      <clipPath id="mark0-bars-clip">
+        <path
+          d="M282 815v-59c0-66 38-139 88-186v204c-30 10-60 25-88 41ZM398 766V544c29-41 65-76 106-108v311c-36 1-72 8-106 19ZM530 747V418c35-30 72-56 112-79v426c-37-12-74-18-112-18ZM670 778V325c25-15 52-23 80-23a7 7 0 0 1 7 7v520c-27-21-57-38-87-51Z"
+        />
+      </clipPath>
+    </defs>
+    <use xlink:href="#mark0-left-brace" fill="url(#mark0-left-green)" />
+    <g clip-path="url(#mark0-left-clip)">
+      <path
+        d="M48 328c82-58 177-105 290-115v172c-123 31-210 84-290 146Z"
+        fill="#008a51"
+        opacity=".36"
+      />
+      <path
+        d="M48 508c111-15 172 103 290 229v114C209 813 130 746 48 672Z"
+        fill="#005735"
+        opacity=".84"
+      />
+    </g>
+    <use
+      xlink:href="#mark0-left-brace"
+      transform="translate(1024 0) scale(-1 1)"
+      fill="url(#mark0-right-green)"
+    />
+    <g clip-path="url(#mark0-right-clip)">
+      <path
+        d="M677 224c122 20 224 61 300 127v257c-71 26-126 113-200 167l-100-69Z"
+        fill="#005735"
+        opacity=".72"
+      />
+      <path d="M678 827c137-22 229-93 299-184v173H678Z" fill="#009e5c" opacity=".35" />
+    </g>
+    <g clip-path="url(#mark0-bars-clip)" transform="translate(0 -50)">
+      <path fill="url(#mark0-bars-green)" d="M260 290h520v550H260Z" />
+      <path d="M260 722c178-201 348-288 520-421v544H260Z" fill="#12a667" opacity=".65" />
+      <path d="M260 802c176-135 355-153 520 18v40H260Z" fill="url(#mark0-ribbon-green)" />
+      <path d="M260 817c178-132 355-145 520 20v23H260Z" fill="#18c77b" />
+      <path d="M260 827c178-130 355-141 520 23v22H260Z" fill="#6de0ad" />
+    </g>
+  </g>
+  <g fill="#15282b" font-family="Arial, Helvetica, sans-serif">
+    <text x="139" y="86" font-size="29" font-weight="700" letter-spacing="-.8">TotalFinance</text>
+    <text x="1136" y="78" text-anchor="end" font-size="12" letter-spacing="2" fill="#57676a">
+      BY INSIDERFINANCE
+    </text>
+    <text x="64" y="225" font-size="68" font-weight="700" letter-spacing="-2.2">
+      The most complete
+    </text>
+    <text x="64" y="303" font-size="68" font-weight="700" letter-spacing="-2.2" fill="#078754">
+      finance toolkit.
+    </text>
+    <text x="68" y="375" font-size="27" font-weight="700">For developers and AI agents.</text>
+    <text x="68" y="418" font-size="23" fill="#57676a">Built with TypeScript. Run anywhere.</text>
+    <text x="68" y="473" font-size="18" fill="#57676a">Options · Portfolios · Research · Risk</text>
+    <path d="M64 523h1072" stroke="#d6e1d7" />
+    <text x="66" y="577" font-size="22" font-weight="700" fill="#078754">totalfinance.io</text>
+    <text x="1136" y="577" text-anchor="end" font-size="17" fill="#57676a">
+      Open source · Apache-2.0
+    </text>
+  </g>
+  <rect x="795" y="161" width="340" height="340" rx="28" fill="#edf4eb" />
+  <g transform="translate(811 175) scale(.303)">
+    <title>TotalFinance</title>
+    <desc>
+      Editable vector recreation of the supplied green code braces and ascending financial bars.
+    </desc>
+    <defs>
+      <linearGradient
+        id="mark1-left-green"
+        x1="160"
+        y1="135"
+        x2="305"
+        y2="890"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#22cd80" />
+        <stop offset=".5" stop-color="#07a866" />
+        <stop offset="1" stop-color="#099d60" />
+      </linearGradient>
+      <linearGradient
+        id="mark1-right-green"
+        x1="720"
+        y1="135"
+        x2="905"
+        y2="890"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#008a4a" />
+        <stop offset=".5" stop-color="#006d40" />
+        <stop offset="1" stop-color="#00864a" />
+      </linearGradient>
+      <linearGradient
+        id="mark1-bars-green"
+        x1="285"
+        y1="510"
+        x2="760"
+        y2="640"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#38d992" />
+        <stop offset=".55" stop-color="#24bc7b" />
+        <stop offset="1" stop-color="#00874c" />
+      </linearGradient>
+      <linearGradient
+        id="mark1-ribbon-green"
+        x1="256"
+        y1="640"
+        x2="765"
+        y2="820"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#009b61" />
+        <stop offset="1" stop-color="#00623d" />
+      </linearGradient>
+      <path
+        id="mark1-left-brace"
+        d="M292 135h30a8 8 0 0 1 8 8v55a8 8 0 0 1-8 8h-19c-58 0-96 40-96 97v101c0 49-23 85-68 108 45 22 68 58 68 108v101c0 57 38 97 96 97h19a8 8 0 0 1 8 8v55a8 8 0 0 1-8 8h-30c-93 0-169-71-169-165v-97c0-44-21-76-60-82a8 8 0 0 1-7-8v-50a8 8 0 0 1 7-8c39-6 60-38 60-82v-97c0-94 76-165 169-165Z"
+      />
+      <clipPath id="mark1-left-clip"><use xlink:href="#mark1-left-brace" /></clipPath>
+      <clipPath id="mark1-right-clip">
+        <use xlink:href="#mark1-left-brace" transform="translate(1024 0) scale(-1 1)" />
+      </clipPath>
+      <clipPath id="mark1-bars-clip">
+        <path
+          d="M282 815v-59c0-66 38-139 88-186v204c-30 10-60 25-88 41ZM398 766V544c29-41 65-76 106-108v311c-36 1-72 8-106 19ZM530 747V418c35-30 72-56 112-79v426c-37-12-74-18-112-18ZM670 778V325c25-15 52-23 80-23a7 7 0 0 1 7 7v520c-27-21-57-38-87-51Z"
+        />
+      </clipPath>
+    </defs>
+    <use xlink:href="#mark1-left-brace" fill="url(#mark1-left-green)" />
+    <g clip-path="url(#mark1-left-clip)">
+      <path
+        d="M48 328c82-58 177-105 290-115v172c-123 31-210 84-290 146Z"
+        fill="#008a51"
+        opacity=".36"
+      />
+      <path
+        d="M48 508c111-15 172 103 290 229v114C209 813 130 746 48 672Z"
+        fill="#005735"
+        opacity=".84"
+      />
+    </g>
+    <use
+      xlink:href="#mark1-left-brace"
+      transform="translate(1024 0) scale(-1 1)"
+      fill="url(#mark1-right-green)"
+    />
+    <g clip-path="url(#mark1-right-clip)">
+      <path
+        d="M677 224c122 20 224 61 300 127v257c-71 26-126 113-200 167l-100-69Z"
+        fill="#005735"
+        opacity=".72"
+      />
+      <path d="M678 827c137-22 229-93 299-184v173H678Z" fill="#009e5c" opacity=".35" />
+    </g>
+    <g clip-path="url(#mark1-bars-clip)" transform="translate(0 -50)">
+      <path fill="url(#mark1-bars-green)" d="M260 290h520v550H260Z" />
+      <path d="M260 722c178-201 348-288 520-421v544H260Z" fill="#12a667" opacity=".65" />
+      <path d="M260 802c176-135 355-153 520 18v40H260Z" fill="url(#mark1-ribbon-green)" />
+      <path d="M260 817c178-132 355-145 520 20v23H260Z" fill="#18c77b" />
+      <path d="M260 827c178-130 355-141 520 23v22H260Z" fill="#6de0ad" />
+    </g>
+  </g>
+</svg>

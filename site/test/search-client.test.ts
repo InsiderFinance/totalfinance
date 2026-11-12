@@ -184,9 +184,11 @@ describe('search loading (mock document, not visual browser verification)', () =
 
   it('uses the version-pinned index for URL queries and retains honest empty results', async () => {
     const fetchMock = vi.fn().mockResolvedValue(response());
-    const page = await setup(fetchMock, '?q=newer', '/versions/0.1.0-preview.0');
+    const page = await setup(fetchMock, '?q=newer', '/docs/totalfinance/versions/0.1.0-preview.0');
     await settle();
-    expect(fetchMock).toHaveBeenCalledWith('/versions/0.1.0-preview.0/search-index.json');
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/docs/totalfinance/versions/0.1.0-preview.0/search-index.json',
+    );
     expect(page.results.innerHTML).toContain('newer');
     page.submit('absent');
     await settle();

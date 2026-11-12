@@ -11,6 +11,23 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
+### Active bounded site work: homepage and docs separation (2026-11-11)
+
+The maintainer authorized the standalone homepage and separation of the existing workbench under
+`/docs/totalfinance/`; InsiderFinance's later landing page will use `/totalfinance`. Follow
+[the bounded contract](./specs/homepage-and-docs-routing.md), H1–H4. This is local site work only;
+the InsiderFinance app, external rewrite, deployment, release versions and publication stay separate.
+H1–H3 are locally verified: 81 site tests, the installed 24-example consumer check, typecheck/build,
+and generated route/link checks pass. H4's visual review remains open because Ri's browser refuses
+loopback preview URLs; local HTTP checks and hosting instructions do not substitute for that review.
+The numerical/release work retains its own scope and verification records.
+
+Branding/deployment handoff amendment (2026-11-12), in the same contract: supplied-artwork reference,
+editable SVG recreation, favicon/Apple/social exports, homepage/docs metadata, static Vercel config,
+exact-runtime build wrapper and [numbered deployment guide](./runbooks/deploy-totalfinance-site.md).
+Both wrapper commands, site typecheck/lint and 82 site tests pass locally. No hosted project, DNS,
+InsiderFinance app, package version or publication change is made; H4 remains a hosted-preview review.
+
 ### Completed: GitHub Release → SDK publication (2026-11-11)
 
 SDK 0.1.3 is public; main `ca122ab` and the original release run are green. The paragraphs below preserve the initial preparation scope and its bounded production follow-up.
