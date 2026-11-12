@@ -135,3 +135,17 @@ correction. The prior byte-identical-site statement applies to54e758b; this late
 only that necessary authored domain metadata/page. SDK/provider/starter/author binary packs remain
 hash-identical; no SDK source, financial computation or budget setting changed. New exact-head
 FAST+FULL are required; first failed runs are retained as history.
+
+## Second hosted run and independent-oracle reconciliation
+
+At db4521e FAST43302797398/FULL43302779701 failed only the same two shard5 tests on all
+three full-workflow Node versions; merged coverage correctly retained those failures. All other
+shards, static checks, release rehearsal and clean regeneration passed. The independent union
+checker had treated unknown/any as non-nullable despite the strict compiler accepting null. It now
+asks TypeScript's null assignability directly, independently of the inventory producer; all41 parity
+cases and the separate strict compiler controls pass. No arm/depth/route threshold was relaxed.
+The alignment specification's authored live surface/enforcement/naming/package counters now match
+the actual generated artifacts (7979/2735/1620/1978;5469 candidates;44592 names). The existing
+executable exact-counter reconciliation remains unchanged. Targeted52 cases pass. Only affected
+documentation inventory is refreshed; these test/prose changes do not alter production inventories,
+SDK binaries, financial engines, packed hashes or budgets. Fresh exact-head FAST+FULL remain required.
