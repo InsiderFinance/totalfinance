@@ -5,6 +5,17 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
+[Proposed C5 contract](./specs/community-connector-c5-author-contract.md) is ready for coordinator
+technical review before runtime/signature changes. New isolated branch is based on accepted3bc356f;
+current mainca122ab is already included. C4 fast/full green and coordinator acceptance remain
+historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
+
+- [x] Read current task, independent second-provider review/probes and existing contracts.
+- [x] Draft examples, protocol ownership, limits, safe errors, timestamps, resume and quality choices.
+- [ ] Coordinator C5 technical review, then bounded implementation/compatibility/measurement proof.
+- [ ] Source-final generation/local gates and fresh exact-head fast/full; later connected acceptance separate.
+
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
 7,971 public paths and43,849 naming identities/zero unresolved. Final public/packed/guide verification passes at source6162130;

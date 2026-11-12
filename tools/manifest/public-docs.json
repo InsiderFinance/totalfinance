@@ -1,18 +1,18 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 261,
+    "surfaces": 263,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 73,
+      "future-target": 75,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4669,
+    "executableFences": 4673,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 73,
+    "checkedUnderVocabulary": 75,
     "shippedNamesWatched": 9889,
     "documentedExceptions": 9,
     "findings": 0
@@ -698,6 +698,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c5-spec-2026-11-12.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/dogfood-0.1.3.md",
       "class": "future-target",
       "owner": "human",
@@ -829,6 +836,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 2
+    },
+    {
+      "path": "docs/specs/community-connector-c5-author-contract.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 4
     },
     {
       "path": "docs/specs/community-connector-foundation.md",
