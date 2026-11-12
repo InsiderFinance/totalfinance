@@ -1,4 +1,3 @@
-import { Buffer } from 'node:buffer';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createStarterProvider } from './dist/index.js';

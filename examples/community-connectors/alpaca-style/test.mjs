@@ -96,11 +96,11 @@ test('page3 throttle persists consumed work then deliberately resumes without re
   let once = true;
   const fetch = makeVendorFetch(30),
     s = source(async (url, init) => {
-      const token = new URL(url).searchParams.get('page_token');
+      const token = new globalThis.URL(url).searchParams.get('page_token');
       seen.push(token);
       if (token === '20' && once) {
         once = false;
-        return new Response('{}', { status: 429 });
+        return new globalThis.Response('{}', { status: 429 });
       }
       return fetch(url, init);
     });
@@ -136,7 +136,7 @@ test('suspect finite values are retained, default stop, deliberate exclusion/use
           const r = await fetch(url, init),
             b = await r.json();
           b.bars[1].h = 50;
-          return new Response(JSON.stringify(b));
+          return new globalThis.Response(JSON.stringify(b));
         }),
       )
       .priceBars(request);

@@ -121,3 +121,17 @@ source-tests.log/full-packed.log and adjacent compact JSON. Historical candidate
 No merge/publication/new version/deployment/provider remote/InsiderFinance API-server/staging/
 secret/allowance/key/grant/account/paper/recurring/live action occurred. Final hosted acceptance and
 coordinator review still required; no source/receipt commit will be added after green without reruns.
+
+## First hosted run and required docs integration correction
+
+At2a9a3f2 FAST43299168023/FULL43299165338 failed, not accepted: the recovered site's reference
+builder required an authored data-domain title. Static checks found unqualified URL/Response in the
+independent .mjs tests and an unused Buffer import. Release rehearsal and clean regeneration passed.
+Added only the required research-data domain metadata/page with existing guide/reference components;
+no layout/branding/behavior redesign. Its real domain route resolves in the existing exhaustive link
+gate. Qualified native globals and removed the unused import, with no lint/environment rule change.
+All202 site tests/16files, frozen site typecheck/build and fresh installed7 author cases pass after
+correction. The prior byte-identical-site statement applies to54e758b; this later integration adds
+only that necessary authored domain metadata/page. SDK/provider/starter/author binary packs remain
+hash-identical; no SDK source, financial computation or budget setting changed. New exact-head
+FAST+FULL are required; first failed runs are retained as history.
