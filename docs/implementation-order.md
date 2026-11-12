@@ -8,7 +8,7 @@
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
 [Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
 projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
-main23fbf06 plus latest3555f93 authored/site/README changes are reconciled (inherited0.1.4); normal ancestry recording and source-final generated acceptance remain pending. C4 fast/full green and coordinator acceptance remain
+main23fbf06 plus3555f93 authored/site/README changes are reconciled (inherited0.1.4). Prior225c1bb exact-head FAST/FULL passed; ca176773 identified one remaining continuation preflight ordering repair, now locally corrected and awaiting fresh hosted acceptance. Latest fetched9828b0a is site/docs-only relative to the integrated package/runtime/budget paths; no site redesign or unrelated reconciliation is part of this narrow fix. C4 fast/full green and coordinator acceptance remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 
 - [x] Read current task, independent second-provider review/probes and existing contracts.
@@ -17,7 +17,8 @@ historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged
 - [x] Scoped source/installed proof and [exact measured budget](./reviews/community-connectors-c5-budget-2026-11-12.md) approved45c974dc; three required mutable-control/input/cross-copy corrections pass. Whole34/34 and installed54/54 fit ONLY reviewed limits. Final integration/public/generated/hosted acceptance remains pending.
 - [x] Source-final affected generation aligns actual inherited0.1.4 inputs: defective0, naming unresolved0, fixture join1343; source/type/API/public checks pass.
 - [x] Clean committed-source no-key recipe, all86 reference cases, independent author/starter, primary119.5,236 packed checks and approved whole/installed bounds pass; [local receipts](./reviews/community-connectors-c5-closure-2026-11-12.md).
-- [ ] Exact-head hosted fast/full and coordinator review; later maintainer/connected-agent/App acceptance separate.
+- [x] ca176773 bounded continuation preflight precedes canonical copying; cycle/accessor/work-limit controls refuse with zero source calls, while mutation/cross-copy laws pass against fresh packs.
+- [ ] New exact-head hosted fast/full and coordinator review after the preflight repair; later maintainer/connected-agent/App acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,

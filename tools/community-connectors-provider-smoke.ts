@@ -232,6 +232,26 @@ for(const code of ['input.wrong_type','input.missing_field','input.not_finite','
 const original={timestampMs:Date.parse('2026-10-26T04:00:00Z'),open:100,high:102,low:99,close:101,volume:10,adjusted:true,vwap:0};
 const facts={dataset:{id:'independent',version:'1'},receivedTimestampMs:1793404800000,adjustment:'split',consistency:'best-effort',timestampConvention:'session-start'};
 const times={observedTimestampMs:null,availableTimestampMs:null,sourceStoredTimestampMs:null};
+let continuationControls=0;
+for(const bind of [defineDataProvider,foreignDefine]){
+ let calls=0;const received=[];
+ const p=bind({protocol:'totalfinance-data-source',contractVersion:2,id:'cursor-check',version:'1',async capabilities(){return []},async query(q,controls){calls++;received.push({q,controls});return {data:[],nextCursor:'next',facts}}});
+ const first=await p.query(q,{limit:1});
+ for(const variation of ['cycle','accessor','work-limit']){
+  const cursor=structuredClone(first.continuation);let getterReads=0;
+  if(variation==='cycle')cursor.pins.extra=cursor.pins;
+  if(variation==='accessor')Object.defineProperty(cursor.pins,'datasetId',{enumerable:true,get(){getterReads++;return 'independent'}});
+  if(variation==='work-limit')cursor.pins.extra=Array(1_000_001).fill(0);
+  const before=calls;
+  await assert.rejects(p.query(q,{limit:1,cursor}),e=>{assert.equal(e.code,'data.invalid_response');assert.equal(e.name,'DataError');return true});
+  assert.equal(calls,before);assert.equal(getterReads,0);assert.equal(Object.isFrozen(cursor.pins),false);continuationControls++;
+ }
+ const cursor=structuredClone(first.continuation),options={limit:1,cursor},input={...q};
+ const pending=p.query(input,options);options.limit=100000;cursor.pins.datasetId='mutated';cursor.binding.query.to='2026-10-29';input.to='2026-10-29';
+ await pending;assert.equal(received.at(-1).controls.limit,1);assert.equal(received.at(-1).controls.pins.datasetId,'independent');assert.deepEqual(received.at(-1).q,q);assert.equal(Object.isFrozen(options),false);
+}
+assert.equal(continuationControls,6);
+console.log('BOUNDED_CONTINUATION_AND_SNAPSHOT_OK controls='+continuationControls);
 let copyControls=0;
 for(const bind of [defineDataProvider,foreignDefine])for(const variant of ['normal','missing-volume','suspect']){
  const bar={...original};if(variant==='missing-volume')delete bar.volume;if(variant==='suspect')bar.high=100;

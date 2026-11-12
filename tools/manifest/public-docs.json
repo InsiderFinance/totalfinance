@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 271,
+    "surfaces": 272,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 83,
+      "future-target": 84,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4707,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 83,
+    "checkedUnderVocabulary": 84,
     "shippedNamesWatched": 10110,
     "documentedExceptions": 9,
     "findings": 0
@@ -706,6 +706,13 @@
     },
     {
       "path": "docs/reviews/community-connectors-c5-closure-2026-11-12.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c5-cursor-2026-11-12.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",

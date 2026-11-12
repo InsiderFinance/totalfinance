@@ -1348,6 +1348,45 @@ it('refuses a consumer wrapper as the C5 raw-source binding before calling it', 
   expect(calls).toBe(0);
 });
 
+it.each(['cycle', 'accessor', 'work limit'] as const)(
+  'bounded continuation preflight refuses %s before serialization or source invocation',
+  async (variation) => {
+    let calls = 0,
+      getterReads = 0;
+    const provider = defineDataProvider(
+      source({
+        async query() {
+          calls++;
+          return page(0, 'next');
+        },
+      }),
+    );
+    const first = await provider.query(query, { limit: 1 });
+    const cursor = structuredClone(first.continuation) as unknown as {
+      pins: Record<string, unknown>;
+    };
+    if (variation === 'cycle') cursor.pins['extra'] = cursor.pins;
+    if (variation === 'accessor')
+      Object.defineProperty(cursor.pins, 'datasetId', {
+        enumerable: true,
+        get() {
+          getterReads++;
+          return 'independent';
+        },
+      });
+    if (variation === 'work limit') cursor.pins['extra'] = Array(1_000_001).fill(0);
+    const before = calls;
+    const { DataError } = await import('../src/errors.js');
+    const pending = provider.query(query, { limit: 1, cursor: cursor as never });
+    await expect(pending).rejects.toBeInstanceOf(DataError);
+    await expect(pending).rejects.toMatchObject({ code: 'data.invalid_response' });
+    expect(calls).toBe(before);
+    expect(getterReads).toBe(0);
+    expect(Object.isFrozen(cursor)).toBe(false);
+    expect(Object.isFrozen(cursor.pins)).toBe(false);
+  },
+);
+
 it('snapshots validated limit, query and nested continuation pins before asynchronous dispatch', async () => {
   const seen: unknown[] = [];
   const p = defineDataProvider(

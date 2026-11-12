@@ -51,8 +51,9 @@ export function defineDataProvider(source: DataProviderSource): DataProvider {
       const signal = o['signal'],
         limit = o['limit'] as number;
       const q = freezeData(input);
-      const continuation = o['cursor'] === undefined ? undefined : freezeData(o['cursor']);
-      if (continuation !== undefined) continuationData(continuation, q, identity);
+      const rawCursor = o['cursor'];
+      if (rawCursor !== undefined) continuationData(rawCursor, q, identity);
+      const continuation = rawCursor === undefined ? undefined : freezeData(rawCursor);
       const binding = freezeData({ provider: identity, query: q }),
         cursor = continuation?.cursor ?? null,
         pins = continuation?.pins ?? null;

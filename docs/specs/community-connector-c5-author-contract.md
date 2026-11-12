@@ -659,3 +659,16 @@ pass input/error/pre/in-flight abort/missing-volume/suspect-selector kit control
 candidate still must fit reviewed caps and complete source-final generation/current-head hosted gates.
 
 Final local source/packed/generator receipts: [C5 closure](../reviews/community-connectors-c5-closure-2026-11-12.md). Hosted exact-head and coordinator implementation acceptance remain open at this commit; feature in_progress.
+
+## Continuation preflight correction (ca176773, 2026-11-12)
+
+225c1bb FAST/FULL green and its independently accepted controls remain historical evidence. The
+coordinator reproduced a raw RangeError because the owned continuation copy was made before its
+existing bounded validation. The narrow correction validates the ORIGINAL continuation once through
+continuationData synchronously, then canonical-copies/freezes that validated data before async
+dispatch. No public shape, scanner, serializer, catch or error catalog changes. Caller ownership and
+real AbortSignal remain intact. Cyclic/accessor/work-limit controls refuse as existing typed
+data.invalid_response with zero source invocations; post-call limit/query/nested-pin mutations cannot
+change dispatched controls. Permanent source and actual separate-installed-copy checks cover both
+laws. New actual source/packs must fit unchanged reviewed caps and fresh exact-head FAST/FULL before
+implementation acceptance; no merge authority.

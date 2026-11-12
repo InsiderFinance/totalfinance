@@ -1,0 +1,664 @@
+{
+  "historicalHead": "225c1bb8cf94c345a8cbb0c58729d9a94a8a9b21",
+  "request": "ca176773-e9eb-89e0-8dad-5939ce329c60",
+  "sourceSha256": "ac593332da36eedaa5420da48c2b60c23cb02132a0cc90496560d33bf0ee15ad",
+  "node": "v22.23.2",
+  "cursorReplay": {
+    "accepted": false,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "research data: invalid research data at page (invalid_structure).",
+    "calls": 0
+  },
+  "mutationReplay": {
+    "sdk": {
+      "path": "/tmp/tf-c5-cursor-packs/insiderfinance-totalfinance-0.1.4.tgz",
+      "sha256": "39210b1045b02a487fad01965ce9f2bf500917cae751eb939f5368bc56962e4d"
+    },
+    "node": "v22.23.2",
+    "mutableLimit": {
+      "status": "accepted",
+      "passedLimit": 1,
+      "rows": 1
+    },
+    "mutablePins": {
+      "status": "accepted",
+      "passedDataset": "original",
+      "dataset": "original"
+    },
+    "sourceInputError": {
+      "code": "input.wrong_type",
+      "name": "InputError",
+      "message": "query: provider refused the request (input.wrong_type)."
+    }
+  },
+  "whole": [
+    {
+      "entry": "packages/valuation/src/price-levels.ts",
+      "bytesMin": 31903,
+      "bytesGzip": 9432,
+      "candidateEnforcedCapBytes": 9856
+    },
+    {
+      "entry": "packages/options/src/black-scholes.ts",
+      "bytesMin": 47712,
+      "bytesGzip": 15374,
+      "candidateEnforcedCapBytes": 15744
+    },
+    {
+      "entry": "packages/core/src/index.ts",
+      "bytesMin": 63178,
+      "bytesGzip": 19799,
+      "candidateEnforcedCapBytes": 20480
+    },
+    {
+      "entry": "packages/core/src/artifacts/index.ts",
+      "bytesMin": 108862,
+      "bytesGzip": 31935,
+      "candidateEnforcedCapBytes": 32768
+    },
+    {
+      "entry": "packages/core/src/pricing.ts",
+      "bytesMin": 47539,
+      "bytesGzip": 15587,
+      "candidateEnforcedCapBytes": 15616
+    },
+    {
+      "entry": "packages/math/src/index.ts",
+      "bytesMin": 127765,
+      "bytesGzip": 41274,
+      "candidateEnforcedCapBytes": 41728
+    },
+    {
+      "entry": "packages/math/src/montecarlo.ts",
+      "bytesMin": 21007,
+      "bytesGzip": 7603,
+      "candidateEnforcedCapBytes": 7616
+    },
+    {
+      "entry": "packages/math/src/normal.ts",
+      "bytesMin": 2214,
+      "bytesGzip": 1133,
+      "candidateEnforcedCapBytes": 3072
+    },
+    {
+      "entry": "packages/calendars/src/nyse.ts",
+      "bytesMin": 16650,
+      "bytesGzip": 5981,
+      "candidateEnforcedCapBytes": 8192
+    },
+    {
+      "entry": "packages/calendars/src/crypto.ts",
+      "bytesMin": 14547,
+      "bytesGzip": 5040,
+      "candidateEnforcedCapBytes": 5056
+    },
+    {
+      "entry": "packages/performance/src/sector-performance.ts",
+      "bytesMin": 34735,
+      "bytesGzip": 10770,
+      "candidateEnforcedCapBytes": 10783.9488
+    },
+    {
+      "entry": "packages/performance/src/sharpe.ts",
+      "bytesMin": 28345,
+      "bytesGzip": 9048,
+      "candidateEnforcedCapBytes": 9472
+    },
+    {
+      "entry": "packages/technical-analysis/src/rsi.ts",
+      "bytesMin": 28993,
+      "bytesGzip": 8919,
+      "candidateEnforcedCapBytes": 8960
+    },
+    {
+      "entry": "packages/fixed-income/src/lattice.ts",
+      "bytesMin": 39938,
+      "bytesGzip": 13195,
+      "candidateEnforcedCapBytes": 13215.9488
+    },
+    {
+      "entry": "packages/fixed-income/src/convertible.ts",
+      "bytesMin": 26443,
+      "bytesGzip": 9012,
+      "candidateEnforcedCapBytes": 9024
+    },
+    {
+      "entry": "packages/fixed-income/src/xva.ts",
+      "bytesMin": 33985,
+      "bytesGzip": 12000,
+      "candidateEnforcedCapBytes": 12032
+    },
+    {
+      "entry": "packages/volatility/src/artifacts.ts",
+      "bytesMin": 331480,
+      "bytesGzip": 89163,
+      "candidateEnforcedCapBytes": 90112
+    },
+    {
+      "entry": "packages/fixed-income/src/artifacts.ts",
+      "bytesMin": 159945,
+      "bytesGzip": 45578,
+      "candidateEnforcedCapBytes": 46592
+    },
+    {
+      "entry": "packages/backtest/src/portfolio/index.ts",
+      "bytesMin": 417340,
+      "bytesGzip": 116575,
+      "candidateEnforcedCapBytes": 116736
+    },
+    {
+      "entry": "packages/portfolio/src/trade/index.ts",
+      "bytesMin": 287649,
+      "bytesGzip": 79389,
+      "candidateEnforcedCapBytes": 79424
+    },
+    {
+      "entry": "packages/backtest/src/environment/index.ts",
+      "bytesMin": 515420,
+      "bytesGzip": 145637,
+      "candidateEnforcedCapBytes": 145920
+    },
+    {
+      "entry": "packages/backtest/src/paper/index.ts",
+      "bytesMin": 138244,
+      "bytesGzip": 38035,
+      "candidateEnforcedCapBytes": 38047.9488
+    },
+    {
+      "entry": "packages/backtest/src/artifacts.ts",
+      "bytesMin": 853769,
+      "bytesGzip": 240520,
+      "candidateEnforcedCapBytes": 241152
+    },
+    {
+      "entry": "packages/research/src/artifacts.ts",
+      "bytesMin": 159560,
+      "bytesGzip": 43995,
+      "candidateEnforcedCapBytes": 45056
+    },
+    {
+      "entry": "packages/workflows/src/index.ts",
+      "bytesMin": 1940685,
+      "bytesGzip": 521220,
+      "candidateEnforcedCapBytes": 521728
+    },
+    {
+      "entry": "packages/research/src/index.ts",
+      "bytesMin": 95411,
+      "bytesGzip": 25788,
+      "candidateEnforcedCapBytes": 25856
+    },
+    {
+      "entry": "packages/foreign-exchange/src/index.ts",
+      "bytesMin": 39191,
+      "bytesGzip": 10910,
+      "candidateEnforcedCapBytes": 11008
+    },
+    {
+      "entry": "packages/portfolio/src/disclosed-holdings.ts",
+      "bytesMin": 31962,
+      "bytesGzip": 10501,
+      "candidateEnforcedCapBytes": 10752
+    },
+    {
+      "entry": "packages/portfolio/src/disclosed-holding-partitions.ts",
+      "bytesMin": 34722,
+      "bytesGzip": 11290,
+      "candidateEnforcedCapBytes": 11648
+    },
+    {
+      "entry": "packages/portfolio/src/index.ts",
+      "bytesMin": 410985,
+      "bytesGzip": 113010,
+      "candidateEnforcedCapBytes": 113408
+    },
+    {
+      "entry": "packages/commodities/src/index.ts",
+      "bytesMin": 39426,
+      "bytesGzip": 11223,
+      "candidateEnforcedCapBytes": 11264
+    },
+    {
+      "entry": "packages/scenarios/src/index.ts",
+      "bytesMin": 276421,
+      "bytesGzip": 73238,
+      "candidateEnforcedCapBytes": 73728
+    },
+    {
+      "entry": "packages/totalfinance/src/data.ts",
+      "bytesMin": 68717,
+      "bytesGzip": 21487,
+      "candidateEnforcedCapBytes": 21504
+    },
+    {
+      "entry": "packages/totalfinance/src/index.ts",
+      "bytesMin": 2700072,
+      "bytesGzip": 732399,
+      "candidateEnforcedCapBytes": 732672
+    }
+  ],
+  "installed": [
+    {
+      "fixture": "normal-feature",
+      "bundler": "esbuild",
+      "bytesMin": 715,
+      "bytesGzip": 497,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-feature",
+      "bundler": "rollup",
+      "bytesMin": 693,
+      "bytesGzip": 479,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-domain",
+      "bundler": "esbuild",
+      "bytesMin": 715,
+      "bytesGzip": 495,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-domain",
+      "bundler": "rollup",
+      "bytesMin": 693,
+      "bytesGzip": 479,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-domain-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 715,
+      "bytesGzip": 495,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-domain-static-star",
+      "bundler": "rollup",
+      "bytesMin": 693,
+      "bytesGzip": 479,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 715,
+      "bytesGzip": 496,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 693,
+      "bytesGzip": 479,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "normal-root-namespace",
+      "bundler": "esbuild",
+      "bytesMin": 128040,
+      "bytesGzip": 41396,
+      "enforcedCapBytes": 43008
+    },
+    {
+      "fixture": "normal-root-namespace",
+      "bundler": "rollup",
+      "bytesMin": 693,
+      "bytesGzip": 479,
+      "enforcedCapBytes": 614.4
+    },
+    {
+      "fixture": "rsi-feature",
+      "bundler": "esbuild",
+      "bytesMin": 29056,
+      "bytesGzip": 8950,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-feature",
+      "bundler": "rollup",
+      "bytesMin": 28606,
+      "bytesGzip": 8772,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-domain",
+      "bundler": "esbuild",
+      "bytesMin": 29056,
+      "bytesGzip": 8926,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-domain",
+      "bundler": "rollup",
+      "bytesMin": 28612,
+      "bytesGzip": 8750,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-domain-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 29056,
+      "bytesGzip": 8926,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-domain-static-star",
+      "bundler": "rollup",
+      "bytesMin": 28612,
+      "bytesGzip": 8750,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 29056,
+      "bytesGzip": 8950,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 28606,
+      "bytesGzip": 8772,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "rsi-root-namespace",
+      "bundler": "esbuild",
+      "bytesMin": 419925,
+      "bytesGzip": 105777,
+      "enforcedCapBytes": 105984
+    },
+    {
+      "fixture": "rsi-root-namespace",
+      "bundler": "rollup",
+      "bytesMin": 28612,
+      "bytesGzip": 8750,
+      "enforcedCapBytes": 9216
+    },
+    {
+      "fixture": "facade-feature",
+      "bundler": "esbuild",
+      "bytesMin": 47586,
+      "bytesGzip": 15353,
+      "enforcedCapBytes": 15744
+    },
+    {
+      "fixture": "facade-feature",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "facade-domain",
+      "bundler": "esbuild",
+      "bytesMin": 47586,
+      "bytesGzip": 15354,
+      "enforcedCapBytes": 15744
+    },
+    {
+      "fixture": "facade-domain",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "facade-domain-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 47586,
+      "bytesGzip": 15354,
+      "enforcedCapBytes": 15744
+    },
+    {
+      "fixture": "facade-domain-static-star",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "facade-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 47586,
+      "bytesGzip": 15353,
+      "enforcedCapBytes": 15744
+    },
+    {
+      "fixture": "facade-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "facade-root-namespace",
+      "bundler": "esbuild",
+      "bytesMin": 368159,
+      "bytesGzip": 99770,
+      "enforcedCapBytes": 100096
+    },
+    {
+      "fixture": "facade-root-namespace",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "facade-root-hoist",
+      "bundler": "esbuild",
+      "bytesMin": 47586,
+      "bytesGzip": 15355,
+      "enforcedCapBytes": 15744
+    },
+    {
+      "fixture": "facade-root-hoist",
+      "bundler": "rollup",
+      "bytesMin": 32746,
+      "bytesGzip": 10970,
+      "enforcedCapBytes": 11264
+    },
+    {
+      "fixture": "expert-feature",
+      "bundler": "esbuild",
+      "bytesMin": 14606,
+      "bytesGzip": 5625,
+      "enforcedCapBytes": 5632
+    },
+    {
+      "fixture": "expert-feature",
+      "bundler": "rollup",
+      "bytesMin": 6731,
+      "bytesGzip": 3075,
+      "enforcedCapBytes": 3328
+    },
+    {
+      "fixture": "expert-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 14606,
+      "bytesGzip": 5627,
+      "enforcedCapBytes": 5632
+    },
+    {
+      "fixture": "expert-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 6731,
+      "bytesGzip": 3075,
+      "enforcedCapBytes": 3328
+    },
+    {
+      "fixture": "expert-black76-feature",
+      "bundler": "esbuild",
+      "bytesMin": 14308,
+      "bytesGzip": 5504,
+      "enforcedCapBytes": 5632
+    },
+    {
+      "fixture": "expert-black76-feature",
+      "bundler": "rollup",
+      "bytesMin": 6487,
+      "bytesGzip": 2978,
+      "enforcedCapBytes": 3200
+    },
+    {
+      "fixture": "expert-black76-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 14308,
+      "bytesGzip": 5504,
+      "enforcedCapBytes": 5632
+    },
+    {
+      "fixture": "expert-black76-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 6487,
+      "bytesGzip": 2978,
+      "enforcedCapBytes": 3200
+    },
+    {
+      "fixture": "expert-bachelier-feature",
+      "bundler": "esbuild",
+      "bytesMin": 4359,
+      "bytesGzip": 2119,
+      "enforcedCapBytes": 2560
+    },
+    {
+      "fixture": "expert-bachelier-feature",
+      "bundler": "rollup",
+      "bytesMin": 4363,
+      "bytesGzip": 2102,
+      "enforcedCapBytes": 2560
+    },
+    {
+      "fixture": "expert-bachelier-feature-static-star",
+      "bundler": "esbuild",
+      "bytesMin": 4359,
+      "bytesGzip": 2119,
+      "enforcedCapBytes": 2560
+    },
+    {
+      "fixture": "expert-bachelier-feature-static-star",
+      "bundler": "rollup",
+      "bytesMin": 4363,
+      "bytesGzip": 2102,
+      "enforcedCapBytes": 2560
+    },
+    {
+      "fixture": "unused-library",
+      "bundler": "esbuild",
+      "bytesMin": 43,
+      "bytesGzip": 61,
+      "enforcedCapBytes": 122.88
+    },
+    {
+      "fixture": "unused-library",
+      "bundler": "rollup",
+      "bytesMin": 61,
+      "bytesGzip": 81,
+      "enforcedCapBytes": 122.88
+    },
+    {
+      "fixture": "dynamic-math-namespace",
+      "bundler": "esbuild",
+      "bytesMin": 128081,
+      "bytesGzip": 41490,
+      "enforcedCapBytes": 44032
+    },
+    {
+      "fixture": "dynamic-math-namespace",
+      "bundler": "rollup",
+      "bytesMin": 114172,
+      "bytesGzip": 37232,
+      "enforcedCapBytes": 44032
+    },
+    {
+      "fixture": "data-named",
+      "bundler": "esbuild",
+      "bytesMin": 66065,
+      "bytesGzip": 20810,
+      "enforcedCapBytes": 20992
+    },
+    {
+      "fixture": "data-named",
+      "bundler": "rollup",
+      "bytesMin": 59782,
+      "bytesGzip": 18776,
+      "enforcedCapBytes": 18944
+    },
+    {
+      "fixture": "data-root",
+      "bundler": "esbuild",
+      "bytesMin": 68873,
+      "bytesGzip": 21518,
+      "enforcedCapBytes": 21760
+    },
+    {
+      "fixture": "data-root",
+      "bundler": "rollup",
+      "bytesMin": 59794,
+      "bytesGzip": 18734,
+      "enforcedCapBytes": 18944
+    },
+    {
+      "fixture": "data-restore",
+      "bundler": "esbuild",
+      "bytesMin": 49591,
+      "bytesGzip": 15985,
+      "enforcedCapBytes": 16128
+    },
+    {
+      "fixture": "data-restore",
+      "bundler": "rollup",
+      "bytesMin": 42486,
+      "bytesGzip": 13754,
+      "enforcedCapBytes": 14080
+    }
+  ],
+  "sdk": {
+    "path": "/tmp/tf-c5-cursor-packs/insiderfinance-totalfinance-0.1.4.tgz",
+    "sha256": "39210b1045b02a487fad01965ce9f2bf500917cae751eb939f5368bc56962e4d"
+  },
+  "provider": {
+    "path": "/tmp/tf-c5-cursor-packs/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz",
+    "sha256": "71bfad932410ed6d22e5eaebf98e827d754f9508cfe1d2ec2bae2af9fdee1c55"
+  },
+  "starter": {
+    "path": "/tmp/tf-c5-cursor-packs/totalfinance-example-cents-connector-0.0.0.tgz",
+    "sha256": "e56b775e0eaf7944a2c11418da6238e1775426c3947438e9bf457df192e18abb"
+  },
+  "author": {
+    "path": "/tmp/tf-c5-cursor-packs/tf-connector-acme-0.1.0.tgz",
+    "sha256": "8a8e43e767beb6a990654531130f958b3f6a0362431fb90aae05381ffedd1b12"
+  },
+  "providerPassed": 86,
+  "authorPassed": 7,
+  "crossCopy": "BOUNDED_CONTINUATION_AND_SNAPSHOT_OK controls=6\nTWO_COPY_KIT_INPUT_ABORT_SELECTORS_OK controls=6\nREAL_SEPARATE_SDK_ERROR_COPY_OK",
+  "primaryRuns": [
+    {
+      "pages": 1,
+      "output": "119.5"
+    },
+    {
+      "pages": 3,
+      "output": "119.5"
+    }
+  ],
+  "hosted": "pending_at_receipt_commit",
+  "providerHead": "e0d4af223d4b4c5776c5077cd565e86a3a1fbba1",
+  "sourceTests": {
+    "passed": 414,
+    "files": 17
+  },
+  "fullPacked": {
+    "passed": 236,
+    "files": 2
+  },
+  "publicDocsTests": {
+    "passed": 76,
+    "files": 4
+  }
+}
