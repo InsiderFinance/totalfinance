@@ -47,13 +47,18 @@ function resolves(out: string, base: string, href: string): boolean {
 describe('built public documentation', () => {
   it('serves the recovered marketing homepage with the supplied brand and no development banner', () => {
     const home = html('/');
-    expect(home).toContain('The complete quant library for TypeScript and');
+    expect(home).toContain('The complete finance library for TypeScript and');
     expect(home).toContain('AI agents.');
     expect(home).toContain('Give your agent a calculator it can trust.');
     expect(home).toContain('Finance code fails quietly. TotalFinance makes it speak up.');
     expect(home).toContain('Drag a slider. Watch the library answer.');
-    expect(home).toContain('Every domain, tree-shakeable.');
+    expect(home).toContain('The finance library, tree-shakeable.');
     expect(home).not.toContain('What do you want');
+    expect(home).not.toContain('Discord bot');
+    const libraryNav = html('/start');
+    expect(libraryNav).toContain('<p class="tf-nav-group">Library</p>');
+    expect(libraryNav).toContain(`href="${BASE}/domains/fixed-income"`);
+    expect(libraryNav).toContain(`href="${BASE}/domains/valuation"`);
     expect(home).not.toContain('Development ·');
     expect(home).not.toContain('Using the source build until publication');
     expect(home).toContain('href="https://www.totalfinance.io/"');

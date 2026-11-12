@@ -27,7 +27,7 @@ export default defineConfig({
   mdxOptions: {
     // Code panels are dark in both themes, so one theme keeps the markup half the size.
     rehypeCodeOptions: {
-      themes: { light: 'github-dark-dimmed', dark: 'github-dark-dimmed' },
+      themes: { light: 'vesper', dark: 'vesper' },
       defaultColor: 'light',
     },
   },

@@ -53,12 +53,6 @@ export const FAMILY = {
           { id: 'mcp', label: 'MCP', href: `${FAMILY_ORIGIN}/docs/mcp`, external: true },
         ]
       : []),
-    {
-      id: 'discord',
-      label: 'Discord bot',
-      href: `${FAMILY_ORIGIN}/docs/discord-bot`,
-      external: true,
-    },
   ] satisfies FamilyLink[],
   /** Where "get real market data" points: the API docs when public, otherwise the product. */
   data: API_DOCS_PUBLIC

@@ -140,8 +140,7 @@ export function navigation(): NavTab[] {
           ),
         },
         {
-          title: 'Domains',
-          collapsible: true,
+          title: 'Library',
           links: index.domains
             .filter((domain) => domain.slug !== 'index')
             .map((domain) => link(`domains/${domain.slug}`, domain.title)),

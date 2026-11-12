@@ -50,11 +50,11 @@
   --color-fd-ring: #078754;
 
   /* The run panel and code blocks are dark in both themes, like the InsiderFinance try-it panel. */
-  --color-panel: #0b1020;
-  --color-panel-raised: #111833;
-  --color-panel-border: #24304d;
-  --color-panel-foreground: #e2e8f0;
-  --color-panel-muted: #94a3b8;
+  --color-panel: #111318;
+  --color-panel-raised: #191c23;
+  --color-panel-border: #303641;
+  --color-panel-foreground: #e5e7eb;
+  --color-panel-muted: #9ca3af;
 
   /* Chart chrome and validated series colours (dataviz validator, light surface #ffffff). */
   --color-chart-surface: #ffffff;
@@ -100,9 +100,9 @@
   --color-fd-accent-foreground: #b2edcc;
   --color-fd-ring: #80e2af;
 
-  --color-panel: #0e1322;
-  --color-panel-raised: #151c31;
-  --color-panel-border: #263150;
+  --color-panel: #111318;
+  --color-panel-raised: #191c23;
+  --color-panel-border: #303641;
 
   --color-chart-surface: #0b0f1a;
   --color-chart-grid: #1b2231;
@@ -428,7 +428,7 @@
     color: #dcbdfb;
   }
   .tf-code-pre .tk-x {
-    color: #8ddb8c;
+    color: #c8d2e0;
   }
   .tf-code-pre .tk-p,
   .tf-code-pre .tk-b {

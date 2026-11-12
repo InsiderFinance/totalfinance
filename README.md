@@ -10,7 +10,7 @@
 [![CI](https://github.com/InsiderFinance/totalfinance/actions/workflows/totalfinance-ci.yml/badge.svg)](https://github.com/InsiderFinance/totalfinance/actions/workflows/totalfinance-ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-078754.svg)](./LICENSE)
 
-[Homepage](https://totalfinance.io/) · [Documentation](https://totalfinance.io/docs/totalfinance/) · [npm](https://www.npmjs.com/package/@insiderfinance/totalfinance) · [Releases](https://github.com/InsiderFinance/totalfinance/releases)
+[Homepage](https://totalfinance.io/) · [Documentation](https://www.insiderfinance.io/docs/totalfinance/) · [npm](https://www.npmjs.com/package/@insiderfinance/totalfinance) · [Releases](https://github.com/InsiderFinance/totalfinance/releases) · [By InsiderFinance](https://www.insiderfinance.io/)
 
 Price options, analyze portfolios, build indicators, test strategies, and give agents the same
 financial tools you use in code. TotalFinance brings options, volatility, technical analysis, risk,
@@ -45,7 +45,7 @@ console.log(price); // 0.8983…
 Rates and volatility are decimals: `0.045` means 4.5%, `0.22` means 22%. Time is in years;
 the result uses the same currency as spot and strike.
 
-[Try the calculator →](https://totalfinance.io/docs/totalfinance/learn/price-an-option/)
+[Try the calculator →](https://www.insiderfinance.io/docs/totalfinance/learn/price-an-option/)
 
 ## See the assumptions behind the answer
 
@@ -86,7 +86,7 @@ result.assumptions;
 result.diagnostics;
 ```
 
-[Explore pricing engines and conventions →](./docs/guides/assumptions.md)
+[Explore pricing engines and conventions →](https://www.insiderfinance.io/docs/totalfinance/guides/assumptions)
 
 ## What's inside
 
@@ -127,7 +127,7 @@ Feature imports such as `@insiderfinance/totalfinance/technical-analysis/rsi` le
 Calculation entry points work in browsers; the CLI, HTTP, and MCP transports run in Node.js.
 Node.js requires **22.13+**. The package is ESM with TypeScript declarations.
 
-[Imports, runtimes, and bundle sizes →](./docs/guides/imports-and-bundles.md)
+[Imports, runtimes, and bundle sizes →](https://www.insiderfinance.io/docs/totalfinance/guides/imports-and-bundles)
 
 <details>
 <summary>Root imports and tree shaking</summary>
@@ -169,17 +169,17 @@ Add it to your MCP client's configuration:
 ```
 
 The server computes from supplied data. It does not fetch market prices. The
-[MCP guide](./docs/guides/mcp.md) covers client setup, profiles, permissions, and background jobs.
-Agents can also use the [agent handbook](https://totalfinance.io/docs/totalfinance/agents/),
-[llms.txt](./docs/llms.txt), and [full library reference](./docs/llms-full.txt).
+[MCP guide](https://www.insiderfinance.io/docs/totalfinance/guides/mcp) covers client setup, profiles, permissions, and background jobs.
+Agents can also use the [agent handbook](https://www.insiderfinance.io/docs/totalfinance/agents/handbook),
+[llms.txt](https://www.insiderfinance.io/docs/totalfinance/llms.txt), and [full library reference](https://www.insiderfinance.io/docs/totalfinance/llms-full.txt).
 
 ## Documentation
 
-- [Interactive docs](https://totalfinance.io/docs/totalfinance/) — start with a task, run a calculator, and explore the result.
-- [API reference](https://totalfinance.io/docs/totalfinance/reference/) — exports, types, and operations.
+- [Interactive docs](https://www.insiderfinance.io/docs/totalfinance/) — start with a task, run a calculator, and explore the result.
+- [API reference](https://www.insiderfinance.io/docs/totalfinance/reference/) — exports, types, and operations.
 - [Examples](./docs/examples/) — executable examples across the toolkit.
-- [Assumptions & conventions](./docs/guides/assumptions.md) — units, models, dates, and day counts.
-- [Errors & diagnostics](./docs/guides/errors.md) — understand a refusal and fix the input.
+- [Assumptions & conventions](https://www.insiderfinance.io/docs/totalfinance/guides/assumptions) — units, models, dates, and day counts.
+- [Errors & diagnostics](https://www.insiderfinance.io/docs/totalfinance/guides/errors) — understand a refusal and fix the input.
 - [Site source](./site/) — the static HTML generator, browser calculators, and local preview instructions.
 
 ## Contributing

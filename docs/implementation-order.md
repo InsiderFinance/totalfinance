@@ -13,6 +13,14 @@ The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the
 
 ### Completed bounded site work: recover the original homepage and branding (2026-11-12)
 
+Presentation follow-up locally complete: [U1–U4](./specs/homepage-and-docs-routing.md) cover the finance headline,
+removing Discord, an always-expanded Library list, neutral code panels, clearer full-reference
+links and README links to the upcoming InsiderFinance docs with a linked credit. Generated reference
+coverage is complete by export path; the ported authored guides/examples have less depth. This pass
+improves presentation/discovery and verifies the LLM artifacts, rather than claiming new tutorials.
+The build, 202 site tests, 42 documentation/example checks, site types and changed-source lint pass;
+the 197-entry-point/6,967-export-path reference and both LLM artifacts remain intact.
+
 Current clarification: the actual original marketing frontend was found as uncommitted work in
 `totalfinance-24287e`, with the hero “The complete quant library for TypeScript and AI agents.”
 Follow M1–M5 in [the current correction](./specs/homepage-and-docs-routing.md), recovering that
@@ -50,8 +58,8 @@ The numerical/release work retains its own scope and verification records.
 README follow-up locally complete (2026-11-12): the maintainer requested prominent npm/homepage/docs
 links, a clearer open-source introduction and removal of repeated version hedging. The root README
 now has branding, badges, a direct quickstart, feature overview and concise agent setup. GitHub About
-links to `https://totalfinance.io` and describes the toolkit. Docs links use the working TotalFinance
-host until the separate InsiderFinance rewrite is available. All 33 focused documentation/example
+links to `https://totalfinance.io` and describes the toolkit. The later U1–U4 follow-up points README
+docs links at the upcoming InsiderFinance host, as explicitly requested. All 33 focused documentation/example
 tests, 15 local-link checks and eight public URL/asset checks pass. Documentation regeneration has
 zero findings and no inventory drift; distribution assembly copies the updated README with absolute
 repository links. No package publication, version bump or manual site deployment occurred.

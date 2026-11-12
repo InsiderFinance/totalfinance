@@ -23,7 +23,7 @@ import { blackScholes } from '@insiderfinance/totalfinance/options';
 import { createOperationRegistry, defaultOperations } from '@insiderfinance/totalfinance/workflows';
 
 const homeMetadata = pageMetadata({
-  title: 'TotalFinance — the complete quant library for TypeScript and AI agents',
+  title: 'TotalFinance — the complete finance library for TypeScript and AI agents',
   description:
     'Options, volatility, technical analysis, risk, valuation, fixed income and backtesting in one fully typed, dependency-free TypeScript package, with MCP tools for AI agents. Open source, by InsiderFinance.',
   route: '/',
@@ -33,7 +33,7 @@ export const metadata = {
   ...homeMetadata,
   alternates: { canonical: `${SITE_ORIGIN}/`, types: { 'text/markdown': `${BASE_PATH}/index.md` } },
   openGraph: { ...homeMetadata.openGraph, url: `${SITE_ORIGIN}/`, type: 'website' as const },
-  title: { absolute: 'TotalFinance — the complete quant library for TypeScript and AI agents' },
+  title: { absolute: 'TotalFinance — the complete finance library for TypeScript and AI agents' },
 };
 
 /** One calculation, shown twice: as library code and as the MCP tool call an agent makes. */
@@ -158,7 +158,7 @@ export default function HomePage() {
               </a>
             </p>
             <h1 className="mt-6 font-display text-[2.6rem] font-semibold leading-[1.04] tracking-[-0.035em] text-balance sm:text-6xl">
-              The complete quant library for TypeScript and{' '}
+              The complete finance library for TypeScript and{' '}
               <span className="text-fd-primary">AI agents.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-fd-muted-foreground text-pretty">
@@ -217,7 +217,7 @@ export default function HomePage() {
         <dl className="mx-auto grid max-w-[88rem] grid-cols-1 divide-y divide-fd-border px-5 sm:grid-cols-2 sm:divide-y-0 sm:px-8 lg:grid-cols-4 lg:divide-x lg:px-10">
           <Pillar
             title="Complete"
-            value={`${domainCount} domains`}
+            value={`${domainCount} modules`}
             detail={`${index.totals.exportPaths.toLocaleString('en-US')} documented exports, from Black–Scholes to backtests`}
           />
           <Pillar
@@ -383,7 +383,7 @@ export default function HomePage() {
         <div className="mb-2 max-w-2xl">
           <p className="tf-eyebrow">Everything in one package</p>
           <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">
-            Every domain, tree-shakeable.
+            The finance library, tree-shakeable.
           </h2>
         </div>
         <DomainGrid />

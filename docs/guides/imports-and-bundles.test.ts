@@ -88,7 +88,11 @@ describe('public imports and bundles guidance', () => {
       for (const name of ['blackScholes', 'option', 'market', 'engines', 'impliedVolatility'])
         expect(text).toContain(`\`${name}\``);
       expect(text).toContain('Rollup shakes this static use');
-      expect(text).toContain('guides/imports-and-bundles.md)');
+      expect(text).toContain(
+        path === '../../README.md'
+          ? 'https://www.insiderfinance.io/docs/totalfinance/guides/imports-and-bundles)'
+          : 'guides/imports-and-bundles.md)',
+      );
       await executeSnippet(intro);
     });
   }

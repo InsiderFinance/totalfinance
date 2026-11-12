@@ -19,7 +19,7 @@ export default function ReferenceIndexPage() {
         route="/reference"
         eyebrow="Generated from the source"
         title="API reference"
-        description={`${index.totals.packages} packages, ${index.totals.entrypoints} supported entry points and ${index.totals.exportPaths.toLocaleString('en-US')} export paths, including types. Every page comes from the export maps and the TypeScript checker, so nothing public can be missing.`}
+        description={`${index.totals.packages} packages, ${index.totals.entrypoints} supported entry points and ${index.totals.exportPaths.toLocaleString('en-US')} export paths, including types. Browse signatures, types, field contracts and imports generated from the public source.`}
         crumbs={[{ title: 'TotalFinance', url: '/' }, { title: 'Reference' }]}
       >
         <div className="mt-5 flex flex-wrap gap-2 text-xs">

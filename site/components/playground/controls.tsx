@@ -32,7 +32,7 @@ function Label({
         <label htmlFor={htmlFor} className="text-[0.8125rem] font-medium text-white">
           {label}
         </label>
-        {value ? <span className="font-mono text-xs text-[#a8eac6]">{value}</span> : null}
+        {value ? <span className="font-mono text-xs text-panel-foreground">{value}</span> : null}
       </div>
       {hint ? <p className="mt-0.5 text-[0.6875rem] leading-4 text-panel-muted">{hint}</p> : null}
     </div>
@@ -361,7 +361,7 @@ export function TableControl({
         type="button"
         onClick={() => onChange([...value, { ...control.newRow }])}
         disabled={value.length >= control.maxRows}
-        className="mt-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-[#a8eac6] hover:bg-white/10 disabled:opacity-40"
+        className="mt-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-panel-foreground hover:bg-white/10 disabled:opacity-40"
       >
         <Plus className="size-3.5" aria-hidden /> Add row
       </button>
@@ -668,7 +668,10 @@ export function DataControl({
         </div>
       ) : null}
       {notes.length ? (
-        <ul className="mt-1.5 space-y-0.5 text-[0.6875rem] leading-4 text-[#a8eac6]" role="status">
+        <ul
+          className="mt-1.5 space-y-0.5 text-[0.6875rem] leading-4 text-panel-foreground"
+          role="status"
+        >
           {notes.map((note) => (
             <li key={note}>{note}</li>
           ))}

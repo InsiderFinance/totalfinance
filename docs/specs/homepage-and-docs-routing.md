@@ -1,5 +1,30 @@
 # TotalFinance homepage and documentation routing
 
+## Current follow-up: navigation, copy and palette (2026-11-12)
+
+The maintainer requested “finance” in the marketing headline, removal of the unlaunched Discord
+bot link, a better name than Domains with an always-visible list, less green in code blocks, and
+README docs links to the upcoming InsiderFinance host plus a linked By InsiderFinance credit.
+The recovered docs are ported content: generated reference coverage and authored guide depth are
+different claims. Do not present curated overview cards as a complete set of guides.
+
+- [x] U1: Use the finance headline; remove Discord; label the overview section Library and keep its links expanded.
+- [x] U2: Use neutral charcoal code panels and a balanced syntax palette, retaining green as a brand accent.
+- [x] U3: Point README documentation/LLM links at the intended InsiderFinance prefix and add the linked credit.
+- [x] U4: Clarify overview-to-reference navigation; preserve all export coverage, LLM artifacts, routes and checks.
+
+The `/domains/*` routes and internal identifiers remain stable. The live site's source-host links
+continue working until the separate InsiderFinance rewrite launches; README URLs intentionally
+name the upcoming public docs host. No library calculations, public package versions or dependencies change.
+
+Local verification on Node 22.23.2/pnpm 10.32.0: the build preserves 578 routes, 577 Markdown twins,
+197 public entry points, 6,967 export paths and 48 operations. All 202 site tests and 42 targeted
+documentation/example tests pass, along with site typecheck and changed-source ESLint. Documentation
+regeneration leaves the inventory unchanged. Both LLM artifacts are generated; the source-host index
+and full bundle returned HTTP 200. These counts include types and re-exports, not 6,967 unique functions
+or authored guides. The 24 module overviews now separate common APIs from complete generated reference
+links. Authored tutorial depth remains the ported content; no new comprehensive guide coverage is claimed.
+
 **Current correction (2026-11-12):** the requested original is the uncommitted Next.js/Fumadocs
 site in worktree `totalfinance-24287e`, whose hero reads “The complete quant library for TypeScript
 and AI agents.” It is governed by [the recovered original contract](./developer-docs-v2.md).

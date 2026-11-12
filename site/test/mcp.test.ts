@@ -192,7 +192,7 @@ describe('the built site through the preview server', () => {
     const homepage = await get('/');
     expect(homepage.status).toBe(200);
     expect(homepage.headers.get('location')).toBeNull();
-    expect(await homepage.text()).toContain('The complete quant library for TypeScript and');
+    expect(await homepage.text()).toContain('The complete finance library for TypeScript and');
     const docsEntry = await get(BASE);
     expect(docsEntry.status).toBe(307);
     expect(docsEntry.headers.get('location')).toBe(`${BASE}/start`);

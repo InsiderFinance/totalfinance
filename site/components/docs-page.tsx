@@ -18,7 +18,7 @@ const SECTION: Record<string, Crumb> = {
   learn: { title: 'Calculators', url: '/playgrounds' },
   guides: { title: 'Guides', url: '/guides' },
   agents: { title: 'Agents', url: '/agents' },
-  domains: { title: 'Domains', url: '/domains' },
+  domains: { title: 'Library', url: '/domains' },
 };
 
 export function DocsPage({ slug }: { slug: string[] }) {
