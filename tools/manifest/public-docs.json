@@ -10,7 +10,7 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4613,
+    "executableFences": 4614,
     "checkedUnderTruthfulness": 175,
     "checkedUnderVocabulary": 62,
     "shippedNamesWatched": 9748,
@@ -639,7 +639,7 @@
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
-      "codeFences": 1
+      "codeFences": 2
     },
     {
       "path": "docs/runbooks/release-pair-legacy.md",

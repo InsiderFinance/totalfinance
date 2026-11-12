@@ -96,7 +96,17 @@ product page and public docs address are still the next, separate integration.
 In `insiderfinance-app`, create the native `/totalfinance` landing page and link it from the desired
 navigation. This page has not been built by the TotalFinance homepage change.
 
-Append this rule to the app's existing `rewrites()` array in `next.config.js`; retain all other rules:
+Add this entry rule to the app's existing `redirects()` array in `next.config.js`; retain all other rules:
+
+```js
+{
+  source: '/docs/totalfinance',
+  destination: '/docs/totalfinance/start',
+  permanent: false,
+}
+```
+
+Then append this rule to the existing `rewrites()` array:
 
 ```js
 {
@@ -110,6 +120,11 @@ Keep `/docs/totalfinance` as the docs prefix on both hosts for this shared build
 HTML, scripts and navigation without rewriting response bodies. `/docs/*` on TotalFinance is possible
 with a separate build, but changing the proxy's destination path alone does not remount the client.
 Use the canonical `www.totalfinance.io` source above to avoid a host redirect through the proxy.
+
+The local entry redirect is required on Vercel: an empty wildcard capture can send the upstream
+request to `/docs/totalfinance/`. The upstream removes that slash and returns the browser to the
+same public entry URL, which repeats the rewrite forever. Enter `/start` before proxying; keep
+nested pages and assets on the wildcard rewrite. Check both the entry and a nested page after deployment.
 
 The source URL on `www.totalfinance.io` must continue serving docs files directly. Redirecting that
 source back to InsiderFinance creates a proxy loop. Keep the asset paths under the same docs mount;
