@@ -1,7 +1,8 @@
+import { registeredDataRefusal } from './data-provider-error.js';
 /** Conformance validates actual supplied selectors; it never repairs an incorrect provider view. */
 import { responseIssue } from './data-response-issue.js';
-import { ErrorCode, QuantError } from './errors.js';
-import type { DataProvider, DataQuery, DataView, OhlcvInput } from './data-types.js';
+import { ErrorCode } from './errors.js';
+import type { DataProvider, DataQuery, DataView, PriceBarRecord } from './data-types.js';
 import { pageData, plain, frozen } from './data-validation.js';
 import { validateV2Page, equalData, barIssues, continuationOf } from './data-protocol.js';
 export function invalidView(): never {
@@ -50,7 +51,48 @@ export function viewEnvelope(
           : 'unavailable-legacy-context')
   )
     invalidView();
-  if (p.kind === 'price-bars')
+  const baseKeys = ['kind', 'page', 'continuation', 'continuationStatus'];
+  const barKeys = [
+    'closePrices',
+    'ohlcvBars',
+    'bars',
+    'issues',
+    'selection',
+    'selections',
+    'resolve',
+  ];
+  if (
+    Object.keys(d).some(
+      (k) => ![...baseKeys, ...(p.kind === 'price-bars' ? barKeys : [])].includes(k),
+    )
+  )
+    invalidView();
+  if (p.kind === 'price-bars') {
+    for (const k of ['issues', 'selection', 'selections']) {
+      const x = d[k];
+      if (!x || !('value' in x) || !x.enumerable || x.configurable || x.writable) invalidView();
+      plain(x.value);
+      if (!frozen(x.value)) invalidView();
+    }
+    if (
+      !equalData(d['issues']!.value, barIssues(p.data as readonly PriceBarRecord[], 0)) ||
+      !equalData(d['selection']!.value, {
+        version: 1,
+        decisions: [],
+        sourceRows: p.data.map((_: unknown, rowIndex: number) => ({ pageIndex: 0, rowIndex })),
+      }) ||
+      !equalData(d['selections']!.value, ['closePrices', 'ohlcvBars', 'bars'])
+    )
+      invalidView();
+    const resolve = d['resolve'];
+    if (
+      !resolve ||
+      typeof resolve.value !== 'function' ||
+      resolve.enumerable ||
+      resolve.writable ||
+      resolve.configurable
+    )
+      invalidView();
     for (const k of ['closePrices', 'ohlcvBars', 'bars'])
       if (
         !d[k] ||
@@ -60,6 +102,7 @@ export function viewEnvelope(
         d[k]!.configurable
       )
         invalidView();
+  }
 }
 export function viewSelection(
   view: DataView,
@@ -75,19 +118,25 @@ export function viewSelection(
   try {
     value = view[key];
   } catch (error) {
+    const refusal = registeredDataRefusal(error);
     if (
-      error instanceof QuantError &&
+      refusal &&
       suspect &&
-      error.code === ErrorCode.DataSuspectObservations &&
-      equalData(error.context, { ...suspect, selection: key })
+      refusal.code === ErrorCode.DataSuspectObservations &&
+      equalData(refusal.context, { ...suspect, selection: key })
     )
       return undefined;
     if (
-      error instanceof QuantError &&
+      refusal &&
       !suspect &&
       missing !== -1 &&
-      error.code === ErrorCode.InputMissingField &&
-      equalData(error.context, { field: 'volume', pageIndex: 0, rowIndex: missing, index: missing })
+      refusal.code === ErrorCode.InputMissingField &&
+      equalData(refusal.context, {
+        field: 'volume',
+        pageIndex: 0,
+        rowIndex: missing,
+        index: missing,
+      })
     )
       return undefined;
     invalidView();

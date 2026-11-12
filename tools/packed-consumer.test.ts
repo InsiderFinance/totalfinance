@@ -21,6 +21,9 @@ import {
 } from './release/registry-smoke.js';
 import type { ReleaseManifest } from './release/dry-run.js';
 import { playgrounds } from '../site/src/playgrounds/index.js';
+
+/** Four copy surfaces per playground: first call and full reproduction, at default and edited inputs. */
+const SITE_EXAMPLE_COUNT = playgrounds.length * 4;
 import { registerInstalledConsumerTests } from './bundle-size/consumer-tests.js';
 import { assertInstalledIndicatorMetadata } from './bundle-size/indicator-metadata-consumer.js';
 import {
@@ -569,7 +572,7 @@ afterAll(() => {
       if (retainedReceiptPath) {
         rmSync(consumer, { recursive: true, force: true });
         const receipt = JSON.parse(readFileSync(retainedReceiptPath, 'utf8')) as SmokeReceipt;
-        expect(receipt.examplesCount).toBe(24);
+        expect(receipt.examplesCount).toBe(SITE_EXAMPLE_COUNT);
         expect(receipt.origin.kind).toBe('tarball-rehearsal');
       }
     } finally {
@@ -598,9 +601,9 @@ it('the complete installed indicator catalog is independent of discovery imports
 describe('site copy buttons against installed tarballs and release receipts', () => {
   let result: SiteExamplesSmokeResult;
 
-  it('strictly typechecks and executes all 24 exact first-call/full default/edited copies from the installed tarballs', () => {
+  it('strictly typechecks and executes every exact first-call/full default/edited copy from the installed tarballs', () => {
     const samples = siteExampleCases();
-    expect(samples).toHaveLength(24);
+    expect(samples).toHaveLength(SITE_EXAMPLE_COUNT);
     expect(samples.map((sample) => sample.id)).toEqual(
       playgrounds.flatMap((playground) => [
         `${playground.id}-default`,
@@ -612,7 +615,7 @@ describe('site copy buttons against installed tarballs and release receipts', ()
     result = runSiteExamplesAgainstInstalled(consumer, releaseManifest.version);
     expect(result).toMatchObject({
       version: releaseManifest.version,
-      cases: 24,
+      cases: SITE_EXAMPLE_COUNT,
       sha256: siteExamplesSha256(samples),
       caseIds: samples.map((sample) => sample.id),
       typecheck: { modes: ['nodenext', 'bundler'], strict: true, skipLibCheck: false },
@@ -737,7 +740,7 @@ describe('site copy buttons against installed tarballs and release receipts', ()
       sourceCommit: releaseManifest.commit,
       sourceDirty: true,
       registry: null,
-      examplesCount: 24,
+      examplesCount: SITE_EXAMPLE_COUNT,
       examplesSha256: result.sha256,
       origin,
     });
@@ -786,13 +789,13 @@ describe('site copy buttons against installed tarballs and release receipts', ()
       OPENAPI_MAX_BUFFER,
     );
     expect(output).toContain('every journey matches');
-    expect(output).toContain('24 typechecked site examples');
+    expect(output).toContain(`${SITE_EXAMPLE_COUNT} typechecked site examples`);
     const receipt = JSON.parse(readFileSync(path, 'utf8')) as SmokeReceipt;
     expect(receipt).toMatchObject({
       sourceCommit: releaseManifest.commit,
       version: releaseManifest.version,
       registry: null,
-      examplesCount: 24,
+      examplesCount: SITE_EXAMPLE_COUNT,
       examplesSha256: siteExamplesSha256(),
       origin: { kind: 'tarball-rehearsal' },
       expectations: { matched: true },
@@ -1898,6 +1901,40 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
     )![1]!;
     expect(cliStructured).toBe(sdkStructured);
   }, 120_000);
+
+  it.each(['nodenext', 'bundler'] as const)(
+    'numerical repairs 16–24 compile and execute from installed artifacts: %s',
+    (resolution) => {
+      const dir = join(consumer, `numerical-repairs-${resolution}`);
+      sh('mkdir', ['-p', dir], consumer);
+      writeFileSync(
+        join(dir, 'consumer.mts'),
+        readFileSync(join(ROOT, 'tools/numerical-regression-consumer.ts'), 'utf8') +
+          '\nassertNumericalRepairs(); console.log("NUMERICAL_REPAIRS_OK");\n',
+      );
+      writeFileSync(
+        join(dir, 'tsconfig.json'),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noUncheckedIndexedAccess: true,
+            skipLibCheck: false,
+            target: 'es2022',
+            outDir: './compiled',
+          },
+          include: ['consumer.mts'],
+        }),
+      );
+      sh(TSC, ['-p', dir], dir);
+      expect(sh('node', [join(dir, 'compiled/consumer.mjs')], consumer)).toContain(
+        'NUMERICAL_REPAIRS_OK',
+      );
+    },
+    120_000,
+  );
 
   it.each(['classification', 'reconciliation', 'retries'])(
     'dogfood repair: %s through the installed public SDK',

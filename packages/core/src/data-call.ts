@@ -1,7 +1,7 @@
 import { providerFailure } from './data-provider-error.js';
 import { issueOf, responseIssue } from './data-response-issue.js';
 /** Provider-neutral error/cancellation boundaries; no financial or wall-clock defaults. */
-import { DataError, ErrorCode, QuantError, InputError } from './errors.js';
+import { DataError, ErrorCode, QuantError } from './errors.js';
 import type { DataCallOptions } from './data-types.js';
 import { aborted, object, signalField } from './data-validation.js';
 export function dataSignal(options: DataCallOptions = {}): AbortSignal | undefined {
@@ -62,7 +62,12 @@ export async function dataCall<T>(
     return result;
   } catch (error) {
     aborted(signal);
-    if (issueOf(error)) throw error;
+    const detail = issueOf(error);
+    if (detail)
+      responseIssue(
+        detail,
+        detail.phase === 'capabilities' ? 'defineDataProvider.capabilities' : 'query',
+      );
     // Only locally marked SDK response diagnostics bypass the foreign-code boundary.
     throw providerFailure(error);
   } finally {

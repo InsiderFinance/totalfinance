@@ -4,7 +4,6 @@ import type {
   DataView,
   PriceBarRecord,
   OptionChainResearchRecord,
-  ResearchBarSelection,
   ResearchBarChoice,
 } from './data-types.js';
 import { pageData } from './data-validation.js';

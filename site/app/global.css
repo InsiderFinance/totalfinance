@@ -1,0 +1,630 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import '@fontsource-variable/space-grotesk/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
+
+@source '../components';
+@source '../lib';
+@source '../app';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility tf-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--color-fd-muted-foreground) 35%, transparent)
+    transparent;
+}
+
+/*
+ * InsiderFinance documentation language: white reading surface, slate hairlines, #078754 for
+ * interaction, Space Grotesk display type, system UI body type. Dark mode is designed, not
+ * inverted: its own steps from the same ramps.
+ */
+@theme static {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', var(--font-sans);
+  --font-mono:
+    'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-brand: #078754;
+  --color-brand-hover: #066b43;
+  --color-brand-soft: #e8f6ee;
+
+  --color-fd-background: #ffffff;
+  --color-fd-foreground: #0f172a;
+  --color-fd-muted: #f8fafc;
+  --color-fd-muted-foreground: #5b6578;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #0f172a;
+  --color-fd-card: #f8fafc;
+  --color-fd-card-foreground: #0f172a;
+  --color-fd-border: #e2e8f0;
+  --color-fd-primary: #078754;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-secondary: #f1f5f9;
+  --color-fd-secondary-foreground: #0f172a;
+  --color-fd-accent: #e8f6ee;
+  --color-fd-accent-foreground: #078754;
+  --color-fd-ring: #078754;
+
+  /* The run panel and code blocks are dark in both themes, like the InsiderFinance try-it panel. */
+  --color-panel: #111318;
+  --color-panel-raised: #191c23;
+  --color-panel-border: #303641;
+  --color-panel-foreground: #e5e7eb;
+  --color-panel-muted: #9ca3af;
+
+  /* Chart chrome and validated series colours (dataviz validator, light surface #ffffff). */
+  --color-chart-surface: #ffffff;
+  --color-chart-grid: #e8ecf2;
+  --color-chart-axis: #c5cdd9;
+  --color-chart-ink: #0f172a;
+  --color-chart-ink-secondary: #475569;
+  --color-chart-ink-muted: #64748b;
+  --color-series-1: #078754;
+  --color-series-2: #eb6834;
+  --color-series-3: #1baf7a;
+  --color-series-4: #eda100;
+  --color-series-5: #e87ba4;
+  --color-series-6: #008300;
+  --color-series-7: #7a3fb8;
+  --color-series-8: #e34948;
+  --color-profit: #0f8a5f;
+  --color-loss: #d63b4b;
+  --color-neutral-mid: #eef0f3;
+
+  --radius-card: 0.875rem;
+}
+
+.dark {
+  --color-brand: #67d9a3;
+  --color-brand-hover: #8ae5ba;
+  --color-brand-soft: rgb(7 135 84 / 0.16);
+
+  --color-fd-background: #090c13;
+  --color-fd-foreground: #e6e9f0;
+  --color-fd-muted: #0f131d;
+  --color-fd-muted-foreground: #98a2b5;
+  --color-fd-popover: #0f131d;
+  --color-fd-popover-foreground: #e6e9f0;
+  --color-fd-card: #0e121b;
+  --color-fd-card-foreground: #e6e9f0;
+  --color-fd-border: #1e2533;
+  --color-fd-primary: #80e2af;
+  --color-fd-primary-foreground: #0b1020;
+  --color-fd-secondary: #151a26;
+  --color-fd-secondary-foreground: #e6e9f0;
+  --color-fd-accent: rgb(7 135 84 / 0.14);
+  --color-fd-accent-foreground: #b2edcc;
+  --color-fd-ring: #80e2af;
+
+  --color-panel: #111318;
+  --color-panel-raised: #191c23;
+  --color-panel-border: #303641;
+
+  --color-chart-surface: #0b0f1a;
+  --color-chart-grid: #1b2231;
+  --color-chart-axis: #323c50;
+  --color-chart-ink: #f1f5f9;
+  --color-chart-ink-secondary: #c2cad8;
+  --color-chart-ink-muted: #8f9ab0;
+  --color-series-1: #6573f2;
+  --color-series-2: #d95926;
+  --color-series-3: #199e70;
+  --color-series-4: #c98500;
+  --color-series-5: #d55181;
+  --color-series-6: #1f9a1f;
+  --color-series-7: #9085e9;
+  --color-series-8: #e66767;
+  --color-profit: #1f9a6f;
+  --color-loss: #e0533f;
+  --color-neutral-mid: #262d3b;
+}
+
+@layer base {
+  :root {
+    --tf-header-height: 4rem;
+    --tf-sidebar-width: 18rem;
+    scroll-padding-top: calc(var(--tf-header-height) + 1.5rem);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-fd-background text-fd-foreground font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand) 22%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-fd-ring);
+    outline-offset: 2px;
+  }
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: normal;
+    letter-spacing: -0.02em;
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+    font-variant-ligatures: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Reading typography: InsiderFinance prose, without Tailwind Typography's literal backticks. */
+@layer components {
+  .tf-prose {
+    @apply prose max-w-none;
+    --tw-prose-body: var(--color-fd-foreground);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .tf-prose :where(h2, h3, h4):not(:where([class~='not-prose'] *)) {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    scroll-margin-top: calc(var(--tf-header-height) + 1.5rem);
+  }
+  .tf-prose :where(h2):not(:where([class~='not-prose'] *)) {
+    font-size: 1.5rem;
+    margin-top: 2.5em;
+  }
+  .tf-prose :where(code):not(:where(pre *, [class~='not-prose'] *))::before,
+  .tf-prose :where(code):not(:where(pre *, [class~='not-prose'] *))::after {
+    content: none;
+  }
+  .tf-prose :where(code):not(:where(pre *, [class~='not-prose'] *)) {
+    @apply rounded-md border border-fd-border bg-fd-muted px-1.5 py-0.5 text-[0.875em] font-medium;
+  }
+  .tf-prose :where(table):not(:where([class~='not-prose'] *)) {
+    @apply text-sm;
+  }
+  .tf-prose :where(a):not(:where([class~='not-prose'] *, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *)) {
+    @apply text-fd-primary font-medium underline decoration-fd-primary/30 underline-offset-[3px] hover:decoration-fd-primary;
+  }
+
+  .tf-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-fd-primary;
+  }
+  .tf-card {
+    @apply rounded-[var(--radius-card)] border border-fd-border bg-fd-background;
+  }
+  .tf-kbd {
+    @apply inline-flex h-5 min-w-5 items-center justify-center rounded border border-fd-border bg-fd-muted px-1 font-mono text-[0.6875rem] font-medium text-fd-muted-foreground;
+  }
+  .tf-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Code panels: dark in both themes, like the InsiderFinance try-it panel. Shiki emits both themes. */
+@layer components {
+  .tf-code {
+    @apply my-0 min-w-0 overflow-hidden rounded-xl border border-panel-border bg-panel text-panel-foreground;
+  }
+  .tf-code-bar {
+    @apply flex items-center justify-between gap-3 border-b border-panel-border px-4 py-2 text-xs text-panel-muted;
+  }
+  .tf-code-body {
+    @apply tf-scrollbar overflow-auto;
+  }
+  .tf-code-pre {
+    @apply m-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-6;
+    tab-size: 2;
+  }
+  .tf-code-pre code {
+    display: block;
+    min-width: max-content;
+    white-space: pre;
+  }
+  .tf-code-wrap .tf-code-pre code {
+    min-width: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .tf-code-pre .line:empty::before {
+    content: ' ';
+    white-space: pre;
+  }
+
+  /* Fumadocs MDX code blocks share the dark panel look. */
+  .tf-prose figure.shiki,
+  .tf-prose [data-rehype-pretty-code-figure] {
+    @apply border-panel-border bg-panel;
+  }
+  .tf-prose figure.shiki :where(pre) {
+    @apply bg-transparent;
+  }
+  .tf-prose figure.shiki :where(div:has(> figcaption), figcaption) {
+    @apply border-panel-border text-panel-muted;
+  }
+  .tf-prose figure.shiki button {
+    @apply text-panel-muted hover:bg-white/10 hover:text-white;
+  }
+
+  .tf-disclosure > summary {
+    @apply cursor-pointer select-none text-sm font-medium text-fd-foreground marker:text-fd-muted-foreground hover:text-fd-primary;
+  }
+  .tf-chart-data > summary {
+    @apply inline-flex cursor-pointer select-none items-center text-xs font-medium text-fd-muted-foreground hover:text-fd-primary;
+  }
+
+  /* Chart chrome. Text wears ink tokens, never series colours. */
+  .tf-chart-tick {
+    fill: var(--color-chart-ink-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tf-chart-axis-label {
+    fill: var(--color-chart-ink-secondary);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tf-chart-marker {
+    font-size: 11px;
+    font-weight: 600;
+    paint-order: stroke;
+    stroke: var(--color-chart-surface);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+  .tf-chart-cell {
+    font-size: 10.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .tf-chart-tooltip {
+    @apply pointer-events-none absolute z-20 min-w-36 rounded-lg border border-fd-border bg-fd-popover/95 px-3 py-2 shadow-lg backdrop-blur;
+  }
+
+  /* Range slider in the dark run panel. */
+  .tf-range {
+    @apply h-1.5 cursor-pointer appearance-none rounded-full bg-panel-border;
+    accent-color: var(--color-brand);
+  }
+  .tf-range::-webkit-slider-thumb {
+    @apply size-4 appearance-none rounded-full border-2 border-white bg-brand shadow;
+  }
+  .tf-range::-moz-range-thumb {
+    @apply size-4 rounded-full border-2 border-white bg-brand shadow;
+  }
+  .tf-range:focus-visible {
+    @apply outline-none ring-2 ring-[#67d9a3]/50 ring-offset-2 ring-offset-panel;
+  }
+
+  .tf-hero-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--color-fd-border) 70%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-fd-border) 70%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 70% 60% at 30% 0%, black 30%, transparent 75%);
+  }
+}
+
+/*
+ * Heatmap steps. Sequential: one blue ramp, light→dark (dark theme: anchored at the surface).
+ * Diverging: loss red ↔ neutral grey ↔ profit green, with the value printed in each cell as the
+ * secondary encoding. Each step carries its own readable ink.
+ */
+:root {
+  --tf-seq-0: #e3eefc;
+  --tf-seq-1: #cde2fb;
+  --tf-seq-2: #b7d3f6;
+  --tf-seq-3: #86b6ef;
+  --tf-seq-4: #5598e7;
+  --tf-seq-5: #3987e5;
+  --tf-seq-6: #2a78d6;
+  --tf-seq-7: #1c5cab;
+  --tf-seq-8: #104281;
+  --tf-seq-ink-0: #0f172a;
+  --tf-seq-ink-1: #0f172a;
+  --tf-seq-ink-2: #0f172a;
+  --tf-seq-ink-3: #0f172a;
+  --tf-seq-ink-4: #ffffff;
+  --tf-seq-ink-5: #ffffff;
+  --tf-seq-ink-6: #ffffff;
+  --tf-seq-ink-7: #ffffff;
+  --tf-seq-ink-8: #ffffff;
+  --tf-div-0: #b2283a;
+  --tf-div-1: #d63b4b;
+  --tf-div-2: #ea8a94;
+  --tf-div-3: #f6cfd3;
+  --tf-div-4: #eef0f3;
+  --tf-div-5: #c6eadb;
+  --tf-div-6: #7fcaa8;
+  --tf-div-7: #1f9a6f;
+  --tf-div-8: #0b6f4b;
+  --tf-div-ink-0: #ffffff;
+  --tf-div-ink-1: #ffffff;
+  --tf-div-ink-2: #0f172a;
+  --tf-div-ink-3: #0f172a;
+  --tf-div-ink-4: #0f172a;
+  --tf-div-ink-5: #0f172a;
+  --tf-div-ink-6: #0f172a;
+  --tf-div-ink-7: #ffffff;
+  --tf-div-ink-8: #ffffff;
+}
+.dark {
+  --tf-seq-0: #121a2c;
+  --tf-seq-1: #13294d;
+  --tf-seq-2: #184f95;
+  --tf-seq-3: #1c5cab;
+  --tf-seq-4: #256abf;
+  --tf-seq-5: #2a78d6;
+  --tf-seq-6: #3987e5;
+  --tf-seq-7: #6da7ec;
+  --tf-seq-8: #9ec5f4;
+  --tf-seq-ink-0: #e6e9f0;
+  --tf-seq-ink-1: #e6e9f0;
+  --tf-seq-ink-2: #ffffff;
+  --tf-seq-ink-3: #ffffff;
+  --tf-seq-ink-4: #ffffff;
+  --tf-seq-ink-5: #ffffff;
+  --tf-seq-ink-6: #ffffff;
+  --tf-seq-ink-7: #0b1020;
+  --tf-seq-ink-8: #0b1020;
+  --tf-div-0: #f0727f;
+  --tf-div-1: #c2404f;
+  --tf-div-2: #7a2d37;
+  --tf-div-3: #3f2329;
+  --tf-div-4: #232a37;
+  --tf-div-5: #1b3a30;
+  --tf-div-6: #1e6b4e;
+  --tf-div-7: #26a374;
+  --tf-div-8: #5fd3a3;
+  --tf-div-ink-0: #0b1020;
+  --tf-div-ink-1: #ffffff;
+  --tf-div-ink-2: #ffffff;
+  --tf-div-ink-3: #e6e9f0;
+  --tf-div-ink-4: #e6e9f0;
+  --tf-div-ink-5: #e6e9f0;
+  --tf-div-ink-6: #ffffff;
+  --tf-div-ink-7: #0b1020;
+  --tf-div-ink-8: #0b1020;
+}
+
+/* Token colours for the isomorphic highlighter (src/highlight.ts), tuned on the dark code panel. */
+@layer components {
+  .tf-code-pre .tk-k {
+    color: #f47067;
+  }
+  .tf-code-pre .tk-s {
+    color: #96d0ff;
+  }
+  .tf-code-pre .tk-n {
+    color: #6cb6ff;
+  }
+  .tf-code-pre .tk-c {
+    color: #768390;
+    font-style: italic;
+  }
+  .tf-code-pre .tk-t {
+    color: #f69d50;
+  }
+  .tf-code-pre .tk-f {
+    color: #dcbdfb;
+  }
+  .tf-code-pre .tk-x {
+    color: #c8d2e0;
+  }
+  .tf-code-pre .tk-p,
+  .tf-code-pre .tk-b {
+    color: #adbac7;
+  }
+  .tf-code-pre {
+    color: #cdd9e5;
+  }
+}
+
+/* "Edit and run": a transparent textarea over the highlighted code, identical metrics. */
+@layer components {
+  .tf-editor {
+    font-variant-ligatures: none;
+  }
+  .tf-editor:focus-within {
+    outline: 2px solid #67d9a3;
+    outline-offset: -2px;
+  }
+  .tf-editor-input {
+    @apply m-0 block size-full resize-none overflow-hidden border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-6 outline-none;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    caret-color: #e2e8f0;
+    white-space: pre;
+    tab-size: 2;
+    font-variant-ligatures: none;
+  }
+  .tf-editor-input:focus-visible {
+    outline: none;
+  }
+  .tf-editor-input::selection {
+    background: rgb(108 182 255 / 0.35);
+  }
+}
+
+/* Compact reference markup (large contracts render thousands of rows). */
+@layer components {
+  .tf-kind {
+    @apply inline-flex h-5 shrink-0 items-center rounded bg-fd-secondary px-1.5 font-mono text-[0.625rem] font-bold text-fd-muted-foreground;
+  }
+  .tf-kind-function,
+  .tf-kind-value {
+    @apply bg-fd-accent text-fd-primary;
+  }
+  .tf-kind-class {
+    @apply bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300;
+  }
+  .tf-entry {
+    @apply border-t border-fd-border pt-8;
+    scroll-margin-top: calc(var(--tf-header-height) + 1.5rem);
+  }
+  .tf-entry-head {
+    @apply mb-3 flex flex-wrap items-center gap-2.5;
+  }
+  .tf-entry-head h2 {
+    @apply font-mono text-lg font-semibold tracking-tight text-fd-foreground;
+  }
+  .tf-entry-head a {
+    @apply font-mono text-sm text-fd-muted-foreground hover:text-fd-primary;
+  }
+  .tf-entry-doc {
+    @apply mb-4 max-w-3xl text-[0.9375rem] leading-7 text-fd-foreground;
+  }
+  .tf-entry-doc p,
+  .tf-mt-doc p,
+  .tf-entry-tags dd p {
+    @apply mb-2 last:mb-0;
+  }
+  .tf-entry-doc code,
+  .tf-mt-doc code,
+  .tf-entry-tags code {
+    @apply rounded border border-fd-border bg-fd-muted px-1 py-px font-mono text-[0.85em];
+  }
+  .tf-muted {
+    @apply text-sm text-fd-muted-foreground;
+  }
+  .tf-entry-split {
+    @apply rounded-xl border border-fd-border p-4 text-sm;
+  }
+  .tf-entry-split p {
+    @apply mb-2 text-fd-muted-foreground;
+  }
+  .tf-entry-split ul {
+    @apply grid gap-1 sm:grid-cols-2;
+  }
+  .tf-entry-split a {
+    @apply font-mono text-xs text-fd-primary hover:underline;
+  }
+  .tf-entry-tags {
+    @apply grid gap-x-4 gap-y-1.5 text-sm sm:grid-cols-[8rem_minmax(0,1fr)];
+  }
+  .tf-entry-tags > div {
+    @apply contents;
+  }
+  .tf-entry-tags dt {
+    @apply font-mono text-xs text-fd-muted-foreground;
+  }
+  .tf-entry-tags dd {
+    @apply text-[0.8125rem] leading-6;
+  }
+  .tf-entry-foot {
+    @apply text-xs text-fd-muted-foreground;
+  }
+  .tf-entry-foot a {
+    @apply text-fd-primary hover:underline;
+  }
+  .tf-mt-wrap {
+    @apply overflow-x-auto rounded-xl border border-fd-border;
+  }
+  .tf-mt {
+    @apply w-full min-w-[40rem] text-[0.8125rem];
+  }
+  .tf-mt thead {
+    @apply bg-fd-muted text-left text-xs text-fd-muted-foreground;
+  }
+  .tf-mt th {
+    @apply px-3 py-2 font-medium;
+  }
+  .tf-mt th:first-child {
+    width: 38%;
+  }
+  .tf-mt th:last-child {
+    width: 18%;
+  }
+  .tf-mt td {
+    @apply border-t border-fd-border px-3 py-2 align-top;
+  }
+  .tf-mt-name {
+    @apply block font-mono text-[0.78rem] font-semibold break-all text-fd-foreground;
+  }
+  .tf-mt-type {
+    @apply mt-0.5 block font-mono text-[0.72rem] break-all text-fd-primary;
+  }
+  .tf-mt-doc {
+    @apply text-fd-foreground;
+  }
+  .tf-mt-unit {
+    @apply mt-1 block text-[0.6875rem] text-fd-muted-foreground;
+  }
+  .tf-mt-req {
+    @apply text-xs font-medium text-fd-foreground;
+  }
+  .tf-mt-opt {
+    @apply text-xs text-fd-muted-foreground;
+  }
+  .tf-mt-default {
+    @apply mt-0.5 block text-xs text-fd-muted-foreground;
+  }
+  .tf-grid-title {
+    @apply mb-2.5 text-xs font-semibold tracking-[0.14em] text-fd-muted-foreground uppercase;
+  }
+  .tf-grid-title span {
+    @apply font-normal;
+  }
+  .tf-export-grid {
+    @apply grid gap-x-6 gap-y-1 sm:grid-cols-2 2xl:grid-cols-3;
+  }
+  .tf-export-grid li {
+    @apply min-w-0;
+  }
+  .tf-export-grid a {
+    @apply flex min-w-0 items-baseline gap-2 rounded-md px-1.5 py-1 hover:bg-fd-muted;
+  }
+  .tf-export-grid code {
+    @apply shrink-0 font-mono text-[0.8125rem] font-medium text-fd-primary;
+  }
+  .tf-export-grid span {
+    @apply truncate text-xs text-fd-muted-foreground;
+  }
+}
+
+/* Navigation: compact classes, because the section tree renders on every page. */
+@layer components {
+  .tf-nav-list {
+    @apply space-y-px;
+  }
+  .tf-nav-link {
+    @apply flex items-start gap-2 rounded-lg px-2.5 py-1.5 text-[0.875rem] leading-5 text-fd-muted-foreground transition-colors hover:bg-fd-secondary hover:text-fd-foreground;
+  }
+  .tf-nav-link > span:last-child {
+    @apply min-w-0 break-words;
+  }
+  .tf-nav-link[data-active] {
+    @apply bg-fd-accent font-medium text-fd-primary hover:bg-fd-accent hover:text-fd-primary;
+  }
+  .tf-nav-badge {
+    @apply mt-px w-9 shrink-0 font-mono text-[0.625rem] font-bold tracking-wide text-fd-muted-foreground/80;
+  }
+  .tf-nav-link[data-active] .tf-nav-badge {
+    @apply text-fd-primary;
+  }
+  .tf-nav-group {
+    @apply mb-1 px-2.5 py-1 text-[0.6875rem] font-semibold tracking-[0.14em] text-fd-muted-foreground uppercase;
+  }
+  .tf-nav-toggle {
+    @apply flex w-full items-center justify-between rounded-md text-left hover:text-fd-foreground;
+  }
+}

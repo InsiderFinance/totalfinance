@@ -1,3 +1,4 @@
+import { analyticPremium, logPriceRatio } from './analytic-premium.js';
 /**
  * Exotic option engines (spec §9.3): barrier, Asian, and lookback options.
  *
@@ -502,6 +503,7 @@ export const asian = {
         timeToExpiryYears: T,
         shocks: z,
       });
+      if (m === 1) return { arith: path[1]!, geo: path[1]! };
       let sum = 0;
       let logSum = 0;
       for (let i = 1; i <= m; i++) {
@@ -1043,18 +1045,46 @@ function kirkSpread(input: {
   }
   const disc = Math.exp(-r * T);
   const a = F2 / (F2 + K);
-  const sk = Math.sqrt(Math.max(0, v1 * v1 - 2 * rho * v1 * v2 * a + v2 * v2 * a * a));
+  const effectiveV2 = v2 * a;
+  const sk = Math.hypot(v1 - rho * effectiveV2, Math.sqrt((1 - rho) * (1 + rho)) * effectiveV2);
   const sd = sk * Math.sqrt(T);
-  let call: number;
-  if (sd <= 0) {
-    call = disc * Math.max(F1 - (F2 + K), 0);
-  } else {
-    const d1 = (Math.log(F1 / (F2 + K)) + 0.5 * sd * sd) / sd;
-    const d2 = d1 - sd;
-    call = disc * (F1 * N(d1) - (F2 + K) * N(d2));
+  if (sk === 0) return disc * Math.max(type === 'call' ? F1 - (F2 + K) : F2 + K - F1, 0);
+  if (sd === 0) {
+    throw new InputError(
+      'spread.price: effective volatility is positive, but its product with sqrt(timeToExpiryYears) underflows binary64 precision. Use a higher-precision calculation for these inputs; this is different from exact zero effective volatility.',
+      {
+        code: ErrorCode.InputOutOfRange,
+        context: { field: 'timeToExpiryYears', reason: 'horizon_volatility_underflow' },
+      },
+    );
   }
-  // Spread put–call parity: C − P = disc·(F1 − F2 − K).
-  return type === 'call' ? call : call - disc * (F1 - F2 - K);
+  // K=0 is exact Margrabe: common risk-free carry cancels before any rounding of forwards.
+  const logRatio = K === 0 ? logPriceRatio(S1, S2) : logPriceRatio(F1, F2 + K);
+  const carry = (q2 - q1) * T;
+  const h = K === 0 ? logRatio + carry : logRatio;
+  const hError =
+    K === 0
+      ? 8 * Number.EPSILON * (Math.abs(logRatio) + Math.abs(carry))
+      : 8 *
+        Number.EPSILON *
+        (1 +
+          Math.abs((r - q1) * T) +
+          Math.abs(F2 / (F2 + K)) * (1 + Math.abs((r - q2) * T)) +
+          Math.abs(K / (F2 + K)) +
+          Math.abs(h));
+  const d1 = (h + 0.5 * sd * sd) / sd;
+  const d2 = d1 - sd;
+  return analyticPremium({
+    positiveLeg: disc * (type === 'call' ? F1 * N(d1) : (F2 + K) * N(-d2)),
+    negativeLeg: disc * (type === 'call' ? (F2 + K) * N(d2) : F1 * N(-d1)),
+    atTheMoney: h === 0,
+    discountedScale: sd < 1e-4 ? S1 * Math.exp(-q1 * T) : disc * F1,
+    discountedStrike: sd < 1e-4 ? S2 * Math.exp(-q2 * T) + disc * K : disc * (F2 + K),
+    type,
+    logMoneyness: h,
+    logMoneynessError: hError,
+    standardDeviation: sd,
+  });
 }
 
 const SPREAD_PRICE_SPEC = specOf('spread.price#0');

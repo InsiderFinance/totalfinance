@@ -94,10 +94,19 @@ describe('release receipts and preserved documentation', () => {
       writeFileSync(join(source, 'version.json'), JSON.stringify(old));
       writeFileSync(join(source, 'index.html'), 'original old page');
       writeFileSync(join(source, 'assets/client.js'), 'original old code');
+      const logo = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg>';
+      const icon = Buffer.from([0, 0, 1, 0]);
+      const png = Buffer.from([137, 80, 78, 71]);
+      writeFileSync(join(source, 'assets/logo.svg'), logo);
+      writeFileSync(join(source, 'assets/favicon.ico'), icon);
+      writeFileSync(join(source, 'assets/og.png'), png);
       expect(restoreReleaseArchives(archives, out, current)).toEqual([version]);
       expect(readFileSync(join(out, 'versions', version, 'assets/client.js'), 'utf8')).toBe(
         'original old code',
       );
+      expect(readFileSync(join(out, 'versions', version, 'assets/logo.svg'), 'utf8')).toBe(logo);
+      expect(readFileSync(join(out, 'versions', version, 'assets/favicon.ico'))).toEqual(icon);
+      expect(readFileSync(join(out, 'versions', version, 'assets/og.png'))).toEqual(png);
       writeFileSync(join(source, 'version.json'), JSON.stringify({ ...old, published: false }));
       expect(() => restoreReleaseArchives(archives, out, current)).toThrow('does not match');
       writeFileSync(join(source, 'version.json'), JSON.stringify(old));

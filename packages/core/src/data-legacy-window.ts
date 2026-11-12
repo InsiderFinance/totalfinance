@@ -7,13 +7,8 @@ import { object, numberField, pageData, version, requestData } from './data-vali
 import { responseData } from './data-call.js';
 import { invalidView } from './data-view-validation.js';
 import { dataSequence } from './data-sequence-validation.js';
-import type {
-  PriceBarsView,
-  PriceBarsWindowRequest,
-  PriceBarsWindow,
-  PriceBarsWindowView,
-} from './data-types.js';
-import { makeWindowView } from './data-connection.js';
+import type { PriceBarsWindowRequest, PriceBarsWindow, PriceBarsWindowView } from './data-types.js';
+import { makeWindowView } from './data-window-view.js';
 function windowRequest(input: PriceBarsWindowRequest, limit: number) {
   const query = { ...input, kind: 'price-bars' as const, limit };
   requestData(query as never);

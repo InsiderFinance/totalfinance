@@ -51,3 +51,30 @@ Keep independently approved upstream caps and structural guards; candidate root 
 until final measured review, not an approved sum of upstream and C5 growth. Any derived conflicts
 must be recreated by documented generators from final combined inputs, never hand-selected as
 combined proof. No final combined acceptance or green budget is asserted by this source checkpoint.
+
+## Integrated source and single budget checkpoint
+
+The earlier260-case/0.1.3 paragraphs are historical iteration receipts. Current inherited SDK and
+independent peer/file locks use actual0.1.4. Authored source checkpoint is e0a6f381; merge of exact
+main23fbf06 remains in progress pending five derived outputs, not combined acceptance. Latest shared
+origin/main3555f93 site/README work is noted in the budget report and remains to be reconciled before
+final source-generation/PR closure; no packages source changed in that delta.
+
+The [concrete budget proposal](./community-connectors-c5-budget-2026-11-12.md) and adjacent JSON name
+actual source fingerprints, artifact hashes, graphs, repeated min/gzip bytes and exact unchanged caps.
+Current gates remain red: whole25/34 pass (9 byte overages); all54 installed structural checks pass,
+48 ordinary byte cases pass, five data byte cases exceed current caps. No threshold was edited.
+The feature-local catch placement is corrected and Rollup prunes the catalog; prior avoidable
+retention failures are retained as history. No shared registry/helper/financial optimization occurred.
+
+Current source passes403 cases/17 files including selected upstream numerical controls, C4/40k and65
+C5 cases. Build/typecheck and scoped lint/format pass. Fresh installed public consumer1/1, IF86/86,
+starter+copied independent author7/7, real second-copy error, one/three-page119.5,101.5,103/102,
+warmup/retained warnings/storage/NaN repair/finite unit oracle and strict public typings pass.
+Original independent author/probes and observations are unchanged; new dispositions are exercised
+by migrated public-source author/installed controls. Legacy v1 restoration keeps its old laws; the
+04Z convention improvement is explicit source2/v2, never a silent legacy-page financial rewrite.
+
+Source-final generation/zero-defect joined counts, complete public/API/reference/docs/full packed
+and clean committed-checkout recipe, final committed packs, exact-head hosted FAST+FULL and final
+coordinator review remain open. PR26 stays draft at historical3bc356f, no C5 push/merge/acceptance.

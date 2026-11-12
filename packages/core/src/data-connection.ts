@@ -14,9 +14,9 @@ import {
   checkCapability,
   continuationOf,
 } from './data-protocol.js';
-import { defineDataProvider } from './data.js';
+import { defineDataProvider } from './data-provider.js';
 import { dataSequence } from './data-sequence-validation.js';
-import { researchSelection, appendChoice } from './data-selection.js';
+import { makeWindowView } from './data-window-view.js';
 import { legacyWindowView } from './data-legacy-window.js';
 import type {
   DataProviderSource,
@@ -30,11 +30,14 @@ import type {
   DataQueryBinding,
   PriceBarRecord,
   DataPage,
+  DataCapability,
   PriceBarsQuery,
-  PriceBarsPaging,
-  ResearchBarChoice,
-  DataContinuation,
 } from './data-types.js';
+// Resolve these registered values outside guarded phases. Reading the shared enum object
+// inside a catch-observable phase conservatively retains its full catalog in Rollup.
+const inputRangeCode = ErrorCode.InputOutOfRange;
+const unsupportedCapabilityCode = ErrorCode.DataUnsupportedCapability;
+const invalidResponseCode = ErrorCode.DataInvalidResponse;
 const defaults = { pageSize: 1000, maxPages: 20, maxReads: 21, maxRecords: 20000 };
 const hard = { pageSize: 10000, maxPages: 100, maxReads: 101, maxRecords: 100000 };
 const keys = ['maxPages', 'maxReads', 'maxRecords'] as const;
@@ -51,7 +54,7 @@ function controls(value: unknown, ceiling = hard, base = defaults, call = false)
       values[k] = o[k];
     }
   if (call) signalField(o['signal']);
-  return { values, explicit: o };
+  return { values, explicit: Object.freeze({ ...o }) };
 }
 function query(input: PriceBarsWindowRequest): PriceBarsQuery {
   object(input, 'request', ['symbol', 'interval', 'from', 'to']);
@@ -116,8 +119,7 @@ function pagesState(
     sequence(p);
     records += p.data.length;
     bytes += byteSize(p);
-    if (records > hard.maxRecords || bytes > 64 * 1024 * 1024)
-      fail('pages', ErrorCode.InputOutOfRange);
+    if (records > hard.maxRecords || bytes > 64 * 1024 * 1024) fail('pages', inputRangeCode);
   }
   return { records, bytes };
 }
@@ -208,22 +210,6 @@ export function priceBarsCheckpoint(error: unknown): PriceBarsCheckpoint | undef
   if (!d) return undefined;
   if (!('value' in d)) fail('checkpoint');
   return checkpointData(d.value);
-}
-/** Construct a terminal view; strict selection remains lazy and all page facts survive. */
-export function makeWindowView(window: PriceBarsWindow, selection?: unknown): PriceBarsWindowView {
-  const state = researchSelection(window.pages, selection);
-  return Object.freeze(
-    Object.defineProperties(
-      { kind: 'price-bars-window' as const, window },
-      {
-        ...state.descriptors(),
-        resolve: {
-          value: (choice: ResearchBarChoice) =>
-            makeWindowView(window, appendChoice(window.pages, state.selection, choice)),
-        },
-      },
-    ),
-  ) as PriceBarsWindowView;
 }
 /** Bind only protocol2 sources. Construction performs no discovery or network work. */
 export function connect(
@@ -316,13 +302,6 @@ export function connect(
         cp,
       );
     }
-    function capture<T>(run: () => T): T {
-      try {
-        return run();
-      } catch (error) {
-        failed(error);
-      }
-    }
     async function read<T>(run: () => Promise<T>): Promise<T> {
       try {
         return await run();
@@ -330,7 +309,7 @@ export function connect(
         failed(error);
       }
     }
-    capture(() => {
+    try {
       aborted(signal);
       if (saved) {
         if (!equalData(binding.provider, bindingProvider)) fail('binding.provider');
@@ -344,7 +323,7 @@ export function connect(
               k === 'maxReads' ? 'reads' : k === 'maxPages' ? 'acceptedPages' : 'records'
             ]
           )
-            fail(k, ErrorCode.InputOutOfRange);
+            fail(k, inputRangeCode);
           limits[k] = candidate;
         }
         const requested = cp.paging.requested;
@@ -358,45 +337,56 @@ export function connect(
             cp.paging.state.effectiveSize > host.values.pageSize) ||
           (requested.mode === 'explicit' && requested.size > host.values.pageSize)
         )
-          fail('pageSize', ErrorCode.InputOutOfRange);
+          fail('pageSize', inputRangeCode);
         update({ limits });
       }
       aborted(signal);
       room();
-    });
+    } catch (error) {
+      failed(error);
+    }
     const declared = await read(() => bound.capabilities(signal ? { signal } : undefined));
     update({ progress: { ...cp.progress, reads: countedReads } });
     const q = binding.query as PriceBarsQuery;
-    const { cap, size } = capture(() => {
-      const cap = declared.capabilities.find(
+    let cap: DataCapability;
+    let size: number;
+    try {
+      const supported = declared.capabilities.find(
         (c) => c.kind === 'price-bars' && c.intervals.includes(q.interval),
       );
-      if (!cap)
+      if (!supported)
         throw new UnsupportedError('priceBars: requested interval is not supported by provider.', {
-          code: ErrorCode.DataUnsupportedCapability,
+          code: unsupportedCapabilityCode,
         });
-      checkCapability(q, cap);
-      let size: number;
-      if (cp.paging.state.status === 'resolved') size = cp.paging.state.effectiveSize;
-      else
-        size =
-          cp.paging.requested.mode === 'explicit'
-            ? cp.paging.requested.size
-            : Math.min(1000, host.values.pageSize, cap.maxPageSize);
-      numberField(
-        size,
-        'pageSize',
-        1,
-        Math.min(host.values.pageSize, cap.maxPageSize, hard.pageSize),
-        true,
-      );
+      cap = supported;
+      try {
+        checkCapability(q, cap);
+        if (cp.paging.state.status === 'resolved') size = cp.paging.state.effectiveSize;
+        else
+          size =
+            cp.paging.requested.mode === 'explicit'
+              ? cp.paging.requested.size
+              : Math.min(1000, host.values.pageSize, cap.maxPageSize);
+        numberField(
+          size,
+          'pageSize',
+          1,
+          Math.min(host.values.pageSize, cap.maxPageSize, hard.pageSize),
+          true,
+        );
+      } catch (error) {
+        if (error instanceof InputError)
+          error.message = 'priceBars: ' + error.message.replace(/^[^:]*:\s*/, '');
+        throw error;
+      }
       update({ paging: { ...cp.paging, state: { status: 'resolved', effectiveSize: size } } });
-      return { cap, size };
-    });
+    } catch (error) {
+      failed(error);
+    }
     const sequence = dataSequence();
     for (const p of cp.pages) sequence(p);
     for (;;) {
-      capture(() => {
+      try {
         aborted(signal);
         if (
           countedReads >= cp.limits.maxReads ||
@@ -404,7 +394,9 @@ export function connect(
           cp.progress.records >= cp.limits.maxRecords
         )
           budget(cp);
-      });
+      } catch (error) {
+        failed(error);
+      }
       const view = await read(() =>
         bound.query(q, {
           limit: Math.min(size, cp.limits.maxRecords - cp.progress.records),
@@ -412,49 +404,58 @@ export function connect(
           ...(signal ? { signal } : {}),
         }),
       );
-      const terminal = capture(() => {
+      const pages = Object.freeze([...cp.pages, view.page]),
+        records = cp.progress.records + view.page.data.length,
+        bytes = cp.bytes + byteSize(view.page);
+      // Only the SDK's local acceptance checks are inside this boundary. Constructing the
+      // immutable public view happens after them, with no provider callback or strict selector.
+      try {
         aborted(signal);
         if (!cap.consistency.includes(view.page.metadata.consistency))
-          throw new DataError('priceBars: provider consistency contradicts discovery.', {
-            code: ErrorCode.DataInvalidResponse,
-          });
+          throw responseError(
+            {
+              phase: 'sequence',
+              path: 'metadata.consistency',
+              reason: 'inconsistent',
+              validationCode: invalidResponseCode,
+              pageIndex: cp.pages.length,
+            },
+            'priceBars',
+          );
         sequence(view.page);
-        const pages = Object.freeze([...cp.pages, view.page]),
-          records = cp.progress.records + view.page.data.length,
-          bytes = cp.bytes + byteSize(view.page);
         if (bytes > 64 * 1024 * 1024) budget(cp, 'maxBytes');
-        if (view.page.nextCursor === null) {
-          const window = freezeData({
-            version: 2 as const,
-            kind: 'price-bars-window' as const,
-            contractVersion: 2 as const,
+      } catch (error) {
+        failed(error);
+      }
+      if (view.page.nextCursor === null)
+        return makeWindowView(
+          freezeData({
+            version: 2,
+            kind: 'price-bars-window',
+            contractVersion: 2,
             binding,
             pages,
             pagination: {
-              status: 'terminal' as const,
+              status: 'terminal',
               pageSize: size,
               pageCalls: pages.length,
               reads: countedReads,
               records,
             },
             bytes,
-          });
-          return makeWindowView(window);
-        }
-        update({
-          pages,
-          next: view.continuation,
-          progress: {
-            status: 'incomplete',
-            acceptedPages: pages.length,
-            records,
-            reads: countedReads,
-          },
-          bytes,
-        });
-        return undefined;
+          }),
+        );
+      update({
+        pages,
+        next: view.continuation,
+        progress: {
+          status: 'incomplete',
+          acceptedPages: pages.length,
+          records,
+          reads: countedReads,
+        },
+        bytes,
       });
-      if (terminal) return terminal;
     }
   }
 

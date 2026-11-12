@@ -13,7 +13,7 @@
     "dist"
   ],
   "peerDependencies": {
-    "@insiderfinance/totalfinance": "0.1.3"
+    "@insiderfinance/totalfinance": "0.1.4"
   },
   "devDependencies": {
     "@insiderfinance/totalfinance": "file:sdk.tgz",

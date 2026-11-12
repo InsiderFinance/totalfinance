@@ -1,0 +1,9 @@
+# The documentation site is its own pnpm project with its own lockfile. It is deliberately NOT a
+# member of the library workspace: site-only dependencies (Next.js, React, Fumadocs, Tailwind)
+# must never re-resolve the library's dependency graph. It consumes the BUILT public package
+# through a link to distribution/totalfinance, exactly as an installed consumer would.
+packages: []
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - '@tailwindcss/oxide'

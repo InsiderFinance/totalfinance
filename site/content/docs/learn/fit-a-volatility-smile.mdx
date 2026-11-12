@@ -1,0 +1,26 @@
+---
+title: Fit a volatility smile
+description: Fit SVI, SABR or monotone interpolation to implied-volatility quotes and check the fit for butterfly arbitrage.
+playground: fit-a-volatility-smile
+---
+
+## What this calculates
+
+`volatilitySurface` turns option quotes into a fitted implied-volatility surface. With one expiry,
+that surface is a smile. `impliedVolatility(strike, expiry)` reads the fitted smile anywhere, the
+slice exposes the fitted parameters, and `arbitrage()` checks the fit for butterfly and calendar
+arbitrage.
+
+## Choosing a model
+
+- **SVI** (raw stochastic-volatility-inspired) fits total variance with five parameters and is the
+  usual choice for equity smiles. It needs at least five strikes.
+- **SABR** with β = 0.5 fits a stochastic-volatility model's implied-volatility approximation.
+- **Monotone interpolation** (PCHIP) passes through every quote and makes no shape assumption beyond
+  them.
+
+## Reading the chart
+
+Dots are your quotes and the line is the fitted smile, extended beyond the outermost strikes. Where
+the line leaves the quotes, the model is extrapolating. The butterfly metric reports whether the
+fitted smile implies a negative probability density anywhere on its check grid.

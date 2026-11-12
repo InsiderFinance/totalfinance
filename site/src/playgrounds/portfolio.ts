@@ -5,7 +5,8 @@ import {
   type PortfolioEventEnvelope,
 } from '@insiderfinance/totalfinance/portfolio';
 import { createMarketSnapshot } from '@insiderfinance/totalfinance/core/artifacts';
-import type { Playground } from '../types.js';
+import type { Playground } from '../types';
+import { numberInput } from './inputs';
 
 export const portfolio: Playground = {
   id: 'track-portfolio-pnl',
@@ -51,7 +52,11 @@ export const portfolio: Playground = {
     },
   ],
   run(input) {
-    const { quantity = 100, openingPrice = 150, closingPrice = 165, deposit = 5000 } = input;
+    const quantity = numberInput(input, 'quantity');
+    const openingPrice = numberInput(input, 'openingPrice');
+    const closingPrice = numberInput(input, 'closingPrice');
+    const deposit = numberInput(input, 'deposit');
+    if (!Number.isInteger(quantity)) throw new Error('Shares held must be a whole number.');
     const shared = {
       schemaVersion: 1 as const,
       sourceId: 'sample',
@@ -112,22 +117,73 @@ export const portfolio: Playground = {
     const result = { pnl, timeline };
     return {
       metrics: [
-        { label: 'Ending account value', value: pnl.to.netAssetValue, unit: 'USD' },
-        { label: 'Investment P&L', value: pnl.investmentReturn, unit: 'USD' },
-        { label: 'External cash flow', value: pnl.externalFlows, unit: 'USD · not profit' },
-        { label: 'Reconciliation residual', value: pnl.residual, unit: 'USD' },
+        {
+          label: 'Ending account value',
+          value: pnl.to.netAssetValue,
+          unit: 'USD',
+          format: 'currency',
+        },
+        {
+          label: 'Investment P&L',
+          value: pnl.investmentReturn,
+          unit: 'USD · profit, not deposits',
+          format: 'currency',
+          tone: pnl.investmentReturn >= 0 ? 'profit' : 'loss',
+        },
+        {
+          label: 'External cash flow',
+          value: pnl.externalFlows,
+          unit: 'USD · deposits are not profit',
+          format: 'currency',
+        },
+        {
+          label: 'Reconciliation residual',
+          value: pnl.residual,
+          unit: 'USD · should be 0',
+          format: 'currency',
+        },
       ],
       chart: {
-        title: 'Account value across sample weekly marks',
-        xLabel: 'Days since February 1, 2026',
-        yLabel: 'Net asset value · USD',
-        series: [
-          {
-            name: 'Account value (includes deposits)',
-            points: timeline.rows.map((row, index) => ({ x: index * 7, y: row.netAssetValue })),
-          },
+        kind: 'waterfall',
+        title: 'From opening to closing account value',
+        caption:
+          'Investment P&L and external cash flows are separate steps: a deposit raises account value without being profit. Zero components are omitted.',
+        yLabel: 'USD',
+        yFormat: 'currency',
+        steps: [
+          { label: 'Opening value', value: pnl.from.netAssetValue, kind: 'start' },
+          ...(
+            [
+              ['Realized P&L', pnl.components.realizedPnl],
+              ['Unrealized P&L', pnl.components.unrealizedPnl],
+              ['Income', pnl.components.income],
+              ['Transaction costs', pnl.components.transactionCosts],
+              ['Financing', pnl.components.financing],
+              ['FX P&L', pnl.components.foreignExchangePnl],
+              ['Deposits & withdrawals', pnl.externalFlows],
+              ['Residual', pnl.residual],
+            ] as const
+          )
+            .filter(([, value]) => value !== 0)
+            .map(([label, value]) => ({ label, value, kind: 'delta' as const })),
+          { label: 'Closing value', value: pnl.to.netAssetValue, kind: 'total' },
         ],
       },
+      additionalCharts: [
+        {
+          title: 'Account value across sample weekly marks',
+          xLabel: 'Days since February 1, 2026',
+          yLabel: 'Net asset value · USD',
+          yFormat: 'currency',
+          series: [
+            {
+              name: 'Account value (includes deposits)',
+              points: timeline.rows.map((row, index) => ({ x: index * 7, y: row.netAssetValue })),
+              style: 'area',
+            },
+          ],
+        },
+      ],
       assumptions: {
         pnl: pnl.assumptions,
         timeline: timeline.assumptions,

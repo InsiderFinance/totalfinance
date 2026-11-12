@@ -1,0 +1,25 @@
+---
+title: Measure value at risk
+description: Historical or parametric VaR and expected shortfall on your own returns, with the loss tail and drawdowns drawn.
+playground: measure-risk
+---
+
+## What this calculates
+
+`valueAtRiskReport` estimates one-period value at risk and expected shortfall (conditional VaR) from
+a return series. Both are positive loss magnitudes, as decimals of the position: `0.021` means a 2.1%
+loss. The report echoes the confidence level, method and horizon, and its diagnostics explain any
+adjustment it could not apply.
+
+## Historical or parametric
+
+- **Historical** takes the empirical tail quantile of your returns. It keeps fat tails and skew, but
+  it can only see losses that are in the sample.
+- **Parametric** fits a normal distribution's mean and volatility. It is smooth, but it assumes the
+  tails are normal, which equity returns usually are not.
+
+## Reading the charts
+
+The histogram shades the returns at or below −VaR; expected shortfall is their average. The drawdown
+chart compounds the returns in order and shows how far below its running peak the investment fell,
+a path risk that a one-period VaR does not capture.

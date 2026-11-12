@@ -1,0 +1,25 @@
+---
+title: Chart technical indicators
+description: Overlay moving averages or Bollinger Bands and add RSI or MACD on your own price data, with honest warmup.
+playground: chart-technical-indicators
+---
+
+## What this calculates
+
+Every indicator is a function from a series to an ordinary array aligned with it: one value per bar,
+or one named record for multi-output indicators such as Bollinger Bands (`upper`, `middle`, `lower`,
+`bandwidth`, `percentB`) and MACD (`macd`, `signal`, `histogram`). Parameters are named, and
+indicators with industry-standard defaults resolve them when you omit them.
+
+## Warmup is not zero
+
+An indicator cannot have a value before it has enough history. Those leading entries are `NaN`, and
+the chart leaves them blank. They are not zeros and not signals; a strategy should treat them as
+"no position". The [warmup guide](/guides/ta-warmup) lists the warmup of every registered
+indicator.
+
+## Bring your own bars
+
+Paste or upload OHLC data in the panel. Indicators here use closing prices; the library also offers
+high/low/volume indicators, streaming updates and snapshots for live charts. Browse the
+[indicator registry](/guides/ta-indicators) and the [live charting guide](/guides/ta-live-charts).

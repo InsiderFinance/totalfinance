@@ -16,7 +16,7 @@ import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 const here = dirname(fileURLToPath(import.meta.url)),
   artifacts = resolve(process.argv[2] ?? '.local-connector-artifacts');
-const sdk = join(artifacts, 'insiderfinance-totalfinance-0.1.3.tgz');
+const sdk = join(artifacts, 'insiderfinance-totalfinance-0.1.4.tgz');
 const rootPackages = JSON.parse(
   execFileSync('pnpm', ['-r', 'list', '--depth', '-1', '--json'], {
     cwd: resolve(here, '../../..'),
@@ -67,7 +67,7 @@ assert.ok(
 );
 const consumerLock = readFileSync(join(work, 'pnpm-lock.yaml'), 'utf8');
 assert.ok(
-  consumerLock.includes('insiderfinance-totalfinance-0.1.3.tgz') &&
+  consumerLock.includes('insiderfinance-totalfinance-0.1.4.tgz') &&
     !consumerLock.includes('workspace:'),
 );
 

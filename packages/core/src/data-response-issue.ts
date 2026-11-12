@@ -20,19 +20,22 @@ export interface ResponseIssue {
   pageIndex?: number;
 }
 const ResearchResponseError = class DataError extends BaseDataError {
-  constructor(
-    readonly issue: ResponseIssue,
-    door: string,
-  ) {
+  readonly #detail: ResponseIssue;
+  constructor(issue: ResponseIssue, door: string) {
     super(`${door}: invalid research data at ${issue.path} (${issue.reason}).`, {
       code: ErrorCode.DataInvalidResponse,
       context: { ...issue },
     });
-    Object.freeze(issue);
+    this.#detail = Object.freeze({ ...issue });
+  }
+  static detail(error: unknown): ResponseIssue | undefined {
+    return error !== null && typeof error === 'object' && #detail in error
+      ? error.#detail
+      : undefined;
   }
 };
 export function issueOf(error: unknown): ResponseIssue | undefined {
-  return error instanceof ResearchResponseError ? error.issue : undefined;
+  return ResearchResponseError.detail(error);
 }
 export function responseError(issue: ResponseIssue, door = 'research data'): BaseDataError {
   return new ResearchResponseError(issue, door);
@@ -98,7 +101,10 @@ for (const prefix of ['diagnostics', 'data[].diagnostics']) {
   fields(prefix + '.warnings[]', 'code message severity context');
 }
 fields('capabilities', 'contractVersion providerId providerVersion capabilities');
-fields('capabilities[]', 'kind intervals maxPageSize consistency pointInTime access');
+fields(
+  'capabilities[]',
+  'kind intervals maxPageSize consistency pointInTime access maxWindowMs maxSessionDays',
+);
 paths.add('capabilities[].intervals[]');
 function allowedPath(p: string, phase: Phase): string | undefined {
   const capability =
@@ -203,13 +209,19 @@ export function scanIssue(
       'facts.sessionDate': 'metadata.sessionDate',
       'facts.sourceGeneratedTimestampMs': 'metadata.sourceGeneratedTimestampMs',
     };
-    const path = allowedPath(
-      source
-        ? (sourcePaths[p] ??
-            p.replace(/^facts\.(times|freshness|coverage|quality|access)(?=\.|$)/, 'metadata.$1'))
-        : p,
-      phase,
-    );
+    const mappedSource =
+      sourcePaths[p] ??
+      p.replace(/^facts\.(times|freshness|coverage|quality|access)(?=\.|$)/, 'metadata.$1');
+    const sourceSchema = p.startsWith('facts.')
+      ? mappedSource !== p
+      : (p === 'data' ||
+          p.startsWith('data[]') ||
+          p === 'nextCursor' ||
+          p === 'diagnostics' ||
+          p.startsWith('diagnostics.')) &&
+        p !== 'data[].timestampConvention' &&
+        p !== 'data[].bar.symbol';
+    const path = allowedPath(source ? (sourceSchema ? mappedSource : '') : p, phase);
     if (path && tokens.length <= 10 && numeric.every(Number.isSafeInteger)) {
       let current: unknown = input,
         stored = false;

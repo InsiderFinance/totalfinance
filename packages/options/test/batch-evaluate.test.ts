@@ -587,3 +587,38 @@ describe('the existing batch pricers on the shared kernel (decision 9)', () => {
     expect(Array.from(out.subarray(5))).toEqual([SENTINEL, SENTINEL]);
   });
 });
+
+describe('arithmetic failure commits no batch outputs', () => {
+  const columns = () => ({
+    spot: new Float64Array([100, 101, 100, 102]),
+    strike: new Float64Array([100, 100, 100 * Math.exp(0.01), 100]),
+    volatility: new Float64Array([0.2, 0.2, 1e-17, 0.2]),
+    timeToExpiryYears: new Float64Array([1, 1, 1, 1]),
+    riskFreeRate: new Float64Array([0, 0, 0.01, 0]),
+    type: new Int8Array([1, 1, 1, 1]),
+  });
+  for (const alias of [false, true])
+    it(`preserves caller storage on row-two refusal (alias=${alias})`, () => {
+      const cols = columns(),
+        out = alias ? cols.spot : new Float64Array(6).fill(-1),
+        before = out.slice();
+      const error = caught(() => blackScholesPriceManyInto(cols, out));
+      expect(error.context).toMatchObject({ contractIndex: 2 });
+      expect(out).toEqual(before);
+    });
+  it('commits selective outputs together, never just the successful prefix', () => {
+    const cols = columns(),
+      price = new Float64Array(6).fill(-1),
+      delta = new Float64Array(6).fill(-2);
+    expect(
+      caught(() => blackScholesEvaluateManyInto(cols, { price, delta })).context,
+    ).toMatchObject({ contractIndex: 2 });
+    expect([...price]).toEqual(Array(6).fill(-1));
+    expect([...delta]).toEqual(Array(6).fill(-2));
+  });
+  it('preserves the row index in an allocating batch too', () => {
+    expect(caught(() => blackScholesPriceMany(columns())).context).toMatchObject({
+      contractIndex: 2,
+    });
+  });
+});

@@ -1,0 +1,39 @@
+---
+title: 'Strategies'
+description: 'Multi-leg option positions: payoff, break-evens, scenarios and a named strategy catalogue.'
+---
+
+Compose positions from legs, or start from one of the named presets, then ask the position for its expiration payoff, scenario table, Greeks or a classification. `scanStrategies` and `optimizeStrategy` search a chain for candidates under explicit objectives.
+
+## Try it live
+
+- [Analyze a strategy](/learn/analyze-a-strategy)
+- [Explore scenarios](/learn/explore-scenarios)
+
+## Common APIs
+
+<KeyExports
+  domain="strategy"
+  names={[
+    'strategy',
+    'legs',
+    'listStrategies',
+    'bullCallSpread',
+    'ironCondor',
+    'coveredCall',
+    'classifyStrategy',
+    'scanStrategies',
+    'explainPosition',
+    'payoffSvg',
+  ]}
+/>
+
+## Guides
+
+- [Strategy catalogue](/guides/strategies)
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="strategy" />

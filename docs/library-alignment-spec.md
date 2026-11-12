@@ -788,3 +788,5 @@ Stage 4 API inherits:
 
 These are permanent conformance gates, not one-time review tests. FC7 and every later slice must
 extend their declaration coverage and direct operation canaries in the same implementation commit.
+
+C5 integration note (2026-11-12): quoted inventory counts above are HISTORICAL C4 evidence at3bc356f. Combined current-main/C5 generation and truthful live-count synchronization are pending; no combined acceptance is claimed by retaining this history.

@@ -1,3 +1,4 @@
+import type { PriceBarRecord } from '../src/data-types.js';
 import { expect, it } from 'vitest';
 import {
   connect,
@@ -277,6 +278,10 @@ it('retains impossible explicit size and post-discovery consumption', async () =
   } catch (e) {
     second = e;
   }
+  expect(second).toMatchObject({
+    message: expect.stringMatching(/^priceBars: pageSize/),
+    code: 'input.out_of_range',
+  });
   expect(priceBarsCheckpoint(second)?.progress.reads).toBe(2);
   expect(queries).toBe(0);
   expect(priceBarsCheckpoint(second)?.paging.requested).toEqual({ mode: 'explicit', size: 1000 });
@@ -298,7 +303,7 @@ it('rejects resolved paging above current host ceiling before discovery and pres
         },
       ];
     },
-    async query(_, o) {
+    async query(_, _o) {
       if (++reads === 2) throw Error('failed');
       return page(0, 'next');
     },
@@ -896,7 +901,7 @@ it('record oracle refutes finite wrong source units independently', async () => 
   ).rejects.toMatchObject({ code: 'data.nonconformant', context: { law: 'expected-facts' } });
 });
 
-function expectedRecordFacts(): import('../src/data-types.js').PriceBarRecord[] {
+function expectedRecordFacts(): PriceBarRecord[] {
   return [
     {
       bar: {
@@ -1123,3 +1128,333 @@ for (const options of [{ maxSessionDays: 3 }, { maxWindowMs: 0 }])
       ).resolves.toBeDefined();
     }
   });
+
+it('raw author omitted and explicit undefined close keep controlled field/row diagnostics', async () => {
+  for (const explicit of [true, false]) {
+    const raw = structuredClone(page(0));
+    const b = raw.data[0]!.bar as unknown as Record<string, unknown>;
+    if (explicit) b['close'] = undefined;
+    else delete b['close'];
+    await expect(
+      defineDataProvider(
+        source({
+          async query() {
+            return raw;
+          },
+        }),
+      ).query(query, { limit: 1 }),
+    ).rejects.toMatchObject({
+      code: 'data.invalid_response',
+      context: { path: 'data[].bar.close', rowIndex: 0, reason: 'missing_field' },
+    });
+  }
+  const raw = page(0);
+  const noBar = { ...raw, data: [{ sessionDate: '2026-01-01' }] };
+  await expect(
+    defineDataProvider(
+      source({
+        async query() {
+          return noBar as never;
+        },
+      }),
+    ).query(query, { limit: 1 }),
+  ).rejects.toMatchObject({
+    code: 'data.invalid_response',
+    context: { path: 'data[].bar', rowIndex: 0, reason: 'missing_field' },
+  });
+});
+
+it('raw-source scanner does not promote canonical-envelope lookalikes or arbitrary names', async () => {
+  for (const decoration of [
+    { metadata: { datasetId: NaN } },
+    { binding: { provider: { id: undefined } } },
+    { 'data[0].bar.close': NaN },
+  ]) {
+    const s = source({
+      async query() {
+        return { ...page(0), ...decoration };
+      },
+    });
+    await expect(defineDataProvider(s).query(query, { limit: 1 })).rejects.toMatchObject({
+      code: 'data.invalid_response',
+      context: { path: 'page', reason: 'invalid_structure' },
+    });
+  }
+});
+
+it('rebuilds genuine SDK validation detail after a provider changes public error text/context', async () => {
+  let original: unknown;
+  try {
+    createDataView({
+      contractVersion: 1,
+      kind: 'price-bars',
+      symbol: 'TEST',
+      data: [],
+      nextCursor: null,
+    });
+  } catch (error) {
+    original = error;
+  }
+  if (!(original instanceof DataError)) throw Error('missing SDK validation error');
+  original.message = 'secret URL from provider';
+  Object.defineProperty(original, 'context', { value: { path: 'secret', value: 'payload' } });
+  await expect(
+    defineDataProvider(
+      source({
+        async query() {
+          throw original;
+        },
+      }),
+    ).query(query, { limit: 1 }),
+  ).rejects.toMatchObject({ code: 'data.invalid_response', context: { path: 'provenance' } });
+  const failed = await failureOf(() =>
+    defineDataProvider(
+      source({
+        async query() {
+          throw original;
+        },
+      }),
+    ).query(query, { limit: 1 }),
+  );
+  expect(JSON.stringify(failed)).not.toMatch(/secret|URL|payload/);
+});
+it('prototype-forged validation errors cannot promote provider-authored schema context', async () => {
+  const bad = page(0);
+  const r = bad.data[0]!;
+  const broken = source({
+    async query() {
+      return { ...bad, data: [{ ...r, bar: { ...r.bar, close: NaN } }] };
+    },
+  });
+  const actual = await failureOf(() => defineDataProvider(broken).query(query, { limit: 1 }));
+  const forged = Object.assign(Object.create(Object.getPrototypeOf(actual)), {
+    code: 'data.invalid_response',
+    message: 'secret payload',
+    issue: Object.freeze({
+      phase: 'page',
+      path: 'secret',
+      reason: 'not_finite',
+      validationCode: 'input.not_finite',
+    }),
+    context: { path: 'secret', value: 'payload' },
+  });
+  const rejected = await failureOf(() =>
+    defineDataProvider(
+      source({
+        async query() {
+          throw forged;
+        },
+      }),
+    ).query(query, { limit: 1 }),
+  );
+  expect((rejected as any).code).toBe('data.invalid_response');
+  expect((rejected as any).context?.path).toBeUndefined();
+  expect(JSON.stringify(rejected)).not.toMatch(/secret|payload/);
+});
+it('copies constructor control authority instead of retaining mutable caller options', async () => {
+  let calls = 0;
+  const s = source({
+    async query(_, o) {
+      calls++;
+      return page(o.cursor ? 1 : 0, o.cursor ? null : '1');
+    },
+  });
+  const error = await failureOf(() => connect(s).priceBars(request, { maxReads: 2, maxPages: 1 })),
+    cp = priceBarsCheckpoint(error);
+  if (!cp) throw Error('missing checkpoint');
+  const omitted: { maxReads?: number; maxPages?: number } = {},
+    defaults = connect(s, omitted);
+  omitted.maxReads = 20;
+  omitted.maxPages = 10;
+  const refused = await failureOf(() => defaults.resumePriceBars(cp));
+  expect((refused as any).code).toBe('data.window_budget_exceeded');
+  expect(priceBarsCheckpoint(refused)).toEqual(cp);
+  expect(calls).toBe(1);
+  const explicit = { maxReads: 10, maxPages: 5 },
+    chosen = connect(s, explicit);
+  explicit.maxReads = 1;
+  explicit.maxPages = 1;
+  const success = await chosen.resumePriceBars(cp);
+  expect(success.closePrices).toEqual([101, 102]);
+  expect(calls).toBe(2);
+  expect(explicit).toEqual({ maxReads: 1, maxPages: 1 });
+});
+it('portable guidance admits controlled canonical fields without claiming a forged SDK phase', async () => {
+  for (const field of [
+    'data[].bar.close',
+    'metadata.datasetId',
+    'capabilities[].maxPageSize',
+  ] as const) {
+    const p = defineDataProvider(
+      source({
+        async query() {
+          throw new DataProviderError({
+            code: ErrorCode.DataInvalidResponse,
+            guidance: { field, rule: 'source_domain_rule' },
+          });
+        },
+      }),
+    );
+    const e = await failureOf(() => p.query(query, { limit: 1 }));
+    expect((e as any).context).toEqual({ retryable: false, field, rule: 'source_domain_rule' });
+    expect((e as any).context.phase).toBeUndefined();
+  }
+  expect(
+    () =>
+      new DataProviderError({
+        code: ErrorCode.DataInvalidRequest,
+        guidance: { field: 'secret URL' as never, rule: 'source_domain_rule' },
+      }),
+  ).toThrowError(expect.objectContaining({ code: 'input.invalid_enum' }));
+});
+for (const patch of [
+  { protocol: 'other' },
+  { contractVersion: 1 },
+  { query: null },
+  { capabilities: null },
+])
+  it('refuses raw-source protocol misuse before any call ' + JSON.stringify(patch), () => {
+    let calls = 0;
+    const raw = source({
+      async capabilities() {
+        calls++;
+        return [];
+      },
+      async query() {
+        calls++;
+        return page(0);
+      },
+    });
+    expect(() => connect({ ...raw, ...patch } as never)).toThrow();
+    expect(calls).toBe(0);
+  });
+it('refuses a consumer wrapper as the C5 raw-source binding before calling it', () => {
+  let calls = 0;
+  const p = defineDataProvider(
+    source({
+      async capabilities() {
+        calls++;
+        return [];
+      },
+      async query() {
+        calls++;
+        return page(0);
+      },
+    }),
+  );
+  expect(() => connect(p as never)).toThrowError(
+    expect.objectContaining({ code: 'data.contract_version_unsupported' }),
+  );
+  expect(calls).toBe(0);
+});
+
+it('snapshots validated limit, query and nested continuation pins before asynchronous dispatch', async () => {
+  const seen: unknown[] = [];
+  const p = defineDataProvider(
+    source({
+      async query(q, controls) {
+        seen.push({ q, controls });
+        return page(controls.cursor ? 1 : 0, controls.cursor ? null : 'next');
+      },
+    }),
+  );
+  const mutableQuery = { ...query };
+  const options = { limit: 1 };
+  const pending = p.query(mutableQuery, options);
+  options.limit = 100000;
+  mutableQuery.to = '2026-01-02';
+  const first = await pending;
+  expect(seen[0]).toMatchObject({ q: query, controls: { limit: 1 } });
+  expect(Object.isFrozen(options)).toBe(false);
+  const cursor = JSON.parse(JSON.stringify(first.continuation));
+  const second = p.query(query, { limit: 1, cursor });
+  cursor.pins.datasetId = 'changed-after-validation';
+  cursor.binding.query.to = '2026-01-02';
+  await second;
+  expect(seen[1]).toMatchObject({ q: query, controls: { pins: { datasetId: 'independent' } } });
+  expect(Object.isFrozen(cursor.pins)).toBe(false);
+});
+it('rejects two rows against original limit1 despite a post-invocation options mutation', async () => {
+  let received = 0;
+  const p = defineDataProvider(
+    source({
+      async query(_q, controls) {
+        received = controls.limit;
+        return { ...page(0), data: [...page(0).data, ...page(1).data] };
+      },
+    }),
+  );
+  const options = { limit: 1 };
+  const pending = p.query(query, options);
+  options.limit = 100000;
+  await expect(pending).rejects.toMatchObject({ code: 'data.invalid_response' });
+  expect(received).toBe(1);
+});
+
+it.each([
+  'input.wrong_type',
+  'input.missing_field',
+  'input.not_finite',
+  'input.out_of_range',
+  'input.invalid_enum',
+])(
+  'rebuilds a safe local input refusal %s with private cause and no provider text',
+  async (code) => {
+    const { InputError } = await import('../src/errors.js');
+    const original = new InputError('SECRET URL payload', { code, context: { url: 'SECRET' } });
+    const p = defineDataProvider(
+      source({
+        async query() {
+          throw original;
+        },
+      }),
+    );
+    const e = await failureOf(() => p.query(query, { limit: 1 }));
+    expect(e).toBeInstanceOf(InputError);
+    expect(e).toMatchObject({ code, cause: original });
+    expect(JSON.stringify(e)).not.toMatch(/SECRET|url|payload/);
+  },
+);
+
+it('portable input refusal recognition never trusts unknown codes, inherited codes or getters', async () => {
+  let reads = 0;
+  const bad = [
+    { code: 'input.made_up' },
+    Object.create({ code: 'input.wrong_type' }),
+    Object.defineProperty({}, 'code', {
+      get() {
+        reads++;
+        return 'input.wrong_type';
+      },
+    }),
+    Object.defineProperty({ code: 'input.wrong_type' }, 'context', {
+      get() {
+        reads++;
+        return {};
+      },
+    }),
+    {
+      code: 'input.wrong_type',
+      context: Object.defineProperty({}, 'secret', {
+        enumerable: true,
+        get() {
+          reads++;
+          return 'SECRET';
+        },
+      }),
+    },
+  ];
+  for (const original of bad) {
+    const p = defineDataProvider(
+      source({
+        async query() {
+          throw original;
+        },
+      }),
+    );
+    const e = await failureOf(() => p.query(query, { limit: 1 }));
+    expect(e).toMatchObject({ code: 'data.provider_failure' });
+    expect(JSON.stringify(e)).not.toMatch(/SECRET|made_up/);
+  }
+  expect(reads).toBe(0);
+});

@@ -1,0 +1,24 @@
+---
+title: Browser agent tools
+description: Every calculator registers a page-scoped tool that a browser agent can call with the same inputs a person uses.
+---
+
+In browsers that implement the proposed [WebMCP](https://github.com/webmachinelearning/webmcp)
+`document.modelContext` API, each calculator page registers one tool, such as
+`calculate_price_an_option`. Its input schema is generated from the calculator's own controls, so an
+agent and a person are validated by the same rules, and calling it updates the visible inputs,
+results, charts and copyable TypeScript.
+
+## What the tools can and cannot do
+
+- They compute only on the inputs supplied, in the page. They never fetch data, store a portfolio or
+  place an order.
+- Datasets are accepted as explicit values. An agent must supply real observations or label sample
+  data as synthetic; it must never invent market data.
+- Browsers without the API keep the complete interface; nothing depends on the tools.
+
+## Schemas
+
+The tool's input schema mirrors the panel: numbers carry their unit, minimum and maximum; options
+are enumerations; tables are arrays of typed rows; datasets are OHLC bars or numeric series with an
+origin and a source label.

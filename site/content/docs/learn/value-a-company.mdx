@@ -1,0 +1,24 @@
+---
+title: Value a company
+description: A discounted-cash-flow valuation with a full two-way sensitivity table, where every cell is a real valuation.
+playground: value-a-company
+---
+
+## What this calculates
+
+`discountedCashFlow` discounts a forecast of free cash flow plus a terminal value. Firm-basis cash
+flows (FCFF) produce **enterprise value**, not equity value: no debt, cash or share count is invented
+for you. `discountedCashFlowSensitivityTable` re-runs the same valuation for every pair of discount
+rate and terminal growth, so each cell equals a direct `discountedCashFlow` call by construction.
+
+## Reading the heatmap
+
+Rows are discount rates and columns are terminal growth rates; darker cells are higher enterprise
+values. The outlined cell is your base case. A valuation that swings widely across neighbouring
+cells is telling you how much of the answer is assumption.
+
+## Watch the terminal share
+
+The **terminal share of value** metric reports how much of enterprise value comes from the terminal
+value. When it dominates, the discount rate and terminal growth, which are assumptions rather than
+market facts, drive the answer.

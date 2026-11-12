@@ -1,0 +1,23 @@
+---
+title: Price a bond
+description: Price a fixed-rate bond from its yield and read duration, convexity and DV01, with the price–yield curve drawn.
+playground: price-a-bond
+---
+
+## What this calculates
+
+`bonds.fixedRate` builds a bond with its full payment schedule. `yieldMetrics` prices it at a yield
+and returns the clean and dirty price, accrued interest, Macaulay and modified duration, convexity
+and DV01 (the price change for a one-basis-point rise in yield, per 100 of face value). The applied
+day count, compounding and business-day convention are echoed in the assumptions.
+
+## Reading the charts
+
+The price–yield curve bends upward. That curvature is convexity: when yields fall, price rises more
+than it falls when yields rise by the same amount. The cash-flow chart shows the coupons and the
+final repayment of face value.
+
+## Going further
+
+Curves, key-rate durations, floating and inflation-linked notes, swaps, caps and swaptions live in
+the [Fixed income domain](/domains/fixed-income).

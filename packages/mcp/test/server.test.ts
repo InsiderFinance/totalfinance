@@ -53,6 +53,31 @@ describe('TotalFinance MCP server', () => {
     expect(price?.inputSchema?.required).toContain('spot');
   });
 
+  it('preserves tiny ATM premiums and precision-refusal teaching over MCP (#19)', async () => {
+    const input = {
+      type: 'call',
+      spot: 100,
+      strike: 100,
+      timeToExpiryYears: 1,
+      riskFreeRate: 0,
+      dividendYield: 0,
+      volatility: 1e-17,
+    };
+    const ok = await client.callTool({ name: 'totalfinance_option_price', arguments: input });
+    expect(ok.isError).toBeFalsy();
+    expect((structuredOf(ok) as { value: number }).value / 3.989422804014327e-16).toBeCloseTo(
+      1,
+      13,
+    );
+    const refused = await client.callTool({
+      name: 'totalfinance_option_price',
+      arguments: { ...input, strike: 100 * Math.exp(0.01), riskFreeRate: 0.01 },
+    });
+    expect(refused.isError).toBe(true);
+    expect(JSON.stringify(refused)).toContain('input.out_of_range');
+    expect(JSON.stringify(refused)).toContain('cancellation');
+  });
+
   it('prices an option and returns structured content with assumptions', async () => {
     const res = await client.callTool({
       name: 'totalfinance_option_price',

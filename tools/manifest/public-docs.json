@@ -1,19 +1,19 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 263,
+    "surfaces": 270,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 75,
+      "future-target": 82,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4675,
+    "executableFences": 4707,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 75,
-    "shippedNamesWatched": 9889,
+    "checkedUnderVocabulary": 82,
+    "shippedNamesWatched": 10110,
     "documentedExceptions": 9,
     "findings": 0
   },
@@ -149,7 +149,7 @@
       "class": "current-runnable",
       "owner": "human",
       "rule": "truthfulness",
-      "codeFences": 1
+      "codeFences": 5
     },
     {
       "path": "docs/guides/disclosed-holding-partitions.md",
@@ -338,7 +338,7 @@
       "class": "generated",
       "owner": "tools/llms-docs.ts",
       "rule": "truthfulness",
-      "codeFences": 4378
+      "codeFences": 4405
     },
     {
       "path": "docs/llms.txt",
@@ -698,6 +698,20 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/community-connectors-c5-budget-2026-11-12.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/community-connectors-c5-implementation-2026-11-12.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/community-connectors-c5-spec-2026-11-12.md",
       "class": "future-target",
       "owner": "human",
@@ -719,6 +733,13 @@
       "codeFences": 0
     },
     {
+      "path": "docs/reviews/numerical-repairs-2026-11-11.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/reviews/sector-performance-readiness.md",
       "class": "future-target",
       "owner": "human",
@@ -731,6 +752,13 @@
       "owner": "human",
       "rule": "vocabulary",
       "codeFences": 0
+    },
+    {
+      "path": "docs/runbooks/deploy-totalfinance-site.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 1
     },
     {
       "path": "docs/runbooks/release-pair-legacy.md",
@@ -885,6 +913,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/developer-docs-v2.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/digital-extended-greeks.md",
@@ -1062,6 +1097,13 @@
       "codeFences": 3
     },
     {
+      "path": "docs/specs/homepage-and-docs-routing.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
       "path": "docs/specs/inflation.md",
       "class": "current-runnable",
       "owner": "human",
@@ -1151,6 +1193,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/numerical-correctness-16-24.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/oas-analytics.md",

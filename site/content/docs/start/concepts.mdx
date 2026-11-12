@@ -1,0 +1,77 @@
+---
+title: Core concepts
+description: The few conventions that make every TotalFinance answer readable, checkable and safe to compose.
+---
+
+## Units are part of the name
+
+Rates and ordinary volatility are **decimals**: `0.04` is 4%, `0.2` is 20%. A field ending in
+`Years` is a year fraction; a field ending in `Ms` is epoch milliseconds. Prices are per unit in the
+currency you supply. Greeks use stated units (theta per calendar day, vega per volatility point) and
+the result echoes them. The [assumptions guide](/guides/assumptions) lists every convention.
+
+## Plain answers, explained on request
+
+Facades return the plain value you asked for. Add `.explain()` and the same call returns the value
+with the assumptions it used and its diagnostics:
+
+```ts
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+
+const input = {
+  type: 'put',
+  spot: 100,
+  strike: 95,
+  timeToExpiryYears: 0.5,
+  volatility: 0.25,
+  riskFreeRate: 0.04,
+} as const;
+const plain = blackScholes.price(input);
+const explained = blackScholes.price.explain(input);
+console.log(
+  plain === explained.value,
+  explained.assumptions.dayCount,
+  explained.diagnostics.method,
+);
+```
+
+Read more in [Results and the explain envelope](/guides/envelope).
+
+## Errors that teach
+
+Invalid input throws a typed error with a machine-readable code and a message that names the field
+and the fix. A calculation that cannot converge says so in its diagnostics instead of returning an
+invented number.
+
+```ts
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+
+try {
+  blackScholes.price({
+    type: 'call',
+    spot: 100,
+    strike: 105,
+    timeToExpiryYears: 0.25,
+    volatility: -0.2,
+    riskFreeRate: 0.04,
+  });
+} catch (error) {
+  // blackScholes.price: volatility must be > 0. Received -0.2.
+  console.log(error instanceof Error ? error.message : error);
+}
+```
+
+See [Errors and diagnostics](/guides/errors).
+
+## Levels: from a formula to a workflow
+
+The same capability is available at the level you need: a raw function, a facade with `.explain()`,
+a rich analysis result, a versioned artifact, a batch over typed columns, or a workflow exposed
+through the CLI, HTTP and MCP. Layers are additive; a workflow never replaces the small function
+under it. See [Levels](/guides/levels).
+
+## Your data, never invented data
+
+TotalFinance does not fetch quotes, chains, statements or calendars from the network. Every
+calculation uses the observations you pass in, and timestamps are explicit. That makes results
+reproducible: keep the inputs and the package version with a saved answer and anyone can rerun it.

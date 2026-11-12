@@ -1,5 +1,6 @@
+import { registeredDataRefusal } from './data-provider-error.js';
 /** Public independent-oracle compatibility checks, without transport or test framework dependencies. */
-import { ErrorCode, DataError, InputError, QuantError } from './errors.js';
+import { ErrorCode, DataError, InputError } from './errors.js';
 import {
   object,
   textField,
@@ -236,7 +237,7 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
         try {
           await provider.query(probe.request as DataQuery, { limit: probe.pageSize, signal });
         } catch (e) {
-          if (e instanceof QuantError) code = e.code;
+          code = registeredDataRefusal(e)?.code;
         }
         if (code !== probe.expectedCode) violation(probe.name, 'expected-error');
         return;
@@ -248,14 +249,14 @@ export async function validateDataProvider(input: ValidateDataProviderInput): Pr
           await provider.query(probe.request, { limit: probe.pageSize, signal: pre.signal });
           violation(probe.name, 'pre-abort');
         } catch (e) {
-          if (!(e instanceof QuantError) || e.code !== ErrorCode.DataAborted)
+          if (registeredDataRefusal(e)?.code !== ErrorCode.DataAborted)
             violation(probe.name, 'pre-abort');
         }
         const c = new AbortController(),
           pending = provider.query(probe.request, { limit: probe.pageSize, signal: c.signal });
         const observed = pending.then(
           () => false,
-          (e) => e instanceof QuantError && e.code === ErrorCode.DataAborted,
+          (e) => registeredDataRefusal(e)?.code === ErrorCode.DataAborted,
         );
         await probe.waitUntilStarted();
         c.abort();

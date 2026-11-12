@@ -2559,3 +2559,5 @@ One owner integrates generator/policy changes. Alias paths never become separate
 After this phase, TypeScript helps before execution and the JavaScript runtime teaches the same
 contract during execution. Every new platform-core API must satisfy these ratchets in its first
 commit, and the complete gate reruns against the final platform surface before core freeze.
+
+C5 integration note (2026-11-12): quoted inventory counts above are HISTORICAL C4 evidence at3bc356f. Combined current-main/C5 generation and truthful live-count synchronization are pending; no combined acceptance is claimed by retaining this history.

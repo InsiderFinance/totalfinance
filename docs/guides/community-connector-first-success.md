@@ -1,7 +1,8 @@
 # First success: synthetic data to ordinary calculations
 
-No key, market-data request or npm SDK release is needed. This source-checkout preview supports
-**daily/minute price bars and incomplete option-chain research**. It is not a universal provider
+No key, market-data request or npm SDK release is needed. The InsiderFinance source-checkout preview supports
+**daily/minute price bars and incomplete option-chain research**; the SDK also understands a finite
+set of provider-declared research timeframes. It is not a universal provider
 registry. Pure calculations stay ordinary; provider packages translate source facts once.
 
 Use Node22.23.2 and pnpm10.32.0 (the versions in .nvmrc and package.json). Install that toolchain
@@ -12,7 +13,7 @@ pnpm install --frozen-lockfile
 pnpm build
 mkdir -p .local-connector-artifacts
 (cd distribution/totalfinance && pnpm pack --pack-destination ../../.local-connector-artifacts)
-node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.3.tgz
+node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.4.tgz
 (cd examples/community-connectors/starter && pnpm install --frozen-lockfile && pnpm build && pnpm test && pnpm pack --pack-destination ../../../.local-connector-artifacts)
 node examples/community-connectors/starter/run-consumer.mjs .local-connector-artifacts
 ```
@@ -22,7 +23,7 @@ starter's lock before frozen installation. The starter is an independent pnpm pr
 [examples/community-connectors/starter](../../examples/community-connectors/starter), outside the
 SDK's workspace glob, with its own project boundary and lock. It uses public SDK imports only.
 Packing an independently installable example is not npm publication. No SDK binary is committed.
-Registry0.1.3 does not supply the unreleased connector contract; do not substitute it for this pack.
+Registry0.1.4 does not supply the unreleased connector contract; do not substitute it for this pack.
 
 The runner installs both packs into a new temporary consumer and repeats frozen installation.
 Its synthetic JSON has cents-based OHLC fields, session labels and actual share volume. The source
@@ -58,7 +59,7 @@ observation instants. Terminal pagination proves neither continuous history nor 
 
 Read the small independent [source](../../examples/community-connectors/starter/src/index.ts) and
 its [expected-page test](../../examples/community-connectors/starter/test.mjs). A daily-only raw
-query returns Promise<DataPage<PriceBarRecord>> naturally, without conditional return assertions.
+query receives the original DataQuery on every page and returns Promise<SourcePriceBarsPage> naturally, without conditional return assertions.
 It explicitly refuses unsupported kinds/intervals; the consumer retains generic request inference.
 
 The runner copies this author package, intentionally changes only `close: row.closeCents / 100`

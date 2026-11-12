@@ -7,11 +7,9 @@ import type {
   PriceBarRecord,
   ResearchBarChoice,
   ResearchBarSelection,
-  ResearchBarIssue,
   RowRef,
   OhlcvInput,
   TimestampedOhlcvInput,
-  PriceBarsSelections,
 } from './data-types.js';
 const fields = ['open', 'high', 'low', 'close'] as const;
 const key = (r: RowRef) => r.pageIndex + ':' + r.rowIndex;

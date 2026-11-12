@@ -1,12 +1,12 @@
+import type { OptionChainResearchRecord } from '../src/data-types.js';
 /** Test-only migration of the immutable C1-C4 financial fixtures. No public protocol1 live alias.
  * Old canonical observations remain independent truth facts; requests use the actual protocol2 door.
  */
 import { defineDataProvider as bind } from '../src/data.js';
-import { pageData, requestData, providerShape } from '../src/data-validation.js';
+import { pageData, providerShape } from '../src/data-validation.js';
 import { DataError, ErrorCode } from '../src/errors.js';
 import type {
   DataProvider,
-  DataQuery,
   DataContinuation,
   DataProviderSource,
   SourcePriceBarsPage,
@@ -48,7 +48,7 @@ export function rawFacts(p: any, request?: any): SourcePriceBarsPage | SourceOpt
   if (p.kind === 'price-bars')
     return {
       data: p.data.map((r: any) => {
-        const { symbol, ...bar } = r.bar;
+        const { symbol: _symbol, ...bar } = r.bar;
         return {
           bar,
           sessionDate: r.sessionDate,
@@ -68,7 +68,7 @@ export function rawFacts(p: any, request?: any): SourcePriceBarsPage | SourceOpt
       diagnostics: p.diagnostics,
     };
   return {
-    data: p.data as readonly import('../src/data-types.js').OptionChainResearchRecord[],
+    data: p.data as readonly OptionChainResearchRecord[],
     nextCursor: p.nextCursor,
     facts,
     diagnostics: p.diagnostics,

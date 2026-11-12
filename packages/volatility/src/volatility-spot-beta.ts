@@ -38,7 +38,7 @@ export interface VolatilitySpotBetaInput {
   basis?: 'log' | 'level';
   /** Reference spot to convert a log-basis slope to `∂σ/∂S` (default: the latest spot). */
   referenceSpot?: number;
-  /** Newey–West HAC bandwidth for autocorrelation-robust errors (default 0 = White). */
+  /** Newey–West HAC bandwidth for autocorrelation-robust errors. Default 0 uses classical standard errors (no HAC request). */
   hacLags?: number;
 }
 

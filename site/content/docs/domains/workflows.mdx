@@ -1,0 +1,30 @@
+---
+title: 'Workflows'
+description: 'The operation registry behind the CLI, HTTP server and MCP tools.'
+---
+
+Operations are serializable, permissioned, budgeted descriptions of library calls. One registry drives the CLI, the local HTTP server and the MCP server, with explicit capabilities for anything that writes.
+
+## Common APIs
+
+<KeyExports
+  domain="workflows"
+  names={[
+    'createOperationRegistry',
+    'defineOperation',
+    'describeOperation',
+    'runOperation',
+    'defaultOperations',
+    'defaultPacks',
+  ]}
+/>
+
+## Guides
+
+- [Levels](/guides/levels)
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="workflows" />

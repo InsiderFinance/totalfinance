@@ -1,3 +1,4 @@
+import type { ResearchBarIssue } from './data-types.js';
 /** Protocol2 normalization: explicit source facts once, common canonical validation and pins. */
 import { CONVENTIONS_VERSION } from './assumptions.js';
 import { ErrorCode, DataError, ConfigurationError, UnsupportedError } from './errors.js';
@@ -27,7 +28,6 @@ import type {
   DataPins,
   DataQueryBinding,
   DataContinuation,
-  DataCapabilityDeclaration,
 } from './data-types.js';
 export const intervals = ['1m', '5m', '15m', '30m', '1h', '4h', '1d', '1w', '1mo'] as const;
 export const sessionInterval = (interval: string): boolean =>
@@ -72,14 +72,7 @@ export function invalid(
   });
 }
 export function sourceShape(value: unknown): asserts value is DataProviderSource {
-  const s = object(value, 'provider', [
-    'protocol',
-    'contractVersion',
-    'id',
-    'version',
-    'query',
-    'capabilities',
-  ]);
+  const s = object(value, 'provider');
   if (s['protocol'] !== 'totalfinance-data-source' || s['contractVersion'] !== 2)
     throw new ConfigurationError(
       'connect: supply a protocol2 raw provider source, not a validated consumer wrapper.',
@@ -342,7 +335,7 @@ export function materialize(
       'requestId',
       'timestampConvention',
     ]);
-    for (const field of ['times', 'freshness', 'coverage', 'quality'] as const)
+    for (const field of ['times', 'freshness', 'coverage', 'quality', 'access'] as const)
       if (f[field] === null) fail('metadata.' + field);
     if (p['diagnostics'] === null) fail('diagnostics');
     const d = object(f['dataset'], 'facts.dataset', ['id', 'version']);
@@ -360,30 +353,34 @@ export function materialize(
       ]);
     else if (f['timestampConvention'] !== undefined) fail('timestampConvention');
     const rows = bars
-      ? p['data'].map((input: unknown) => {
-          const r = object(input, 'row', [
-            'bar',
-            'sessionDate',
-            'times',
-            'source',
-            'provisional',
-            'revision',
-            'diagnostics',
-          ]);
-          if (r['times'] === null) fail('row.times');
-          if (r['diagnostics'] === null) fail('row.diagnostics');
-          const bar = object(r['bar'], 'row.bar');
-          if ('symbol' in bar) fail('row.bar.symbol');
-          return {
-            bar: { ...bar, symbol: binding.query.symbol },
-            sessionDate: r['sessionDate'] ?? null,
-            timestampConvention: f['timestampConvention'],
-            times: r['times'] ?? unknownTimes,
-            source: r['source'] ?? null,
-            provisional: r['provisional'] ?? null,
-            revision: r['revision'] ?? null,
-            diagnostics: r['diagnostics'] ?? emptyDiagnostics,
-          };
+      ? p['data'].map((input: unknown, rowIndex: number) => {
+          try {
+            const r = object(input, 'row', [
+              'bar',
+              'sessionDate',
+              'times',
+              'source',
+              'provisional',
+              'revision',
+              'diagnostics',
+            ]);
+            if (r['times'] === null) fail('row.times');
+            if (r['diagnostics'] === null) fail('row.diagnostics');
+            const bar = object(r['bar'], 'row.bar');
+            if ('symbol' in bar) fail('row.bar.symbol');
+            return {
+              bar: { ...bar, symbol: binding.query.symbol },
+              sessionDate: r['sessionDate'] ?? null,
+              timestampConvention: f['timestampConvention'],
+              times: r['times'] ?? unknownTimes,
+              source: r['source'] ?? null,
+              provisional: r['provisional'] ?? null,
+              revision: r['revision'] ?? null,
+              diagnostics: r['diagnostics'] ?? emptyDiagnostics,
+            };
+          } catch (error) {
+            guardResponse(error, 'page', { rowIndex });
+          }
         })
       : p['data'];
     const times = f['times'] ?? unknownTimes;
@@ -447,7 +444,7 @@ export function materialize(
   }
 }
 export function barIssues(rows: readonly PriceBarRecord[], pageIndex: number) {
-  const issues: import('./data-types.js').ResearchBarIssue[] = [];
+  const issues: ResearchBarIssue[] = [];
   rows.forEach(({ bar: b }, rowIndex) => {
     if (b.low > b.high)
       issues.push({

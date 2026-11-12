@@ -1,6 +1,5 @@
 import {
   fixtureProbe,
-  defineFixtureProvider,
   queryFixture,
   fixtureSource,
   expectedPage,
@@ -106,17 +105,6 @@ describe('connected research windows', () => {
 import { copyFrozen } from '../src/data-validation.js';
 import { DataError, ErrorCode } from '../src/errors.js';
 const invalid = { code: 'data.invalid_response' };
-function changedSelector(provider: any, key: string, get: () => unknown): any {
-  return {
-    ...provider,
-    async query(r: any, o: any) {
-      const view = await queryFixture(provider, r, o),
-        descriptors = Object.getOwnPropertyDescriptors(view);
-      descriptors[key] = { get, enumerable: false, configurable: false };
-      return Object.freeze(Object.defineProperties({}, descriptors));
-    },
-  };
-}
 describe('window bounds and independent response mutants', () => {
   for (const [name, mutate] of [
     [

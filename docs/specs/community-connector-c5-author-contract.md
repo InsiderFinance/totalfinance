@@ -630,3 +630,13 @@ Larger/default connections do not alter saved policy or budgets. A pre-dispatch 
 no source consumes ZERO reads; increment occurs at actual invocation. Focused lower-ceiling tests
 for unresolved/resolved states and zero-invocation abort are required. Bounded offline implementation
 is now authorized, not implementation/feature/merge acceptance; no new permission checkpoint.
+
+## Measured implementation checkpoint — 2026-11-12
+
+The approved runtime is implemented and has meaningful source/independent installed proofs; it is
+NOT accepted/complete. See the [single final scoped-source budget proposal](../reviews/community-connectors-c5-budget-2026-11-12.md).
+Current thresholds are unchanged and nine whole/five installed data overages remain recorded red.
+Generation and combined merge acceptance await technical budget disposition, then current-head
+public/packed/generated/hosted checks. Prior checklist boxes are not marked complete merely from
+iteration tests. Source2/v2 observations, selection decisions, resume counters and original financial
+facts remain canonical; no registry release or live-data acceptance is claimed.

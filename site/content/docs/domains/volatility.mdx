@@ -1,0 +1,36 @@
+---
+title: 'Volatility'
+description: 'Realized and implied volatility, smiles and surfaces (SVI, SSVI, SABR, Heston), GARCH.'
+---
+
+Build implied-volatility surfaces from quotes with a choice of models and arbitrage checks, read skew and term structure, and estimate realized volatility with GARCH and HAR-RV. Event-volatility tools separate an earnings move from base volatility.
+
+## Try it live
+
+- [Fit a volatility smile](/learn/fit-a-volatility-smile)
+
+## Common APIs
+
+<KeyExports
+  domain="volatility"
+  names={[
+    'volatilitySurface',
+    'calibrateSvi',
+    'calibrateSabrSmile',
+    'calibrateSsvi',
+    'checkButterfly',
+    'atmTermStructure',
+    'fitGarch',
+    'garchForecast',
+    'expectedMoveFromImpliedVolatility',
+    'impliedVolatilityRank',
+    'eventVolatilityDecomposition',
+    'volatilityCone',
+  ]}
+/>
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="volatility" />

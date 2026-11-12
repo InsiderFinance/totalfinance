@@ -1,0 +1,84 @@
+---
+title: Connect an AI agent
+description: Give Claude, Cursor, VS Code, Codex, ChatGPT or any MCP client real financial calculations and the real API, in one step.
+---
+
+Language models are unreliable at arithmetic and guess at APIs they have not read. TotalFinance gives
+your agent both missing pieces: a **calculator it can call**, with the units, assumptions and
+diagnostics of every answer, and **these docs as tools**, so the code it writes uses functions that
+exist. Both speak the [Model Context Protocol](https://modelcontextprotocol.io) (MCP).
+
+## Connect in one step
+
+Pick what to connect and your client, then copy one command or one config block.
+
+<ConnectAgent />
+
+**Calculations run on your machine**, so your positions, prices and data never leave it. The
+calculation server is read-only by default and never fetches quotes or places orders. **The docs
+server is hosted**: nothing to install, and it only reads these pages.
+
+## What your agent can do
+
+<Cards>
+  <Card
+    title="Calculate"
+    href="/agents/operations"
+    description="Option prices and Greeks, implied volatility, strategy payoffs, expected moves, volatility surfaces, technical indicators, dealer exposures, VaR, performance, bonds, calendars and crypto basis, each with its assumptions."
+  />
+  <Card
+    title="Read the real API"
+    href="/agents/docs-mcp"
+    description="search_docs, read_page, get_reference and list_calculators: the agent looks up exact signatures, units and defaults before it writes code."
+  />
+  <Card
+    title="Load whole domains"
+    href="/agents/llms"
+    description="llms.txt, per-domain bundles sized for a context window, and a Markdown version of every page."
+  />
+  <Card
+    title="Drive the calculators"
+    href="/agents/browser-tools"
+    description="In a browser with WebMCP, each calculator on these docs registers itself as a tool."
+  />
+</Cards>
+
+The calculation server registers <OperationCount which="default" /> read-only tools by default, out
+of <OperationCount /> operations. Every calculator on these docs also has an **Ask your AI agent**
+panel with a prompt built from your inputs.
+
+## Try these prompts
+
+- “Price a 3-month 105 call on a 100 stock at 20% volatility and a 4% rate, then show the Greeks
+  and the assumptions.”
+- “Analyze an iron condor on a 100 stock: long 90 put, short 95 put, short 105 call, long 110
+  call. What are the breakevens and the maximum loss?”
+- “Fit an SVI smile to these implied volatilities by strike and check it for arbitrage: …”
+- “Here is my daily OHLCV CSV. Compute 14-day RSI and 20-day Bollinger Bands and tell me how many
+  warm-up bars have no value.”
+- “Search the TotalFinance docs for value at risk, then write TypeScript that computes 99%
+  historical VaR and expected shortfall from my returns.”
+
+## Choose more tools with a profile
+
+Profiles add task-specific tools to the calculation server. Add `--profile <name>` to the server
+command, for example `--profile backtesting` for backtests or `--profile portfolio` for ledgers and
+P&L explanation:
+
+<AgentProfiles />
+
+A profile never grants write authority. The optional paper-trading tools need explicit
+capabilities, and no live brokerage connection exists. The [agent handbook](/agents/handbook)
+explains permissions, datasets, errors and long-running jobs.
+
+## Bring the data
+
+Compute tools calculate on the numbers you or your agent supply; they never fetch quotes, chains or
+account history. For options flow, dark pool prints and market data, use
+[InsiderFinance](https://www.insiderfinance.io).
+
+## Go deeper
+
+- [Agent handbook](/agents/handbook): permissions, handles, errors, paper trading and jobs.
+- [MCP server reference](/guides/mcp): every flag, profile, budget and the worker-backed job path.
+- [Operation catalog](/agents/operations): every tool with its schema, profile and cost class.

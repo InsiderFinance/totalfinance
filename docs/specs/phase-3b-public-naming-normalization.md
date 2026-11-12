@@ -1775,3 +1775,5 @@ parameters `params`. The remaining short terms are deliberate, searchable domain
 scoped mathematical notation with a recorded rationale.
 
 That is the vocabulary Phase 3B may safely validate and freeze.
+
+C5 integration note (2026-11-12): quoted inventory counts above are HISTORICAL C4 evidence at3bc356f. Combined current-main/C5 generation and truthful live-count synchronization are pending; no combined acceptance is claimed by retaining this history.

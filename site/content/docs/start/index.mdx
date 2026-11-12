@@ -1,0 +1,75 @@
+---
+title: TotalFinance
+description: Open-source TypeScript finance with explicit units, honest assumptions and diagnostics you can read. Built by InsiderFinance.
+---
+
+TotalFinance is a TypeScript library for financial computation: options and strategies, volatility,
+technical analysis, portfolios and performance, risk, valuation, fixed income, FX, commodities,
+crypto and backtesting. It runs in Node.js and in the browser, has no runtime dependencies, and never
+fetches market data on its own. You supply the data; it computes, and tells you exactly how.
+
+```ts
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+
+const price = blackScholes.price({
+  type: 'call',
+  spot: 100,
+  strike: 105,
+  timeToExpiryYears: 0.25,
+  volatility: 0.2,
+  riskFreeRate: 0.04,
+});
+console.log(price.toFixed(4)); // 2.3909
+```
+
+## What makes it different
+
+- **Units are explicit.** Rates and volatilities are decimals, times are year fractions or epoch
+  milliseconds, and field names say which. No percent-or-decimal guessing.
+- **Answers explain themselves.** Add `.explain()` to a facade and the result carries its
+  assumptions (day count, compounding, model) and diagnostics (method, convergence, warnings).
+- **Errors teach.** Invalid input throws a typed error that names the field and the fix, never a
+  stray `TypeError` or a silent `NaN`.
+- **Nothing is invented.** No hidden market data, no silent financial defaults, no lookahead in
+  backtests, no warmup values pretending to be signals.
+- **Built for agents too.** Every operation in the registry is available to AI agents through an MCP
+  server, the CLI and a local HTTP API, and every page of these docs has a Markdown twin.
+
+## Where to go next
+
+<Cards>
+  <Card
+    title="Install"
+    href="/start/installation"
+    description="One package, every domain, tree-shakeable subpaths."
+  />
+  <Card
+    title="Quickstart"
+    href="/start/quickstart"
+    description="The first calls, and what comes back."
+  />
+  <Card
+    title="Core concepts"
+    href="/start/concepts"
+    description="Units, explain envelopes, errors and API levels."
+  />
+  <Card
+    title="Calculators"
+    href="/playgrounds"
+    description="Ten live calculators that run the library in your browser."
+  />
+  <Card
+    title="API reference"
+    href="/reference"
+    description="Every entry point and export, generated from the source."
+  />
+  <Card
+    title="For agents"
+    href="/agents"
+    description="MCP server, operation catalog and LLM-ready docs."
+  />
+</Cards>
+
+## Library
+
+<DomainGrid />

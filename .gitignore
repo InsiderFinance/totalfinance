@@ -17,3 +17,25 @@ docs/api/
 .vitest-reports/
 
 /.local-connector-artifacts/
+/site/public/assets/brand/
+/site/public/favicon*
+/site/public/apple-touch-icon.png
+/site/public/og.png
+
+# Recovered Next.js site's generated inputs and disposable outputs.
+/site/.generated/
+/site/.source/
+/site/.next/
+/site/.next-snapshot/
+/site/out/
+/site/next-env.d.ts
+/site/content/generated/
+/site/public/search-index.json
+/site/public/operation-catalog.json
+/site/public/openapi.json
+/site/public/version.json
+/site/public/reference-coverage.json
+/site/public/reference/
+/site/public/agents/
+/site/public/runtime/
+/site/.probe/

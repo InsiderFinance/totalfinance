@@ -8,13 +8,13 @@
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
 [Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
 projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
-current mainca122ab is already included. C4 fast/full green and coordinator acceptance remain
+current main23fbf06 is being integrated (released0.1.4/upstream numerical/site work); source-final inventory acceptance remains pending. C4 fast/full green and coordinator acceptance remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 
 - [x] Read current task, independent second-provider review/probes and existing contracts.
 - [x] Draft examples, protocol ownership, limits, safe errors, timestamps, resume and quality choices.
 - [x] C5 technical re-review approved467a9ed (872db889) before runtime changes.
-- [ ] Bounded C5 implementation/compatibility/final measurement proof in progress; no C5 acceptance.
+- [ ] Bounded C5 implementation has source/installed proofs; [single measured budget checkpoint](./reviews/community-connectors-c5-budget-2026-11-12.md) awaits technical disposition. Current byte gates remain red; generation/combined merge/hosted acceptance pending.
 - [ ] Source-final generation/local gates and fresh exact-head fast/full; later connected acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
@@ -89,7 +89,74 @@ and live execution remain outside scope. The full post-PR-25 main run
 completed successfully at `d50b401ee237006c75c76ef90784e5dcde1439a3` on November 2; future landing
 still requires current-head checks and review. No feature merge is authorized by that receipt.
 
-### Active: GitHub Release → SDK publication (2026-11-10)
+### Active: numerical correctness repairs and authorized 0.1.4 release (2026-11-12)
+
+The maintainer authorized the nine numerical repairs, reviewed PR #32 through three rounds and now instructed “Perform the rlease through github.” Follow [the scoped contract](./specs/numerical-correctness-16-24.md), V1–V4, for totalfinance-v0.1.4. S1–S7 passed at c406bca with all eight required fast and 23 full hosted jobs. That evidence is historical for the new version/documentation commit: obtain fresh exact-head fast/full gates, merge #32, require full main CI, then use the existing SDK-only GitHub Release workflow and its independent release repeats. The PR and Release own the exact candidate SHA and publication receipts.
+
+The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
+
+### Completed bounded site work: recover the original homepage and branding (2026-11-12)
+
+Presentation follow-up locally complete: [U1–U4](./specs/homepage-and-docs-routing.md) cover the finance headline,
+removing Discord, an always-expanded Library list, neutral code panels, clearer full-reference
+links and README links to the upcoming InsiderFinance docs with a linked credit. Generated reference
+coverage is complete by export path; the ported authored guides/examples have less depth. This pass
+improves presentation/discovery and verifies the LLM artifacts, rather than claiming new tutorials.
+The build, 202 site tests, 42 documentation/example checks, site types and changed-source lint pass;
+the 197-entry-point/6,967-export-path reference and both LLM artifacts remain intact.
+
+Current clarification: the actual original marketing frontend was found as uncommitted work in
+`totalfinance-24287e`, with the hero “The complete quant library for TypeScript and AI agents.”
+Follow M1–M5 in [the current correction](./specs/homepage-and-docs-routing.md), recovering that
+original Next.js/Fumadocs frontend and its separate dependency lockfile, applying only branding
+and the requested removal of prominent release-status wording, and keeping the root homepage and
+mounted documentation functional. The workbench restoration below was the wrong interpretation.
+The [original frontend contract](./specs/developer-docs-v2.md) is retained with its historical receipts;
+fresh integration and hosted verification are required for this recovery.
+
+M1–M4 are locally verified: original marketing body/layout parity (minus status/brand changes),
+the static export and version snapshot, 198 site tests with a final 13-test routing recheck,
+75 documentation/import checks, all 40 copied examples against installed packages, root/site types
+and changed-source lint. Documentation regeneration: 248 surfaces, zero findings. M5 owns the
+exact-head hosted run and corrected public-page review; do not infer those from local results.
+
+M5 completed: `3c7f1a4` passed all 23 full hosted jobs before landing and on main; the original
+marketing homepage is live at `https://www.totalfinance.io/` with the supplied branding and no
+development banner. Public light/dark, calculator, docs navigation, skip-link and HTTP/404 checks
+pass. Follow-up `9ac5181` fixes the remaining control accents and docs-MCP Node startup; its emitted
+ESM regression, hosted-entrypoint tests and production initialization/search pass. The controlling
+correction records exact run URLs and review limits. Publication, DNS and the InsiderFinance app
+remain separate; the older restoration records below are historical.
+
+The maintainer rejected the replacement marketing homepage in `7c1e932` and requested the original
+landing page from before the docs separation, changing only the logo and brand colors. The
+[controlling correction](./specs/homepage-and-docs-routing.md) owns R1–R4: restore the original
+task-first content and shared layout at `/`, remove the new marketing renderer/CSS, and retain the
+docs mount and previously requested brand assets. InsiderFinance's future `/totalfinance` page,
+rewrite, deployment and release actions remain separate. R1–R4 are locally verified against the
+pre-change source: exact homepage body, logo-only layout change, color/logo-only stylesheet changes,
+site build/typecheck, 82 site tests and 30 documentation tests pass. Earlier H1–H3 evidence in the
+contract is historical; H4's rendered-site review remains open because Ri's browser refuses loopback URLs.
+The numerical/release work retains its own scope and verification records.
+
+README follow-up locally complete (2026-11-12): the maintainer requested prominent npm/homepage/docs
+links, a clearer open-source introduction and removal of repeated version hedging. The root README
+now has branding, badges, a direct quickstart, feature overview and concise agent setup. GitHub About
+links to `https://totalfinance.io` and describes the toolkit. The later U1–U4 follow-up points README
+docs links at the upcoming InsiderFinance host, as explicitly requested. All 33 focused documentation/example
+tests, 15 local-link checks and eight public URL/asset checks pass. Documentation regeneration has
+zero findings and no inventory drift; distribution assembly copies the updated README with absolute
+repository links. No package publication, version bump or manual site deployment occurred.
+
+Branding/deployment handoff amendment (2026-11-12), in the same contract: supplied-artwork reference,
+editable SVG recreation, favicon/Apple/social exports, homepage/docs metadata, static Vercel config,
+exact-runtime build wrapper and [numbered deployment guide](./runbooks/deploy-totalfinance-site.md).
+Both wrapper commands, site typecheck/lint and 82 site tests pass locally. No hosted project, DNS,
+InsiderFinance app, package version or publication change is made; H4 remains a hosted-preview review.
+
+### Completed: GitHub Release → SDK publication (2026-11-11)
+
+SDK 0.1.3 is public; main `ca122ab` and the original release run are green. The paragraphs below preserve the initial preparation scope and its bounded production follow-up.
 
 Bounded production follow-up G7 (2026-11-11): PR #29 is merged at `59a2833`; full main CI and both
 release coverage passes succeeded. npm accepted the authorized SDK 0.1.3 upload with signed
@@ -534,9 +601,11 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,849 public naming identities are walked and 0 are unresolved; 39,645 are `explicit`,
-4,042 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
-blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
+Historical main and C4 naming runs reached zero unresolved identities. Their different identity and
+classification counts are separate historical runs; the combined C5 counts remain pending ordered
+source-final regeneration. Do not select either old inventory as combined proof. Every allowlisted
+canonical term must carry a written rationale, with scoped notation and opaque payload interiors
+classified by the same gate. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;
 see “Closeout state (3B.N9)” in the naming spec for the full table, the gate inventory, and — more

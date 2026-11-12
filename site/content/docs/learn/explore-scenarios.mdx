@@ -1,0 +1,22 @@
+---
+title: Explore scenarios
+description: Revalue an option position before expiry across underlying prices, volatility shocks and the passage of time.
+playground: explore-scenarios
+---
+
+## What this calculates
+
+`position.scenarioTable()` reprices every leg with a model for each combination of underlying
+price, volatility shock and days forward. The result is mark-to-market P&L relative to the model
+premiums paid today, not an expiration payoff and not a forecast.
+
+## Reading the heatmap
+
+Each cell is one scenario. Green cells make money and red cells lose it; the numbers are the P&L in
+USD. Moving down the rows raises implied volatility; advancing the valuation date in the panel shows
+time decay working through the whole grid.
+
+## Compare with expiration
+
+The [strategy analyzer](/learn/analyze-a-strategy) shows the same kind of position at expiration.
+The difference between the two pictures is the time value still in the options.

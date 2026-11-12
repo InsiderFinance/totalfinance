@@ -1,0 +1,24 @@
+---
+title: Track portfolio P&L
+description: Separate investment profit from deposits with an event-sourced ledger and reconciled P&L.
+playground: track-portfolio-pnl
+---
+
+## What this calculates
+
+`createPortfolioLedger` turns dated events (deposits, fills, dividends, fees) into an immutable
+ledger. `portfolioPnl` values that ledger at two marks and explains the change: realized and
+unrealized P&L, income, costs, financing, foreign-exchange effects, external cash flows and a
+reconciliation residual that should be zero.
+
+## Why the waterfall matters
+
+A deposit raises account value, but it is not profit. The waterfall keeps the two apart: investment
+P&L and external flows are separate steps from the opening to the closing value. Change the deposit
+in the panel and only the deposits step moves; investment P&L stays put.
+
+## Your own portfolio
+
+Replace the sample events with your own fills and cash movements, and the sample marks with your own
+timestamped prices. TotalFinance never fetches prices: every valuation uses the market snapshot you
+pass in, and the report carries the assumptions it used.

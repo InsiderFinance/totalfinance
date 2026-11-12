@@ -1,0 +1,43 @@
+---
+title: 'Technical analysis'
+description: 'Hundreds of registered indicators with explicit warmup, streaming state, snapshots and a TA-Lib compatibility matrix.'
+---
+
+Every indicator is a function over an array that returns an aligned array, with `NaN` during warmup. The same indicators stream bar by bar, snapshot and restore their state, and compose into signals and feature pipelines. Candlestick patterns, pivots, Fibonacci levels and alternative bar types are included.
+
+## Try it live
+
+- [Chart technical indicators](/learn/chart-technical-indicators)
+
+## Common APIs
+
+<KeyExports
+  domain="technical-analysis"
+  names={[
+    'sma',
+    'ema',
+    'rsi',
+    'macd',
+    'bbands',
+    'atr',
+    'adx',
+    'vwap',
+    'stoch',
+    'ichimoku',
+    'supertrend',
+    'SignalBuilder',
+  ]}
+/>
+
+## Guides
+
+- [Indicator registry](/guides/ta-indicators)
+- [Warmup and lookahead](/guides/ta-warmup)
+- [Live charts](/guides/ta-live-charts)
+- [Compatibility](/guides/ta-compatibility)
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="technical-analysis" />

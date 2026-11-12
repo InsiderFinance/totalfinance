@@ -9,13 +9,70 @@ import {
 } from './errors.js';
 import { scanCanonicalData } from './artifacts/canonical-scan.js';
 import { object, enumField, numberField, fail } from './data-validation.js';
+import { schemaPath } from './data-response-issue.js';
+import type { Bar, OptionQuoteGreeks } from './market-data.js';
+import type { Provenance } from './provenance.js';
+import type {
+  DataPageMetadata,
+  PriceBarRecord,
+  OptionChainResearchRecord,
+  OptionResearchTerms,
+  ObservationTimes,
+  PriceBarsQuery,
+  OptionChainResearchQuery,
+} from './data-types.js';
+/** Only finite canonical SDK schema paths or the explicit financial request fields. */
 export type KnownDataField =
   | 'request.symbol'
   | 'request.from'
   | 'request.to'
   | 'request.from/to'
   | 'request.limit'
-  | 'request.interval';
+  | 'request.interval'
+  | 'page'
+  | 'contractVersion'
+  | 'kind'
+  | 'symbol'
+  | 'data'
+  | 'nextCursor'
+  | 'provenance'
+  | 'metadata'
+  | 'assumptions'
+  | 'diagnostics'
+  | 'binding'
+  | 'timestampConvention'
+  | 'issues'
+  | `provenance.${Exclude<keyof Provenance, 'warnings'>}`
+  | 'assumptions.conventionsVersion'
+  | `metadata.${keyof DataPageMetadata}`
+  | `metadata.times.${keyof ObservationTimes}`
+  | `data[].times.${keyof ObservationTimes}`
+  | `metadata.freshness.${keyof DataPageMetadata['freshness']}`
+  | `metadata.coverage.${keyof DataPageMetadata['coverage']}`
+  | `metadata.quality.${keyof DataPageMetadata['quality']}`
+  | 'metadata.quality.issues[]'
+  | `metadata.quality.issues[].${'source' | 'code' | 'message'}`
+  | 'data[]'
+  | `data[].${keyof PriceBarRecord | keyof OptionChainResearchRecord}`
+  | `data[].bar.${keyof Bar}`
+  | `data[].terms.${keyof OptionResearchTerms}`
+  | `data[].quote.${keyof OptionChainResearchRecord['quote']}`
+  | `data[].greeks.${keyof OptionQuoteGreeks}`
+  | `data[].greeks.provenance.${'source' | 'model' | 'timestampMs'}`
+  | `${'diagnostics' | 'data[].diagnostics'}.warnings`
+  | `${'diagnostics' | 'data[].diagnostics'}.warnings[]`
+  | `${'diagnostics' | 'data[].diagnostics'}.warnings[].${'code' | 'message' | 'severity' | 'context'}`
+  | 'capabilities'
+  | 'capabilities[]'
+  | 'capabilities[].intervals[]'
+  | `capabilities.${'contractVersion' | 'providerId' | 'providerVersion' | 'capabilities'}`
+  | `capabilities[].${'kind' | 'intervals' | 'maxPageSize' | 'consistency' | 'pointInTime' | 'access' | 'maxWindowMs' | 'maxSessionDays'}`
+  | 'binding.provider'
+  | 'binding.query'
+  | 'binding.query.snapshot'
+  | `binding.provider.${'id' | 'version'}`
+  | `binding.query.${keyof PriceBarsQuery | keyof OptionChainResearchQuery}`
+  | `binding.query.snapshot.${'kind' | 'sessionDate' | 'snapshotId'}`;
 export type DataGuidanceRule =
   | 'uppercase_symbol'
   | 'zoned_instant_required'
@@ -52,7 +109,17 @@ const teaching = {
   unsupported_interval: 'is unsupported by this provider',
   source_domain_rule: 'was rejected by the provider domain rule',
 };
+// Portable author refusals admit only these existing general input rules.
+const inputCodes = new Set<string>([
+  ErrorCode.InputWrongType,
+  ErrorCode.InputMissingField,
+  ErrorCode.InputNotFinite,
+  ErrorCode.InputOutOfRange,
+  ErrorCode.InputInvalidEnum,
+]);
 const codes = new Set<string>([
+  ...inputCodes,
+  ErrorCode.DataSuspectObservations,
   ErrorCode.DataUnsupportedCapability,
   ErrorCode.DataContractVersionUnsupported,
   ErrorCode.DataAuthenticationRequired,
@@ -73,6 +140,32 @@ function own(value: unknown, key: string): unknown {
   const d = Object.getOwnPropertyDescriptor(value, key);
   return d && 'value' in d ? d.value : undefined;
 }
+/** Opt-in compatibility only: registered own data, never class identity or foreign text/getters. */
+export function registeredDataRefusal(
+  value: unknown,
+): { code: string; context: unknown } | undefined {
+  try {
+    const code = own(value, 'code');
+    if (typeof code !== 'string' || !codes.has(code)) return undefined;
+    const descriptor = Object.getOwnPropertyDescriptor(value, 'context');
+    if (descriptor && !('value' in descriptor)) return undefined;
+    const context = descriptor?.value;
+    if (context !== undefined) {
+      scanCanonicalData(context, {
+        functionName: 'data refusal',
+        label: 'context',
+        requireFiniteNumbers: true,
+        maximumWorkUnits: 1000,
+      });
+    }
+    return {
+      code,
+      context: context === undefined ? undefined : JSON.parse(JSON.stringify(context)),
+    };
+  } catch {
+    return undefined;
+  }
+}
 function safeFailure(value: unknown): DataProviderFailure {
   scanCanonicalData(value, {
     functionName: 'DataProviderError',
@@ -92,7 +185,14 @@ function safeFailure(value: unknown): DataProviderFailure {
   if (!codes.has(x['code'] as string)) fail('dataFailure.code', ErrorCode.InputInvalidEnum);
   if (x['guidance'] !== undefined) {
     const g = object(x['guidance'], 'guidance', ['field', 'rule']);
-    enumField(g['field'], 'guidance.field', fields);
+    const field = g['field'];
+    if (
+      typeof field !== 'string' ||
+      (!fields.includes(field) &&
+        schemaPath(field) !== field &&
+        schemaPath(field, 'capabilities') !== field)
+    )
+      fail('guidance.field', ErrorCode.InputInvalidEnum);
     enumField(g['rule'], 'guidance.rule', Object.keys(teaching));
   }
   if (x['retryable'] !== undefined) enumField(x['retryable'], 'retryable', [true, false]);
@@ -101,9 +201,8 @@ function safeFailure(value: unknown): DataProviderFailure {
   if (x['status'] !== undefined) numberField(x['status'], 'status', 100, 599, true);
   return x as unknown as DataProviderFailure;
 }
-export class DataProviderError extends QuantError {
-  readonly dataFailure: DataProviderFailure;
-  constructor(options: DataProviderErrorOptions) {
+function declaredOptions(options: DataProviderErrorOptions) {
+  try {
     object(options, 'options', [
       'code',
       'guidance',
@@ -113,7 +212,17 @@ export class DataProviderError extends QuantError {
       'cause',
     ]);
     const { cause, ...fields } = options;
-    const safe = safeFailure({ version: 1, ...fields });
+    return { cause, safe: safeFailure({ version: 1, ...fields }) };
+  } catch (error) {
+    if (error instanceof QuantError)
+      error.message = 'DataProviderError: ' + error.message.replace(/^[^:]*:\s*/, '');
+    throw error;
+  }
+}
+export class DataProviderError extends QuantError {
+  readonly dataFailure: DataProviderFailure;
+  constructor(options: DataProviderErrorOptions) {
+    const { cause, safe } = declaredOptions(options);
     super('query: provider failure declaration.', {
       code: safe.code,
       ...(cause === undefined ? {} : { cause }),
@@ -131,9 +240,9 @@ export function providerFailure(error: unknown): QuantError {
     const declaration = own(error, 'dataFailure');
     if (declaration !== undefined) safe = safeFailure(declaration);
     else {
-      const code = own(error, 'code');
-      const context = own(error, 'context');
-      if (typeof code === 'string' && codes.has(code)) {
+      const refusal = registeredDataRefusal(error);
+      if (refusal) {
+        const { code, context } = refusal;
         const hints: Record<string, unknown> = { version: 1, code };
         for (const key of ['retryable', 'retryAfterMs', 'status']) {
           const v = own(context, key);
@@ -151,7 +260,8 @@ export function providerFailure(error: unknown): QuantError {
       ? UnsupportedError
       : code === ErrorCode.DataContractVersionUnsupported
         ? ConfigurationError
-        : [ErrorCode.DataInvalidCursor, ErrorCode.DataInvalidRequest].includes(
+        : inputCodes.has(code) ||
+            [ErrorCode.DataInvalidCursor, ErrorCode.DataInvalidRequest].includes(
               code as typeof ErrorCode.DataInvalidCursor,
             )
           ? InputError

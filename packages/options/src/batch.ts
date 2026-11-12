@@ -5,7 +5,7 @@
  *   - rows: `priceMany({ contracts, market, engine })` → `PriceResult[]` (rich, convenient).
  *   - columns: struct-of-arrays `Float64Array` kernels for hot loops — `blackScholesEvaluateMany`
  *     for any selection of outputs, `blackScholesPriceMany` for price (optionally with the five
- *     first-order Greeks) — each with a buffer-writing `*Into` variant for zero-allocation reuse.
+ *     first-order Greeks) — each with a buffer-writing `*Into` variant for reusable output storage with atomic writes.
  *
  * Every columnar Black–Scholes path runs the ONE selective kernel (`bsm-evaluate.ts`): the plan is
  * resolved once per call, only the requested outputs and their dependencies are computed per row,
@@ -260,7 +260,7 @@ function evaluateColumns(
 ): void {
   const bySlot = new Array<Float64Array | undefined>(BLACK_SCHOLES_OUTPUT_SLOTS);
   for (let k = 0; k < plan.slots.length; k++) bySlot[plan.slots[k]!] = targets[k];
-  evaluateBlackScholesRowsUnchecked(plan, cols, rows, bySlot);
+  evaluateBlackScholesRowsUnchecked(plan, cols, rows, bySlot, true);
 }
 
 /** Byte range `[start, end)` the first `rows` elements of a typed array occupy, or none for a plain array. */
@@ -342,7 +342,7 @@ function requireNonOverlappingOut(
 }
 
 /**
- * Write BSM prices for `cols` into the provided `out` buffer (no allocation).
+ * Write BSM prices for `cols` into the provided `out` buffer, committing only after all rows succeed.
  *
  * Validates the columns (closed keys, exact row counts) and every row's values — positive finite
  * spot, strike, time and volatility; finite rate, dividend yield and type — before writing anything,
@@ -365,7 +365,9 @@ export function blackScholesPriceManyInto(cols: OptionBatchColumns, out: Float64
   // licence to skip input validation — the values are checked here, in one flat pass, before the
   // first write, so a rejected call never leaves `out` half-updated.
   requireBatchRowValues(cols, n, 'blackScholesPriceManyInto');
-  evaluateColumns(resolveBlackScholesPlan(['price']), cols, n, [out]);
+  const scratch = new Float64Array(n);
+  evaluateColumns(resolveBlackScholesPlan(['price']), cols, n, [scratch]);
+  out.set(scratch);
 }
 
 /**
@@ -518,7 +520,7 @@ function describeReceived(value: unknown): string {
 
 /**
  * Write the selected Black–Scholes–Merton outputs for every row into caller-owned buffers — the
- * zero-allocation form of {@link blackScholesEvaluateMany} for hot loops that reuse storage. The
+ * buffer-writing form of {@link blackScholesEvaluateMany}. Temporary result columns ensure atomic writes. The
  * property names of `outputs` are the selection: `{ gamma: buffer }` computes gamma only.
  *
  * Reusable storage is not unchecked input. Before anything is written this validates the columns
@@ -575,7 +577,9 @@ export function blackScholesEvaluateManyInto(
   }
   requireDisjointOutputs(columns, selected, targets, n, functionName);
   requireBatchRowValues(columns, n, functionName);
-  evaluateColumns(resolveBlackScholesPlan(selected), columns, n, targets);
+  const scratch = targets.map(() => new Float64Array(n));
+  evaluateColumns(resolveBlackScholesPlan(selected), columns, n, scratch);
+  targets.forEach((target, i) => target.set(scratch[i]!));
 }
 
 /**

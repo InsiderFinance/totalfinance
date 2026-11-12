@@ -113,7 +113,7 @@ export interface GarchFit {
 export interface GarchFitOptions {
   /** Seed for the deterministic multi-start of the optimizer (default `0x61726368`). */
   seed?: number;
-  /** `'zero'` (default) assumes a zero-mean series; `'sample'` de-means by the sample mean first. */
+  /** `'zero'` (default) fits second moments about zero; `'sample'` de-means first. A nonzero constant has a positive second moment in zero mode but is degenerate in sample mode. */
   mean?: 'zero' | 'sample';
   /**
    * Warm start for the `(α, β)` search (Stage 4.5): replaces the primary `(0.05, 0.90)` start; `ω`
@@ -163,7 +163,8 @@ function logit(x: number): number {
  * The conditional variance follows `σ²ₜ = ω + α·r²ₜ₋₁ + β·σ²ₜ₋₁`, seeded with the sample second moment
  * `E[r²]`. The optimizer works in the unconstrained space `θ = (log ω, logit p, logit f)` where
  * `p = α+β` and `f = α/(α+β)`, so `ω>0, α≥0, β≥0, α+β<1` hold at every evaluation. A degenerate
- * (constant / zero-variance) series has no variance process to fit and returns `converged: false`.
+ * zero-second-moment series returns `converged: false`. Exact constants are degenerate in sample
+ * mode; in zero mode a nonzero constant retains its second moment about the declared zero mean.
  */
 export function fitGarch(returns: number[], options: GarchFitOptions = {}): GarchFit {
   requireArgumentArray('fitGarch', 'returns', returns);
@@ -200,7 +201,13 @@ export function fitGarch(returns: number[], options: GarchFitOptions = {}): Garc
     }
   }
   const startKind = start !== undefined ? 'supplied' : 'default';
-  const mu = meanMode === 'sample' ? mean(returns) : 0;
+  // Preserve exact constancy before a rounded sum can manufacture residual variance.
+  const mu =
+    meanMode === 'sample'
+      ? returns.every((value) => value === returns[0])
+        ? returns[0]!
+        : mean(returns)
+      : 0;
   const r = mu === 0 ? returns : returns.map((x) => x - mu);
   const n = r.length;
 

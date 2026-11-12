@@ -1,17 +1,11 @@
-import {
-  defineFixtureProvider,
-  queryFixture,
-  fixtureSource,
-  expectedPage,
-  rawFacts,
-} from './data-fixture-migration.js';
+import { queryFixture, expectedPage, rawFacts } from './data-fixture-migration.js';
 import { describe, it, expect } from 'vitest';
 import { validateDataProvider, type DataPagesProbe } from '../src/data-conformance.js';
 import type { DataProvider, DataCapabilities } from '../src/data.js';
-import type { DataRequest } from '../src/data-legacy-types.js';
+
 import { defineDataProvider } from '../src/data.js';
 import { ErrorCode, DataError, QuantError } from '../src/errors.js';
-import { createFixtureDataProvider } from '../../../docs/examples/community-connector-fixture.js';
+
 import { copyFrozen } from '../src/data-validation.js';
 import {
   page,
@@ -29,7 +23,7 @@ function unchecked(raw: any): any {
     return value;
   }
   const p = freeze(raw);
-  let closes: any, bars: any;
+  let closes: any, bars: any, timestamped: any;
   return Object.freeze(
     Object.defineProperties(
       {
@@ -57,16 +51,21 @@ function unchecked(raw: any): any {
           : null,
         continuationStatus: p.nextCursor ? 'available' : 'terminal',
         issues: p.issues,
-        selection: {
+        selection: freeze({
           version: 1,
           decisions: [],
           sourceRows: p.data.map((_: unknown, rowIndex: number) => ({ pageIndex: 0, rowIndex })),
-        },
-        selections: ['closePrices', 'ohlcvBars', 'bars'],
+        }),
+        selections: freeze(['closePrices', 'ohlcvBars', 'bars']),
       },
       {
         closePrices: { get: () => (closes ??= freeze(p.data.map((r: any) => r.bar.close))) },
-        bars: { get: () => freeze(p.data.map((r: any) => ({ ...r.bar }))) },
+        resolve: {
+          value: () => {
+            throw Error('unused mutant resolver');
+          },
+        },
+        bars: { get: () => (timestamped ??= freeze(p.data.map((r: any) => ({ ...r.bar })))) },
         ohlcvBars: {
           get: () =>
             (bars ??= freeze(
@@ -89,12 +88,6 @@ function fixture() {
   (first.data as unknown[]).push(bar(), bar('2026-10-27'));
   (first as any).nextCursor = 'fixture-page2';
   (last.data as unknown[]).push(bar('2026-10-28'));
-  const continuation: DataRequest = {
-    kind: 'price-bars',
-    symbol: 'TEST',
-    cursor: 'fixture-page2',
-    limit: 2,
-  };
   let block = false;
   let started!: () => void;
   const ready = new Promise<void>((r) => {
@@ -122,7 +115,7 @@ function fixture() {
   const probe: DataPagesProbe = {
     name: 'daily',
     kind: 'pages',
-    request: (({ limit, ...q }) => q)(dailyRequest),
+    request: (({ limit: _limit, ...q }) => q)(dailyRequest),
     pageSize: 2,
     expectedPages: [first, last],
   };
@@ -139,6 +132,19 @@ function fixture() {
 }
 const options = { maxPages: 4, maxRecords: 10, timeoutMs: 100 };
 describe('public data compatibility kit', () => {
+  it('accepts the unmutated independently assembled view control before refuting one-defect mutants', async () => {
+    const f = fixture();
+    const provider = {
+      ...f.provider,
+      async query(q: any, o: any) {
+        if (o.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
+        return unchecked(structuredClone(o.cursor ? f.last : f.first));
+      },
+    };
+    await expect(
+      validateDataProvider({ ...options, provider, probes: [f.probe] }),
+    ).resolves.toBeUndefined();
+  });
   it('proves exact multipage facts, typed errors and actual in-flight abort', async () => {
     const f = fixture();
     await validateDataProvider({
@@ -377,6 +383,63 @@ describe('public data compatibility kit', () => {
 
 describe('independent consumer-view compatibility mutants', () => {
   const cases: [string, (descriptors: PropertyDescriptorMap) => void][] = [
+    [
+      'lost issue disclosure',
+      (d) => {
+        d['issues']!.value = Object.freeze([
+          {
+            pageIndex: 0,
+            rowIndex: 0,
+            rule: 'close_outside_range',
+            fields: ['close', 'low', 'high'],
+          },
+        ]);
+      },
+    ],
+    [
+      'wrong source-row correspondence',
+      (d) => {
+        d['selection']!.value = copyFrozen({
+          version: 1,
+          decisions: [],
+          sourceRows: [
+            { pageIndex: 0, rowIndex: 1 },
+            { pageIndex: 0, rowIndex: 0 },
+          ],
+        });
+      },
+    ],
+    [
+      'lying timestamped bar',
+      (d) => {
+        const actual = d['bars']!.get!();
+        d['bars']!.get = () =>
+          copyFrozen(
+            actual.map((b: any, i: number) => ({ ...b, timestampMs: i ? b.timestampMs : 1 })),
+          );
+      },
+    ],
+    [
+      'lost timestamped adjustment',
+      (d) => {
+        const actual = d['bars']!.get!();
+        d['bars']!.get = () =>
+          copyFrozen(
+            actual.map((b: any) => {
+              const { adjusted: _adjusted, ...rest } = b;
+              return rest;
+            }),
+          );
+      },
+    ],
+    [
+      'forged suitability refusal',
+      (d) => {
+        d['closePrices']!.get = () => {
+          throw new DataError('forged', { code: ErrorCode.DataSuspectObservations });
+        };
+      },
+    ],
     [
       'wrong kind',
       (d) => {

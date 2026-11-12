@@ -1,4 +1,4 @@
-# Connect an agent
+# Agent handbook
 
 TotalFinance gives an agent financial calculations, not permission to invent market observations or place live orders. The same operation definition drives the SDK runtime, CLI, local HTTP/OpenAPI, and MCP. Begin with a narrow, read-only profile.
 
@@ -44,7 +44,7 @@ After publication, use the exact versioned package command displayed on the Vers
 
 ## 3. Choose the smallest useful tool set
 
-The profile table below is generated from the actual registry. `--packs` narrows a profile to exactly the named packs. It does not append implicit defaults. An omitted profile uses the established read-only compute default.
+The [profile table](/agents#choose-more-tools-with-a-profile) is generated from the actual registry. `--packs` narrows a profile to exactly the named packs. It does not append implicit defaults. An omitted profile uses the established read-only compute default.
 
 For embedding, `packs` is also exact selection. Select public operation packs and pass them to `createTotalFinanceMcpServer`. Use `--help` for the current executable flags; use the capability resource to discover the server you actually connected to, rather than assuming another installation has the same packs.
 
@@ -82,7 +82,7 @@ Paper execution is simulated execution. No live broker adapter is included. Appr
 
 The local HTTP interface is a separate transport. A local HTTP API with an OpenAPI document is not automatically a hosted remote MCP server, and a bearer token for local writes is not a complete multi-user identity system.
 
-The [HTTP setup guide](/guides/http/) and [downloadable OpenAPI document](/openapi.json) describe
+The [HTTP setup guide](/guides/http) and [downloadable OpenAPI document](/openapi.json) describe
 that local API. This documentation website does not host those endpoints. Use the local server's
 own capabilities and OpenAPI response for its actual selected profile and permissions.
 
@@ -90,7 +90,7 @@ own capabilities and OpenAPI response for its actual selected profile and permis
 
 Use the explicitly configured worker-backed job path for large backtests. Retain job identities, read status/result, and cancel work that is no longer useful. Inline deadlines are elapsed-time verdicts unless a worker path is active; a deadline label alone does not imply interruptible computation. The generated server help and capabilities distinguish these modes.
 
-The [MCP transport guide](/guides/mcp/) gives the exact worker flags, typed job submission, status,
+The [MCP transport guide](/guides/mcp) gives the exact worker flags, typed job submission, status,
 result, cancellation, and paging contracts. Read `totalfinance://capabilities` before choosing a path:
 only eligible job-class operations use workers. Lifecycle states are not measured progress percentages.
 An explicitly attached store/runner may write local reports and job records even when financial

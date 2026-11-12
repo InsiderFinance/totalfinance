@@ -1,0 +1,34 @@
+---
+title: 'Core'
+description: 'Shared errors, conventions, validation, dates, formatting, OCC symbols and artifacts.'
+---
+
+Types and utilities every domain shares: the typed error hierarchy, conventions and defaults that are always echoed, validation helpers, date handling without the machine clock, formatting and OCC option symbols.
+
+## Common APIs
+
+<KeyExports
+  domain="core"
+  names={[
+    'QuantError',
+    'InputError',
+    'isQuantError',
+    'parseOccSymbol',
+    'formatOccSymbol',
+    'discountFactor',
+    'resolveAsOf',
+    'resolvedExpiry',
+    'formatMoney',
+  ]}
+/>
+
+## Guides
+
+- [Errors and diagnostics](/guides/errors)
+- [Results and the explain envelope](/guides/envelope)
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="core" />

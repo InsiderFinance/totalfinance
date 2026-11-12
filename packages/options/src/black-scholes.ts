@@ -534,7 +534,10 @@ function impliedVolatilityExplain(
       method: 'brent',
       converged: false,
       iterations: res.iterations,
-      warnings: [{ code, message, severity }, ...suspicious],
+      warnings: [
+        { code, message: res.message ?? message, severity, context: { reason: res.reason } },
+        ...suspicious,
+      ],
     },
   };
 }

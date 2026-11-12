@@ -1,3 +1,11 @@
+import {
+  analyticPremium,
+  analyticTrial,
+  analyticPrecisionFailure,
+  analyticLowerTrial,
+  logPriceRatio,
+  requireHorizonVolatility,
+} from './analytic-premium.js';
 /**
  * The pure Black–Scholes–Merton kernel (spec §9.3 analytical engine).
  *
@@ -37,6 +45,7 @@ interface D1D2 {
   discountFactor: number;
   /** Dividend discount e^{-qT}. */
   dq: number;
+  logRatio: number;
 }
 
 export interface BlackScholesPriceBoundsInput {
@@ -62,9 +71,15 @@ function d1d2(input: Omit<BlackScholesKernelInput, 'type'>): D1D2 {
     volatility: sigma,
   } = input;
   const sqrtT = Math.sqrt(T);
-  const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+  if (sigma > 0 && T > 0) requireHorizonVolatility(sigma * sqrtT);
+  const ratio = S / K;
+  const logRatio =
+    sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+      ? logPriceRatio(S, K)
+      : Math.log(ratio);
+  const d1 = (logRatio + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
   const d2 = d1 - sigma * sqrtT;
-  return { d1, d2, sqrtT, discountFactor: Math.exp(-r * T), dq: Math.exp(-q * T) };
+  return { d1, d2, sqrtT, discountFactor: Math.exp(-r * T), dq: Math.exp(-q * T), logRatio };
 }
 
 /**
@@ -157,9 +172,20 @@ const BSM_HINTS: Record<string, string> = {
  */
 export function blackScholesPriceUnchecked(input: BlackScholesKernelInput): number {
   const { type, spot: S, strike: K } = input;
-  const { d1, d2, discountFactor, dq } = d1d2(input);
-  if (type === 'call') return S * dq * normalCdf(d1) - K * discountFactor * normalCdf(d2);
-  return K * discountFactor * normalCdf(-d2) - S * dq * normalCdf(-d1);
+  const { d1, d2, discountFactor, dq, sqrtT, logRatio } = d1d2(input);
+  const sd = input.volatility * sqrtT;
+  const carry = (input.riskFreeRate - input.dividendYield) * input.timeToExpiryYears;
+  return analyticPremium({
+    positiveLeg: type === 'call' ? S * dq * normalCdf(d1) : K * discountFactor * normalCdf(-d2),
+    negativeLeg: type === 'call' ? K * discountFactor * normalCdf(d2) : S * dq * normalCdf(-d1),
+    atTheMoney: S === K && input.riskFreeRate === input.dividendYield,
+    discountedScale: S * dq,
+    discountedStrike: K * discountFactor,
+    type,
+    logMoneyness: logRatio + carry,
+    logMoneynessError: sd < 1e-4 ? 8 * Number.EPSILON * (Math.abs(logRatio) + Math.abs(carry)) : 0,
+    standardDeviation: sd,
+  });
 }
 
 /**
@@ -328,8 +354,8 @@ export type ImpliedVolatilityReason =
   /**
    * The target premium is smaller than the model price at the lowest σ the solver represents, so no
    * volatility in the bracket reproduces it (the σ→0 floor sits ABOVE the target). Distinct from
-   * `below_intrinsic` (a no-arbitrage violation) and from `no_bracket` (a bracketing failure with a
-   * root that exists): here the inverse simply has no solution at this price scale.
+   * `below_intrinsic` (a no-arbitrage violation) and from `no_bracket` (no usable bracket was
+   * established; see `message` for precision limits). The no_bracket reason does not assert that a root exists.
    */
   | 'price_below_resolvable'
   | 'no_bracket'
@@ -341,6 +367,8 @@ export interface BlackScholesImpliedVolatilityResult {
   iterations: number;
   error?: number;
   reason?: ImpliedVolatilityReason;
+  /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+  message?: string;
 }
 
 export interface BlackScholesImpliedVolatilityOptions {
@@ -437,7 +465,7 @@ export function blackScholesImpliedVolatility(
     'upperVolatilityBound',
     'blackScholesImpliedVolatility',
   );
-  const lo = lowerVolatilityBound ?? 1e-7;
+  let lo = lowerVolatilityBound ?? 1e-7;
   let hi = upperVolatilityBound ?? 5;
   /**
    * The bracket must be a VOLATILITY INTERVAL, checked after defaults are applied and BEFORE any
@@ -494,15 +522,18 @@ export function blackScholesImpliedVolatility(
 
   // Unchecked: every field was validated at the boundary above, and this runs per Brent iteration.
   const f = (sigma: number): number =>
-    blackScholesPriceUnchecked({
-      type,
-      spot: S,
-      strike: K,
-      timeToExpiryYears: T,
-      riskFreeRate: r,
-      dividendYield: q,
-      volatility: sigma,
-    }) - price;
+    analyticTrial(
+      () =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: sigma,
+        }) - price,
+    );
 
   // Endpoint acceptance: when the target matches the model price at a bracket endpoint to within a
   // RELATIVE tolerance, that endpoint's volatility is a legitimate root (deep ITM/OTM contracts
@@ -510,7 +541,10 @@ export function blackScholesImpliedVolatility(
   // tolerance is relative so this stays "the endpoint IS the root" at every price scale.
   const ptol = impliedVolatilityPriceTolerance(price);
 
-  const flo = f(lo);
+  const lowerTrial = analyticLowerTrial(f, lo, hi);
+  lo = lowerTrial.lower;
+  const flo = lowerTrial.value;
+  if (!Number.isFinite(flo)) return analyticPrecisionFailure(0);
   if (Math.abs(flo) <= ptol) {
     return { value: lo, converged: true, iterations: 0, error: Math.abs(flo) };
   }
@@ -519,11 +553,15 @@ export function blackScholesImpliedVolatility(
     // reproduces it: the target is below the solver's resolvable price floor. Reporting `lo` here
     // (what an absolute tolerance did for every target ≤ 1e-8) is a fabricated volatility.
     return {
-      value: NaN,
-      converged: false,
-      iterations: 0,
+      ...(lowerTrial.adjusted
+        ? analyticPrecisionFailure(0)
+        : {
+            value: NaN,
+            converged: false,
+            iterations: 0,
+            reason: 'price_below_resolvable' as const,
+          }),
       error: flo,
-      reason: 'price_below_resolvable',
     };
   }
 
@@ -559,10 +597,14 @@ export function blackScholesImpliedVolatility(
   const res = brent(f, lo, hi, { tolerance: 1e-12, maximumIterations: 100 });
   if (!res.converged) {
     return {
-      value: NaN,
-      converged: false,
-      iterations: res.iterations,
-      reason: 'max_iterations',
+      ...(res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
+        ? analyticPrecisionFailure(res.iterations)
+        : {
+            value: NaN,
+            converged: false,
+            iterations: res.iterations,
+            reason: 'max_iterations' as const,
+          }),
       ...(res.residual !== undefined ? { error: res.residual } : {}),
     };
   }

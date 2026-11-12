@@ -1,12 +1,12 @@
+import type { DataQuery, DataQueryOptions } from '../src/data-types.js';
 import {
   fixtureProbe,
   defineFixtureProvider,
   queryFixture,
-  fixtureSource,
   fixtureSourceOf,
 } from './data-fixture-migration.js';
 import { it, expect } from 'vitest';
-import type { DataRequest } from '../src/data-legacy-types.js';
+
 import { createDataView, connect, createPriceBarsWindowView } from '../src/data.js';
 import {
   bar,
@@ -269,7 +269,8 @@ it('unknown scanner paths, accessors and forged provider context never become sc
     await queryFixture(p, dailyRequest);
     throw Error('accepted');
   } catch (e: any) {
-    expect(e.code).toBe('data.provider_failure');
+    expect(e).toBeInstanceOf(InputError);
+    expect(e.code).toBe('input.wrong_type');
     expect(JSON.stringify(e)).not.toMatch(/secret|URL|validationCode/);
   }
 });
@@ -425,10 +426,7 @@ it('invalid expected pages are caller input errors with zero provider calls', as
       calls++;
       return base.capabilities();
     },
-    query: async <R extends import('../src/data-types.js').DataQuery>(
-      r: R,
-      o: import('../src/data-types.js').DataQueryOptions,
-    ) => {
+    query: async <R extends DataQuery>(r: R, o: DataQueryOptions) => {
       calls++;
       return base.query(r, o);
     },

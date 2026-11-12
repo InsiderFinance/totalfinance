@@ -1,3 +1,4 @@
+import { analyticTrial, logPriceRatio } from './analytic-premium.js';
 /**
  * Implied-volatility method suite (spec §9.5).
  *
@@ -143,8 +144,12 @@ function impliedVolatilityDerivatives(input: {
     dividendYield: q,
     volatility: sigma,
   } = input;
+  if (!(sigma > 0)) return { f: NaN, df: NaN, d2f: NaN, d3f: NaN };
   const sqrtT = Math.sqrt(T);
-  const d1 = (Math.log(S / K) + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+  const d1 =
+    ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
+      (r - q + 0.5 * sigma * sigma) * T) /
+    (sigma * sqrtT);
   const d2 = d1 - sigma * sqrtT;
   const vega = S * Math.exp(-q * T) * normalPdf(d1) * sqrtT;
   const vomma = (vega * d1 * d2) / sigma;
@@ -154,15 +159,17 @@ function impliedVolatilityDerivatives(input: {
     // its boundary, and this runs once per Newton/Halley/Householder iteration. Routing it through
     // the guarded facade re-checked six fields per iteration for no added safety.
     f:
-      blackScholesPriceUnchecked({
-        type,
-        spot: S,
-        strike: K,
-        timeToExpiryYears: T,
-        riskFreeRate: r,
-        dividendYield: q,
-        volatility: sigma,
-      }) - target,
+      analyticTrial(() =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: sigma,
+        }),
+      ) - target,
     df: vega,
     d2f: vomma,
     d3f: d3,
@@ -347,6 +354,7 @@ export function impliedVolatility(
     converged: boolean;
     iterations: number;
     reason?: ImpliedVolatilityReason;
+    message?: string;
   } => {
     const res = blackScholesImpliedVolatility({
       type,
@@ -362,6 +370,7 @@ export function impliedVolatility(
       converged: res.converged,
       iterations: res.iterations,
       ...(res.reason !== undefined ? { reason: res.reason } : {}),
+      ...(res.message !== undefined ? { message: res.message } : {}),
     };
   };
 
@@ -370,7 +379,17 @@ export function impliedVolatility(
    * warning naming why. The Brent kernel knows the reason — pass it through instead of flattening
    * every bracketed failure into a bare non-convergence.
    */
-  const brentFailure = (reason: ImpliedVolatilityReason | undefined): QuantWarning => {
+  const brentFailure = (
+    reason: ImpliedVolatilityReason | undefined,
+    message?: string,
+  ): QuantWarning => {
+    if (message !== undefined)
+      return {
+        code: ErrorCode.ImpliedVolatilityNoConvergence,
+        severity: 'error',
+        message: `brent: ${message}`,
+        context: { reason },
+      };
     switch (reason) {
       case 'below_intrinsic':
         return {
@@ -411,15 +430,17 @@ export function impliedVolatility(
     v > 0 &&
     Math.abs(
       // Unchecked for the same reason: acceptance runs per candidate root, behind that same boundary.
-      blackScholesPriceUnchecked({
-        type,
-        spot: S,
-        strike: K,
-        timeToExpiryYears: T,
-        riskFreeRate: r,
-        dividendYield: q,
-        volatility: v,
-      }) - price,
+      analyticTrial(() =>
+        blackScholesPriceUnchecked({
+          type,
+          spot: S,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          dividendYield: q,
+          volatility: v,
+        }),
+      ) - price,
     ) <=
       // Relative to the target for the same reason as `residualTolerance` above: an absolute floor
       // accepts any σ once the price is small enough.
@@ -433,7 +454,7 @@ export function impliedVolatility(
     usedMethod = 'brent';
     // Law 2: the brent path owes the same error-severity warning every other path pushes — without
     // it a failed solve returned `value: null` with an EMPTY warning list and no reason at all.
-    if (!converged) warnings.push(brentFailure(res.reason));
+    if (!converged) warnings.push(brentFailure(res.reason, res.message));
   } else {
     const res =
       method === 'newton'
@@ -459,7 +480,7 @@ export function impliedVolatility(
         severity: 'info',
       });
       // When the fallback ALSO fails, the info warning above is not a failure report — say why.
-      if (!converged) warnings.push(brentFailure(fb.reason));
+      if (!converged) warnings.push(brentFailure(fb.reason, fb.message));
     } else {
       value = NaN;
       converged = false;

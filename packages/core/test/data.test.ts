@@ -2,18 +2,17 @@ import {
   defineFixtureProvider,
   queryFixture,
   fixtureSource,
-  expectedPage,
   fixtureEntries,
   type CanonicalFixtureSource,
 } from './data-fixture-migration.js';
 import { describe, it, expect, vi } from 'vitest';
 import {
   DATA_CONTRACT_VERSION,
-  type DataProviderSource,
   type DataPage,
   type PriceBarRecord,
   type OptionChainResearchRecord,
 } from '../src/data.js';
+import { defineDataProvider as bindDataProvider } from '../src/data.js';
 import { ErrorCode, QuantError } from '../src/errors.js';
 import { createFixtureDataProvider } from '../../../docs/examples/community-connector-fixture.js';
 import {
@@ -210,7 +209,7 @@ describe('community data contract', () => {
   });
 });
 it('allows raw source-owned structural state without changing consumed fields', () => {
-  const source = { ...raw(), vendorState: { connection: 'synthetic' } };
-  expect(defineFixtureProvider(source).id).toBe('fixture');
-  expect(() => defineFixtureProvider({ ...source, id: 42 } as never)).toThrow(QuantError);
+  const source = { ...fixtureSource(raw()), vendorState: { connection: 'synthetic' } };
+  expect(bindDataProvider(source).id).toBe('fixture');
+  expect(() => bindDataProvider({ ...source, id: 42 } as never)).toThrow(QuantError);
 });

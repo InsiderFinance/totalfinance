@@ -22,3 +22,9 @@ Improve connector authoring with a natural homogeneous raw-page return type, con
 mapping diagnostics and an independently installed no-key starter. Reject contradictory adjustment
 facts and negative normalized option premiums; order same-term contracts by actual source IDs without
 inventing identities. Preserve unknown financial inputs, caller-fixture blame and source metadata.
+
+C5 simplifies authoring with protocol2 sources, original queries on every page and SDK-owned
+normalization. Add finite capability negotiation, cross-copy safe errors, actual timestamped bars,
+explicit consumed-work checkpoints/resume and field-specific research-quality choices with retained
+originals/decisions. Keep clean data.connect/priceBars/existing-SMA use unchanged and all acquisition
+synthetic/offline until separately configured access; no financial defaults or implicit execution.

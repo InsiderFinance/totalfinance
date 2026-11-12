@@ -1,0 +1,41 @@
+---
+title: 'Options'
+description: 'Black–Scholes, Black-76, Bachelier, American, Heston, SABR and exotic pricing; Greeks; implied volatility; chain health.'
+---
+
+Price a single option or a whole chain. Facades such as `blackScholes` return plain numbers and explain themselves on request; `option` and `engines` select a model explicitly; `impliedVolatility` inverts a price. Exotic payoffs (barriers, digitals, Asians, lookbacks, cliquets, autocallables and more) are included, each with the same explicit units.
+
+## Try it live
+
+- [Price an option](/learn/price-an-option)
+
+## Common APIs
+
+<KeyExports
+  domain="options"
+  names={[
+    'blackScholes',
+    'black76',
+    'bachelier',
+    'impliedVolatility',
+    'option',
+    'engines',
+    'americanExercise',
+    'barrier',
+    'digital',
+    'heston',
+    'chainGreeks',
+    'optionChainHealth',
+  ]}
+/>
+
+## Guides
+
+- [Selective Greeks and exposure](/guides/selective-greeks-and-exposure)
+- [Assumptions and conventions](/guides/assumptions)
+
+## Complete API reference
+
+Browse all public exports, types, and feature imports below.
+
+<EntrypointList domain="options" />
