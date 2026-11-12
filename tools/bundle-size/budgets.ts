@@ -194,9 +194,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/math/montecarlo',
     entry: 'packages/math/src/montecarlo.ts',
-    budgetKB: 7.375,
+    budgetKB: 7.4375,
     intent: 'Sobol direction numbers are generated, not a vendored table',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '7.25 → 7.375 KB (installed-consumer repair, 2026-09-21): measured 7,501 B with Node 22.23.2/esbuild 0.25.12. Shared input codes are private named constants so guard-only consumers can drop the complete error registry; whole-registry consumers pay small binding overhead. No added module family; the lean expert-price fixtures independently cap the resulting savings. ' +
       'WS9.5 lifted the 13-dimension Sobol cap to 1111 dimensions. The direction numbers are ' +
       'GENERATED from primitive polynomials at load (a few KB of code), NOT a ~50 KB vendored table, ' +
@@ -226,9 +228,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/calendars/crypto',
     entry: 'packages/calendars/src/crypto.ts',
-    budgetKB: 4.875,
+    budgetKB: 4.9375,
     intent: 'aliases alwaysOpen and pulls in no exchange-holiday dataset',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '4.75 → 4.875 KB (installed-consumer repair, 2026-09-21): measured 4,934 B with Node 22.23.2/esbuild 0.25.12. The shared validation-code split adds small binding overhead to whole-registry consumers while allowing guard-only kernels to discard unrelated codes. The no-dataset boundary remains enforced. ' +
       '3.5 KB (was 3): the 2026-08-02 defect-fix wave made createRuleCalendar copy its rule arrays ' +
       'and session object at construction and reject an all-weekend configuration, so one calendar ' +
@@ -249,9 +253,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/performance/sector-performance',
     entry: 'packages/performance/src/sector-performance.ts',
-    budgetKB: 10.5,
+    budgetKB: 10.5312,
     intent: 'simple and audited sector returns; no option pricing or schema machinery',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       'PR #336 (2026-09-07): measured 10,374 B gzip for both pure entrypoints, shared aggregation, runtime teaching and complete selected-input lineage. Consumers need not import the umbrella or unrelated performance metrics.',
     forbidden: [
       { needle: 'blackScholesPrice', why: 'sector returns must not pull option-pricing engines' },
@@ -318,9 +323,10 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/fixed-income/lattice',
     entry: 'packages/fixed-income/src/lattice.ts',
-    budgetKB: 12.875,
+    budgetKB: 12.9062,
     intent: 'short-rate lattice; pulls the option/BSM kernel for the equity leg',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       '12.75 → 12.875 KB (installed-consumer repair, 2026-09-21): measured 13,112 B with Node 22.23.2/esbuild 0.25.12. The shared validation-code split adds small binding overhead when the full error registry is also needed; no new runtime dependency or capability. Separate installed expert-price fixtures enforce removal of the unrelated registry and facades. ' +
       '9 KB (was 8): E5 added the Law 12 spec-key guards, bond/curve instance teaching errors, and ' +
       'the bermudan report grammar (assumptions echo + diagnostics) — deliberate boundary code ' +
@@ -341,9 +347,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/fixed-income/convertible',
     entry: 'packages/fixed-income/src/convertible.ts',
-    budgetKB: 8.75,
+    budgetKB: 8.8125,
     intent: 'convertible bond pricing, reported separately so a consumer sees what it pays',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
+      'C3 reviewed taxonomy allowance (e2fef6ff, 2026-11-02): +32 B only for DataWindowBudgetExceeded. Retained module set unchanged; core/errors.ts +55 minified bytes. All other structural/installed/guard-only ceilings retained. ' +
       '6.5 KB (was 6), 2026-08-02 defect-fix wave: inherits the anchor-based schedule generation ' +
       'and the expanding yield bracket. Measured 6,370 B; already ~23 B over before the wave. ' +
       '7 KB → 7.5 (2026-08-16 coordinated tail sweep): inherits the endOfMonth schedule ladder ' +
@@ -420,10 +428,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/portfolio/trade',
     entry: 'packages/portfolio/src/trade/index.ts',
-    budgetKB: 77.5,
+    budgetKB: 77.5625,
     intent:
       'Stage 7B.2 the safe trade lifecycle: intents and execution plans, the structured policy, and preflight through the ledger fold and the monitor — a subpath so a ledger consumer never pays for the lifecycle',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21, combos and one order vocabulary): 76 -> 77.5 KB, measured 76.3 KB. Combo terms on the intent and the plan, the combo after-state in preflight, the combo binding in the grant, and the core order vocabulary. ' +
       'Stage 7B.2 slice 1 (2026-09-05): the artifacts and their guards, normalization from an intent or a rebalance proposal, the policy with its stricter-merge, and preflight — which bundles the snapshot, the reducer fold, and the monitor it composes (the monitor is most of the weight). Measured 64,195 B (62.7 KB); the budget is 65 KB so slice 2 (the grant, the journal, reconciliation) reconciles its growth rather than absorbs it.' +
       '65 → 76 KB (Stage 7B.2 slice 2, 2026-09-06): the authorization grant (create + verify with the variance envelope), the execution journal fold with its transition table, and reconcileExecution composing reconcilePortfolio — the slice-2 verbs and their closed guards; measured 74,507 B.',
@@ -448,10 +457,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/backtest/paper',
     entry: 'packages/backtest/src/paper/index.ts',
-    budgetKB: 37.125,
+    budgetKB: 37.1562,
     intent:
       'Stage 7B.2 createPaperBroker: the first execution adapter over the engines’ own fill path — submit (grant verification, idempotency, the receipt), step (fills through fillOrderWithPolicy and the ledger events), cancel, deliver, halt; its own entrypoint so the engines never pay for the broker',
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       '37 → 37.125 KB (installed-consumer repair, 2026-09-21): measured 37,920 B with Node 22.23.2/esbuild 0.25.12. Private shared validation constants add binding overhead to whole-registry consumers while preserving code identities and allowing guard-only consumers to discard the registry. No broker behavior or dependency changed. ' +
       'Pre-publish interface repairs B5/B6 (2026-09-21): 34.5 -> 37 KB, measured 36.1 KB. All-or-none combo fills against one observation instant with the net-limit check, the submission stamp and the observation-before-submission refusal. ' +
       '34 → 34.5 KB (pre-publish interface repairs, 2026-09-18, assumptions and units): the broker refuses an OCC option symbol it has no multiplier for, at creation and at submit, through the core OCC grammar predicate (the grammar was split from expiry resolution so this costs the parse, not the session calendar: 36.6 KB with the calendar, 34,876 B without); 60 B over the 34 KB line. ' +
@@ -667,12 +677,33 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
     timeoutMs: 120_000,
   },
   {
+    specifier: '@insiderfinance/totalfinance/data',
+    entry: 'packages/totalfinance/src/data.ts',
+    budgetKB: 21,
+    intent:
+      'provider-neutral bounded research windows and canonical restoration; explicit provider binding',
+    rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
+      'C4 ae690e3f approved (2026-11-11): final15663B, cap15872B (209B headroom); finite controlled schema/guard diagnostics, unchanged module set and structural exclusions. C3 initial measured gate approved e2fef6ff:13475 B gzip, cap13824 B. No conformance runner, provider/credential/HTTP implementation or TA engine.',
+    forbidden: [
+      { needle: 'validateDataProvider', why: 'behavioral conformance runner stays opt-in' },
+      { needle: 'INSIDERFINANCE_API_KEY', why: 'credentials belong to external providers/host' },
+      {
+        needle: 'api-staging.insiderfinance',
+        why: 'provider infrastructure defaults stay external',
+      },
+    ],
+  },
+  {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 701.5,
+    budgetKB: 715.5,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
+      'C4 ae690e3f approved (2026-11-11) root723200B: main714320 -> integrated720687 -> scoped721811 -> controlled known-schema correction722908B;292B headroom. Opt-in guard/schema cost, unchanged retained module sets. Only the eight reviewed whole/data installed caps change. ' +
+      'C3 approved root data connection (e2fef6ff, 2026-11-02): 696.25 -> 703 KiB; baseline712661 -> candidate719087 B gzip. The provider-neutral window/validation/view branch is newly reachable; no provider, credentials, network implementation or copied calculation. Final source remeasured under this same cap. ' +
       'PR32 second review: 717,551 → 718,019 B gzip on Node 22.23.2/esbuild 0.25.12. The guarded intrinsic/Kirk paths, cheaper covariance validation and IV message add 468 B net. The 701.5 KiB ceiling leaves 317 B. No public export or forbidden-domain exception is added. ' +
       'PR32 review corrections (2026-11-11): measured 716,058 → 717,551 B gzip, canonical Node 22.23.2/esbuild 0.25.12. Review regression fixes add 1,493 B across existing owners; 701 KiB leaves 273 B. Public signatures remain compatible and dependency/module boundaries remain enforced. ' +
       'Numerical precision repairs #16–24 (2026-11-11): measured 714,320 → 716,058 B gzip on Node 22.23.2/esbuild 0.25.12. Shared stable annuities/IRR/MC, strategy roots and honest diagnostics add 1,738 B; 699.5 KiB leaves 230 B. No new exports/dependencies; all structural and installed leaf-import budgets remain enforced. ' +

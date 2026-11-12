@@ -20,6 +20,8 @@ Calculations run locally with the data you provide. The main package has **zero 
 dependencies**, typed inputs, and tree-shakeable ESM exports. Use it in Node.js, browsers, and workers;
 connect the same engines to agents through MCP.
 
+**Community connectors (unreleased):** [no-key first success and author journey](./docs/guides/community-connector-first-success.md) builds the preview from source; the [connector guide](./docs/guides/community-connectors.md) explains the provider-neutral data handoff.
+
 ## Quick start
 
 ```sh

@@ -359,3 +359,43 @@ export function allowedConsumerModule(
     )
   );
 }
+
+/** C3 measured initial ceilings, approved e2fef6ff. Existing consumer fixtures stay unchanged. */
+export const DATA_CONSUMER_FIXTURES: readonly ConsumerFixture[] = [
+  {
+    id: 'data-named',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance/data',
+    style: 'named',
+    source:
+      "import { connect } from '@insiderfinance/totalfinance/data'; globalThis.consumerConnect = connect;",
+    budgetKiB: { esbuild: 20.5, rollup: 18.5 },
+    reason:
+      'C5 measured review45c974dc: named20676/18631B, root21395/18596B, restore15985/13754B. Only exact reviewed limits apply; restore Rollup remains14080B, every other structural/ordinary gate unchanged. ' +
+      'C4 ae690e3f approved15102/13009B within15360/13312B: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 named connect measured12977/10820B; approved13312/11008B.',
+  },
+  {
+    id: 'data-root',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance',
+    style: 'root namespace',
+    source:
+      "import { data } from '@insiderfinance/totalfinance'; globalThis.consumerConnect = data.connect;",
+    budgetKiB: { esbuild: 21.25, rollup: 18.5 },
+    reason:
+      'C5 measured review45c974dc: named20676/18631B, root21395/18596B, restore15985/13754B. Only exact reviewed limits apply; restore Rollup remains14080B, every other structural/ordinary gate unchanged. ' +
+      'C4 ae690e3f approved15759/12990B within15872/13312B: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 root data namespace measured13589/10839B; approved13824/11008B.',
+  },
+  {
+    id: 'data-restore',
+    canary: 'normal',
+    specifier: '@insiderfinance/totalfinance/data',
+    style: 'named restore',
+    source:
+      "import { createPriceBarsWindowView } from '@insiderfinance/totalfinance/data'; globalThis.consumerRestore = createPriceBarsWindowView;",
+    budgetKiB: { esbuild: 15.75, rollup: 13.75 },
+    reason:
+      'C5 measured review45c974dc: named20676/18631B, root21395/18596B, restore15985/13754B. Only exact reviewed limits apply; restore Rollup remains14080B, every other structural/ordinary gate unchanged. ' +
+      'C4 ae690e3f approved13884/13897B within14080B each: complete controlled diagnostics, unchanged module sets/structural guards. Historical C3 restore measured11823/11833B; approved12032B each.',
+  },
+];

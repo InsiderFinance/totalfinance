@@ -42,6 +42,10 @@ export interface ForbiddenToken {
  * silent exemption.
  */
 export const FORBIDDEN_TOKENS: Readonly<Record<string, ForbiddenToken>> = {
+  mo: {
+    direction: 'month',
+    why: 'Truncated unit outside an explicitly approved interval literal.',
+  },
   acc: {
     direction: 'accumulated or accumulator',
     why: 'Truncation also ambiguous with "accuracy" and "account".',
@@ -406,6 +410,8 @@ export const CANONICAL_NAME_TOKENS: Readonly<Record<string, readonly string[]>> 
   '1h': ['h'],
   '4h': ['h'],
   '1d': ['d'],
+  '1w': ['w'],
+  '1mo': ['mo'],
   CHoCH: ['c'],
 
   /**
@@ -562,6 +568,9 @@ export const CANONICAL_NAMES: Readonly<Record<string, string>> = {
   '1h': 'Bar-interval code (1 hour).',
   '4h': 'Bar-interval code (4 hours).',
   '1d': 'Bar-interval code (1 day).',
+  '1w': 'Bar-interval code (1 week); the finite understood research interval, not a general unit grammar.',
+  '1mo':
+    'One-month research bar interval literal in the finite declared set; only this exact spelling excuses mo.',
   CHoCH: 'Change of Character — Smart Money Concepts market-structure event, printed exactly so.',
 
   // ---- FC2: published fundamental-score model names (each excuses only its own letter) ----

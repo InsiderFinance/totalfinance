@@ -10,6 +10,12 @@ export const DOMAINS: readonly { slug: string; title: string; summary: string }[
     summary: 'One import for every domain as a namespace. Prefer domain subpaths in browsers.',
   },
   {
+    slug: 'data',
+    title: 'Research data',
+    summary:
+      'Provider-neutral research queries, immutable source views, bounded windows and explicit resume/quality decisions; external packages own acquisition.',
+  },
+  {
     slug: 'options',
     title: 'Options',
     summary:

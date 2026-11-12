@@ -4411,22 +4411,22 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `Rule` | `terms[].operator` | enum | "and" \\| "or" |  |  |  |
 | `SignalBuilder` | `addRule` | function | callback |  |  |  |
 | `SignalBuilder` | `atr` | function | callback |  |  |  |
-| `SignalBuilder` | `candles` | other |  |  |  |  |
+| `SignalBuilder` | `candles` | other |  |  | yes |  |
 | `SignalBuilder` | `columns` | function | callback |  |  |  |
-| `SignalBuilder` | `context` | other |  |  |  |  |
+| `SignalBuilder` | `context` | other |  |  | yes |  |
 | `SignalBuilder` | `ema` | function | callback |  |  |  |
-| `SignalBuilder` | `evalRule` | other |  |  |  |  |
+| `SignalBuilder` | `evalRule` | other |  |  | yes |  |
 | `SignalBuilder` | `events` | function | callback |  |  |  |
 | `SignalBuilder` | `feature` | function | callback |  |  |  |
-| `SignalBuilder` | `isKnownRef` | other |  |  |  |  |
-| `SignalBuilder` | `pipe` | other |  |  |  |  |
+| `SignalBuilder` | `isKnownRef` | other |  |  | yes |  |
+| `SignalBuilder` | `pipe` | other |  |  | yes |  |
 | `SignalBuilder` | `rsi` | function | callback |  |  |  |
-| `SignalBuilder` | `rules` | other |  |  |  |  |
+| `SignalBuilder` | `rules` | other |  |  | yes |  |
 | `SignalBuilder` | `signals` | function | callback |  |  |  |
 | `SignalBuilder` | `sma` | function | callback |  |  |  |
 | `SignalBuilder` | `use` | function | callback |  |  |  |
 | `SignalBuilder` | `useBars` | function | callback |  |  |  |
-| `SignalBuilder` | `validateRefs` | other |  |  |  |  |
+| `SignalBuilder` | `validateRefs` | other |  |  | yes |  |
 | `SignalBuilder` | `when` | function | callback |  |  |  |
 | `SignalBuilder` | `wma` | function | callback |  |  |  |
 | `SwingWindow` | `left` | numeric |  | yes |  | unitless by name |

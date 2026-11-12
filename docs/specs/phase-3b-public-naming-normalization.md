@@ -1423,16 +1423,16 @@ identities without adding or removing a public identity; the historical naming p
 
 | Final measure                                            |      Count |
 | -------------------------------------------------------- | ---------: |
-| Public naming identities walked                          |     43,372 |
+| Public naming identities walked                          |     44,592 |
 | **Unresolved (the migration queue)**                     |      **0** |
-| `explicit`                                               |     39,204 |
-| `canonical-term` (allowlisted, each with a rationale)    |      4,006 |
+| `explicit`                                               |     40,311 |
+| `canonical-term` (allowlisted, each with a rationale)    |      4,119 |
 | `scoped-symbol` (approved notation inside a named scope) |        159 |
 | `opaque-state` (round-trip payload interiors)            |          3 |
 | Retired forms with executable removal evidence           | 115 of 115 |
 | Packages, including the umbrella                         |         25 |
 
-Identity kinds walked: 22,897 fields, 7,460 exports, 4,199 parameters, 4,657 string-literal values, 1,780 methods, 1,553 MCP schema fields, 276 stable codes, 276 enum members, 192 subpaths, 57 MCP tools, 25 packages. The MCP schema
+Identity kinds walked: 23,509 fields, 7,582 exports, 4,225 parameters, 5,054 string-literal values, 1,794 methods, 1,553 MCP schema fields, 299 stable codes, 299 enum members, 195 subpaths, 57 MCP tools, 25 packages. The MCP schema
 fields and the array-element and method-signature walks were added during N7 after the inventory was
 found to be reporting zero unresolved over an incomplete traversal — 18,077 identities became 19,209
 without a single name changing, which is the reason the count is quoted with the walk that produced
@@ -1775,3 +1775,5 @@ parameters `params`. The remaining short terms are deliberate, searchable domain
 scoped mathematical notation with a recorded rationale.
 
 That is the vocabulary Phase 3B may safely validate and freeze.
+
+C5 integration note (2026-11-12): quoted inventory counts above are HISTORICAL C4 evidence at3bc356f. Combined current-main/C5 generation and truthful live-count synchronization are pending; no combined acceptance is claimed by retaining this history.

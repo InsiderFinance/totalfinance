@@ -379,7 +379,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `ArbitrageSlice` | `strikes` | array | array of numeric | yes |  |  |
 | `ArbitrageSlice` | `timeToExpiryYears` | numeric |  |  |  | years (decimal) |
 | `ArtifactInputs` | `inputsHash` | string |  |  |  | unitless by name |
-| `ArtifactInputs` | `parameters` | other |  | yes |  |  |
+| `ArtifactInputs` | `parameters` | other |  | yes | yes |  |
 | `ArtifactInputs` | `snapshotHash` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `libraryVersion` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `operation` | string |  |  |  | unitless by name |
@@ -926,30 +926,30 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `VolatilitySurface` | `assumptions.timeToExpiryConvention` | other |  | yes |  |  |
 | `VolatilitySurface` | `assumptions.timeToExpiryYears` | numeric |  | yes |  | years (decimal) |
 | `VolatilitySurface` | `assumptions.units` | object | → GreekUnits | yes |  |  |
-| `VolatilitySurface` | `cosineExpansionTerms` | other |  |  |  |  |
+| `VolatilitySurface` | `cosineExpansionTerms` | other |  |  | yes |  |
 | `VolatilitySurface` | `diagnostics` | object | → Diagnostics |  |  |  |
-| `VolatilitySurface` | `dividendYield` | other |  |  |  |  |
+| `VolatilitySurface` | `dividendYield` | other |  |  | yes |  |
 | `VolatilitySurface` | `essvi` | object | → ESSVIParameters | yes |  |  |
 | `VolatilitySurface` | `expiries` | function | callback |  |  |  |
 | `VolatilitySurface` | `heston` | object | → HestonParameters | yes |  |  |
 | `VolatilitySurface` | `impliedVolatility` | function | callback |  |  |  |
 | `VolatilitySurface` | `impliedVolatilityByDelta` | function | callback |  |  |  |
 | `VolatilitySurface` | `impliedVolatilityByMoneyness` | function | callback |  |  |  |
-| `VolatilitySurface` | `interps` | other |  |  |  |  |
+| `VolatilitySurface` | `interps` | other |  |  | yes |  |
 | `VolatilitySurface` | `lookup` | function | callback |  |  |  |
-| `VolatilitySurface` | `makeSmile` | other |  |  |  |  |
+| `VolatilitySurface` | `makeSmile` | other |  |  | yes |  |
 | `VolatilitySurface` | `model` | enum | "essvi" \\| "heston" \\| "interpolated" \\| "raw" \\| "sabr" \\| "smoothed" \\| "ssvi" \\| "svi" |  |  |  |
-| `VolatilitySurface` | `ownSmileConfig` | other |  |  |  |  |
+| `VolatilitySurface` | `ownSmileConfig` | other |  |  | yes |  |
 | `VolatilitySurface` | `points` | array | array of object |  |  |  |
 | `VolatilitySurface` | `points[].expiry` | string |  |  |  | unitless by name |
 | `VolatilitySurface` | `points[].impliedVolatility` | numeric |  |  |  | unitless by name |
 | `VolatilitySurface` | `points[].strike` | numeric |  |  |  | unitless by name |
 | `VolatilitySurface` | `points[].timeToExpiryYears` | numeric |  |  |  | years (decimal) |
 | `VolatilitySurface` | `points[].type` | enum | "call" \\| "put" |  |  |  |
-| `VolatilitySurface` | `rate` | other |  |  |  |  |
-| `VolatilitySurface` | `referenceSpot` | other |  |  |  |  |
-| `VolatilitySurface` | `sabrBeta` | other |  |  |  |  |
-| `VolatilitySurface` | `sabrVolatilityType` | other |  |  |  |  |
+| `VolatilitySurface` | `rate` | other |  |  | yes |  |
+| `VolatilitySurface` | `referenceSpot` | other |  |  | yes |  |
+| `VolatilitySurface` | `sabrBeta` | other |  |  | yes |  |
+| `VolatilitySurface` | `sabrVolatilityType` | other |  |  | yes |  |
 | `VolatilitySurface` | `shock` | function | callback |  |  |  |
 | `VolatilitySurface` | `slice` | function | callback |  |  |  |
 | `VolatilitySurface` | `slices` | array | array of object |  |  |  |
@@ -964,9 +964,9 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `VolatilitySurface` | `slices[].strikes` | array | array |  |  |  |
 | `VolatilitySurface` | `slices[].svi` | object | object (declaration walk stops here) | yes |  |  |
 | `VolatilitySurface` | `slices[].timeToExpiryYears` | numeric |  |  |  | years (decimal) |
-| `VolatilitySurface` | `slot` | other |  |  |  |  |
-| `VolatilitySurface` | `smileConfig` | other |  |  |  |  |
-| `VolatilitySurface` | `smoothingBandwidth` | other |  | yes |  |  |
+| `VolatilitySurface` | `slot` | other |  |  | yes |  |
+| `VolatilitySurface` | `smileConfig` | other |  |  | yes |  |
+| `VolatilitySurface` | `smoothingBandwidth` | other |  | yes | yes |  |
 | `VolatilitySurface` | `ssvi` | object | → SSVIParameters | yes |  |  |
 | `VolatilitySurface` | `toJSON` | function | callback |  |  |  |
 | `VolatilitySurface` | `toRows` | function | callback |  |  |  |

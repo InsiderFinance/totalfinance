@@ -43,6 +43,11 @@
       "import": "./modules/totalfinance/dist/index.js",
       "default": "./modules/totalfinance/dist/index.js"
     },
+    "./data": {
+      "types": "./modules/totalfinance/dist/data.d.ts",
+      "import": "./modules/totalfinance/dist/data.js",
+      "default": "./modules/totalfinance/dist/data.js"
+    },
     "./backtest": {
       "types": "./modules/backtest/dist/index.d.ts",
       "import": "./modules/backtest/dist/index.js",
@@ -162,6 +167,16 @@
       "types": "./modules/core/dist/artifacts/index.d.ts",
       "import": "./modules/core/dist/artifacts/index.js",
       "default": "./modules/core/dist/artifacts/index.js"
+    },
+    "./core/data": {
+      "types": "./modules/core/dist/data.d.ts",
+      "import": "./modules/core/dist/data.js",
+      "default": "./modules/core/dist/data.js"
+    },
+    "./core/data-conformance": {
+      "types": "./modules/core/dist/data-conformance.d.ts",
+      "import": "./modules/core/dist/data-conformance.js",
+      "default": "./modules/core/dist/data-conformance.js"
     },
     "./crypto": {
       "types": "./modules/crypto/dist/index.d.ts",

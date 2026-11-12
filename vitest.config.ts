@@ -21,6 +21,8 @@ export default defineConfig({
       '@totalfinance/core/schema': fromRoot('./packages/core/src/schema/index.ts'),
       '@totalfinance/core/artifacts': fromRoot('./packages/core/src/artifacts/index.ts'),
       '@totalfinance/core/pricing': fromRoot('./packages/core/src/pricing.ts'),
+      '@totalfinance/core/data': fromRoot('./packages/core/src/data.ts'),
+      '@totalfinance/core/data-conformance': fromRoot('./packages/core/src/data-conformance.ts'),
       '@totalfinance/core': fromRoot('./packages/core/src/index.ts'),
       '@totalfinance/crypto/carry': fromRoot('./packages/crypto/src/carry.ts'),
       '@totalfinance/crypto/curve': fromRoot('./packages/crypto/src/curve.ts'),
@@ -321,6 +323,7 @@ export default defineConfig({
       // The umbrella (bare `totalfinance`); no `@` prefix, so it never shadows the scoped aliases above.
       'totalfinance/options': fromRoot('./packages/totalfinance/src/options.ts'),
       'totalfinance/core': fromRoot('./packages/totalfinance/src/core.ts'),
+      'totalfinance/data': fromRoot('./packages/totalfinance/src/data.ts'),
       'totalfinance/math': fromRoot('./packages/totalfinance/src/math.ts'),
       'totalfinance/crypto': fromRoot('./packages/totalfinance/src/crypto.ts'),
       'totalfinance/valuation': fromRoot('./packages/totalfinance/src/valuation.ts'),

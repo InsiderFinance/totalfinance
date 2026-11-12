@@ -5,6 +5,95 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
+[Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
+projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
+main23fbf06/3555f93 and current71ffb42 site/sidebar/header/navigation/deployment-doc changes are integrated (inherited0.1.4). The bounded cursor repair at7b24305 was independently accepted fdfb464b after exact-head FAST8/FULL23 green; that is accepted SOURCE evidence, not certification of this new docs-only merge head. SDK source fingerprint and packed artifact identity remain unchanged. The only generated merge conflict is recreated from combined authored sources. C4 and earlier green receipts remain
+historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
+
+- [x] Read current task, independent second-provider review/probes and existing contracts.
+- [x] Draft examples, protocol ownership, limits, safe errors, timestamps, resume and quality choices.
+- [x] C5 technical re-review approved467a9ed (872db889) before runtime changes.
+- [x] Scoped source/installed proof and [exact measured budget](./reviews/community-connectors-c5-budget-2026-11-12.md) approved45c974dc; three required mutable-control/input/cross-copy corrections pass. Whole34/34 and installed54/54 fit ONLY reviewed limits. Final integration/public/generated/hosted acceptance remains pending.
+- [x] Source-final affected generation aligns actual inherited0.1.4 inputs: defective0, naming unresolved0, fixture join1343; source/type/API/public checks pass.
+- [x] Clean committed-source no-key recipe, all86 reference cases, independent author/starter, primary119.5,236 packed checks and approved whole/installed bounds pass; [local receipts](./reviews/community-connectors-c5-closure-2026-11-12.md).
+- [x] ca176773 bounded continuation preflight precedes canonical copying; cycle/accessor/work-limit controls refuse with zero source calls, while mutation/cross-copy laws pass against fresh packs.
+- [x] Bounded repair7b24305 exact-head FAST43309751937/FULL43309736347 and coordinator acceptance; source/provider/packed receipts retained.
+- [x] Integrate current main71ffb42 in this C5 tree and regenerate its sole docs-inventory conflict; source/artifact inputs unchanged; [integration record](./reviews/community-connectors-c5-integration-2026-11-12.md).
+- [ ] Fresh integrated-head FAST/FULL and coordinator closure; later maintainer/connected-agent/App acceptance separate.
+
+C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
+request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
+7,971 public paths and43,849 naming identities/zero unresolved. Final public/packed/guide verification passes at source6162130;
+[local receipts](./reviews/community-connectors-c4-closure-2026-11-11.md) record exact packs/caps.
+Fresh final-head fast/full hosted verification remains required. PR26 remains draft; earlier reports/checks are historical. Feature
+in_progress; no merge/release/connected acceptance.
+
+### Active connector review repairs (2026-11-11)
+
+The independent first-consumer review supersedes the earlier no-blocker C3 acceptance. Preserve
+that acceptance and e5 green receipts as history. The maintainer authorized the corrections.
+The [C4 addendum](./specs/community-connector-c4-review-updates.md) defines adjustment/identity,
+safe diagnostics, natural author typing, premium policy and no-key onboarding. Coordinator
+technical review approved the bounded runtime repairs at d6cc42b (a55531a4), with recorded packaging/diagnostic corrections. Feature stays in progress, PR26 draft.
+
+- [x] Read current task, prior specs and complete public independent evidence in a new isolated tree.
+- [x] Fetch main ca122ab; attempt integration and identify authored/derived conflicts (not completed).
+- [x] Coordinator C4 contract review and committed main integration preserving 0.1.3/upstream proof.
+- [x] C4 runtime/author/starter repairs, source/generated/static and fresh installed/whole budget proofs.
+- [ ] Fresh exact-head fast/full hosted proof; attach final tested head/results to draft PR26 and Ri task.
+
+### Active community connector foundation (2026-11-02)
+
+The maintainer agreed to community-owned independent provider packages. The next feature is the
+bounded Stage 6 C0/C1 lane in
+[community-connector-foundation.md](./specs/community-connector-foundation.md): the public query
+contract, compatibility kit/fixture and an externally installed InsiderFinance provider for price
+bars and option-chain research. Broad provider inventories remain possible community work.
+
+- [x] Start from fetched `origin/main` `d50b401ee237006c75c76ef90784e5dcde1439a3`, including merged
+      repair PR #25, in an isolated Ri-owned worktree.
+- [x] C0: write the decision-complete proposal against existing public types and inspected REST
+      source; exact paths, package metadata, time/error/pagination semantics and proof plan are defined.
+- [x] C0 technical review approved at `9815f73567ddf235fca7e94d8ee560c1e6bed42a` before new public implementation.
+- [x] C1.1–C1.4 offline: implement the narrow contract, fixture/shared kit and independent provider;
+      prove packed installation against the public SDK and synthetic HTTP mappings. See the
+      [implementation receipts](./reviews/community-connectors-c1-2026-11-02.md).
+- [x] Review correction: retain original bounds/filters on every provider continuation; repeat
+      corrected tarball installation and unchanged whole/installed bundle gates. Exact source,
+      independent review and artifact receipts are in the implementation record.
+- [x] C1 exact-head hosted fast/full checks and technical implementation review at `b5c3c83`; no merge authority.
+- [x] C2 technical spec review approved at `e1e5a910`, with direct defineDataProvider(source).
+- [x] C2 SDK-first implementation and fresh installed/public/generated/bundle proofs; see
+      the [approved consumer-view spec](./specs/community-connector-c2-integration.md). Earlier
+      rejection remains in the review history; no 10/10 or connected acceptance is inferred.
+- [x] C2 final offline acceptance and exact-head fast/full hosted results at `71da9d1`; draft PR26, no merge.
+- [x] C3: technical approval at `f6c99cf` via request3fa03c0a of the [connection/window spec](./specs/community-connector-c3-connection.md)
+      before runtime work; preserve the maintainer-approved root data.connect → priceBars → existing SMA example.
+- [x] C3 implementation/installed/public/generated/bundle proof at source `35a4285`; see the [final local record](./reviews/community-connectors-c3-2026-11-02.md).
+- [ ] C3 fresh exact-head fast/full hosted proof and coordinator review; draft PR26, no merge.
+- [x] C3 measured budget approved via requeste2fef6ff: [root/new-data and separate narrow taxonomy evidence](./reviews/community-connectors-c3-budget-2026-11-02.md); approved caps applied; final remeasurement remains required.
+- [ ] Later: separately configured/budgeted staging verification, installed-connector agent glue,
+      actual paper-journey and MCP App acceptance.
+
+The feature is in progress. C0/C1 history and immutable heads remain in the Ri task and C1 record.
+C2 was completed by the coordinator after recovery: SDK `71da9d1fb674932f5fc21a780039aeccd9186d6b`
+and provider `075d5951d096828fd8eef01e40d8361359281eca`, with 546 local SDK cases and 83 provider
+cases locally and installed. Exact-head [fast8](https://github.com/InsiderFinance/totalfinance/actions/runs/41542589873)
+and [full23](https://github.com/InsiderFinance/totalfinance/actions/runs/41542644979) passed. The
+[implementation record](./reviews/community-connectors-c2-2026-11-02.md) retains source/artifact history;
+the Ri task records final hosted receipts. Those checks certify C2, not C3 or consumer10/10 acceptance.
+The maintainer approved the complete TotalFinance-owned connection example; C3 is now **approved for bounded offline implementation**, with a measured budget checkpoint
+in a new isolated branch based exactly on that green head. Its [review evidence](./reviews/community-connectors-c3-spec-2026-11-02.md)
+records decisions and documentation checks. Reviewed C1/C2 trees remain unchanged. C3 may fast-forward draft PR26 only after its final local proofs; hosted results must certify the new head.
+The prior staging allowance is
+exhausted; no new reads, grants, keys or active paper-store changes are authorized here. API-01 stays
+with its separate app/API task. Publication, release versions, remote-repository creation, deployment
+and live execution remain outside scope. The full post-PR-25 main run
+[41504979418](https://github.com/InsiderFinance/totalfinance/actions/runs/41504979418) was verified
+completed successfully at `d50b401ee237006c75c76ef90784e5dcde1439a3` on November 2; future landing
+still requires current-head checks and review. No feature merge is authorized by that receipt.
+
 ### Active: numerical correctness repairs and authorized 0.1.4 release (2026-11-12)
 
 The maintainer authorized the nine numerical repairs, reviewed PR #32 through three rounds and now instructed “Perform the rlease through github.” Follow [the scoped contract](./specs/numerical-correctness-16-24.md), V1–V4, for totalfinance-v0.1.4. S1–S7 passed at c406bca with all eight required fast and 23 full hosted jobs. That evidence is historical for the new version/documentation commit: obtain fresh exact-head fast/full gates, merge #32, require full main CI, then use the existing SDK-only GitHub Release workflow and its independent release repeats. The PR and Release own the exact candidate SHA and publication receipts.
@@ -524,8 +613,8 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,372 public naming identities are walked and 0 are unresolved; 39,204 are `explicit`,
-4,006 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
+44,592 public naming identities are walked and 0 are unresolved; 40,311 are `explicit`,
+4,119 allowlisted canonical terms each carry a written rationale — a gate fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;
@@ -916,3 +1005,24 @@ Do not advance to the next row or cutover in the authoritative sequence while th
 
 Within a stage, independent tasks may run in parallel only when they do not settle the same public
 types, package edges, or semantic vocabulary.
+
+C3 current checkpoint: the required public-door teaching correction and larger-window restoration
+regression pass, with192 focused source/fixture/whole-budget cases. Two new installed Rollup cases
+still exceed their approved11008B ceiling (13087/13117B); all other new data budget cases pass.
+See [the current verification record](./reviews/community-connectors-c3-2026-11-02.md). Work stops
+at requeste2fef6ff's explicit cap-failure review point: no further cap increase, shared optimization,
+PR push or hosted acceptance. Ordered generation remains incomplete, feature in progress.
+
+## Final-cap review: narrow local teaching boundary
+
+Coordinator request `a7b9b455-1245-85bd-a12e-ed5a2d99f7cb` identified the broad asynchronous
+priceBars try/catch as the avoidable Rollup retention cause. Removing only the message rewrite
+was insufficient. The independent copied-artifact experiment measured named/root Rollup
+10895/10914B with the catch scoped to local argument/control validation, preserving the public
+priceBars teaching prefix and zero provider calls on malformed dates. Those experiments are
+historical diagnostics, not final generated/artifact acceptance. No further cap increase is
+approved or applied. Source now scopes teaching catches to local request/control validation and
+the discovered pageSize check; acquisition/provider failures retain their typed safe boundary.
+The 40k canonical restoration regression and unchanged individual-page/hard limits remain.
+Final focused window/conformance/whole-budget verification passes130 tests; final packed,
+generated/public and hosted receipts remain pending at this checkpoint.

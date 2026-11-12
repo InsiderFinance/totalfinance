@@ -186,8 +186,11 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // 1315 → 1316: the separately typed reported-partition comparison adds its own valid fixture.
     // 1316 → 1317 (PL, 2026-10-12): the reference-price conversion fixture joins its two-method contract.
     // PL6 adds 16 named price-level fixtures, one per direction and pair (1317 → 1333).
-    // 1334 → 1336 (review repair): explicit chronological projection fixtures for both umbrella aliases.
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1336);
+    // Community connector wrapper/kit add two fixtures; C2 raw-page restoration adds one (1333 → 1336).
+    // C3 connect/window restoration add two independently valid public fixtures (1336 → 1338).
+    // Integrated main adds the three real ohlcvFromBars public spellings (1338 → 1341).
+    // C5 checkpoint access and the closed safe error declaration add two genuine fixtures (1341 → 1343).
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1343);
   });
 
   it('every matched fixture can be BUILT', () => {

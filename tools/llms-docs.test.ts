@@ -38,9 +38,16 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     expect(digest(committed), 'Run pnpm tsx tools/llms-docs.ts').toBe(digest(`${full}\n`));
   });
 
-  it('links the full catalog and all six real journey destinations', () => {
+  it('links the full catalog and all seven real journey destinations', () => {
     expect(concise).toContain('](llms-full.txt)');
-    expect(AGENT_JOURNEYS).toHaveLength(6);
+    expect(AGENT_JOURNEYS).toHaveLength(7);
+    expect(
+      AGENT_JOURNEYS.some(
+        (journey) => journey.guide === 'guides/community-connector-first-success.md',
+      ),
+    ).toBe(true);
+    expect(full).toContain('node examples/community-connectors/starter/prepare-sdk.mjs');
+    expect(full).toContain('Insufficient history for SMA(20)');
     for (const journey of AGENT_JOURNEYS) {
       expect(concise).toContain(`](llms-full.txt#journey-${journey.slug})`);
       expect(full).toContain(`## Journey ${journey.slug}\n`);

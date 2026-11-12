@@ -2777,7 +2777,30 @@ function valueForField(
       return single === undefined ? undefined : Array.from({ length: SERIES_LENGTH }, () => single);
     }
     case 'object': {
-      if (depth >= MAX_BUILD_DEPTH) return undefined;
+      if (depth >= MAX_BUILD_DEPTH) {
+        // Truncated flat inline arms still declare scalar fields in their type text.
+        // Materialize that leaf without another object walk; nested/unknown shapes
+        // retain the existing hard depth refusal. This fixes C5 continuation snapshots.
+        if (depth !== MAX_BUILD_DEPTH) return undefined;
+        const arms = armsOf(field);
+        const type = arms
+          ? chooseBranch(context, path, armFields(arms), armTypes(arms), arms).branchType
+          : field.type;
+        const members = type === undefined ? null : inlineMembers(type);
+        if (
+          !members?.length ||
+          !members.every((m) => /^(?:string|number|boolean|'[^']*')$/.test(m.type))
+        )
+          return undefined;
+        return Object.fromEntries(
+          members
+            .filter((m) => !m.optional)
+            .map((m) => [
+              m.name,
+              m.type === 'string' ? genericString(m.name) : valueForMemberType(m.type),
+            ]),
+        );
+      }
       /**
        * A UNION NODE — recorded, then built from the SELECTED alternative.
        *

@@ -16,6 +16,7 @@ docs/api/
 /distribution/*/STABILITY.md
 .vitest-reports/
 
+/.local-connector-artifacts/
 /site/public/assets/brand/
 /site/public/favicon*
 /site/public/apple-touch-icon.png

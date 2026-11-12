@@ -98,7 +98,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-02): Gate B's migration policy applied a second time at the REPORT level through the { kind, schemaVersion, report } view — newer refuses, older restores only through the caller's registry under the family-scoped kind, every step echoed (Decision 5)"
+      "note": "Stage 4.5 slice 4 (2026-09-02): Gate B's migration policy applied a second time at the REPORT level through the { kind, schemaVersion, report } view \u2014 newer refuses, older restores only through the caller's registry under the family-scoped kind, every step echoed (Decision 5)"
     },
     "ArbitrageError": {
       "kind": "class",
@@ -116,7 +116,7 @@
       "entrypoints": ["./artifacts"],
       "role": "analysis",
       "shape": "report",
-      "note": "Stage 4.5 slice 1 (2026-09-02): byte-exact replay parity between a saved value and its recomputation — identical hashes or the first differing paths (Decision 7)"
+      "note": "Stage 4.5 slice 1 (2026-09-02): byte-exact replay parity between a saved value and its recomputation \u2014 identical hashes or the first differing paths (Decision 7)"
     },
     "assertFiniteResult": {
       "kind": "function",
@@ -157,13 +157,13 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Gate B artifact spine (2026-08-20): canonical JSON v1 — sorted keys, shortest round-trip numbers, non-finite wrapper"
+      "note": "Gate B artifact spine (2026-08-20): canonical JSON v1 \u2014 sorted keys, shortest round-trip numbers, non-finite wrapper"
     },
     "canonicalStringWorkUnits": {
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 1 (2026-09-02): the canonical work cost of one string (1 + ceil(length / 64)) — the scanner's string term, exported so callers size budgets by the same law"
+      "note": "Stage 4.5 slice 1 (2026-09-02): the canonical work cost of one string (1 + ceil(length / 64)) \u2014 the scanner's string term, exported so callers size budgets by the same law"
     },
     "clamp": {
       "kind": "function",
@@ -177,7 +177,7 @@
       "role": "analysis",
       "mcpTools": ["totalfinance_artifact_compare"],
       "shape": "report",
-      "note": "Stage 4.5 slice 1 (2026-09-02): structural leaf-by-leaf comparison of two same-type artifacts — every difference named with both values and deltas, added/removed paths, honest truncation, explicit two-sided tolerance only, market-moved and library-version warnings (Decision 6)"
+      "note": "Stage 4.5 slice 1 (2026-09-02): structural leaf-by-leaf comparison of two same-type artifacts \u2014 every difference named with both values and deltas, added/removed paths, honest truncation, explicit two-sided tolerance only, market-moved and library-version warnings (Decision 6)"
     },
     "compareCalculationArtifacts": {
       "kind": "function",
@@ -275,7 +275,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "artifact",
-      "note": "Gate B artifact spine (2026-08-20): large-table reference — contentHash + counts + opaque locator, never inlined rows"
+      "note": "Gate B artifact spine (2026-08-20): large-table reference \u2014 contentHash + counts + opaque locator, never inlined rows"
     },
     "DataError": {
       "kind": "class",
@@ -318,7 +318,7 @@
       "kind": "function",
       "entrypoints": ["./pricing"],
       "role": "artifact",
-      "note": "Gate C extension contracts (2026-08-20): structural definition — frozen, bound, capability grammar checked; behavioral proof is validatePricer"
+      "note": "Gate C extension contracts (2026-08-20): structural definition \u2014 frozen, bound, capability grammar checked; behavioral proof is validatePricer"
     },
     "discountFactor": {
       "kind": "function",
@@ -359,7 +359,7 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "trusted-tier utility (spec Law 7); the OPTIONAL-field sibling of requireFiniteFields — absent is allowed, present runs the same wrong_type/nan/not_finite ladder"
+      "note": "trusted-tier utility (spec Law 7); the OPTIONAL-field sibling of requireFiniteFields \u2014 absent is allowed, present runs the same wrong_type/nan/not_finite ladder"
     },
     "ensureKnownKeys": {
       "kind": "function",
@@ -406,7 +406,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-03): a validated summary's flat parameter view (arrays become indexed keys) used for named parameter deltas — takes the whole FittedModelSummary through its validator, like every door"
+      "note": "Stage 4.5 slice 4 (2026-09-03): a validated summary's flat parameter view (arrays become indexed keys) used for named parameter deltas \u2014 takes the whole FittedModelSummary through its validator, like every door"
     },
     "formatMoney": {
       "kind": "function",
@@ -457,7 +457,7 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "C hygiene: converged !== false and no error-severity warning — read from diagnostics"
+      "note": "C hygiene: converged !== false and no error-severity warning \u2014 read from diagnostics"
     },
     "isComputed": {
       "kind": "function",
@@ -484,7 +484,7 @@
       "inputPolicies": {
         "0": "open"
       },
-      "policyNote": "a predicate over an ARBITRARY value: it answers false for anything malformed and never teaches — the closed-key law lives on requireFittedModelSummary, which it routes through completely",
+      "policyNote": "a predicate over an ARBITRARY value: it answers false for anything malformed and never teaches \u2014 the closed-key law lives on requireFittedModelSummary, which it routes through completely",
       "note": "Stage 4.5 slice 1 (2026-09-02): fitted-model summary predicate routed through the complete validator (never a shallow sniff)"
     },
     "isMarketSnapshot": {
@@ -563,7 +563,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Gate B artifact spine (2026-08-20): snapshot identity — provenance excluded"
+      "note": "Gate B artifact spine (2026-08-20): snapshot identity \u2014 provenance excluded"
     },
     "missingFieldError": {
       "kind": "function",
@@ -575,7 +575,7 @@
       "kind": "function",
       "entrypoints": ["./pricing"],
       "role": "helper",
-      "note": "Gate C extension contracts (2026-08-20): a runner's pre-flight — every unsatisfied REQUIRED requirement at once"
+      "note": "Gate C extension contracts (2026-08-20): a runner's pre-flight \u2014 every unsatisfied REQUIRED requirement at once"
     },
     "nthWeekdayOfMonth": {
       "kind": "function",
@@ -721,7 +721,7 @@
       "entrypoints": ["./artifacts"],
       "role": "helper",
       "mcpTools": ["totalfinance_artifact_read"],
-      "note": "Gate B artifact spine (2026-08-20): restore + migrate + VERIFY id — a tampered artifact is refused"
+      "note": "Gate B artifact spine (2026-08-20): restore + migrate + VERIFY id \u2014 a tampered artifact is refused"
     },
     "readMarketSnapshot": {
       "kind": "function",
@@ -763,13 +763,13 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-02): the explicit two-sided tolerance law (both members finite and ≥ 0, never defaulted) every comparison verb applies"
+      "note": "Stage 4.5 slice 4 (2026-09-02): the explicit two-sided tolerance law (both members finite and \u2265 0, never defaulted) every comparison verb applies"
     },
     "requireFiniteFields": {
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "trusted-tier utility (spec Law 7); the shared 3B.1b enforcement path for a request object's numeric fields — present, a number, finite, each failure with its own code"
+      "note": "trusted-tier utility (spec Law 7); the shared 3B.1b enforcement path for a request object's numeric fields \u2014 present, a number, finite, each failure with its own code"
     },
     "requireFittedModelSummary": {
       "kind": "function",
@@ -781,13 +781,13 @@
       "kind": "function",
       "entrypoints": ["./schema"],
       "role": "helper",
-      "note": "Stage 7A (2026-09-03): the structural guard for a JSON Schema document (the JSONSchema type this subpath owns) — an operation's or a tool's published output schema is validated once, where it is declared (functionName, field, value: core's guard order; signature-policy row)"
+      "note": "Stage 7A (2026-09-03): the structural guard for a JSON Schema document (the JSONSchema type this subpath owns) \u2014 an operation's or a tool's published output schema is validated once, where it is declared (functionName, field, value: core's guard order; signature-policy row)"
     },
     "requirementKey": {
       "kind": "function",
       "entrypoints": ["./pricing"],
       "role": "helper",
-      "note": "Gate C extension contracts (2026-08-20): canonical requirement identity (optional excluded) — how runners match and errors name"
+      "note": "Gate C extension contracts (2026-08-20): canonical requirement identity (optional excluded) \u2014 how runners match and errors name"
     },
     "requireObservationValue": {
       "kind": "function",
@@ -799,25 +799,25 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "Stage 4.5 slice 2 (2026-09-02): the ONE core RateCurve data validator (closed keys, three day counts, compounding, ascending pillars at or after asOf) made public so @totalfinance/fixed-income's yieldCurveFromRateCurve / rateCurveFromYieldCurve prove curve data through the same law the market snapshot applies — no second validator"
+      "note": "Stage 4.5 slice 2 (2026-09-02): the ONE core RateCurve data validator (closed keys, three day counts, compounding, ascending pillars at or after asOf) made public so @totalfinance/fixed-income's yieldCurveFromRateCurve / rateCurveFromYieldCurve prove curve data through the same law the market snapshot applies \u2014 no second validator"
     },
     "requireRepresentableResult": {
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "Law 7's input-driven twin (2026-08-23 review wave): refuse a computed result finite inputs pushed past IEEE-754 — a teaching overflow refusal, beside assertFiniteValue's library-defect report; the overflow mutant holds the law"
+      "note": "Law 7's input-driven twin (2026-08-23 review wave): refuse a computed result finite inputs pushed past IEEE-754 \u2014 a teaching overflow refusal, beside assertFiniteValue's library-defect report; the overflow mutant holds the law"
     },
     "requireWorkLimit": {
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-02): the count-safe validator of one Decision 9 limit (safe integer ≥ floor, ≤ the law's hard maximum; undefined takes the default or refuses)"
+      "note": "Stage 4.5 slice 4 (2026-09-02): the count-safe validator of one Decision 9 limit (safe integer \u2265 floor, \u2264 the law's hard maximum; undefined takes the default or refuses)"
     },
     "residualStatistics": {
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-02): count, root-mean-square, and maximum absolute value of a residual list (null statistics when empty) — the one residual statistic every projection reports"
+      "note": "Stage 4.5 slice 4 (2026-09-02): count, root-mean-square, and maximum absolute value of a residual list (null statistics when empty) \u2014 the one residual statistic every projection reports"
     },
     "resolveAsOf": {
       "kind": "function",
@@ -885,8 +885,8 @@
       "inputPolicies": {
         "0": "open"
       },
-      "policyNote": "argument 0 is the ARBITRARY stored value under proof — the scanner exists to refuse hostile shapes inside it (accessors, cycles, class instances, symbols, functions) and to measure its cost; the closed-key law lives on argument 1 (the options), which is validated closed",
-      "note": "Stage 4.5 slice 1 (2026-09-02): the bounded stop-at-limit stored-data scanner promoted from @totalfinance/scenarios (one scanner, one Barrier A cost law) — proves behavior-free canonical data without invoking it and refuses before any door allocates"
+      "policyNote": "argument 0 is the ARBITRARY stored value under proof \u2014 the scanner exists to refuse hostile shapes inside it (accessors, cycles, class instances, symbols, functions) and to measure its cost; the closed-key law lives on argument 1 (the options), which is validated closed",
+      "note": "Stage 4.5 slice 1 (2026-09-02): the bounded stop-at-limit stored-data scanner promoted from @totalfinance/scenarios (one scanner, one Barrier A cost law) \u2014 proves behavior-free canonical data without invoking it and refuses before any door allocates"
     },
     "SCENARIO_SET_KIND": {
       "kind": "value",
@@ -904,7 +904,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Gate B artifact spine (2026-08-20): scenario-set identity — provenance excluded"
+      "note": "Gate B artifact spine (2026-08-20): scenario-set identity \u2014 provenance excluded"
     },
     "schema": {
       "kind": "object",
@@ -1003,7 +1003,7 @@
       "kind": "function",
       "entrypoints": ["."],
       "role": "helper",
-      "note": "Law 7's order-honest summation (2026-08-23 fourth review): signed addends summed so a REPRESENTABLE total is never lost to left-to-right overflow — non-finite from stableSum means the true total exceeds MAX_VALUE, which is exactly when a refusal is honest"
+      "note": "Law 7's order-honest summation (2026-08-23 fourth review): signed addends summed so a REPRESENTABLE total is never lost to left-to-right overflow \u2014 non-finite from stableSum means the true total exceeds MAX_VALUE, which is exactly when a refusal is honest"
     },
     "suspiciousReturnsWarning": {
       "kind": "function",
@@ -1027,7 +1027,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "artifact",
-      "note": "Stage 4.5 slice 1 (2026-09-02): mints the table handle for a row set under the ONE column law (records → sorted key union; numbers → one value column) with the rows' canonical content hash (Decision 4)"
+      "note": "Stage 4.5 slice 1 (2026-09-02): mints the table handle for a row set under the ONE column law (records \u2192 sorted key union; numbers \u2192 one value column) with the rows' canonical content hash (Decision 4)"
     },
     "toFixedSafe": {
       "kind": "function",
@@ -1073,13 +1073,13 @@
       "kind": "function",
       "entrypoints": ["./pricing"],
       "role": "helper",
-      "note": "Gate C extension contracts (2026-08-20): one typed requirement descriptor — known kind, closed keys, typed subject fields"
+      "note": "Gate C extension contracts (2026-08-20): one typed requirement descriptor \u2014 known kind, closed keys, typed subject fields"
     },
     "validatePricer": {
       "kind": "function",
       "entrypoints": ["./pricing"],
       "role": "helper",
-      "note": "Gate C extension contracts (2026-08-20): the behavioral conformance kit over caller-supplied probes — bidirectional requirement honesty, capability honesty, selection honesty"
+      "note": "Gate C extension contracts (2026-08-20): the behavioral conformance kit over caller-supplied probes \u2014 bidirectional requirement honesty, capability honesty, selection honesty"
     },
     "validateResolvedExpiry": {
       "kind": "function",
@@ -1097,7 +1097,7 @@
       "kind": "function",
       "entrypoints": ["./artifacts"],
       "role": "helper",
-      "note": "Stage 4.5 slice 4 (2026-09-02): caller-supplied rows for a referenced table must hash to the stored handle (artifact.referenced_data_mismatch otherwise) — replay never runs over different data"
+      "note": "Stage 4.5 slice 4 (2026-09-02): caller-supplied rows for a referenced table must hash to the stored handle (artifact.referenced_data_mismatch otherwise) \u2014 replay never runs over different data"
     },
     "warning": {
       "kind": "function",
@@ -1195,6 +1195,54 @@
       "entrypoints": ["."],
       "role": "helper",
       "note": "trusted-tier utility (spec Law 7)"
+    },
+    "DATA_CONTRACT_VERSION": {
+      "kind": "value",
+      "entrypoints": ["./data"],
+      "role": "constant",
+      "note": "Protocol2 source author contract; independent of dataset/package release versions; legacy v1 is restore-only."
+    },
+    "defineDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Reviewed C0: structural binding and request/result validation, immutable copied output; no provider calls at construction."
+    },
+    "createDataView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C2: validate raw normalized page and restore an immutable consumer view with lazy native-array field selection, no I/O or financial computation."
+    },
+    "validateDataProvider": {
+      "kind": "function",
+      "entrypoints": ["./data-conformance"],
+      "role": "helper",
+      "note": "Framework-independent behavioral conformance over explicit caller fixtures, work bounds and cancellation latches; returns void or typed refusal."
+    },
+    "connect": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "C5: bind a raw protocol2 source, common validated normalization and bounded terminal windows; explicit private checkpoints/resume and local research selections."
+    },
+    "createPriceBarsWindowView": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "Approved C3: validate canonical retained pages and restore a local immutable research-window view, no I/O."
+    },
+    "DataProviderError": {
+      "kind": "class",
+      "entrypoints": ["./data"],
+      "role": "error",
+      "note": "C5: closed, validated cross-copy safe provider guidance and local cause; no arbitrary public source message."
+    },
+    "priceBarsCheckpoint": {
+      "kind": "function",
+      "entrypoints": ["./data"],
+      "role": "artifact",
+      "note": "C5: explicitly access and revalidate a private retained-work checkpoint; absent checkpoint returns undefined, no reads or financial computation."
     }
   }
 }

@@ -1,0 +1,21 @@
+---
+title: 'Research data'
+description: 'Connect independently maintained providers to normalized research data and existing calculations.'
+---
+
+Bind an independently installed connector with `data.connect(provider)`, fetch a bounded research window, and pass its named arrays to existing calculations. Pure calculations still accept caller data without a provider or credential.
+
+This connector preview is unreleased. Build and install the local SDK and provider packs described in the no-key guide; registry version 0.1.4 does not include these exports. The reference connector supports daily/minute bars and incomplete option-chain research. Pagination completion does not prove continuous history, point-in-time availability or executable liquidity.
+
+## Common APIs
+
+<KeyExports domain="data" names={['connect', 'createPriceBarsWindowView', 'priceBarsCheckpoint']} />
+
+## Guides
+
+- [No-key first success and author journey](/guides/community-connector-first-success)
+- [Community connectors, manual resume and data quality](/guides/community-connectors)
+
+## Complete API reference
+
+<EntrypointList domain="data" />
