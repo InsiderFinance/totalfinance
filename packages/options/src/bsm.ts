@@ -354,8 +354,8 @@ export type ImpliedVolatilityReason =
   /**
    * The target premium is smaller than the model price at the lowest σ the solver represents, so no
    * volatility in the bracket reproduces it (the σ→0 floor sits ABOVE the target). Distinct from
-   * `below_intrinsic` (a no-arbitrage violation) and from `no_bracket` (a bracketing failure with a
-   * root that exists): here the inverse simply has no solution at this price scale.
+   * `below_intrinsic` (a no-arbitrage violation) and from `no_bracket` (no usable bracket was
+   * established; see `message` for precision limits). The no_bracket reason does not assert that a root exists.
    */
   | 'price_below_resolvable'
   | 'no_bracket'

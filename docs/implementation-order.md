@@ -5,14 +5,11 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-### Active: numerical correctness repairs, issues 16–24 (2026-11-11)
+### Active: numerical correctness repairs and authorized 0.1.4 release (2026-11-12)
 
-The maintainer authorized fixing all nine independently reproduced findings and opening one PR.
-Follow [the scoped contract](./specs/numerical-correctness-16-24.md), A–H, preserving existing
-financial conventions and call shapes. Second re-review corrections S1–S6 are implemented and locally verified under the maintainer's “Fix these.” S7 requires fresh exact-head hosted fast/full verification on PR #32. Prior receipts at fb6b882 and 2744716 are historical; the latter's full run failed artifact uploads. Current local evidence passes 3,208 affected tests plus the expanded 70-case loan/pricing matrix, 229 packed consumers and 258 integration/contract checks. Independent counterexamples remain mandatory despite earlier green suites. The source
-baseline is current main `ca122ab`; published SDK 0.1.3 also reproduces the symptoms. These are
-separate from PR #27's DX/LIB batch and draft #26. No version bump, merge, publication, provider
-work or app mitigation removal is authorized. Exact-head hosted evidence belongs to the PR.
+The maintainer authorized the nine numerical repairs, reviewed PR #32 through three rounds and now instructed “Perform the rlease through github.” Follow [the scoped contract](./specs/numerical-correctness-16-24.md), V1–V4, for totalfinance-v0.1.4. S1–S7 passed at c406bca with all eight required fast and 23 full hosted jobs. That evidence is historical for the new version/documentation commit: obtain fresh exact-head fast/full gates, merge #32, require full main CI, then use the existing SDK-only GitHub Release workflow and its independent release repeats. The PR and Release own the exact candidate SHA and publication receipts.
+
+The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
 ### Completed: GitHub Release → SDK publication (2026-11-11)
 

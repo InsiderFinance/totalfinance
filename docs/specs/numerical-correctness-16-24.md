@@ -1,6 +1,6 @@
 # Numerical correctness repairs for issues 16–24
 
-Status: second re-review corrections S1–S6 implemented and locally verified; exact-head hosted verification is the post-commit gate under the maintainer's “Fix these.” Receipts at 2744716 and earlier heads do not certify these corrections. This contract was reviewed before implementation against the nine original issues, the supplied handoff, alignment laws 2/7/13/14/15, and CONTRIBUTING. The absent handoff patch is not an implementation dependency.
+Status: S1–S7 verified at c406bca; the maintainer authorized the 0.1.4 GitHub release on 2026-11-12. Release preparation below is in progress. Receipts at 2744716 and earlier heads do not certify these corrections. This contract was reviewed before implementation against the nine original issues, the supplied handoff, alignment laws 2/7/13/14/15, and CONTRIBUTING. The absent handoff patch is not an implementation dependency.
 
 ## Outcome and boundaries
 
@@ -60,3 +60,16 @@ The review of 2744716 independently reproduces a near-interest-only balloon regr
 - [x] S6: update executable public/packed/transport fixtures as applicable, changeset, tracker counts and generated artifacts from final source only. Record disposition of optional follow-ups. The full run at 2744716 failed artifact uploads after all fifteen test steps passed; it is not a green full gate. Fresh exact-head hosted verification is tracked separately as S7 below. No merge, version bump, publication, deployment, app/paper-store or #26 change.
 
 S7 (post-commit gate, owned by PR #32): obtain fresh exact-head fast/full hosted success, inspect step failures and final job/run conclusions, and retain the exact SHA/run/job/artifact metadata. Keep pending or failed status explicit until then. Update the PR body without a receipt-only source commit.
+
+## Authorized 0.1.4 release follow-through (2026-11-12)
+
+The maintainer instructed “Perform the rlease through github” after the round-three no-blocker review and the recommendation to release 0.1.4. This authorization supersedes the earlier PR-only prohibitions on versioning, merging PR #32 and SDK publication. It does not authorize optional MCP publication, website deployment, live execution, application/paper-store actions, PR #26 integration or performance PR #12.
+
+Design review: reuse the existing Changesets/publication generators and SDK-only GitHub Release workflow. Consume only this branch's numerical patch changeset; no new financial implementation, release framework or performance optimization is included. Preserve all measured structural gates. The round-three main-relative batch/IRR regressions and measured bundle growth are accepted for this correctness cut; a prior-revision benchmark is not represented as a speedup against main. Fix the no_bracket documentation overclaim while retaining its closed public union and optional explanation.
+
+- [x] V1: verify 0.1.4 is unused, fix the documentation nit, version the public metadata pair once with Changesets, run publication:update and the required non-frozen lockfile synchronization. Preserve all release notes and the SDK-only upload policy.
+- [x] V2: regenerate from final source in order; verify release pins, installed consumers, relevant contracts, static checks and measured budgets. The prepared release is pushed to the same PR under V3, with accurate pending hosted status.
+- V3 (post-commit): push the prepared release to PR #32 and require fresh exact-head fast/full PR gates before merging #32. Require all 23 full main CI jobs at the exact merged release commit. Record that commit in the PR and private evidence, without receipt-only source commits.
+- V4 (publication): publish the normal GitHub Release totalfinance-v0.1.4 at that verified main commit. The hosted release job must pass pnpm run ci, standalone API and independent second coverage; publish only approved SDK bytes with OIDC/provenance. Retain tarball hashes and source/publication/smoke receipts, verify npm latest and installed consumers, and attach release evidence. No local npm upload, tag movement, asset clobbering or gate bypass.
+
+The scoped release tag totalfinance-v0.1.4 names one candidate across this contract, the authoritative queue and the review record. Final exact-SHA CI and public publication evidence belong to PR #32 and the GitHub Release, not a self-referential source receipt.

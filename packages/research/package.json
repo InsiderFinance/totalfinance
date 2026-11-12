@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/research",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Point-in-time research primitives: universe screening, cross-sectional style factors, and event studies",
   "license": "Apache-2.0",
   "keywords": [
