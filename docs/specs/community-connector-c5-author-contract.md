@@ -499,9 +499,9 @@ issue (e.g. open outside range) does not block a known close. OHLCV and bars con
 actual volume. Error identifies controlled rule/row/selection without copying values.
 
 Page/window views add resolve(choice:ResearchBarChoice):same view type. Choice is a closed union:
-{action:'exclude'|'use';rows?:readonly RowRef[];reason:string} OR
-{action:'correct';corrections:readonly {row:RowRef;values:Partial<Pick<Bar,'open'|'high'|'low'|'close'>>}[];
-reason:string}. RowRef={pageIndex:number;rowIndex:number}; page views require pageIndex0. Omitted
+{action:'exclude'|'use';rows?:readonly RowReference[];reason:string} OR
+{action:'correct';corrections:readonly {row:RowReference;values:Partial<Pick<Bar,'open'|'high'|'low'|'close'>>}[];
+reason:string}. RowReference={pageIndex:number;rowIndex:number}; page views require pageIndex0. Omitted
 rows means all currently unresolved suspect rows, never clean rows; explicit rows must identify
 existing issues. reason nonblank <=512 characters is caller-owned research text, never error text.
 No zero-filling or invented correction. Correct action requires at least one finite explicit OHLC
@@ -510,7 +510,7 @@ Cannot change identity/time/volume/adjustment/dataset/terms or manufacture missi
 Empty/duplicate/conflicting row choices and repeated resolution of a resolved row refuse.
 
 resolve returns a NEW view with same immutable original page/window, generated native arrays and a
-canonical `selection` record {version:1,decisions:readonly ResearchBarChoice[],sourceRows:readonly RowRef[]}
+canonical `selection` record {version:1,decisions:readonly ResearchBarChoice[],sourceRows:readonly RowReference[]}
 listing included row references in source order. Excluded rows are absent from projections; original
 source rows/issues remain. Corrected values affect projections only; decision ledger preserves
 explicit replacements and reason. Use is a visible deliberate override, never clean-validation
@@ -640,3 +640,20 @@ Generation and combined merge acceptance await technical budget disposition, the
 public/packed/generated/hosted checks. Prior checklist boxes are not marked complete merely from
 iteration tests. Source2/v2 observations, selection decisions, resume counters and original financial
 facts remain canonical; no registry release or live-data acceptance is claimed.
+
+## Measured review45c974dc and required source corrections
+
+The coordinator approved ONLY the fourteen exact measured cap increases for fingerprint ee0784bc;
+restoration Rollup14080B and all unrelated/upstream caps/settings/exclusions remain. This is not final
+implementation or merge acceptance. The three reproduced corrections are now permanent controls:
+query captures numeric options and immutable owned continuation/pins synchronously before scheduling;
+caller-owned objects remain mutable and AbortSignal is retained. Existing general input refusals
+admit only input.wrong_type/missing_field/not_finite/out_of_range/invalid_enum, rebuilt as local
+InputError with SDK text, explicit validated guidance only and private cause. Unknown input.\* does
+not qualify. Opt-in kit/selector compatibility uses the same bounded registered-code/own-data reader,
+not SDK class identity; exact independent refusal context/correspondence is still checked. Foreign
+getters/messages/toJSON/raw contexts do not become public facts. Global isQuantError is unchanged.
+
+Initial mutation/input regressions failed7/7 before fixes, then pass; real separately installed copies
+pass input/error/pre/in-flight abort/missing-volume/suspect-selector kit controls. The measured final
+candidate still must fit reviewed caps and complete source-final generation/current-head hosted gates.

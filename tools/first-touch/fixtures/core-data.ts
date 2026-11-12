@@ -41,6 +41,9 @@ const provider = () =>
     ],
   });
 export const CORE_DATA_FIXTURES: Record<string, FixtureThunk> = {
+  'core.DataProviderError.constructor': () => [
+    { code: 'data.rate_limited', retryAfterMs: 1000, status: 429 },
+  ],
   'core.defineDataProvider': () => [provider()],
   'core.connect': () => [provider()],
   'core.createPriceBarsWindowView': () => [

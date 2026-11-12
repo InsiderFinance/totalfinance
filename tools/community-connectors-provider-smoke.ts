@@ -4,15 +4,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import {
-  mkdtempSync,
-  readFileSync,
-  writeFileSync,
-  cpSync,
-  rmSync,
-  readdirSync,
-  realpathSync,
-} from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, cpSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -29,9 +21,9 @@ const sdk = resolve(sdkInput),
   receipt = resolve(receiptInput);
 const work = mkdtempSync(join(tmpdir(), 'totalfinance-external-provider-'));
 const commands: string[] = [];
-function run(command: string, args: string[]): string {
+function run(command: string, args: string[], cwd = work): string {
   const result = spawnSync(command, args, {
-    cwd: work,
+    cwd,
     encoding: 'utf8',
     env: { ...process.env, NODE_PATH: '' },
     maxBuffer: 16 * 1024 * 1024,
@@ -196,23 +188,34 @@ provider.query({kind:'place-order',symbol:'TEST',limit:2});
     )
   )
     throw new Error('Provider or data machinery entered ordinary browser compute.');
-  cpSync(
-    realpathSync(join(work, 'node_modules/@insiderfinance/totalfinance')),
-    join(work, 'foreign-sdk'),
-    { recursive: true },
+  const second = mkdtempSync(join(work, 'foreign-sdk-'));
+  writeFileSync(
+    join(second, 'package.json'),
+    JSON.stringify({
+      private: true,
+      type: 'module',
+      dependencies: { '@insiderfinance/totalfinance': 'file:' + sdk },
+    }),
   );
+  writeFileSync(join(second, 'pnpm-workspace.yaml'), "packages: ['.']\n");
+  run('pnpm', ['install', '--offline', '--ignore-scripts', '--no-frozen-lockfile'], second);
+  run('pnpm', ['install', '--offline', '--ignore-scripts', '--frozen-lockfile'], second);
+  const foreignImport =
+    './' +
+    second.slice(work.length + 1) +
+    '/node_modules/@insiderfinance/totalfinance/modules/core/dist/';
   writeFileSync(
     join(work, 'cross-copy.mjs'),
     `
 import assert from 'node:assert/strict';
 import {defineDataProvider} from '@insiderfinance/totalfinance/core/data';
 import {validateDataProvider} from '@insiderfinance/totalfinance/core/data-conformance';
-import {defineDataProvider as foreignDefine} from './foreign-sdk/modules/core/dist/data.js';
-import {InputError as ForeignInputError} from './foreign-sdk/modules/core/dist/errors.js';
+import {defineDataProvider as foreignDefine} from '${foreignImport}data.js';
+import {InputError as ForeignInputError} from '${foreignImport}errors.js';
 import {InputError} from '@insiderfinance/totalfinance/core';
 import {DataError} from '@insiderfinance/totalfinance/core';
-import {DataError as ForeignDataError} from './foreign-sdk/modules/core/dist/errors.js';
-import {DataProviderError as ForeignProviderError} from './foreign-sdk/modules/core/dist/data.js';
+import {DataError as ForeignDataError} from '${foreignImport}errors.js';
+import {DataProviderError as ForeignProviderError} from '${foreignImport}data.js';
 assert.notEqual(ForeignDataError,DataError);
 const q={kind:'price-bars',symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28'};
 for(const foreign of [new ForeignDataError('secret URL payload',{code:'data.rate_limited',context:{retryable:true,retryAfterMs:1234,status:429,url:'secret'}}),new ForeignProviderError({code:'data.rate_limited',retryAfterMs:1234,status:429})]){

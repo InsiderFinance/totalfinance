@@ -842,7 +842,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `Provenance` | `sourceVersion` | string |  | yes |  | unitless by name |
 | `Provenance` | `warnings` | array | array | yes |  |  |
 | `ReadPortfolioLedgerSnapshotInput` | `migrations` | object | → ArtifactMigrationRegistry | yes |  |  |
-| `ReadPortfolioLedgerSnapshotInput` | `snapshot` | other |  |  |  |  |
+| `ReadPortfolioLedgerSnapshotInput` | `snapshot` | other |  |  | yes |  |
 | `ReconcileExecutionInput` | `asOf` | numeric |  |  |  | an instant: epoch milliseconds or a YYYY-MM-DD / zoned ISO string (the resolveAsOf convention) |
 | `ReconcileExecutionInput` | `external` | object | → ExternalPortfolioSnapshot | yes |  |  |
 | `ReconcileExecutionInput` | `fills` | array | array of object |  |  |  |

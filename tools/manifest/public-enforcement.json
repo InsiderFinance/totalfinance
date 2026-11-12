@@ -2842,8 +2842,8 @@
     "mcpToolsWithRequiredList": 19,
     "mcpToolsMeasured": 7,
     "mcpToolsDefective": 0,
-    "candidates": 5468,
-    "enforced": 2577,
+    "candidates": 5469,
+    "enforced": 2578,
     "defective": 0,
     "partial": 2705,
     "unmeasured": 186,
@@ -2870,26 +2870,26 @@
       "volatility.snapshot_version_mismatch": 1
     },
     "mutationsExecuted": {
-      "unknown-key": 2803,
-      "null-when-nonnullable": 27142,
-      "omit-required": 13684,
-      "wrong-type": 17339,
-      "non-finite": 9587,
-      "optional-wrong-type": 8511,
-      "invalid-literal": 2009,
+      "unknown-key": 2804,
+      "null-when-nonnullable": 27014,
+      "omit-required": 13687,
+      "wrong-type": 17344,
+      "non-finite": 9589,
+      "optional-wrong-type": 8513,
+      "invalid-literal": 2011,
       "empty-series": 916,
       "non-finite-element": 844,
       "wrong-element-type": 440,
       "ragged-matrix": 59
     },
     "mutationsCovered": {
-      "unknown-key": 6671,
-      "null-when-nonnullable": 68215,
-      "omit-required": 34888,
-      "wrong-type": 44317,
-      "non-finite": 24979,
-      "optional-wrong-type": 20366,
-      "invalid-literal": 5147,
+      "unknown-key": 6672,
+      "null-when-nonnullable": 68020,
+      "omit-required": 34893,
+      "wrong-type": 44324,
+      "non-finite": 24981,
+      "optional-wrong-type": 20368,
+      "invalid-literal": 5151,
       "empty-series": 2417,
       "non-finite-element": 2179,
       "wrong-element-type": 1176,
@@ -2900,21 +2900,20 @@
     "inherited": 3086,
     "fromSynthesizedInput": 2005,
     "alternativeUnmeasuredByReason": {
-      "no-input": 1763,
+      "no-input": 1782,
       "external-callback-contract": 250,
-      "branch-not-realized": 628,
-      "baseline-rejected": 3442,
-      "incomplete-baseline": 491,
-      "async-result-unobserved": 3,
+      "branch-not-realized": 615,
+      "baseline-rejected": 3460,
+      "incomplete-baseline": 494,
       "callback-input-required": 21
     },
     "receiverGroupingGaps": 75,
     "alternatives": {
-      "total": 13258,
+      "total": 13283,
       "enforced": 4018,
-      "partial": 2520,
+      "partial": 2521,
       "defective": 0,
-      "unmeasured": 6720,
+      "unmeasured": 6744,
       "truncated": 0
     },
     "staticFalsePositives": 0,
@@ -4495,7 +4494,7 @@
         "optional-wrong-type": 2
       },
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 (unmeasured: branch-not-realized)"
       ],
       "alternatives": [
@@ -4507,7 +4506,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "input.baseCurrency",
+            "message": "createPaperBroker: input.baseCurrency must be a three-letter uppercase currency code. Received \"x\"."
+          }
         },
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#1",
@@ -4549,7 +4554,7 @@
         "non-finite": 1
       },
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -4563,7 +4568,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "createPortfolioStepper: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCur"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -4627,7 +4638,7 @@
         "non-finite": 10
       },
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -4641,7 +4652,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "definition.accounting.baseCurrency",
+            "message": "createTradingEnvironment: definition.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { ba"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -4811,7 +4828,7 @@
       },
       "undecided": [
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#2 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:present & arg0.portfolioConstruction.short:present#0 & arg0.signal#0 (unmeasured: incomplete-baseline)",
@@ -4861,7 +4878,12 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "incomplete-baseline",
+          "rejection": {
+            "code": "synthesis.incomplete",
+            "typed": false,
+            "message": "request.dataset.observations[0].availableTimestampMs is required and was not supplied"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
@@ -5845,7 +5867,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 2,
-        "null-when-nonnullable": 62,
+        "null-when-nonnullable": 29,
         "omit-required": 7,
         "wrong-type": 5,
         "optional-wrong-type": 13,
@@ -5853,7 +5875,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 62,
+        "null-when-nonnullable": 29,
         "omit-required": 7,
         "wrong-type": 5,
         "optional-wrong-type": 13,
@@ -6002,42 +6024,54 @@
         "invalid-literal": 13
       },
       "undecided": [
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: no-input)",
-        "alternative arg0.observation:kind=quote & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: no-input)",
-        "alternative arg0.observation:kind=trade & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: no-input)",
-        "alternative arg0.observation:kind=order-book & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: no-input)",
+        "alternative arg0.observation:kind=quote & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=trade & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=order-book & arg0.policy.fill.fill#0 & arg0.terms:absent (unmeasured: baseline-rejected)",
         "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#1 & arg0.terms:absent (unmeasured: no-input)",
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:absent (unmeasured: no-input)",
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=call (unmeasured: no-input)",
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=put (unmeasured: no-input)",
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=future (unmeasured: no-input)",
-        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=perpetual (unmeasured: no-input)"
+        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:absent (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=call (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=put (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=future (unmeasured: baseline-rejected)",
+        "alternative arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=perpetual (unmeasured: baseline-rejected)"
       ],
       "alternatives": [
         {
-          "id": "fixture",
+          "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:absent",
           "verdict": "enforced",
           "fixtureSource": "@totalfinance/backtest:fillOrderWithPolicy"
         },
         {
-          "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:absent",
-          "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
-        },
-        {
           "id": "arg0.observation:kind=quote & arg0.policy.fill.fill#0 & arg0.terms:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=trade & arg0.policy.fill.fill#0 & arg0.terms:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=order-book & arg0.policy.fill.fill#0 & arg0.terms:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#1 & arg0.terms:absent",
@@ -6047,35 +6081,65 @@
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=call",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=option,type=put",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=future",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         },
         {
           "id": "arg0.observation:kind=bar & arg0.policy.fill.fill#0 & arg0.terms:present & arg0.terms:present.contract:present & arg0.terms:present.contract:present:kind=perpetual",
           "verdict": "unmeasured",
-          "unmeasuredReason": "no-input"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.missing_field",
+            "typed": true,
+            "field": "input.order.limitPrice",
+            "message": "fillOrderWithPolicy: input.order.limitPrice is required for a 'limit' order."
+          }
         }
       ],
       "alternativeSummary": {
-        "total": 11,
+        "total": 10,
         "enforced": 1,
         "partial": 0,
         "defective": 0,
-        "unmeasured": 10
+        "unmeasured": 9
       },
       "fixtureSource": "@totalfinance/backtest:fillOrderWithPolicy"
     },
@@ -11894,7 +11958,7 @@
       },
       "undecided": [
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#1 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present.asOf:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
@@ -11935,7 +11999,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "portfolioBacktest: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCurrency"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
@@ -13995,14 +14065,14 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 13,
+        "null-when-nonnullable": 12,
         "optional-wrong-type": 10,
         "omit-required": 2,
         "wrong-type": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 13,
+        "null-when-nonnullable": 12,
         "optional-wrong-type": 10,
         "omit-required": 2,
         "wrong-type": 1
@@ -14042,7 +14112,7 @@
       "package": "@totalfinance/cli",
       "implementation": "packages/workflows/dist/local/jobs.d.ts#cancelJob",
       "verdict": "enforced",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 1
       },
@@ -14193,7 +14263,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 29,
+        "null-when-nonnullable": 28,
         "omit-required": 22,
         "wrong-type": 7,
         "optional-wrong-type": 7,
@@ -14202,7 +14272,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 29,
+        "null-when-nonnullable": 28,
         "omit-required": 22,
         "wrong-type": 7,
         "optional-wrong-type": 7,
@@ -14744,6 +14814,30 @@
       "guardReachability": "direct"
     },
     {
+      "id": "@totalfinance/core:DataProviderError.constructor",
+      "package": "@totalfinance/core",
+      "implementation": "packages/core/dist/data-provider-error.d.ts#DataProviderError",
+      "verdict": "enforced",
+      "guardReachability": "delegated",
+      "mutationsExecuted": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 1,
+        "wrong-type": 3,
+        "optional-wrong-type": 2,
+        "non-finite": 2
+      },
+      "mutationsCovered": {
+        "unknown-key": 1,
+        "null-when-nonnullable": 5,
+        "omit-required": 1,
+        "wrong-type": 3,
+        "optional-wrong-type": 2,
+        "non-finite": 2
+      },
+      "fixtureSource": "@totalfinance/core:DataProviderError.constructor"
+    },
+    {
       "id": "@totalfinance/core:Pricer#price",
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/pricing.d.ts#Pricer.price",
@@ -15052,7 +15146,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 40,
+        "null-when-nonnullable": 38,
         "omit-required": 24,
         "wrong-type": 28,
         "optional-wrong-type": 10,
@@ -15061,7 +15155,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 40,
+        "null-when-nonnullable": 38,
         "omit-required": 24,
         "wrong-type": 28,
         "optional-wrong-type": 10,
@@ -15078,7 +15172,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 39,
+        "null-when-nonnullable": 37,
         "omit-required": 23,
         "wrong-type": 26,
         "optional-wrong-type": 11,
@@ -15087,7 +15181,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 39,
+        "null-when-nonnullable": 37,
         "omit-required": 23,
         "wrong-type": 26,
         "optional-wrong-type": 11,
@@ -15104,18 +15198,18 @@
       "guardReachability": "delegated",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "inputPolicies": {
@@ -15131,14 +15225,14 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 11,
+        "null-when-nonnullable": 10,
         "omit-required": 4,
         "wrong-type": 5,
         "optional-wrong-type": 5
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 11,
+        "null-when-nonnullable": 10,
         "omit-required": 4,
         "wrong-type": 5,
         "optional-wrong-type": 5
@@ -15313,23 +15407,23 @@
     {
       "id": "@totalfinance/core:defineDataProvider",
       "package": "@totalfinance/core",
-      "implementation": "packages/core/dist/data.d.ts#defineDataProvider",
+      "implementation": "packages/core/dist/data-provider.d.ts#defineDataProvider",
       "verdict": "enforced",
-      "guardReachability": "delegated",
+      "guardReachability": "ambiguous",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "inputPolicies": {
@@ -16117,13 +16211,13 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "omit-required": 1,
         "wrong-type": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "omit-required": 1,
         "wrong-type": 1
       },
@@ -16404,7 +16498,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 7,
+        "null-when-nonnullable": 6,
         "omit-required": 4,
         "wrong-type": 5,
         "optional-wrong-type": 1,
@@ -16412,7 +16506,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 7,
+        "null-when-nonnullable": 6,
         "omit-required": 4,
         "wrong-type": 5,
         "optional-wrong-type": 1,
@@ -17407,7 +17501,54 @@
       "package": "@totalfinance/core",
       "implementation": "packages/core/dist/data-conformance.d.ts#validateDataProvider",
       "verdict": "partial",
-      "guardReachability": "direct",
+      "guardReachability": "delegated",
+      "undecided": [
+        "invalid-literal",
+        "non-finite",
+        "null-when-nonnullable",
+        "omit-required",
+        "wrong-type",
+        "alternative fixture (partial)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=15m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=15m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=error (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=15m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#1 & arg0.probes:kind=pages.request:interval=15m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1d,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1mo,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1w,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=30m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=4h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=5m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#0 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#1 & arg0.probes:kind=records.request:interval=15m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1d,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1mo,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1w,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=30m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=4h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=5m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#0 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1d,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1mo,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1w,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=30m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=4h,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=5m,kind=price-bars (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#0 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#1 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#2 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#1 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#2 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#1 (unmeasured: no-input)",
+        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#2 (unmeasured: no-input)"
+      ],
       "mutationsExecuted": {
         "unknown-key": 1,
         "null-when-nonnullable": 10,
@@ -17424,30 +17565,170 @@
         "non-finite": 4,
         "invalid-literal": 1
       },
-      "undecided": [
-        "alternative arg0.probes:kind=error (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1d,kind=price-bars (unmeasured: no-input)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1m,kind=price-bars (unmeasured: async-result-unobserved)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#0 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#2 (unmeasured: async-result-unobserved)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=price-bars (unmeasured: async-result-unobserved)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1m,kind=price-bars (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#0 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#2 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=price-bars (unmeasured: no-input)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#1 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#2 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#1 (unmeasured: no-input)",
-        "alternative arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#2 (unmeasured: no-input)"
+      "advisory": [
+        {
+          "mutation": "null-when-nonnullable",
+          "argumentIndex": 0,
+          "field": "provider.contractVersion",
+          "declared": true,
+          "verdict": "accepted",
+          "returned": "undefined"
+        },
+        {
+          "mutation": "omit-required",
+          "argumentIndex": 0,
+          "field": "provider.contractVersion",
+          "declared": true,
+          "verdict": "accepted",
+          "returned": "undefined"
+        },
+        {
+          "mutation": "invalid-literal",
+          "argumentIndex": 0,
+          "field": "provider.contractVersion",
+          "declared": true,
+          "verdict": "accepted",
+          "returned": "undefined"
+        },
+        {
+          "mutation": "wrong-type",
+          "argumentIndex": 0,
+          "field": "provider.contractVersion",
+          "declared": true,
+          "verdict": "accepted",
+          "returned": "undefined"
+        },
+        {
+          "mutation": "non-finite",
+          "argumentIndex": 0,
+          "field": "provider.contractVersion",
+          "verdict": "accepted",
+          "returned": "undefined"
+        }
       ],
       "alternatives": [
         {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1d,kind=price-bars",
-          "verdict": "enforced",
+          "id": "fixture",
+          "verdict": "partial",
           "fixtureSource": "@totalfinance/core:validateDataProvider"
         },
         {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=15m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=15m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
           "id": "arg0.probes:kind=error",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=15m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#1 & arg0.probes:kind=pages.request:interval=15m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1d,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1h,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1mo,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=1w,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=30m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=4h,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:interval=5m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#0",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#1 & arg0.probes:kind=records.request:interval=15m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1d,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1h,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1mo,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=1w,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=30m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=4h,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:interval=5m,kind=price-bars",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#0",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
@@ -17457,24 +17738,9 @@
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:interval=1m,kind=price-bars",
-          "verdict": "unmeasured",
-          "unmeasuredReason": "async-result-unobserved"
-        },
-        {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#0",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1h,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
-        },
-        {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#2",
-          "verdict": "unmeasured",
-          "unmeasuredReason": "async-result-unobserved"
-        },
-        {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=price-bars",
-          "verdict": "unmeasured",
-          "unmeasuredReason": "async-result-unobserved"
         },
         {
           "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1m,kind=price-bars",
@@ -17482,47 +17748,72 @@
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#0",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1mo,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#2",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=1w,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=price-bars",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=30m,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#1",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=4h,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.request:kind=option-chain-research#1 & arg0.probes:kind=pages.request:kind=option-chain-research#1.snapshot#2",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:interval=5m,kind=price-bars",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#1",
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#0",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         },
         {
-          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research#1 & arg0.probes:kind=abort.request:kind=option-chain-research#1.snapshot#2",
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=pages & arg0.probes:kind=pages.expectedPages#0 & arg0.probes:kind=pages.request:kind=option-chain-research & arg0.probes:kind=pages.request:kind=option-chain-research.snapshot#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=records & arg0.probes:kind=records.expectedRecords#0 & arg0.probes:kind=records.request:kind=option-chain-research & arg0.probes:kind=records.request:kind=option-chain-research.snapshot#2",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#1",
+          "verdict": "unmeasured",
+          "unmeasuredReason": "no-input"
+        },
+        {
+          "id": "arg0.probes:kind=abort & arg0.probes:kind=abort.request:kind=option-chain-research & arg0.probes:kind=abort.request:kind=option-chain-research.snapshot#2",
           "verdict": "unmeasured",
           "unmeasuredReason": "no-input"
         }
       ],
       "alternativeSummary": {
-        "total": 15,
-        "enforced": 1,
-        "partial": 0,
+        "total": 40,
+        "enforced": 0,
+        "partial": 1,
         "defective": 0,
-        "unmeasured": 14
+        "unmeasured": 39
       },
       "fixtureSource": "@totalfinance/core:validateDataProvider"
     },
@@ -17616,7 +17907,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 11,
+        "null-when-nonnullable": 10,
         "omit-required": 8,
         "wrong-type": 8,
         "non-finite": 2,
@@ -17625,7 +17916,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 11,
+        "null-when-nonnullable": 10,
         "omit-required": 8,
         "wrong-type": 8,
         "non-finite": 2,
@@ -22334,7 +22625,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 38,
+        "null-when-nonnullable": 36,
         "omit-required": 8,
         "wrong-type": 25,
         "optional-wrong-type": 11,
@@ -22343,7 +22634,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 38,
+        "null-when-nonnullable": 36,
         "omit-required": 8,
         "wrong-type": 25,
         "optional-wrong-type": 11,
@@ -27582,7 +27873,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 17,
         "omit-required": 4,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -27591,7 +27882,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 17,
         "omit-required": 4,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -38740,7 +39031,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#determinant",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -39302,7 +39593,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#luDecompose",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -39441,7 +39732,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#matrixMultiply",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 2,
@@ -40824,7 +41115,7 @@
       "package": "@totalfinance/math",
       "implementation": "packages/math/dist/linalg.d.ts#transpose",
       "verdict": "partial",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "undecided": ["empty-series", "no-authoritative-dimension-tested", "ragged-matrix"],
       "mutationsExecuted": {
         "empty-series": 1,
@@ -41344,7 +41635,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "omit-required": 16,
         "invalid-literal": 4,
         "wrong-type": 18,
@@ -41352,7 +41643,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "omit-required": 16,
         "invalid-literal": 4,
         "wrong-type": 18,
@@ -58496,13 +58787,13 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "optional-wrong-type": 1,
         "omit-required": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "optional-wrong-type": 1,
         "omit-required": 1
       },
@@ -60358,7 +60649,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 38,
+        "null-when-nonnullable": 36,
         "omit-required": 10,
         "wrong-type": 24,
         "optional-wrong-type": 12,
@@ -60367,7 +60658,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 38,
+        "null-when-nonnullable": 36,
         "omit-required": 10,
         "wrong-type": 24,
         "optional-wrong-type": 12,
@@ -116628,7 +116919,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 42,
+        "null-when-nonnullable": 40,
         "omit-required": 8,
         "wrong-type": 27,
         "optional-wrong-type": 13,
@@ -116637,7 +116928,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 42,
+        "null-when-nonnullable": 40,
         "omit-required": 8,
         "wrong-type": 27,
         "optional-wrong-type": 13,
@@ -116965,7 +117256,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 17,
         "omit-required": 4,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -116974,7 +117265,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 18,
+        "null-when-nonnullable": 17,
         "omit-required": 4,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -119176,7 +119467,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
+        "null-when-nonnullable": 16,
         "omit-required": 3,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -119185,7 +119476,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 17,
+        "null-when-nonnullable": 16,
         "omit-required": 3,
         "wrong-type": 11,
         "optional-wrong-type": 5,
@@ -119370,14 +119661,14 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 13,
+        "null-when-nonnullable": 12,
         "optional-wrong-type": 10,
         "omit-required": 2,
         "wrong-type": 1
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 13,
+        "null-when-nonnullable": 12,
         "optional-wrong-type": 10,
         "omit-required": 2,
         "wrong-type": 1
@@ -119449,7 +119740,7 @@
       "verdict": "enforced",
       "measurementSource": "@totalfinance/cli:cancelJob",
       "inheritedFrom": "@totalfinance/cli:cancelJob",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 1
       },
@@ -119971,7 +120262,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "omit-required": 16,
         "invalid-literal": 4,
         "wrong-type": 17,
@@ -119979,7 +120270,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "omit-required": 16,
         "invalid-literal": 4,
         "wrong-type": 17,
@@ -120459,13 +120750,13 @@
       ],
       "mutationsExecuted": {
         "unknown-key": 25,
-        "null-when-nonnullable": 674,
+        "null-when-nonnullable": 626,
         "optional-wrong-type": 562,
         "wrong-type": 46
       },
       "mutationsCovered": {
         "unknown-key": 25,
-        "null-when-nonnullable": 674,
+        "null-when-nonnullable": 626,
         "optional-wrong-type": 562,
         "wrong-type": 46
       },
@@ -120538,22 +120829,6 @@
           "mutation": "optional-wrong-type",
           "argumentIndex": 0,
           "field": "handle.anyOf",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "handle.const",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "handle.default",
           "declared": true,
           "verdict": "accepted",
           "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
@@ -120930,22 +121205,6 @@
           "mutation": "optional-wrong-type",
           "argumentIndex": 0,
           "field": "structured.anyOf",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "structured.const",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "structured.default",
           "declared": true,
           "verdict": "accepted",
           "returned": "{\"type\":\"object\",\"description\":\"runOperation(...) — identity, the structured output (or its spilled handle), assumptions"
@@ -121427,7 +121686,7 @@
       "guardReachability": "direct",
       "mutationsExecuted": {
         "unknown-key": 1,
-        "null-when-nonnullable": 54,
+        "null-when-nonnullable": 51,
         "optional-wrong-type": 29,
         "omit-required": 18,
         "wrong-type": 20,
@@ -121436,7 +121695,7 @@
       },
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 54,
+        "null-when-nonnullable": 51,
         "optional-wrong-type": 29,
         "omit-required": 18,
         "wrong-type": 20,
@@ -121588,13 +121847,13 @@
       ],
       "mutationsExecuted": {
         "unknown-key": 12,
-        "null-when-nonnullable": 312,
+        "null-when-nonnullable": 288,
         "optional-wrong-type": 268,
         "wrong-type": 11
       },
       "mutationsCovered": {
         "unknown-key": 12,
-        "null-when-nonnullable": 312,
+        "null-when-nonnullable": 288,
         "optional-wrong-type": 268,
         "wrong-type": 11
       },
@@ -121670,22 +121929,6 @@
           "mutation": "optional-wrong-type",
           "argumentIndex": 0,
           "field": "anyOf",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"The structured output exceeded the inline byte budget and was stored as a report; read `"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "const",
-          "declared": true,
-          "verdict": "accepted",
-          "returned": "{\"type\":\"object\",\"description\":\"The structured output exceeded the inline byte budget and was stored as a report; read `"
-        },
-        {
-          "mutation": "null-when-nonnullable",
-          "argumentIndex": 0,
-          "field": "default",
           "declared": true,
           "verdict": "accepted",
           "returned": "{\"type\":\"object\",\"description\":\"The structured output exceeded the inline byte budget and was stored as a report; read `"
@@ -122091,7 +122334,7 @@
       ],
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 29,
+        "null-when-nonnullable": 28,
         "omit-required": 22,
         "wrong-type": 7,
         "optional-wrong-type": 7,
@@ -122148,7 +122391,7 @@
       "mutationsExecuted": {
         "omit-required": 17,
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "invalid-literal": 4,
         "wrong-type": 17,
         "optional-wrong-type": 21
@@ -122156,7 +122399,7 @@
       "mutationsCovered": {
         "omit-required": 17,
         "unknown-key": 1,
-        "null-when-nonnullable": 41,
+        "null-when-nonnullable": 39,
         "invalid-literal": 4,
         "wrong-type": 17,
         "optional-wrong-type": 21
@@ -127763,7 +128006,7 @@
       "inheritedFrom": "@totalfinance/backtest:createPortfolioStepper",
       "guardReachability": "direct",
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -127786,7 +128029,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "createPortfolioStepper: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCur"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -127834,7 +128083,7 @@
       "inheritedFrom": "@totalfinance/backtest:createTradingEnvironment",
       "guardReachability": "direct",
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -127857,7 +128106,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "definition.accounting.baseCurrency",
+            "message": "createTradingEnvironment: definition.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { ba"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -128001,7 +128256,7 @@
       "guardReachability": "direct",
       "undecided": [
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#2 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:present & arg0.portfolioConstruction.short:present#0 & arg0.signal#0 (unmeasured: incomplete-baseline)",
@@ -128060,7 +128315,12 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "incomplete-baseline",
+          "rejection": {
+            "code": "synthesis.incomplete",
+            "typed": false,
+            "message": "request.dataset.observations[0].availableTimestampMs is required and was not supplied"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
@@ -128917,7 +129177,7 @@
       "undecided": ["alternative arg0.broker#0 (unmeasured: no-input)"],
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 62,
+        "null-when-nonnullable": 29,
         "omit-required": 7,
         "wrong-type": 5,
         "optional-wrong-type": 13,
@@ -129173,7 +129433,7 @@
       "guardReachability": "direct",
       "undecided": [
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#1 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present.asOf:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
@@ -129223,7 +129483,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "portfolioBacktest: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCurrency"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
@@ -141068,10 +141334,10 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "fixtureSource": "@totalfinance/core:connect",
@@ -144444,7 +144710,7 @@
       "inheritedFrom": "@totalfinance/backtest:createPortfolioStepper",
       "guardReachability": "direct",
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -144467,7 +144733,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "createPortfolioStepper: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCur"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -144532,7 +144804,7 @@
       "inheritedFrom": "@totalfinance/backtest:createTradingEnvironment",
       "guardReachability": "direct",
       "undecided": [
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:present & arg0.execution:present.fill.fill#1 & arg0.marketData.optionChains:absent (unmeasured: branch-not-realized)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#1 (unmeasured: baseline-rejected)"
@@ -144555,7 +144827,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "definition.accounting.baseCurrency",
+            "message": "createTradingEnvironment: definition.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { ba"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0",
@@ -147003,7 +147281,7 @@
       "guardReachability": "direct",
       "undecided": [
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#2 & arg0.portfolioConstruction.short:absent & arg0.signal#0 (unmeasured: incomplete-baseline)",
         "alternative arg0.execution:absent & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:present & arg0.portfolioConstruction.short:present#0 & arg0.signal#0 (unmeasured: incomplete-baseline)",
@@ -147062,7 +147340,12 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.portfolioConstruction.long#0 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "incomplete-baseline",
+          "rejection": {
+            "code": "synthesis.incomplete",
+            "typed": false,
+            "message": "request.dataset.observations[0].availableTimestampMs is required and was not supplied"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.portfolioConstruction.long#1 & arg0.portfolioConstruction.short:absent & arg0.signal#0",
@@ -150107,10 +150390,10 @@
       "guardReachability": "delegated",
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 5,
-        "omit-required": 5,
-        "invalid-literal": 1,
-        "wrong-type": 3,
+        "null-when-nonnullable": 6,
+        "omit-required": 6,
+        "invalid-literal": 2,
+        "wrong-type": 4,
         "non-finite": 1
       },
       "fixtureSource": "@totalfinance/core:connect",
@@ -150993,7 +151276,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -155272,7 +155555,7 @@
       "undecided": ["alternative arg0.broker#0 (unmeasured: no-input)"],
       "mutationsCovered": {
         "unknown-key": 2,
-        "null-when-nonnullable": 62,
+        "null-when-nonnullable": 29,
         "omit-required": 7,
         "wrong-type": 5,
         "optional-wrong-type": 13,
@@ -182379,7 +182662,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -183351,7 +183634,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:determinant",
       "inheritedFrom": "@totalfinance/math:determinant",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -183822,7 +184105,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:luDecompose",
       "inheritedFrom": "@totalfinance/math:luDecompose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -183935,7 +184218,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -185136,7 +185419,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",
@@ -185435,7 +185718,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:matrixMultiply",
       "inheritedFrom": "@totalfinance/math:matrixMultiply",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "ragged-matrix",
@@ -203422,7 +203705,7 @@
       "guardReachability": "direct",
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "optional-wrong-type": 1,
         "omit-required": 1
       },
@@ -205125,7 +205408,7 @@
       "guardReachability": "direct",
       "undecided": [
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
-        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: branch-not-realized)",
+        "alternative arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#1 (unmeasured: baseline-rejected)",
         "alternative arg0.execution:absent & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:present.asOf:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent (unmeasured: baseline-rejected)",
@@ -205175,7 +205458,13 @@
         {
           "id": "arg0.execution:present & arg0.execution:present.fill.fill#0 & arg0.marketData.optionChains:absent & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
           "verdict": "unmeasured",
-          "unmeasuredReason": "branch-not-realized"
+          "unmeasuredReason": "baseline-rejected",
+          "rejection": {
+            "code": "input.out_of_range",
+            "typed": true,
+            "field": "request.accounting.baseCurrency",
+            "message": "portfolioBacktest: request.accounting.baseCurrency must be an uppercase three-letter code. Received \"x\". Example: portfolioBacktest({ accounting: { baseCurrency"
+          }
         },
         {
           "id": "arg0.execution:absent & arg0.marketData.optionChains:present & arg0.marketData.optionChains:present.asOf#0 & arg0.strategy#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio & arg0.strategy#0.model:kind=totalfinance.model-portfolio.benchmark:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.horizonEndDate:absent & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveFrom#0 & arg0.strategy#0.model:kind=totalfinance.model-portfolio.strategic.effectiveTo:absent & arg0.strategy#0.policy:absent",
@@ -211428,7 +211717,7 @@
       "guardReachability": "direct",
       "mutationsCovered": {
         "unknown-key": 1,
-        "null-when-nonnullable": 2,
+        "null-when-nonnullable": 1,
         "optional-wrong-type": 1,
         "omit-required": 1
       },
@@ -260902,7 +261191,7 @@
       "verdict": "partial",
       "measurementSource": "@totalfinance/math:transpose",
       "inheritedFrom": "@totalfinance/math:transpose",
-      "guardReachability": "ambiguous",
+      "guardReachability": "delegated",
       "advisory": [
         {
           "mutation": "empty-series",

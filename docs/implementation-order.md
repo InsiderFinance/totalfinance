@@ -8,14 +8,15 @@
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
 [Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
 projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
-current main23fbf06 is being integrated (released0.1.4/upstream numerical/site work); source-final inventory acceptance remains pending. C4 fast/full green and coordinator acceptance remain
+main23fbf06 plus latest3555f93 authored/site/README changes are reconciled (inherited0.1.4); normal ancestry recording and source-final generated acceptance remain pending. C4 fast/full green and coordinator acceptance remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 
 - [x] Read current task, independent second-provider review/probes and existing contracts.
 - [x] Draft examples, protocol ownership, limits, safe errors, timestamps, resume and quality choices.
 - [x] C5 technical re-review approved467a9ed (872db889) before runtime changes.
-- [ ] Bounded C5 implementation has source/installed proofs; [single measured budget checkpoint](./reviews/community-connectors-c5-budget-2026-11-12.md) awaits technical disposition. Current byte gates remain red; generation/combined merge/hosted acceptance pending.
-- [ ] Source-final generation/local gates and fresh exact-head fast/full; later connected acceptance separate.
+- [x] Scoped source/installed proof and [exact measured budget](./reviews/community-connectors-c5-budget-2026-11-12.md) approved45c974dc; three required mutable-control/input/cross-copy corrections pass. Whole34/34 and installed54/54 fit ONLY reviewed limits. Final integration/public/generated/hosted acceptance remains pending.
+- [x] Source-final affected generation aligns actual inherited0.1.4 inputs: defective0, naming unresolved0, fixture join1343; source/type/API/public checks pass.
+- [ ] Final clean packed/guide rehearsal, reviewed commits and fresh exact-head fast/full; later connected acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,
@@ -601,11 +602,9 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-Historical main and C4 naming runs reached zero unresolved identities. Their different identity and
-classification counts are separate historical runs; the combined C5 counts remain pending ordered
-source-final regeneration. Do not select either old inventory as combined proof. Every allowlisted
-canonical term must carry a written rationale, with scoped notation and opaque payload interiors
-classified by the same gate. All 115 retired forms have
+44,592 public naming identities are walked and 0 are unresolved; 40,311 are `explicit`,
+4,119 allowlisted canonical terms each carry a written rationale — a gate fails if any is
+blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),
 behind a gate that fails if a fixture is recorded without an assertion. Eight tests hold the surface;
 see “Closeout state (3B.N9)” in the naming spec for the full table, the gate inventory, and — more

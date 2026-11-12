@@ -7,17 +7,17 @@ import type {
   PriceBarRecord,
   ResearchBarChoice,
   ResearchBarSelection,
-  RowRef,
+  RowReference,
   OhlcvInput,
   TimestampedOhlcvInput,
 } from './data-types.js';
 const fields = ['open', 'high', 'low', 'close'] as const;
-const key = (r: RowRef) => r.pageIndex + ':' + r.rowIndex;
-function ref(value: unknown, pages: readonly DataPage<PriceBarRecord>[]): RowRef {
+const key = (r: RowReference) => r.pageIndex + ':' + r.rowIndex;
+function ref(value: unknown, pages: readonly DataPage<PriceBarRecord>[]): RowReference {
   const r = object(value, 'row', ['pageIndex', 'rowIndex']);
   numberField(r['pageIndex'], 'row.pageIndex', 0, pages.length - 1, true);
   numberField(r['rowIndex'], 'row.rowIndex', 0, pages[r['pageIndex']]!.data.length - 1, true);
-  return r as unknown as RowRef;
+  return r as unknown as RowReference;
 }
 export function researchSelection(
   pages: readonly DataPage<PriceBarRecord>[],
@@ -44,7 +44,7 @@ export function researchSelection(
         ? ['action', 'corrections', 'reason']
         : ['action', 'rows', 'reason'],
     );
-    const choices: RowRef[] = [];
+    const choices: RowReference[] = [];
     if (d['action'] === 'correct') {
       if (!Array.isArray(d['corrections']) || !d['corrections'].length) fail('choice.corrections');
       for (const c of d['corrections']) {

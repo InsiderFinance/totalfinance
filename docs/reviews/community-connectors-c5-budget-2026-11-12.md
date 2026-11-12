@@ -136,3 +136,12 @@ refreshes actual counters; public/API/reference/docs/full packed+ordinary gates;
 fresh committed-source packs/locks/hashes; reviewable combined SDK/provider commits; fast-forward SAME
 draftPR26 only after local gates and run exact-head FAST+FULL. No hosted C5 jobs are queued or passed.
 No merge/publication/new version/deployment/provider remote/private/live action occurred.
+
+## Subsequent disposition45c974dc (historical proposal above retained)
+
+Coordinator approved exactly the fourteen proposed increases for ee0784bc, requiring mutable
+query controls, portable input refusals and remaining cross-copy kit/selector corrections. Only
+those caps were applied. Corrected R2 whole root732397/data21487B; installed named20808/18773,
+root21516/18731, restore15985/13754B all fit. Whole34/34, installed54/54 with unchanged structures pass.
+Those source-checkpoint receipts are not final generated/hosted acceptance. No further allowance
+is granted; later final artifacts must remeasure. Original proposal/observations remain historical.

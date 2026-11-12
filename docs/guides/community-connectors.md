@@ -193,7 +193,7 @@ Expected metadata may differ by provider; do not erase financial, temporal or qu
 to make a comparison pass. A kit that cannot reject one-defect provider mutants proves little.
 
 Pack and install both SDK and provider in a clean consumer with no workspace aliases. Compile with
-NodeNext and Bundler resolution, execute ordinary ESM, verify SDK QuantError identity and run the
+NodeNext and Bundler resolution, execute ordinary ESM, verify the registered safe error contract across separately installed SDK copies and run the
 same research workflow against fixture and HTTP implementations. The explicit local rehearsal is
 `tools/community-connectors-provider-smoke.ts`; its inputs are two supplied tarballs and synthetic
 tests, never credentials. Offline fixtures establish mapping behavior, not upstream deployment,
@@ -204,3 +204,10 @@ service/data failures have distinct registered codes. Retry advice is metadata; 
 not issue a second request. API-01's published pagination instructions remain a separate app/API
 task. API-02–05 coverage, temporal model, freshness and methodology findings remain source-qualified
 limits rather than an invitation to rewrite the server or invent missing inputs.
+
+Portable provider refusals preserve the registered data/access codes and only these existing general
+input codes: input.wrong_type, input.missing_field, input.not_finite, input.out_of_range and
+input.invalid_enum. The SDK rebuilds its own error text/class and retains the original cause locally.
+Use DataProviderError with explicit controlled guidance for public field/rule teaching; arbitrary
+provider messages, contexts and causes are never forwarded as public diagnostics. Unknown codes and
+network throws remain data.provider_failure. The kit checks the same protocol across SDK copies.

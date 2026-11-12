@@ -150,25 +150,25 @@ export interface OhlcvInput {
   readonly volume: number;
 }
 export type TimestampedOhlcvInput = Readonly<Bar & { volume: number }>;
-export interface RowRef {
+export interface RowReference {
   readonly pageIndex: number;
   readonly rowIndex: number;
 }
 export type OHLCField = 'open' | 'high' | 'low' | 'close';
-export interface ResearchBarIssue extends RowRef {
+export interface ResearchBarIssue extends RowReference {
   readonly rule: 'low_above_high' | 'open_outside_range' | 'close_outside_range';
   readonly fields: readonly OHLCField[];
 }
 export type ResearchBarChoice =
   | {
       readonly action: 'exclude' | 'use';
-      readonly rows?: readonly RowRef[];
+      readonly rows?: readonly RowReference[];
       readonly reason: string;
     }
   | {
       readonly action: 'correct';
       readonly corrections: readonly {
-        readonly row: RowRef;
+        readonly row: RowReference;
         readonly values: Partial<Pick<Bar, OHLCField>>;
       }[];
       readonly reason: string;
@@ -176,7 +176,7 @@ export type ResearchBarChoice =
 export interface ResearchBarSelection {
   readonly version: 1;
   readonly decisions: readonly ResearchBarChoice[];
-  readonly sourceRows: readonly RowRef[];
+  readonly sourceRows: readonly RowReference[];
 }
 export interface PriceBarsSelections {
   readonly closePrices: readonly number[];

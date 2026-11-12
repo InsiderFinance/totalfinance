@@ -258,8 +258,15 @@ describe('manifest conformance (Law 1)', () => {
   it('the umbrella hoist is frozen: five ratified names + the 20 domain namespaces + C3 data, nothing else', () => {
     const names = Object.keys(umbrella).filter((n) => n !== 'default');
     expect([...names].sort()).toEqual([...RATIFIED_HOIST, ...DOMAINS, 'data'].sort());
-    // C3 approves only the curated consumer namespace; no flat acquisition hoist.
-    expect(Object.keys(umbrella.data).sort()).toEqual(['connect', 'createPriceBarsWindowView']);
+    // C3/C5 approve only curated connection/restore/checkpoint doors; no flat acquisition hoist.
+    expect(Object.keys(umbrella.data).sort()).toEqual([
+      'connect',
+      'createPriceBarsWindowView',
+      'priceBarsCheckpoint',
+    ]);
+    expect('defineDataProvider' in umbrella.data).toBe(false);
+    expect('defineDataProvider' in umbrella).toBe(false);
+    expect('priceBarsCheckpoint' in umbrella).toBe(false);
     expect('connect' in umbrella).toBe(false);
     // The hoisted five are identical to the scoped options exports (pure re-export, no copy).
     const options = MANIFESTS.get('options')!;

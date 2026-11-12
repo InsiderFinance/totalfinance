@@ -32261,7 +32261,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -32944,7 +32944,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -33141,7 +33141,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -33824,7 +33824,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -65098,7 +65098,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "operation",
@@ -65173,7 +65173,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "bytes",
@@ -65209,7 +65209,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           }
                         ]
                       }
@@ -72298,7 +72298,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "maxInputBytes",
@@ -72350,7 +72350,7 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     }
                   ]
                 },
@@ -85533,7 +85533,7 @@
                 "type": "unknown",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             }
           ],
@@ -87797,7 +87797,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -88103,7 +88103,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -88295,7 +88295,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -89586,7 +89586,7 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "snapshotHash",
@@ -93006,7 +93006,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -97410,7 +97410,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -99047,7 +99047,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -100455,7 +100455,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "output",
@@ -101195,14 +101195,14 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "default",
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "description",
@@ -101222,7 +101222,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         }
                       },
                       {
@@ -101757,7 +101757,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "output",
@@ -102497,14 +102497,14 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "default",
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "description",
@@ -102524,7 +102524,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         }
                       },
                       {
@@ -103024,7 +103024,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "success",
@@ -103150,14 +103150,14 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "default",
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "description",
@@ -103370,14 +103370,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "output",
                             "type": "unknown",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           }
                         ]
                       },
@@ -104603,7 +104603,7 @@
                     "type": "unknown",
                     "kind": "other",
                     "optional": false,
-                    "nullable": false
+                    "nullable": true
                   }
                 }
               ]
@@ -104845,7 +104845,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "output",
@@ -105585,14 +105585,14 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "default",
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "description",
@@ -105612,7 +105612,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         }
                       },
                       {
@@ -108523,7 +108523,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -111033,7 +111033,7 @@
                 "type": "unknown",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             }
           ],
@@ -126195,7 +126195,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -126773,7 +126773,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -126970,7 +126970,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -127548,7 +127548,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -140112,7 +140112,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -140690,7 +140690,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -283975,7 +283975,7 @@
                                 "type": "unknown",
                                 "kind": "other",
                                 "optional": false,
-                                "nullable": false
+                                "nullable": true
                               },
                               {
                                 "name": "success",
@@ -284101,14 +284101,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "default",
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "description",
@@ -284321,14 +284321,14 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "output",
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             }
                           ]
                         },
@@ -284480,14 +284480,14 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "default",
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "description",
@@ -284507,7 +284507,7 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": false,
-                        "nullable": false
+                        "nullable": true
                       }
                     },
                     {
@@ -369303,7 +369303,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -370110,7 +370110,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -370307,7 +370307,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -371114,7 +371114,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -376817,7 +376817,7 @@
                     "type": "unknown",
                     "kind": "other",
                     "optional": true,
-                    "nullable": false
+                    "nullable": true
                   },
                   {
                     "name": "greeks",
@@ -393752,7 +393752,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "instrumentId",
@@ -394522,7 +394522,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "pricer",
@@ -396520,7 +396520,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "instrumentId",
@@ -397290,7 +397290,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "pricer",
@@ -405344,7 +405344,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "assumptions",
@@ -405489,14 +405489,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "defaultPriceRange",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "legs",
@@ -405685,7 +405685,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "market",
@@ -406549,14 +406549,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "resolveMarket",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "scenarioTable",
@@ -406923,7 +406923,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "value",
@@ -407843,7 +407843,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     }
                   ]
                 },
@@ -445403,7 +445403,7 @@
                 "type": "unknown",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             }
           ],
@@ -456684,7 +456684,7 @@
                 "type": "any",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             },
             {
@@ -456896,7 +456896,7 @@
                 "type": "any",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             },
             {
@@ -458971,7 +458971,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "columns",
@@ -459002,7 +459002,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "ema",
@@ -459053,7 +459053,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "events",
@@ -459130,14 +459130,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "pipe",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "rsi",
@@ -459188,7 +459188,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "signals",
@@ -459380,7 +459380,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "when",
@@ -459489,14 +459489,14 @@
                             "type": "any",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "terms",
                             "type": "any",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           }
                         ]
                       }
@@ -460600,7 +460600,7 @@
                 "type": "unknown",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             }
           ],
@@ -612191,7 +612191,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -612778,7 +612778,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -612975,7 +612975,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -613562,7 +613562,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -614570,7 +614570,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -615157,7 +615157,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -627043,7 +627043,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": true,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "snapshotHash",
@@ -627630,7 +627630,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": true,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "snapshotHash",
@@ -631113,7 +631113,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "maxInputBytes",
@@ -631165,7 +631165,7 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     }
                   ]
                 },
@@ -632874,7 +632874,7 @@
                 "type": "unknown",
                 "kind": "other",
                 "optional": false,
-                "nullable": false
+                "nullable": true
               }
             },
             {
@@ -634446,14 +634446,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "default",
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "description",
@@ -635468,14 +635468,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "default",
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "description",
@@ -635688,7 +635688,7 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "output",
@@ -635847,14 +635847,14 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "default",
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "description",
@@ -635874,7 +635874,7 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": false,
-                        "nullable": false
+                        "nullable": true
                       }
                     },
                     {
@@ -636582,7 +636582,7 @@
                                 "type": "unknown",
                                 "kind": "other",
                                 "optional": false,
-                                "nullable": false
+                                "nullable": true
                               },
                               {
                                 "name": "success",
@@ -636708,14 +636708,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "default",
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "description",
@@ -636928,14 +636928,14 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "output",
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             }
                           ]
                         },
@@ -637087,14 +637087,14 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "default",
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "description",
@@ -637114,7 +637114,7 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": false,
-                        "nullable": false
+                        "nullable": true
                       }
                     },
                     {
@@ -637613,7 +637613,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "output",
@@ -638353,14 +638353,14 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "default",
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "description",
@@ -638380,7 +638380,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         }
                       },
                       {
@@ -638633,7 +638633,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "output",
@@ -639373,14 +639373,14 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "default",
                         "type": "unknown",
                         "kind": "other",
                         "optional": true,
-                        "nullable": false
+                        "nullable": true
                       },
                       {
                         "name": "description",
@@ -639400,7 +639400,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         }
                       },
                       {
@@ -645479,7 +645479,7 @@
                                 "type": "unknown",
                                 "kind": "other",
                                 "optional": false,
-                                "nullable": false
+                                "nullable": true
                               },
                               {
                                 "name": "success",
@@ -645605,14 +645605,14 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "default",
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "description",
@@ -645825,14 +645825,14 @@
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             },
                             {
                               "name": "output",
                               "type": "unknown",
                               "kind": "other",
                               "optional": false,
-                              "nullable": false
+                              "nullable": true
                             }
                           ]
                         },
@@ -645984,14 +645984,14 @@
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "default",
                       "type": "unknown",
                       "kind": "other",
                       "optional": true,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "description",
@@ -646011,7 +646011,7 @@
                         "type": "unknown",
                         "kind": "other",
                         "optional": false,
-                        "nullable": false
+                        "nullable": true
                       }
                     },
                     {
@@ -655684,7 +655684,7 @@
                     "type": "unknown",
                     "kind": "other",
                     "optional": true,
-                    "nullable": false
+                    "nullable": true
                   },
                   {
                     "name": "greeks",
@@ -665106,7 +665106,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -686101,7 +686101,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "operation",
@@ -686176,7 +686176,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "bytes",
@@ -686212,7 +686212,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           }
                         ]
                       }
@@ -724068,7 +724068,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "assumptions",
@@ -724213,14 +724213,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "defaultPriceRange",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "legs",
@@ -724409,7 +724409,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "market",
@@ -725273,14 +725273,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "resolveMarket",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "scenarioTable",
@@ -725647,7 +725647,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "value",
@@ -726567,7 +726567,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     }
                   ]
                 },
@@ -736488,7 +736488,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -738718,7 +738718,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -810800,7 +810800,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": false,
-                  "nullable": false
+                  "nullable": true
                 }
               ]
             }
@@ -1157243,7 +1157243,7 @@
                     "type": "unknown",
                     "kind": "other",
                     "optional": true,
-                    "nullable": false
+                    "nullable": true
                   },
                   {
                     "name": "greeks",
@@ -1177284,7 +1177284,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "instrumentId",
@@ -1178054,7 +1178054,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "pricer",
@@ -1180581,7 +1180581,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "instrumentId",
@@ -1181351,7 +1181351,7 @@
                   "type": "unknown",
                   "kind": "other",
                   "optional": true,
-                  "nullable": false
+                  "nullable": true
                 },
                 {
                   "name": "pricer",
@@ -1182954,7 +1182954,7 @@
                           "type": "unknown",
                           "kind": "other",
                           "optional": false,
-                          "nullable": false
+                          "nullable": true
                         },
                         {
                           "name": "operation",
@@ -1183029,7 +1183029,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": false,
-                            "nullable": false
+                            "nullable": true
                           },
                           {
                             "name": "bytes",
@@ -1183065,7 +1183065,7 @@
                             "type": "unknown",
                             "kind": "other",
                             "optional": true,
-                            "nullable": false
+                            "nullable": true
                           }
                         ]
                       }
@@ -1198125,7 +1198125,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "assumptions",
@@ -1198270,14 +1198270,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "defaultPriceRange",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "legs",
@@ -1198466,7 +1198466,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "market",
@@ -1199330,14 +1199330,14 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "resolveMarket",
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "scenarioTable",
@@ -1199704,7 +1199704,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     },
                     {
                       "name": "value",
@@ -1200624,7 +1200624,7 @@
                       "type": "any",
                       "kind": "other",
                       "optional": false,
-                      "nullable": false
+                      "nullable": true
                     }
                   ]
                 },

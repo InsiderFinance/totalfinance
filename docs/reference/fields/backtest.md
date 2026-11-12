@@ -367,12 +367,12 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `AgentTranscript` | `answer.refused` | boolean |  | yes |  |  |
 | `AgentTranscript` | `answer.text` | string |  |  |  | unitless by name |
 | `AgentTranscript` | `calls` | array | array of object |  |  |  |
-| `AgentTranscript` | `calls[].arguments` | other |  |  |  |  |
+| `AgentTranscript` | `calls[].arguments` | other |  |  | yes |  |
 | `AgentTranscript` | `calls[].bytes` | numeric |  | yes |  | unitless by name |
 | `AgentTranscript` | `calls[].error` | object | object (declaration walk stops here) | yes |  |  |
 | `AgentTranscript` | `calls[].ok` | boolean |  |  |  |  |
 | `AgentTranscript` | `calls[].operation` | string |  |  |  | unitless by name |
-| `AgentTranscript` | `calls[].result` | other |  | yes |  |  |
+| `AgentTranscript` | `calls[].result` | other |  | yes | yes |  |
 | `AgentTranscriptExpectation` | `argumentPredicates` | object |  | yes |  |  |
 | `AgentTranscriptExpectation` | `artifactIds` | array | array of string | yes |  |  |
 | `AgentTranscriptExpectation` | `budget` | object |  | yes |  |  |
@@ -381,13 +381,13 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `AgentTranscriptExpectation` | `mustRefuse` | boolean |  | yes |  |  |
 | `AgentTranscriptExpectation` | `operations` | array | array of string |  |  |  |
 | `AgentTranscriptExpectation` | `parity` | object |  | yes |  |  |
-| `AgentTranscriptExpectation` | `parity.direct` | other |  |  |  |  |
+| `AgentTranscriptExpectation` | `parity.direct` | other |  |  | yes |  |
 | `AgentTranscriptExpectation` | `parity.operation` | string |  |  |  | unitless by name |
 | `AppliedMarkingPolicy` | `maximumQuoteAgeMs` | numeric |  |  | yes | milliseconds |
 | `AppliedMarkingPolicy` | `missingMark` | enum | "carry-last-volatility" \\| "entry-volatility" \\| "refuse" |  |  |  |
 | `AppliedMarkingPolicy` | `volatility` | enum | "current-quote" \\| "entry" |  |  |  |
 | `ArtifactInputs` | `inputsHash` | string |  |  |  | unitless by name |
-| `ArtifactInputs` | `parameters` | other |  | yes |  |  |
+| `ArtifactInputs` | `parameters` | other |  | yes | yes |  |
 | `ArtifactInputs` | `snapshotHash` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `libraryVersion` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `operation` | string |  |  |  | unitless by name |
@@ -800,34 +800,34 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `EnvironmentProvenance` | `runId` | string |  |  |  | unitless by name |
 | `EnvironmentProvenance` | `seed` | numeric |  |  | yes | unitless by name |
 | `EventDrivenOptions` | `broker` | object |  |  |  |  |
-| `EventDrivenOptions` | `broker._orders` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker._settlements` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker._trades` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker._warnings` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.applyFill` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.applySplit` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.assignmentModel` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.assignmentThreshold` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.bracketCapacity` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.brw` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker._orders` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker._settlements` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker._trades` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker._warnings` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.applyFill` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.applySplit` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.assignmentModel` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.assignmentThreshold` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.bracketCapacity` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.brw` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.cancel` | function | callback |  |  |  |
-| `EventDrivenOptions` | `broker.cancelGroup` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.cancelGroup` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.cash` | numeric |  |  |  | unitless by name |
-| `EventDrivenOptions` | `broker.cashLowWater` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.earlyAssignmentsForBar` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.cashLowWater` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.earlyAssignmentsForBar` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.equity` | function | callback |  |  |  |
 | `EventDrivenOptions` | `broker.exerciseOption` | function | callback |  |  |  |
-| `EventDrivenOptions` | `broker.fee` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.groupRemaining` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.lastMark` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.lastTs` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.markedAtCost` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.maxLeverage` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.multiplierOf` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.negativeCashWarning` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.noShort` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.onParentFilled` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.optionSpecs` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.fee` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.groupRemaining` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.lastMark` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.lastTs` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.markedAtCost` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.maxLeverage` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.multiplierOf` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.negativeCashWarning` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.noShort` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.onParentFilled` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.optionSpecs` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.orders` | array | array of object |  |  |  |
 | `EventDrivenOptions` | `broker.orders[].filledNotional` | numeric |  |  |  | currency amount (the field or record currency) |
 | `EventDrivenOptions` | `broker.orders[].filledQuantity` | numeric |  |  |  | unitless by name |
@@ -845,16 +845,16 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `EventDrivenOptions` | `broker.orders[].takeProfit` | numeric |  | yes |  | unitless by name |
 | `EventDrivenOptions` | `broker.orders[].timeInForce` | enum | "day" \\| "gtc" |  |  |  |
 | `EventDrivenOptions` | `broker.orders[].type` | enum | "limit" \\| "market" \\| "market-on-close" \\| "market-on-open" \\| "stop" \\| "stop-limit" |  |  |  |
-| `EventDrivenOptions` | `broker.participation` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.periodsPerYear` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.participation` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.periodsPerYear` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.policies` | function | callback |  |  |  |
 | `EventDrivenOptions` | `broker.position` | function | callback |  |  |  |
 | `EventDrivenOptions` | `broker.positions` | object |  |  |  |  |
 | `EventDrivenOptions` | `broker.processBar` | function | callback |  |  |  |
-| `EventDrivenOptions` | `broker.reduceGroupToOpenPosition` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.reduceGroupToOpenPosition` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.registerOption` | function | callback |  |  |  |
-| `EventDrivenOptions` | `broker.riskFreeRate` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.settleEarly` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.riskFreeRate` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.settleEarly` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.settleExpiries` | function | callback |  |  |  |
 | `EventDrivenOptions` | `broker.settlements` | array | array of object |  |  |  |
 | `EventDrivenOptions` | `broker.settlements[].action` | enum | "assigned" \\| "exercised" \\| "expired" |  |  |  |
@@ -872,7 +872,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `EventDrivenOptions` | `broker.settlements[].type` | enum | "call" \\| "put" |  |  |  |
 | `EventDrivenOptions` | `broker.settlements[].underlierPrice` | numeric |  |  |  | currency amount (the field or record currency) |
 | `EventDrivenOptions` | `broker.settlements[].underlying` | string |  |  |  | unitless by name |
-| `EventDrivenOptions` | `broker.slip` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.slip` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.submit` | function | callback |  |  |  |
 | `EventDrivenOptions` | `broker.trades` | array | array of object |  |  |  |
 | `EventDrivenOptions` | `broker.trades[].commission` | numeric |  |  |  | unitless by name |
@@ -883,14 +883,14 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `EventDrivenOptions` | `broker.trades[].slippage` | numeric |  |  |  | unitless by name |
 | `EventDrivenOptions` | `broker.trades[].symbol` | string |  |  |  | unitless by name |
 | `EventDrivenOptions` | `broker.trades[].timestampMs` | numeric |  |  |  | milliseconds |
-| `EventDrivenOptions` | `broker.triggerPrice` | other |  |  |  |  |
-| `EventDrivenOptions` | `broker.tryFill` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.triggerPrice` | other |  |  | yes |  |
+| `EventDrivenOptions` | `broker.tryFill` | other |  |  | yes |  |
 | `EventDrivenOptions` | `broker.warnings` | array | array of object |  |  |  |
 | `EventDrivenOptions` | `broker.warnings[].code` | string |  |  |  | unitless by name |
 | `EventDrivenOptions` | `broker.warnings[].context` | object | object (declaration walk stops here) | yes |  |  |
 | `EventDrivenOptions` | `broker.warnings[].message` | string |  |  |  | unitless by name |
 | `EventDrivenOptions` | `broker.warnings[].severity` | enum | "error" \\| "info" \\| "warn" |  |  |  |
-| `EventDrivenOptions` | `broker.wouldBreachLeverage` | other |  |  |  |  |
+| `EventDrivenOptions` | `broker.wouldBreachLeverage` | other |  |  | yes |  |
 | `EventDrivenOptions` | `corporateActions` | object |  | yes |  |  |
 | `EventDrivenOptions` | `data` | array | array of object |  |  |  |
 | `EventDrivenOptions` | `data[].adjusted` | boolean |  | yes |  |  |
@@ -1788,12 +1788,12 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `PortfolioTimelineResult` | `valuations` | array | array of object |  |  |  |
 | `PortfolioTimelineResult` | `valuations[].netAssetValue` | numeric |  |  |  | currency amount (the field or record currency) |
 | `PortfolioTimelineResult` | `valuations[].valuationDate` | string |  |  |  | calendar date (YYYY-MM-DD) |
-| `Position` | `assertSingleExpiry` | other |  |  |  |  |
+| `Position` | `assertSingleExpiry` | other |  |  | yes |  |
 | `Position` | `assumptions` | function | callback |  |  |  |
 | `Position` | `chartData` | function | callback |  |  |  |
 | `Position` | `constructedAs` | string |  | yes |  | unitless by name |
-| `Position` | `defaultExpiry` | other |  |  |  |  |
-| `Position` | `defaultPriceRange` | other |  |  |  |  |
+| `Position` | `defaultExpiry` | other |  |  | yes |  |
+| `Position` | `defaultPriceRange` | other |  |  | yes |  |
 | `Position` | `legs` | array | array of object |  |  |  |
 | `Position` | `legs[].expiry` | other |  | yes |  |  |
 | `Position` | `legs[].impliedVolatility` | other |  | yes |  |  |
@@ -1802,7 +1802,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `Position` | `legs[].price` | numeric |  |  |  | unitless by name |
 | `Position` | `legs[].quantity` | numeric |  |  |  | unitless by name |
 | `Position` | `legs[].strike` | other |  | yes |  |  |
-| `Position` | `markToMarketAssumptions` | other |  |  |  |  |
+| `Position` | `markToMarketAssumptions` | other |  |  | yes |  |
 | `Position` | `market` | object |  | yes |  |  |
 | `Position` | `market.asOf` | numeric |  |  |  | an instant: epoch milliseconds or a YYYY-MM-DD / zoned ISO string (the resolveAsOf convention) |
 | `Position` | `market.dividendYield` | numeric |  | yes |  | decimal rate (0.05 = 5%) |
@@ -1819,13 +1819,13 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `Position` | `premiumSource` | enum | "model" \\| "user" |  |  |  |
 | `Position` | `premiumVolatilitySource` | enum | "leg" \\| "mixed" \\| "position" | yes |  |  |
 | `Position` | `probability` | function | callback |  |  |  |
-| `Position` | `probabilityAssumptions` | other |  |  |  |  |
-| `Position` | `resolveMarket` | other |  |  |  |  |
+| `Position` | `probabilityAssumptions` | other |  |  | yes |  |
+| `Position` | `resolveMarket` | other |  |  | yes |  |
 | `Position` | `scenarioTable` | function | callback |  |  |  |
-| `Position` | `slopeAt` | other |  |  |  |  |
+| `Position` | `slopeAt` | other |  |  | yes |  |
 | `Position` | `value` | function | callback |  |  |  |
 | `Position` | `whatIfCube` | function | callback |  |  |  |
-| `Position` | `whatIfProbability` | other |  |  |  |  |
+| `Position` | `whatIfProbability` | other |  |  | yes |  |
 | `Provenance` | `asOf` | numeric |  | yes |  | an instant: epoch milliseconds or a YYYY-MM-DD / zoned ISO string (the resolveAsOf convention) |
 | `Provenance` | `dataset` | string |  | yes |  | unitless by name |
 | `Provenance` | `provider` | string |  | yes |  | unitless by name |

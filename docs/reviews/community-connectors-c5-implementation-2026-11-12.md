@@ -78,3 +78,61 @@ by migrated public-source author/installed controls. Legacy v1 restoration keeps
 Source-final generation/zero-defect joined counts, complete public/API/reference/docs/full packed
 and clean committed-checkout recipe, final committed packs, exact-head hosted FAST+FULL and final
 coordinator review remain open. PR26 stays draft at historical3bc356f, no C5 push/merge/acceptance.
+
+## Review45c974dc corrections and latest upstream authored reconciliation
+
+Fourteen measured cap increases approved, not implementation acceptance. Added seven reproducing
+mutation/input cases failed before fixes. Corrected six-file data run283/283 passes, including73 C5
+cases and the original C4 diagnostic/private-context controls. Input class/code preservation is a
+changed approved C5 boundary; C4's forged SDK phase context is still discarded and never serialized.
+Own descriptor/registered-code checks are shared only in opt-in data paths; global guards untouched.
+Actual installed provider/corpus86/86, real two-copy input classes and six kit variant controls pass.
+Repeated whole entries all fit, root732397B and /data21487B. Installed named20808/18773,
+root21516/18731, restoration15985/13754B fit; all54 installed structures/byte cases and34 whole gates pass.
+Candidate R2 receipts are /tmp/tf-c5-r2-{whole,primary,provider,installed}.json; old hashes remain historical.
+
+To avoid selecting old generated conflict outputs, latest3555f93 authored/site/README delta was
+applied three-way from exact23fbf06 while its merge remained in progress, excluding public-docs
+inventory. Only authored gitignore conflicted: both local-artifact and recovered-site exclusions
+were retained. Site source is byte-identical to3555f93; README preserves its navigation/domain-import
+behavior plus the connector journey. The pending23fbf06 merge is not yet committed; after actual
+combined generator resolution, normal merge of3555f93 will record ancestry without force or other
+tree changes. The necessary integration-enabling generator pass now uses actual combined authored
+inputs. Any remaining merge resolution must regenerate derived outputs, never select a stale side.
+
+## Actual generated-gate repairs (not waived populations)
+
+The first public gate run exposed stale historical prose, fixture join1342 versus1341, two phantom
+runtime paths from type-only value re-exports, an unfixtured DataProviderError constructor, and six
+named cursor snapshots silently built absent. These are retained as failures in
+/tmp/tf-c5-final-generated-tests.log. The existing unmeasured ceiling was NOT raised and no new
+residual was allowlisted. Curated /data now explicitly re-exports only the common TYPES; it does not
+turn type-only defineDataProvider values into callable root doors. A valid registered constructor
+fixture now measures its actual closed input instead of a synthesized invalid code. The independent
+fixture join and authored counters must be refreshed from the resulting actual artifact.
+
+C5 snapshots hit the existing depth4 truncation with a flat inline type still available. Synthesis
+now materializes only scalar flat leaves from that declared text at EXACTLY that boundary, using its
+existing conservative inline parser; nested/unknown/container/callback shapes still refuse and no
+depth/work limit changes. Three permanent controls prove both public query interfaces' six selected
+snapshot branches and a nested refusal. No broad synthesis framework or residual exception was added.
+The month literal1mo receives an exact rationale/exception while mo is forbidden elsewhere; 1w has
+its exact weekly rationale. RowReference spells out the new unreleased type without an alias.
+These real source/policy/fixture input corrections require affected regeneration; previous generator
+outputs are integration-enabling history, not final zero/combined acceptance.
+
+The valid constructor fixture then exposed one FALSE conviction: cause:unknown accepted null, while
+contract-fields recorded nullable:false. TypeScript permits null for unknown/any. The metadata walk
+now records that actual type fact; a strict compiler-parity test covers unknown/any/null union and
+non-null string/number controls. The runtime constructor/private-cause/scanner contract is unchanged.
+No exception, coverage floor, build-depth limit or financial guard was relaxed. Final regeneration
+repeats only the affected contract→enforcement→validation→API→dependent documentation chain after this
+actual input correction; unchanged signatures/naming already regenerated from final source. The
+earlier defective1 artifact remains failed iteration history, never zero-defect evidence.
+
+The nullability fact also belongs to signature metadata, not only the contract tree. A generated gate
+caught an early dependent record carrying old nested nullable:false. Signature metadata was refreshed;
+the affected contract→enforcement→validation/dependent chain is rerun in its documented order. Earlier
+stale-record tests remain failed history. The flat-leaf improvement retires15 OLD exact residuals,
+not an increase in the residual allowlist; fixture join is1343, alias floor3086 and the unmeasured
+ceiling185+two named callback residuals are unchanged. Final receipts must use aligned artifacts.

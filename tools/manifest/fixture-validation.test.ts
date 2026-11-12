@@ -189,7 +189,8 @@ describe('hand-written fixtures satisfy the declarations they are measured again
     // Community connector wrapper/kit add two fixtures; C2 raw-page restoration adds one (1333 → 1336).
     // C3 connect/window restoration add two independently valid public fixtures (1336 → 1338).
     // Integrated main adds the three real ohlcvFromBars public spellings (1338 → 1341).
-    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1341);
+    // C5 checkpoint access and the closed safe error declaration add two genuine fixtures (1341 → 1343).
+    expect(matched, 'the fixture/contract join moved — update this number deliberately').toBe(1343);
   });
 
   it('every matched fixture can be BUILT', () => {
