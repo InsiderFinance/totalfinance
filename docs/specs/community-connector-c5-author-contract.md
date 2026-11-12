@@ -1,6 +1,6 @@
 # C5: author protocol, deliberate resume and research-bar quality
 
-Status: **proposed for coordinator technical review; no C5 runtime implementation**.
+Status: **revised after changes requested at6f3fdd6; coordinator re-review pending; no C5 runtime implementation**.
 2026-11-12. Task01a19da0-2a6f-7450-89a4-2e51047b05b5; execution01a19da1-1351-7b84-b67f-58bc81698fb5.
 Request f417317e-89d8-8c08-8867-defc21e5f479. Maintainer authorized “Make the revision”.
 This is the required engineering checkpoint, not another maintainer permission request.
@@ -148,7 +148,9 @@ Exact signature changes (readonly fields throughout):
 - DataPageOptions = {limit:number; cursor:string|null; pins:DataPins|null; signal?:AbortSignal}.
   DataPins = {datasetId:string; datasetVersion:string; snapshotId:string|null;
   sessionDate:string|null; adjustment:DataPageMetadata['adjustment'];
-  consistency:'snapshot'|'best-effort'}. SDK sends null pins on first call, accepted first-page
+  consistency:'snapshot'|'best-effort';
+  temporal:{kind:'price-bars';interval:DataInterval;timestampConvention:PriceBarRecord['timestampConvention']}
+  |{kind:'option-chain-research'}}. SDK sends null pins on first call, accepted first-page
   pins thereafter. Provider must pass required vendor pins on; it cannot upgrade unknown pins.
 - DataProviderSource = {protocol:'totalfinance-data-source'; contractVersion:2; id; version;
   capabilities(options?:DataCallOptions):Promise<readonly DataCapabilityDeclaration[]>;
@@ -170,8 +172,9 @@ Exact signature changes (readonly fields throughout):
 - defineDataProvider(source:DataProviderSource):DataProvider remains the advanced validated consumer
   constructor. `DataProvider.query<R extends DataQuery>(query:R, options:{limit:number;
 cursor?:DataContinuation;signal?:AbortSignal}):Promise<DataViewFor<R>>` is one page, zero discovery.
-  DataContinuation={version:2;provider:{id,version};query:DataQuery;cursor:string;pins:DataPins}.
-  View.continuation is this canonical continuation or null. SDK compares supplied financial query
+  DataQueryBinding={provider:{id:string;version:string};query:DataQuery}.
+  DataContinuation={version:2;binding:DataQueryBinding;cursor:string;pins:DataPins}.
+  Both price-bar and chain one-page views expose continuation of this shape or null. SDK compares supplied financial query
   exactly, rejecting conflicts before invocation; manual caller does not assemble pins.
 - data.connect(source:DataProviderSource, options?:DataConnectionOptions):ConnectedData.
   ConnectedData exposes capabilities/query plus priceBars and resumePriceBars. External factory
@@ -189,12 +192,44 @@ it. Unknown-key/duplicate source envelope fields refuse, not ignored copies that
 Per-row symbol and provenance copies disappear from author input. Adjusted row flag remains optional
 and independent; when known C4 adjustment consistency still applies, with no inferred true/false.
 
-Canonical v2 DataPage retains the existing normalized fields and meanings; adds interval for bars,
-row timestampConvention stamped from page declaration, and `issues:readonly ResearchBarIssue[]`.
-The common materializer validates resulting facts with common page/sequence validation. It does not
-price, sort, deduplicate, repair source values or generate expected test answers. Dataset/version/
-pin/adjustment/consistency still must match within a window; different independent queries may vary.
-Best-effort null pins never become snapshot/PIT guarantees. Chain term/ID/premium rules stay C4.
+Canonical v2 DataPage retains existing normalized fields and adds exactly one SDK-stamped
+`binding:DataQueryBinding` plus `issues:readonly ResearchBarIssue[]`. No separate page interval:
+bar interval lives only in binding.query.interval. Every binding holds the complete original query,
+including chain snapshot/expiration/strike/right filters, and exact provider package id/version.
+Authors supply none of this duplicated binding. Canonical price-bar pages also retain a required
+page.timestampConvention copied from explicit source page facts, including on empty pages; each
+canonical row keeps its existing timestampConvention stamped from that same fact and must agree.
+This retains temporal pins even when the first accepted page has zero rows. Chains have neither
+page timestampConvention nor OHLC selectors; their bar issues are empty.
+
+createDataView(page:unknown,selection?:unknown) validates v2 binding, kind/symbol/provenance identity,
+all rows against stored original filters/bounds, pins/conventions and canonical schema before
+constructing a view. For nextCursor non-null it deterministically constructs continuation from
+page.binding, nextCursor and accepted page facts (including page timestampConvention on empty bars); terminal page yields null. No financial bound
+or provider version is inferred from rows/provenance.datasetVersion. Advanced consumer query takes
+that continuation and compares its binding.query to supplied query and binding.provider to actual
+bound source id/version BEFORE invocation, with zero discovery. A modified external query/token
+binding or different provider version refuses before I/O. Arbitrary consistently rewritten stored
+facts cannot be authenticated; this is validation of represented data, not tamper-proof provenance.
+Legacy v1 createDataView can still restore its raw page/selectors under old laws but exposes no
+usable continuation (continuation:null, continuationStatus:'unavailable-legacy-context' when a cursor
+exists, 'terminal' otherwise). It never invents query/version. V2 statuses are 'available' or
+'terminal'. Legacy callers with external original context must start an explicit new query;
+there is no implicit v1 continuation upgrade/alias.
+
+```ts
+import { createDataView } from '@insiderfinance/totalfinance/core/data';
+const first = await marketData.query(filteredChainQuery, { limit: 100 });
+const restored = createDataView(JSON.parse(JSON.stringify(first.page)));
+if (restored.continuation) {
+  await marketData.query(filteredChainQuery, { limit: 100, cursor: restored.continuation });
+}
+```
+
+The common materializer/page/sequence validator never prices, sorts, deduplicates, repairs values
+or generates expected answers. Dataset/version/pin/adjustment/consistency AND bar interval/convention
+remain constant within a window, restored window or checkpoint; independent queries may differ.
+Null best-effort pins never become snapshot/PIT guarantees. C4 chain term/ID/premium laws remain.
 
 ## 2. Finite capability and host safety contract
 
@@ -208,15 +243,23 @@ and session labels govern bounds (section4), never generated expected sessions.
 Known capability declaration: {kind;intervals;maxPageSize;consistency:readonly modes[];
 pointInTime:false;access; maxWindowMs?:number; maxSessionDays?:number}. Bars intervals nonempty,
 chains intervals empty. Optional range ceilings apply only to instant/session query respectively;
-positive safe integers, no guessed trading-day meaning. IF declares its actual2000 and minute31-day
+positive safe integers, no guessed trading-day meaning. For instant bounds maxWindowMs permits
+exactly `toEpochMs-fromEpochMs <= maxWindowMs` (inclusive endpoints, zero span allowed). For session
+bounds maxSessionDays counts Gregorian dates inclusively as `(toUtcDateMs-fromUtcDateMs)/86400000+1`;
+equal dates count1, weekends/holidays count, no exchange calendar is consulted. Only these explicit
+provider ceilings restrict spans; the SDK does not infer an interval-duration-based span ceiling. IF declares its actual2000 and minute31-day
 restriction; independent Alpaca-style preview declares10000 and supported additional intervals.
 Provider ceilings are source facts, not host limits. maxPageSize positive safe integer need not be
 <= host cap. Requests never exceed min(provider ceiling, explicit host ceiling, remaining records).
 Explicit impossible override refuses; omitted pageSize negotiates min(1000, provider ceiling).
 
 Unknown capability kinds are ignored with a controlled unsupported-kind discovery note. Unknown
-well-formed interval tokens matching digits+(m|h|d|w|mo) are ignored within a known kind, with a
-controlled unsupported-interval note; no arbitrary text copied into warnings. Malformed known entries
+well-formed raw tokens (ASCII1–32 characters matching `[A-Za-z0-9][A-Za-z0-9_-]{0,31}`) are ignored within a known kind, with a
+controlled unsupported-interval note; no arbitrary text copied into warnings. Token framing only
+bounds safe identifiers, never parses numeric duration or treats new units as understood. Thus1s,
+1y and a future named token can be ignored while1d remains supported. Empty/whitespace/control/
+nonstring/oversize tokens refuse, as do duplicate raw tokens before filtering; ['1d','1s'] yields1d
+plus ignored.intervals1. Unknown kind plus a known kind preserves the latter. Malformed known entries
 (0 size, bad mode/type, duplicate kind/interval, malformed token) still refuse the descriptor.
 A known kind left with no understood intervals is unavailable, not a reason to disable other kinds.
 Discovery returns validated understood DataCapabilities plus ignored counts, not arbitrary future
@@ -236,7 +279,7 @@ perform at most one vendor data request per query, disclose discovery cost, and 
 Hosts enforce actual request allowances externally; SDK limits do not grant access or paid reads.
 
 Primary evidence: [Alpaca stock bars](https://docs.alpaca.markets/us/reference/stockbars) documents
-10000 returned points and page_token, with additional timeframes. [Polygon's own client contract](https://github.closePriceom/polygon-io/client-php/blob/master/docs/Api/CryptoaggregatesApi.md)
+10000 returned points and page_token, with additional timeframes. [Polygon's own client contract](https://github.com/polygon-io/client-php/blob/master/docs/Api/CryptoaggregatesApi.md)
 describes50000 BASE aggregates queried, not a universal returned-row limit. This scope chooses
 understood intervals and host bounds explicitly; no staging/vendor data request verified here.
 
@@ -290,20 +333,48 @@ start timestamp. Ordering/identity use actual timestamp and strict session-label
 session queries; conflicting same-session duplicate is refused. Timestamp is never observation,
 availability, valuation or guaranteed exchange-open time. Existing unknown clocks stay null.
 
-Add `bars:readonly TimestampedOhlcvInput[]` on page/window views, where TimestampedOhlcvInput =
-OhlcvInput & {readonly symbol:string;readonly timestampMs:number}. This strict selection requires
-actual volume on every row, even though resample's TimeBar type makes volume optional and its
-current engine treats absence as zero. That prevents hidden zero-filling through this convenience
-path. No compute/backtest/resample validators/defaults change. Compatible existing timestamped
-backtest/resample inputs accept these plain immutable native rows structurally; broader required
-backtest policies/costs still come from callers. No selector performs calculation, clock or fetch.
+Only price-bar page/window views expose closePrices/ohlcvBars/bars, issues/selection and resolve.
+Chain views expose raw page/continuation and research metadata, never OHLC selectors/decisions.
+Add `bars:readonly TimestampedOhlcvInput[]`, where the exact type is
+`Readonly<Bar & {volume:number}>`. Project every defined canonical Bar field: symbol, timestampMs,
+OHLC, actual volume, optional adjusted and vwap. Preserve adjusted:true, adjusted:false, absent
+adjusted and vwap:0/absent exactly; never derive flags from page adjustment metadata or compute vwap.
+No source decoration is needed on arrays. OhlcvInput-only selection keeps its existing shape; bars is the canonical financial-flag-preserving projection. Strict selection requires actual volume on EVERY row,
+even though resample TimeBar makes it optional and its current engine treats absence as zero.
+No selector performs calculation/clock/fetch, no compute/backtest/resample API changes.
 
-Each view has an enumerable frozen data-property `selections:['closePrices','ohlcvBars','bars']`
-and enumerable issues/selection (below). Numeric selectors remain nonenumerable lazy cached getters.
-Object.keys/console inspection can discover choices without invoking strict getters. JSON enumerates
-kind/page-or-window/selections/issues/selection only; unknown volume never makes serialization throw.
-Canonical persistence uses page/window plus an explicitly persisted selection record, not getters.
-Arrays remain native frozen Array.prototype with no Proxy or decorated metadata.
+Existing vectorized options require mutable Bar[] ownership; a readonly native selection is NOT
+assignable directly. Teach an ordinary array ownership copy, without assertions:
+
+```ts
+const result = backtest.vectorized({ ...explicitBacktestOptions, data: [...prices.bars] });
+const sampled = technicalAnalysis.resample(
+  prices.bars,
+  explicitResampleInterval,
+  explicitResampleOptions,
+);
+```
+
+Caller supplies all existing engine policies/options and signals, aligned to selected sourceRows.
+The ownership copy does not change frozen source rows. Resample accepts ArrayLike directly.
+Verify vectorized result assumptions.corporateAction equals the independent source-Bar baseline
+for true/false/absent flags (its current data[0].adjusted behavior stays unchanged), plus exact zero
+vwap projection and actual engine parity. Deliberate use of suspect bars never bypasses leaf guards.
+
+Price-bar views have enumerable frozen data `selections:['closePrices','ohlcvBars','bars']` and
+issues/selection. Numeric selectors remain nonenumerable lazy cached getters. Object.keys/console
+can discover choices without invoking strict getters. JSON enumerates kind/page-or-window/
+continuation-and-status/selections/issues/selection only; unknown volume cannot make it throw.
+Persist canonical page/window and selection, not getters. Native frozen Array.prototype arrays,
+no Proxy/decorations. Chain serialization has no bar-only properties.
+
+Temporal pin law: DataPins.temporal for bars is derived from binding.query.interval plus first-page
+explicit canonical page.timestampConvention, and every page's rows must match that convention. Shared sequence
+validation checks this tuple on live walk, canonical window restore, checkpoint restore/resume and
+kit, even when both individual pages are valid daily records. Mixed midnight-label/session-start
+refuses as data.invalid_response/inconsistent before accepting the changed page. Adapter code does
+not rebuild this guard.04Z stays04Z; session labels stay explicit, with no claim of exchange-open,
+observation or availability. Chains use temporal.kind only and no invented bar interval/convention.
 
 ## 5. Deliberate resumability, not partial success
 
@@ -319,21 +390,42 @@ one accessor avoids a new window error hierarchy; no general error-helper framew
 Input preflight failures have no checkpoint. Zero-page invocation failures can retain initial state
 for honest accounting.
 Canonical checkpoint exact outer shape:
-{version:1,kind:'price-bars-checkpoint',contractVersion:2,provider:{id,version},query:PriceBarsQuery,
+{version:1,kind:'price-bars-checkpoint',contractVersion:2,binding:DataQueryBinding,
 pages:readonly DataPage<PriceBarRecord>[],next:DataContinuation|null,
 progress:{status:'incomplete',acceptedPages:number,records:number,reads:number},
-limits:{pageSize,maxPages,maxReads,maxRecords},
-bytes:number}. No signal, credentials, methods, mutable counters or source error. Pins in next must
-match first accepted page; next.cursor must equal last accepted nextCursor; empty pages require
-next=null with an explicit initial marker `acceptedPages:0` meaning next source request is first.
-Terminal page never creates an incomplete checkpoint. Seen cursors/order keys are recomputed from
-retained pages, not accepted blindly as separate state. Accepted pages imply a minimum read count;
-reads may exceed pages+1 after failures; within hard limits. Byte count must equal bounded canonical
-page size sum. No hash is claimed to authenticate caller-edited snapshots or external read history.
-The guarantee is validated represented state, not a tamper-proof ledger or crash-atomic checkpoint.
+paging:{requested:{mode:'automatic'}|{mode:'explicit',size:number},
+state:{status:'unresolved'}|{status:'resolved',effectiveSize:number}},
+limits:{maxPages:number,maxReads:number,maxRecords:number},bytes:number}.
+Binding.query must be PriceBarsQuery. No duplicate pageSize in limits. No signals/credentials/methods
+or source errors. next.binding must equal checkpoint binding and every retained page.binding;
+next.pins match first accepted page including temporal tuple; next.cursor equals last nextCursor.
+
+A failed INITIAL discovery stores requested automatic/explicit policy and unresolved size, with
+reads incremented1 and zero accepted pages. Resume can negotiate automatic min(1000,provider ceiling)
+after its discovery; a provider ceiling50 therefore resolves50. Explicit1000 against50 still
+refuses after discovery (that consumed read retained), leaving size unresolved. Resolve effective
+size after successful negotiation; once resolved it stays pinned on resume, including a failed first
+query. Any accepted page requires resolved size. With accepted pages a changed capability ceiling
+below pinned size refuses, never silently shrinks. Before accepting any page a caller wanting a
+different size must deliberately start a different operation; this is not a counter-reset mechanism.
+
+ONLY pages.length===0/acceptedPages===0 with next:null means initial source request, whether
+paging is unresolved or resolved. No inference from records===0. Accepted empty nonterminal pages
+are explicitly permitted in v2 if nextCursor is non-null, different and unseen. They count as a page
+and read, retain dataset/temporal pins and their cursor, and cannot reset paging/query/order state.
+Order tracks last nonempty row key through empty pages. Repeated/cyclic cursor refuses; finite
+page/read ceilings bound even a stream of distinct empty cursors. Accepted terminal empty page
+finishes success; a terminal page never creates incomplete state. Legacy v1 laws remain unchanged.
+
+Seen cursors/order keys are recomputed from retained pages; no untrusted independent last-key state.
+Accepted page count equals pages.length, records equals row sum; reads >= acceptedPages+1 (at least
+one discovery) and can be larger from failed/aborted/discovery attempts. Every count is bounded by
+hard limits; stored limit exhaustion is a valid checkpoint state, not a successful window. bytes
+must match bounded canonical page sizes. No checksum authenticates caller-edited facts or actual
+external billing history. Represented-state validation, not tamper-proof ledger/crash-atomic storage.
 
 PriceBarsWindow exact v2 outer shape is {version:2,kind:'price-bars-window',contractVersion:2,
-provider:{id,version},query:PriceBarsQuery,pages:readonly DataPage<PriceBarRecord>[],
+binding:DataQueryBinding,pages:readonly DataPage<PriceBarRecord>[],
 pagination:{status:'terminal',pageSize:number,pageCalls:number,reads:number,records:number},bytes:number}.
 pageCalls counts accepted pages; reads includes failed attempts and discovery. It retains original
 query, accepted pages and terminal status. At least one terminal page for empty success. Counts no
@@ -345,7 +437,7 @@ Before resume: bounded scan and revalidate every page/query/provider/dataset/pin
 filter/cursor-cycle/count/byte fact and contract version. Bind exact provider id/version (host must
 also supply the correct access binding; credentials are not compared/persisted). Reject forged/raw
 source boundary or mismatched binding before reads. Fresh capability negotiation costs ONE additional
-read and checks current support against stored effective page size/pins. No accepted-page refetch.
+read, resolves unresolved paging policy or checks the pinned effective size/pins as above. No accepted-page refetch.
 No automatic new snapshot on expiry. Source410 remains data.snapshot_expired, with prior checkpoint.
 
 Before invoking discovery or query, increment reads once; failed/aborted invocation remains charged
@@ -356,14 +448,38 @@ be requested again only by explicit resume; vendor may have charged twice. No se
 identical best-effort retry promise. Invalid page after a successful upstream read consumes a read
 but is not accepted. Do not continue automatically after invalid data. Query attempts are sequential.
 
-At budget exhaustion refuse before another call and retain checkpoint. Resume preserves consumed
-reads/accepted pages/records, never resets. Default reuse of spent limits refuses before I/O when
-there is insufficient room for discovery plus another query. Raising host limits must be explicit
-through a new connection ceiling and/or permitted call override (never above connection or hard
-caps); increases don't reset counters, don't alter prior query/page size or grant vendor allowance.
-No increased allowance inferred from time, provider identity, new signal or creating a new connection.
-Other retryable failures similarly require host's explicit budget/access decision. No background
-jobs, retry scheduler, cache or generic page-job abstraction.
+At budget exhaustion refuse before another call and retain the checkpoint. Resume never resets
+reads/pages/records. Budget merge for each k in maxPages/maxReads/maxRecords is exact:
+S[k]=stored limit, C[k]=resolved connection ceiling, E[k]=explicit constructor option if present,
+R[k]=explicit resume option if present. Candidate[k]=R[k] if supplied, else E[k] if supplied,
+else S[k]. Require positive safe integer <=C[k] and hard cap, and no limit below consumed work.
+A smaller explicitly selected limit may constrain remaining work; an explicit increase authorizes
+only that host work. A bare new connection's larger DEFAULT C does NOT change S. R is a call
+ceiling <=C even if constructor default was used. For example saved maxReads5 on a default21-read
+connection still uses5; explicit resume maxReads10 can raise it to10 within C21. A new connection
+with explicit maxReads60 can raise it to60 without requiring a second redundant resume option.
+If default C is LOWER than stored S, refuse with checkpoint before I/O until host explicitly binds
+sufficient ceilings or requests a permissible reduced limit; never silently replace S with defaults.
+
+Paging policy is separate and immutable on resume: options.pageSize on resume must be absent or
+exactly the original explicit size; an original automatic policy cannot be changed by resume or
+connection defaults. Accepted pages pin effectiveSize as above. A larger explicit constructor
+pageSize is not a request to alter that saved policy. Budgets are limits for the entire resumed
+operation, not incremental grants. Creating a connection/signal or waiting never resets them.
+
+Before resumed discovery reserve room for at least ONE discovery and ONE query (reads+2<=maxReads),
+and one additional accepted page/record capacity; otherwise refuse before I/O with unchanged
+checkpoint, no charging invented reads. Discovery failure consumes exactly1 read. Discovery that
+succeeds but rejects capabilities/paging/range/entitlement also consumes1, updating the checkpoint
+before refusal; it does not consume a query. Pre-aborted resume with a valid checkpoint rethrows data.aborted with unchanged checkpoint/counters and zero calls. Post-discovery pre-abort consumes no query read.
+Before actual query dispatch recheck abort/limits, increment1, then retain that consumed read on
+failure/body abort/validation refusal. If a lower record budget would prevent even a terminal
+empty query, conservatively refuse without an extra read; do not spend beyond declared budgets.
+All pre-I/O resume budget/capability/policy refusals attach the last validated checkpoint; malformed
+checkpoint input itself remains InputError with no trusted checkpoint. Late source successes are
+not accepted after abort. New limits are recorded only after successful local merge validation.
+No provider allowance is granted or reset. Retryable failures require explicit host/access choice;
+no automatic retries/background jobs/cache or generic page-job abstraction.
 
 ## 6. Suspect observations and smallest explicit choices
 
@@ -472,10 +588,32 @@ future entries can be represented without TypeScript assertions. The understood 
 consumer result has contractVersion2/providerId/providerVersion, validated known capability records
 and ignored:{kinds:number,intervals:number}; no future payload is forwarded. Known consistency modes
 must match each query's actual per-page facts. Snapshot mode requires a non-null real source pin.
-Page issues use pageIndex0 at one-page scope; window issues copy controlled issue records with actual
+Price-bar page issues use pageIndex0 at one-page scope; window issues copy controlled issue records with actual
 page index without altering retained page facts. Selection defaults to version1/empty decisions/all
 sourceRows; the window retains original pages regardless of selection. New source protocol is
 rejected by old SDKs; restore supports old v1 under old laws without quietly migrating financial facts.
 Public types named here belong to data-types.ts; normalization/negotiation stay data-validation/data.ts,
 selectors data-view, window/checkpoint work data-connection (a narrow checkpoint module if needed).
 Public errors/codes use the existing core registry and opt-in data error boundary, no registry rewrite.
+
+## Re-review acceptance additions (101c2e57, 2026-11-12)
+
+- [ ] Persist/restore nonterminal bars AND filtered chain pages, compare exact binding/query/pins/
+      cursor, continue with zero discovery; mismatched supplied query/bound provider refuses before
+      I/O; no inferred dates/version for legacy v1. All v2 pages in stored windows match binding.
+- [ ] Failed initial discovery automatic1000 then provider50 negotiates50; explicit1000 refuses;
+      post-discovery refusal count retained; saved low limits on larger default connection unchanged;
+      explicit constructor/resume increases work; insufficient reads refuses with checkpoint/zero I/O.
+- [ ] Accepted empty nonterminal first/intermediate page preserves next cursor/counts/pins/effective
+      size and last nonempty order key; resume never restarts from first query or refetches it.
+- [ ] Timestamped bars preserve true/false/absent adjusted and zero/absent vwap, every actual
+      timestamp/volume; strict TS proves ownership-copy backtest and direct ArrayLike resample;
+      actual engine results/assumptions equal independent canonical-Bar reference inputs.
+- [ ] ['1d','1s'] and ['1d','1y'] keep1d/count ignored; malformed-type/empty/control/oversize/duplicate
+      raw token rejects; unknown kind mixed with supported kind cannot disable the latter.
+- [ ] Individually valid daily midnight and04Z session-start pages mixed across a live/restored/
+      resumed window fail shared temporal pin law and kit; homogeneous04Z works without any inferred
+      observation/availability. Span equality/equal-date/weekend cases verify exact provider ceilings.
+
+Review disposition at6f3fdd6 is changes_requested, not runtime approval. These corrections replace
+ambiguous earlier prose without changing maintainer scope. Re-review required before implementation.

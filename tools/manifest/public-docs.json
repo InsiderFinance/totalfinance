@@ -10,7 +10,7 @@
       "historical": 8,
       "migration-evidence": 2
     },
-    "executableFences": 4673,
+    "executableFences": 4675,
     "checkedUnderTruthfulness": 177,
     "checkedUnderVocabulary": 75,
     "shippedNamesWatched": 9889,
@@ -842,7 +842,7 @@
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
-      "codeFences": 4
+      "codeFences": 6
     },
     {
       "path": "docs/specs/community-connector-foundation.md",

@@ -6,8 +6,8 @@
 > synchronized.
 
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
-[Proposed C5 contract](./specs/community-connector-c5-author-contract.md) is ready for coordinator
-technical review before runtime/signature changes. New isolated branch is based on accepted3bc356f;
+[Proposed C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
+projection/negotiation/temporal contracts are ready for technical re-review before runtime changes. New isolated branch is based on accepted3bc356f;
 current mainca122ab is already included. C4 fast/full green and coordinator acceptance remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 

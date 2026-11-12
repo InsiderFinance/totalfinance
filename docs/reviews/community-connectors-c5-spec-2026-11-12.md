@@ -61,3 +61,51 @@ author/src/vendor.ts54553b110f050787ac0f4c99ad25e154d44885b62055eb3bfefb1373bb27
 The source-only proposal deliberately chooses one raw-source binding, protocol2 and windowv2,
 finite interval set, explicit consumed-work resume and resolve choices; these are coordinator
 review decisions, no hidden unresolved product question or new generic maintainer approval loop.
+
+## Changes-requested disposition and revised contract (2026-11-12)
+
+Coordinator request101c2e57 reviewed6f3fdd6/all481 lines; exact-output changes_requested
+review01a1d099-f101-7b77-b52e-a22eb31b5d6f/output01a1d094-18fa-76b1-b717-14a4d08946a5 is
+preserved in Ri task revision45. No C5 runtime approval. Earlier “decision-complete” proposal
+claim is superseded by this concrete correction/re-review; maintainer implementation authorization
+remains, with no generic permission question.
+
+1. v2 canonical page has one SDK-stamped binding holding original DataQuery and provider id/version,
+   no redundant page interval. Both bars/filtered chains restore exact continuation with zero
+   discovery; mismatched external query/binding refuses before I/O. Legacy v1 cannot synthesize
+   missing query/version; reports unavailable-legacy-context and retains strict old restore laws.
+2. Checkpoint paging keeps requested automatic/explicit and unresolved/resolved effective size,
+   separate from accepted-page/record/read budgets. Failed initial discovery remains unresolved;
+   automatic1000 may negotiate50 later, explicit1000 refuses. Zero accepted pages alone means first
+   request; an accepted empty nonterminal page retains cursor/pins/counts. Saved budgets stay saved
+   on a larger default connection; explicit resume option, else explicit constructor option, else
+   saved limit determines each budget, always <=connection/hard ceilings and >=consumed work.
+   All valid-checkpoint pre-I/O refusals retain it; fresh discovery/query accounting is explicit.
+3. bars is readonly Readonly<Bar & {volume:number}>[], preserving adjusted true/false/absent and
+   vwap zero/absent. vectorized.ts504 reads adjusted for corporateAction; VectorizedOptions.data
+   is Bar[], so teach data:[...prices.bars] for ownership, not a direct readonly assignment.
+   resample.ts accepts ArrayLike and takes interval plus optional options; direct array use is valid.
+   No compute signatures/immutability weakened. Future engine parity tests require exact source
+   flags and assumptions, in addition to selected numeric data.
+4. Safe raw interval framing permits future units1s/1y and named tokens but never interprets them;
+   only the finite understood set is queryable. Invalid type/empty/control/duplicate remains error.
+5. Shared DataPins.temporal pins interval/convention across live pages, stored windows, checkpoint/
+   resume and kit; individually valid midnight and04Z conventions cannot be mixed. Actual source
+   stamps/session labels remain separate from observation/availability.
+
+Corrected the malformed primary-source link introduced by the prior text replacement. OHLC
+selections/issues/resolve explicitly belong only to price-bar views. Provider maxSessionDays uses
+inclusive Gregorian dates, including weekends; maxWindowMs compares inclusive endpoints' elapsed
+millisecond difference, no implicit trading calendar. Added exact acceptance cases and concrete
+continuation/ownership-copy examples. No runtime/provider/signature/budget changes, PR26 untouched.
+Documentation-only rerun results recorded below, not implementation proof.
+
+Re-review verification: documentation conformance25/25, inventory263 surfaces/4675 executable
+fences/zero findings, scoped format/diff checks pass. Only docs inventory regenerated. An external
+scratch consumer using hash-verified current C4 public SDK types compiles the proposed canonical-Bar
+shape's ownership-copy backtest/direct ArrayLike resample examples under strict NodeNext and Bundler;
+an @ts-expect-error control proves direct readonly backtest data is rejected. Logs
+/tmp/tf-c5-r2-types-{nodenext,bundler}.log. This verifies existing types, not an implemented C5 selector.
+Canonical page.timestampConvention is explicitly retained for empty bar pages as well, so first
+empty-page temporal pins are restorable; no inference from a nonexistent first row.
+No runtime/signature/provider changes or C5 implementation/hosted acceptance claimed.
