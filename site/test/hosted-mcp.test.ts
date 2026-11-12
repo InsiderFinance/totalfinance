@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import endpoint from '../../api/mcp.js';
 
-const URL = 'https://www.totalfinance.io/docs/totalfinance/mcp';
+const ENDPOINT_URL = 'https://www.totalfinance.io/docs/totalfinance/mcp';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -53,7 +53,7 @@ describe('the deployed documentation MCP entrypoint', () => {
     const fetchAsset = vi.fn(async () => Response.json({ version: '0.0.0-host-test' }));
     vi.stubGlobal('fetch', fetchAsset);
     const response = await endpoint.fetch(
-      new Request(URL, {
+      new Request(ENDPOINT_URL, {
         method: 'POST',
         body: JSON.stringify({
           jsonrpc: '2.0',
@@ -75,17 +75,17 @@ describe('the deployed documentation MCP entrypoint', () => {
   });
 
   it('rejects unsupported methods and malformed JSON through the public entrypoint', async () => {
-    const get = await endpoint.fetch(new Request(URL));
+    const get = await endpoint.fetch(new Request(ENDPOINT_URL));
     expect(get.status).toBe(405);
     expect(get.headers.get('allow')).toBe('POST');
-    const invalid = await endpoint.fetch(new Request(URL, { method: 'POST', body: '{' }));
+    const invalid = await endpoint.fetch(new Request(ENDPOINT_URL, { method: 'POST', body: '{' }));
     expect(invalid.status).toBe(400);
     expect(await invalid.json()).toMatchObject({ error: { code: -32700 } });
   });
 
   it('refuses oversized requests before parsing', async () => {
     const response = await endpoint.fetch(
-      new Request(URL, {
+      new Request(ENDPOINT_URL, {
         method: 'POST',
         headers: { 'content-length': '1000001' },
         body: '{}',
