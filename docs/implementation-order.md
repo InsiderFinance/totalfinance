@@ -11,7 +11,7 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
-### Active bounded site work: restore the original homepage and apply branding (2026-11-12)
+### Completed bounded site work: recover the original homepage and branding (2026-11-12)
 
 Current clarification: the actual original marketing frontend was found as uncommitted work in
 `totalfinance-24287e`, with the hero “The complete quant library for TypeScript and AI agents.”
@@ -27,6 +27,14 @@ the static export and version snapshot, 198 site tests with a final 13-test rout
 75 documentation/import checks, all 40 copied examples against installed packages, root/site types
 and changed-source lint. Documentation regeneration: 248 surfaces, zero findings. M5 owns the
 exact-head hosted run and corrected public-page review; do not infer those from local results.
+
+M5 completed: `3c7f1a4` passed all 23 full hosted jobs before landing and on main; the original
+marketing homepage is live at `https://www.totalfinance.io/` with the supplied branding and no
+development banner. Public light/dark, calculator, docs navigation, skip-link and HTTP/404 checks
+pass. Follow-up `9ac5181` fixes the remaining control accents and docs-MCP Node startup; its emitted
+ESM regression, hosted-entrypoint tests and production initialization/search pass. The controlling
+correction records exact run URLs and review limits. Publication, DNS and the InsiderFinance app
+remain separate; the older restoration records below are historical.
 
 The maintainer rejected the replacement marketing homepage in `7c1e932` and requested the original
 landing page from before the docs separation, changing only the logo and brand colors. The

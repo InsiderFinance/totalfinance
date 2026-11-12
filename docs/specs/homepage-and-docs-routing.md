@@ -13,7 +13,7 @@ hero and sidebar. Release evidence and version-page details retain their existin
 - [x] M2: Apply the supplied logo/colors and omit prominent development/unpublished labels.
 - [x] M3: Serve the homepage at `/`; verify docs/assets/agent files and actual 404s through the mount.
 - [x] M4: Pass the recovered site's tests/build, installed-example checks, lint and documentation regeneration.
-- [ ] M5: Verify hosted checks and inspect the corrected public homepage after integration.
+- [x] M5: Verify hosted checks and inspect the corrected public homepage after integration.
 
 Local recovery evidence (Node 22.23.2/pnpm 10.32.0): the marketing page body is byte-identical to
 the original after removing its status paragraph and substituting one brand accent. The original
@@ -25,6 +25,29 @@ the final routing adjustment. Root/site types, changed-source lint and 75 docume
 checks pass. All 40 exact default/edited first-call/full examples typecheck and execute against
 installed tarballs. Documentation regeneration reports 248 surfaces, zero findings. Library
 sources, public package versions, the root dependency graph and release evidence are unchanged.
+
+Hosted and production verification:
+
+- Recovery commit `3c7f1a411b96d287dcd2e470ba97b50283066049` passed all **23 full hosted jobs**
+  [before landing](https://github.com/InsiderFinance/totalfinance/actions/runs/43272009110) and
+  [on main](https://github.com/InsiderFinance/totalfinance/actions/runs/43274168756).
+- The production homepage at `https://www.totalfinance.io/` shows the original marketing hero,
+  supplied logo and green branding, with no development/unpublished header or hero banner. Real
+  browser review at 1200px passed in light/dark themes with loaded fonts and no horizontal overflow.
+  Changing volatility from 20% to 25% updated the live option price from $2.39 to $3.35; Get started
+  opened `/docs/totalfinance/start`; keyboard activation of the skip link focused the main landmark.
+- Eight production page/asset checks passed, including the docs-entry redirect, API reference,
+  `llms.txt`, SVG icon and PNG social card. An unknown docs URL returned a real 404.
+- Follow-up `9ac5181` finishes the remaining calculator accents and fixes the recovered docs MCP's
+  emitted-ESM startup. A cold Node reproduction failed on the old extensionless import and passed
+  after the repair. The 201-test site suite and the expanded four-test hosted-entrypoint suite pass,
+  along with site types/lint. Production initialization reports `totalfinance-docs` version `0.1.4`,
+  and a real `search_docs` call returns the current Black–Scholes reference. This endpoint reads
+  documentation only; hosted financial computation remains separate.
+
+M1–M5 are complete. H4 below is the historical full mobile/supported-WebMCP review item; those checks
+were not freshly repeated in this recovery. No SDK/MCP package publication, version bump, DNS or
+InsiderFinance-app change was made.
 
 **Controlling correction (2026-11-12):** the maintainer rejected the new marketing homepage and
 requested the original landing page from before the docs separation, changing only its logo and
