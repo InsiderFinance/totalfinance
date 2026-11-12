@@ -6,8 +6,8 @@
  * Host-agnostic: adapters supply `readAsset(path)` for files of the static export (relative to the
  * docs base path), so the same core runs in the local preview and in a hosted function.
  */
-import { markdownRoute } from '../src/routes';
-import { search, type SearchRecord } from '../src/search';
+import { markdownRoute } from '../src/routes.js';
+import { search, type SearchRecord } from '../src/search.js';
 
 export const DOCS_MCP_NAME = 'totalfinance-docs';
 export const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26', '2024-11-05'] as const;

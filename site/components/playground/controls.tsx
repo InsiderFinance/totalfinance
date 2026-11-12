@@ -13,7 +13,7 @@ import type {
 } from '@/src/types';
 
 const field =
-  'w-full rounded-lg border border-panel-border bg-panel-raised px-2.5 py-1.5 text-sm text-panel-foreground tabular-nums outline-none transition-colors placeholder:text-panel-muted focus:border-[#6573f2] focus:ring-2 focus:ring-[#6573f2]/30 disabled:opacity-60';
+  'w-full rounded-lg border border-panel-border bg-panel-raised px-2.5 py-1.5 text-sm text-panel-foreground tabular-nums outline-none transition-colors placeholder:text-panel-muted focus:border-[#67d9a3] focus:ring-2 focus:ring-[#67d9a3]/30 disabled:opacity-60';
 
 function Label({
   htmlFor,
@@ -32,7 +32,7 @@ function Label({
         <label htmlFor={htmlFor} className="text-[0.8125rem] font-medium text-white">
           {label}
         </label>
-        {value ? <span className="font-mono text-xs text-[#aab4ff]">{value}</span> : null}
+        {value ? <span className="font-mono text-xs text-[#a8eac6]">{value}</span> : null}
       </div>
       {hint ? <p className="mt-0.5 text-[0.6875rem] leading-4 text-panel-muted">{hint}</p> : null}
     </div>
@@ -174,7 +174,7 @@ export function SelectControl({
               onClick={() => onChange(option.value)}
               className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                 option.value === value
-                  ? 'bg-[#303fe1] text-white shadow-sm'
+                  ? 'bg-[#078754] text-white shadow-sm'
                   : 'text-panel-muted hover:text-white'
               }`}
             >
@@ -361,7 +361,7 @@ export function TableControl({
         type="button"
         onClick={() => onChange([...value, { ...control.newRow }])}
         disabled={value.length >= control.maxRows}
-        className="mt-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-[#aab4ff] hover:bg-white/10 disabled:opacity-40"
+        className="mt-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-[#a8eac6] hover:bg-white/10 disabled:opacity-40"
       >
         <Plus className="size-3.5" aria-hidden /> Add row
       </button>
@@ -570,7 +570,7 @@ export function DataControl({
             type="button"
             onClick={() => setEditing(!editing)}
             aria-expanded={editing}
-            className="inline-flex items-center gap-1 rounded-lg bg-[#303fe1] px-2.5 py-1 text-xs font-semibold text-white hover:bg-[#2432cf]"
+            className="inline-flex items-center gap-1 rounded-lg bg-[#078754] px-2.5 py-1 text-xs font-semibold text-white hover:bg-[#066b43]"
           >
             <Upload className="size-3.5" aria-hidden /> Use your data
           </button>
@@ -596,7 +596,7 @@ export function DataControl({
                   role="radio"
                   aria-checked={meaning === option}
                   onClick={() => setMeaning(option)}
-                  className={`rounded-md px-2 py-1 font-medium ${meaning === option ? 'bg-[#303fe1] text-white' : 'text-panel-muted hover:text-white'}`}
+                  className={`rounded-md px-2 py-1 font-medium ${meaning === option ? 'bg-[#078754] text-white' : 'text-panel-muted hover:text-white'}`}
                 >
                   {option === 'prices' ? 'Closing prices' : 'Returns (decimals)'}
                 </button>
@@ -631,7 +631,7 @@ export function DataControl({
               type="button"
               onClick={() => apply(text, 'Your pasted data')}
               disabled={!text.trim()}
-              className="rounded-lg bg-[#303fe1] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#2432cf] disabled:opacity-40"
+              className="rounded-lg bg-[#078754] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#066b43] disabled:opacity-40"
             >
               Apply
             </button>
@@ -668,7 +668,7 @@ export function DataControl({
         </div>
       ) : null}
       {notes.length ? (
-        <ul className="mt-1.5 space-y-0.5 text-[0.6875rem] leading-4 text-[#aab4ff]" role="status">
+        <ul className="mt-1.5 space-y-0.5 text-[0.6875rem] leading-4 text-[#a8eac6]" role="status">
           {notes.map((note) => (
             <li key={note}>{note}</li>
           ))}

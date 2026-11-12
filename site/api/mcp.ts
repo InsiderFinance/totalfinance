@@ -3,7 +3,7 @@
  * It reads the deployment's own static files over HTTP, so it stays stateless and read-only.
  * Routing: `site/vercel.json` rewrites `<base>/mcp` here.
  */
-import { createDocsMcp } from '../mcp/docs-mcp';
+import { createDocsMcp } from '../mcp/docs-mcp.js';
 
 const BASE = process.env['TOTALFINANCE_DOCS_BASE_PATH'] ?? '/docs/totalfinance';
 const PUBLIC_URL = (

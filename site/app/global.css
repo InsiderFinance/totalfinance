@@ -295,16 +295,16 @@
   /* Range slider in the dark run panel. */
   .tf-range {
     @apply h-1.5 cursor-pointer appearance-none rounded-full bg-panel-border;
-    accent-color: #6573f2;
+    accent-color: var(--color-brand);
   }
   .tf-range::-webkit-slider-thumb {
-    @apply size-4 appearance-none rounded-full border-2 border-white bg-[#6573f2] shadow;
+    @apply size-4 appearance-none rounded-full border-2 border-white bg-brand shadow;
   }
   .tf-range::-moz-range-thumb {
-    @apply size-4 rounded-full border-2 border-white bg-[#6573f2] shadow;
+    @apply size-4 rounded-full border-2 border-white bg-brand shadow;
   }
   .tf-range:focus-visible {
-    @apply outline-none ring-2 ring-[#6573f2]/50 ring-offset-2 ring-offset-panel;
+    @apply outline-none ring-2 ring-[#67d9a3]/50 ring-offset-2 ring-offset-panel;
   }
 
   .tf-hero-grid {
@@ -445,7 +445,7 @@
     font-variant-ligatures: none;
   }
   .tf-editor:focus-within {
-    outline: 2px solid #6573f2;
+    outline: 2px solid #67d9a3;
     outline-offset: -2px;
   }
   .tf-editor-input {

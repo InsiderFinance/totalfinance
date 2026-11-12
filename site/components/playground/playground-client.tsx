@@ -343,7 +343,7 @@ export function PlaygroundClient({
           <button
             type="button"
             onClick={() => void share()}
-            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#303fe1] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2432cf]"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#078754] px-3 py-2 text-xs font-semibold text-white hover:bg-[#066b43]"
           >
             {shared === 'idle' ? (
               <Link2 className="size-3.5" aria-hidden />
