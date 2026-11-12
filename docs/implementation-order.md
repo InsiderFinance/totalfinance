@@ -24,6 +24,15 @@ site build/typecheck, 82 site tests and 30 documentation tests pass. Earlier H1â
 contract is historical; H4's rendered-site review remains open because Ri's browser refuses loopback URLs.
 The numerical/release work retains its own scope and verification records.
 
+README follow-up locally complete (2026-11-12): the maintainer requested prominent npm/homepage/docs
+links, a clearer open-source introduction and removal of repeated version hedging. The root README
+now has branding, badges, a direct quickstart, feature overview and concise agent setup. GitHub About
+links to `https://totalfinance.io` and describes the toolkit. Docs links use the working TotalFinance
+host until the separate InsiderFinance rewrite is available. All 33 focused documentation/example
+tests, 15 local-link checks and eight public URL/asset checks pass. Documentation regeneration has
+zero findings and no inventory drift; distribution assembly copies the updated README with absolute
+repository links. No package publication, version bump or manual site deployment occurred.
+
 Branding/deployment handoff amendment (2026-11-12), in the same contract: supplied-artwork reference,
 editable SVG recreation, favicon/Apple/social exports, homepage/docs metadata, static Vercel config,
 exact-runtime build wrapper and [numbered deployment guide](./runbooks/deploy-totalfinance-site.md).
