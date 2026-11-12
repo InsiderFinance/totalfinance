@@ -555,30 +555,30 @@ Ordered implementation after coordinator review:
 - [x] Read task/review/evidence and prior contracts; new isolated tree from exact3bc356f.
 - [x] Record fetched mainca122ab3115ea08cc8789fd7d1be8380382fdc6c: already ancestor of base, no new merge needed now.
 - [x] Coordinator technical re-review approved467a9ed before runtime changes; prior rejection retained below.
-- [ ] Source protocol/common normalization/finite negotiation, pre-read misuse rejection; migrate IF
+- [x] Source protocol/common normalization/finite negotiation, pre-read misuse rejection; migrate IF
       in separate provider worktree from29b02e0, no remote. Keep all83 original behaviors/corpus,
       migrating signatures, and a copied independent Alpaca-style author (original unchanged).
-- [ ] Cross-copy safe errors/teaching/network classification and every C4 diagnostic/redaction law.
-- [ ] Native timestamped selections/serialization and source04Z/session facts; unchanged engine parity.
-- [ ] Explicit checkpoint/resume with failure accounting and separate private storage; independent
+- [x] Cross-copy safe errors/teaching/network classification and every C4 diagnostic/redaction law.
+- [x] Native timestamped selections/serialization and source04Z/session facts; unchanged engine parity.
+- [x] Explicit checkpoint/resume with failure accounting and separate private storage; independent
       rate-limit page3, discovery failure, record/page/read exhaustion, pre/in-flight/body abort,
       expired pin and malformed restore mutants. No accepted read repeats, skips or duplicates;
       explicit increased budget vs hidden-reset/allowance refusal, best-effort uncertainty disclosed.
-- [ ] Suspect OHLC acquisition, field-intersection STOP, exclusion/use/correction and replay/storage;
+- [x] Suspect OHLC acquisition, field-intersection STOP, exclusion/use/correction and replay/storage;
       partial/empty/zero/missing-volume, clean source and immutable decisions/correspondence mutants.
-- [ ] Fresh independently packed SDK/IF/starter/Alpaca-style consumers, strict no-assertion author and
+- [x] Fresh independently packed SDK/IF/starter/Alpaca-style consumers, strict no-assertion author and
       readonly consumer NodeNext/Bundler; shared independent oracle, one/three-page119.5,103/102/101.5,
       SMA.explain/VWAP/backtest/resample structural parity and no-key guide executed verbatim.
-- [ ] Final concrete baseline/candidate whole+installed min/gzip/retained graphs and repeated bytes.
+- [x] Final concrete baseline/candidate whole+installed min/gzip/retained graphs and repeated bytes.
       All C4 caps stay until technical measurement review; no shared optimization or settings edits.
-- [ ] Source-final affected ordered generators (signature→naming→contract→enforcement→validation→API→
+- [x] Source-final affected ordered generators (signature→naming→contract→enforcement→validation→API→
       README→LLM→reference/bundle→OpenAPI→docs), zero measured defects/truthful joined counters,
       public/first-touch/API/types/scoped lint+format/full existing packed/whole/browser/guard gates.
 - [ ] Reviewable SDK/provider commits, fast-forward SAME draftPR26 only after local gates; fresh
       exact-head FAST+FULL hosted runs, no post-green commit without rerun. Feature stays in_progress.
 
-Node22.23.2/pnpm10.32.0 frozen installs. No C5 runtime, MCP/App/agent glue or connected acceptance
-claimed by this spec. No merge/publication/new release version/deployment/provider remote/API-server
+Node22.23.2/pnpm10.32.0 frozen installs. Spec approval alone did not certify runtime. Offline proofs are in the C5 closure report; no
+MCP/App/agent glue or connected acceptance is claimed. No merge/publication/new release version/deployment/provider remote/API-server
 edits/staging/secret/allowance/key/grant/account/paper/recurring/live operations. No unresolved
 external product choice is deferred: defaults, semantics and choices above are concrete review
 proposals, not claims the maintainer already endorsed unseen details.
@@ -598,20 +598,20 @@ Public errors/codes use the existing core registry and opt-in data error boundar
 
 ## Re-review acceptance additions (101c2e57, 2026-11-12)
 
-- [ ] Persist/restore nonterminal bars AND filtered chain pages, compare exact binding/query/pins/
+- [x] Persist/restore nonterminal bars AND filtered chain pages, compare exact binding/query/pins/
       cursor, continue with zero discovery; mismatched supplied query/bound provider refuses before
       I/O; no inferred dates/version for legacy v1. All v2 pages in stored windows match binding.
-- [ ] Failed initial discovery automatic1000 then provider50 negotiates50; explicit1000 refuses;
+- [x] Failed initial discovery automatic1000 then provider50 negotiates50; explicit1000 refuses;
       post-discovery refusal count retained; saved low limits on larger default connection unchanged;
       explicit constructor/resume increases work; insufficient reads refuses with checkpoint/zero I/O.
-- [ ] Accepted empty nonterminal first/intermediate page preserves next cursor/counts/pins/effective
+- [x] Accepted empty nonterminal first/intermediate page preserves next cursor/counts/pins/effective
       size and last nonempty order key; resume never restarts from first query or refetches it.
-- [ ] Timestamped bars preserve true/false/absent adjusted and zero/absent vwap, every actual
+- [x] Timestamped bars preserve true/false/absent adjusted and zero/absent vwap, every actual
       timestamp/volume; strict TS proves ownership-copy backtest and direct ArrayLike resample;
       actual engine results/assumptions equal independent canonical-Bar reference inputs.
-- [ ] ['1d','1s'] and ['1d','1y'] keep1d/count ignored; malformed-type/empty/control/oversize/duplicate
+- [x] ['1d','1s'] and ['1d','1y'] keep1d/count ignored; malformed-type/empty/control/oversize/duplicate
       raw token rejects; unknown kind mixed with supported kind cannot disable the latter.
-- [ ] Individually valid daily midnight and04Z session-start pages mixed across a live/restored/
+- [x] Individually valid daily midnight and04Z session-start pages mixed across a live/restored/
       resumed window fail shared temporal pin law and kit; homogeneous04Z works without any inferred
       observation/availability. Span equality/equal-date/weekend cases verify exact provider ceilings.
 
@@ -657,3 +657,5 @@ getters/messages/toJSON/raw contexts do not become public facts. Global isQuantE
 Initial mutation/input regressions failed7/7 before fixes, then pass; real separately installed copies
 pass input/error/pre/in-flight abort/missing-volume/suspect-selector kit controls. The measured final
 candidate still must fit reviewed caps and complete source-final generation/current-head hosted gates.
+
+Final local source/packed/generator receipts: [C5 closure](../reviews/community-connectors-c5-closure-2026-11-12.md). Hosted exact-head and coordinator implementation acceptance remain open at this commit; feature in_progress.

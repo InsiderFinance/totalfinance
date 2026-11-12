@@ -16,7 +16,8 @@ historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged
 - [x] C5 technical re-review approved467a9ed (872db889) before runtime changes.
 - [x] Scoped source/installed proof and [exact measured budget](./reviews/community-connectors-c5-budget-2026-11-12.md) approved45c974dc; three required mutable-control/input/cross-copy corrections pass. Whole34/34 and installed54/54 fit ONLY reviewed limits. Final integration/public/generated/hosted acceptance remains pending.
 - [x] Source-final affected generation aligns actual inherited0.1.4 inputs: defective0, naming unresolved0, fixture join1343; source/type/API/public checks pass.
-- [ ] Final clean packed/guide rehearsal, reviewed commits and fresh exact-head fast/full; later connected acceptance separate.
+- [x] Clean committed-source no-key recipe, all86 reference cases, independent author/starter, primary119.5,236 packed checks and approved whole/installed bounds pass; [local receipts](./reviews/community-connectors-c5-closure-2026-11-12.md).
+- [ ] Exact-head hosted fast/full and coordinator review; later maintainer/connected-agent/App acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,

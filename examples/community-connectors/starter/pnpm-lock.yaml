@@ -21,7 +21,7 @@ importers:
 packages:
 
   '@insiderfinance/totalfinance@file:sdk.tgz':
-    resolution: {integrity: sha512-Dsv1tTyMw63QSMxtHu0HMnPxKybq8abvbw296YONl1LjGcwG0evUzJqSRekAnjAxAAwiyIQ2t7f+qKBDlCW/zQ==, tarball: file:sdk.tgz}
+    resolution: {integrity: sha512-y/6FuzHT7Z1TzyWYLSC41WnIj6oDKvspBhXnfHaMO/vUmz8o90QUgxz27DCPB95wIawU38k/8L7B4ivvfkSwlA==, tarball: file:sdk.tgz}
     version: 0.1.4
     engines: {node: '>=22.13.0'}
     hasBin: true
