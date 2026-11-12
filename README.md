@@ -112,6 +112,7 @@ Use domain imports for portable tree shaking:
 
 ```ts
 import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
+import { valueAtRisk } from '@insiderfinance/totalfinance/risk';
 
 const closes = [
   44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
@@ -119,6 +120,7 @@ const closes = [
 ];
 
 rsi(closes).at(-1); // 57.92…
+valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]);
 ```
 
 Feature imports such as `@insiderfinance/totalfinance/technical-analysis/rsi` let you go narrower.
@@ -126,6 +128,16 @@ Calculation entry points work in browsers; the CLI, HTTP, and MCP transports run
 Node.js requires **22.13+**. The package is ESM with TypeScript declarations.
 
 [Imports, runtimes, and bundle sizes →](./docs/guides/imports-and-bundles.md)
+
+<details>
+<summary>Root imports and tree shaking</summary>
+
+The root exports domain namespaces and the option helpers `blackScholes`, `option`, `market`,
+`engines`, and `impliedVolatility`. Accessing `math.normalCdf(0)` through a root namespace retains
+the math namespace in esbuild. Rollup shakes this static use. Domain and feature imports offer
+more predictable browser bundles.
+
+</details>
 
 ## For AI agents
 
@@ -184,6 +196,7 @@ corepack enable
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test
+pnpm site:build
 pnpm site:dev
 ```
 

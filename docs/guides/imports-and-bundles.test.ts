@@ -69,13 +69,19 @@ describe('public imports and bundles guidance', () => {
     it(`${path} starts with runnable named domain imports and preserves root convenience`, async () => {
       const markdown = readFileSync(new URL(path, guideUrl), 'utf8');
       const text = normalized(markdown);
-      const intro = extractTsBlocks(markdown)[0]!;
+      const blocks = extractTsBlocks(markdown);
+      const intro = blocks[0]!;
+      // The README leads with pricing, then shows risk/indicators in its import section.
+      // Check all three runnable domain imports without requiring one combined first example.
+      expect(intro).toContain(
+        "import { blackScholes } from '@insiderfinance/totalfinance/options';",
+      );
       for (const statement of [
         "import { blackScholes } from '@insiderfinance/totalfinance/options';",
         "import { valueAtRisk } from '@insiderfinance/totalfinance/risk';",
         "import { rsi } from '@insiderfinance/totalfinance/technical-analysis';",
       ])
-        expect(intro).toContain(statement);
+        expect(blocks.join('\n')).toContain(statement);
       expect(intro).not.toContain("from '@insiderfinance/totalfinance';");
       expect(text).not.toContain('options API is re-exported flat');
       expect(text).not.toContain('leanest possible bundle, install only');
