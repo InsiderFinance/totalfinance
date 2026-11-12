@@ -7,8 +7,8 @@ import { MenuButton, SearchButton } from './header-actions';
 import { ThemeToggle } from './theme-toggle';
 
 /**
- * The InsiderFinance documentation header, with TotalFinance as the active section. Family links
- * leave this zone, so they are plain anchors (no base path).
+ * Shared brand and documentation navigation. Family links leave this zone, so they are plain
+ * anchors (no base path).
  */
 export function SiteHeader() {
   return (
@@ -42,12 +42,7 @@ export function SiteHeader() {
                 {item.label}
               </a>
             ) : (
-              <Link
-                key={item.id}
-                href={item.href}
-                aria-current="page"
-                className="font-semibold text-fd-primary"
-              >
+              <Link key={item.id} href={item.href} className="font-semibold text-fd-primary">
                 {item.label}
               </Link>
             ),

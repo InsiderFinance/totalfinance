@@ -1,5 +1,23 @@
 # TotalFinance homepage and documentation routing
 
+## Current follow-up: compact documentation chrome (2026-11-12)
+
+The maintainer requested one brand block in the top left, a version/GitHub/npm resource row, and
+“View Docs” in the shared navigation. Keep the global header's brand and remove the sidebar's
+duplicate logo, name and byline. Link the compact version badge to the versions page and remove
+the redundant sidebar-footer GitHub link. The docs mount remains `/docs/totalfinance` on both hosts
+so one build can be proxied by InsiderFinance without remapping its compiled links and assets.
+Document that reasoning and use the canonical `www` origin in the rewrite example.
+
+- [x] N1: One brand block; version, GitHub and npm grouped above the docs-area tabs.
+- [x] N2: “View Docs” links from the marketing homepage to the docs start page.
+- [x] N3: Explain the shared prefix; pass the build, typecheck and existing site checks.
+
+Local verification on Node 22.23.2/pnpm 10.32.0: the 578-route static build, all 202 site tests,
+30 documentation checks, site types, changed-source ESLint and formatting pass. The generated
+documentation inventory is unchanged. The preceding main commit `3555f93` passed all 23 hosted jobs.
+No docs mount, SDK source, dependency graph or package version changed.
+
 ## Current follow-up: navigation, copy and palette (2026-11-12)
 
 The maintainer requested “finance” in the marketing headline, removal of the unlaunched Discord
