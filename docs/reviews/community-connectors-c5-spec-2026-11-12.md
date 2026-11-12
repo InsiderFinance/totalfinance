@@ -109,3 +109,9 @@ an @ts-expect-error control proves direct readonly backtest data is rejected. Lo
 Canonical page.timestampConvention is explicitly retained for empty bar pages as well, so first
 empty-page temporal pins are restorable; no inference from a nonexistent first row.
 No runtime/signature/provider changes or C5 implementation/hosted acceptance claimed.
+
+Coordinator approved exact467a9ed under872db889 after independent25/25 documentation cases;
+/tmp/tf-c5-coordinator-spec-r2-docs.log. Recorded host page-size ceiling/automatic negotiation and
+actual-invocation read-accounting precision in spec before runtime. C5 implementation proceeds in
+same isolated tree/task/execution, with final measured budget checkpoint if required. No merge/live
+or feature acceptance claimed; original rejections preserved.

@@ -114,13 +114,13 @@ for (const [name, change] of [
     writeFileSync(
       join(broken, 'probe.mjs'),
       readFileSync(join(broken, 'test.mjs'), 'utf8').split("test('independently")[0] +
-        `try{await createStarterProvider(rows,receipt).query({...request,kind:'price-bars',limit:2});throw Error('accepted broken mapping');}catch(e){if(e.context?.path!=='data[].bar.close'||e.context?.reason!=='not_finite')throw e;console.log(e.code+' '+e.context.path+' '+e.context.reason);}`,
+        `try{await defineDataProvider(createStarterProvider(rows,receipt)).query({...request,kind:'price-bars'},{limit:2});throw Error('accepted broken mapping');}catch(e){if(e.context?.path!=='data[].bar.close'||e.context?.reason!=='not_finite')throw e;console.log(e.code+' '+e.context.path+' '+e.context.reason);}`,
     );
     console.log(run(process.execPath, ['probe.mjs'], broken).trim());
   } else
     assert.throws(
       () => run('pnpm', ['test'], broken),
-      (error) => /expected facts/.test(String(error.stdout)),
+      (error) => /expected-facts/.test(String(error.stdout)),
       'Expected-page oracle must refute finite wrong units',
     );
 }

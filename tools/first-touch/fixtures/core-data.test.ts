@@ -13,7 +13,7 @@ it('first-touch connector fixtures execute public heads and returned methods', a
     typeof defineDataProvider
   >[0];
   const provider = defineDataProvider(input);
-  await expect(provider.capabilities()).resolves.toMatchObject({ contractVersion: 1 });
+  await expect(provider.capabilities()).resolves.toMatchObject({ contractVersion: 2 });
   await expect(
     validateDataProvider(
       CORE_DATA_FIXTURES['core.validateDataProvider']!()[0] as Parameters<
@@ -34,7 +34,7 @@ it('first-touch connector fixtures execute public heads and returned methods', a
       );
     } else if (value !== undefined)
       await expect(provider.capabilities(value as never)).rejects.toBeInstanceOf(QuantError);
-    await expect(provider.query(value as never)).rejects.toBeInstanceOf(QuantError);
+    await expect(provider.query(value as never, { limit: 2 })).rejects.toBeInstanceOf(QuantError);
     await expect(validateDataProvider(value as never)).rejects.toBeInstanceOf(QuantError);
   }
 });

@@ -6,14 +6,15 @@
 > synchronized.
 
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
-[Proposed C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
-projection/negotiation/temporal contracts are ready for technical re-review before runtime changes. New isolated branch is based on accepted3bc356f;
+[Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
+projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;
 current mainca122ab is already included. C4 fast/full green and coordinator acceptance remain
 historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged.
 
 - [x] Read current task, independent second-provider review/probes and existing contracts.
 - [x] Draft examples, protocol ownership, limits, safe errors, timestamps, resume and quality choices.
-- [ ] Coordinator C5 technical review, then bounded implementation/compatibility/measurement proof.
+- [x] C5 technical re-review approved467a9ed (872db889) before runtime changes.
+- [ ] Bounded C5 implementation/compatibility/final measurement proof in progress; no C5 acceptance.
 - [ ] Source-final generation/local gates and fresh exact-head fast/full; later connected acceptance separate.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under

@@ -49,29 +49,34 @@ it('fresh SDK pack installs, exposes opt-in contracts, and runs the public fixtu
   }
   const source = `
 import {createFixtureDataProvider} from './community-connector-fixture.js';
-import {dailyRequest,page,barCapability} from './community-connector-facts.js';
-import {defineDataProvider,type PriceBarRecord,type DataProvider} from '@insiderfinance/totalfinance/core/data';
+import {defineDataProvider,createDataView,type DataProviderSource,type DataQuery,type DataPageOptions,type SourcePriceBarsPage,type PriceBarRecord,type DataProvider,type DataViewFor} from '@insiderfinance/totalfinance/core/data';
 import {validateDataProvider} from '@insiderfinance/totalfinance/core/data-conformance';
 import {QuantError} from '@insiderfinance/totalfinance/core';
-import { data, technicalAnalysis } from '@insiderfinance/totalfinance';
-import { canonicalJsonOf } from '@insiderfinance/totalfinance/core/artifacts';
-import { bar } from './community-connector-facts.js';
-const provider:DataProvider=createFixtureDataProvider({id:'fixture',version:'0.0.0',capabilities:[barCapability],entries:[{request:dailyRequest,page:page()}]});
-await validateDataProvider({provider,probes:[{name:'installed fixture',kind:'pages',request:dailyRequest,expectedPages:[page()]}],maxPages:1,maxRecords:2,timeoutMs:1000});
-const result=await provider.query(dailyRequest);const rows:readonly PriceBarRecord[]=result.page.data;
-if(rows.length!==0||result.page.metadata.executionEligibility!=='research-only')throw new Error('unexpected fixture facts');
-try{defineDataProvider(null as never);throw new Error('missing refusal');}catch(error){if(!(error instanceof QuantError))throw error;}
-const first={...page(),data:[bar('2026-10-26',100),bar('2026-10-27',101)],nextCursor:'fixture-next'};
-const last={...page(),data:[bar('2026-10-28',102)]};
-first.data[0]!.bar.volume=1;first.data[1]!.bar.volume=2;last.data[0]!.bar.volume=3;
-const interchangeable=createFixtureDataProvider({id:'fixture',version:'0.0.0',capabilities:[{...barCapability,maxPageSize:2}],entries:[{request:dailyRequest,page:first},{request:{kind:'price-bars',symbol:'TEST',cursor:'fixture-next',limit:2},page:last}]});
-const connected=data.connect(interchangeable);
-const prices=await connected.priceBars({symbol:'TEST',interval:'1d',from:'2026-10-26',to:'2026-10-28'});
-if(technicalAnalysis.sma(prices.closePrices,{period:2}).at(-1)!==101.5)throw Error('C3 fixture SMA');
-if(canonicalJsonOf(prices.window.pages)!==canonicalJsonOf([first,last]))throw Error('C3 source facts lost');
-if(canonicalJsonOf(technicalAnalysis.sma.explain(prices.closePrices,{period:2}))!==canonicalJsonOf(technicalAnalysis.sma.explain([100,101,102],{period:2})))throw Error('C3 explain parity');
-const literalBars=[{open:100,high:102,low:99,close:100,volume:1},{open:100,high:102,low:99,close:101,volume:2},{open:100,high:102,low:99,close:102,volume:3}];
-if(canonicalJsonOf(technicalAnalysis.vwap(prices.ohlcvBars))!==canonicalJsonOf(technicalAnalysis.vwap(literalBars)))throw Error('C3 VWAP parity');
+import { data, technicalAnalysis,backtest } from '@insiderfinance/totalfinance';
+const query={kind:'price-bars' as const,symbol:'TEST',interval:'1d' as const,from:'2026-10-26',to:'2026-10-28'};
+// Natural one-capability author, no conditional return assertion or generic envelope duplication.
+function author():DataProviderSource{return {protocol:'totalfinance-data-source',contractVersion:2,id:'independent',version:'1',
+ async capabilities(){return [{kind:'price-bars',intervals:['1d','1s'],maxPageSize:10000,consistency:['best-effort'],pointInTime:false,access:'unknown'}]},
+ async query(q:DataQuery,p:DataPageOptions):Promise<SourcePriceBarsPage>{
+  if(q.kind!=='price-bars')throw Error('unsupported synthetic source');
+  return {data:[{bar:{timestampMs:1792972800000,open:100,high:102,low:99,close:101,volume:1,adjusted:true,vwap:0},sessionDate:'2026-10-26'}],nextCursor:null,facts:{dataset:{id:'literal-bars',version:'1'},receivedTimestampMs:1793203200000,adjustment:'split',consistency:'best-effort',timestampConvention:'session-label-midnight-utc'}};
+ }}};
+const source=author(),provider:DataProvider=defineDataProvider(source);
+const result=await provider.query(query,{limit:2});const rows:readonly PriceBarRecord[]=result.page.data;const values:readonly number[]=result.closePrices;
+if(values[0]!==101||rows.length!==1||result.page.metadata.executionEligibility!=='research-only')throw Error('unexpected source facts');
+const expectedRecords=[{bar:{symbol:'TEST',timestampMs:1792972800000,open:100,high:102,low:99,close:101,volume:1,adjusted:true,vwap:0},sessionDate:'2026-10-26',timestampConvention:'session-label-midnight-utc' as const,times:{observedTimestampMs:null,availableTimestampMs:null,sourceStoredTimestampMs:null},source:null,provisional:null,revision:null,diagnostics:{warnings:[]}}];
+await validateDataProvider({provider,probes:[{name:'literal independently authored rows',kind:'records',request:query,pageSize:2,expectedRecords,expectedFacts:[{datasetId:'literal-bars',datasetVersion:'1',adjustment:'split',consistency:'best-effort'}]}],maxPages:2,maxRecords:3,timeoutMs:1000});
+const prices=await data.connect(source).priceBars({symbol:'TEST',interval:'1d',from:query.from,to:query.to});
+const mutableOwnership=[...prices.bars];const engineInput:Parameters<typeof backtest.vectorized>[0]={data:mutableOwnership,signal:[true],initialCapital:1000};void engineInput;
+technicalAnalysis.resample(prices.bars,86400000,{includePartial:true});
+if(data.createPriceBarsWindowView(JSON.parse(JSON.stringify(prices.window))).closePrices[0]!==101)throw Error('restore');
+if(createDataView(JSON.parse(JSON.stringify(result.page))).kind!=='price-bars')throw Error('page restore');
+const restored=createDataView(result.page);if(restored.kind==='price-bars')technicalAnalysis.sma(restored.closePrices,{period:1});
+// Public fixture/source binding is interchangeable without returning consumer views from authors.
+const syntheticPage=await source.query(query,{limit:2,cursor:null,pins:null});
+const fixture=createFixtureDataProvider({id:'independent',version:'1',capabilities:await source.capabilities(),entries:[{query,cursor:null,page:syntheticPage}]});
+if((await data.connect(fixture).priceBars({symbol:'TEST',interval:'1d',from:query.from,to:query.to})).closePrices[0]!==101)throw Error('fixture');
+try{defineDataProvider(null as never);throw Error('missing refusal')}catch(error){if(!(error instanceof QuantError))throw error}
 console.log('INSTALLED_COMMUNITY_CONTRACT_OK');
 `;
   writeFileSync(join(work, 'consumer.mts'), source);
@@ -80,9 +85,9 @@ console.log('INSTALLED_COMMUNITY_CONTRACT_OK');
     transformSync(source, { loader: 'ts', format: 'esm', target: 'es2022' }).code,
   );
   expect(run(process.execPath, ['consumer.mjs'])).toContain('INSTALLED_COMMUNITY_CONTRACT_OK');
-  const misuse = `import type {PriceBarsRequest,DataProvider} from '@insiderfinance/totalfinance/core/data';
+  const misuse = `import type {PriceBarsQuery,DataProvider} from '@insiderfinance/totalfinance/core/data';
 // @ts-expect-error explicit interval/from/to/limit are required
-const missing:PriceBarsRequest={kind:'price-bars',symbol:'TEST'};
+const missing:PriceBarsQuery={kind:'price-bars',symbol:'TEST'};
 declare const provider:DataProvider;
 // @ts-expect-error unknown kind is not a public account-read capability
 provider.query({kind:'account-read',symbol:'TEST',limit:2});

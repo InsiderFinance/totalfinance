@@ -1,6 +1,13 @@
+import {
+  defineFixtureProvider,
+  queryFixture,
+  fixtureSource,
+  expectedPage,
+  fixtureEntries,
+  type CanonicalFixtureSource,
+} from './data-fixture-migration.js';
 import { describe, it, expect, vi } from 'vitest';
 import {
-  defineDataProvider,
   DATA_CONTRACT_VERSION,
   type DataProviderSource,
   type DataPage,
@@ -18,7 +25,7 @@ import {
 } from '../../../docs/examples/community-connector-facts.js';
 function raw(
   value: DataPage<PriceBarRecord> | DataPage<OptionChainResearchRecord> = page(),
-): DataProviderSource {
+): CanonicalFixtureSource {
   return {
     id: 'fixture',
     version: '0.0.0',
@@ -43,11 +50,11 @@ describe('community data contract', () => {
     const source = raw(value);
     vi.spyOn(source, 'query');
     vi.spyOn(source, 'capabilities');
-    const provider = defineDataProvider(source);
-    expect(DATA_CONTRACT_VERSION).toBe(1);
+    const provider = defineFixtureProvider(source);
+    expect(DATA_CONTRACT_VERSION).toBe(2);
     expect(source.query).not.toHaveBeenCalled();
     expect(source.capabilities).not.toHaveBeenCalled();
-    const result = await provider.query(dailyRequest);
+    const result = await queryFixture(provider, dailyRequest);
     expect(result.page.data[0]?.bar.volume).toBe(0);
     expect(result.page.metadata.times.observedTimestampMs).toBeNull();
     expect(Object.isFrozen(result.page.data[0]?.bar)).toBe(true);
@@ -56,7 +63,7 @@ describe('community data contract', () => {
     expect(Object.isFrozen(await provider.capabilities())).toBe(true);
   });
   it.each([undefined, null, [], {}, 42])('first touch is typed for %j', (input) => {
-    expect(() => defineDataProvider(input as never)).toThrow(QuantError);
+    expect(() => defineFixtureProvider(input as never)).toThrow(QuantError);
   });
   it.each([
     {},
@@ -67,15 +74,18 @@ describe('community data contract', () => {
     { ...dailyRequest, cursor: 'next' },
     { ...dailyRequest, interval: '1m', from: '2026-10-26T12:00:00', to: '2026-10-26T13:00:00' },
   ])('rejects malformed direct request %j', async (input) => {
-    await expect(defineDataProvider(raw()).query(input as never)).rejects.toBeInstanceOf(
+    await expect(queryFixture(defineFixtureProvider(raw()), input as never)).rejects.toBeInstanceOf(
       QuantError,
     );
   });
   it('refuses unsupported kinds and versions', async () => {
     await expect(
-      defineDataProvider(raw()).query({ ...dailyRequest, kind: 'account-read' } as never),
+      queryFixture(defineFixtureProvider(raw()), {
+        ...dailyRequest,
+        kind: 'account-read',
+      } as never),
     ).rejects.toMatchObject({ code: ErrorCode.DataUnsupportedCapability });
-    expect(() => defineDataProvider({ ...raw(), contractVersion: 2 } as never)).toThrow(
+    expect(() => defineFixtureProvider({ ...raw(), contractVersion: 2 } as never)).toThrow(
       expect.objectContaining({ code: ErrorCode.DataContractVersionUnsupported }),
     );
   });
@@ -111,7 +121,9 @@ describe('community data contract', () => {
   ])('refuses a malformed provider page', async (mutate) => {
     const value = page();
     mutate(value);
-    await expect(defineDataProvider(raw(value)).query(dailyRequest)).rejects.toMatchObject({
+    await expect(
+      queryFixture(defineFixtureProvider(raw(value)), dailyRequest),
+    ).rejects.toMatchObject({
       code: ErrorCode.DataInvalidResponse,
     });
   });
@@ -119,7 +131,7 @@ describe('community data contract', () => {
   it('retains incomplete chain research without invented terms', async () => {
     const value = page('option-chain-research');
     (value.data as unknown[]).push(chain());
-    const result = await defineDataProvider(raw(value)).query({
+    const result = await queryFixture(defineFixtureProvider(raw(value)), {
       kind: 'option-chain-research',
       symbol: 'TEST',
       snapshot: { kind: 'latest' },
@@ -128,7 +140,7 @@ describe('community data contract', () => {
     expect(result.page.data[0]?.terms.multiplier).toBeNull();
     expect(result.page.data[0]?.quote.bid).toBe(0);
     expect(result.page.data[0]?.greeks).toBeNull();
-    expect(Object.keys(result)).toEqual(['kind', 'page']);
+    expect(Object.keys(result)).toEqual(['kind', 'page', 'continuation', 'continuationStatus']);
   });
   it('protects the caller request and refuses raw-source mutation', async () => {
     const source = raw();
@@ -136,8 +148,8 @@ describe('community data contract', () => {
       (request as any).symbol = 'OTHER';
       return page() as never;
     };
-    await expect(defineDataProvider(source).query(dailyRequest)).rejects.toMatchObject({
-      code: ErrorCode.DataInvalidResponse,
+    await expect(queryFixture(defineFixtureProvider(source), dailyRequest)).rejects.toMatchObject({
+      code: ErrorCode.DataProviderFailure,
     });
     expect(dailyRequest.symbol).toBe('TEST');
   });
@@ -145,9 +157,11 @@ describe('community data contract', () => {
     const pre = new AbortController();
     const source = raw();
     vi.spyOn(source, 'query');
-    const provider = defineDataProvider(source);
+    const provider = defineFixtureProvider(source);
     pre.abort();
-    await expect(provider.query(dailyRequest, { signal: pre.signal })).rejects.toMatchObject({
+    await expect(
+      queryFixture(provider, dailyRequest, { signal: pre.signal }),
+    ).rejects.toMatchObject({
       code: ErrorCode.DataAborted,
     });
     expect(source.query).not.toHaveBeenCalled();
@@ -157,7 +171,7 @@ describe('community data contract', () => {
       return page() as never;
     };
     await expect(
-      defineDataProvider(source).query(dailyRequest, { signal: later.signal }),
+      queryFixture(defineFixtureProvider(source), dailyRequest, { signal: later.signal }),
     ).rejects.toMatchObject({ code: ErrorCode.DataAborted });
   });
   it('migrates public fixture query/discovery and narrower capability bounds', async () => {
@@ -165,38 +179,38 @@ describe('community data contract', () => {
       id: 'fixture',
       version: '0.0.0',
       capabilities: [{ ...barCapability, intervals: ['1d'], maxPageSize: 2 }],
-      entries: [{ request: dailyRequest, page: page() }],
+      entries: fixtureEntries([{ request: dailyRequest, page: page() }]),
     });
-    expect((await provider.query(dailyRequest)).page.data).toEqual([]);
+    expect((await queryFixture(provider, dailyRequest)).page.data).toEqual([]);
     await expect(
-      provider.query({
+      queryFixture(provider, {
         ...dailyRequest,
         interval: '1m',
         from: '2026-10-26T00:00:00Z',
         to: '2026-10-26T01:00:00Z',
       }),
     ).rejects.toMatchObject({ code: ErrorCode.DataUnsupportedCapability });
-    await expect(provider.query({ ...dailyRequest, limit: 3 })).rejects.toMatchObject({
-      code: ErrorCode.InputOutOfRange,
+    await expect(queryFixture(provider, { ...dailyRequest, limit: 3 })).rejects.toMatchObject({
+      code: ErrorCode.DataInvalidRequest,
     });
   });
   it('teaches removed envelopes and invalid optional controls without aliases', async () => {
-    expect(() => defineDataProvider({ provider: raw() } as never)).toThrow(QuantError);
-    const provider = defineDataProvider(raw());
-    await expect(provider.query({ request: dailyRequest } as never)).rejects.toBeInstanceOf(
+    expect(() => defineFixtureProvider({ provider: raw() } as never)).toThrow(QuantError);
+    const provider = defineFixtureProvider(raw());
+    await expect(queryFixture(provider, { request: dailyRequest } as never)).rejects.toBeInstanceOf(
       QuantError,
     );
     for (const options of [null, 42, [], { singal: true }, { signal: null }]) {
-      await expect(provider.query(dailyRequest, options as never)).rejects.toBeInstanceOf(
+      await expect(queryFixture(provider, dailyRequest, options as never)).rejects.toBeInstanceOf(
         QuantError,
       );
       await expect(provider.capabilities(options as never)).rejects.toBeInstanceOf(QuantError);
     }
-    await expect(provider.capabilities(undefined)).resolves.toMatchObject({ contractVersion: 1 });
+    await expect(provider.capabilities(undefined)).resolves.toMatchObject({ contractVersion: 2 });
   });
 });
 it('allows raw source-owned structural state without changing consumed fields', () => {
   const source = { ...raw(), vendorState: { connection: 'synthetic' } };
-  expect(defineDataProvider(source).id).toBe('fixture');
-  expect(() => defineDataProvider({ ...source, id: 42 } as never)).toThrow(QuantError);
+  expect(defineFixtureProvider(source).id).toBe('fixture');
+  expect(() => defineFixtureProvider({ ...source, id: 42 } as never)).toThrow(QuantError);
 });

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createStarterProvider } from './dist/index.js';
 import { validateDataProvider } from '@insiderfinance/totalfinance/core/data-conformance';
 import { data, technicalAnalysis } from '@insiderfinance/totalfinance';
+import { defineDataProvider } from '@insiderfinance/totalfinance/core/data';
 import { CONVENTIONS_VERSION } from '@insiderfinance/totalfinance/core';
 export const rows = [
   {
@@ -65,7 +66,13 @@ const records = [
   diagnostics: { warnings: [] },
 }));
 const header = {
-  contractVersion: 1,
+  contractVersion: 2,
+  binding: {
+    provider: { id: 'starter-synthetic', version: '1' },
+    query: { ...request, kind: 'price-bars' },
+  },
+  timestampConvention: 'session-label-midnight-utc',
+  issues: [],
   kind: 'price-bars',
   symbol: 'TEST',
   provenance: {
@@ -102,21 +109,20 @@ const header = {
     ],
   },
 };
-const cursor = Buffer.from(
-  JSON.stringify({ symbol: 'TEST', from: '2026-10-26', to: '2026-10-30', offset: 2 }),
-).toString('base64url');
+const cursor = '2';
 const expected = [
   { ...header, data: records.slice(0, 2), nextCursor: cursor },
   { ...header, data: records.slice(2), nextCursor: null },
 ];
 test('independently expected pages refute unit scaling errors', async () => {
   await validateDataProvider({
-    provider: createStarterProvider(rows, receipt),
+    provider: defineDataProvider(createStarterProvider(rows, receipt)),
     probes: [
       {
         name: 'cents mapping',
         kind: 'pages',
-        request: { ...request, kind: 'price-bars', limit: 2 },
+        request: { ...request, kind: 'price-bars' },
+        pageSize: 2,
         expectedPages: expected,
       },
     ],

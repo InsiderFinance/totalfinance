@@ -1,3 +1,4 @@
+import { equalData, pinOf, sessionInterval } from './data-protocol.js';
 import { responseIssue } from './data-response-issue.js';
 /** Sequence laws shared by bounded acquisition, stored windows and the conformance kit. */
 import type { DataPage, PriceBarRecord, OptionChainResearchRecord } from './data-types.js';
@@ -25,10 +26,16 @@ export function dataSequence() {
     basisSeen = false;
   const cursors = new Set<string>(),
     ids = new Set<string>();
+  let previousSession: string | undefined;
   let pageIndex = -1;
   return (page: DataPage<PriceBarRecord | OptionChainResearchRecord>): void => {
     pageIndex++;
     if (first) {
+      if (
+        page.contractVersion === 2 &&
+        (!equalData(page.binding, first.binding) || !equalData(pinOf(page), pinOf(first)))
+      )
+        sequenceFault('binding', 'inconsistent', undefined, pageIndex);
       for (const field of ['kind', 'symbol'] as const)
         if (page[field] !== first[field])
           sequenceFault('page.' + field, 'inconsistent', undefined, pageIndex);
@@ -48,6 +55,15 @@ export function dataSequence() {
     } else first = page;
     for (let rowIndex = 0; rowIndex < page.data.length; rowIndex++) {
       const row = page.data[rowIndex]!;
+      if (
+        page.binding?.query.kind === 'price-bars' &&
+        sessionInterval(page.binding.query.interval)
+      ) {
+        const label = (row as PriceBarRecord).sessionDate!;
+        if (previousSession !== undefined && label <= previousSession)
+          sequenceFault('data[].sessionDate', 'out_of_order', rowIndex, pageIndex);
+        previousSession = label;
+      }
       const key = rowKey(page.kind, row);
       if (previous && compareKeys(previous, key) >= 0)
         sequenceFault('data.order', 'out_of_order', rowIndex, pageIndex);

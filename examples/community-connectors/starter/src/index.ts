@@ -1,17 +1,12 @@
-import {
-  defineDataProvider,
-  type DataPage,
-  type DataRequest,
-  type PriceBarRecord,
+import type {
+  DataProviderSource,
+  DataQuery,
+  DataPageOptions,
+  SourcePriceBarsPage,
 } from '@insiderfinance/totalfinance/core/data';
-import {
-  CONVENTIONS_VERSION,
-  DataError,
-  ErrorCode,
-  UnsupportedError,
-} from '@insiderfinance/totalfinance/core';
-
-/** Deliberately different vendor schema; all prices are synthetic USD per share. */
+import { DataProviderError } from '@insiderfinance/totalfinance/core/data';
+import { ErrorCode } from '@insiderfinance/totalfinance/core';
+/** Different synthetic vendor schema. Prices are actual USD cents/share, volume actual shares. */
 export interface VendorRow {
   ticker: string;
   session: string;
@@ -21,119 +16,75 @@ export interface VendorRow {
   closeCents: number;
   shares: number | null;
 }
-
-export function createStarterProvider(rows: readonly VendorRow[], receivedTimestampMs: number) {
-  const id = 'starter-synthetic';
-  const version = '1';
-  const unknownTimes = {
-    observedTimestampMs: null,
-    availableTimestampMs: null,
-    sourceStoredTimestampMs: null,
-  };
-  return defineDataProvider({
-    id,
-    version,
-    contractVersion: 1,
+/** No network, key, financial default, return assertion or query-in-cursor envelope. */
+export function createStarterProvider(
+  rows: readonly VendorRow[],
+  receivedTimestampMs: number,
+): DataProviderSource {
+  return {
+    protocol: 'totalfinance-data-source',
+    contractVersion: 2,
+    id: 'starter-synthetic',
+    version: '1',
     async capabilities() {
-      return {
-        contractVersion: 1,
-        providerId: id,
-        providerVersion: version,
-        capabilities: [
-          {
-            kind: 'price-bars',
-            intervals: ['1d'],
-            maxPageSize: 2,
-            consistency: 'best-effort',
-            pointInTime: false,
-            access: 'granted',
-          },
-        ],
-      };
+      return [
+        {
+          kind: 'price-bars',
+          intervals: ['1d'],
+          maxPageSize: 2,
+          consistency: ['best-effort'],
+          pointInTime: false,
+          access: 'granted',
+        },
+      ];
     },
-    async query(request: DataRequest): Promise<DataPage<PriceBarRecord>> {
-      if (request.kind !== 'price-bars' || (!('cursor' in request) && request.interval !== '1d')) {
-        throw new UnsupportedError('This synthetic connector supplies daily prices only.', {
-          code: ErrorCode.DataUnsupportedCapability,
+    async query(query: DataQuery, page: DataPageOptions): Promise<SourcePriceBarsPage> {
+      if (query.kind !== 'price-bars' || query.interval !== '1d')
+        throw new DataProviderError({ code: ErrorCode.DataUnsupportedCapability });
+      if (page.limit > 2)
+        throw new DataProviderError({
+          code: ErrorCode.DataInvalidRequest,
+          guidance: { field: 'request.limit', rule: 'page_limit' },
         });
-      }
-      if (request.limit > 2)
-        throw new DataError('Page size exceeds 2.', { code: ErrorCode.DataInvalidRequest });
-      // An opaque continuation retains the original resource and date bounds.
-      const selection =
-        'cursor' in request
-          ? (JSON.parse(Buffer.from(request.cursor, 'base64url').toString('utf8')) as {
-              symbol: string;
-              from: string;
-              to: string;
-              offset: number;
-            })
-          : { symbol: request.symbol, from: request.from, to: request.to, offset: 0 };
-      if (selection.symbol !== request.symbol)
-        throw new DataError('Cursor resource changed.', { code: ErrorCode.DataInvalidCursor });
+      const offset = page.cursor === null ? 0 : Number(page.cursor);
+      if (!Number.isSafeInteger(offset) || offset < 0)
+        throw new DataProviderError({ code: ErrorCode.DataInvalidCursor });
       const matching = rows.filter(
         (row) =>
-          row.ticker === selection.symbol &&
-          row.session >= selection.from &&
-          row.session <= selection.to,
+          row.ticker === query.symbol && row.session >= query.from && row.session <= query.to,
       );
-      const selected = matching.slice(selection.offset, selection.offset + request.limit);
-      const data: PriceBarRecord[] = selected.map((row) => ({
-        bar: {
-          symbol: row.ticker,
-          timestampMs: Date.parse(`${row.session}T00:00:00Z`),
-          open: row.openCents / 100,
-          high: row.highCents / 100,
-          low: row.lowCents / 100,
-          close: row.closeCents / 100,
-          ...(row.shares === null ? {} : { volume: row.shares }),
-          adjusted: false,
-        },
-        sessionDate: row.session,
-        timestampConvention: 'session-label-midnight-utc',
-        times: unknownTimes,
-        source: 'starter-cents-json',
-        provisional: null,
-        revision: null,
-        diagnostics: { warnings: [] },
-      }));
-      const offset = selection.offset + selected.length;
-      const page: DataPage<PriceBarRecord> = {
-        contractVersion: 1,
-        kind: 'price-bars',
-        symbol: request.symbol,
-        data,
-        nextCursor:
-          offset < matching.length
-            ? Buffer.from(JSON.stringify({ ...selection, offset })).toString('base64url')
-            : null,
-        provenance: {
-          provider: id,
-          dataset: 'synthetic-daily',
-          sourceVersion: '1',
-          receivedAt: receivedTimestampMs,
-        },
-        metadata: {
-          datasetId: 'synthetic-daily',
-          datasetVersion: '1',
-          snapshotId: null,
-          sessionDate: null,
-          sourceGeneratedTimestampMs: null,
+      const selected = matching.slice(offset, offset + page.limit),
+        next = offset + selected.length;
+      return {
+        data: selected.map((row) => ({
+          bar: {
+            timestampMs: Date.parse(row.session + 'T00:00:00Z'),
+            open: row.openCents / 100,
+            high: row.highCents / 100,
+            low: row.lowCents / 100,
+            close: row.closeCents / 100,
+            ...(row.shares === null ? {} : { volume: row.shares }),
+            adjusted: false,
+          },
+          sessionDate: row.session,
+          source: 'starter-cents-json',
+        })),
+        nextCursor: next < matching.length ? String(next) : null,
+        facts: {
+          dataset: { id: 'synthetic-daily', version: '1' },
           receivedTimestampMs,
-          times: unknownTimes,
+          adjustment: 'unadjusted',
           consistency: 'best-effort',
+          timestampConvention: 'session-label-midnight-utc',
           freshness: { status: 'historical', configuredDelayMs: null, evaluatedTimestampMs: null },
           coverage: {
             status: 'observed-only',
             start: matching[0]?.session ?? null,
             end: matching.at(-1)?.session ?? null,
           },
-          adjustment: 'unadjusted',
           quality: { status: 'complete', issues: [] },
           access: 'granted',
-          executionEligibility: 'research-only',
         },
-        assumptions: { conventionsVersion: CONVENTIONS_VERSION },
         diagnostics: {
           warnings: [
             {
@@ -145,7 +96,6 @@ export function createStarterProvider(rows: readonly VendorRow[], receivedTimest
           ],
         },
       };
-      return page;
     },
-  });
+  };
 }

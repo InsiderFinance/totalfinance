@@ -1,11 +1,13 @@
-import { it, expect } from 'vitest';
-import type { DataRequest } from '../src/data-types.js';
 import {
-  createDataView,
-  defineDataProvider,
-  connect,
-  createPriceBarsWindowView,
-} from '../src/data.js';
+  fixtureProbe,
+  defineFixtureProvider,
+  queryFixture,
+  fixtureSource,
+  fixtureSourceOf,
+} from './data-fixture-migration.js';
+import { it, expect } from 'vitest';
+import type { DataRequest } from '../src/data-legacy-types.js';
+import { createDataView, connect, createPriceBarsWindowView } from '../src/data.js';
 import {
   bar,
   chain,
@@ -14,7 +16,7 @@ import {
   dailyRequest,
 } from '../../../docs/examples/community-connector-facts.js';
 function provider(value: any) {
-  return defineDataProvider({
+  return defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -41,11 +43,11 @@ for (const basis of ['unadjusted', 'split', 'split-and-dividend'] as const) {
     expect(() => createDataView(raw)).toThrowError(
       expect.objectContaining({ code: 'data.invalid_response' }),
     );
-    await expect(provider(raw).query(dailyRequest)).rejects.toMatchObject({
+    await expect(queryFixture(provider(raw), dailyRequest)).rejects.toMatchObject({
       code: 'data.invalid_response',
     });
     await expect(
-      connect(provider(raw)).priceBars({
+      connect(fixtureSourceOf(provider(raw))).priceBars({
         symbol: 'TEST',
         interval: '1d',
         from: dailyRequest.from,
@@ -71,7 +73,8 @@ for (const basis of ['unknown', 'unadjusted', 'split', 'split-and-dividend'] as 
   }
 it('distinguishes scanner-first NaN and undefined metadata safely', async () => {
   await expect(
-    provider({ ...page(), data: [{ ...bar(), bar: { ...bar().bar, close: NaN } }] }).query(
+    queryFixture(
+      provider({ ...page(), data: [{ ...bar(), bar: { ...bar().bar, close: NaN } }] }),
       dailyRequest,
     ),
   ).rejects.toMatchObject({
@@ -79,7 +82,8 @@ it('distinguishes scanner-first NaN and undefined metadata safely', async () => 
     context: { path: 'data[].bar.close', reason: 'not_finite', rowIndex: 0 },
   });
   await expect(
-    provider({ ...page(), metadata: { ...page().metadata, datasetId: undefined } }).query(
+    queryFixture(
+      provider({ ...page(), metadata: { ...page().metadata, datasetId: undefined } }),
       dailyRequest,
     ),
   ).rejects.toMatchObject({
@@ -129,7 +133,7 @@ it('same-term contracts work across pages; duplicates and tie reversal do not', 
   const duplicate = dataSequence();
   duplicate(first);
   expect(() => duplicate({ ...last, data: [a] })).toThrow();
-  const source = defineDataProvider({
+  const source = defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -151,7 +155,7 @@ it('same-term contracts work across pages; duplicates and tie reversal do not', 
     maxRecords: 2,
     timeoutMs: 1000,
     probes: [
-      {
+      fixtureProbe({
         name: 'real IDs',
         kind: 'pages',
         request: {
@@ -161,7 +165,7 @@ it('same-term contracts work across pages; duplicates and tie reversal do not', 
           limit: 1,
         },
         expectedPages: [first, last],
-      },
+      }),
     ],
   });
 });
@@ -172,7 +176,7 @@ it('all restoration paths refuse contradictory later rows with safe indices', as
     data: [{ ...bar(), bar: { ...bar().bar, adjusted: false } }],
   };
   const { limit: _limit, kind: _kind, ...req } = dailyRequest;
-  const prices = await connect(provider(good)).priceBars(req);
+  const prices = await connect(fixtureSourceOf(provider(good))).priceBars(req);
   const saved = JSON.parse(JSON.stringify(prices.window));
   saved.pages[0].data[0].bar.adjusted = true;
   expect(() => createPriceBarsWindowView(saved)).toThrowError(
@@ -203,7 +207,12 @@ it('kit retains the actual SDK validation detail and rejects expected invalid pa
       maxRecords: 2,
       timeoutMs: 1000,
       probes: [
-        { name: 'mapping', kind: 'pages', request: dailyRequest, expectedPages: [expected] },
+        fixtureProbe({
+          name: 'mapping',
+          kind: 'pages',
+          request: dailyRequest,
+          expectedPages: [expected],
+        }),
       ],
     }),
   ).rejects.toMatchObject({
@@ -242,7 +251,7 @@ it('unknown scanner paths, accessors and forged provider context never become sc
   };
   expect(() => createDataView(bad)).toThrow();
   expect(reads).toBe(0);
-  const p = defineDataProvider({
+  const p = defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -257,10 +266,10 @@ it('unknown scanner paths, accessors and forged provider context never become sc
     },
   });
   try {
-    await p.query(dailyRequest);
+    await queryFixture(p, dailyRequest);
     throw Error('accepted');
   } catch (e: any) {
-    expect(e.code).toBe('input.wrong_type');
+    expect(e.code).toBe('data.provider_failure');
     expect(JSON.stringify(e)).not.toMatch(/secret|URL|validationCode/);
   }
 });
@@ -275,7 +284,7 @@ it('negative Greeks and general underlying prices retain their existing meaning'
 
 it('raw union typing still rejects a response of the wrong request kind', async () => {
   const p = provider({ ...page('option-chain-research'), data: [chain()] });
-  await expect(p.query(dailyRequest)).rejects.toMatchObject({
+  await expect(queryFixture(p, dailyRequest)).rejects.toMatchObject({
     code: 'data.invalid_response',
     context: { phase: 'page' },
   });
@@ -315,7 +324,7 @@ it('kit reports the actual failed page index', async () => {
       ...page(),
       data: [{ ...bar('2026-10-28'), bar: { ...bar('2026-10-28').bar, close: NaN } }],
     };
-  const p = defineDataProvider({
+  const p = defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -338,12 +347,12 @@ it('kit reports the actual failed page index', async () => {
       maxRecords: 2,
       timeoutMs: 1000,
       probes: [
-        {
+        fixtureProbe({
           name: 'later page',
           kind: 'pages',
           request: { ...dailyRequest, limit: 1 },
           expectedPages: [first, { ...page(), data: [bar('2026-10-28')] }],
-        },
+        }),
       ],
     }),
   ).rejects.toMatchObject({
@@ -380,7 +389,7 @@ for (const explicit of [false, true])
       );
     });
 it('capability range failure identifies capabilities door and phase', async () => {
-  const p = defineDataProvider({
+  const p = defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -416,9 +425,12 @@ it('invalid expected pages are caller input errors with zero provider calls', as
       calls++;
       return base.capabilities();
     },
-    query: async <R extends DataRequest>(r: R) => {
+    query: async <R extends import('../src/data-types.js').DataQuery>(
+      r: R,
+      o: import('../src/data-types.js').DataQueryOptions,
+    ) => {
       calls++;
-      return base.query(r);
+      return base.query(r, o);
     },
   };
   await expect(
@@ -428,12 +440,12 @@ it('invalid expected pages are caller input errors with zero provider calls', as
       maxRecords: 2,
       timeoutMs: 1000,
       probes: [
-        {
+        fixtureProbe({
           name: 'bad expectation',
           kind: 'pages',
           request: dailyRequest,
           expectedPages: [{ ...page(), data: [{ ...bar(), bar: { ...bar().bar, close: NaN } }] }],
-        },
+        }),
       ],
     }),
   ).rejects.toMatchObject({
@@ -496,7 +508,7 @@ it('scanner uses the schema of its actual phase, not lookalike aliases', async (
       }),
     );
   }
-  const p = defineDataProvider({
+  const p = defineFixtureProvider({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -535,7 +547,7 @@ for (const path of ['metadata', 'metadata.times', 'data[].bar'])
     );
   });
 it('missing request object retains its original input type boundary', async () => {
-  await expect(provider(page()).query(undefined as any)).rejects.toMatchObject({
+  await expect(queryFixture(provider(page()), undefined as any)).rejects.toMatchObject({
     name: 'InputError',
     code: 'input.wrong_type',
   });

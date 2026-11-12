@@ -26,7 +26,7 @@ import type {
   DataProvider,
   PriceBarRecord,
   OptionChainResearchRecord,
-} from './data-types.js';
+} from './data-legacy-types.js';
 
 type RecordValue = Record<string, unknown>;
 const FUNCTION = 'defineDataProvider';
@@ -92,7 +92,7 @@ export function calendarDate(value: unknown, path: string): number {
 function nullableDate(value: unknown, path: string): void {
   if (value !== null) calendarDate(value, path);
 }
-function zonedInstant(value: unknown, path: string): number {
+export function zonedInstant(value: unknown, path: string): number {
   textField(value, path, 64);
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/.test(value))
     fail(path);
@@ -289,7 +289,7 @@ function diagnostics(value: unknown, path: string): void {
     if (warning['context'] !== undefined) object(warning['context'], 'warning.context');
   }
 }
-function barData(value: unknown, symbol: string): void {
+export function barData(value: unknown, symbol: string, modern = false): void {
   const r = object(value, 'row');
   const b = object(r['bar'], 'row.bar');
   if (b['symbol'] !== symbol) fail('row.bar.symbol');
@@ -299,15 +299,17 @@ function barData(value: unknown, symbol: string): void {
     if (b[k] !== undefined) numberField(b[k], `bar.${k}`, k === 'volume' ? 0 : -Infinity);
   if (b['adjusted'] !== undefined) enumField(b['adjusted'], 'bar.adjusted', [true, false]);
   if (
-    (b['low'] as number) > Math.min(b['open'] as number, b['close'] as number) ||
-    (b['high'] as number) < Math.max(b['open'] as number, b['close'] as number) ||
-    (b['low'] as number) > (b['high'] as number)
+    !modern &&
+    ((b['low'] as number) > Math.min(b['open'] as number, b['close'] as number) ||
+      (b['high'] as number) < Math.max(b['open'] as number, b['close'] as number) ||
+      (b['low'] as number) > (b['high'] as number))
   )
     fail('bar.OHLC');
   nullableDate(r['sessionDate'], 'row.sessionDate');
   enumField(r['timestampConvention'], 'row.timestampConvention', [
     'session-label-midnight-utc',
     'interval-start',
+    ...(modern ? ['session-start'] : []),
   ]);
   if (
     r['timestampConvention'] === 'session-label-midnight-utc' &&
@@ -321,7 +323,7 @@ function barData(value: unknown, symbol: string): void {
     numberField(r['revision'], 'row.revision', 0, Number.MAX_SAFE_INTEGER, true);
   diagnostics(r['diagnostics'], 'row.diagnostics');
 }
-function chainData(value: unknown, symbol: string): void {
+export function chainData(value: unknown, symbol: string): void {
   const r = object(value, 'row');
   textField(r['sourceContractId'], 'row.sourceContractId');
   const t = object(r['terms'], 'row.terms');
@@ -412,17 +414,19 @@ function pageDataUnchecked(
 ): asserts value is DataPage<PriceBarRecord | OptionChainResearchRecord> {
   plain(value);
   const p = object(value, 'page');
-  version(p['contractVersion']);
+  const modern = p['contractVersion'] === 2;
+  if (!modern) version(p['contractVersion']);
   enumField(p['kind'], 'page.kind', ['price-bars', 'option-chain-research']);
   textField(p['symbol'], 'page.symbol', 128);
   if (request && p['kind'] !== request.kind) fail('page.kind');
   if (request && p['symbol'] !== request.symbol) fail('page.symbol');
   const rows = array(p['data'], 'page.data');
-  if (rows.length > (request?.limit ?? 2000)) fail('page.data.length');
+  if (rows.length > (request?.limit ?? (modern ? 10000 : 2000))) fail('page.data.length');
   if (p['nextCursor'] !== null) textField(p['nextCursor'], 'page.nextCursor', 16384);
   if (
     p['nextCursor'] !== null &&
-    (!rows.length || (request && 'cursor' in request && p['nextCursor'] === request.cursor))
+    ((!modern && !rows.length) ||
+      (request && 'cursor' in request && p['nextCursor'] === request.cursor))
   )
     fail('page.nextCursor');
   try {
@@ -501,12 +505,23 @@ function pageDataUnchecked(
   }
   let previous: readonly (string | number)[] | undefined;
   const ids = new Set();
+  let basisSeen = false,
+    basis: boolean | undefined;
   for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
     const row = rows[rowIndex];
     try {
       if (p['kind'] === 'price-bars') {
-        barData(row, p['symbol'] as string);
+        barData(row, p['symbol'] as string, modern);
         const flag = (row as PriceBarRecord).bar.adjusted;
+        if (modern && basisSeen && flag !== basis)
+          responseIssue({
+            phase: 'page',
+            path: 'data[].bar.adjusted',
+            reason: 'inconsistent',
+            validationCode: RESPONSE_CODE,
+          });
+        basisSeen = true;
+        basis = flag;
         if (
           flag !== undefined &&
           m['adjustment'] !== 'unknown' &&

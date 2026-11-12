@@ -1,3 +1,4 @@
+import { providerFailure } from './data-provider-error.js';
 import { issueOf, responseIssue } from './data-response-issue.js';
 /** Provider-neutral error/cancellation boundaries; no financial or wall-clock defaults. */
 import { DataError, ErrorCode, QuantError, InputError } from './errors.js';
@@ -62,12 +63,8 @@ export async function dataCall<T>(
   } catch (error) {
     aborted(signal);
     if (issueOf(error)) throw error;
-    if (error instanceof InputError && error.code.startsWith('input.'))
-      throw new InputError('query: provider refused the supplied request.', { code: error.code });
-    if (error instanceof QuantError && error.code === ErrorCode.DataInvalidResponse)
-      invalidResponse();
-    if (error instanceof QuantError) throw error;
-    invalidResponse();
+    // Only locally marked SDK response diagnostics bypass the foreign-code boundary.
+    throw providerFailure(error);
   } finally {
     cleanup();
   }

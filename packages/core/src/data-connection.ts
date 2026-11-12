@@ -1,344 +1,532 @@
-import { scanIssue, atResponse, issueOf, responseIssue } from './data-response-issue.js';
-/** Bounded explicit research acquisition. HTTP/authentication and upstream metering belong to providers. */
-import { scanCanonicalData } from './artifacts/canonical-scan.js';
-import { canonicalJsonOf } from './canonical-json.js';
-import { deepFreeze } from './artifacts/deep-freeze.js';
-import { DataError, ErrorCode, InputError, UnsupportedError, QuantError } from './errors.js';
+/** Bounded terminal research acquisition and explicit private, consumed-work checkpoints. */
+import { issueOf, responseError } from './data-response-issue.js';
+import { ErrorCode, InputError, DataError, QuantError, UnsupportedError } from './errors.js';
+import { object, numberField, enumField, signalField, aborted, fail } from './data-validation.js';
+import {
+  sourceShape,
+  queryData,
+  bindingData,
+  freezeData,
+  equalData,
+  bounded,
+  byteSize,
+  validateV2Page,
+  checkCapability,
+  continuationOf,
+} from './data-protocol.js';
+import { defineDataProvider } from './data.js';
+import { dataSequence } from './data-sequence-validation.js';
+import { researchSelection, appendChoice } from './data-selection.js';
+import { legacyWindowView } from './data-legacy-window.js';
 import type {
+  DataProviderSource,
   ConnectedData,
-  DataProvider,
   DataConnectionOptions,
   PriceBarsWindowOptions,
   PriceBarsWindowRequest,
   PriceBarsWindowView,
   PriceBarsWindow,
-  DataRequest,
-  DataViewFor,
-  DataCallOptions,
-  PriceBarsView,
-  OhlcvInput,
-  DataPage,
+  PriceBarsCheckpoint,
+  DataQueryBinding,
   PriceBarRecord,
+  DataPage,
+  PriceBarsQuery,
+  PriceBarsPaging,
+  ResearchBarChoice,
+  DataContinuation,
 } from './data-types.js';
-import {
-  object,
-  numberField,
-  providerShape,
-  requestData,
-  capabilityData,
-  pageData,
-  copyFrozen,
-  version,
-  signalField,
-  aborted,
-} from './data-validation.js';
-import { dataCall, dataSignal, responseData } from './data-call.js';
-import { viewEnvelope, checkedView, viewSelection, invalidView } from './data-view-validation.js';
-import { dataSequence } from './data-sequence-validation.js';
-import { createDataView } from './data-view.js';
-/** Relabel only C3 teaching at its public door; codes, class, context and shared guards survive. */
-function doorError(error: unknown, door: string): never {
-  if (error instanceof QuantError)
-    error.message = door + ': ' + error.message.replace(/^[^:]*:\s*/, '');
-  throw error;
-}
-const defaults = { pageSize: 1000, maxPages: 20, maxRecords: 20000 };
-const hard = { pageSize: 2000, maxPages: 100, maxRecords: 100000 };
-function limits(
-  value: DataConnectionOptions | undefined,
-  ceilings = hard,
-  base = defaults,
-  call = false,
-) {
-  const args = object(
+const defaults = { pageSize: 1000, maxPages: 20, maxReads: 21, maxRecords: 20000 };
+const hard = { pageSize: 10000, maxPages: 100, maxReads: 101, maxRecords: 100000 };
+const keys = ['maxPages', 'maxReads', 'maxRecords'] as const;
+function controls(value: unknown, ceiling = hard, base = defaults, call = false) {
+  const o = object(
     value === undefined ? {} : value,
     'options',
-    call
-      ? ['pageSize', 'maxPages', 'maxRecords', 'signal']
-      : ['pageSize', 'maxPages', 'maxRecords'],
+    call ? ['pageSize', ...keys, 'signal'] : ['pageSize', ...keys],
   );
-  const result = { ...base };
-  for (const key of ['pageSize', 'maxPages', 'maxRecords'] as const)
-    if (args[key] !== undefined) {
-      numberField(args[key], key, 1, ceilings[key], true);
-      result[key] = args[key];
+  const values = { ...base };
+  for (const k of ['pageSize', ...keys] as const)
+    if (o[k] !== undefined) {
+      numberField(o[k], k, 1, ceiling[k], true);
+      values[k] = o[k];
     }
-  return { values: result, explicitPageSize: args['pageSize'] !== undefined };
+  if (call) signalField(o['signal']);
+  return { values, explicit: o };
 }
-function windowRequest(input: PriceBarsWindowRequest, limit: number) {
+function query(input: PriceBarsWindowRequest): PriceBarsQuery {
   object(input, 'request', ['symbol', 'interval', 'from', 'to']);
-  const query = { ...input, kind: 'price-bars' as const, limit };
-  requestData(query);
-  return copyFrozen(query);
+  const q = { ...input, kind: 'price-bars' as const };
+  queryData(q);
+  return freezeData(q);
 }
-function windowView(window: PriceBarsWindow, views: readonly PriceBarsView[]): PriceBarsWindowView {
-  let closes: readonly number[] | undefined, bars: readonly OhlcvInput[] | undefined;
-  function collect(key: 'closePrices' | 'ohlcvBars'): readonly number[] | readonly OhlcvInput[] {
-    const values: unknown[] = [];
-    for (let pageIndex = 0; pageIndex < views.length; pageIndex++) {
-      try {
-        const selected = viewSelection(views[pageIndex]!, key);
-        for (const value of selected)
-          values.push(typeof value === 'number' ? value : Object.freeze({ ...value }));
-      } catch (error) {
-        if (error instanceof QuantError && error.code === ErrorCode.InputMissingField) {
-          const rowIndex = error.context?.['index'] as number;
-          throw new InputError('ohlcvBars: actual volume is required on every selected row.', {
-            code: ErrorCode.InputMissingField,
-            context: { field: 'volume', pageIndex, rowIndex, index: values.length + rowIndex },
-          });
-        }
-        throw error;
-      }
+function budget(checkpoint: PriceBarsCheckpoint, dimension?: string): never {
+  const limit =
+    dimension ??
+    (checkpoint.progress.acceptedPages >= checkpoint.limits.maxPages
+      ? 'maxPages'
+      : checkpoint.progress.records >= checkpoint.limits.maxRecords
+        ? 'maxRecords'
+        : 'maxReads');
+  throw new DataError(
+    'priceBars: terminal paging requires an explicit increase of the host work budget.',
+    {
+      code: ErrorCode.DataWindowBudgetExceeded,
+      context: {
+        provider: checkpoint.binding.provider.id,
+        kind: 'price-bars',
+        limit,
+        retryable: false,
+        reads: checkpoint.progress.reads,
+        pageCalls: checkpoint.progress.acceptedPages,
+        records: checkpoint.progress.records,
+        ...checkpoint.limits,
+      },
+    },
+  );
+}
+
+function attach(error: unknown, checkpoint: PriceBarsCheckpoint): never {
+  if (error && typeof error === 'object')
+    Object.defineProperty(error, 'checkpoint', {
+      value: freezeData(checkpoint),
+      enumerable: false,
+    });
+  throw error;
+}
+function pagesState(
+  pages: readonly DataPage<PriceBarRecord>[],
+  binding: DataQueryBinding,
+  terminal: boolean,
+) {
+  const sequence = dataSequence();
+  let records = 0,
+    bytes = 0;
+  if (pages.length > 100) fail('pages');
+  for (let i = 0; i < pages.length; i++) {
+    const p = pages[i]!;
+    try {
+      validateV2Page(p);
+    } catch (error) {
+      const detail = issueOf(error);
+      if (detail) throw responseError({ ...detail, pageIndex: i }, 'createPriceBarsWindowView');
+      throw error;
     }
-    return Object.freeze(values) as readonly number[] | readonly OhlcvInput[];
+    if (p.kind !== 'price-bars' || !equalData(p.binding, binding)) fail('binding');
+    if ((p.nextCursor === null) !== (terminal && i === pages.length - 1)) fail('pages.nextCursor');
+    sequence(p);
+    records += p.data.length;
+    bytes += byteSize(p);
+    if (records > hard.maxRecords || bytes > 64 * 1024 * 1024)
+      fail('pages', ErrorCode.InputOutOfRange);
   }
+  return { records, bytes };
+}
+function checkpointDataUnchecked(value: unknown): PriceBarsCheckpoint {
+  bounded(value, 'checkpoint', 20_000_000);
+  const c = object(value, 'checkpoint', [
+    'version',
+    'kind',
+    'contractVersion',
+    'binding',
+    'pages',
+    'next',
+    'progress',
+    'paging',
+    'limits',
+    'bytes',
+  ]);
+  enumField(c['version'], 'checkpoint.version', [1]);
+  enumField(c['kind'], 'checkpoint.kind', ['price-bars-checkpoint']);
+  enumField(c['contractVersion'], 'checkpoint.contractVersion', [2]);
+  bindingData(c['binding']);
+  const binding = c['binding'];
+  if (binding.query.kind !== 'price-bars') fail('binding.query.kind');
+  if (!Array.isArray(c['pages'])) fail('pages');
+  const pages = c['pages'] as DataPage<PriceBarRecord>[];
+  const state = pagesState(pages, binding, false);
+  const limits = object(c['limits'], 'limits', keys);
+  for (const k of keys) numberField(limits[k], 'limits.' + k, 1, hard[k], true);
+  const progress = object(c['progress'], 'progress', [
+    'status',
+    'acceptedPages',
+    'records',
+    'reads',
+  ]);
+  enumField(progress['status'], 'progress.status', ['incomplete']);
+  numberField(progress['acceptedPages'], 'progress.acceptedPages', 0, 100, true);
+  numberField(progress['records'], 'progress.records', 0, 100000, true);
+  numberField(progress['reads'], 'progress.reads', 0, 101, true);
+  if (
+    progress['acceptedPages'] !== pages.length ||
+    progress['records'] !== state.records ||
+    progress['reads'] < (pages.length ? pages.length + 1 : 0) ||
+    progress['acceptedPages'] > (limits['maxPages'] as number) ||
+    progress['records'] > (limits['maxRecords'] as number) ||
+    progress['reads'] > (limits['maxReads'] as number)
+  )
+    fail('progress');
+  numberField(c['bytes'], 'bytes', 0, 64 * 1024 * 1024, true);
+  if (c['bytes'] !== state.bytes) fail('bytes');
+  if (!equalData(c['next'], pages.length ? continuationOf(pages[pages.length - 1]!) : null))
+    fail('next');
+  const paging = object(c['paging'], 'paging', ['requested', 'state']),
+    r = object(paging['requested'], 'paging.requested'),
+    s = object(paging['state'], 'paging.state');
+  enumField(r['mode'], 'paging.requested.mode', ['automatic', 'explicit']);
+  object(r, 'paging.requested', r['mode'] === 'automatic' ? ['mode'] : ['mode', 'size']);
+  if (r['mode'] === 'explicit') numberField(r['size'], 'paging.requested.size', 1, 10000, true);
+  enumField(s['status'], 'paging.state.status', ['unresolved', 'resolved']);
+  object(s, 'paging.state', s['status'] === 'resolved' ? ['status', 'effectiveSize'] : ['status']);
+  if (s['status'] === 'resolved') {
+    numberField(s['effectiveSize'], 'paging.state.effectiveSize', 1, 10000, true);
+    if (
+      (r['mode'] === 'explicit' && s['effectiveSize'] !== r['size']) ||
+      (r['mode'] === 'automatic' && s['effectiveSize'] > 1000)
+    )
+      fail('paging');
+    for (const p of pages) if (p.data.length > s['effectiveSize']) fail('paging');
+  } else if (pages.length) fail('paging.state');
+  return freezeData(c as unknown as PriceBarsCheckpoint);
+}
+function checkpointData(value: unknown): PriceBarsCheckpoint {
+  try {
+    return checkpointDataUnchecked(value);
+  } catch (error) {
+    const d = issueOf(error);
+    if (d)
+      throw new InputError('resumePriceBars: malformed checkpoint input.', {
+        code: d.validationCode.startsWith('input.') ? d.validationCode : ErrorCode.InputWrongShape,
+        context: { ...d, field: 'checkpoint' },
+      });
+    throw error;
+  }
+}
+/** Explicit accessor; serialized public errors never contain licensed pages or cursors. */
+export function priceBarsCheckpoint(error: unknown): PriceBarsCheckpoint | undefined {
+  if (!error || typeof error !== 'object') return undefined;
+  const d = Object.getOwnPropertyDescriptor(error, 'checkpoint');
+  if (!d) return undefined;
+  if (!('value' in d)) fail('checkpoint');
+  return checkpointData(d.value);
+}
+/** Construct a terminal view; strict selection remains lazy and all page facts survive. */
+export function makeWindowView(window: PriceBarsWindow, selection?: unknown): PriceBarsWindowView {
+  const state = researchSelection(window.pages, selection);
   return Object.freeze(
     Object.defineProperties(
       { kind: 'price-bars-window' as const, window },
       {
-        closePrices: {
-          get() {
-            return (closes ??= collect('closePrices') as readonly number[]);
-          },
-        },
-        ohlcvBars: {
-          get() {
-            return (bars ??= collect('ohlcvBars') as readonly OhlcvInput[]);
-          },
+        ...state.descriptors(),
+        resolve: {
+          value: (choice: ResearchBarChoice) =>
+            makeWindowView(window, appendChoice(window.pages, state.selection, choice)),
         },
       },
     ),
   ) as PriceBarsWindowView;
 }
-/** Bind an installed provider once. Construction performs no reads; only priceBars walks a window.
- * @example
- * const marketData = connect(provider);
- * const prices = await marketData.priceBars({symbol:'SPY',interval:'1d',from:'2026-09-01',to:'2026-10-28'});
- */
-export function connect(provider: DataProvider, options?: DataConnectionOptions): ConnectedData {
-  let host: ReturnType<typeof limits>;
-  try {
-    providerShape(provider);
-    host = limits(options);
-  } catch (error) {
-    doorError(error, 'connect');
+/** Bind only protocol2 sources. Construction performs no discovery or network work. */
+export function connect(
+  source: DataProviderSource,
+  options?: DataConnectionOptions,
+): ConnectedData {
+  sourceShape(source);
+  const host = controls(options),
+    provider = defineDataProvider(source),
+    bindingProvider = freezeData({ id: source.id, version: source.version });
+  const sourceQuery = source.query.bind(source),
+    sourceCapabilities = source.capabilities.bind(source);
+  async function walk(
+    binding: DataQueryBinding,
+    options: PriceBarsWindowOptions | undefined,
+    saved?: PriceBarsCheckpoint,
+  ): Promise<PriceBarsWindowView> {
+    let call: ReturnType<typeof controls>;
+    try {
+      call = controls(options, host.values, host.values, true);
+    } catch (error) {
+      if (saved) attach(error, saved);
+      throw error;
+    }
+    const signal = options?.signal;
+    let cp: PriceBarsCheckpoint =
+      saved ??
+      freezeData({
+        version: 1,
+        kind: 'price-bars-checkpoint',
+        contractVersion: 2,
+        binding,
+        pages: [],
+        next: null,
+        progress: { status: 'incomplete', acceptedPages: 0, records: 0, reads: 0 },
+        paging: {
+          requested:
+            call.explicit['pageSize'] !== undefined || host.explicit['pageSize'] !== undefined
+              ? { mode: 'explicit', size: call.values.pageSize }
+              : { mode: 'automatic' },
+          state: { status: 'unresolved' },
+        },
+        limits: {
+          maxPages: call.values.maxPages,
+          maxReads: call.values.maxReads,
+          maxRecords: call.values.maxRecords,
+        },
+        bytes: 0,
+      });
+    function update(changes: Partial<PriceBarsCheckpoint>) {
+      cp = freezeData({ ...cp, ...changes });
+    }
+    function room() {
+      if (
+        cp.progress.reads + 2 > cp.limits.maxReads ||
+        cp.progress.acceptedPages >= cp.limits.maxPages ||
+        cp.progress.records >= cp.limits.maxRecords
+      )
+        budget(cp);
+    }
+    // Count exactly at source method invocation, after every pre-dispatch signal check.
+    let countedReads = cp.progress.reads;
+    const metered: DataProviderSource = {
+      protocol: 'totalfinance-data-source',
+      contractVersion: 2,
+      id: bindingProvider.id,
+      version: bindingProvider.version,
+      capabilities(o) {
+        aborted(signal);
+        countedReads++;
+        return sourceCapabilities(o);
+      },
+      query(q, o) {
+        aborted(signal);
+        countedReads++;
+        return sourceQuery(q, o);
+      },
+    };
+    const bound = defineDataProvider(metered);
+    function failed(error: unknown): never {
+      update({ progress: { ...cp.progress, reads: countedReads } });
+      const detail = issueOf(error);
+      attach(
+        detail
+          ? responseError(
+              { ...detail, pageIndex: detail.pageIndex ?? cp.pages.length },
+              'priceBars',
+            )
+          : error,
+        cp,
+      );
+    }
+    function capture<T>(run: () => T): T {
+      try {
+        return run();
+      } catch (error) {
+        failed(error);
+      }
+    }
+    async function read<T>(run: () => Promise<T>): Promise<T> {
+      try {
+        return await run();
+      } catch (error) {
+        failed(error);
+      }
+    }
+    capture(() => {
+      aborted(signal);
+      if (saved) {
+        if (!equalData(binding.provider, bindingProvider)) fail('binding.provider');
+        const limits = { ...saved.limits };
+        for (const k of keys) {
+          const candidate = call.explicit[k] ?? host.explicit[k] ?? saved.limits[k];
+          numberField(candidate, k, 1, host.values[k], true);
+          if (
+            candidate <
+            saved.progress[
+              k === 'maxReads' ? 'reads' : k === 'maxPages' ? 'acceptedPages' : 'records'
+            ]
+          )
+            fail(k, ErrorCode.InputOutOfRange);
+          limits[k] = candidate;
+        }
+        const requested = cp.paging.requested;
+        if (
+          call.explicit['pageSize'] !== undefined &&
+          (requested.mode !== 'explicit' || call.explicit['pageSize'] !== requested.size)
+        )
+          fail('pageSize');
+        if (
+          (cp.paging.state.status === 'resolved' &&
+            cp.paging.state.effectiveSize > host.values.pageSize) ||
+          (requested.mode === 'explicit' && requested.size > host.values.pageSize)
+        )
+          fail('pageSize', ErrorCode.InputOutOfRange);
+        update({ limits });
+      }
+      aborted(signal);
+      room();
+    });
+    const declared = await read(() => bound.capabilities(signal ? { signal } : undefined));
+    update({ progress: { ...cp.progress, reads: countedReads } });
+    const q = binding.query as PriceBarsQuery;
+    const { cap, size } = capture(() => {
+      const cap = declared.capabilities.find(
+        (c) => c.kind === 'price-bars' && c.intervals.includes(q.interval),
+      );
+      if (!cap)
+        throw new UnsupportedError('priceBars: requested interval is not supported by provider.', {
+          code: ErrorCode.DataUnsupportedCapability,
+        });
+      checkCapability(q, cap);
+      let size: number;
+      if (cp.paging.state.status === 'resolved') size = cp.paging.state.effectiveSize;
+      else
+        size =
+          cp.paging.requested.mode === 'explicit'
+            ? cp.paging.requested.size
+            : Math.min(1000, host.values.pageSize, cap.maxPageSize);
+      numberField(
+        size,
+        'pageSize',
+        1,
+        Math.min(host.values.pageSize, cap.maxPageSize, hard.pageSize),
+        true,
+      );
+      update({ paging: { ...cp.paging, state: { status: 'resolved', effectiveSize: size } } });
+      return { cap, size };
+    });
+    const sequence = dataSequence();
+    for (const p of cp.pages) sequence(p);
+    for (;;) {
+      capture(() => {
+        aborted(signal);
+        if (
+          countedReads >= cp.limits.maxReads ||
+          cp.progress.acceptedPages >= cp.limits.maxPages ||
+          cp.progress.records >= cp.limits.maxRecords
+        )
+          budget(cp);
+      });
+      const view = await read(() =>
+        bound.query(q, {
+          limit: Math.min(size, cp.limits.maxRecords - cp.progress.records),
+          ...(cp.next ? { cursor: cp.next } : {}),
+          ...(signal ? { signal } : {}),
+        }),
+      );
+      const terminal = capture(() => {
+        aborted(signal);
+        if (!cap.consistency.includes(view.page.metadata.consistency))
+          throw new DataError('priceBars: provider consistency contradicts discovery.', {
+            code: ErrorCode.DataInvalidResponse,
+          });
+        sequence(view.page);
+        const pages = Object.freeze([...cp.pages, view.page]),
+          records = cp.progress.records + view.page.data.length,
+          bytes = cp.bytes + byteSize(view.page);
+        if (bytes > 64 * 1024 * 1024) budget(cp, 'maxBytes');
+        if (view.page.nextCursor === null) {
+          const window = freezeData({
+            version: 2 as const,
+            kind: 'price-bars-window' as const,
+            contractVersion: 2 as const,
+            binding,
+            pages,
+            pagination: {
+              status: 'terminal' as const,
+              pageSize: size,
+              pageCalls: pages.length,
+              reads: countedReads,
+              records,
+            },
+            bytes,
+          });
+          return makeWindowView(window);
+        }
+        update({
+          pages,
+          next: view.continuation,
+          progress: {
+            status: 'incomplete',
+            acceptedPages: pages.length,
+            records,
+            reads: countedReads,
+          },
+          bytes,
+        });
+        return undefined;
+      });
+      if (terminal) return terminal;
+    }
   }
 
-  const id = provider.id,
-    providerVersion = provider.version,
-    identity = { id, version: providerVersion };
-  const query = provider.query.bind(provider),
-    discovery = provider.capabilities.bind(provider);
-  async function capabilities(options?: DataCallOptions) {
-    const signal = dataSignal(options);
-    return dataCall(signal, async () => {
-      const result = await discovery(signal ? { signal } : undefined);
+  return Object.freeze({
+    ...provider,
+    async priceBars(input: PriceBarsWindowRequest, o?: PriceBarsWindowOptions) {
+      let q: PriceBarsQuery;
       try {
-        capabilityData(result, identity);
-        return copyFrozen(result);
+        q = query(input);
+        controls(o, host.values, host.values, true);
       } catch (error) {
-        const detail = issueOf(error);
-        if (detail) responseIssue(detail, 'connect.capabilities');
+        if (error instanceof QuantError)
+          error.message = 'priceBars: ' + error.message.replace(/^[^:]*:\s*/, '');
         throw error;
       }
-    });
-  }
-  async function one<R extends DataRequest>(
-    input: R,
-    options?: DataCallOptions,
-  ): Promise<DataViewFor<R>> {
-    const signal = dataSignal(options);
-    requestData(input);
-    const request = copyFrozen(input);
-    return dataCall(signal, async () => {
-      const result = await query(request, signal ? { signal } : undefined);
-      return responseData(() => {
-        viewEnvelope(result, request, identity);
-        return checkedView(result) as DataViewFor<R>;
-      }, id);
-    });
-  }
-  return Object.freeze({
-    id,
-    version: providerVersion,
-    contractVersion: 1 as const,
-    capabilities,
-    query: one,
-    async priceBars(
-      input: PriceBarsWindowRequest,
-      options?: PriceBarsWindowOptions,
-    ): Promise<PriceBarsWindowView> {
-      let call: ReturnType<typeof limits>;
-      let original: ReturnType<typeof windowRequest>;
-      const signal = options?.signal;
-      try {
-        call = limits(options, host.values, host.values, true);
-        signalField(signal);
-        original = windowRequest(input, call.values.pageSize);
-      } catch (error) {
-        doorError(error, 'priceBars');
-      }
-      aborted(signal);
-      const declared = await capabilities(signal ? { signal } : undefined);
-      const capability = declared.capabilities.find(
-        (c) => c.kind === 'price-bars' && c.intervals.includes(original.interval),
-      );
-      if (!capability)
-        throw new UnsupportedError(
-          'priceBars: requested interval is not supported by this provider.',
-          { code: ErrorCode.DataUnsupportedCapability, context: { provider: id } },
-        );
-      if (capability.access === 'denied')
-        throw new DataError('priceBars: provider entitlement is required.', {
-          code: ErrorCode.DataEntitlementRequired,
-          context: { provider: id },
-        });
-      const pageSize =
-        host.explicitPageSize || call.explicitPageSize
-          ? call.values.pageSize
-          : Math.min(call.values.pageSize, capability.maxPageSize);
-      try {
-        numberField(pageSize, 'pageSize', 1, capability.maxPageSize, true);
-      } catch (error) {
-        doorError(error, 'priceBars');
-      }
-      const pages: DataPage<PriceBarRecord>[] = [],
-        views: PriceBarsView[] = [];
-      const sequence = dataSequence();
-      let records = 0,
-        cursor: string | null = null;
-      do {
-        aborted(signal);
-        const limit =
-          pages.length >= call.values.maxPages
-            ? 'maxPages'
-            : records >= call.values.maxRecords
-              ? 'maxRecords'
-              : null;
-        if (limit)
-          throw new DataError(
-            'priceBars: terminal pagination exceeds the configured work budget; use explicit one-page query for manual control.',
-            {
-              code: ErrorCode.DataWindowBudgetExceeded,
-              context: {
-                provider: id,
-                kind: 'price-bars',
-                limit,
-                pageCalls: pages.length,
-                records,
-                maxPages: call.values.maxPages,
-                maxRecords: call.values.maxRecords,
-                retryable: false,
-              },
-            },
-          );
-        const count = Math.min(pageSize, call.values.maxRecords - records);
-        const request = pages.length
-          ? {
-              kind: 'price-bars' as const,
-              symbol: original.symbol,
-              cursor: cursor!,
-              limit: count,
-            }
-          : { ...original, limit: count };
-        let view: PriceBarsView;
-        try {
-          view = (await one(request, signal ? { signal } : undefined)) as PriceBarsView;
-        } catch (error) {
-          atResponse(error, { pageIndex: pages.length }, 'priceBars');
-        }
-        responseData(() => {
-          pageData(view.page, { ...original, limit: count }, identity);
-          if (view.page.metadata.consistency !== capability.consistency) invalidView();
-          sequence(view.page);
-        }, id);
-        pages.push(view.page);
-        views.push(view);
-        records += view.page.data.length;
-        cursor = view.page.nextCursor;
-      } while (cursor !== null);
-      aborted(signal);
-      const request: PriceBarsWindowRequest = Object.freeze({
-        symbol: original.symbol,
-        interval: original.interval,
-        from: original.from,
-        to: original.to,
-      });
-      const window: PriceBarsWindow = Object.freeze({
-        version: 1,
-        kind: 'price-bars-window',
-        request,
-        pages: Object.freeze(pages),
-        pagination: Object.freeze({
-          status: 'terminal',
-          pageSize,
-          pageCalls: pages.length,
-          records,
-        }),
-      });
-      return windowView(window, views);
+
+      return walk(freezeData({ provider: bindingProvider, query: q }), o);
+    },
+    async resumePriceBars(input: unknown, o?: PriceBarsWindowOptions) {
+      const c = checkpointData(input);
+      return walk(c.binding, o, c);
     },
   });
 }
-/** Restore retained research pages, never fetch or synthesize aggregate source metadata.
- * @example
- * const prices = createPriceBarsWindowView(JSON.parse(savedWindowJson));
- */
-export function createPriceBarsWindowView(input: unknown): PriceBarsWindowView {
-  try {
-    return responseData(() => {
-      // A window contains up to100 individually bounded pages plus its header. The per-page
-      // 2M scan remains enforced by pageData/createDataView below; do not apply it to their sum.
-      try {
-        scanCanonicalData(input, {
-          functionName: 'createPriceBarsWindowView',
-          label: 'window',
-          requireFiniteNumbers: true,
-          maximumWorkUnits: 2_000_000 * 101,
-        });
-      } catch (error) {
-        scanIssue(error, input);
-      }
-      const args = object(input, 'window', ['version', 'kind', 'request', 'pages', 'pagination']);
-      version(args['version']);
-      if (args['kind'] !== 'price-bars-window') invalidView();
-      const pagination = object(args['pagination'], 'pagination', [
-        'status',
-        'pageSize',
-        'pageCalls',
-        'records',
-      ]);
-      if (pagination['status'] !== 'terminal') invalidView();
-      numberField(pagination['pageSize'], 'pageSize', 1, 2000, true);
-      numberField(pagination['pageCalls'], 'pageCalls', 1, 100, true);
-      numberField(pagination['records'], 'records', 0, 100000, true);
-      const original = windowRequest(
-        args['request'] as PriceBarsWindowRequest,
-        pagination['pageSize'],
-      );
-      if (!Array.isArray(args['pages']) || args['pages'].length !== pagination['pageCalls'])
-        invalidView();
-      const views: PriceBarsView[] = [],
-        sequence = dataSequence();
-      let records = 0;
-      for (let i = 0; i < args['pages'].length; i++) {
-        const p = args['pages'][i];
-        try {
-          pageData(p, original);
-        } catch (error) {
-          atResponse(error, { pageIndex: i }, 'createPriceBarsWindowView');
-        }
-        if ((p.nextCursor === null) !== (i === args['pages'].length - 1)) invalidView();
-        sequence(p);
-        records += p.data.length;
-        views.push(createDataView(p) as PriceBarsView);
-      }
-      if (records !== pagination['records']) invalidView();
-      const window = deepFreeze(JSON.parse(canonicalJsonOf(input)) as PriceBarsWindow);
-      return windowView(window, views);
-    });
-  } catch (error) {
-    doorError(error, 'createPriceBarsWindowView');
-  }
+/** Restore full terminal state and explicit research choices; no source calls or clocks. */
+export function createPriceBarsWindowView(
+  input: unknown,
+  selection?: unknown,
+): PriceBarsWindowView {
+  if (
+    input &&
+    typeof input === 'object' &&
+    Object.getOwnPropertyDescriptor(input, 'version')?.value === 1
+  )
+    return legacyWindowView(input, selection);
+  bounded(input, 'window', 20_000_000);
+  const w = object(input, 'window', [
+    'version',
+    'kind',
+    'contractVersion',
+    'binding',
+    'pages',
+    'pagination',
+    'bytes',
+  ]);
+  enumField(w['version'], 'window.version', [2]);
+  enumField(w['kind'], 'window.kind', ['price-bars-window']);
+  enumField(w['contractVersion'], 'window.contractVersion', [2]);
+  bindingData(w['binding']);
+  if (w['binding'].query.kind !== 'price-bars') fail('binding.query');
+  if (!Array.isArray(w['pages']) || !w['pages'].length) fail('pages');
+  const state = pagesState(w['pages'], w['binding'], true);
+  const p = object(w['pagination'], 'pagination', [
+    'status',
+    'pageSize',
+    'pageCalls',
+    'reads',
+    'records',
+  ]);
+  enumField(p['status'], 'pagination.status', ['terminal']);
+  numberField(p['pageSize'], 'pagination.pageSize', 1, 10000, true);
+  numberField(p['pageCalls'], 'pagination.pageCalls', 1, 100, true);
+  numberField(p['reads'], 'pagination.reads', w['pages'].length + 1, 101, true);
+  numberField(p['records'], 'pagination.records', 0, 100000, true);
+  if (
+    p['pageCalls'] !== w['pages'].length ||
+    p['records'] !== state.records ||
+    w['bytes'] !== state.bytes ||
+    w['pages'].some(
+      (page: DataPage<PriceBarRecord>) => page.data.length > (p['pageSize'] as number),
+    )
+  )
+    fail('pagination');
+  return makeWindowView(freezeData(input as PriceBarsWindow), selection);
 }

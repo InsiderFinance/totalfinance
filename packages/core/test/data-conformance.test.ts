@@ -1,6 +1,15 @@
+import {
+  defineFixtureProvider,
+  queryFixture,
+  fixtureSource,
+  expectedPage,
+  rawFacts,
+} from './data-fixture-migration.js';
 import { describe, it, expect } from 'vitest';
 import { validateDataProvider, type DataPagesProbe } from '../src/data-conformance.js';
-import type { DataProvider, DataRequest, DataCapabilities } from '../src/data.js';
+import type { DataProvider, DataCapabilities } from '../src/data.js';
+import type { DataRequest } from '../src/data-legacy-types.js';
+import { defineDataProvider } from '../src/data.js';
 import { ErrorCode, DataError, QuantError } from '../src/errors.js';
 import { createFixtureDataProvider } from '../../../docs/examples/community-connector-fixture.js';
 import { copyFrozen } from '../src/data-validation.js';
@@ -23,9 +32,41 @@ function unchecked(raw: any): any {
   let closes: any, bars: any;
   return Object.freeze(
     Object.defineProperties(
-      { kind: p.kind, page: p },
+      {
+        kind: p.kind,
+        page: p,
+        continuation: p.nextCursor
+          ? {
+              version: 2,
+              binding: p.binding,
+              cursor: p.nextCursor,
+              pins: {
+                datasetId: p.metadata.datasetId,
+                datasetVersion: p.metadata.datasetVersion,
+                snapshotId: p.metadata.snapshotId,
+                sessionDate: p.metadata.sessionDate,
+                adjustment: p.metadata.adjustment,
+                consistency: p.metadata.consistency,
+                temporal: {
+                  kind: p.kind,
+                  interval: p.binding.query.interval,
+                  timestampConvention: p.timestampConvention,
+                },
+              },
+            }
+          : null,
+        continuationStatus: p.nextCursor ? 'available' : 'terminal',
+        issues: p.issues,
+        selection: {
+          version: 1,
+          decisions: [],
+          sourceRows: p.data.map((_: unknown, rowIndex: number) => ({ pageIndex: 0, rowIndex })),
+        },
+        selections: ['closePrices', 'ohlcvBars', 'bars'],
+      },
       {
         closePrices: { get: () => (closes ??= freeze(p.data.map((r: any) => r.bar.close))) },
+        bars: { get: () => freeze(p.data.map((r: any) => ({ ...r.bar }))) },
         ohlcvBars: {
           get: () =>
             (bars ??= freeze(
@@ -43,8 +84,8 @@ function unchecked(raw: any): any {
   );
 }
 function fixture() {
-  const first = page(),
-    last = page();
+  const first = expectedPage(page(), dailyRequest),
+    last = expectedPage(page(), dailyRequest);
   (first.data as unknown[]).push(bar(), bar('2026-10-27'));
   (first as any).nextCursor = 'fixture-page2';
   (last.data as unknown[]).push(bar('2026-10-28'));
@@ -54,34 +95,47 @@ function fixture() {
     cursor: 'fixture-page2',
     limit: 2,
   };
+  let block = false;
   let started!: () => void;
   const ready = new Promise<void>((r) => {
     started = r;
   });
-  const provider = createFixtureDataProvider({
+  const provider = defineDataProvider({
+    protocol: 'totalfinance-data-source',
+    contractVersion: 2,
     id: 'fixture',
     version: '0.0.0',
-    capabilities: [barCapability],
-    entries: [
-      { request: dailyRequest, page: first },
-      { request: continuation, page: last },
-    ],
-    beforeQuery: async ({ signal }) => {
-      if (signal) {
+    async capabilities() {
+      return [barCapability];
+    },
+    async query(q, o) {
+      if (o.signal && block) {
         started();
-        await new Promise<void>((resolve) =>
-          signal.addEventListener('abort', () => resolve(), { once: true }),
+        await new Promise<void>((r) =>
+          o.signal!.addEventListener('abort', () => r(), { once: true }),
         );
       }
+      if (q.symbol !== 'TEST') throw new DataError('not found', { code: ErrorCode.DataNotFound });
+      return rawFacts(o.cursor ? last : first);
     },
   });
   const probe: DataPagesProbe = {
     name: 'daily',
     kind: 'pages',
-    request: dailyRequest,
+    request: (({ limit, ...q }) => q)(dailyRequest),
+    pageSize: 2,
     expectedPages: [first, last],
   };
-  return { provider, probe, first, last, ready };
+  return {
+    provider,
+    probe,
+    first,
+    last,
+    get ready() {
+      block = true;
+      return ready;
+    },
+  };
 }
 const options = { maxPages: 4, maxRecords: 10, timeoutMs: 100 };
 describe('public data compatibility kit', () => {
@@ -95,10 +149,17 @@ describe('public data compatibility kit', () => {
         {
           name: 'missing',
           kind: 'error',
-          request: { ...dailyRequest, symbol: 'NONE' },
+          request: { ...f.probe.request, symbol: 'NONE' },
+          pageSize: 2,
           expectedCode: ErrorCode.DataNotFound,
         },
-        { name: 'abort', kind: 'abort', request: dailyRequest, waitUntilStarted: () => f.ready },
+        {
+          name: 'abort',
+          kind: 'abort',
+          request: f.probe.request,
+          pageSize: 2,
+          waitUntilStarted: () => f.ready,
+        },
       ],
     });
   });
@@ -210,7 +271,7 @@ describe('public data compatibility kit', () => {
       };
       // A NaN mutation must be visible to the kit, rather than repaired by the fixture wrapper.
       if (name.startsWith('nonfinite'))
-        provider.query = async (_request, { signal } = {}) => {
+        provider.query = async (_request, { signal }) => {
           if (signal?.aborted) throw new DataError('aborted', { code: ErrorCode.DataAborted });
           return unchecked(mutate(JSON.parse(JSON.stringify(f.first)), 0)) as never;
         };
@@ -277,7 +338,8 @@ describe('public data compatibility kit', () => {
           {
             name: 'never-started',
             kind: 'abort',
-            request: dailyRequest,
+            request: f.probe.request,
+            pageSize: 2,
             waitUntilStarted: () => new Promise(() => {}),
           },
         ],
@@ -291,7 +353,7 @@ describe('public data compatibility kit', () => {
       async query(input: any, options?: any) {
         if (options?.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
         if (options?.signal) return unchecked(structuredClone(f.first)) as never;
-        return (await f.provider.query(input, options)) as never;
+        return (await queryFixture(f.provider, input, options)) as never;
       },
     };
     await expect(
@@ -300,7 +362,13 @@ describe('public data compatibility kit', () => {
         provider,
         probes: [
           f.probe,
-          { name: 'late', kind: 'abort', request: dailyRequest, waitUntilStarted: async () => {} },
+          {
+            name: 'late',
+            kind: 'abort',
+            request: f.probe.request,
+            pageSize: 2,
+            waitUntilStarted: async () => {},
+          },
         ],
       }),
     ).rejects.toMatchObject({ code: ErrorCode.DataNonconformant });
@@ -409,16 +477,16 @@ describe('independent consumer-view compatibility mutants', () => {
         message: 'Synthetic source limitation',
         severity: 'warn',
       });
-      const base = await f.provider.query(dailyRequest);
+      const base = await queryFixture(f.provider, dailyRequest);
       const d = Object.getOwnPropertyDescriptors(base);
       mutate(d);
       const lie = Object.freeze(Object.defineProperties({}, d));
       const provider = {
         ...f.provider,
-        async query(request: DataRequest, options?: { signal?: AbortSignal }) {
+        async query(request: any, options?: any) {
           if (options?.signal?.aborted)
             throw new DataError('abort', { code: ErrorCode.DataAborted });
-          return ('cursor' in request ? await f.provider.query(request, options) : lie) as never;
+          return (options?.cursor ? await f.provider.query(request, options) : lie) as never;
         },
       };
       await expect(
@@ -432,7 +500,7 @@ describe('independent consumer-view compatibility mutants', () => {
     await expect(
       validateDataProvider({ ...options, provider: f.provider, probes: [f.probe] }),
     ).resolves.toBeUndefined();
-    const base = await f.provider.query(dailyRequest);
+    const base = await queryFixture(f.provider, dailyRequest);
     const d = Object.getOwnPropertyDescriptors(base);
     const fake = Object.freeze(
       f.first.data.map((r: any) => Object.freeze({ ...r.bar, volume: 0 })),
@@ -441,9 +509,9 @@ describe('independent consumer-view compatibility mutants', () => {
     const lie = Object.freeze(Object.defineProperties({}, d));
     const provider = {
       ...f.provider,
-      async query(request: DataRequest, opts?: { signal?: AbortSignal }) {
+      async query(request: any, opts?: any) {
         if (opts?.signal?.aborted) throw new DataError('abort', { code: ErrorCode.DataAborted });
-        return ('cursor' in request ? await f.provider.query(request, opts) : lie) as never;
+        return (opts?.cursor ? await f.provider.query(request, opts) : lie) as never;
       },
     };
     await expect(

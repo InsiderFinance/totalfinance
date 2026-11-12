@@ -1,5 +1,12 @@
+import {
+  fixtureProbe,
+  defineFixtureProvider,
+  queryFixture,
+  fixtureSource,
+  expectedPage,
+} from './data-fixture-migration.js';
 import { describe, it, expect } from 'vitest';
-import { connect, createPriceBarsWindowView, defineDataProvider } from '../src/data.js';
+import { connect, createPriceBarsWindowView } from '../src/data.js';
 import { sma } from '../../technical-analysis/src/overlap.js';
 import { vwap } from '../../technical-analysis/src/bars.js';
 import { bar, page, barCapability } from '../../../docs/examples/community-connector-facts.js';
@@ -16,7 +23,7 @@ function facts() {
 function fixture(pages = facts(), extra: Record<string, unknown> = {}) {
   const calls: any[] = [];
   let discovery = 0;
-  const provider = defineDataProvider({
+  const provider = fixtureSource({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,
@@ -35,7 +42,23 @@ function fixture(pages = facts(), extra: Record<string, unknown> = {}) {
     },
   });
   return {
-    provider: { ...provider, ...extra } as typeof provider,
+    provider: {
+      ...provider,
+      ...extra,
+      ...(extra['capabilities']
+        ? {
+            async capabilities(o: any) {
+              const x = await (extra['capabilities'] as any)(o);
+              return Array.isArray(x)
+                ? x
+                : x.capabilities.map((c: any) => ({
+                    ...c,
+                    consistency: Array.isArray(c.consistency) ? c.consistency : [c.consistency],
+                  }));
+            },
+          }
+        : {}),
+    } as typeof provider,
     calls,
     discovery: () => discovery,
   };
@@ -49,7 +72,9 @@ describe('connected research windows', () => {
     const prices = await data.priceBars(request);
     expect(prices.closePrices).toEqual([100, 101, 102]);
     expect(sma(prices.closePrices, { period: 2 }).at(-1)).toBe(101.5);
-    expect(prices.window.pages).toEqual(facts());
+    expect(prices.window.pages).toEqual(
+      facts().map((p) => expectedPage(p, { ...request, kind: 'price-bars' })),
+    );
     expect(f.calls).toEqual([
       { ...request, kind: 'price-bars', limit: 2 },
       { kind: 'price-bars', symbol: 'TEST', cursor: 'second', limit: 2 },
@@ -74,7 +99,7 @@ describe('connected research windows', () => {
     const restored = createPriceBarsWindowView(JSON.parse(JSON.stringify(prices.window)));
     expect(restored.window).toEqual(prices.window);
     expect(restored.closePrices).toEqual(prices.closePrices);
-    expect(Object.keys(prices)).toEqual(['kind', 'window']);
+    expect(Object.keys(prices)).toEqual(['kind', 'window', 'issues', 'selection', 'selections']);
   });
 });
 
@@ -85,7 +110,7 @@ function changedSelector(provider: any, key: string, get: () => unknown): any {
   return {
     ...provider,
     async query(r: any, o: any) {
-      const view = await provider.query(r, o),
+      const view = await queryFixture(provider, r, o),
         descriptors = Object.getOwnPropertyDescriptors(view);
       descriptors[key] = { get, enumerable: false, configurable: false };
       return Object.freeze(Object.defineProperties({}, descriptors));
@@ -190,7 +215,9 @@ describe('window bounds and independent response mutants', () => {
     ];
     const f = fixture(pages);
     const p = await connect(f.provider).priceBars(request);
-    expect(p.window.pages).toEqual(pages);
+    expect(p.window.pages).toEqual(
+      pages.map((p) => expectedPage(p, { ...request, kind: 'price-bars' })),
+    );
     expect(p.closePrices).toEqual([100, 102]);
     expect(p.window.pagination.status).toBe('terminal');
     expect(p.window.pages[0]!.metadata.coverage.status).toBe('unknown');
@@ -216,7 +243,7 @@ describe('window bounds and independent response mutants', () => {
     const f = fixture();
     const provider = { ...f.provider, query: async () => copyFrozen(facts()[0]) } as any;
     await expect(
-      connect(provider).query({ ...request, kind: 'price-bars', limit: 2 }),
+      queryFixture(connect(provider), { ...request, kind: 'price-bars', limit: 2 }),
     ).rejects.toMatchObject(invalid);
   });
   it('never invokes an accessor source property', async () => {
@@ -253,12 +280,7 @@ describe('metering and explicit controls', () => {
   });
   it('clamps only an omitted pageSize to declared support', async () => {
     const f = fixture([page()]);
-    const capabilities = async () => ({
-      contractVersion: 1,
-      providerId: 'fixture',
-      providerVersion: '0.0.0',
-      capabilities: [{ ...barCapability, maxPageSize: 3 }],
-    });
+    const capabilities = async () => [{ ...barCapability, maxPageSize: 3 }];
     const p = connect({ ...f.provider, capabilities } as any);
     await p.priceBars(request);
     expect(f.calls[0].limit).toBe(3);
@@ -275,6 +297,7 @@ describe('metering and explicit controls', () => {
       status: 'terminal',
       pageSize: 2,
       pageCalls: 2,
+      reads: 3,
       records: 3,
     });
     expect(f.calls[1].limit).toBe(1);
@@ -324,19 +347,14 @@ describe('metering and explicit controls', () => {
   });
   it('keeps manual query exactly one page and zero-discovery', async () => {
     const f = fixture();
-    const p = await connect(f.provider).query({ ...request, kind: 'price-bars', limit: 2 });
+    const p = await queryFixture(connect(f.provider), { ...request, kind: 'price-bars', limit: 2 });
     expect(p.page.nextCursor).toBe('second');
     expect(f.calls).toHaveLength(1);
     expect(f.discovery()).toBe(0);
   });
   it('refuses denied entitlement before acquisition', async () => {
     const f = fixture();
-    const capabilities = async () => ({
-      contractVersion: 1,
-      providerId: 'fixture',
-      providerVersion: '0.0.0',
-      capabilities: [{ ...barCapability, access: 'denied' }],
-    });
+    const capabilities = async () => [{ ...barCapability, access: 'denied' }];
     await expect(
       connect({ ...f.provider, capabilities } as any).priceBars(request),
     ).rejects.toMatchObject({ code: 'data.entitlement_required' });
@@ -344,12 +362,7 @@ describe('metering and explicit controls', () => {
   });
   it('refuses unsupported interval before acquisition', async () => {
     const f = fixture();
-    const capabilities = async () => ({
-      contractVersion: 1,
-      providerId: 'fixture',
-      providerVersion: '0.0.0',
-      capabilities: [],
-    });
+    const capabilities = async () => [];
     await expect(
       connect({ ...f.provider, capabilities } as any).priceBars(request),
     ).rejects.toMatchObject({ code: 'data.unsupported_capability' });
@@ -379,36 +392,28 @@ describe('source selectors stay lazy, strict and honest', () => {
       expect(() => JSON.stringify(p)).not.toThrow();
       expect(f.calls).toHaveLength(2);
     });
-  for (const mode of ['query', 'window'])
-    it('delegates and refutes a lying close selector through ' + mode, async () => {
+  // C5 binds a raw source only: a consumer view is rejected as a raw source response.
+  // Actual lying-selector correspondence is still tested independently by the common kit.
+  for (const key of ['closePrices', 'ohlcvBars'])
+    it('rejects a consumer selector response for ' + key, async () => {
       const f = fixture();
       let calls = 0;
-      const provider = changedSelector(f.provider, 'closePrices', () => {
-        calls++;
-        return Object.freeze([0, 0]);
-      });
-      const p = connect(provider);
-      const result =
-        mode === 'query'
-          ? await p.query({ ...request, kind: 'price-bars', limit: 2 })
-          : await p.priceBars(request);
+      const source = {
+        ...f.provider,
+        async query() {
+          return Object.freeze(
+            Object.defineProperty({ kind: 'price-bars' }, key, {
+              get() {
+                calls++;
+                throw Error('do not evaluate');
+              },
+            }),
+          );
+        },
+      };
+      await expect(connect(source as any).priceBars(request)).rejects.toMatchObject(invalid);
       expect(calls).toBe(0);
-      expect(() => result.closePrices).toThrowError(expect.objectContaining(invalid));
-      expect(calls).toBeGreaterThan(0);
     });
-  it('does not require OHLCV merely to acquire or serialize', async () => {
-    const f = fixture();
-    let calls = 0;
-    const provider = changedSelector(f.provider, 'ohlcvBars', () => {
-      calls++;
-      throw Error('do not read me');
-    });
-    const p = await connect(provider).priceBars(request);
-    expect(() => JSON.stringify(p)).not.toThrow();
-    expect(p.closePrices).toEqual([100, 101, 102]);
-    expect(calls).toBe(0);
-    expect(() => p.ohlcvBars).toThrow();
-  });
   it('produces cached ordinary frozen arrays and strict OHLCV objects', async () => {
     const p = await connect(fixture().provider).priceBars(request);
     expect(Object.getPrototypeOf(p.closePrices)).toBe(Array.prototype);
@@ -425,9 +430,9 @@ describe('source selectors stay lazy, strict and honest', () => {
     ['page calls', (w: any) => w.pagination.pageCalls++],
     ['premature terminal', (w: any) => (w.pages[0].nextCursor = null)],
     ['unfinished', (w: any) => (w.pages[1].nextCursor = 'more')],
-    ['version', (w: any) => (w.version = 2)],
+    ['version', (w: any) => (w.version = 3)],
     ['storage keys', (w: any) => (w.key = 'secret')],
-    ['out of bounds', (w: any) => (w.request.to = '2026-10-27')],
+    ['out of bounds', (w: any) => (w.binding.query.to = '2026-10-27')],
   ] as const)
     it('refuses stored ' + name, async () => {
       const p = await connect(fixture().provider).priceBars(request);
@@ -498,7 +503,7 @@ describe('cancellation and safe failures', () => {
         throw Error('secret key cursor');
       },
     } as any);
-    await expect(p.priceBars(request)).rejects.toMatchObject(invalid);
+    await expect(p.priceBars(request)).rejects.toMatchObject({ code: 'data.provider_failure' });
     try {
       await p.priceBars(request);
     } catch (error) {
@@ -527,12 +532,12 @@ it('the same independent compatibility kit accepts the connected one-page protoc
   await validateDataProvider({
     provider: connect(f.provider),
     probes: [
-      {
+      fixtureProbe({
         name: 'retained fixture',
         kind: 'pages',
         request: { ...request, kind: 'price-bars', limit: 2 },
         expectedPages: pages,
-      },
+      }),
     ],
     maxPages: 2,
     maxRecords: 3,
@@ -582,7 +587,7 @@ it('restores a bounded 40000-row minute window without applying one-page scan wo
     });
     return p;
   });
-  const provider = defineDataProvider({
+  const provider = fixtureSource({
     id: 'fixture',
     version: '0.0.0',
     contractVersion: 1,

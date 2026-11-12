@@ -1,9 +1,9 @@
+/** Conformance validates actual supplied selectors; it never repairs an incorrect provider view. */
 import { responseIssue } from './data-response-issue.js';
-/** Shared read-door checks. Never repairs a provider's source page or selected values. */
-import { ErrorCode, InputError, QuantError } from './errors.js';
-import type { DataProvider, DataRequest, DataView, OhlcvInput } from './data-types.js';
+import { ErrorCode, QuantError } from './errors.js';
+import type { DataProvider, DataQuery, DataView, OhlcvInput } from './data-types.js';
 import { pageData, plain, frozen } from './data-validation.js';
-
+import { validateV2Page, equalData, barIssues, continuationOf } from './data-protocol.js';
 export function invalidView(): never {
   responseIssue(
     {
@@ -12,13 +12,12 @@ export function invalidView(): never {
       reason: 'invalid_structure',
       validationCode: ErrorCode.DataInvalidResponse,
     },
-    'connect',
+    'query',
   );
 }
-/** Check descriptors before reading source fields; no selector is invoked here. */
 export function viewEnvelope(
   value: unknown,
-  request?: DataRequest,
+  request?: DataQuery,
   provider?: Pick<DataProvider, 'id' | 'version'>,
 ): asserts value is DataView {
   if (
@@ -28,118 +27,104 @@ export function viewEnvelope(
     !Object.isFrozen(value)
   )
     invalidView();
-  const descriptors = Object.getOwnPropertyDescriptors(value);
-  for (const name of ['kind', 'page']) {
-    const d = descriptors[name];
-    if (!d || !('value' in d) || !d.enumerable || d.writable || d.configurable) invalidView();
-  }
-  const raw = descriptors['page']!.value;
-  pageData(raw, request, provider);
-  if (!frozen(raw) || descriptors['kind']!.value !== raw.kind) invalidView();
-  const keys =
-    raw.kind === 'price-bars' ? ['kind', 'page', 'closePrices', 'ohlcvBars'] : ['kind', 'page'];
+  const d = Object.getOwnPropertyDescriptors(value);
+  for (const k of ['kind', 'page', 'continuation', 'continuationStatus'])
+    if (!d[k] || !('value' in d[k]!) || !d[k]!.enumerable || d[k]!.writable || d[k]!.configurable)
+      invalidView();
+  const p = d['page']!.value;
+  pageData(p);
+  if (p.contractVersion === 2) validateV2Page(p);
+  if (!frozen(p) || d['kind']!.value !== p.kind) invalidView();
   if (
-    Reflect.ownKeys(value).length !== keys.length ||
-    Reflect.ownKeys(value).some((k) => typeof k !== 'string' || !keys.includes(k))
+    (request && !equalData(p.binding?.query, request)) ||
+    (provider && !equalData(p.binding?.provider, provider))
   )
     invalidView();
-  if (raw.kind === 'price-bars')
-    for (const name of ['closePrices', 'ohlcvBars']) {
-      const d = descriptors[name];
+  if (
+    !equalData(d['continuation']!.value, continuationOf(p)) ||
+    d['continuationStatus']!.value !==
+      (p.nextCursor === null
+        ? 'terminal'
+        : p.contractVersion === 2
+          ? 'available'
+          : 'unavailable-legacy-context')
+  )
+    invalidView();
+  if (p.kind === 'price-bars')
+    for (const k of ['closePrices', 'ohlcvBars', 'bars'])
       if (
-        !d ||
-        typeof d.get !== 'function' ||
-        d.set !== undefined ||
-        d.enumerable ||
-        d.configurable
+        !d[k] ||
+        typeof d[k]!.get !== 'function' ||
+        d[k]!.set ||
+        d[k]!.enumerable ||
+        d[k]!.configurable
       )
         invalidView();
-    }
 }
-/** Compare the actual selector with every retained row; do not manufacture a correct replacement. */
 export function viewSelection(
   view: DataView,
-  key: 'closePrices' | 'ohlcvBars',
-): readonly number[] | readonly OhlcvInput[] {
+  key: 'closePrices' | 'ohlcvBars' | 'bars',
+): readonly unknown[] | undefined {
   if (view.kind !== 'price-bars') invalidView();
-  const rows = view.page.data;
-  const missing = key === 'ohlcvBars' ? rows.findIndex((row) => row.bar.volume === undefined) : -1;
-  let value: readonly number[] | readonly OhlcvInput[];
+  const missing =
+    key !== 'closePrices' ? view.page.data.findIndex((r) => r.bar.volume === undefined) : -1;
+  if (view.selection.decisions.length) invalidView();
+  const used = key === 'closePrices' ? ['close'] : ['open', 'high', 'low', 'close'];
+  const suspect = barIssues(view.page.data, 0).find((i) => i.fields.some((f) => used.includes(f)));
+  let value: unknown;
   try {
     value = view[key];
   } catch (error) {
     if (
-      missing !== -1 &&
       error instanceof QuantError &&
-      error.code === ErrorCode.InputMissingField &&
-      error.context?.['field'] === 'volume' &&
-      error.context?.['index'] === missing
-    ) {
-      throw new InputError('ohlcvBars: actual volume is required on every selected row.', {
-        code: ErrorCode.InputMissingField,
-        context: { field: 'volume', index: missing },
-      });
-    }
-    invalidView();
-  }
-  if (missing !== -1) invalidView();
-  try {
-    plain(value);
-    if (
-      !Array.isArray(value) ||
-      Object.getPrototypeOf(value) !== Array.prototype ||
-      !frozen(value) ||
-      value.length !== rows.length ||
-      view[key] !== value
+      suspect &&
+      error.code === ErrorCode.DataSuspectObservations &&
+      equalData(error.context, { ...suspect, selection: key })
     )
-      invalidView();
-    for (let i = 0; i < rows.length; i++) {
-      const bar = rows[i]!.bar;
-      if (key === 'closePrices') {
-        if (value[i] !== bar.close) invalidView();
-      } else {
-        const row = value[i] as OhlcvInput;
-        if (
-          !row ||
-          typeof row !== 'object' ||
-          Object.getPrototypeOf(row) !== Object.prototype ||
-          Object.keys(row).length !== 5
-        )
-          invalidView();
-        for (const field of ['open', 'high', 'low', 'close', 'volume'] as const)
-          if (row[field] !== bar[field]) invalidView();
-      }
-    }
-    return value;
-  } catch {
+      return undefined;
+    if (
+      error instanceof QuantError &&
+      !suspect &&
+      missing !== -1 &&
+      error.code === ErrorCode.InputMissingField &&
+      equalData(error.context, { field: 'volume', pageIndex: 0, rowIndex: missing, index: missing })
+    )
+      return undefined;
     invalidView();
   }
-}
-/** Delegate selectors lazily; SDK outputs are fresh ordinary frozen native arrays. */
-export function checkedView(view: DataView): DataView {
-  if (view.kind !== 'price-bars') return view;
-  let closes: readonly number[] | undefined, bars: readonly OhlcvInput[] | undefined;
-  return Object.freeze(
-    Object.defineProperties(
-      { kind: 'price-bars' as const, page: view.page },
-      {
-        closePrices: {
-          get() {
-            return (closes ??= Object.freeze(
-              Array.from(viewSelection(view, 'closePrices') as readonly number[]),
-            ));
-          },
-        },
-        ohlcvBars: {
-          get() {
-            return (bars ??= Object.freeze(
-              Array.from(viewSelection(view, 'ohlcvBars') as readonly OhlcvInput[], (row) =>
-                Object.freeze({ ...row }),
-              ),
-            ));
-          },
-        },
-      },
-    ),
-  ) as DataView;
+  if (suspect || missing !== -1) invalidView();
+  plain(value);
+  if (
+    !Array.isArray(value) ||
+    Object.getPrototypeOf(value) !== Array.prototype ||
+    !frozen(value) ||
+    view[key] !== value
+  )
+    invalidView();
+  // Kit probes start without caller research decisions. Check every source row independently.
+  if (view.selection.decisions.length || value.length !== view.page.data.length) invalidView();
+  for (let i = 0; i < value.length; i++) {
+    const b = view.page.data[i]!.bar;
+    if (key === 'closePrices') {
+      if (value[i] !== b.close) invalidView();
+    } else {
+      const r = value[i] as Record<string, unknown>;
+      const expected =
+        key === 'bars'
+          ? {
+              symbol: b.symbol,
+              timestampMs: b.timestampMs,
+              open: b.open,
+              high: b.high,
+              low: b.low,
+              close: b.close,
+              volume: b.volume,
+              ...(b.adjusted === undefined ? {} : { adjusted: b.adjusted }),
+              ...(b.vwap === undefined ? {} : { vwap: b.vwap }),
+            }
+          : { open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume };
+      if (!equalData(r, expected)) invalidView();
+    }
+  }
+  return value;
 }

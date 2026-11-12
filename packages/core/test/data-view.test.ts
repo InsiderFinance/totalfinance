@@ -1,10 +1,9 @@
-import { describe, it, expect } from 'vitest';
 import {
-  createDataView,
-  defineDataProvider,
-  type DataPage,
-  type PriceBarRecord,
-} from '../src/data.js';
+  defineFixtureProvider as defineDataProvider,
+  queryFixture,
+} from './data-fixture-migration.js';
+import { describe, it, expect } from 'vitest';
+import { createDataView, type DataPage, type PriceBarRecord } from '../src/data.js';
 import { ErrorCode, QuantError } from '../src/errors.js';
 import { canonicalJsonOf } from '../src/canonical-json.js';
 import { contentHash } from '../src/artifacts/content-hash.js';
@@ -47,12 +46,13 @@ describe('SDK-owned consumer data view', () => {
         return raw as never;
       },
     });
-    const result = await provider.query({ ...dailyRequest, limit: 3 });
+    const result = await queryFixture(provider, { ...dailyRequest, limit: 3 });
     expect(sma(result.closePrices, { period: 2 }).at(-1)).toBe(101.5);
     expect(sma.explain(result.closePrices, { period: 2 })).toEqual(
       sma.explain([100, 101, 102], { period: 2 }),
     );
-    expect(result.page).toEqual(raw);
+    expect(result.page.data).toEqual(raw.data);
+    expect(result.page.metadata).toEqual(raw.metadata);
     expect(Object.isFrozen(raw)).toBe(false);
   });
   it('supplies plain immutable arrays/rows compatible with VWAP', () => {
@@ -102,8 +102,21 @@ describe('SDK-owned consumer data view', () => {
       );
       expect(view.page.metadata.quality.status).toBe('partial');
       expect(view.page.diagnostics).toEqual(raw.diagnostics);
-      expect(JSON.parse(JSON.stringify(view))).toEqual({ kind: 'price-bars', page: raw });
-      expect(Object.keys(view)).toEqual(['kind', 'page']);
+      expect(JSON.parse(JSON.stringify(view)).page).toEqual(raw);
+      expect(JSON.parse(JSON.stringify(view)).selections).toEqual([
+        'closePrices',
+        'ohlcvBars',
+        'bars',
+      ]);
+      expect(Object.keys(view)).toEqual([
+        'kind',
+        'page',
+        'continuation',
+        'continuationStatus',
+        'issues',
+        'selection',
+        'selections',
+      ]);
     },
   );
   it.each(['complete', 'partial', 'unknown', 'unavailable'] as const)(

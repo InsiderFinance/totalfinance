@@ -1,12 +1,12 @@
 import type {
   DataPage,
   PriceBarRecord,
-  PriceBarsRequest,
+  PriceBarsQuery,
   OptionChainResearchRecord,
   DataCapability,
 } from '@insiderfinance/totalfinance/core/data';
 import { CONVENTIONS_VERSION } from '@insiderfinance/totalfinance/core';
-export const dailyRequest: PriceBarsRequest = {
+export const dailyRequest: PriceBarsQuery & { limit: number } = {
   kind: 'price-bars',
   symbol: 'TEST',
   interval: '1d',
@@ -18,7 +18,7 @@ export const barCapability: DataCapability = {
   kind: 'price-bars',
   intervals: ['1d', '1m'],
   maxPageSize: 2000,
-  consistency: 'best-effort',
+  consistency: ['best-effort'],
   pointInTime: false,
   access: 'unknown',
 };

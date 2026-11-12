@@ -1,0 +1,28 @@
+{
+  "name": "tf-connector-acme",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "@insiderfinance/totalfinance": "0.1.3"
+  },
+  "devDependencies": {
+    "@insiderfinance/totalfinance": "file:sdk.tgz",
+    "typescript": "5.9.3",
+    "@types/node": "22.19.21"
+  },
+  "packageManager": "pnpm@10.32.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test.mjs"
+  }
+}

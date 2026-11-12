@@ -84,10 +84,10 @@ writeFileSync(join(consumer, 'primary.mts'), primary);
 writeFileSync(
   join(consumer, 'types.mts'),
   `
-import { data, type PriceBarsWindowRequest, type DataProvider } from '@insiderfinance/totalfinance';
+import { data, type PriceBarsWindowRequest, type DataProviderSource } from '@insiderfinance/totalfinance';
 import { connect, createPriceBarsWindowView } from '@insiderfinance/totalfinance/data';
 import { sma, vwap } from '@insiderfinance/totalfinance/technical-analysis';
-declare const provider:DataProvider;
+declare const provider:DataProviderSource;
 const request:PriceBarsWindowRequest={symbol:'SPY',interval:'1d',from:'2026-09-01',to:'2026-10-28'};
 const connected=connect(provider);
 const result=await data.connect(provider).priceBars(request);
@@ -101,7 +101,7 @@ connected.priceBars({...request,limit:100});
 connected.priceBars({symbol:'SPY',from:request.from,to:request.to});
 // @ts-expect-error no per-indicator provider client
 connected.sma({period:20});
-const sample=await connected.query({...request,kind:'price-bars',limit:100});
+const sample=await connected.query({...request,kind:'price-bars'},{limit:100});
 sma(sample.closePrices,{period:20});
 `,
 );

@@ -1,6 +1,6 @@
 # C5: author protocol, deliberate resume and research-bar quality
 
-Status: **revised after changes requested at6f3fdd6; coordinator re-review pending; no C5 runtime implementation**.
+Status: **technical re-review approved at467a9ed; bounded offline implementation in progress**.
 2026-11-12. Task01a19da0-2a6f-7450-89a4-2e51047b05b5; execution01a19da1-1351-7b84-b67f-58bc81698fb5.
 Request f417317e-89d8-8c08-8867-defc21e5f479. Maintainer authorized “Make the revision”.
 This is the required engineering checkpoint, not another maintainer permission request.
@@ -554,7 +554,7 @@ Ordered implementation after coordinator review:
 
 - [x] Read task/review/evidence and prior contracts; new isolated tree from exact3bc356f.
 - [x] Record fetched mainca122ab3115ea08cc8789fd7d1be8380382fdc6c: already ancestor of base, no new merge needed now.
-- [ ] Coordinator technical review of this concrete C5 contract; no runtime/signature changes before it.
+- [x] Coordinator technical re-review approved467a9ed before runtime changes; prior rejection retained below.
 - [ ] Source protocol/common normalization/finite negotiation, pre-read misuse rejection; migrate IF
       in separate provider worktree from29b02e0, no remote. Keep all83 original behaviors/corpus,
       migrating signatures, and a copied independent Alpaca-style author (original unchanged).
@@ -617,3 +617,16 @@ Public errors/codes use the existing core registry and opt-in data error boundar
 
 Review disposition at6f3fdd6 is changes_requested, not runtime approval. These corrections replace
 ambiguous earlier prose without changing maintainer scope. Re-review required before implementation.
+
+## Technical approval and host-ceiling precision (872db889, 2026-11-12)
+
+Coordinator approved467a9ed after full re-review; review01a1d0a5-1685-72ed-95e6-cdfcfa3670ee,
+output01a1d0a0-c7c8-790e-baa4-f4d8cf974c4e. All prior changes_requested history remains.
+Before runtime: resumed resolved effectiveSize must fit CURRENT connection page-size ceiling,
+provider maximum and hard cap; a lower connection ceiling refuses BEFORE upstream I/O with unchanged
+validated checkpoint, never shrinks or resets. Unresolved automatic paging negotiates min(saved
+base1000,current connection ceiling,provider maximum). Original explicit size must fit all ceilings.
+Larger/default connections do not alter saved policy or budgets. A pre-dispatch abort that invokes
+no source consumes ZERO reads; increment occurs at actual invocation. Focused lower-ceiling tests
+for unresolved/resolved states and zero-invocation abort are required. Bounded offline implementation
+is now authorized, not implementation/feature/merge acceptance; no new permission checkpoint.

@@ -34,8 +34,11 @@ const ResearchResponseError = class DataError extends BaseDataError {
 export function issueOf(error: unknown): ResponseIssue | undefined {
   return error instanceof ResearchResponseError ? error.issue : undefined;
 }
+export function responseError(issue: ResponseIssue, door = 'research data'): BaseDataError {
+  return new ResearchResponseError(issue, door);
+}
 export function responseIssue(issue: ResponseIssue, door = 'research data'): never {
-  throw new ResearchResponseError(issue, door);
+  throw responseError(issue, door);
 }
 export function atResponse(
   error: unknown,
@@ -54,8 +57,15 @@ function fields(prefix: string, names: string) {
 }
 fields(
   '',
-  'contractVersion kind symbol data nextCursor provenance metadata assumptions diagnostics',
+  'contractVersion kind symbol data nextCursor provenance metadata assumptions diagnostics binding timestampConvention issues',
 );
+fields('binding', 'provider query');
+fields('binding.provider', 'id version');
+fields(
+  'binding.query',
+  'kind symbol interval from to snapshot expirationFrom expirationTo minStrike maxStrike rights',
+);
+fields('binding.query.snapshot', 'kind sessionDate snapshotId');
 fields('provenance', 'provider dataset sourceVersion receivedAt asOf requestId');
 fields('assumptions', 'conventionsVersion');
 fields(
@@ -156,7 +166,12 @@ export function guardResponse(
   });
 }
 /** Only the SDK scanner's controlled path projection; no second walk, getters or raw messages. */
-export function scanIssue(error: unknown, input: unknown, phase: Phase = 'page'): never {
+export function scanIssue(
+  error: unknown,
+  input: unknown,
+  phase: Phase = 'page',
+  source = false,
+): never {
   const context =
     error instanceof QuantError
       ? (Object.getOwnPropertyDescriptor(error, 'context')?.value as object | undefined)
@@ -171,14 +186,30 @@ export function scanIssue(error: unknown, input: unknown, phase: Phase = 'page')
       : undefined;
   if (typeof raw === 'string') {
     const numeric = [...raw.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1]));
-    const suffix = raw.replace(/^(data|window)\.?/, '');
+    const suffix = raw.replace(/^(data|window|sourcePage)\.?/, '');
     const tokens = suffix.replace(/\[(\d+)\]/g, '.$1').split('.');
     const isWindow = tokens[0] === 'pages' && /^\d+$/.test(tokens[1] ?? '');
     const p = (isWindow ? tokens.slice(2) : tokens)
       .map((t) => (/^\d+$/.test(t) ? '[]' : t))
       .join('.')
       .replace(/\.\[\]/g, '[]');
-    const path = allowedPath(p, phase);
+    const sourcePaths: Record<string, string> = {
+      'facts.dataset.id': 'metadata.datasetId',
+      'facts.dataset.version': 'metadata.datasetVersion',
+      'facts.receivedTimestampMs': 'metadata.receivedTimestampMs',
+      'facts.adjustment': 'metadata.adjustment',
+      'facts.consistency': 'metadata.consistency',
+      'facts.snapshotId': 'metadata.snapshotId',
+      'facts.sessionDate': 'metadata.sessionDate',
+      'facts.sourceGeneratedTimestampMs': 'metadata.sourceGeneratedTimestampMs',
+    };
+    const path = allowedPath(
+      source
+        ? (sourcePaths[p] ??
+            p.replace(/^facts\.(times|freshness|coverage|quality|access)(?=\.|$)/, 'metadata.$1'))
+        : p,
+      phase,
+    );
     if (path && tokens.length <= 10 && numeric.every(Number.isSafeInteger)) {
       let current: unknown = input,
         stored = false;

@@ -1,74 +1,78 @@
-/** Opt-in structural data contract. No provider, credential, clock or network is loaded here. */
-import { dataCall, dataSignal, invalidResponse } from './data-call.js';
+/** Public protocol2 source binding; ordinary compute remains provider/credential free. */
+import { issueOf, responseIssue } from './data-response-issue.js';
+import { dataCall, dataSignal } from './data-call.js';
+import { object, numberField, aborted, signalField } from './data-validation.js';
+import {
+  sourceShape,
+  queryData,
+  freezeData,
+  capabilityList,
+  materialize,
+  continuationData,
+} from './data-protocol.js';
+import { dataViewOf } from './data-view.js';
 import type {
-  DataProvider,
   DataProviderSource,
-  DataRequest,
+  DataProvider,
+  DataQuery,
+  DataQueryOptions,
   DataViewFor,
-  DataCapabilities,
   DataCallOptions,
 } from './data-types.js';
-import {
-  providerShape,
-  requestData,
-  capabilityData,
-  pageData,
-  copyFrozen,
-} from './data-validation.js';
-import { dataViewOf } from './data-view.js';
-export { createDataView } from './data-view.js';
+export const DATA_CONTRACT_VERSION = 2;
 export type * from './data-types.js';
-/** Research acquisition protocol version, independent of package and dataset versions. */
-export const DATA_CONTRACT_VERSION = 1;
-
-/** Validate and bind a raw source without calling it. Query returns an immutable common SDK view.
- * @example
- * const provider = defineDataProvider(mySource);
- * const prices = await provider.query({ kind: 'price-bars', symbol: 'SPY', interval: '1d', from: '2026-10-26', to: '2026-10-28', limit: 100 });
- * const average = sma(prices.closePrices, { period: 2 });
- */
+export { createDataView } from './data-view.js';
+export { DataProviderError } from './data-provider-error.js';
+export type {
+  DataProviderErrorOptions,
+  DataProviderFailure,
+  KnownDataField,
+  DataGuidanceRule,
+} from './data-provider-error.js';
 export function defineDataProvider(source: DataProviderSource): DataProvider {
-  providerShape(source);
-  const raw: DataProviderSource = source;
-  const id = raw.id,
-    version = raw.version;
-  const query = raw.query.bind(raw);
-  const capabilities = raw.capabilities.bind(raw);
-  const identity = { id, version };
+  sourceShape(source);
+  const { id, version } = source,
+    identity = Object.freeze({ id, version }),
+    query = source.query.bind(source),
+    caps = source.capabilities.bind(source);
   return Object.freeze({
     id,
     version,
-    contractVersion: DATA_CONTRACT_VERSION,
-    async capabilities(options?: DataCallOptions): Promise<DataCapabilities> {
+    contractVersion: 2,
+    async capabilities(options?: DataCallOptions) {
       const signal = dataSignal(options);
       return dataCall(signal, async () => {
-        const result = await capabilities(signal ? { signal } : undefined);
+        const value = await caps(signal ? { signal } : undefined);
         try {
-          capabilityData(result, identity);
-          return copyFrozen(result);
+          return capabilityList(value, identity);
         } catch (error) {
-          invalidResponse(error, id, 'defineDataProvider.capabilities');
+          const detail = issueOf(error);
+          if (detail) responseIssue(detail, 'defineDataProvider.capabilities');
+          throw error;
         }
       });
     },
-    async query<R extends DataRequest>(
-      input: R,
-      options?: DataCallOptions,
-    ): Promise<DataViewFor<R>> {
-      const signal = dataSignal(options);
-      requestData(input);
-      const request = copyFrozen(input);
+    async query<R extends DataQuery>(input: R, options: DataQueryOptions): Promise<DataViewFor<R>> {
+      queryData(input);
+      const o = object(options, 'options', ['limit', 'cursor', 'signal']);
+      numberField(o['limit'], 'request.limit', 1, 10000, true);
+      signalField(o['signal']);
+      const signal = o['signal'];
+      const q = freezeData(input);
+      if (options.cursor !== undefined) continuationData(options.cursor, q, identity);
+      const binding = freezeData({ provider: identity, query: q }),
+        cursor = options.cursor?.cursor ?? null,
+        pins = options.cursor?.pins ?? null;
       return dataCall(signal, async () => {
-        const result = await query(request, signal ? { signal } : undefined);
-        try {
-          pageData(result, request, identity);
-          return dataViewOf(copyFrozen(result)) as DataViewFor<R>;
-        } catch (error) {
-          invalidResponse(error, id);
-        }
+        aborted(signal);
+        const result = await query(
+          q,
+          Object.freeze({ limit: options.limit, cursor, pins, ...(signal ? { signal } : {}) }),
+        );
+        aborted(signal);
+        return dataViewOf(materialize(result, binding, options.limit, pins)) as DataViewFor<R>;
       });
     },
   });
 }
-
-export { connect, createPriceBarsWindowView } from './data-connection.js';
+export { connect, createPriceBarsWindowView, priceBarsCheckpoint } from './data-connection.js';
