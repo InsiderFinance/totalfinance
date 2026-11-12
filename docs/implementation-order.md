@@ -11,15 +11,17 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
-### Active bounded site work: homepage and docs separation (2026-11-11)
+### Active bounded site work: restore the original homepage and apply branding (2026-11-12)
 
-The maintainer authorized the standalone homepage and separation of the existing workbench under
-`/docs/totalfinance/`; InsiderFinance's later landing page will use `/totalfinance`. Follow
-[the bounded contract](./specs/homepage-and-docs-routing.md), H1–H4. This is local site work only;
-the InsiderFinance app, external rewrite, deployment, release versions and publication stay separate.
-H1–H3 are locally verified: 81 site tests, the installed 24-example consumer check, typecheck/build,
-and generated route/link checks pass. H4's visual review remains open because Ri's browser refuses
-loopback preview URLs; local HTTP checks and hosting instructions do not substitute for that review.
+The maintainer rejected the replacement marketing homepage in `7c1e932` and requested the original
+landing page from before the docs separation, changing only the logo and brand colors. The
+[controlling correction](./specs/homepage-and-docs-routing.md) owns R1–R4: restore the original
+task-first content and shared layout at `/`, remove the new marketing renderer/CSS, and retain the
+docs mount and previously requested brand assets. InsiderFinance's future `/totalfinance` page,
+rewrite, deployment and release actions remain separate. R1–R4 are locally verified against the
+pre-change source: exact homepage body, logo-only layout change, color/logo-only stylesheet changes,
+site build/typecheck, 82 site tests and 30 documentation tests pass. Earlier H1–H3 evidence in the
+contract is historical; H4's rendered-site review remains open because Ri's browser refuses loopback URLs.
 The numerical/release work retains its own scope and verification records.
 
 Branding/deployment handoff amendment (2026-11-12), in the same contract: supplied-artwork reference,

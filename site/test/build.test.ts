@@ -6,8 +6,6 @@ import { gzipSync } from 'node:zlib';
 import { readSiteVersion } from '../version.js';
 import { search, type SearchRecord } from '../src/search.js';
 import { DOCS_BASE, docsUrl } from '../paths.js';
-import { options } from '../src/playgrounds/options.js';
-import { escapeHtml, formatNumber, renderChart } from '../src/render.js';
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const SITE_OUT = join(ROOT, 'site/dist');
@@ -45,25 +43,23 @@ describe('built public documentation', () => {
     }
   });
 
-  it('separates the homepage from the workbench and reuses the installed-consumer-proven example', () => {
+  it('uses the original task-first homepage and shared docs layout without a replacement marketing design', () => {
     const homepage = readFileSync(join(SITE_OUT, 'index.html'), 'utf8');
     const workbench = readFileSync(join(OUT, 'index.html'), 'utf8');
-    const calculation = options.run(
-      Object.fromEntries(options.controls.map((control) => [control.name, control.value])),
-    );
-    expect(homepage).toContain('Finance,<br/>in your <span>code.</span>');
-    expect(homepage).not.toContain('class="sidebar"');
-    expect(homepage).toContain(`href="${docsUrl('/guides/start/')}"`);
+    expect(homepage).toContain('What do you want<br/>to calculate?');
+    expect(homepage).toContain('class="sidebar"');
+    expect(homepage).toContain('class="topbar"');
+    expect(homepage).toContain('class="task-grid"');
+    expect(homepage).toContain('A small call. An explainable answer.');
+    expect(homepage).toContain('data-playground="price-an-option"');
+    expect(homepage).toContain('<a class="brand" href="/">');
+    expect(homepage).toContain(`href="${docsUrl('/learn/price-an-option/')}"`);
     expect(homepage).toContain(`href="${docsUrl('/reference/')}"`);
-    expect(homepage).toContain(
-      `id="homepage-example">${escapeHtml(calculation.example.code)}</code>`,
-    );
-    expect(homepage).toContain(
-      `${formatNumber(calculation.example.result as number)}<small> USD / share`,
-    );
-    expect(homepage).toContain(renderChart(calculation.chart));
-    expect(homepage).toContain('Hypothetical inputs');
-    expect(homepage).toContain('Pre-1.0 software');
+    const main = (html: string) => /<main id="main">([\s\S]*?)<\/main>/.exec(html)![1];
+    expect(main(homepage)).toBe(main(workbench));
+    expect(homepage).not.toContain('landing-hero');
+    expect(homepage).not.toContain('homepage.css');
+    expect(existsSync(join(SITE_OUT, 'assets/homepage.css'))).toBe(false);
     expect(workbench).toContain('What do you want<br/>to calculate?');
     expect(workbench).toContain(`data-base="${DOCS_BASE}"`);
     expect(existsSync(join(SITE_OUT, 'reference'))).toBe(false);

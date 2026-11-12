@@ -22,8 +22,7 @@ import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/lo
 import { unitByName } from '../tools/fields-doc.js';
 import type { SearchRecord } from './src/search.js';
 import { DOCS_BASE, docsUrl, mountDocsHtml } from './paths.js';
-import { renderHomepage } from './src/homepage.js';
-import { brandMetadata } from './src/brand.js';
+import { brandMetadata, SITE_ORIGIN } from './src/brand.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = join(ROOT, 'site/dist');
@@ -55,12 +54,13 @@ export const tasks = [
   ],
 ] as const;
 
-export function layout(title: string, body: string, active = ''): string {
+export function layout(title: string, body: string, active = '', canonicalUrl?: string): string {
   const description = `${title}: real finance calculations, explicit assumptions, and a complete TypeScript API reference. Learn TotalFinance with runnable examples.`;
   const metadata = brandMetadata({
     title: `${title} · TotalFinance`,
     description,
     assetBase: '/assets/brand',
+    ...(canonicalUrl ? { canonicalUrl } : {}),
   });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${escapeHtml(title)} · TotalFinance</title><meta name="description" content="${escapeHtml(description)}"/>${metadata}<link rel="stylesheet" href="/assets/styles.css"/><script type="module" src="/assets/client.js"></script></head><body><a class="skip" href="#main">Skip to content</a><aside class="sidebar"><a class="brand" href="/"><img class="brand-mark" src="/assets/brand/favicon.svg" width="36" height="36" alt=""/>TotalFinance</a><p class="version">${escapeHtml(release.label)}</p><nav aria-label="Documentation"><span class="nav-label">Start with a task</span>${tasks.map(([slug, label]) => `<a href="/learn/${slug}/"${slug === active ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a>`).join('')}<span class="nav-label">Go deeper</span><a href="/reference/">API reference</a><a href="/playgrounds/explore-scenarios/">Scenario playground</a><a href="/agents/">Agent handbook</a><a href="/guides/">Guides & conventions</a><a href="/versions/">Versions & stability</a></nav><p class="note">Local calculations.<br/>Explicit assumptions.<br/>Your data stays yours.</p></aside><div class="shell"><header class="topbar"><span class="eyebrow">The finance developer workbench</span><a class="button quiet" href="/search/">Search the reference <span aria-hidden="true">⌕</span></a><span class="version-badge">${escapeHtml(release.label)}</span></header><main id="main">${body}<footer><span>TotalFinance · Apache-2.0</span><a href="/versions/">Version & stability</a><a href="/agents/">For agents</a><span>Sample data is hypothetical. Analytics are not investment advice.</span></footer></main></div></body></html>`;
 }
@@ -127,11 +127,8 @@ export async function buildSite(): Promise<void> {
     target: 'es2022',
     minify: true,
   });
-  page(
-    '',
-    'Start with a calculation',
-    `<div class="page-intro"><p class="eyebrow">Learn by doing</p><h1>What do you want<br/>to calculate?</h1><p>Start with a question. Get a real result, inspect the assumptions, and take the TypeScript with you.</p></div><div class="task-grid">${tasks.map(([slug, title, description], index) => `<a class="task-card" href="/learn/${slug}/"><span class="number">0${index + 1} ↗</span><h2>${title}</h2><p>${description}</p></a>`).join('')}</div><h2>A small call. An explainable answer.</h2>${renderPlayground(options)}`,
-  );
+  const homepageBody = `<div class="page-intro"><p class="eyebrow">Learn by doing</p><h1>What do you want<br/>to calculate?</h1><p>Start with a question. Get a real result, inspect the assumptions, and take the TypeScript with you.</p></div><div class="task-grid">${tasks.map(([slug, title, description], index) => `<a class="task-card" href="/learn/${slug}/"><span class="number">0${index + 1} ↗</span><h2>${title}</h2><p>${description}</p></a>`).join('')}</div><h2>A small call. An explainable answer.</h2>${renderPlayground(options)}`;
+  page('', 'Start with a calculation', homepageBody);
   const searchRecords: SearchRecord[] = [];
   for (const playground of playgrounds) {
     const path = `${playground.id === 'explore-scenarios' ? 'playgrounds' : 'learn'}/${playground.id}`;
@@ -531,11 +528,10 @@ export async function buildSite(): Promise<void> {
   cpSync(BRAND_ASSETS, join(OUT, 'assets/brand'), { recursive: true });
   for (const name of ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png'])
     cpSync(join(BRAND_ASSETS, name), join(OUT, name));
-  writeFileSync(
-    join(OUT, 'assets/homepage.css'),
-    readFileSync(join(ROOT, 'site/src/homepage.css')),
-  );
-  writeFileSync(join(OUT, 'index.html'), renderHomepage());
+  const homepage = mountDocsHtml(
+    layout('Start with a calculation', homepageBody, '', `${SITE_ORIGIN}/`),
+  ).replace(`<a class="brand" href="${DOCS_BASE}/">`, '<a class="brand" href="/">');
+  writeFileSync(join(OUT, 'index.html'), homepage);
   writeFileSync(join(OUT, 'robots.txt'), 'User-agent: *\nAllow: /\n');
   writeFileSync(
     join(OUT, '404.html'),

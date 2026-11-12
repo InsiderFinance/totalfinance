@@ -1,5 +1,26 @@
 # TotalFinance homepage and documentation routing
 
+**Controlling correction (2026-11-12):** the maintainer rejected the new marketing homepage and
+requested the original landing page from before the docs separation, changing only its logo and
+brand colors. Restore the pre-`7c1e932` task-first content/layout at `/`; retain the existing docs
+mount, logo/favicon/social assets and deployment configuration. The original implementation record
+below is historical where it describes a replacement marketing page.
+
+Correction acceptance:
+
+- [x] R1: The original homepage content, sidebar, task cards and calculator appear at `/`.
+- [x] R2: Remove the replacement marketing renderer/stylesheet; reuse the original page body/layout.
+- [x] R3: Visual changes from the original are limited to the supplied logo and green brand palette.
+- [x] R4: Verify source parity with the pre-change homepage and pass site build/type/link checks.
+
+Correction verification on Node 22.23.2/pnpm 10.32.0: compared source against `7c1e932^`.
+The homepage template matches exactly; the shared body layout differs only by the logo element;
+CSS matches after excluding the logo rule and color values. The root and docs index reuse the same
+body, with docs links mounted under `/docs/totalfinance/`. The replacement marketing renderer and
+stylesheet are removed. The site build, typecheck, changed-source lint, **82 site tests** and
+**30 documentation tests** pass. Documentation regeneration reports **247 surfaces, zero findings**
+and leaves the generated inventory unchanged. H4's separate rendered-site review remains open.
+
 Status: authorized local implementation, 2026-11-11. This is the bounded homepage separation
 requested by the maintainer after reviewing the three-surface hosting proposal.
 

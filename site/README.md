@@ -1,7 +1,7 @@
 # TotalFinance homepage and developer documentation
 
-This static TypeScript site contains the standalone TotalFinance homepage and public developer
-workbench, with real, local library calculations. No API keys, remote compute, market feeds,
+This static TypeScript site uses the original task-first TotalFinance homepage and public developer
+workbench layout, with real, local library calculations. No API keys, remote compute, market feeds,
 brokerage access, analytics beacon, or account sign-in is required. Publishing decisions still
 belong to the maintainer.
 
@@ -33,7 +33,8 @@ DNS, preview review and the separately pending InsiderFinance integration. The c
 `vercel.json` serves `site/dist` and calls `site/vercel.sh` for the exact Node/pnpm versions already
 selected by `.nvmrc`/`package.json`. No package version or supported Node range is changed.
 
-The standalone homepage lives at `/`. All documentation, including its assets, search index,
+The original homepage lives at `/`, retaining its sidebar, task cards, copy and calculator; only
+the logo and brand colors change. The documentation copy, including its assets, search index,
 reference coverage, machine-readable discovery and version snapshots, lives under `/docs/totalfinance/`.
 `paths.ts` owns that mount. The homepage's example is the exact option-playground first call;
 its displayed price and chart come from that same calculation, not a second implementation.
@@ -49,7 +50,7 @@ Deploy **only `site/dist/`**, using a static host with directory-index routing a
 Do not use an SPA fallback that returns the home page for unknown reference URLs. Enable HTTPS and
 Brotli/gzip compression. HTML, version manifests, and search indexes should revalidate; immutable
 version snapshots may be cached permanently once released. Hashed JavaScript chunks may be immutable;
-`client.js`, `calculation-worker.js`, `styles.css`, and `homepage.css` are not content-hashed and must revalidate.
+`client.js`, `calculation-worker.js`, and `styles.css` are not content-hashed and must revalidate.
 Suggested security headers: `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, and
 `Content-Security-Policy: default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self';
 img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`.
@@ -57,8 +58,8 @@ There are no inline scripts or styles requiring an unsafe-inline exception.
 
 ## Content and ownership
 
-- `src/homepage.ts` and `src/homepage.css`: the standalone homepage. Homepage styles are scoped
-  separately from the task-first documentation layout.
+- `build.ts` and `src/styles.css`: the original shared homepage/docs renderer and layout. The root
+  homepage uses the original workbench content; no separate marketing renderer or stylesheet exists.
 - `brand/`: original supplied PNG, editable vector recreation, favicon/Apple icons and social card.
   See [asset sources and regeneration](./brand/README.md). The site build copies the reviewed exports.
 - `content/`: task-first starting and agent guides. Other public guides come from `docs/guides/`.
