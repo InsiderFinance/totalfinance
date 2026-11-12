@@ -62,12 +62,17 @@ const NAMESPACE_REASON =
 // Rollup expert 3106/2999 B, facade 10835 B. Positive Gaussian tail evaluation,
 // field-specific precision errors and IV diagnostics account for the growth. Ceilings
 // leave at least 94 B headroom; exact retained-module exclusions are unchanged.
+// Second review corrections: 5566/5441 B esbuild expert, 3196/3103 B Rollup expert;
+// facade 15555–15558/11046 B and coarse esbuild facade 99976 B. Reusing logarithms
+// offsets part of the intrinsic-sensitivity guard and explanatory-IV-message cost.
+// Facade ceilings become 15.375/11 KiB; expert Rollup 3.25/3.125 KiB, coarse 97.75.
+// Expert esbuild remains 5.5 KiB (66 B above the largest measured consumer).
 const leanBudgets = {
   normal: 0.6,
   rsi: 9,
-  facade: 15.125,
-  expert: 3.125,
-  'expert-black76': 3.0625,
+  facade: 15.375,
+  expert: 3.25,
+  'expert-black76': 3.125,
   'expert-bachelier': 2.5,
 } as const;
 // Actual esbuild root namespaces: 41508/105191/95468 B. These are coarse DOMAIN budgets,
@@ -78,7 +83,7 @@ const leanBudgets = {
 // Review repair: the installed root namespace is 105817 B gzip on canonical Node 22.23.2.
 // Single-symbol/time and optional-metadata validation add 231 B; only this coarse ceiling moves
 // from 103.25 to 103.5 KiB. Leaf RSI and every unrelated-domain exclusion remain unchanged.
-const coarseBudgets = { normal: 42, rsi: 103.5, facade: 97.5 } as const;
+const coarseBudgets = { normal: 42, rsi: 103.5, facade: 97.75 } as const;
 
 function calculation(
   canary: Exclude<ConsumerCanary, 'unused' | 'dynamic'>,
@@ -112,7 +117,7 @@ function calculation(
           : rootNamespace
             ? coarseBudgets[canary as keyof typeof coarseBudgets]
             : leanBudgets[canary],
-      rollup: canary === 'facade' ? 10.75 : leanBudgets[canary],
+      rollup: canary === 'facade' ? 11 : leanBudgets[canary],
     },
     ...(style === 'feature' ? {} : { parityWith: `${canary}-feature` }),
     ...(rootNamespace ? { rootNamespace: true } : {}),

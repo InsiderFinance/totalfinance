@@ -6,9 +6,15 @@ import {
 } from '@insiderfinance/totalfinance/valuation';
 import { minVariance } from '@insiderfinance/totalfinance/risk';
 import { strategy, legs } from '@insiderfinance/totalfinance/strategy';
-import { blackScholes } from '@insiderfinance/totalfinance/options/black-scholes';
+import {
+  blackScholesImpliedVolatility,
+  blackScholes,
+} from '@insiderfinance/totalfinance/options/black-scholes';
 import { blackScholesPriceManyInto } from '@insiderfinance/totalfinance/options/batch';
-import { black76 } from '@insiderfinance/totalfinance/options/black76';
+import {
+  type black76ImpliedVolatility,
+  black76,
+} from '@insiderfinance/totalfinance/options/black76';
 import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carlo';
 import { option as optionContracts, asian, spread } from '@insiderfinance/totalfinance/options';
 import { fitGarch } from '@insiderfinance/totalfinance/volatility/forecast';
@@ -234,6 +240,59 @@ export function assertNumericalRepairs(): void {
       european.monteCarlo.confidenceInterval === null,
     'review B4 finite estimator, sub-ULP reporting',
   );
+  // Existing 0.1.3 exhaustive switches continue to compile after this patch.
+  const legacyReason = (
+    reason: ReturnType<typeof blackScholesImpliedVolatility>['reason'],
+  ): string => {
+    switch (reason) {
+      case undefined:
+        return 'success';
+      case 'below_intrinsic':
+      case 'above_max_bound':
+      case 'price_below_resolvable':
+      case 'no_bracket':
+      case 'max_iterations':
+        return reason;
+      default: {
+        const exhaustive: never = reason;
+        return exhaustive;
+      }
+    }
+  };
+  const legacyBlack76Reason = (
+    reason: ReturnType<typeof black76ImpliedVolatility>['reason'],
+  ): string => legacyReason(reason);
+  const { volatility: ignoredVolatility, ...ivTerms } = option;
+  void ignoredVolatility;
+  const unavailable = blackScholesImpliedVolatility({ ...ivTerms, riskFreeRate: -1000, price: 10 });
+  check(
+    legacyReason(unavailable.reason) === 'no_bracket' &&
+      unavailable.message!.includes('binary64 precision'),
+    'closed IV reasons, explanatory detail',
+  );
+  check(legacyBlack76Reason(undefined) === 'success', 'legacy Black76 reason switch');
+  const balloon = amortizationSchedule({
+    principal: 100000,
+    periodicInterestRate: 0.05 / 12,
+    numberOfPeriods: 60,
+    paymentTiming: 'end',
+    balloon: 99999.99,
+  });
+  check(balloon.rows.at(-1)!.closingBalance === 99999.99, 'near-interest-only balloon');
+  const carryFree = spread.price({
+    type: 'call',
+    spot1: 1 + 1e-10,
+    spot2: 1,
+    strike: 0,
+    timeToExpiryYears: 1,
+    riskFreeRate: 0.05,
+    dividendYield1: 0,
+    dividendYield2: 0,
+    volatility1: 0.2000000001,
+    volatility2: 0.2,
+    correlation: 1,
+  });
+  check(Math.abs(carryFree.value / 1.0833154930733507e-10 - 1) < 1e-12, 'Kirk carry cancellation');
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

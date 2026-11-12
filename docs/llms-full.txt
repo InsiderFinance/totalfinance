@@ -52946,6 +52946,7 @@ same functions; prefer the namespace over the deprecated flat exports.
 - heston.impliedVolatility().return.converged: boolean; default: not declared
 - heston.impliedVolatility().return.error?: number; default: not declared
 - heston.impliedVolatility().return.iterations: number; default: not declared
+- heston.impliedVolatility().return.message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
 - heston.impliedVolatility().return.reason?: import('@insiderfinance/totalfinance/options').ImpliedVolatilityReason; default: not declared
 - heston.impliedVolatility().return.value: number; default: not declared
 - heston.impliedVolatility(request): import('@insiderfinance/totalfinance/options/heston').HestonPriceRequest; default: not declared
@@ -87039,7 +87040,7 @@ cannot use — supplied, never inferred from losses or carryforwards.
 balance = opening − principal; Σ principal ≈ principal − balloon) and any display rounding is
 the caller's explicit, documented policy applied afterwards. The final installment may absorb
 arithmetic drift only within a compounding-propagated roundoff allowance, capped at
-1e-10 of the principal being amortized; larger drift
+1e-10 of original principal; larger drift
 is refused. The `payment` headline is the level installment; inspect the final row's payment
 for its explicit roundoff reconciliation.
 - amortizationSchedule().return.balloon: number; default: not declared — The requested residual after the final, roundoff-adjusted installment.
@@ -154798,7 +154799,9 @@ export interface Black76ImpliedVolatilityResult {
     value: number;
     converged: boolean;
     iterations: number;
-    reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations' | 'precision_limit';
+    reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations';
+    /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+    message?: string;
 }
 ```
 
@@ -154806,7 +154809,8 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 
 - converged: boolean; default: not declared
 - iterations: number; default: not declared
-- reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations' | 'precision_limit'; default: not declared
+- message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
+- reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations'; default: not declared
 - value: number; default: not declared
 
 ### @insiderfinance/totalfinance/options#Black76Input
@@ -155198,6 +155202,8 @@ export interface BlackScholesImpliedVolatilityResult {
     iterations: number;
     error?: number;
     reason?: ImpliedVolatilityReason;
+    /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+    message?: string;
 }
 ```
 
@@ -155206,6 +155212,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - converged: boolean; default: not declared
 - error?: number; default: not declared
 - iterations: number; default: not declared
+- message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
 - reason?: ImpliedVolatilityReason; default: not declared
 - value: number; default: not declared
 
@@ -157884,9 +157891,7 @@ export type ImpliedVolatilityReason = 'below_intrinsic' | 'above_max_bound'
  * `below_intrinsic` (a no-arbitrage violation) and from `no_bracket` (a bracketing failure with a
  * root that exists): here the inverse simply has no solution at this price scale.
  */
- | 'price_below_resolvable' | 'no_bracket' | 'max_iterations'
-/** A pricing trial could not resolve a premium in binary64 precision. */
- | 'precision_limit';
+ | 'price_below_resolvable' | 'no_bracket' | 'max_iterations';
 ```
 
 ### @insiderfinance/totalfinance/options#ImpliedVolatilityResult
@@ -162302,6 +162307,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - impliedVolatility().return.converged: boolean; default: not declared
 - impliedVolatility().return.error?: number; default: not declared
 - impliedVolatility().return.iterations: number; default: not declared
+- impliedVolatility().return.message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
 - impliedVolatility().return.reason?: import('@insiderfinance/totalfinance/options').ImpliedVolatilityReason; default: not declared
 - impliedVolatility().return.value: number; default: not declared
 - impliedVolatility(request): HestonPriceRequest; default: not declared
@@ -164548,7 +164554,7 @@ duplicate-free; only these are computed and returned.
 Kind: function; stability: stable-by-law (pre-1.0; not a 1.0 stability guarantee).
 
 Write the selected Black–Scholes–Merton outputs for every row into caller-owned buffers — the
-zero-allocation form of {@link blackScholesEvaluateMany} for hot loops that reuse storage. The
+buffer-writing form of {@link blackScholesEvaluateMany}. Temporary result columns ensure atomic writes. The
 property names of `outputs` are the selection: `{ gamma: buffer }` computes gamma only.
 
 Reusable storage is not unchecked input. Before anything is written this validates the columns
@@ -164932,6 +164938,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - return.converged: boolean; default: not declared
 - return.error?: number; default: not declared
 - return.iterations: number; default: not declared
+- return.message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
 - return.reason?: ImpliedVolatilityReason; default: not declared
 - return.value: number; default: not declared
 
@@ -165116,7 +165123,8 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - (input).type: OptionType; default: not declared
 - return.converged: boolean; default: not declared
 - return.iterations: number; default: not declared
-- return.reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations' | 'precision_limit'; default: not declared
+- return.message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
+- return.reason?: 'below_intrinsic' | 'above_max_bound' | 'price_below_resolvable' | 'no_bracket' | 'max_iterations'; default: not declared
 - return.value: number; default: not declared
 
 ### @insiderfinance/totalfinance/options/black76#black76Price
@@ -165509,6 +165517,7 @@ Members/parameters (default = JSDoc only; not declared means no documented defau
 - return.converged: boolean; default: not declared
 - return.error?: number; default: not declared
 - return.iterations: number; default: not declared
+- return.message?: string; default: not declared — Explanatory detail when a usable numeric pricing bracket cannot be established.
 - return.reason?: import('@insiderfinance/totalfinance/options').ImpliedVolatilityReason; default: not declared
 - return.value: number; default: not declared
 
@@ -265352,7 +265361,7 @@ The full amortization schedule. Unrounded binary64 values reconcile within arith
 balance = opening − principal; Σ principal ≈ principal − balloon) and any display rounding is
 the caller's explicit, documented policy applied afterwards. The final installment may absorb
 arithmetic drift only within a compounding-propagated roundoff allowance, capped at
-1e-10 of the principal being amortized; larger drift
+1e-10 of original principal; larger drift
 is refused. The `payment` headline is the level installment; inspect the final row's payment
 for its explicit roundoff reconciliation.
 

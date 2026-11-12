@@ -1,6 +1,7 @@
 import {
   analyticPremium,
   analyticTrial,
+  analyticPrecisionFailure,
   analyticLowerTrial,
   logPriceRatio,
   requireHorizonVolatility,
@@ -44,6 +45,7 @@ interface D1D2 {
   discountFactor: number;
   /** Dividend discount e^{-qT}. */
   dq: number;
+  logRatio: number;
 }
 
 export interface BlackScholesPriceBoundsInput {
@@ -70,12 +72,14 @@ function d1d2(input: Omit<BlackScholesKernelInput, 'type'>): D1D2 {
   } = input;
   const sqrtT = Math.sqrt(T);
   if (sigma > 0 && T > 0) requireHorizonVolatility(sigma * sqrtT);
-  const d1 =
-    ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
-      (r - q + 0.5 * sigma * sigma) * T) /
-    (sigma * sqrtT);
+  const ratio = S / K;
+  const logRatio =
+    sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+      ? logPriceRatio(S, K)
+      : Math.log(ratio);
+  const d1 = (logRatio + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
   const d2 = d1 - sigma * sqrtT;
-  return { d1, d2, sqrtT, discountFactor: Math.exp(-r * T), dq: Math.exp(-q * T) };
+  return { d1, d2, sqrtT, discountFactor: Math.exp(-r * T), dq: Math.exp(-q * T), logRatio };
 }
 
 /**
@@ -168,7 +172,9 @@ const BSM_HINTS: Record<string, string> = {
  */
 export function blackScholesPriceUnchecked(input: BlackScholesKernelInput): number {
   const { type, spot: S, strike: K } = input;
-  const { d1, d2, discountFactor, dq } = d1d2(input);
+  const { d1, d2, discountFactor, dq, sqrtT, logRatio } = d1d2(input);
+  const sd = input.volatility * sqrtT;
+  const carry = (input.riskFreeRate - input.dividendYield) * input.timeToExpiryYears;
   return analyticPremium({
     positiveLeg: type === 'call' ? S * dq * normalCdf(d1) : K * discountFactor * normalCdf(-d2),
     negativeLeg: type === 'call' ? K * discountFactor * normalCdf(d2) : S * dq * normalCdf(-d1),
@@ -176,14 +182,9 @@ export function blackScholesPriceUnchecked(input: BlackScholesKernelInput): numb
     discountedScale: S * dq,
     discountedStrike: K * discountFactor,
     type,
-    logMoneyness:
-      logPriceRatio(S, K) + (input.riskFreeRate - input.dividendYield) * input.timeToExpiryYears,
-    logMoneynessError:
-      8 *
-      Number.EPSILON *
-      (Math.abs(logPriceRatio(S, K)) +
-        Math.abs((input.riskFreeRate - input.dividendYield) * input.timeToExpiryYears)),
-    standardDeviation: input.volatility * Math.sqrt(input.timeToExpiryYears),
+    logMoneyness: logRatio + carry,
+    logMoneynessError: sd < 1e-4 ? 8 * Number.EPSILON * (Math.abs(logRatio) + Math.abs(carry)) : 0,
+    standardDeviation: sd,
   });
 }
 
@@ -358,9 +359,7 @@ export type ImpliedVolatilityReason =
    */
   | 'price_below_resolvable'
   | 'no_bracket'
-  | 'max_iterations'
-  /** A pricing trial could not resolve a premium in binary64 precision. */
-  | 'precision_limit';
+  | 'max_iterations';
 
 export interface BlackScholesImpliedVolatilityResult {
   value: number;
@@ -368,6 +367,8 @@ export interface BlackScholesImpliedVolatilityResult {
   iterations: number;
   error?: number;
   reason?: ImpliedVolatilityReason;
+  /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+  message?: string;
 }
 
 export interface BlackScholesImpliedVolatilityOptions {
@@ -543,8 +544,7 @@ export function blackScholesImpliedVolatility(
   const lowerTrial = analyticLowerTrial(f, lo, hi);
   lo = lowerTrial.lower;
   const flo = lowerTrial.value;
-  if (!Number.isFinite(flo))
-    return { value: NaN, converged: false, iterations: 0, reason: 'precision_limit' };
+  if (!Number.isFinite(flo)) return analyticPrecisionFailure(0);
   if (Math.abs(flo) <= ptol) {
     return { value: lo, converged: true, iterations: 0, error: Math.abs(flo) };
   }
@@ -553,11 +553,15 @@ export function blackScholesImpliedVolatility(
     // reproduces it: the target is below the solver's resolvable price floor. Reporting `lo` here
     // (what an absolute tolerance did for every target ≤ 1e-8) is a fabricated volatility.
     return {
-      value: NaN,
-      converged: false,
-      iterations: 0,
+      ...(lowerTrial.adjusted
+        ? analyticPrecisionFailure(0)
+        : {
+            value: NaN,
+            converged: false,
+            iterations: 0,
+            reason: 'price_below_resolvable' as const,
+          }),
       error: flo,
-      reason: lowerTrial.adjusted ? 'precision_limit' : 'price_below_resolvable',
     };
   }
 
@@ -593,13 +597,14 @@ export function blackScholesImpliedVolatility(
   const res = brent(f, lo, hi, { tolerance: 1e-12, maximumIterations: 100 });
   if (!res.converged) {
     return {
-      value: NaN,
-      converged: false,
-      iterations: res.iterations,
-      reason:
-        res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
-          ? 'precision_limit'
-          : 'max_iterations',
+      ...(res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
+        ? analyticPrecisionFailure(res.iterations)
+        : {
+            value: NaN,
+            converged: false,
+            iterations: res.iterations,
+            reason: 'max_iterations' as const,
+          }),
       ...(res.residual !== undefined ? { error: res.residual } : {}),
     };
   }

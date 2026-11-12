@@ -9,7 +9,7 @@
 
 The maintainer authorized fixing all nine independently reproduced findings and opening one PR.
 Follow [the scoped contract](./specs/numerical-correctness-16-24.md), A–H, preserving existing
-financial conventions and call shapes. Review corrections R1–R8 are implemented and locally verified; R9 exact-head hosted evidence is owned by PR #32: the independent review found acceptance/refusal regressions despite the original green suites. Prior 84-regression/3,270-test/229-consumer and hosted receipts at fb6b882 are historical; fresh local verification passes 3,783 affected tests and 229 packed consumers; fresh hosted evidence is required after corrections. The source
+financial conventions and call shapes. Second re-review corrections S1–S6 are implemented and locally verified under the maintainer's “Fix these.” S7 requires fresh exact-head hosted fast/full verification on PR #32. Prior receipts at fb6b882 and 2744716 are historical; the latter's full run failed artifact uploads. Current local evidence passes 3,208 affected tests plus the expanded 70-case loan/pricing matrix, 229 packed consumers and 258 integration/contract checks. Independent counterexamples remain mandatory despite earlier green suites. The source
 baseline is current main `ca122ab`; published SDK 0.1.3 also reproduces the symptoms. These are
 separate from PR #27's DX/LIB batch and draft #26. No version bump, merge, publication, provider
 work or app mitigation removal is authorized. Exact-head hosted evidence belongs to the PR.
@@ -461,7 +461,7 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,373 public naming identities are walked and 0 are unresolved; 39,205 are `explicit`,
+43,372 public naming identities are walked and 0 are unresolved; 39,204 are `explicit`,
 4,006 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),

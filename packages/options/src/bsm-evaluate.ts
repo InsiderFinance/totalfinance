@@ -204,10 +204,12 @@ export function evaluateBlackScholesRowsUnchecked(
       }
       throw error;
     }
-    const d1 =
-      ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
-        (r - q + 0.5 * sigma * sigma) * T) /
-      (sigma * sqrtT);
+    const ratio = S / K;
+    const logRatio =
+      sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+        ? logPriceRatio(S, K)
+        : Math.log(ratio);
+    const d1 = (logRatio + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
     const d2 = wantD2 ? d1 - sigma * sqrtT : 0;
     // A zero rate or yield discounts by exactly 1 (`Math.exp(-0)`), so the exponential is skipped
     // without changing a bit: GEX sweeps run with q = 0, and paid an extra `exp` per row for it.
@@ -226,9 +228,11 @@ export function evaluateBlackScholesRowsUnchecked(
           discountedScale: S * dq,
           discountedStrike: K * discountFactor,
           type: isCall ? 'call' : 'put',
-          logMoneyness: logPriceRatio(S, K) + (r - q) * T,
+          logMoneyness: logRatio + (r - q) * T,
           logMoneynessError:
-            8 * Number.EPSILON * (Math.abs(logPriceRatio(S, K)) + Math.abs((r - q) * T)),
+            sigma * sqrtT < 1e-4
+              ? 8 * Number.EPSILON * (Math.abs(logRatio) + Math.abs((r - q) * T))
+              : 0,
           standardDeviation: sigma * sqrtT,
         });
       } catch (error) {
@@ -299,10 +303,12 @@ function evaluateGammaRows(
       }
       throw error;
     }
-    const d1 =
-      ((sigma * sqrtT < 1e-4 ? logPriceRatio(S, K) : Math.log(S / K)) +
-        (r - q + 0.5 * sigma * sigma) * T) /
-      (sigma * sqrtT);
+    const ratio = S / K;
+    const logRatio =
+      sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+        ? logPriceRatio(S, K)
+        : Math.log(ratio);
+    const d1 = (logRatio + (r - q + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
     const dq = q === 0 ? 1 : Math.exp(-q * T);
     const pdf = normalPdf(d1);
     out[i] = (dq * pdf) / (S * sigma * sqrtT);

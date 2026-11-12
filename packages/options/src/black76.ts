@@ -1,6 +1,7 @@
 import {
   analyticPremium,
   analyticTrial,
+  analyticPrecisionFailure,
   analyticLowerTrial,
   logPriceRatio,
   requireHorizonVolatility,
@@ -75,10 +76,13 @@ function d1d2({
 }: Pick<Black76Input, 'forward' | 'strike' | 'timeToExpiryYears' | 'volatility'>) {
   const sqrtT = Math.sqrt(T);
   if (sigma > 0 && T > 0) requireHorizonVolatility(sigma * sqrtT);
-  const d1 =
-    ((sigma * sqrtT < 1e-4 ? logPriceRatio(F, K) : Math.log(F / K)) + 0.5 * sigma * sigma * T) /
-    (sigma * sqrtT);
-  return { d1, d2: d1 - sigma * sqrtT, sqrtT };
+  const ratio = F / K;
+  const logRatio =
+    sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+      ? logPriceRatio(F, K)
+      : Math.log(ratio);
+  const d1 = (logRatio + 0.5 * sigma * sigma * T) / (sigma * sqrtT);
+  return { d1, d2: d1 - sigma * sqrtT, sqrtT, logRatio };
 }
 
 /** The numeric fields of a Black-76 request, with a pasteable example for each. */
@@ -119,7 +123,8 @@ const BLACK76_HINTS: Record<string, string> = {
  */
 function black76PriceUnchecked(input: Black76TypedInput): number {
   const { type, forward: F, strike: K, timeToExpiryYears: T, riskFreeRate: r } = input;
-  const { d1, d2 } = d1d2(input);
+  const { d1, d2, sqrtT, logRatio } = d1d2(input);
+  const sd = input.volatility * sqrtT;
   const df = Math.exp(-r * T);
   return analyticPremium({
     positiveLeg: df * (type === 'call' ? F * normalCdf(d1) : K * normalCdf(-d2)),
@@ -128,8 +133,9 @@ function black76PriceUnchecked(input: Black76TypedInput): number {
     discountedScale: df * F,
     discountedStrike: df * K,
     type,
-    logMoneyness: logPriceRatio(F, K),
-    standardDeviation: input.volatility * Math.sqrt(T),
+    logMoneyness: logRatio,
+    logMoneynessError: sd < 1e-4 ? 8 * Number.EPSILON * Math.abs(logRatio) : 0,
+    standardDeviation: sd,
   });
 }
 
@@ -257,8 +263,9 @@ export interface Black76ImpliedVolatilityResult {
     | 'above_max_bound'
     | 'price_below_resolvable'
     | 'no_bracket'
-    | 'max_iterations'
-    | 'precision_limit';
+    | 'max_iterations';
+  /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+  message?: string;
 }
 
 /**
@@ -318,17 +325,13 @@ export function black76ImpliedVolatility(
   const lowerTrial = analyticLowerTrial(f, lo, hi);
   lo = lowerTrial.lower;
   const flo = lowerTrial.value;
-  if (!Number.isFinite(flo))
-    return { value: NaN, converged: false, iterations: 0, reason: 'precision_limit' };
+  if (!Number.isFinite(flo)) return analyticPrecisionFailure(0);
   if (Math.abs(flo) <= ptol) return { value: lo, converged: true, iterations: 0 };
   // Target below the model price at the lowest representable σ ⇒ no σ ≥ lo reproduces it.
   if (flo > 0)
-    return {
-      value: NaN,
-      converged: false,
-      iterations: 0,
-      reason: lowerTrial.adjusted ? 'precision_limit' : 'price_below_resolvable',
-    };
+    return lowerTrial.adjusted
+      ? analyticPrecisionFailure(0)
+      : { value: NaN, converged: false, iterations: 0, reason: 'price_below_resolvable' };
   let fhi = f(hi);
   let exp = 0;
   while (fhi < 0 && exp < 12) {
@@ -341,15 +344,9 @@ export function black76ImpliedVolatility(
   const res = brent(f, lo, hi, { tolerance: 1e-12, maximumIterations: 100 });
   return res.converged
     ? { value: res.value, converged: true, iterations: res.iterations }
-    : {
-        value: NaN,
-        converged: false,
-        iterations: res.iterations,
-        reason:
-          res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
-            ? 'precision_limit'
-            : 'max_iterations',
-      };
+    : res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
+      ? analyticPrecisionFailure(res.iterations)
+      : { value: NaN, converged: false, iterations: res.iterations, reason: 'max_iterations' };
 }
 
 // ---- facade ----
@@ -576,7 +573,12 @@ function impliedVolatilityExplain(i: Black76ImpliedVolatilityInput): Computed<nu
       converged: false,
       iterations: res.iterations,
       warnings: [
-        { code, message: `Black-76 implied vol failed (${res.reason})`, severity: 'error' },
+        {
+          code,
+          message: res.message ?? `Black-76 implied vol failed (${res.reason})`,
+          severity: 'error',
+          context: { reason: res.reason },
+        },
         ...suspicious,
       ],
     },

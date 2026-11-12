@@ -287,3 +287,28 @@ it('keeps explicitly charged periodic fees separate from interest and principal'
   expect(schedule.rows.at(-1)!.closingBalance).toBe(0);
   expect(schedule.rows.reduce((sum, row) => sum + row.fee!, 0)).toBe(750);
 });
+
+for (const paymentTiming of ['end', 'beginning'] as const)
+  for (const scale of [1e-100, 1, 1e100])
+    for (const [principal, rate, numberOfPeriods, balloon] of [
+      [100000, 0.05 / 12, 60, 99999.99],
+      [500000, 0.005, 120, 499999],
+      [100000, 0.01, 360, 99990],
+      [250000, 0.05 / 12, 60, 249999.99],
+    ])
+      it(`keeps near-interest-only balloon schedules representable: ${principal}/${balloon}/${paymentTiming}/${scale}`, () => {
+        const t = {
+          principal: principal! * scale,
+          periodicInterestRate: rate!,
+          numberOfPeriods: numberOfPeriods!,
+          balloon: balloon! * scale,
+          paymentTiming,
+        };
+        const schedule = amortizationSchedule(t);
+        expect(schedule.rows.at(-1)!.closingBalance).toBe(t.balloon);
+        expect(
+          Math.abs(schedule.rows.at(-1)!.payment - schedule.payment) / t.principal,
+        ).toBeLessThan(1e-10);
+        expect(loanInterestPayment({ ...t, period: 1 })).toBe(schedule.rows[0]!.interest);
+        if (paymentTiming === 'end') expect(schedule.rows[0]!.interest).toBe(t.principal * rate!);
+      });

@@ -87,7 +87,7 @@ export function impliedVolatilityFacadePair<Input>(
     if (arbitrageCodes.includes(code)) {
       throw new ArbitrageError(message, { code, context: { input } });
     }
-    throw new ConvergenceError(message, { code, context: { input } });
+    throw new ConvergenceError(message, { code, context: { ...reason?.context, input } });
   };
   return facade(label, call, explain);
 }

@@ -287332,6 +287332,7 @@
         "Black76ImpliedVolatilityInput.type",
         "Black76ImpliedVolatilityResult.converged",
         "Black76ImpliedVolatilityResult.iterations",
+        "Black76ImpliedVolatilityResult.message",
         "Black76ImpliedVolatilityResult.reason",
         "Black76ImpliedVolatilityResult.value"
       ]
@@ -290616,6 +290617,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value"
       ]
@@ -297575,6 +297577,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -298634,6 +298637,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -965403,6 +965407,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -1032754,6 +1032759,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",

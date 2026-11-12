@@ -5,7 +5,7 @@
  *   - rows: `priceMany({ contracts, market, engine })` → `PriceResult[]` (rich, convenient).
  *   - columns: struct-of-arrays `Float64Array` kernels for hot loops — `blackScholesEvaluateMany`
  *     for any selection of outputs, `blackScholesPriceMany` for price (optionally with the five
- *     first-order Greeks) — each with a buffer-writing `*Into` variant for zero-allocation reuse.
+ *     first-order Greeks) — each with a buffer-writing `*Into` variant for reusable output storage with atomic writes.
  *
  * Every columnar Black–Scholes path runs the ONE selective kernel (`bsm-evaluate.ts`): the plan is
  * resolved once per call, only the requested outputs and their dependencies are computed per row,
@@ -520,7 +520,7 @@ function describeReceived(value: unknown): string {
 
 /**
  * Write the selected Black–Scholes–Merton outputs for every row into caller-owned buffers — the
- * zero-allocation form of {@link blackScholesEvaluateMany} for hot loops that reuse storage. The
+ * buffer-writing form of {@link blackScholesEvaluateMany}. Temporary result columns ensure atomic writes. The
  * property names of `outputs` are the selection: `{ gamma: buffer }` computes gamma only.
  *
  * Reusable storage is not unchecked input. Before anything is written this validates the columns

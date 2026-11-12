@@ -6,6 +6,8 @@ import {
   meanVariance,
   kelly,
   blackLitterman,
+  riskParity,
+  hrp,
 } from '@totalfinance/risk';
 const constraints = {
   budget: 1,
@@ -117,4 +119,18 @@ for (const scale of [1e-200, 1, 1e200])
         context: expect.objectContaining({ reason: 'indefinite_covariance' }),
       }),
     );
+  });
+
+for (const scale of [1e-150, 1, 1e150])
+  it(`accepts a rank-deficient Gram covariance at ${scale} without mutating it`, () => {
+    const vectors = Array.from({ length: 12 }, (_, i) => [1, (i + 1) / 16, ((i % 3) + 1) / 8]);
+    const covariance = vectors.map((x) =>
+      vectors.map((y) => scale * x.reduce((sum, z, k) => sum + z * y[k]!, 0)),
+    );
+    const before = covariance.map((row) => row.slice());
+    for (const result of [riskParity(covariance), hrp(covariance)]) {
+      expect(result.value.weights.every(Number.isFinite)).toBe(true);
+      expect(result.value.weights.reduce((sum, x) => sum + x, 0)).toBeCloseTo(1, 10);
+    }
+    expect(covariance).toEqual(before);
   });

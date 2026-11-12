@@ -31,7 +31,7 @@ import {
 } from '@totalfinance/core';
 import type { Matrix } from '@totalfinance/math';
 import { describeInputValue } from './input-description.js';
-import { requireCovariance, dot, quadForm } from './linalg.js';
+import { assertSquare, requireCovariance, dot, quadForm } from './linalg.js';
 import { snapshotFiniteVector } from './numeric-vector.js';
 import { OPTIMIZE_CONSTRAINTS_KEYS, validateOptimizeConstraints } from './optimizer-validation.js';
 import {
@@ -432,7 +432,7 @@ function requireFrontierWorkBudget(
           : 0))
     : MAX_AFFINE_BOX_PROJECTION_SWEEPS * assetCount;
   const operationsPerIteration = assetCount * assetCount + projectionOperations;
-  const setupOperations = solverCalls * 4 * assetCount ** 3;
+  const setupOperations = (solverCalls * 4 + 1) * assetCount ** 3;
   const endpointOperations = maximumReturnBounded === true ? MAX_LINEAR_PROGRAM_OPERATIONS : 0;
   const operationUnits =
     workUnits * operationsPerIteration +
@@ -1364,7 +1364,7 @@ export function efficientFrontier(input: EfficientFrontierInput): EfficientFront
       { rows: n },
     );
   }
-  requireCovariance(covariance, n, FUNCTION_NAME);
+  assertSquare(covariance, n, FUNCTION_NAME);
   const mu = requireMeanVector(mean, n);
   if (rawConstraints !== undefined) {
     requireDataObject('constraints', rawConstraints, OPTIMIZE_CONSTRAINTS_KEYS);
@@ -1398,6 +1398,7 @@ export function efficientFrontier(input: EfficientFrontierInput): EfficientFront
   const boundedness = maximumReturnBounded(problem);
   const bounded = boundedness.bounded;
   requireFrontierWorkBudget(grid, constraints, riskFreeRatePerPeriod !== undefined, n, bounded);
+  requireCovariance(covariance, n, FUNCTION_NAME);
 
   // The left endpoint. Constraint validation and aggregate-work refusal have already completed, so
   // no hostile request can buy a solver run merely to discover malformed grammar or excessive work.

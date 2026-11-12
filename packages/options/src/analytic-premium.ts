@@ -54,13 +54,24 @@ export function analyticPremium(input: {
     standardDeviation: sd,
   } = input;
   if (sd > 0 && sd < 1e-4 && A > 0 && B > 0 && Number.isFinite(A) && Number.isFinite(B)) {
+    const a = Math.abs(h) / sd;
+    const error = input.logMoneynessError ?? 0;
+    const inTheMoney = input.type === 'call' ? h > 0 : h < 0;
+    // A zero is justified only if the whole moneyness error interval stays in the
+    // unrepresentable OTM tail. In particular, a>55 alone says nothing about ITM precision.
+    if (!inTheMoney && (Math.abs(h) - error) / sd > 55) return 0;
+    if (error > 0) {
+      const timeValueBound = 2 * (error / sd) * (1 + a);
+      // Total ITM premium is at least intrinsic. This bound preserves well-resolved
+      // intrinsic values even when their (irrelevant) relative time-value error is large.
+      const intrinsicBound =
+        inTheMoney && Math.abs(h) > error ? (2 * error) / -Math.expm1(-Math.abs(h)) : Infinity;
+      if (Math.min(timeValueBound, intrinsicBound) > 1e-8) throw new AnalyticPrecisionError();
+    }
     if (atTheMoney) {
       const square = sd * sd;
       return ((A * sd) / Math.sqrt(2 * Math.PI)) * (1 - square / 24 + (square * square) / 640);
     }
-    const a = Math.abs(h) / sd;
-    // A forward computed by cancelling carry and log-price terms may have lost the
-    // moneyness needed to resolve its premium. Never interpret that loss as exact ATM.
     const intrinsic =
       input.type === 'call'
         ? h > 0
@@ -73,9 +84,7 @@ export function analyticPremium(input: {
             ? A * Math.expm1(-h)
             : B - A
           : 0;
-    // Even the largest finite currency scale cannot rescue this Gaussian tail.
     if (a > 55) return intrinsic;
-    if (((input.logMoneynessError ?? 0) / sd) * (1 + a) > 1e-8) throw new AnalyticPrecisionError();
     // The Gaussian integral for time value, expanded only in sd (not moneyness):
     // OTM = sqrt(A B) sd phi(a) [J0 - sd² J1/8 + sd⁴ J2/128].
     // Jn = exp(a²/2) integral_0^1 u^(2n) exp(-a²/(2u²)) du.
@@ -141,4 +150,22 @@ export function analyticLowerTrial(
     value = evaluate(lower);
   }
   return { lower, value, adjusted: lower !== original };
+}
+
+/** The existing reason describes failure to establish a usable finite pricing bracket. */
+export function analyticPrecisionFailure(iterations: number): {
+  value: number;
+  converged: false;
+  iterations: number;
+  reason: 'no_bracket';
+  message: string;
+} {
+  return {
+    value: NaN,
+    converged: false,
+    iterations,
+    reason: 'no_bracket',
+    message:
+      'no usable pricing bracket could be resolved in binary64 precision; use a resolvable bracket or a higher-precision calculation',
+  };
 }

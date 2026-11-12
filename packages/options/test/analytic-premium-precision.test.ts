@@ -248,7 +248,7 @@ it("preserves the expert kernels' existing finite non-ATM expiry answers", () =>
   }
 });
 
-it('reports precision_limit when the entire explicit IV bracket is unavailable', () => {
+it('reports an unavailable numeric bracket without widening the public reason union', () => {
   const t = { ...input, strike: 100 * Math.exp(0.01), riskFreeRate: 0.01, volatility: 0.2 };
   const { volatility: _, ...terms } = t;
   const r = blackScholesImpliedVolatility({
@@ -259,7 +259,8 @@ it('reports precision_limit when the entire explicit IV bracket is unavailable',
   });
   expect(r.converged).toBe(false);
   expect(r.iterations).toBe(0);
-  expect(r.reason).toBe('precision_limit');
+  expect(r.reason).toBe('no_bracket');
+  expect(r.message).toMatch(/binary64 precision/);
 });
 
 it('recovers facade IV at the reported sub-second horizon', () => {

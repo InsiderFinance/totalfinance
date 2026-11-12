@@ -5,7 +5,7 @@
  */
 
 import { InputError, ErrorCode } from '@totalfinance/core';
-import { type Matrix, cholesky, choleskySolve, jacobiEigen } from '@totalfinance/math';
+import { type Matrix, cholesky, choleskySolve } from '@totalfinance/math';
 
 /** Dot product of two equal-length vectors. */
 export function dot(a: ArrayLike<number>, b: ArrayLike<number>): number {
@@ -43,25 +43,26 @@ export function requireCovariance(A: Matrix, n: number, functionName: string): v
     0,
   );
   if (scale === 0 || n === 0) return;
-  // Normalize before the eigensolve: a covariance's units must not determine validity.
-  const eigenvalues = jacobiEigen(A.map((row) => row.map((x) => x / scale))).values;
-  const largest = Math.max(...eigenvalues.map(Math.abs));
-  const smallest = Math.min(...eigenvalues);
-  const tolerance = 64 * n * Number.EPSILON * largest;
-  if (smallest < -tolerance)
+  // A validation-only normalized copy: original covariance is never regularized in a solve.
+  // Cholesky costs one factorization, rather than multiple Jacobi rotation sweeps. The diagonal
+  // tolerance admits roundoff at a semidefinite boundary without accepting material negative risk.
+  const tolerance = 64 * n * Number.EPSILON;
+  const validation = A.map((row, i) =>
+    row.map((x, j) => (x / scale + A[j]![i]! / scale) / 2 + (i === j ? tolerance : 0)),
+  );
+  try {
+    cholesky(validation);
+  } catch (error) {
+    if (!(error instanceof InputError) || error.code !== ErrorCode.LinalgNotPositiveDefinite)
+      throw error;
     throw new InputError(
       `${functionName}: covariance must be positive semidefinite; the matrix implies negative portfolio variance. Check variances, correlations and units.`,
       {
         code: ErrorCode.InputOutOfRange,
-        context: {
-          functionName,
-          field: 'covariance',
-          reason: 'indefinite_covariance',
-          normalizedSmallestEigenvalue: smallest,
-          tolerance,
-        },
+        context: { functionName, field: 'covariance', reason: 'indefinite_covariance', tolerance },
       },
     );
+  }
 }
 
 /**

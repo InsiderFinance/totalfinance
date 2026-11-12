@@ -1,11 +1,11 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43373,
+    "identities": 43372,
     "unresolved": 0,
     "byDisposition": {
       "canonical-term": 4006,
-      "explicit": 39205,
+      "explicit": 39204,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
@@ -13,8 +13,8 @@
       "code-string": 276,
       "enum-member": 276,
       "export": 7460,
-      "field": 22895,
-      "literal-value": 4660,
+      "field": 22897,
+      "literal-value": 4657,
       "mcp-field": 1553,
       "mcp-tool": 57,
       "method": 1780,
@@ -35,7 +35,7 @@
       "@totalfinance/http": 393,
       "@totalfinance/math": 923,
       "@totalfinance/mcp": 493,
-      "@totalfinance/options": 2721,
+      "@totalfinance/options": 2720,
       "@totalfinance/performance": 716,
       "@totalfinance/portfolio": 2716,
       "@totalfinance/research": 1392,
@@ -107673,6 +107673,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|field|Black76ImpliedVolatilityResult.message",
+      "name": "message",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|field|Black76ImpliedVolatilityResult.reason",
       "name": "reason",
       "kind": "field",
@@ -108053,6 +108060,13 @@
     {
       "id": "@totalfinance/options|field|BlackScholesImpliedVolatilityResult.iterations",
       "name": "iterations",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesImpliedVolatilityResult.message",
+      "name": "message",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -118249,13 +118263,6 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/options|literal-value|Black76ImpliedVolatilityResult.reason:precision_limit",
-      "name": "precision_limit",
-      "kind": "literal-value",
-      "position": "serialized",
-      "disposition": "explicit"
-    },
-    {
       "id": "@totalfinance/options|literal-value|Black76ImpliedVolatilityResult.reason:price_below_resolvable",
       "name": "price_below_resolvable",
       "kind": "literal-value",
@@ -118701,13 +118708,6 @@
     {
       "id": "@totalfinance/options|literal-value|ImpliedVolatilityReason:no_bracket",
       "name": "no_bracket",
-      "kind": "literal-value",
-      "position": "serialized",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/options|literal-value|ImpliedVolatilityReason:precision_limit",
-      "name": "precision_limit",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"
@@ -119479,13 +119479,6 @@
     {
       "id": "@totalfinance/options|literal-value|OptionImpliedVolatilityBatchResult.reasons:no_bracket",
       "name": "no_bracket",
-      "kind": "literal-value",
-      "position": "serialized",
-      "disposition": "explicit"
-    },
-    {
-      "id": "@totalfinance/options|literal-value|OptionImpliedVolatilityBatchResult.reasons:precision_limit",
-      "name": "precision_limit",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"

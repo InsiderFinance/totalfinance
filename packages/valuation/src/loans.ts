@@ -278,7 +278,7 @@ export interface AmortizationScheduleResult {
  * balance = opening − principal; Σ principal ≈ principal − balloon) and any display rounding is
  * the caller's explicit, documented policy applied afterwards. The final installment may absorb
  * arithmetic drift only within a compounding-propagated roundoff allowance, capped at
- * 1e-10 of the principal being amortized; larger drift
+ * 1e-10 of original principal; larger drift
  * is refused. The `payment` headline is the level installment; inspect the final row's payment
  * for its explicit roundoff reconciliation.
  */
@@ -302,7 +302,7 @@ export function amortizationSchedule(input: AmortizationScheduleInput): Amortiza
   let balance = input.principal;
   let totalInterest = 0;
   let driftBudget = 0;
-  const correctionCap = 1e-10 * ((input.principal - balloon) / input.principal);
+  const correctionCap = 1e-10;
   for (let period = 1; period <= input.numberOfPeriods; period++) {
     // Beginning-timing payments reduce the balance BEFORE the period accrues interest.
     const interestBase = input.paymentTiming === 'beginning' ? balance - payment : balance;

@@ -354,6 +354,7 @@ export function impliedVolatility(
     converged: boolean;
     iterations: number;
     reason?: ImpliedVolatilityReason;
+    message?: string;
   } => {
     const res = blackScholesImpliedVolatility({
       type,
@@ -369,6 +370,7 @@ export function impliedVolatility(
       converged: res.converged,
       iterations: res.iterations,
       ...(res.reason !== undefined ? { reason: res.reason } : {}),
+      ...(res.message !== undefined ? { message: res.message } : {}),
     };
   };
 
@@ -377,16 +379,18 @@ export function impliedVolatility(
    * warning naming why. The Brent kernel knows the reason — pass it through instead of flattening
    * every bracketed failure into a bare non-convergence.
    */
-  const brentFailure = (reason: ImpliedVolatilityReason | undefined): QuantWarning => {
+  const brentFailure = (
+    reason: ImpliedVolatilityReason | undefined,
+    message?: string,
+  ): QuantWarning => {
+    if (message !== undefined)
+      return {
+        code: ErrorCode.ImpliedVolatilityNoConvergence,
+        severity: 'error',
+        message: `brent: ${message}`,
+        context: { reason },
+      };
     switch (reason) {
-      case 'precision_limit':
-        return {
-          code: ErrorCode.ImpliedVolatilityNoConvergence,
-          severity: 'error',
-          message:
-            'brent: a pricing trial could not resolve this premium in binary64 precision; use higher precision or a resolvable bracket',
-          context: { reason },
-        };
       case 'below_intrinsic':
         return {
           code: ErrorCode.ImpliedVolatilityBelowIntrinsic,
@@ -450,7 +454,7 @@ export function impliedVolatility(
     usedMethod = 'brent';
     // Law 2: the brent path owes the same error-severity warning every other path pushes — without
     // it a failed solve returned `value: null` with an EMPTY warning list and no reason at all.
-    if (!converged) warnings.push(brentFailure(res.reason));
+    if (!converged) warnings.push(brentFailure(res.reason, res.message));
   } else {
     const res =
       method === 'newton'
@@ -476,7 +480,7 @@ export function impliedVolatility(
         severity: 'info',
       });
       // When the fallback ALSO fails, the info warning above is not a failure report — say why.
-      if (!converged) warnings.push(brentFailure(fb.reason));
+      if (!converged) warnings.push(brentFailure(fb.reason, fb.message));
     } else {
       value = NaN;
       converged = false;

@@ -1058,16 +1058,31 @@ function kirkSpread(input: {
       },
     );
   }
-  const d1 = (logPriceRatio(F1, F2 + K) + 0.5 * sd * sd) / sd;
+  // K=0 is exact Margrabe: common risk-free carry cancels before any rounding of forwards.
+  const logRatio = K === 0 ? logPriceRatio(S1, S2) : logPriceRatio(F1, F2 + K);
+  const carry = (q2 - q1) * T;
+  const h = K === 0 ? logRatio + carry : logRatio;
+  const hError =
+    K === 0
+      ? 8 * Number.EPSILON * (Math.abs(logRatio) + Math.abs(carry))
+      : 8 *
+        Number.EPSILON *
+        (1 +
+          Math.abs((r - q1) * T) +
+          Math.abs(F2 / (F2 + K)) * (1 + Math.abs((r - q2) * T)) +
+          Math.abs(K / (F2 + K)) +
+          Math.abs(h));
+  const d1 = (h + 0.5 * sd * sd) / sd;
   const d2 = d1 - sd;
   return analyticPremium({
     positiveLeg: disc * (type === 'call' ? F1 * N(d1) : (F2 + K) * N(-d2)),
     negativeLeg: disc * (type === 'call' ? (F2 + K) * N(d2) : F1 * N(-d1)),
-    atTheMoney: F1 === F2 + K,
-    discountedScale: disc * F1,
-    discountedStrike: disc * (F2 + K),
+    atTheMoney: h === 0,
+    discountedScale: sd < 1e-4 ? S1 * Math.exp(-q1 * T) : disc * F1,
+    discountedStrike: sd < 1e-4 ? S2 * Math.exp(-q2 * T) + disc * K : disc * (F2 + K),
     type,
-    logMoneyness: logPriceRatio(F1, F2 + K),
+    logMoneyness: h,
+    logMoneynessError: hError,
     standardDeviation: sd,
   });
 }
