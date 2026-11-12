@@ -18,7 +18,14 @@ import { PlaygroundGallery } from '@/components/mdx/playground-gallery';
 import { PlaygroundSection } from '@/components/playground/playground-section';
 import { operations, referenceIndex } from '@/lib/data';
 import { pageMetadata } from '@/lib/metadata';
-import { BASE_PATH, FAMILY, PACKAGE_NAME, REPOSITORY_URL, SITE_ORIGIN } from '@/lib/site';
+import {
+  BASE_PATH,
+  FAMILY,
+  PACKAGE_NAME,
+  PUBLIC_DOCS_URL,
+  REPOSITORY_URL,
+  SITE_ORIGIN,
+} from '@/lib/site';
 import { blackScholes } from '@insiderfinance/totalfinance/options';
 import { createOperationRegistry, defaultOperations } from '@insiderfinance/totalfinance/workflows';
 
@@ -169,13 +176,13 @@ export default function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
-                href="/start"
+                href={`${PUBLIC_DOCS_URL}/start`}
                 className="inline-flex items-center gap-2 rounded-xl bg-fd-primary px-5 py-3 text-sm font-semibold text-fd-primary-foreground shadow-sm transition-colors hover:bg-[var(--color-brand-hover)]"
               >
                 Get started <ArrowRight className="size-4" aria-hidden />
               </Link>
               <Link
-                href="/agents"
+                href={`${PUBLIC_DOCS_URL}/agents`}
                 className="inline-flex items-center gap-2 rounded-xl border border-fd-primary/40 bg-fd-accent px-5 py-3 text-sm font-semibold text-fd-primary transition-colors hover:border-fd-primary"
               >
                 <Bot className="size-4" aria-hidden /> Connect your AI agent
@@ -314,7 +321,7 @@ export default function HomePage() {
                 <span>
                   <strong className="text-fd-foreground">Context-ready docs.</strong>{' '}
                   <a
-                    href={`${BASE_PATH}/llms.txt`}
+                    href={`${PUBLIC_DOCS_URL}/llms.txt`}
                     className="font-medium text-fd-primary hover:underline"
                   >
                     llms.txt
@@ -331,7 +338,7 @@ export default function HomePage() {
               </li>
             </ul>
             <Link
-              href="/agents"
+              href={`${PUBLIC_DOCS_URL}/agents`}
               className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-fd-primary hover:underline"
             >
               Everything for agents <ArrowRight className="size-4" aria-hidden />
@@ -352,7 +359,7 @@ export default function HomePage() {
             TypeScript all follow your inputs.
           </p>
         </div>
-        <PlaygroundSection id="price-an-option" />
+        <PlaygroundSection id="price-an-option" docsBaseUrl={PUBLIC_DOCS_URL} />
       </section>
 
       <section className="border-y border-fd-border bg-fd-muted">
@@ -369,13 +376,13 @@ export default function HomePage() {
               </p>
             </div>
             <Link
-              href="/playgrounds"
+              href={`${PUBLIC_DOCS_URL}/playgrounds`}
               className="text-sm font-semibold text-fd-primary hover:underline"
             >
               All calculators →
             </Link>
           </div>
-          <PlaygroundGallery exclude={['price-an-option']} />
+          <PlaygroundGallery exclude={['price-an-option']} docsBaseUrl={PUBLIC_DOCS_URL} />
         </div>
       </section>
 
@@ -386,7 +393,7 @@ export default function HomePage() {
             The finance library, tree-shakeable.
           </h2>
         </div>
-        <DomainGrid />
+        <DomainGrid docsBaseUrl={PUBLIC_DOCS_URL} />
       </section>
 
       <section aria-labelledby="star-heading" className="px-5 pb-6 sm:px-8 lg:px-10">

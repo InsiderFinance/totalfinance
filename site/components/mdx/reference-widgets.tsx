@@ -6,7 +6,13 @@ import type { ExportLink } from '@/src/site-data';
 export { KindBadge } from '../reference/kind-badge';
 import { KindBadge } from '../reference/kind-badge';
 
-export function DomainGrid({ exclude = [] as string[] }: { exclude?: string[] }) {
+export function DomainGrid({
+  exclude = [] as string[],
+  docsBaseUrl = '',
+}: {
+  exclude?: string[];
+  docsBaseUrl?: string;
+}) {
   const domains = referenceIndex().domains.filter(
     (domain) => domain.slug !== 'index' && !exclude.includes(domain.slug),
   );
@@ -20,7 +26,7 @@ export function DomainGrid({ exclude = [] as string[] }: { exclude?: string[] })
         return (
           <Link
             key={domain.slug}
-            href={`/domains/${domain.slug}`}
+            href={`${docsBaseUrl}/domains/${domain.slug}`}
             className="group rounded-xl border border-fd-border p-4 transition-colors hover:border-fd-primary/50 hover:bg-fd-muted"
           >
             <span className="flex items-center justify-between gap-2">

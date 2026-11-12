@@ -13,6 +13,13 @@ The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the
 
 ### Completed bounded site work: recover the original homepage and branding (2026-11-12)
 
+Public-link follow-up locally complete: [P1–P2](./specs/homepage-and-docs-routing.md) point the homepage's
+docs entry points to InsiderFinance production, as requested. Staging's proxy works; the production
+route currently returns 404 pending the separately authorized InsiderFinance release. Keep the
+source docs mount, calculations, layout and canonical metadata unchanged.
+The build, 202 site tests, 30 documentation checks, site types and changed-source lint pass.
+Rendered homepage anchors all use InsiderFinance for docs; in-docs navigation remains local.
+
 Chrome follow-up locally complete: [N1–N3](./specs/homepage-and-docs-routing.md) remove duplicate sidebar
 branding, group version/GitHub/npm, and label the shared docs link View Docs. The shared
 `/docs/totalfinance` mount is retained; the deployment guide explains why and uses the canonical

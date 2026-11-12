@@ -1,5 +1,26 @@
 # TotalFinance homepage and documentation routing
 
+## Current follow-up: link to InsiderFinance docs (2026-11-12)
+
+The maintainer requested that View Docs on TotalFinance send visitors to InsiderFinance.
+Use the production `https://www.insiderfinance.io/docs/totalfinance` prefix for the shared header
+and the homepage's docs entry links, agent links, library/calculator cards, footer and mobile
+navigation. Shared docs widgets retain relative links when rendered inside the docs.
+Preserve the marketing layout and the source deployment's `/docs/totalfinance` mount; the proxy
+must still fetch those files directly. This changes links, not canonical metadata or MCP endpoints.
+
+- [x] P1: Public docs entry points use InsiderFinance's production URL.
+- [x] P2: Existing docs routes and local navigation still build and pass their checks.
+
+At implementation time, both production entry URLs return HTTP 404; staging's rewrite is live.
+The maintainer explicitly named the production domain, so use it rather than silently substituting
+staging. InsiderFinance's production release remains a separately authorized application action.
+
+Local verification: static build, all 202 site tests, 30 documentation checks, site typecheck,
+changed-source ESLint and formatting pass on Node 22.23.2/pnpm 10.32.0. The rendered homepage
+contains 44 InsiderFinance docs anchors and no source-host docs anchors. The documentation's own
+Installation link remains local to the docs mount. No source packages, versions or dependencies change.
+
 ## Current follow-up: compact documentation chrome (2026-11-12)
 
 The maintainer requested one brand block in the top left, a version/GitHub/npm resource row, and

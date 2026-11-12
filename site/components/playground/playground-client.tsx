@@ -22,6 +22,7 @@ export interface PlaygroundClientProps {
   introduction: string;
   controls: Control[];
   initial: Calculation;
+  agentsHref?: string;
 }
 
 type Status = { state: 'ready' } | { state: 'running' } | { state: 'error'; message: string };
@@ -117,6 +118,7 @@ export function PlaygroundClient({
   introduction,
   controls,
   initial,
+  agentsHref,
 }: PlaygroundClientProps) {
   const defaults = useMemo(() => defaultInput({ controls }), [controls]);
   const [input, setInput] = useState<PlaygroundInput>(defaults);
@@ -375,7 +377,7 @@ export function PlaygroundClient({
           calculation={calculation}
           onNeedResult={() => void run(input, { updateUrl: false }).catch(() => undefined)}
         />
-        <AskAgent id={id} input={validInput} />
+        <AskAgent id={id} input={validInput} href={agentsHref} />
       </div>
     </section>
   );

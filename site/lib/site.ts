@@ -35,6 +35,7 @@ const FAMILY_ORIGIN = (
   process.env.TOTALFINANCE_DOCS_FAMILY_ORIGIN ?? 'https://www.insiderfinance.io'
 ).replace(/\/$/, '');
 const API_DOCS_PUBLIC = process.env.TOTALFINANCE_DOCS_FAMILY_API === '1';
+export const PUBLIC_DOCS_URL = `${FAMILY_ORIGIN}/docs/totalfinance`;
 
 export interface FamilyLink {
   id: string;
@@ -47,7 +48,12 @@ export const FAMILY = {
   home: FAMILY_ORIGIN,
   docs: `${FAMILY_ORIGIN}/docs`,
   links: [
-    { id: 'totalfinance', label: 'View Docs', href: '/start', external: false },
+    {
+      id: 'totalfinance',
+      label: 'View Docs',
+      href: `${PUBLIC_DOCS_URL}/start`,
+      external: true,
+    },
     ...(API_DOCS_PUBLIC
       ? [
           { id: 'api', label: 'API', href: `${FAMILY_ORIGIN}/docs/api`, external: true },

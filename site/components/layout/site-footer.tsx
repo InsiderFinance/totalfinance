@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { siteVersion } from '@/lib/data';
 import { BASE_PATH, FAMILY, REPOSITORY_URL } from '@/lib/site';
 
-export function SiteFooter() {
+export function SiteFooter({ docsBaseUrl = '' }: { docsBaseUrl?: string }) {
   const version = siteVersion();
   return (
     <footer className="border-t border-fd-border">
@@ -19,13 +19,13 @@ export function SiteFooter() {
           . Sample data is hypothetical. Analytics are not investment advice.
         </p>
         <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-1">
-          <Link href="/versions" className="hover:text-fd-primary">
+          <Link href={`${docsBaseUrl}/versions`} className="hover:text-fd-primary">
             v{version.version}
           </Link>
-          <a href={`${BASE_PATH}/llms.txt`} className="hover:text-fd-primary">
+          <a href={`${docsBaseUrl || BASE_PATH}/llms.txt`} className="hover:text-fd-primary">
             llms.txt
           </a>
-          <Link href="/agents" className="hover:text-fd-primary">
+          <Link href={`${docsBaseUrl}/agents`} className="hover:text-fd-primary">
             For agents
           </Link>
           <a href={REPOSITORY_URL} className="hover:text-fd-primary">

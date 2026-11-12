@@ -10,10 +10,12 @@ export function DocsShell({
   children,
   tab,
   sidebarOnDesktop = true,
+  docsBaseUrl = '',
 }: {
   children: ReactNode;
   tab: NavTab['id'];
   sidebarOnDesktop?: boolean;
+  docsBaseUrl?: string;
 }) {
   const version = siteVersion();
   const tabs = navigation();
@@ -28,14 +30,15 @@ export function DocsShell({
         repositoryUrl={REPOSITORY_URL}
         packageUrl={PACKAGE_URL}
         data={FAMILY.data}
-        llmsUrl={`${BASE_PATH}/llms.txt`}
+        llmsUrl={`${docsBaseUrl || BASE_PATH}/llms.txt`}
+        docsBaseUrl={docsBaseUrl}
         desktop={sidebarOnDesktop}
       />
       <div className={sidebarOnDesktop ? 'lg:pl-(--tf-sidebar-width)' : ''}>
         <main id="tf-main" tabIndex={-1} className="outline-none">
           {children}
         </main>
-        <SiteFooter />
+        <SiteFooter docsBaseUrl={docsBaseUrl} />
       </div>
     </>
   );

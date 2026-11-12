@@ -13,7 +13,7 @@ const PlaygroundShell = dynamic(() =>
  * without JavaScript, then hands interactivity to the client. Only data crosses the boundary:
  * samples travel as ids and the full result object is recomputed in the browser on demand.
  */
-export function PlaygroundSection({ id }: { id: string }) {
+export function PlaygroundSection({ id, docsBaseUrl = '' }: { id: string; docsBaseUrl?: string }) {
   const playground = playgrounds.find((candidate) => candidate.id === id);
   if (!playground) throw new Error(`Unknown playground ${id}.`);
   const calculation = playground.run(defaultInput(playground));
@@ -24,6 +24,7 @@ export function PlaygroundSection({ id }: { id: string }) {
       introduction={playground.introduction}
       controls={stripSamples(playground.controls)}
       initial={{ ...calculation, result: null }}
+      agentsHref={`${docsBaseUrl}/agents`}
     />
   );
 }

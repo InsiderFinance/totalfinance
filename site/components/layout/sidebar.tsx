@@ -16,6 +16,7 @@ export interface SidebarProps {
   packageUrl: string;
   data: { label: string; href: string };
   llmsUrl: string;
+  docsBaseUrl?: string;
   /** Render the fixed desktop sidebar (pages like the home page use only the mobile drawer). */
   desktop?: boolean;
 }
@@ -26,10 +27,12 @@ function Group({
   group,
   pathname,
   onNavigate,
+  docsBaseUrl,
 }: {
   group: NavGroup;
   pathname: string;
   onNavigate: () => void;
+  docsBaseUrl: string;
 }) {
   const containsActive = group.links.some((link) => normalize(link.url) === pathname);
   const [open, setOpen] = useState(!group.collapsible || containsActive);
@@ -44,7 +47,7 @@ function Group({
         return (
           <li key={link.url}>
             <Link
-              href={link.url}
+              href={`${docsBaseUrl}${link.url}`}
               prefetch={false}
               onClick={onNavigate}
               aria-current={active ? 'page' : undefined}
@@ -93,6 +96,7 @@ function SidebarContent({
   packageUrl,
   data,
   llmsUrl,
+  docsBaseUrl = '',
   onNavigate,
 }: SidebarProps & { onNavigate: () => void }) {
   const pathname = normalize(usePathname() ?? '/');
@@ -117,7 +121,7 @@ function SidebarContent({
           className="flex flex-wrap items-center gap-x-3 gap-y-2 pr-10 text-xs text-fd-muted-foreground lg:pr-0"
         >
           <Link
-            href="/versions"
+            href={`${docsBaseUrl}/versions`}
             onClick={onNavigate}
             className="rounded-full bg-fd-secondary px-2 py-0.5 font-medium hover:text-fd-primary"
             aria-label={`TotalFinance versions (${versionLabel})`}
@@ -138,7 +142,7 @@ function SidebarContent({
           {tabs.map((candidate) => (
             <Link
               key={candidate.id}
-              href={candidate.url}
+              href={`${docsBaseUrl}${candidate.url}`}
               onClick={onNavigate}
               aria-current={candidate.id === current ? 'true' : undefined}
               title={candidate.description}
@@ -161,6 +165,7 @@ function SidebarContent({
               group={group}
               pathname={pathname}
               onNavigate={onNavigate}
+              docsBaseUrl={docsBaseUrl}
             />
           ))}
         </nav>

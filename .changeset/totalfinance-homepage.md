@@ -26,3 +26,6 @@ links target InsiderFinance and include its linked credit.
 
 Keep one header brand, group version/GitHub/npm links in the sidebar, and label the homepage's
 documentation navigation View Docs. Explain the shared docs prefix in the deployment guide.
+
+Point the homepage's public documentation entry links to InsiderFinance, including shared-header
+navigation, agent links, library/calculator cards, footer and mobile navigation.

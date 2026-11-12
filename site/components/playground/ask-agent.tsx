@@ -9,7 +9,15 @@ import { CopyButton } from '../code/copy-button';
  * The same calculation, asked of an AI agent: the MCP tool that performs it and a prompt built
  * from the inputs of the last successful calculation.
  */
-export function AskAgent({ id, input }: { id: string; input: PlaygroundInput }) {
+export function AskAgent({
+  id,
+  input,
+  href = '/agents',
+}: {
+  id: string;
+  input: PlaygroundInput;
+  href?: string;
+}) {
   const agent = CALCULATOR_AGENTS[id];
   if (!agent) return null;
   const prompt = agent.prompt(input);
@@ -55,7 +63,7 @@ export function AskAgent({ id, input }: { id: string; input: PlaygroundInput }) 
       </figure>
       <p className="text-sm">
         <Link
-          href="/agents"
+          href={href}
           className="inline-flex items-center gap-1 font-medium text-fd-primary hover:underline"
         >
           Connect Claude, Cursor, VS Code, Codex or ChatGPT{' '}

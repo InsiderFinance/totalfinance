@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Bot } from 'lucide-react';
-import { FAMILY, SITE_ORIGIN } from '@/lib/site';
+import { FAMILY, PUBLIC_DOCS_URL, SITE_ORIGIN } from '@/lib/site';
 import { TotalFinanceMark } from '../brand/totalfinance-mark';
 import { StarOnGitHub } from '../brand/star-on-github';
 import { MenuButton, SearchButton } from './header-actions';
@@ -37,7 +37,11 @@ export function SiteHeader() {
               <a
                 key={item.id}
                 href={item.href}
-                className="text-fd-muted-foreground transition-colors hover:text-fd-primary"
+                className={
+                  item.id === 'totalfinance'
+                    ? 'font-semibold text-fd-primary'
+                    : 'text-fd-muted-foreground transition-colors hover:text-fd-primary'
+                }
               >
                 {item.label}
               </a>
@@ -50,7 +54,7 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-1.5">
           <Link
-            href="/agents"
+            href={`${PUBLIC_DOCS_URL}/agents`}
             className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg border border-fd-primary/30 bg-fd-accent px-2.5 text-sm font-semibold text-fd-primary transition-colors hover:border-fd-primary/60"
             aria-label="Connect an AI agent"
           >
