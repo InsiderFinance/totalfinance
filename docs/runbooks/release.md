@@ -44,12 +44,13 @@ Node 22.13.0. This preserves the supported consumer runtime while meeting npm's 
 ## For each version
 
 1. Prepare/review/merge version, changelog and derived metadata through the normal PR process.
-   For 0.1.3 this is already done: do not run `release.sh` or `changeset version` again.
+   Run Changesets once for the selected unused version, then `pnpm publication:update` and the
+   required lockfile synchronization. Do not run versioning again for an already prepared cut.
 2. Wait for the **full main CI at the exact release commit** to pass. The release checks require
    every supported Node shard, coverage merge, static job, clean regeneration and registry rehearsal;
    a fast PR run cannot substitute. Creating the release early produces a clear refusal; rerun its
    failed verification job once main CI is green.
-3. In GitHub → Releases → Draft a new release, select/create `totalfinance-v0.1.3` at the prepared
+3. In GitHub → Releases → Draft a new release, select/create `totalfinance-v<version>` (for example `totalfinance-v0.1.4`) at the prepared
    main commit, enter the reviewed release notes, and click **Publish release**. Drafts do nothing;
    prereleases are skipped and never advance npm `latest`. Stable tags must match both prepared
    distribution versions. Publishing does not invent or bump a version.

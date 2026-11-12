@@ -1,3 +1,11 @@
+import {
+  analyticPremium,
+  analyticTrial,
+  analyticPrecisionFailure,
+  analyticLowerTrial,
+  logPriceRatio,
+  requireHorizonVolatility,
+} from './analytic-premium.js';
 /**
  * `@insiderfinance/totalfinance/options/black76` — the Black-76 model for options on forwards/futures (spec §9.3).
  *
@@ -67,8 +75,14 @@ function d1d2({
   volatility: sigma,
 }: Pick<Black76Input, 'forward' | 'strike' | 'timeToExpiryYears' | 'volatility'>) {
   const sqrtT = Math.sqrt(T);
-  const d1 = (Math.log(F / K) + 0.5 * sigma * sigma * T) / (sigma * sqrtT);
-  return { d1, d2: d1 - sigma * sqrtT, sqrtT };
+  if (sigma > 0 && T > 0) requireHorizonVolatility(sigma * sqrtT);
+  const ratio = F / K;
+  const logRatio =
+    sigma * sqrtT < 1e-4 || !(ratio > 0 && Number.isFinite(ratio))
+      ? logPriceRatio(F, K)
+      : Math.log(ratio);
+  const d1 = (logRatio + 0.5 * sigma * sigma * T) / (sigma * sqrtT);
+  return { d1, d2: d1 - sigma * sqrtT, sqrtT, logRatio };
 }
 
 /** The numeric fields of a Black-76 request, with a pasteable example for each. */
@@ -109,11 +123,20 @@ const BLACK76_HINTS: Record<string, string> = {
  */
 function black76PriceUnchecked(input: Black76TypedInput): number {
   const { type, forward: F, strike: K, timeToExpiryYears: T, riskFreeRate: r } = input;
-  const { d1, d2 } = d1d2(input);
+  const { d1, d2, sqrtT, logRatio } = d1d2(input);
+  const sd = input.volatility * sqrtT;
   const df = Math.exp(-r * T);
-  return type === 'call'
-    ? df * (F * normalCdf(d1) - K * normalCdf(d2))
-    : df * (K * normalCdf(-d2) - F * normalCdf(-d1));
+  return analyticPremium({
+    positiveLeg: df * (type === 'call' ? F * normalCdf(d1) : K * normalCdf(-d2)),
+    negativeLeg: df * (type === 'call' ? K * normalCdf(d2) : F * normalCdf(-d1)),
+    atTheMoney: F === K,
+    discountedScale: df * F,
+    discountedStrike: df * K,
+    type,
+    logMoneyness: logRatio,
+    logMoneynessError: sd < 1e-4 ? 8 * Number.EPSILON * Math.abs(logRatio) : 0,
+    standardDeviation: sd,
+  });
 }
 
 /**
@@ -241,6 +264,8 @@ export interface Black76ImpliedVolatilityResult {
     | 'price_below_resolvable'
     | 'no_bracket'
     | 'max_iterations';
+  /** Explanatory detail when a usable numeric pricing bracket cannot be established. */
+  message?: string;
 }
 
 /**
@@ -283,22 +308,30 @@ export function black76ImpliedVolatility(
 
   // Unchecked: the solver validated its own legs at the boundary; this runs per Brent iteration.
   const f = (sigma: number): number =>
-    black76PriceUnchecked({
-      type,
-      forward: F,
-      strike: K,
-      timeToExpiryYears: T,
-      riskFreeRate: r,
-      volatility: sigma,
-    }) - price;
-  const lo = 1e-7;
+    analyticTrial(
+      () =>
+        black76PriceUnchecked({
+          type,
+          forward: F,
+          strike: K,
+          timeToExpiryYears: T,
+          riskFreeRate: r,
+          volatility: sigma,
+        }) - price,
+    );
+  let lo = 1e-7;
   let hi = 5;
   const ptol = impliedVolatilityPriceTolerance(price);
-  const flo = f(lo);
+  const lowerTrial = analyticLowerTrial(f, lo, hi);
+  lo = lowerTrial.lower;
+  const flo = lowerTrial.value;
+  if (!Number.isFinite(flo)) return analyticPrecisionFailure(0);
   if (Math.abs(flo) <= ptol) return { value: lo, converged: true, iterations: 0 };
   // Target below the model price at the lowest representable σ ⇒ no σ ≥ lo reproduces it.
   if (flo > 0)
-    return { value: NaN, converged: false, iterations: 0, reason: 'price_below_resolvable' };
+    return lowerTrial.adjusted
+      ? analyticPrecisionFailure(0)
+      : { value: NaN, converged: false, iterations: 0, reason: 'price_below_resolvable' };
   let fhi = f(hi);
   let exp = 0;
   while (fhi < 0 && exp < 12) {
@@ -311,7 +344,9 @@ export function black76ImpliedVolatility(
   const res = brent(f, lo, hi, { tolerance: 1e-12, maximumIterations: 100 });
   return res.converged
     ? { value: res.value, converged: true, iterations: res.iterations }
-    : { value: NaN, converged: false, iterations: res.iterations, reason: 'max_iterations' };
+    : res.reason === 'non_finite_endpoint' || res.reason === 'non_finite_iteration'
+      ? analyticPrecisionFailure(res.iterations)
+      : { value: NaN, converged: false, iterations: res.iterations, reason: 'max_iterations' };
 }
 
 // ---- facade ----
@@ -538,7 +573,12 @@ function impliedVolatilityExplain(i: Black76ImpliedVolatilityInput): Computed<nu
       converged: false,
       iterations: res.iterations,
       warnings: [
-        { code, message: `Black-76 implied vol failed (${res.reason})`, severity: 'error' },
+        {
+          code,
+          message: res.message ?? `Black-76 implied vol failed (${res.reason})`,
+          severity: 'error',
+          context: { reason: res.reason },
+        },
         ...suspicious,
       ],
     },

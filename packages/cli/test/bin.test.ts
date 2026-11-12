@@ -122,6 +122,36 @@ describe('the totalfinance binary', () => {
     expect(unknown.json).toMatchObject({ code: 'operation.unknown' });
   });
 
+  it('preserves tiny ATM premiums and precision refusals through the binary (#19)', () => {
+    const store = fresh();
+    const input = {
+      type: 'call',
+      spot: 100,
+      strike: 100,
+      timeToExpiryYears: 1,
+      riskFreeRate: 0,
+      dividendYield: 0,
+      volatility: 1e-17,
+    };
+    const ok = totalfinance(['run', 'totalfinance.option.price', '--input', '-'], {
+      store,
+      stdin: JSON.stringify(input),
+    });
+    expect(ok.code).toBe(CLI_EXIT_CODES.success);
+    expect(
+      (ok.json as { structured: { value: number } }).structured.value / 3.989422804014327e-16,
+    ).toBeCloseTo(1, 13);
+    const refused = totalfinance(['run', 'totalfinance.option.price', '--input', '-'], {
+      store,
+      stdin: JSON.stringify({ ...input, strike: 100 * Math.exp(0.01), riskFreeRate: 0.01 }),
+    });
+    expect(refused.code).toBe(CLI_EXIT_CODES.inputRefused);
+    expect(refused.json).toMatchObject({
+      code: 'input.out_of_range',
+      message: expect.stringContaining('cancellation'),
+    });
+  });
+
   it('run: one OperationResult on stdout; a refused input exits 3 with the error document; stdin with -', () => {
     const store = fresh();
     const file = join(store, 'input.json');

@@ -29,7 +29,7 @@ import { matrixMultiply, matrixVectorProduct, qrDecompose, transpose } from './l
 
 /** Newey–West HAC configuration: Bartlett-kernel bandwidth (number of lags). */
 export interface OlsHacOptions {
-  /** Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. `L = 0` ⇒ White (HC0). */
+  /** Bartlett-kernel bandwidth `L`; weights are `1 − j/(L+1)` for lag `j = 1..L`. The covariance includes the finite-sample factor n/(n−k) at every bandwidth; `L = 0` ⇒ HC1. */
   lags: number;
 }
 
@@ -88,7 +88,7 @@ function requireOlsOptions(options: OlsOptions): void {
       'ols',
       'options.hac.lags',
       'ols(response, design, { hac: { lags: 4 } })',
-      'Newey–West bandwidth; use 0 for White (HC0) standard errors',
+      'Newey–West bandwidth; use 0 for HC1 standard errors (HC0 sandwich with the n/(n-k) finite-sample correction)',
     );
   }
   if (typeof lags !== 'number') {

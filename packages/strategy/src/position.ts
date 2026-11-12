@@ -8,6 +8,7 @@
 
 import {
   ensureFiniteWhenPresent,
+  stableSum,
   type Assumptions,
   CONVENTIONS_VERSION,
   DEFAULT_GREEK_UNITS,
@@ -616,6 +617,13 @@ function optionExpiries(legs: readonly Leg[]): Set<string | undefined> {
   return new Set(legs.filter((leg) => leg.kind !== 'stock').map((leg) => leg.expiry));
 }
 
+/** Stable aggregation with a scale-relative allowance for cancellation of supplied terms. */
+function roundoffSum(terms: number[], arithmeticAllowance = 0): number {
+  const total = stableSum(terms);
+  const budget = 8 * (Number.EPSILON * stableSum(terms.map(Math.abs)) + arithmeticAllowance);
+  return Number.isFinite(budget) && Math.abs(total) <= budget ? 0 : total;
+}
+
 export class Position {
   /**
    * The resolved legs — a frozen snapshot (deep-copied at construction, `Object.freeze`d per leg
@@ -886,46 +894,56 @@ export class Position {
     }
   }
 
-  /** Expiration P&L at an underlying price. */
+  /** Expiration P&L at an underlying price, allowing only relative arithmetic roundoff. */
   pnlAtExpiry(underlyingPrice: number): number {
-    // A single terminal payoff is meaningless for a calendar/diagonal (legs expire at different
-    // times); refuse it here rather than fabricate a flat curve (the guard `metrics()`/`payoff()`
-    // already enforce, extended to the public payoff primitive and to `chartData(expirationPnl)`).
     this.assertSingleExpiry('pnlAtExpiry');
-    let total = 0;
+    const terms: number[] = [];
+    const allowances: number[] = [];
     for (const leg of this.legs) {
+      const quantity = leg.quantity * (leg.kind === 'stock' ? 1 : this.multiplier);
+      const roundingScale = Number.EPSILON * Math.abs(quantity);
       if (leg.kind === 'stock') {
-        total += leg.quantity * (underlyingPrice - leg.price);
+        // Retain the price difference before scaling: the gross cash legs can
+        // overflow even when the actual P&L is finite (including exactly zero).
+        terms.push(quantity * (underlyingPrice - leg.price));
+        allowances.push(
+          roundingScale * Math.abs(underlyingPrice),
+          roundingScale * Math.abs(leg.price),
+        );
       } else {
         const intrinsic =
           leg.kind === 'call'
             ? Math.max(underlyingPrice - leg.strike, 0)
             : Math.max(leg.strike - underlyingPrice, 0);
-        total += leg.quantity * this.multiplier * (intrinsic - leg.premium);
+        terms.push(quantity * (intrinsic - leg.premium));
+        allowances.push(roundingScale * Math.abs(leg.premium));
+        if (intrinsic > 0)
+          allowances.push(
+            roundingScale * Math.abs(underlyingPrice),
+            roundingScale * Math.abs(leg.strike),
+          );
       }
     }
-    return total;
+    return roundoffSum(terms, stableSum(allowances));
   }
 
-  /** Slope of the expiration payoff at an underlying price (used for asymptotic analysis). */
+  /** Quantity-relative cancellation preserves a genuinely small standalone tail slope. */
   private slopeAt(underlyingPrice: number): number {
-    let slope = 0;
-    for (const leg of this.legs) {
-      if (leg.kind === 'stock') {
-        slope += leg.quantity;
-      } else {
-        const d =
-          leg.kind === 'call'
-            ? underlyingPrice > leg.strike
-              ? 1
-              : 0
-            : underlyingPrice < leg.strike
-              ? -1
-              : 0;
-        slope += leg.quantity * this.multiplier * d;
-      }
-    }
-    return slope;
+    return roundoffSum(
+      this.legs.map((leg) =>
+        leg.kind === 'stock'
+          ? leg.quantity
+          : leg.quantity *
+            this.multiplier *
+            (leg.kind === 'call'
+              ? underlyingPrice > leg.strike
+                ? 1
+                : 0
+              : underlyingPrice < leg.strike
+                ? -1
+                : 0),
+      ),
+    );
   }
 
   /** Net cash to enter (positive = debit, negative = credit). */
@@ -966,41 +984,44 @@ export class Position {
     }
 
     const pnl = kinks.map((k) => this.pnlAtExpiry(k));
-    const leftSlope = this.slopeAt(kinks[0]! - 1);
-    const rightSlope = this.slopeAt(kinks[kinks.length - 1]! + 1);
+    const leftSlope = this.slopeAt(-Infinity);
+    const rightSlope = this.slopeAt(Infinity);
 
     // The payoff is linear on [0, k₀], between consecutive kinks, and on [kₙ, ∞). Its extremes occur
     // at a kink, at S=0, or at ±∞ per the right-tail slope (S ≥ 0, so the left tail is bounded).
     const pnl0 = this.pnlAtExpiry(0);
     // An unbounded tail is `null` with its `bounded` flag false (B3) — never `Infinity`, which
     // JSON drops and which read as "the best trade" in a ratio.
-    const bounded = { profit: !(rightSlope > EPS), loss: !(rightSlope < -EPS) };
+    const bounded = { profit: !(rightSlope > 0), loss: !(rightSlope < 0) };
     const maxProfit = bounded.profit ? Math.max(pnl0, ...pnl) : null;
     const maxLoss = bounded.loss ? Math.min(pnl0, ...pnl) : null;
 
     const breakevens: number[] = [];
     const add = (x: number): void => {
-      if (Number.isFinite(x) && !breakevens.some((b) => Math.abs(b - x) < 1e-9)) breakevens.push(x);
+      if (Number.isFinite(x) && !breakevens.includes(x)) breakevens.push(x);
     };
-    // A kink sitting exactly on zero is itself a breakeven (e.g. a lone long stock at its entry).
+    const everywhereZero = leftSlope === 0 && rightSlope === 0 && pnl.every((value) => value === 0);
+    // Zero-interval boundaries are useful partitions; an everywhere-zero payoff has no isolated root.
     kinks.forEach((k, i) => {
-      if (Math.abs(pnl[i]!) < 1e-9) add(k);
+      if (pnl[i] === 0 && !everywhereZero) add(k);
     });
     // Interior segments: an exact root wherever consecutive kinks straddle zero.
     for (let i = 0; i < kinks.length - 1; i++) {
       const a = pnl[i]!;
       const b = pnl[i + 1]!;
       if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
-        add(kinks[i]! + ((kinks[i + 1]! - kinks[i]!) * (0 - a)) / (b - a));
+        const scale = Math.max(Math.abs(a), Math.abs(b));
+        const weight = Math.abs(a) / scale / (Math.abs(a) / scale + Math.abs(b) / scale);
+        add(kinks[i]! + (kinks[i + 1]! - kinks[i]!) * weight);
       }
     }
     // Left tail (0 ≤ x < k₀): crossing off the first kink using the analytic left slope.
-    if (Math.abs(leftSlope) > EPS) {
+    if (leftSlope !== 0) {
       const x = kinks[0]! - pnl[0]! / leftSlope;
       if (x >= 0 && x < kinks[0]!) add(x);
     }
     // Right tail (x > kₙ): crossing off the last kink using the analytic right slope.
-    if (Math.abs(rightSlope) > EPS) {
+    if (rightSlope !== 0) {
       const last = kinks.length - 1;
       const x = kinks[last]! - pnl[last]! / rightSlope;
       if (x > kinks[last]!) add(x);

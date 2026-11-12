@@ -50,12 +50,29 @@ const NAMESPACE_REASON =
 // a blackScholes.call consumer pays for them. 12 → 13.75 KiB esbuild, 8 → 9.5 KiB Rollup.
 // 0.1.2 speed (2026-10-05): the gamma-only row loop, remembered expiry-label parses and the
 // path-on-hit finiteness walk add about 280 B to the facade (13.9 KiB esbuild); 13.75 → 14 KiB.
+// Numerical repairs #19/#23 (2026-11-11), installed Node 22.23.2, esbuild 0.25.12:
+// facade ~14.3 KiB, root namespace ~96.3 KiB; Rollup facade ~9.9 KiB.
+// Expert BSM/Black76 are 5025/4918 B esbuild and 2666/2591 B Rollup. The required
+// registered ErrorCode reference retains the catalog in esbuild; keep code-registry
+// conformance and record that cost without adding a new public error API.
+// Bachelier remains 2242/2227 B. Only the exact shared analytic-premium module is
+// admitted for BSM/Black76; unrelated-module exclusions and all validation checks remain binding.
+// PR32 review corrections (2026-11-11), installed canonical Node 22.23.2:
+// esbuild expert BSM/Black76 5475/5338 B; facade 15347–15348 B; coarse facade 99609 B.
+// Rollup expert 3106/2999 B, facade 10835 B. Positive Gaussian tail evaluation,
+// field-specific precision errors and IV diagnostics account for the growth. Ceilings
+// leave at least 94 B headroom; exact retained-module exclusions are unchanged.
+// Second review corrections: 5566/5441 B esbuild expert, 3196/3103 B Rollup expert;
+// facade 15555–15558/11046 B and coarse esbuild facade 99976 B. Reusing logarithms
+// offsets part of the intrinsic-sensitivity guard and explanatory-IV-message cost.
+// Facade ceilings become 15.375/11 KiB; expert Rollup 3.25/3.125 KiB, coarse 97.75.
+// Expert esbuild remains 5.5 KiB (66 B above the largest measured consumer).
 const leanBudgets = {
   normal: 0.6,
   rsi: 9,
-  facade: 14,
-  expert: 2.5,
-  'expert-black76': 2.5,
+  facade: 15.375,
+  expert: 3.25,
+  'expert-black76': 3.125,
   'expert-bachelier': 2.5,
 } as const;
 // Actual esbuild root namespaces: 41508/105191/95468 B. These are coarse DOMAIN budgets,
@@ -66,7 +83,7 @@ const leanBudgets = {
 // Review repair: the installed root namespace is 105817 B gzip on canonical Node 22.23.2.
 // Single-symbol/time and optional-metadata validation add 231 B; only this coarse ceiling moves
 // from 103.25 to 103.5 KiB. Leaf RSI and every unrelated-domain exclusion remain unchanged.
-const coarseBudgets = { normal: 42, rsi: 103.5, facade: 96 } as const;
+const coarseBudgets = { normal: 42, rsi: 103.5, facade: 97.75 } as const;
 
 function calculation(
   canary: Exclude<ConsumerCanary, 'unused' | 'dynamic'>,
@@ -94,10 +111,13 @@ function calculation(
     style,
     source: `import ${binding} from '${specifier}';\nglobalThis.consumerCall = (input) => ${member}(${arguments_});\n`,
     budgetKiB: {
-      esbuild: rootNamespace
-        ? coarseBudgets[canary as keyof typeof coarseBudgets]
-        : leanBudgets[canary],
-      rollup: canary === 'facade' ? 9.5 : leanBudgets[canary],
+      esbuild:
+        canary === 'expert' || canary === 'expert-black76'
+          ? 5.5
+          : rootNamespace
+            ? coarseBudgets[canary as keyof typeof coarseBudgets]
+            : leanBudgets[canary],
+      rollup: canary === 'facade' ? 11 : leanBudgets[canary],
     },
     ...(style === 'feature' ? {} : { parityWith: `${canary}-feature` }),
     ...(rootNamespace ? { rootNamespace: true } : {}),
@@ -314,6 +334,7 @@ export function allowedConsumerModule(
     // esbuild can retain the model module's tiny key-array construction even when the entire
     // facade is eliminated. Tests cap that residue; forbidding the whole source file is false.
     return (
+      id === '@insiderfinance/totalfinance/modules/options/dist/analytic-premium.js' ||
       id === '@insiderfinance/totalfinance/modules/options/dist/bsm.js' ||
       id === '@insiderfinance/totalfinance/modules/math/dist/normal.js' ||
       id === '@insiderfinance/totalfinance/modules/options/dist/black-scholes.js'
@@ -322,13 +343,15 @@ export function allowedConsumerModule(
   if (fixture.canary === 'expert-black76' || fixture.canary === 'expert-bachelier') {
     const model = fixture.canary.slice('expert-'.length);
     return (
+      (fixture.canary === 'expert-black76' &&
+        id === '@insiderfinance/totalfinance/modules/options/dist/analytic-premium.js') ||
       id === `@insiderfinance/totalfinance/modules/options/dist/${model}.js` ||
       id === '@insiderfinance/totalfinance/modules/math/dist/normal.js'
     );
   }
   // The facade namespace carries its selective members (delta…rho, evaluate) and their one kernel.
   return (
-    /^@insiderfinance\/totalfinance\/modules\/options\/dist\/(?:black-scholes|bsm|bsm-evaluate|facade-util)\.js$/.test(
+    /^@insiderfinance\/totalfinance\/modules\/options\/dist\/(?:black-scholes|bsm|bsm-evaluate|facade-util|analytic-premium)\.js$/.test(
       id,
     ) ||
     /^@insiderfinance\/totalfinance\/modules\/math\/dist\/(?:normal|solvers|resource-validation)\.js$/.test(

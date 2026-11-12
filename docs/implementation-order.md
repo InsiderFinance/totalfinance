@@ -5,7 +5,15 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-### Active: GitHub Release → SDK publication (2026-11-10)
+### Active: numerical correctness repairs and authorized 0.1.4 release (2026-11-12)
+
+The maintainer authorized the nine numerical repairs, reviewed PR #32 through three rounds and now instructed “Perform the rlease through github.” Follow [the scoped contract](./specs/numerical-correctness-16-24.md), V1–V4, for totalfinance-v0.1.4. S1–S7 passed at c406bca with all eight required fast and 23 full hosted jobs. That evidence is historical for the new version/documentation commit: obtain fresh exact-head fast/full gates, merge #32, require full main CI, then use the existing SDK-only GitHub Release workflow and its independent release repeats. The PR and Release own the exact candidate SHA and publication receipts.
+
+The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
+
+### Completed: GitHub Release → SDK publication (2026-11-11)
+
+SDK 0.1.3 is public; main `ca122ab` and the original release run are green. The paragraphs below preserve the initial preparation scope and its bounded production follow-up.
 
 Bounded production follow-up G7 (2026-11-11): PR #29 is merged at `59a2833`; full main CI and both
 release coverage passes succeeded. npm accepted the authorized SDK 0.1.3 upload with signed
@@ -450,7 +458,7 @@ NAME entries for published notation (VaR/CVaR, R², p-value, stochastic %K/%D, I
 Bollinger %B, greeks partials, Gatheral's `g`, SSVI's `w`, G2++, z-score/Z-spread, k-fold) — names,
 never tokens, since one `r` or `k` token entry would exempt every compound containing that letter.
 
-43,370 public naming identities are walked and 0 are unresolved; 39,202 are `explicit`,
+43,372 public naming identities are walked and 0 are unresolved; 39,204 are `explicit`,
 4,006 allowlisted canonical terms each carry a written rationale — a gate now fails if any is
 blank — 159 are scoped notation and 3 are opaque payload interiors. All 115 retired forms have
 executable removal evidence (`tools/naming-removals.test.ts`),

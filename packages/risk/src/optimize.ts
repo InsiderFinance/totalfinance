@@ -23,7 +23,7 @@ import {
   WarningCode,
 } from '@totalfinance/core';
 import { type Matrix, jacobiEigen } from '@totalfinance/math';
-import { dot, matVec, quadForm, assertSquare, spdInverse } from './linalg.js';
+import { dot, matVec, quadForm, requireCovariance, spdInverse } from './linalg.js';
 import { snapshotFiniteVector } from './numeric-vector.js';
 import { describeInputValue } from './input-description.js';
 import {
@@ -322,15 +322,20 @@ function conditioningWarning(covariance: Matrix, functionName: string): QuantWar
     if (v > lambdaMax) lambdaMax = v;
     if (v < lambdaMin) lambdaMin = v;
   }
-  if (!Number.isFinite(lambdaMax) || !Number.isFinite(lambdaMin) || lambdaMax <= 0)
-    return undefined;
+  if (!Number.isFinite(lambdaMax) || !Number.isFinite(lambdaMin)) return undefined;
   const condition = lambdaMin > 0 ? lambdaMax / lambdaMin : Infinity;
+  const reason = lambdaMin <= 0 ? 'singular_covariance' : 'condition_number_overflow';
   if (condition <= MAX_COVARIANCE_CONDITION_NUMBER) return undefined;
   return warning(
     ErrorCode.RiskIllConditionedCovariance,
-    `${functionName}: the covariance matrix is ill-conditioned (condition number ${condition.toExponential(2)} > ${MAX_COVARIANCE_CONDITION_NUMBER.toExponential(0)}; smallest eigenvalue ${lambdaMin.toExponential(2)}) — Σ⁻¹ amplifies estimation noise into extreme offsetting weights, so the returned portfolio is reported with converged: false. Shrink the covariance (see \`shrunkCovariance\`), drop collinear assets, or use a longer sample.`,
+    `${functionName}: the covariance matrix is ill-conditioned (condition number ${Number.isFinite(condition) ? condition.toExponential(2) : 'undefined'}; threshold ${MAX_COVARIANCE_CONDITION_NUMBER.toExponential(0)}; smallest eigenvalue ${lambdaMin.toExponential(2)}) — Σ⁻¹ amplifies estimation noise into extreme offsetting weights, so the returned portfolio is reported with converged: false. Shrink the covariance (see \`shrunkCovariance\`), drop collinear assets, or use a longer sample.`,
     'warn',
-    { conditionNumber: condition, smallestEigenvalue: lambdaMin, largestEigenvalue: lambdaMax },
+    {
+      conditionNumber: Number.isFinite(condition) ? condition : null,
+      ...(!Number.isFinite(condition) ? { reason } : {}),
+      smallestEigenvalue: lambdaMin,
+      largestEigenvalue: lambdaMax,
+    },
   );
 }
 
@@ -608,7 +613,7 @@ function projectedQp(input: {
 
 /** Global minimum-variance portfolio. Objective = portfolio variance. */
 function minVarianceSolve(covariance: Matrix, constraints: OptimizeConstraints = {}): SolverOutput {
-  assertSquare(covariance, covariance.length, 'minVariance');
+  requireCovariance(covariance, covariance.length, 'minVariance');
   validateConstraints(constraints, 'minVariance', covariance.length);
   const budget = constraints.budget ?? 1;
   if (!hasInequality(constraints)) {
@@ -680,7 +685,7 @@ function maxSharpeSolve(
   options: MaxSharpeOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'maxSharpe');
+  requireCovariance(covariance, n, 'maxSharpe');
   validateConstraints(options, 'maxSharpe', n);
   const mu = requireMeanVector(mean, n, 'maxSharpe');
   ensureFiniteWhenPresent(options.riskFreeRatePerPeriod, 'riskFreeRatePerPeriod', 'maxSharpe');
@@ -851,7 +856,7 @@ function meanVarianceSolve(
   options: MeanVarianceOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'meanVariance');
+  requireCovariance(covariance, n, 'meanVariance');
   validateConstraints(options, 'meanVariance', n);
   const mu = requireMeanVector(mean, n, 'meanVariance');
   ensureFiniteWhenPresent(options.riskAversion, 'riskAversion', 'optimize');
@@ -936,7 +941,7 @@ function riskParitySolve(
   options: { budget?: number; maximumIterations?: number; tolerance?: number } = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'riskParity');
+  requireCovariance(covariance, n, 'riskParity');
   validateConstraints(options, 'riskParity');
   const budget = options.budget ?? 1;
   const maximumIterations = options.maximumIterations ?? 10000;
@@ -1037,7 +1042,7 @@ function hrpSolve(covariance: Matrix, options: { budget?: number } = {}): Solver
     });
   }
   const n = covariance.length;
-  assertSquare(covariance, n, 'hrp');
+  requireCovariance(covariance, n, 'hrp');
   validateConstraints(options, 'hrp');
   const budget = options.budget ?? 1;
   const order = quasiDiagonalOrder(covToCorr(covariance));
@@ -1095,7 +1100,7 @@ function kellySolve(
   options: KellyOptions = {},
 ): SolverOutput {
   const n = covariance.length;
-  assertSquare(covariance, n, 'kelly');
+  requireCovariance(covariance, n, 'kelly');
   validateConstraints(options, 'kelly', n);
   const mu = requireMeanVector(mean, n, 'kelly');
   ensureFiniteWhenPresent(options.fraction, 'fraction', 'kelly');
@@ -1229,7 +1234,7 @@ export function blackLitterman(options: BlackLittermanOptions): BlackLittermanRe
   const functionName = 'blackLitterman';
   const covariance = options.covariance;
   const n = covariance.length;
-  assertSquare(covariance, n, functionName);
+  requireCovariance(covariance, n, functionName);
   ensureFiniteWhenPresent(options.riskAversion, 'riskAversion', 'blackLitterman');
   const delta = options.riskAversion ?? 2.5;
   ensureFinite(delta, 'riskAversion', functionName);

@@ -1,11 +1,11 @@
 {
   "version": 1,
   "summary": {
-    "identities": 43370,
+    "identities": 43372,
     "unresolved": 0,
     "byDisposition": {
       "canonical-term": 4006,
-      "explicit": 39202,
+      "explicit": 39204,
       "opaque-state": 3,
       "scoped-symbol": 159
     },
@@ -13,7 +13,7 @@
       "code-string": 276,
       "enum-member": 276,
       "export": 7460,
-      "field": 22895,
+      "field": 22897,
       "literal-value": 4657,
       "mcp-field": 1553,
       "mcp-tool": 57,
@@ -35,7 +35,7 @@
       "@totalfinance/http": 393,
       "@totalfinance/math": 923,
       "@totalfinance/mcp": 493,
-      "@totalfinance/options": 2718,
+      "@totalfinance/options": 2720,
       "@totalfinance/performance": 716,
       "@totalfinance/portfolio": 2716,
       "@totalfinance/research": 1392,
@@ -107673,6 +107673,13 @@
       "disposition": "explicit"
     },
     {
+      "id": "@totalfinance/options|field|Black76ImpliedVolatilityResult.message",
+      "name": "message",
+      "kind": "field",
+      "position": "artifact",
+      "disposition": "explicit"
+    },
+    {
       "id": "@totalfinance/options|field|Black76ImpliedVolatilityResult.reason",
       "name": "reason",
       "kind": "field",
@@ -108053,6 +108060,13 @@
     {
       "id": "@totalfinance/options|field|BlackScholesImpliedVolatilityResult.iterations",
       "name": "iterations",
+      "kind": "field",
+      "position": "result",
+      "disposition": "explicit"
+    },
+    {
+      "id": "@totalfinance/options|field|BlackScholesImpliedVolatilityResult.message",
+      "name": "message",
       "kind": "field",
       "position": "result",
       "disposition": "explicit"
@@ -276476,8 +276490,8 @@
       "disposition": "explicit"
     },
     {
-      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.3",
-      "name": "0.1.3",
+      "id": "@totalfinance/workflows|literal-value|WORKFLOWS_VERSION:0.1.4",
+      "name": "0.1.4",
       "kind": "literal-value",
       "position": "serialized",
       "disposition": "explicit"

@@ -4,7 +4,7 @@
  * Required semantics (spec, frozen): payment timing is EXPLICIT (`'end'` or `'beginning'` of
  * period); balloon/residual value is explicit; schedule rows expose opening balance, payment,
  * interest, principal, fees when supplied, and closing balance; the unrounded schedule reconciles
- * exactly within tolerance and any rounding policy is explicit; payment components are SIGNED.
+ * within an explicit rounding budget; the final installment absorbs only that drift; payment components are SIGNED.
  *
  * Sign convention (the 2026-08-23 review resolution): for a nonnegative periodic rate every
  * component is a positive magnitude, exactly as before. A NEGATIVE periodic rate is economically
@@ -17,6 +17,7 @@
 
 import {
   ConvergenceError,
+  stableSum,
   ErrorCode,
   InputError,
   assertFiniteValue,
@@ -178,17 +179,17 @@ function levelPaymentValue(
   if (rate === 0) {
     return (principal - balloon) / periods;
   }
-  const growth = Math.pow(1 + rate, periods);
-  if (growth === 1) {
-    return (principal - balloon) / (periods * timingFactor(rate, timing));
+  const logGrowth = periods * Math.log1p(rate);
+  if (rate > 0) {
+    const inverseGrowth = Math.exp(-logGrowth);
+    return (
+      (principal - balloon * inverseGrowth) *
+      (rate / -Math.expm1(-logGrowth) / timingFactor(rate, timing))
+    );
   }
-  const annuityTiming = ((growth - 1) / rate) * timingFactor(rate, timing);
-  if (Number.isFinite(growth) && Number.isFinite(annuityTiming) && annuityTiming !== 0) {
-    return principal * (growth / annuityTiming) - balloon / annuityTiming;
-  }
-  const inverseGrowth = Number.isFinite(growth) ? 1 / growth : 0;
-  const ratePerTiming = rate / timingFactor(rate, timing);
-  return ((principal - balloon * inverseGrowth) * ratePerTiming) / (1 - inverseGrowth);
+  // Accumulated form avoids a huge reciprocal growth factor for negative rates.
+  const annuity = Math.expm1(logGrowth) / rate;
+  return (principal * Math.exp(logGrowth) - balloon) / annuity / timingFactor(rate, timing);
 }
 
 /**
@@ -201,7 +202,7 @@ function levelPaymentValue(
  */
 export function annuityPayment(input: LoanTermsInput): number {
   const { balloon } = validateLoanTerms('annuityPayment', input);
-  return requireRepresentableResult(
+  const payment = requireRepresentableResult(
     'annuityPayment',
     levelPaymentValue(
       input.principal,
@@ -211,6 +212,23 @@ export function annuityPayment(input: LoanTermsInput): number {
       balloon,
     ),
   );
+  const interest =
+    (input.paymentTiming === 'beginning' ? input.principal - payment : input.principal) *
+    input.periodicInterestRate;
+  if (
+    (input.periodicInterestRate >= 0 &&
+      !(input.principal - (payment - interest) < input.principal)) ||
+    (payment === 0 && balloon === 0)
+  ) {
+    throw new ConvergenceError(
+      'annuityPayment: binary64 precision cannot represent the principal reduction required by these terms. Use a shorter horizon or a higher-precision calculation; the requested residual cannot be claimed reached.',
+      {
+        code: ErrorCode.SolverNoConvergence,
+        context: { field: 'numberOfPeriods', reason: 'unrepresentable_principal_reduction' },
+      },
+    );
+  }
+  return payment;
 }
 
 /**
@@ -245,19 +263,24 @@ const SCHEDULE_KEYS = [...LOAN_KEYS, 'periodicFee'] as const;
 /** The schedule plus its reconciliation facts — the unrounded rows reconcile exactly. */
 export interface AmortizationScheduleResult {
   rows: AmortizationRow[];
+  /** Level payment; the final row may differ by the documented binary64 reconciliation drift. */
   payment: number;
   totalInterest: number;
   totalPrincipal: number;
-  /** The explicit residual after the final payment (equals the requested balloon). */
+  /** The requested residual after the final, roundoff-adjusted installment. */
   balloon: number;
   /** This schedule is UNROUNDED: display rounding is the caller's explicit policy. */
   rounding: 'none';
 }
 
 /**
- * The full amortization schedule. Unrounded by design — the rows reconcile exactly (each closing
- * balance = opening − principal; Σ principal = principal − balloon) and any display rounding is
- * the caller's explicit, documented policy applied afterwards.
+ * The full amortization schedule. Unrounded binary64 values reconcile within arithmetic precision (closing
+ * balance = opening − principal; Σ principal ≈ principal − balloon) and any display rounding is
+ * the caller's explicit, documented policy applied afterwards. The final installment may absorb
+ * arithmetic drift only within a compounding-propagated roundoff allowance, capped at
+ * 1e-10 of original principal; larger drift
+ * is refused. The `payment` headline is the level installment; inspect the final row's payment
+ * for its explicit roundoff reconciliation.
  */
 export function amortizationSchedule(input: AmortizationScheduleInput): AmortizationScheduleResult {
   requireArgumentObject('amortizationSchedule', 'input', input);
@@ -278,6 +301,8 @@ export function amortizationSchedule(input: AmortizationScheduleInput): Amortiza
   const rows: AmortizationRow[] = [];
   let balance = input.principal;
   let totalInterest = 0;
+  let driftBudget = 0;
+  const correctionCap = 1e-10;
   for (let period = 1; period <= input.numberOfPeriods; period++) {
     // Beginning-timing payments reduce the balance BEFORE the period accrues interest.
     const interestBase = input.paymentTiming === 'beginning' ? balance - payment : balance;
@@ -292,18 +317,52 @@ export function amortizationSchedule(input: AmortizationScheduleInput): Amortiza
       ...(periodicFee !== undefined ? { fee: periodicFee } : {}),
       closingBalance: closing,
     });
+    // Propagate each row's rounding through the same recurrence as the balance. The cap
+    // prevents an ill-conditioned schedule from calling a material write-off "roundoff".
+    driftBudget = Math.min(
+      correctionCap,
+      driftBudget * Math.abs(1 + rate) +
+        8 *
+          Number.EPSILON *
+          (Math.abs(balance / input.principal) +
+            Math.abs(payment / input.principal) +
+            Math.abs(interest / input.principal)),
+    );
     totalInterest += interest;
     balance = closing;
   }
-  // 2026-08-23 review, finding 1: a schedule whose running balances or totals overflow IEEE-754
-  // doubles is a typed refusal, never rows carrying Infinity/NaN.
+  requireRepresentableResult('amortizationSchedule', { rows, totalInterest });
+  // An arithmetic error bound, never a monetary rounding policy or balloon write-off.
+  const relativeDrift = Math.abs((balance - balloon) / input.principal);
+  if (!(relativeDrift <= driftBudget)) {
+    throw new ConvergenceError(
+      'amortizationSchedule: the computed final balance does not reconcile with the requested balloon within the binary64 rounding budget. No final payment adjustment was applied. Use a shorter horizon or higher precision.',
+      {
+        code: ErrorCode.SolverNoConvergence,
+        context: { reason: 'unreconciled_balloon', relativeDrift, driftBudget },
+      },
+    );
+  }
+  if (balance !== balloon) {
+    const last = rows[rows.length - 1]!;
+    last.payment =
+      input.paymentTiming === 'end'
+        ? last.openingBalance - balloon + last.interest
+        : last.openingBalance - balloon / (1 + rate);
+    last.interest =
+      (input.paymentTiming === 'beginning'
+        ? last.openingBalance - last.payment
+        : last.openingBalance) * rate;
+    last.principal = last.openingBalance - balloon;
+    last.closingBalance = balloon;
+  }
   return requireRepresentableResult('amortizationSchedule', {
     rows,
     payment,
-    totalInterest,
-    totalPrincipal: input.principal - balloon,
+    totalInterest: rows.reduce((sum, row) => sum + row.interest, 0),
+    totalPrincipal: rows.reduce((sum, row) => sum + row.principal, 0),
     balloon,
-    rounding: 'none',
+    rounding: 'none' as const,
   });
 }
 
@@ -506,29 +565,35 @@ export function loanNumberOfPeriods(input: LoanNumberOfPeriodsInput): number {
         { code: ErrorCode.InputOutOfRange, context: { field: 'payment' } },
       );
     }
+    const u = effectivePayment / input.principal;
+    const b = balloon / input.principal;
+    const relativeChange = ((1 - b) * rate) / (u - rate);
     periods =
-      Math.log((effectivePayment - balloon * rate) / (effectivePayment - input.principal * rate)) /
-      Math.log(1 + rate);
+      (rate < 0 && relativeChange < -0.5
+        ? Math.log(u - b * rate) - Math.log(u - rate)
+        : Math.log1p(relativeChange)) / Math.log1p(rate);
   }
   // Verify before returning: the result must be a finite positive period count AND satisfy the
   // amortization identity `principal·(1+r)^n − effectivePayment·((1+r)^n − 1)/r = balloon`
   // (rate 0: `principal − n·payment = balloon`). A closed form fed degenerate-but-finite inputs
   // can emit a plausible wrong number — a solver refuses instead.
-  let identityHolds = false;
-  if (Number.isFinite(periods) && periods > 0) {
-    if (rate === 0) {
-      const residual = input.principal - input.payment * periods - balloon;
-      identityHolds =
-        Math.abs(residual) <= 1e-8 * Math.max(1, Math.abs(input.principal), Math.abs(balloon));
-    } else {
-      const growth = Math.pow(1 + rate, periods);
-      const amortized = (effectivePayment * (growth - 1)) / rate;
-      const projectedBalloon = input.principal * growth - amortized;
-      const scale = Math.max(1, Math.abs(input.principal * growth), Math.abs(amortized));
-      identityHolds =
-        Number.isFinite(projectedBalloon) && Math.abs(projectedBalloon - balloon) <= 1e-8 * scale;
-    }
-  }
+  const logGrowth = periods * Math.log1p(rate);
+  const growth = Math.exp(logGrowth);
+  const accumulatedPayments = ((effectivePayment / input.principal) * Math.expm1(logGrowth)) / rate;
+  const residual = balloon / input.principal;
+  const normalizedPresentValue =
+    rate === 0
+      ? (input.payment / input.principal) * periods + balloon / input.principal
+      : (effectivePayment / input.principal) * (-Math.expm1(-logGrowth) / rate) +
+        (balloon / input.principal) * Math.exp(-logGrowth);
+  const identityHolds =
+    Number.isFinite(periods) &&
+    periods > 0 &&
+    (rate < 0
+      ? Math.max(Math.abs(growth), Math.abs(accumulatedPayments), residual) > 0 &&
+        Math.abs(growth - accumulatedPayments - residual) <=
+          1e-10 * Math.max(Math.abs(growth), Math.abs(accumulatedPayments), residual)
+      : Math.abs(normalizedPresentValue - 1) <= 1e-10);
   if (!identityHolds) {
     throw new ConvergenceError(
       `loanNumberOfPeriods: no positive, finite number of periods satisfies the amortization identity for these terms (the closed form produced ${periods}) — the payment cannot amortize this principal down to the balloon at this rate. Check the payment against the principal, rate, and balloon.\n  e.g. loanNumberOfPeriods({ principal: 250_000, periodicInterestRate: 0.06 / 12, payment: 1_498.88, paymentTiming: 'end' })`,
@@ -759,13 +824,21 @@ export function loanPeriodicInterestRate(input: LoanPeriodicInterestRateInput): 
   }
   const impliedRate = low + (high - low) / 2;
 
-  // Verify the root before returning it: the found rate must actually reproduce the payment.
-  const reproducedPayment = paymentAtRate(impliedRate);
-  const relativeResidual =
-    Math.abs(reproducedPayment - input.payment) / Math.max(1, Math.abs(input.payment));
-  if (!Number.isFinite(impliedRate) || !(relativeResidual <= 1e-6)) {
+  // Independent PV check: sum the actual dated installments, not the payment objective
+  // used by bisection. Normalization keeps the acceptance independent of monetary units.
+  const logRate = Math.log1p(impliedRate);
+  const presentValues: number[] = [];
+  for (let period = 0; period < input.numberOfPeriods; period++) {
+    const time = period + (input.paymentTiming === 'end' ? 1 : 0);
+    presentValues.push((input.payment / input.principal) * Math.exp(-time * logRate));
+  }
+  presentValues.push(
+    ((input.balloon ?? 0) / input.principal) * Math.exp(-input.numberOfPeriods * logRate),
+  );
+  const relativeResidual = Math.abs(stableSum(presentValues) - 1);
+  if (!Number.isFinite(impliedRate) || !(relativeResidual <= 1e-10)) {
     throw new ConvergenceError(
-      `loanPeriodicInterestRate: the bracketed root did not reproduce the payment — loanPayment(rate ${impliedRate}) = ${reproducedPayment} against the requested ${input.payment} (relative residual ${relativeResidual}, tolerance 1e-6). This is a refusal rather than a plausible wrong number; please report it with your inputs.`,
+      'loanPeriodicInterestRate: the solved rate did not reconcile the discounted individual payments and balloon with principal. Use higher precision or check these terms.',
       {
         code: ErrorCode.SolverNoConvergence,
         context: { field: 'payment', impliedRate, relativeResidual },

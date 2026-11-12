@@ -1,5 +1,15 @@
 # @insiderfinance/totalfinance
 
+## 0.1.4
+
+### Patch Changes
+
+- e6f088c: Repair numerical correctness in loans, IRR and composed returns, strategy break-evens, analytic option premiums, Kirk effective volatility, sample-centered GARCH, and Monte Carlo uncertainty. Singular covariance diagnostics now use null with a reason instead of infinite metadata. Clarify the existing HC1 correction in HAC documentation.
+
+  Supported call shapes and financial conventions are preserved. Unresolved analytic-premium cancellation and unrepresentable loan amortization receive explicit precision refusals. Loan schedules sum actual principal entries and reconcile only bounded arithmetic drift in the final installment. Positive Monte Carlo standard errors may accompany a null confidence interval when its endpoints cannot be represented around the estimate; this reporting limit does not change estimator convergence. Validate indefinite covariance before optimization, preserve term-relative IRR convergence and root ambiguity, and commit batch output buffers only after every row succeeds. Unavailable IV pricing trials retain the existing no_bracket reason with optional explanatory detail, including through the rich facades; the supported closed reason unions are preserved. Near-interest-only balloon loans reconcile only propagated roundoff capped at 1e-10 of original principal. Covariance validation uses a scale-normalized validation-only factorization without changing the supplied covariance. Kirk cancels common risk-free carry algebraically for zero-strike exchanges and guards unresolved general-strike moneyness. Caller-buffer pricing reuses logarithms and documents its temporary storage for atomic writes.
+
+  Release tradeoffs: repeated reviewer comparisons against main find roughly 35% slower columnar Black–Scholes pricing and 4–6x slower IRR for the tested workloads. These correctness and atomic-write costs are accepted for this patch; focused performance work remains separate. Installed expert BSM/Black76 bundles are about 5.5 KiB with esbuild (about 3.2 KiB with Rollup), and the facade is about 15.2 KiB with esbuild. Module/dependency exclusions remain enforced. Extreme compounded loan horizons and unresolved option precision remain explicit refusals. The existing closed IV reason union is preserved; no_bracket means no usable bracket was established and does not prove that a root exists.
+
 ## 0.1.3
 
 ### Patch Changes

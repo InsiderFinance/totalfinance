@@ -15990,7 +15990,7 @@
     "maxPathsPerImplementation": 625,
     "inputContracts": 1610,
     "resultContracts": 1962,
-    "validatorIdentities": 386,
+    "validatorIdentities": 387,
     "helperQuantAnswers": 0,
     "highLevelPositionalPairs": 34,
     "byInputShape": {
@@ -287332,6 +287332,7 @@
         "Black76ImpliedVolatilityInput.type",
         "Black76ImpliedVolatilityResult.converged",
         "Black76ImpliedVolatilityResult.iterations",
+        "Black76ImpliedVolatilityResult.message",
         "Black76ImpliedVolatilityResult.reason",
         "Black76ImpliedVolatilityResult.value"
       ]
@@ -290616,6 +290617,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value"
       ]
@@ -297575,6 +297577,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -298634,6 +298637,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -373114,6 +373118,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -375471,6 +375476,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",
@@ -689808,6 +689814,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -791211,6 +791218,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",
@@ -965399,6 +965407,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -1032750,6 +1032759,7 @@
         "BlackScholesImpliedVolatilityResult.converged",
         "BlackScholesImpliedVolatilityResult.error",
         "BlackScholesImpliedVolatilityResult.iterations",
+        "BlackScholesImpliedVolatilityResult.message",
         "BlackScholesImpliedVolatilityResult.reason",
         "BlackScholesImpliedVolatilityResult.value",
         "HestonPriceRequest.input",
@@ -1152913,6 +1152923,7 @@
         "ensureFiniteWhenPresent",
         "requireArgumentArray",
         "requireClosedDataObject",
+        "requireCovariance",
         "requireMeanVector"
       ],
       "guardReachability": "direct",
@@ -1155270,6 +1155281,7 @@
       "validators": [
         "ensureKnownKeys",
         "requireArgumentArray",
+        "requireCovariance",
         "requireDataObject",
         "requireFrontierWorkBudget",
         "requireMeanVector",
