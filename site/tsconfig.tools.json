@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "baseUrl": ".."
+  },
+  "include": [
+    "src/**/*.ts",
+    "*.ts",
+    "test/**/*.ts",
+    "scripts/**/*.ts",
+    "mcp/**/*.ts",
+    "api/**/*.ts"
+  ],
+  "exclude": ["source.config.ts", "next-env.d.ts", "node_modules", "dist", ".next", ".source"]
+}

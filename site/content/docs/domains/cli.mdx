@@ -1,0 +1,28 @@
+---
+title: 'CLI'
+description: 'The command-line interface over the operation registry.'
+---
+
+Run any registered operation from a shell, with profiles, a file-backed artifact store and local background jobs.
+
+## Key exports
+
+<KeyExports
+  domain="cli"
+  names={[
+    'CLI_COMMANDS',
+    'REGISTRY_PROFILES',
+    'packsForProfile',
+    'registryForProfile',
+    'createFileArtifactStore',
+    'createLocalJobRunner',
+  ]}
+/>
+
+## Guides
+
+- [Command line](/guides/cli)
+
+## Every import path
+
+<EntrypointList domain="cli" />

@@ -7,6 +7,8 @@ import ts from 'typescript';
 import { canonicalJsonOf } from '@totalfinance/core/artifacts';
 import { playgrounds } from '../site/src/playgrounds/index.js';
 import { firstCallCode } from '../site/src/examples.js';
+import { editedInput } from '../site/src/playgrounds/edits.js';
+import { defaultInput, validateInputs } from '../site/src/playgrounds/inputs.js';
 
 export interface SiteExampleCase {
   id: string;
@@ -33,15 +35,14 @@ export interface SiteExamplesSmokeResult {
 
 export function siteExampleCases(): SiteExampleCase[] {
   const cases = playgrounds.flatMap((playground) => {
-    const defaults = Object.fromEntries(
-      playground.controls.map((control) => [control.name, control.value]),
+    // Default inputs, then the first control moved to its next valid value (number, option,
+    // preset or sample). Both validate through the same boundary as the browser and agent tools.
+    const inputs = [defaultInput(playground), editedInput(playground)].map((input) =>
+      validateInputs(playground, input),
     );
-    const control = playground.controls[0];
-    if (!control || !(control.step > 0) || control.value + control.step > control.max) {
+    if (JSON.stringify(inputs[0]) === JSON.stringify(inputs[1]))
       throw new Error(`${playground.id}: a valid edited-input example must be declared.`);
-    }
-    const changed = { ...defaults, [control.name]: control.value + control.step };
-    return [defaults, changed].flatMap((input, index) => {
+    return inputs.flatMap((input, index) => {
       const calculation = playground.run(input);
       const id = `${playground.id}-${index ? 'edited' : 'default'}`;
       return [

@@ -1,0 +1,41 @@
+{
+  "name": "@totalfinance/site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TotalFinance public documentation site (Next.js static export). Not published.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "next dev --port 4174",
+    "next:build": "next build"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource-variable/space-grotesk": "5.3.0",
+    "@insiderfinance/totalfinance": "link:../distribution/totalfinance",
+    "d3-array": "3.2.4",
+    "d3-scale": "4.0.2",
+    "d3-shape": "3.2.0",
+    "fumadocs-core": "16.17.3",
+    "fumadocs-mdx": "15.4.7",
+    "fumadocs-ui": "16.17.3",
+    "lucide-react": "1.57.0",
+    "next": "16.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/d3-array": "3.2.2",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-shape": "3.2.0",
+    "@types/mdx": "2.0.14",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "postcss": "8.5.30",
+    "sucrase": "3.35.1",
+    "tailwindcss": "4.3.3"
+  },
+  "packageManager": "pnpm@10.32.0"
+}

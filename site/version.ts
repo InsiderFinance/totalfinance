@@ -4,24 +4,9 @@ import { execFileSync } from 'node:child_process';
 import { siteExamplesSha256 } from '../tools/site-examples-smoke.js';
 import { PUBLIC_PACKAGE_NAME, publicPackageDirectories } from '../tools/public-packages.js';
 
-export interface VerifiedRelease {
-  version: string;
-  channel: 'preview' | 'stable';
-  verifiedAt: string;
-  sourceCommit: string;
-  registry: string;
-  examplesSha256: string;
-}
+import type { SiteVersion, VerifiedRelease } from './version-types.js';
 
-export interface SiteVersion {
-  version: string;
-  label: string;
-  channel: 'development' | 'preview' | 'stable';
-  published: boolean;
-  sourceMatchesRelease: boolean;
-  packageVersions: Record<string, string>;
-  releases: VerifiedRelease[];
-}
+export type { SiteVersion, VerifiedRelease } from './version-types.js';
 
 export function sourceMatchesRelease(root: string, release: VerifiedRelease): boolean {
   try {

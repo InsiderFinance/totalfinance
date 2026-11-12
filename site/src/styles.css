@@ -2,12 +2,12 @@
 @layer base {
   :root {
     color-scheme: light;
-    --ink: #172b25;
-    --muted: #52685d;
-    --navy: #0f2e23;
-    --blue: #078754;
-    --line: #d8e5dc;
-    --pale: #f3f8f4;
+    --ink: #172333;
+    --muted: #526176;
+    --navy: #102238;
+    --blue: #245eea;
+    --line: #dae2ee;
+    --pale: #f3f6fb;
     --green: #0d796c;
     --red: #a52b3d;
     font-family:
@@ -114,7 +114,7 @@
     inset: 0 auto 0 0;
     width: 250px;
     background: var(--navy);
-    color: #deeee5;
+    color: #dfe7f4;
     padding: 2rem 1.4rem;
     overflow: auto;
   }
@@ -129,13 +129,16 @@
     align-items: center;
   }
   .brand-mark {
+    border: 1px solid #607b9e;
     border-radius: 6px;
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
+    width: 29px;
+    height: 29px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 450;
   }
   .sidebar .version {
-    color: #adccbd;
+    color: #adbed4;
     font-size: 0.8rem;
     margin: 0.45rem 0 2.2rem;
   }
@@ -146,12 +149,12 @@
   .nav-label {
     font-size: 0.75rem;
     letter-spacing: 0.12em;
-    color: #96b9a8;
+    color: #96acc9;
     margin: 1.7rem 0.7rem 0.5rem;
     text-transform: uppercase;
   }
   .sidebar nav a {
-    color: #deeee5;
+    color: #dfe7f4;
     text-decoration: none;
     padding: 0.65rem 0.7rem;
     border-radius: 5px;
@@ -159,14 +162,14 @@
   }
   .sidebar nav a:hover,
   .sidebar nav a[aria-current='page'] {
-    background: #214d3b;
+    background: #243e5d;
     color: white;
   }
   .sidebar .note {
-    border-top: 1px solid #395d4e;
+    border-top: 1px solid #39516d;
     margin-top: 2.5rem;
     padding-top: 1rem;
-    color: #adccbd;
+    color: #adbed4;
     font-size: 0.875rem;
   }
   .shell {
@@ -207,11 +210,11 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     min-height: 170px;
-    box-shadow: 0 2px 3px #172b2503;
+    box-shadow: 0 2px 3px #17233303;
   }
   .task-card:hover {
     border-color: var(--blue);
-    box-shadow: 0 5px 20px #0787540a;
+    box-shadow: 0 5px 20px #245eea0a;
   }
   .task-card .number {
     color: var(--blue);
@@ -283,12 +286,12 @@
     white-space: nowrap;
     padding: 0.2rem 0.55rem;
     border-radius: 4px;
-    background: #e7f5ec;
-    color: #07683f;
+    background: #eaf0ff;
+    color: #234fad;
   }
   .sample-badge {
-    background: #e5efe9;
-    color: #465d51;
+    background: #e5ecef;
+    color: #46556b;
   }
   .panel-heading {
     display: flex;
@@ -318,7 +321,7 @@
     width: 100%;
     background: white;
     color: var(--ink);
-    border: 1px solid #b9cfc1;
+    border: 1px solid #b9c7d8;
     border-radius: 5px;
     padding: 0.55rem 0.65rem;
     min-height: 42px;
@@ -406,11 +409,11 @@
     fill: var(--muted);
   }
   .chart-grid {
-    stroke: #e0ebe3;
+    stroke: #e3e9f1;
     stroke-width: 1;
   }
   .chart-zero {
-    stroke: #a0b5a8;
+    stroke: #9cacc0;
     stroke-width: 1;
   }
   .chart-line {
@@ -483,8 +486,8 @@
     margin: 2rem 0;
   }
   .code-section > pre {
-    background: #102f24;
-    color: #e2f1e7;
+    background: #13253b;
+    color: #e2ebfb;
     padding: 1.5rem;
     border-radius: 8px;
     line-height: 1.8;

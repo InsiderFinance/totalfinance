@@ -1,0 +1,16 @@
+---
+title: All calculators
+description: Ten live calculators that run TotalFinance in your browser, with your inputs and your data.
+---
+
+Each calculator calls the public library in a Web Worker in your browser. Change an input and the
+results, charts and copyable TypeScript update together. Bring your own price data to the backtest,
+indicator and risk calculators. Nothing you enter leaves the page.
+
+Under **Use it in your project**, choose **Edit and run** to change the first call and run it right
+there. It runs only when you press Run (or ⌘/Ctrl + Enter), in a sandbox with no network and no
+access to the page, against the same package build as the calculator, and stops after 10 seconds.
+Any `@insiderfinance/totalfinance` import that works in a browser is available; the Node-only CLI,
+HTTP and local-workflow entry points are not.
+
+<PlaygroundGallery />

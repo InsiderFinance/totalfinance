@@ -1,5 +1,6 @@
-import { loadPlayground, validateInputs } from './playgrounds/load.js';
+import { loadPlayground, validateInputs } from './playgrounds/load';
 
+/** Runs calculations off the main thread. Inputs are validated at this boundary too. */
 const worker = globalThis as unknown as {
   onmessage:
     | ((event: { data: { requestId: number; playgroundId: string; input: unknown } }) => void)

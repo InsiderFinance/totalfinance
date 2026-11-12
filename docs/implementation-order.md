@@ -13,6 +13,21 @@ The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the
 
 ### Active bounded site work: restore the original homepage and apply branding (2026-11-12)
 
+Current clarification: the actual original marketing frontend was found as uncommitted work in
+`totalfinance-24287e`, with the hero “The complete quant library for TypeScript and AI agents.”
+Follow M1–M5 in [the current correction](./specs/homepage-and-docs-routing.md), recovering that
+original Next.js/Fumadocs frontend and its separate dependency lockfile, applying only branding
+and the requested removal of prominent release-status wording, and keeping the root homepage and
+mounted documentation functional. The workbench restoration below was the wrong interpretation.
+The [original frontend contract](./specs/developer-docs-v2.md) is retained with its historical receipts;
+fresh integration and hosted verification are required for this recovery.
+
+M1–M4 are locally verified: original marketing body/layout parity (minus status/brand changes),
+the static export and version snapshot, 198 site tests with a final 13-test routing recheck,
+75 documentation/import checks, all 40 copied examples against installed packages, root/site types
+and changed-source lint. Documentation regeneration: 248 surfaces, zero findings. M5 owns the
+exact-head hosted run and corrected public-page review; do not infer those from local results.
+
 The maintainer rejected the replacement marketing homepage in `7c1e932` and requested the original
 landing page from before the docs separation, changing only the logo and brand colors. The
 [controlling correction](./specs/homepage-and-docs-routing.md) owns R1–R4: restore the original

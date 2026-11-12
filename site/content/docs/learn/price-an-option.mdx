@@ -1,0 +1,32 @@
+---
+title: Price an option
+description: Black–Scholes–Merton prices and Greeks for a European call or put, with every convention echoed back.
+playground: price-an-option
+---
+
+## What this calculates
+
+`blackScholes.price` returns the value of one European option in the same currency unit as the
+spot and strike. `blackScholes.greeks` returns delta, gamma, theta, vega and rho in TotalFinance's
+default units: theta per calendar day, vega per one volatility point and rho per one percentage
+point of rate. Add `.explain()` to either call and the answer arrives with its assumptions (day
+count, compounding, dividend model, units) and diagnostics (engine, method, convergence).
+
+## Reading the charts
+
+- **Value across underlying prices** compares today's model value with the value at expiry. The
+  vertical distance between the two curves is time value; it is largest near the strike.
+- **Delta, gamma, vega and theta** are drawn as small multiples on their own axes, never on a shared
+  axis, so each sensitivity keeps its true scale.
+
+## Units you must supply
+
+Volatility and rates are decimals (`0.2` is 20%). Time to expiry is a year fraction. If you have
+dates instead, the date-aware APIs accept `expiry` and `asOf` and disclose how a date-only expiry was
+resolved. See [Assumptions and conventions](/guides/assumptions).
+
+## Go further
+
+- American exercise, Black-76, Bachelier and exotic engines live in the [Options domain](/domains/options).
+- Many contracts at once: the batch APIs in [API levels](/guides/levels).
+- Only some Greeks? [Selective Greeks and exposure](/guides/selective-greeks-and-exposure).

@@ -1,4 +1,4 @@
-import type { Calculation } from './types.js';
+import type { Calculation } from './types';
 
 /** The exact complete source copied by the first-call button, including any sample setup. */
 export function firstCallCode(calculation: Calculation): string {

@@ -1,0 +1,32 @@
+---
+title: Backtest a strategy
+description: Test a moving-average rule on your own price data, with next-bar execution, commissions, equity and drawdown.
+playground: backtest-a-strategy
+---
+
+## What this calculates
+
+`vectorized` runs a backtest from bars and a signal aligned to them. The signal says whether to hold
+the asset on each bar; with `executionLag: 1` a signal observed on one bar trades on the next, so
+the strategy can never act on a price before it exists. Fees, slippage, borrow costs, leverage
+limits and the annualization basis are explicit options, and the report echoes them.
+
+## Bring your own data
+
+Choose **Use your data** in the panel and paste or upload daily bars as CSV or TSV with date, open,
+high, low and close columns (volume is optional). Most broker and data-vendor exports work as they
+are; rows newest-first are put in order and the panel tells you what it changed. Your data stays in
+your browser.
+
+## Reading the chart
+
+Candles show each bar (hollow up, filled down), with the moving averages on top. Triangles mark
+entries and exits on the bar where they fill. The equity and drawdown panes share the price axis, so
+the crosshair lines up a trade with its effect.
+
+## Honest limits
+
+The rebalance rule here is every bar, so small trades keep the position at its target weight; the
+fill count includes them. A good backtest on one series is not evidence of an edge. Read
+[Backtesting](/guides/backtesting) for the engines, the laws every engine keeps and out-of-sample
+practice.

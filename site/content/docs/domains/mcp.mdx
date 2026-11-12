@@ -1,0 +1,29 @@
+---
+title: 'MCP server'
+description: 'The optional @insiderfinance/totalfinance-mcp package for AI agents.'
+---
+
+Expose TotalFinance to AI agents over the Model Context Protocol, read-only by default, with task profiles, exact pack selection and explicit capabilities for paper-trading workflows.
+
+## Key exports
+
+<KeyExports
+  domain="mcp"
+  entrypoint="reference/mcp"
+  names={[
+    'createTotalFinanceMcpServer',
+    'defaultTools',
+    'defaultPacks',
+    'toolFromOperation',
+    'toolNameFor',
+  ]}
+/>
+
+## Guides
+
+- [Connect an agent](/agents)
+- [MCP server reference](/guides/mcp)
+
+## Every import path
+
+<EntrypointList domain="mcp" />

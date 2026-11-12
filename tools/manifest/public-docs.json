@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 247,
+    "surfaces": 248,
     "byClass": {
       "current-runnable": 93,
-      "future-target": 61,
+      "future-target": 62,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4613,
     "checkedUnderTruthfulness": 175,
-    "checkedUnderVocabulary": 61,
+    "checkedUnderVocabulary": 62,
     "shippedNamesWatched": 9748,
     "documentedExceptions": 7,
     "findings": 0
@@ -759,6 +759,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/developer-docs-v2.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/digital-extended-greeks.md",

@@ -29,3 +29,25 @@ distribution/*/etc/
 distribution/*/README.md
 distribution/*/LICENSE
 distribution/*/STABILITY.md
+
+# Documentation site: build outputs and generated inputs (see site/README.md).
+site/.next
+site/.next-snapshot
+site/.source
+site/.generated
+site/.probe
+site/out
+site/content/generated
+site/public/search-index.json
+site/public/operation-catalog.json
+site/public/openapi.json
+site/public/version.json
+site/public/reference-coverage.json
+site/public/reference
+site/public/agents
+site/next-env.d.ts
+
+site/public/assets/brand/
+site/pnpm-lock.yaml
+
+site/public/runtime/

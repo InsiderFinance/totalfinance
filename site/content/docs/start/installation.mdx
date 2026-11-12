@@ -1,0 +1,63 @@
+---
+title: Installation
+description: Add one package, import from domain subpaths, and keep bundles small.
+installs: true
+---
+
+TotalFinance publishes two packages:
+
+| Package                            | What it is                                                                              |
+| ---------------------------------- | --------------------------------------------------------------------------------------- |
+| `@insiderfinance/totalfinance`     | The whole toolkit: every domain, with tree-shakeable subpaths. No runtime dependencies. |
+| `@insiderfinance/totalfinance-mcp` | An optional MCP server that exposes the operation registry to AI agents.                |
+
+## Install
+
+```sh
+pnpm add @insiderfinance/totalfinance
+# or: npm install @insiderfinance/totalfinance
+```
+
+Node.js 22.13 or newer is supported. The package is ESM-first and also loads from CommonJS. Check
+the [Versions page](/versions) for the release this documentation describes; until a release is
+verified there, build the [source checkout](https://github.com/InsiderFinance/totalfinance).
+
+## Import from a domain
+
+Named imports from a domain subpath are the portable default for browsers and bundlers:
+
+```ts
+import { blackScholes } from '@insiderfinance/totalfinance/options';
+import { rsi } from '@insiderfinance/totalfinance/technical-analysis';
+import { valueAtRisk } from '@insiderfinance/totalfinance/risk';
+
+const closes = [
+  44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.1, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28,
+  46.28, 46.0,
+];
+console.log(rsi(closes).at(-1));
+console.log(valueAtRisk([0.01, -0.02, 0.015, -0.005, 0.008]));
+console.log(
+  blackScholes.call({
+    spot: 100,
+    strike: 105,
+    timeToExpiryYears: 30 / 365,
+    riskFreeRate: 0.045,
+    volatility: 0.22,
+  }),
+);
+```
+
+Feature subpaths such as `@insiderfinance/totalfinance/math/normal` narrow an import further. The
+umbrella import (`@insiderfinance/totalfinance`) exposes every domain as a namespace for convenience;
+whether a bundler can drop unused namespace members depends on the bundler. The
+[imports and bundles guide](/guides/imports-and-bundles) has the measured budgets.
+
+## The MCP server (optional)
+
+```sh
+npx -y @insiderfinance/totalfinance-mcp doctor
+```
+
+`doctor` reports the effective tool set, budgets and store configuration. See
+[Connect an agent](/agents) for client configuration and profiles.

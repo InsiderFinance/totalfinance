@@ -12,3 +12,7 @@ plus static Vercel configuration and a step-by-step deployment guide.
 
 Refresh the project README with homepage, documentation and npm links, a direct quickstart,
 concise feature coverage and agent setup, and remove repeated version caveats.
+
+Recover the original Next.js/Fumadocs marketing homepage and dependent site components from the
+earlier design worktree. Apply the supplied TotalFinance branding, keep the documentation mount,
+and remove prominent development/unpublished status banners without changing release evidence.

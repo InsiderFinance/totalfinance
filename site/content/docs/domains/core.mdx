@@ -1,0 +1,32 @@
+---
+title: 'Core'
+description: 'Shared errors, conventions, validation, dates, formatting, OCC symbols and artifacts.'
+---
+
+Types and utilities every domain shares: the typed error hierarchy, conventions and defaults that are always echoed, validation helpers, date handling without the machine clock, formatting and OCC option symbols.
+
+## Key exports
+
+<KeyExports
+  domain="core"
+  names={[
+    'QuantError',
+    'InputError',
+    'isQuantError',
+    'parseOccSymbol',
+    'formatOccSymbol',
+    'discountFactor',
+    'resolveAsOf',
+    'resolvedExpiry',
+    'formatMoney',
+  ]}
+/>
+
+## Guides
+
+- [Errors and diagnostics](/guides/errors)
+- [Results and the explain envelope](/guides/envelope)
+
+## Every import path
+
+<EntrypointList domain="core" />

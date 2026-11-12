@@ -1,0 +1,27 @@
+---
+title: Analyze an option strategy
+description: Build any multi-leg position, then read its expiration payoff, break-evens and maximum profit and loss.
+playground: analyze-a-strategy
+---
+
+## What this calculates
+
+`strategy(legs, { multiplier })` assembles a position from ordinary leg records. `legs.call` and
+`legs.put` take a strike, a per-share premium and a signed quantity (positive long, negative
+short); `legs.stock` takes a price and a signed share count. `position.payoff()` returns the net debit
+or credit, maximum profit and loss (or `null` when unbounded), the break-even prices and the P&L at
+every requested underlying price.
+
+## Reading the chart
+
+The line is net profit or loss **at expiration**, including the premiums paid and received and the
+100-share contract multiplier. Green shading is profit, red is loss, and dashed lines mark the
+break-evens. Before expiry a position is worth something different: use
+[Explore scenarios](/learn/explore-scenarios) to revalue it with time and volatility.
+
+## Presets are just legs
+
+The preset menu fills the table with ordinary legs. Their premiums are hypothetical Black–Scholes
+values, not quotes. Edit any cell, add or remove legs, and the strategy is whatever the legs say: a
+named preset never constrains a custom combination. The full catalogue of named positions is in
+the [strategy guide](/guides/strategies).

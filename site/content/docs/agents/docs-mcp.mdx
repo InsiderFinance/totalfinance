@@ -1,0 +1,35 @@
+---
+title: Docs MCP server
+description: Give an AI agent searchable, citable access to these docs over the Model Context Protocol.
+---
+
+These docs are also an MCP server. An agent connected to it can search the documentation, read any
+page as Markdown and fetch the complete contract of any export, so it writes code against the real
+API instead of guessing. It is read-only and stateless, and it never computes finance: for
+calculations, connect the [TotalFinance MCP server](/agents), which runs the library locally.
+
+## Tools
+
+| Tool               | What it returns                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_docs`      | Ranked pages, functions, types, calculators and operations for a query, with URLs.                                                    |
+| `read_page`        | The Markdown of one docs page (the same text as its `.md` twin).                                                                      |
+| `get_reference`    | The full generated contract of an export or entry point: signature, members with units and declared defaults, examples and stability. |
+| `list_calculators` | The live calculators, their inputs and the APIs they call.                                                                            |
+
+## Connect
+
+The endpoint speaks MCP over Streamable HTTP at `/docs/totalfinance/mcp` on the host that serves
+these docs. Nothing to install: pick your client.
+
+<ConnectAgent only="docs" />
+
+When you preview the site locally with `pnpm site:dev`, the same endpoint is served at
+`http://127.0.0.1:4173/docs/totalfinance/mcp`. A static host without functions serves every page and
+Markdown twin but not this endpoint; agents can still use [LLM-ready docs](/agents/llms).
+
+## Good prompts
+
+- "Search the TotalFinance docs for how to price an American put, then write the call."
+- "Read the reference for `valueAtRiskReport` and explain each option and its default."
+- "Using only exports that `get_reference` confirms, write a backtest of an RSI rule."

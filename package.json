@@ -25,9 +25,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docs": "typedoc --options typedoc.json",
-    "site:build": "tsx site/build.ts",
+    "site:build": "pnpm site:install && tsx site/build.ts",
     "site:dev": "tsx site/serve.ts",
-    "site:typecheck": "tsc --noEmit -p site/tsconfig.json",
+    "site:typecheck": "pnpm site:install && tsc --noEmit -p site/tsconfig.tools.json",
     "site:test": "vitest run --config site/vitest.config.ts",
     "site:record-release": "tsx site/record-release.ts",
     "agents:score": "tsx tools/agent-experience/cli.ts tools/agent-experience/corpus.json",
@@ -48,7 +48,8 @@
     "release:dry-run": "tsx tools/release/dry-run.ts",
     "release:smoke": "tsx tools/release/registry-smoke.ts",
     "release:publish": "tsx tools/release/publish-tarballs.ts",
-    "release:promote": "tsx tools/release/promote-tarballs.ts"
+    "release:promote": "tsx tools/release/promote-tarballs.ts",
+    "site:install": "pnpm --dir site install --frozen-lockfile"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

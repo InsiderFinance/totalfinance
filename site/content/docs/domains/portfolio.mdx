@@ -1,0 +1,38 @@
+---
+title: 'Portfolio'
+description: 'Event-sourced ledgers, positions, lots, cash, P&L attribution and timelines.'
+---
+
+Record what happened as dated events (fills, deposits, income, costs, corporate actions) and derive everything else: positions, lots, cash, P&L between any two marks and a valuation timeline. The trade-lifecycle tools propose, preflight and reconcile rebalances without ever placing an order.
+
+## Try it live
+
+- [Track portfolio P&L](/learn/track-portfolio-pnl)
+
+## Key exports
+
+<KeyExports
+  domain="portfolio"
+  names={[
+    'createPortfolioLedger',
+    'portfolioPnl',
+    'portfolioTimeline',
+    'portfolioSnapshot',
+    'applyPortfolioEvents',
+    'reconcilePortfolio',
+    'proposePortfolioRebalance',
+    'preflightTradePlan',
+    'monitorPortfolio',
+    'compareDisclosedHoldings',
+  ]}
+/>
+
+## Guides
+
+- [End to end](/guides/end-to-end)
+- [Trade lifecycle](/guides/trade-lifecycle)
+- [Disclosed holdings](/guides/disclosed-holdings)
+
+## Every import path
+
+<EntrypointList domain="portfolio" />

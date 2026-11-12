@@ -1,0 +1,34 @@
+---
+title: LLM-ready docs
+description: Markdown twins, llms.txt and per-domain bundles sized for an agent's context window.
+---
+
+Everything on this site is available as plain text an agent can read without a browser.
+
+## Every page as Markdown
+
+Append `.md` to any page path: `/learn/price-an-option` becomes `/learn/price-an-option.md`, and the
+home page is `/index.md`. Hosts that support content negotiation also return Markdown for a request
+with `Accept: text/markdown`. Every page header has **Copy page**, **View as Markdown**, **Open in
+Claude** and **Open in ChatGPT** actions.
+
+## Index and bundles
+
+| File                               | Use it for                                                                                                                         |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| [`/llms.txt`](/llms.txt)           | The index: what TotalFinance is, and links to every page's Markdown, every bundle and the machine-readable catalogs. Start here.   |
+| `/llms/<domain>.txt`               | One domain's guide pages plus a compact reference of its exports (signatures, units, descriptions), sized to fit a context window. |
+| [`/llms-full.txt`](/llms-full.txt) | The complete generated reference of every entry point, type and operation. Large; prefer a domain bundle.                          |
+
+## Machine-readable catalogs
+
+- [`/search-index.json`](/search-index.json): the same index the search dialog uses.
+- `/reference/totalfinance/<entry point>.json`: the full contract of every export of one entry point.
+- [`/operation-catalog.json`](/operation-catalog.json): every registered operation with input and output schemas, permissions and cost.
+- [`/openapi.json`](/openapi.json): the local HTTP server's OpenAPI document.
+- [`/reference-coverage.json`](/reference-coverage.json): every public export path and its reference URL.
+
+## Honesty for agents
+
+Pages state units and assumptions in words, and examples print their real output. The calculators
+use synthetic sample data that is labelled as such; an agent should never present it as market data.

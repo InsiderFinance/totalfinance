@@ -64,9 +64,8 @@ routes to align with InsiderFinance's current Next.js default. The docs' trailin
 normalize once; repeated redirects indicate a routing problem to fix before launch.
 
 Rendered mobile/keyboard review and supported-host WebMCP checks remain separate from automated
-tests. Also review the Versions page: the current site evidence ledger can still label this checkout
-development/unpublished even when the SDK is public. Reconcile that wording with verified SDK-only
-release evidence before advertising release-matched docs; do not fabricate or bypass a receipt.
+tests. Release evidence belongs on the Versions page; the marketing header, hero and navigation
+omit development/unpublished status banners. SDK/MCP publication remains a separate release action.
 
 ## 4. Connect totalfinance.io
 

@@ -1,5 +1,31 @@
 # TotalFinance homepage and documentation routing
 
+**Current correction (2026-11-12):** the requested original is the uncommitted Next.js/Fumadocs
+site in worktree `totalfinance-24287e`, whose hero reads “The complete quant library for TypeScript
+and AI agents.” It is governed by [the recovered original contract](./developer-docs-v2.md).
+The pre-`7c1e932` workbench restored below was the wrong page; that verification is historical.
+Recover the original site's authored frontend and isolated dependency project, preserve its layout
+and copy with the supplied logo/green brand palette, and serve its marketing page at `/`.
+Keep the docs mounted at `/docs/totalfinance` and remove release-status banners from the header,
+hero and sidebar. Release evidence and version-page details retain their existing semantics.
+
+- [x] M1: Recover the actual original marketing frontend and its dependent components/calculators.
+- [x] M2: Apply the supplied logo/colors and omit prominent development/unpublished labels.
+- [x] M3: Serve the homepage at `/`; verify docs/assets/agent files and actual 404s through the mount.
+- [x] M4: Pass the recovered site's tests/build, installed-example checks, lint and documentation regeneration.
+- [ ] M5: Verify hosted checks and inspect the corrected public homepage after integration.
+
+Local recovery evidence (Node 22.23.2/pnpm 10.32.0): the marketing page body is byte-identical to
+the original after removing its status paragraph and substituting one brand accent. The original
+components, styles, self-hosted fonts, ten calculators and source-owned build pipeline are recovered.
+The root serves that marketing page; the docs entry redirects to `/docs/totalfinance/start`.
+Site build: 578 routes, 577 Markdown twins, 6,967 export paths and 48 operations, including the
+self-contained version snapshot. All 198 site tests pass; 13 preview/host tests pass again after
+the final routing adjustment. Root/site types, changed-source lint and 75 documentation/import
+checks pass. All 40 exact default/edited first-call/full examples typecheck and execute against
+installed tarballs. Documentation regeneration reports 248 surfaces, zero findings. Library
+sources, public package versions, the root dependency graph and release evidence are unchanged.
+
 **Controlling correction (2026-11-12):** the maintainer rejected the new marketing homepage and
 requested the original landing page from before the docs separation, changing only its logo and
 brand colors. Restore the pre-`7c1e932` task-first content/layout at `/`; retain the existing docs
