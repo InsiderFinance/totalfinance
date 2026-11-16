@@ -103,20 +103,21 @@ Node loading.
 
 ### First success: synthetic data to ordinary calculations
 
-No key, market-data request or npm SDK release is needed. The InsiderFinance source-checkout preview supports
-**daily/minute price bars and incomplete option-chain research**; the SDK also understands a finite
-set of provider-declared research timeframes. It is not a universal provider
-registry. Pure calculations stay ordinary; provider packages translate source facts once.
+SDK 0.1.5 includes the provider-neutral preview research protocol. This source-checkout walkthrough
+builds the exact local SDK and an independent synthetic provider, so no key, market-data request or
+public provider package is needed. The SDK understands a finite set of provider-declared research
+timeframes; it is not a universal provider registry. Pure calculations stay ordinary; provider
+packages translate source facts once.
 
 Use Node22.23.2 and pnpm10.32.0 (the versions in .nvmrc and package.json). Install that toolchain
-first if missing. From a clean checkout of this feature branch at repository root, run:
+first if missing. From a clean checkout at repository root, run:
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm build
 mkdir -p .local-connector-artifacts
 (cd distribution/totalfinance && pnpm pack --pack-destination ../../.local-connector-artifacts)
-node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.4.tgz
+node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.5.tgz
 (cd examples/community-connectors/starter && pnpm install --frozen-lockfile && pnpm build && pnpm test && pnpm pack --pack-destination ../../../.local-connector-artifacts)
 node examples/community-connectors/starter/run-consumer.mjs .local-connector-artifacts
 ```
@@ -126,7 +127,7 @@ starter's lock before frozen installation. The starter is an independent pnpm pr
 [examples/community-connectors/starter](../examples/community-connectors/starter), outside the
 SDK's workspace glob, with its own project boundary and lock. It uses public SDK imports only.
 Packing an independently installable example is not npm publication. No SDK binary is committed.
-Registry0.1.4 does not supply the unreleased connector contract; do not substitute it for this pack.
+Use the SDK pack from this checkout so the installed example and contract match. Older registry SDK 0.1.4 does not supply the connector contract.
 
 The runner installs both packs into a new temporary consumer and repeats frozen installation.
 Its synthetic JSON has cents-based OHLC fields, session labels and actual share volume. The source
@@ -181,7 +182,7 @@ expected literal pages reject it under the kit's expected-facts law. Both proofs
 
 #### Use compatible real data later
 
-After separately configuring access and an allowance, replace only the provider binding with
+The InsiderFinance provider and API integration remain private, without public onboarding. After separately arranging access and an allowance, replace only the provider binding with
 `createInsiderFinanceProvider(apiKey)` from the independently installed reference connector.
 The same `data.connect(provider).priceBars(request)` and existing calculations remain. Follow the
 [connector guide](guides/community-connectors.md) for explicit symbol/interval/dates and the exact root
@@ -237,7 +238,7 @@ node distribution/mcp/dist/bin.js --profile default
 node distribution/mcp/dist/bin.js doctor
 ```
 
-This checkout declares @insiderfinance/totalfinance-mcp 0.1.4 (pre-1.0; component maturity varies (see stability policy)). After independently confirming availability of that exact release, a client may use command `npx` with args `["-y", "@insiderfinance/totalfinance-mcp@0.1.4", "--profile", "default"]`. Do not assume the workspace version has been published. Stdout in server mode is JSON-RPC only.
+This checkout declares @insiderfinance/totalfinance-mcp 0.1.5 (pre-1.0; component maturity varies (see stability policy)). After independently confirming availability of that exact release, a client may use command `npx` with args `["-y", "@insiderfinance/totalfinance-mcp@0.1.5", "--profile", "default"]`. Do not assume the workspace version has been published. Stdout in server mode is JSON-RPC only.
 
 Published-package smoke: pending release. This build-time reference does not claim execution against published packages.
 
@@ -41109,7 +41110,7 @@ Every import path has its own export identity. Repeated declarations refer to an
 
 ## Package @insiderfinance/totalfinance
 
-Version: 0.1.4; stability: pre-1.0; component maturity varies (see stability policy).
+Version: 0.1.5; stability: pre-1.0; component maturity varies (see stability policy).
 
 Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
 
@@ -288195,7 +288196,7 @@ Kind: value; stability: preview (pre-1.0).
 Generated by publication:update from the public distribution version; browser-safe.
 
 ```typescript
-export declare const WORKFLOWS_VERSION: '0.1.4';
+export declare const WORKFLOWS_VERSION: '0.1.5';
 ```
 
 ### @insiderfinance/totalfinance/workflows#analysisOperations
@@ -289839,7 +289840,7 @@ Same declaration, documentation, members and stability as `@insiderfinance/total
 
 ## Package @insiderfinance/totalfinance-mcp
 
-Version: 0.1.4; stability: pre-1.0; component maturity varies (see stability policy).
+Version: 0.1.5; stability: pre-1.0; component maturity varies (see stability policy).
 
 TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
 

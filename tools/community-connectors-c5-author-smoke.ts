@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, writeFileSync, readFileSync, cpSync, realpathSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { basename, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const [sdkInput, starterInput, authorInput, receiptInput] = process.argv.slice(2);
 if (!sdkInput || !starterInput || !authorInput || !receiptInput)
@@ -46,7 +46,7 @@ try {
   run('pnpm', ['install', '--frozen-lockfile', '--offline', '--ignore-scripts']);
   const lock = readFileSync(join(work, 'pnpm-lock.yaml'), 'utf8');
   assert.ok(!lock.includes('workspace:'));
-  assert.ok(lock.includes('insiderfinance-totalfinance-0.1.4.tgz'));
+  assert.ok(lock.includes(basename(sdk)), 'Lock must retain the supplied SDK tarball');
   for (const name of ['starter', 'alpaca-style']) {
     const p = join(root, 'examples/community-connectors', name),
       input = readFileSync(join(p, 'test.mjs'), 'utf8');

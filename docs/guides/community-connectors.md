@@ -7,18 +7,26 @@ bars and option-chain research. Provider authors own their packages, releases an
 TotalFinance inclusion PR, central allowlist or listing is required. Ordinary calculations still
 accept caller data and load no provider, network client or credential.
 
-This connector contract is unreleased; registry SDK0.1.4 does not contain these subpaths.
+SDK 0.1.5 includes this provider-neutral **preview** contract. Earlier SDK 0.1.4 does not contain
+these subpaths. The independent InsiderFinance provider and its API integration remain private and
+are not publicly launched; this SDK release does not provide public onboarding or an API key.
 Start with the [no-key source-checkout journey](./community-connector-first-success.md), which
 builds the local SDK and an independently packed cents-based provider without internal receipts,
-maintainer paths or credentials. Then use the reference connector with separately configured access.
+maintainer paths or credentials. Private reference-provider use requires separately arranged access.
 An external provider's provisional peer version alone never proves registry compatibility.
 
 ## Fetch data and calculate
 
-Install the SDK and your chosen connector in the same application. For this unreleased preview,
-install both tested local tarballs; registry SDK 0.1.4 does not yet provide this contract.
-TotalFinance binds your installed connector once, fetches a bounded window and supplies named arrays
-to its existing calculations:
+Install SDK 0.1.5 and a separately available compatible provider in the same application. The
+[no-key source-checkout journey](./community-connector-first-success.md) builds and verifies a
+synthetic provider without a public provider package or API access.
+
+### Private reference-provider example
+
+The following example is for separately arranged private access. The named InsiderFinance provider
+package is not publicly distributed and its API integration has not launched publicly; this is not
+a public npm-install or API-key onboarding flow. Once a compatible provider is available,
+TotalFinance binds it once, fetches a bounded window and supplies named arrays to existing calculations:
 
 ```ts
 import { data, technicalAnalysis } from '@insiderfinance/totalfinance';

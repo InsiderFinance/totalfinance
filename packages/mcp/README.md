@@ -6,10 +6,14 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.4: this command describes the planned published experience, not a verified npm installation. Until publication, use a [source checkout](https://github.com/InsiderFinance/totalfinance#develop).
+Source version 0.1.5: the optional MCP package is not published on npm; this is not a verified npm installation.
+Use a [source checkout](https://github.com/InsiderFinance/totalfinance#contributing). SDK publication does not publish this separate server package.
 
 ```sh
-pnpm add @insiderfinance/totalfinance-mcp@0.1.4
+pnpm install --frozen-lockfile
+pnpm build
+node distribution/mcp/dist/bin.js doctor
+node distribution/mcp/dist/bin.js
 ```
 
 ## Example

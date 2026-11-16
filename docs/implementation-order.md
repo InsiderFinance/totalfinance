@@ -5,6 +5,12 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active: SDK 0.1.5 and npm README publication (2026-11-16)
+
+The maintainer authorized completing 0.1.5 through the established GitHub Actions trusted-publishing workflow, including the necessary release PR/merge and SDK npm publication. Follow [R1–R5](./specs/release-0.1.5-readme.md). The release starts at fetched main 3e56ad6, after PR #26 merged; the source-only/unpublished SDK connector wording is updated for this cut while the InsiderFinance provider/API remains private. Preserve the polished README and use verified public documentation targets. Keep optional MCP/source metadata coherent but publish only the SDK. No unmerged PR #12, site deployment, API/staging reads or paper-store actions.
+
+The connector checkpoints below preserve their original source/review history. PR #26 is now merged; their earlier draft/unmerged and unreleased-SDK statements do not describe current main. Connected-provider/App acceptance remains separate from this SDK release. SDK 0.1.4 was already published at e588c9c through the successful GitHub release workflow; its old preparation paragraphs below are historical.
+
 C5 current checkpoint (2026-11-12): maintainer authorized author-contract/resume/quality revision.
 [Approved C5 contract](./specs/community-connector-c5-author-contract.md) was changes_requested at6f3fdd6; revised written binding/resume/
 projection/negotiation/temporal corrections were approved at467a9ed before runtime. Implementation and independent packed proofs are in progress. New isolated branch is based on accepted3bc356f;

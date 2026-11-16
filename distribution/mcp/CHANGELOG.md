@@ -1,5 +1,79 @@
 # @insiderfinance/totalfinance-mcp
 
+## 0.1.5
+
+### Patch Changes
+
+- 820314e: Add opt-in research data-provider contracts and a bounded compatibility kit at core/data and
+  core/data-conformance. Keep provider packages external and all ordinary compute imports free of
+  credentials and fetching. Preserve incomplete financial terms, unknown times, source quality and
+  coverage limitations; these contracts grant no execution authority.
+
+  Add the SDK-owned consumer data view: direct-source binding, direct query/optional discovery,
+  explicit native closePrices/OHLCV arrays and retained raw source pages. Preserve field-specific
+  missing-input refusals without blanket quality/history bans or provider dependencies in compute.
+
+  C3 adds the TotalFinance-owned `data.connect(provider)` research workflow at the root namespace
+  and `/data`, with bounded terminal price-bar windows, retained source pages and lazy strict native
+  array views for existing calculations. Advanced provider query remains one page. New workflow
+  budget refusal is distinct from upstream allowance exhaustion; no provider, credential or HTTP
+  implementation enters ordinary compute. Terminal pagination does not assert continuous coverage, source freshness or trade eligibility.
+
+  Improve connector authoring with a natural homogeneous raw-page return type, controlled actionable
+  mapping diagnostics and an independently installed no-key starter. Reject contradictory adjustment
+  facts and negative normalized option premiums; order same-term contracts by actual source IDs without
+  inventing identities. Preserve unknown financial inputs, caller-fixture blame and source metadata.
+
+  C5 simplifies authoring with protocol2 sources, original queries on every page and SDK-owned
+  normalization. Add finite capability negotiation, cross-copy safe errors, actual timestamped bars,
+  explicit consumed-work checkpoints/resume and field-specific research-quality choices with retained
+  originals/decisions. Keep clean data.connect/priceBars/existing-SMA use unchanged and all acquisition
+  synthetic/offline until separately configured access; no financial defaults or implicit execution.
+
+  Release policy: the maintainer explicitly selected continued 0.1.x releases and authorized 0.1.5
+  for current main after PR #26 merged. The original minor intent is released under that patch
+  override; the preview provider-neutral protocol is an addition, not a reclassified bug fix. The
+  InsiderFinance provider/API remains private and unlaunched. This release does not publish provider
+  or optional MCP packages, deploy a site, grant access or enable trading.
+
+- 7c1e932: Keep the original task-first TotalFinance homepage at `/`, changing only its logo and brand colors,
+  and expose the developer workbench under `/docs/totalfinance/` using the same layout. This changes
+  the already merged website; its implementation did not change SDK calculations. This release
+  publishes the refreshed npm README without deploying the website.
+
+  Add the supplied brand's editable SVG recreation, favicon/Apple icons and social preview card,
+  plus static Vercel configuration and a step-by-step deployment guide.
+
+  Refresh the project README with homepage, documentation and npm links, a direct quickstart,
+  concise feature coverage and agent setup, and remove repeated version caveats.
+
+  Recover the original Next.js/Fumadocs marketing homepage and dependent site components from the
+  earlier design worktree. Apply the supplied TotalFinance branding, keep the documentation mount,
+  and remove prominent development/unpublished status banners without changing release evidence.
+
+  Finish the calculator's green control accents and fix the restored docs MCP adapter's Node ESM
+  startup, with a cold emitted-module regression and a Web Request entrypoint for Vercel.
+
+  Use finance in the headline, remove the unlaunched Discord link, expose the Library navigation,
+  clarify complete API-reference links, and use neutral code-panel colors. README documentation
+  links target InsiderFinance and include its linked credit.
+
+  Keep one header brand, group version/GitHub/npm links in the sidebar, and label the homepage's
+  documentation navigation View Docs. Explain the shared docs prefix in the deployment guide.
+
+  Point the homepage's public documentation entry links to InsiderFinance, including shared-header
+  navigation, agent links, library/calculator cards, footer and mobile navigation.
+
+  For npm 0.1.5, preserve the branding, badges and concise examples; point documentation links to
+  verified public TotalFinance pages while the InsiderFinance production docs routes are unavailable.
+  Describe the preview SDK connector protocol separately from the private provider/API integration,
+  retain source-checkout MCP setup and the no-key synthetic journey, and remove its obsolete fixed
+  SDK-tarball version so the independently installed example follows the tested SDK version.
+
+- Updated dependencies [820314e]
+- Updated dependencies [7c1e932]
+  - @insiderfinance/totalfinance@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

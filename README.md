@@ -10,7 +10,7 @@
 [![CI](https://github.com/InsiderFinance/totalfinance/actions/workflows/totalfinance-ci.yml/badge.svg)](https://github.com/InsiderFinance/totalfinance/actions/workflows/totalfinance-ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-078754.svg)](./LICENSE)
 
-[Homepage](https://totalfinance.io/) · [Documentation](https://www.insiderfinance.io/docs/totalfinance/) · [npm](https://www.npmjs.com/package/@insiderfinance/totalfinance) · [Releases](https://github.com/InsiderFinance/totalfinance/releases) · [By InsiderFinance](https://www.insiderfinance.io/)
+[Homepage](https://totalfinance.io/) · [Documentation](https://www.totalfinance.io/docs/totalfinance/start) · [npm](https://www.npmjs.com/package/@insiderfinance/totalfinance) · [Releases](https://github.com/InsiderFinance/totalfinance/releases) · [By InsiderFinance](https://www.insiderfinance.io/)
 
 Price options, analyze portfolios, build indicators, test strategies, and give agents the same
 financial tools you use in code. TotalFinance brings options, volatility, technical analysis, risk,
@@ -45,22 +45,23 @@ console.log(price); // 0.8983…
 Rates and volatility are decimals: `0.045` means 4.5%, `0.22` means 22%. Time is in years;
 the result uses the same currency as spot and strike.
 
-[Try the calculator →](https://www.insiderfinance.io/docs/totalfinance/learn/price-an-option/)
+[Try the calculator →](https://www.totalfinance.io/docs/totalfinance/learn/price-an-option/)
 
-## Market data connectors — private preview
+## Market data connectors — preview protocol
 
 Connect an independently maintained provider once, fetch normalized research data, and pass named
 arrays such as `prices.closePrices` into existing TotalFinance calculations. Source timestamps,
 provenance, coverage and quality warnings stay available alongside the data.
 
-The connector foundation is available from this source checkout; **these APIs are not yet included
-in the published npm SDK**. Start with the [no-key synthetic walkthrough](./docs/guides/community-connector-first-success.md),
+SDK **0.1.5** includes the provider-neutral preview connector APIs at `data` and `/data`, with
+contracts and authoring tools at `/core/data` and `/core/data-conformance`. Start with the [no-key synthetic walkthrough](./docs/guides/community-connector-first-success.md),
 which runs entirely offline. The [connector guide](./docs/guides/community-connectors.md) covers
 consumer setup, provider authoring and the current price-bar/option-chain research scope.
 
 The InsiderFinance connector remains private, and its API integration has not launched publicly.
-Real use requires separately arranged API access. Public beta will follow available API onboarding
-and real end-to-end verification; the offline walkthrough requires neither a key nor API access.
+The SDK protocol does not provide public access to that private integration. Real use requires a
+separately available provider and arranged access; the offline walkthrough requires neither a key
+nor API access.
 
 ## See the assumptions behind the answer
 
@@ -101,7 +102,7 @@ result.assumptions;
 result.diagnostics;
 ```
 
-[Explore pricing engines and conventions →](https://www.insiderfinance.io/docs/totalfinance/guides/assumptions)
+[Explore pricing engines and conventions →](https://www.totalfinance.io/docs/totalfinance/guides/assumptions)
 
 ## What's inside
 
@@ -142,7 +143,7 @@ Feature imports such as `@insiderfinance/totalfinance/technical-analysis/rsi` le
 Calculation entry points work in browsers; the CLI, HTTP, and MCP transports run in Node.js.
 Node.js requires **22.13+**. The package is ESM with TypeScript declarations.
 
-[Imports, runtimes, and bundle sizes →](https://www.insiderfinance.io/docs/totalfinance/guides/imports-and-bundles)
+[Imports, runtimes, and bundle sizes →](https://www.totalfinance.io/docs/totalfinance/guides/imports-and-bundles)
 
 <details>
 <summary>Root imports and tree shaking</summary>
@@ -161,7 +162,7 @@ the Model Context Protocol. Its default profile provides **23 read-only tools** 
 strategies, volatility, indicators, risk, portfolios, calendars, and more. Profiles let you select
 the tools your agent needs.
 
-Run the MCP server from a source checkout:
+The optional MCP package is not published on npm. Run the server from a source checkout:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -184,17 +185,17 @@ Add it to your MCP client's configuration:
 ```
 
 The server computes from supplied data. It does not fetch market prices. The
-[MCP guide](https://www.insiderfinance.io/docs/totalfinance/guides/mcp) covers client setup, profiles, permissions, and background jobs.
-Agents can also use the [agent handbook](https://www.insiderfinance.io/docs/totalfinance/agents/handbook),
-[llms.txt](https://www.insiderfinance.io/docs/totalfinance/llms.txt), and [full library reference](https://www.insiderfinance.io/docs/totalfinance/llms-full.txt).
+[MCP source-setup guide](./docs/guides/mcp.md) covers client setup, profiles, permissions, and background jobs.
+Agents can also use the [agent handbook](https://www.totalfinance.io/docs/totalfinance/agents/handbook),
+[llms.txt](https://www.totalfinance.io/docs/totalfinance/llms.txt), and [full library reference](https://www.totalfinance.io/docs/totalfinance/llms-full.txt).
 
 ## Documentation
 
-- [Interactive docs](https://www.insiderfinance.io/docs/totalfinance/) — start with a task, run a calculator, and explore the result.
-- [API reference](https://www.insiderfinance.io/docs/totalfinance/reference/) — exports, types, and operations.
+- [Interactive docs](https://www.totalfinance.io/docs/totalfinance/start) — start with a task, run a calculator, and explore the result.
+- [API reference](https://www.totalfinance.io/docs/totalfinance/reference/) — exports, types, and operations.
 - [Examples](./docs/examples/) — executable examples across the toolkit.
-- [Assumptions & conventions](https://www.insiderfinance.io/docs/totalfinance/guides/assumptions) — units, models, dates, and day counts.
-- [Errors & diagnostics](https://www.insiderfinance.io/docs/totalfinance/guides/errors) — understand a refusal and fix the input.
+- [Assumptions & conventions](https://www.totalfinance.io/docs/totalfinance/guides/assumptions) — units, models, dates, and day counts.
+- [Errors & diagnostics](https://www.totalfinance.io/docs/totalfinance/guides/errors) — understand a refusal and fix the input.
 - [Site source](./site/) — the static HTML generator, browser calculators, and local preview instructions.
 
 ## Contributing
