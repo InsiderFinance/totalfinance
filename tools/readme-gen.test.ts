@@ -46,7 +46,11 @@ describe('package README import guidance', () => {
         readFileSync(new URL(`../packages/${dir}/package.json`, import.meta.url), 'utf8'),
       ) as { version: string };
       expect(content, dir).toContain(`Source version ${manifest.version}`);
-      expect(content, dir).toContain(`@${manifest.version}`);
+      if (dir === 'mcp') {
+        expect(content).toContain('not published on npm');
+        expect(content).toContain('node distribution/mcp/dist/bin.js doctor');
+        expect(content).not.toContain('pnpm add @insiderfinance/totalfinance-mcp');
+      } else expect(content, dir).toContain(`@${manifest.version}`);
       expect(content, dir).not.toContain('@totalfinance/');
       expect(content, dir).toContain('not a verified npm installation');
     }

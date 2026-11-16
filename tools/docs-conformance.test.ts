@@ -294,13 +294,20 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
   });
 
   it('scopes the connector key example to the host environment read, never an SDK field', () => {
-    const context = { path: 'docs/guides/community-connectors.md', owner: 'human' };
+    const context = {
+      path: 'docs/guides/community-connectors.md',
+      owner: 'human',
+      sourceHeading: 'Private reference-provider example',
+    };
     const identifier = {
       name: 'INSIDERFINANCE_API_KEY',
       position: 'access' as const,
       line: 'const apiKey = process.env.INSIDERFINANCE_API_KEY;',
     };
     expect(matchesDocumentedException({ ...context, identifier })).toBe(true);
+    expect(
+      matchesDocumentedException({ ...context, sourceHeading: 'Public SDK setup', identifier }),
+    ).toBe(false);
     expect(
       matchesDocumentedException({
         ...context,
@@ -316,6 +323,7 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
     const context = {
       path: 'docs/guides/community-connectors.md',
       owner: 'human',
+      sourceHeading: 'Private reference-provider example',
     };
     const identifier = {
       name: 'createInsiderFinanceProvider',
@@ -323,6 +331,9 @@ describe('documentation naming inventory (3B.N8-DOCS items 1-3, 11)', () => {
       line: "import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';",
     };
     expect(matchesDocumentedException({ ...context, identifier })).toBe(true);
+    expect(
+      matchesDocumentedException({ ...context, sourceHeading: 'Public SDK setup', identifier }),
+    ).toBe(false);
     expect(
       matchesDocumentedException({
         ...context,

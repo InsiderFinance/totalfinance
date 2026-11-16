@@ -1,19 +1,20 @@
 # First success: synthetic data to ordinary calculations
 
-No key, market-data request or npm SDK release is needed. The InsiderFinance source-checkout preview supports
-**daily/minute price bars and incomplete option-chain research**; the SDK also understands a finite
-set of provider-declared research timeframes. It is not a universal provider
-registry. Pure calculations stay ordinary; provider packages translate source facts once.
+SDK 0.1.5 includes the provider-neutral preview research protocol. This source-checkout walkthrough
+builds the exact local SDK and an independent synthetic provider, so no key, market-data request or
+public provider package is needed. The SDK understands a finite set of provider-declared research
+timeframes; it is not a universal provider registry. Pure calculations stay ordinary; provider
+packages translate source facts once.
 
 Use Node22.23.2 and pnpm10.32.0 (the versions in .nvmrc and package.json). Install that toolchain
-first if missing. From a clean checkout of this feature branch at repository root, run:
+first if missing. From a clean checkout at repository root, run:
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm build
 mkdir -p .local-connector-artifacts
 (cd distribution/totalfinance && pnpm pack --pack-destination ../../.local-connector-artifacts)
-node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.4.tgz
+node examples/community-connectors/starter/prepare-sdk.mjs .local-connector-artifacts/insiderfinance-totalfinance-0.1.5.tgz
 (cd examples/community-connectors/starter && pnpm install --frozen-lockfile && pnpm build && pnpm test && pnpm pack --pack-destination ../../../.local-connector-artifacts)
 node examples/community-connectors/starter/run-consumer.mjs .local-connector-artifacts
 ```
@@ -23,7 +24,7 @@ starter's lock before frozen installation. The starter is an independent pnpm pr
 [examples/community-connectors/starter](../../examples/community-connectors/starter), outside the
 SDK's workspace glob, with its own project boundary and lock. It uses public SDK imports only.
 Packing an independently installable example is not npm publication. No SDK binary is committed.
-Registry0.1.4 does not supply the unreleased connector contract; do not substitute it for this pack.
+Use the SDK pack from this checkout so the installed example and contract match. Older registry SDK 0.1.4 does not supply the connector contract.
 
 The runner installs both packs into a new temporary consumer and repeats frozen installation.
 Its synthetic JSON has cents-based OHLC fields, session labels and actual share volume. The source
@@ -78,7 +79,7 @@ expected literal pages reject it under the kit's expected-facts law. Both proofs
 
 ## Use compatible real data later
 
-After separately configuring access and an allowance, replace only the provider binding with
+The InsiderFinance provider and API integration remain private, without public onboarding. After separately arranging access and an allowance, replace only the provider binding with
 `createInsiderFinanceProvider(apiKey)` from the independently installed reference connector.
 The same `data.connect(provider).priceBars(request)` and existing calculations remain. Follow the
 [connector guide](./community-connectors.md) for explicit symbol/interval/dates and the exact root

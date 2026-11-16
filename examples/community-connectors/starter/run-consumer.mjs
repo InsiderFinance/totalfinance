@@ -16,7 +16,6 @@ import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 const here = dirname(fileURLToPath(import.meta.url)),
   artifacts = resolve(process.argv[2] ?? '.local-connector-artifacts');
-const sdk = join(artifacts, 'insiderfinance-totalfinance-0.1.4.tgz');
 const rootPackages = JSON.parse(
   execFileSync('pnpm', ['-r', 'list', '--depth', '-1', '--json'], {
     cwd: resolve(here, '../../..'),
@@ -28,6 +27,9 @@ assert.ok(
   'Starter must remain outside root workspace',
 );
 const starterSdk = realpathSync(join(here, 'node_modules/@insiderfinance/totalfinance'));
+const sdkVersion = JSON.parse(readFileSync(join(starterSdk, 'package.json'), 'utf8')).version;
+const sdkTarball = `insiderfinance-totalfinance-${sdkVersion}.tgz`;
+const sdk = join(artifacts, sdkTarball);
 assert.ok(
   starterSdk.startsWith(join(realpathSync(here), 'node_modules/')),
   'Starter SDK must resolve its own file install, never a source workspace',
@@ -66,10 +68,7 @@ assert.ok(
   ),
 );
 const consumerLock = readFileSync(join(work, 'pnpm-lock.yaml'), 'utf8');
-assert.ok(
-  consumerLock.includes('insiderfinance-totalfinance-0.1.4.tgz') &&
-    !consumerLock.includes('workspace:'),
-);
+assert.ok(consumerLock.includes(sdkTarball) && !consumerLock.includes('workspace:'));
 
 const facts = readFileSync(join(here, 'test.mjs'), 'utf8')
   .split("test('independently")[0]

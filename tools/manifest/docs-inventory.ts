@@ -139,21 +139,20 @@ export const DOCUMENTED_EXCEPTIONS: Readonly<
 > = {
   'docs/guides/community-connectors.md#INSIDERFINANCE_API_KEY': {
     disposition: 'illustrative',
-    why: 'The approved complete Node example reads this application-owned environment variable; it is not a TotalFinance field, API key lookup, or secret value. Scope is the exact host read line, never an SDK member.',
+    why: 'The explicitly private reference-provider example reads this application-owned environment variable; it is not a TotalFinance field, public API key onboarding, or secret value. Scope is the exact host read line, never an SDK member.',
     generatedSource: {
       owner: 'human',
-      headings: [''],
+      headings: ['Private reference-provider example'],
       position: 'access',
       line: 'const apiKey = process.env.INSIDERFINANCE_API_KEY;',
     },
   },
   'docs/guides/community-connectors.md#createInsiderFinanceProvider': {
     disposition: 'illustrative',
-    why: 'This example imports the maintained external connector factory from @insiderfinance/totalfinance-connector-insiderfinance, not from the TotalFinance SDK. Its exact two-package example is verified with the local tarballs; the guide states that it is unreleased.',
+    why: 'This explicitly private reference-provider example imports an external connector factory from @insiderfinance/totalfinance-connector-insiderfinance, not from the TotalFinance SDK. The guide states that the provider is not publicly distributed and offers no public API key onboarding.',
     generatedSource: {
       owner: 'human',
-      // Human guides have no generated ### source identity; scope by exact import instead.
-      headings: [''],
+      headings: ['Private reference-provider example'],
       position: 'import',
       line: "import { createInsiderFinanceProvider } from '@insiderfinance/totalfinance-connector-insiderfinance';",
     },

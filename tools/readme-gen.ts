@@ -13,7 +13,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALIAS_TABLE } from '../packages/technical-analysis/src/aliases.js';
 import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/local/profiles.js';
-import { MCP_PACKAGE_NAME, PUBLIC_PACKAGE_NAME, toPublicSpecifier } from './public-packages.js';
+import { PUBLIC_PACKAGE_NAME, toPublicSpecifier } from './public-packages.js';
 import { publicDocumentationText } from './public-reference.js';
 
 const ROOT = new URL('../', import.meta.url);
@@ -257,12 +257,26 @@ function buildReadme(
     '',
     '## Install',
     '',
-    `Source version ${pkg.version}: this command describes the planned published experience, not a verified npm installation. ` +
-      `Until publication, use a [source checkout](${REPO_URL}#develop).`,
-    '',
-    '```sh',
-    `pnpm add ${pkg.dir === 'mcp' ? MCP_PACKAGE_NAME : PUBLIC_PACKAGE_NAME}@${pkg.version}`,
-    '```',
+    ...(pkg.dir === 'mcp'
+      ? [
+          `Source version ${pkg.version}: the optional MCP package is not published on npm; this is not a verified npm installation.`,
+          `Use a [source checkout](${REPO_URL}#contributing). SDK publication does not publish this separate server package.`,
+          '',
+          '```sh',
+          'pnpm install --frozen-lockfile',
+          'pnpm build',
+          'node distribution/mcp/dist/bin.js doctor',
+          'node distribution/mcp/dist/bin.js',
+          '```',
+        ]
+      : [
+          `Source version ${pkg.version}: this command describes the planned published experience, not a verified npm installation. ` +
+            `Until publication, use a [source checkout](${REPO_URL}#contributing).`,
+          '',
+          '```sh',
+          `pnpm add ${PUBLIC_PACKAGE_NAME}@${pkg.version}`,
+          '```',
+        ]),
     '',
   ];
   if (snippet) {

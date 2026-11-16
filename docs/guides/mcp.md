@@ -4,8 +4,9 @@
 
 ## Quickstart
 
-The checked-in package version is `0.1.0`, an **unpublished preview**. From a built checkout
-(Node ≥22.13), run the local binary; this does not require a registry release:
+The optional MCP package remains an **unpublished preview**. SDK 0.1.5 publication does not publish
+this separate server package. From a built source checkout (Node ≥22.13), run the local binary;
+this does not require an MCP registry release:
 
 ```sh
 pnpm build
@@ -53,21 +54,18 @@ claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/
 }
 ```
 
-## Install
+## Source installation
 
-After a package version has actually been published, pin that exact version to embed
-`createTotalFinanceMcpServer` in your own server. For the planned first release, verify that
-version `0.1.0` is available; no publication is implied here:
+Use the source checkout rather than an npm install of the unpublished MCP package:
 
 ```sh
-pnpm add @insiderfinance/totalfinance-mcp@0.1.0
+pnpm install --frozen-lockfile
+pnpm build
+node distribution/mcp/dist/bin.js
 ```
 
-## Run
-
-```sh
-pnpm exec totalfinance-mcp
-```
+Installing the SDK alone does not install or start an MCP server. Optional MCP metadata moves with
+the SDK for local builds and verified tarball tests; that is not evidence of an MCP npm release.
 
 Omitting `--profile` keeps the 23-tool default. The examples above deliberately select only the
 options task. The server supplies no quotes or other live data: ask it to list tools, inspect
