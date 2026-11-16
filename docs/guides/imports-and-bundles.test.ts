@@ -90,7 +90,7 @@ describe('public imports and bundles guidance', () => {
       expect(text).toContain('Rollup shakes this static use');
       expect(text).toContain(
         path === '../../README.md'
-          ? 'https://www.insiderfinance.io/docs/totalfinance/guides/imports-and-bundles)'
+          ? 'https://www.totalfinance.io/docs/totalfinance/guides/imports-and-bundles)'
           : 'guides/imports-and-bundles.md)',
       );
       await executeSnippet(intro);
