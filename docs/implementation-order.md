@@ -20,7 +20,8 @@ historical evidence, not C5 acceptance. Feature in_progress, PR26 draft/unmerged
 - [x] ca176773 bounded continuation preflight precedes canonical copying; cycle/accessor/work-limit controls refuse with zero source calls, while mutation/cross-copy laws pass against fresh packs.
 - [x] Bounded repair7b24305 exact-head FAST43309751937/FULL43309736347 and coordinator acceptance; source/provider/packed receipts retained.
 - [x] Integrate current main71ffb42 in this C5 tree and regenerate its sole docs-inventory conflict; source/artifact inputs unchanged; [integration record](./reviews/community-connectors-c5-integration-2026-11-12.md).
-- [ ] Fresh integrated-head FAST/FULL and coordinator closure; later maintainer/connected-agent/App acceptance separate.
+- [x] Integrated041d355 exact-head FAST43313012020/FULL43312996666 and independent coordinator acceptance; later maintainer/connected-agent/App acceptance separate.
+- [ ] November16 maintainer-requested README private-preview clarification: docs only, source/financial contracts/caps unchanged; fresh current-head checks and final outcomes recorded in task/PR metadata.
 
 C4 current checkpoint (2026-11-11): corrected source and exact revised eight caps approved under
 request ae690e3f. Ordered generation from the integrated0.1.3 source reports zero measured defects,

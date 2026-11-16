@@ -20,8 +20,6 @@ Calculations run locally with the data you provide. The main package has **zero 
 dependencies**, typed inputs, and tree-shakeable ESM exports. Use it in Node.js, browsers, and workers;
 connect the same engines to agents through MCP.
 
-**Community connectors (unreleased):** [no-key first success and author journey](./docs/guides/community-connector-first-success.md) builds the preview from source; the [connector guide](./docs/guides/community-connectors.md) explains the provider-neutral data handoff.
-
 ## Quick start
 
 ```sh
@@ -48,6 +46,21 @@ Rates and volatility are decimals: `0.045` means 4.5%, `0.22` means 22%. Time is
 the result uses the same currency as spot and strike.
 
 [Try the calculator →](https://www.insiderfinance.io/docs/totalfinance/learn/price-an-option/)
+
+## Market data connectors — private preview
+
+Connect an independently maintained provider once, fetch normalized research data, and pass named
+arrays such as `prices.closePrices` into existing TotalFinance calculations. Source timestamps,
+provenance, coverage and quality warnings stay available alongside the data.
+
+The connector foundation is available from this source checkout; **these APIs are not yet included
+in the published npm SDK**. Start with the [no-key synthetic walkthrough](./docs/guides/community-connector-first-success.md),
+which runs entirely offline. The [connector guide](./docs/guides/community-connectors.md) covers
+consumer setup, provider authoring and the current price-bar/option-chain research scope.
+
+The InsiderFinance connector remains private, and its API integration has not launched publicly.
+Real use requires separately arranged API access. Public beta will follow available API onboarding
+and real end-to-end verification; the offline walkthrough requires neither a key nor API access.
 
 ## See the assumptions behind the answer
 
