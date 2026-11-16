@@ -1,0 +1,105 @@
+[
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at data[].terms.strike (missing_field).",
+    "context": {
+      "phase": "page",
+      "path": "data[].terms.strike",
+      "reason": "missing_field",
+      "validationCode": "input.missing_field",
+      "rowIndex": 0
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at data[].bar.timestampMs (missing_field).",
+    "context": {
+      "phase": "page",
+      "path": "data[].bar.timestampMs",
+      "reason": "missing_field",
+      "validationCode": "input.missing_field",
+      "rowIndex": 0
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at metadata.freshness.status (invalid_enum).",
+    "context": {
+      "phase": "page",
+      "path": "metadata.freshness.status",
+      "reason": "invalid_enum",
+      "validationCode": "input.invalid_enum"
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at metadata (missing_field).",
+    "context": {
+      "phase": "page",
+      "path": "metadata",
+      "reason": "missing_field",
+      "validationCode": "input.missing_field"
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at metadata.times (missing_field).",
+    "context": {
+      "phase": "page",
+      "path": "metadata.times",
+      "reason": "missing_field",
+      "validationCode": "input.missing_field"
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "createDataView: invalid research data at data[].bar (missing_field).",
+    "context": {
+      "phase": "page",
+      "path": "data[].bar",
+      "reason": "missing_field",
+      "validationCode": "input.missing_field",
+      "rowIndex": 0
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "DataError",
+    "code": "data.invalid_response",
+    "message": "defineDataProvider.capabilities: invalid research data at capabilities[].maxPageSize (out_of_range).",
+    "context": {
+      "phase": "capabilities",
+      "path": "capabilities[].maxPageSize",
+      "reason": "out_of_range",
+      "validationCode": "input.out_of_range"
+    }
+  },
+  {
+    "serialization": 1,
+    "name": "InputError",
+    "code": "input.not_finite",
+    "message": "validateDataProvider: invalid expected research page.",
+    "context": {
+      "phase": "page",
+      "path": "data[].bar.close",
+      "reason": "not_finite",
+      "validationCode": "input.not_finite",
+      "rowIndex": 0,
+      "field": "probes[].expectedPages",
+      "pageIndex": 0
+    },
+    "calls": 0
+  }
+]

@@ -41,7 +41,7 @@ const rows = artifact.enforcement;
  * 35 after 290 extra null checks and 290 optional-type checks, while all 3,084 aliases still reused
  * evidence. Check the accounting directly: no alias executes, and every global counter equals the
  * sum of physical roots. The inherited-population ratchet tightens from >1,000 to the measured
- * 3,084 aliases. Defect plants prove aliases cannot lose attribution or double-claim executions.
+ * 3,084 aliases, tightened to 3,086 after the integrated C4 surface adds two aliases. Defect plants prove aliases cannot lose attribution or double-claim executions.
  */
 function aliasProbeAccountingErrors(subject: typeof artifact): string[] {
   const errors: string[] = [];
@@ -59,7 +59,7 @@ function aliasProbeAccountingErrors(subject: typeof artifact): string[] {
   }
   if (inherited !== subject.summary.inherited)
     errors.push('inherited total differs from alias rows');
-  if (inherited < 3084) errors.push('inherited alias population regressed');
+  if (inherited < 3086) errors.push('inherited alias population regressed');
   for (const kind of new Set([
     ...Object.keys(totals),
     ...Object.keys(subject.summary.mutationsExecuted),

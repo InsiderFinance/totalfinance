@@ -116,7 +116,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `AlignEventWindowsInput` | `returnObservations[].tradingSessionDate` | string |  |  |  | calendar date (YYYY-MM-DD) |
 | `AlignEventWindowsInput` | `sessionPolicy` | enum | "announcement-session" \\| "next-session" | yes |  |  |
 | `ArtifactInputs` | `inputsHash` | string |  |  |  | unitless by name |
-| `ArtifactInputs` | `parameters` | other |  | yes |  |  |
+| `ArtifactInputs` | `parameters` | other |  | yes | yes |  |
 | `ArtifactInputs` | `snapshotHash` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `libraryVersion` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `operation` | string |  |  |  | unitless by name |

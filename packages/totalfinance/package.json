@@ -134,7 +134,12 @@
       "import": "./dist/fixed-income.js",
       "default": "./dist/fixed-income.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js",
+      "default": "./dist/data.js"
+    }
   },
   "files": [
     "dist",

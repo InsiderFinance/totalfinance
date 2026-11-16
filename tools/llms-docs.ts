@@ -22,6 +22,12 @@ const SUMMARY =
 
 export const AGENT_JOURNEYS = [
   {
+    slug: 'community-connectors',
+    title: 'Connect data and author a provider without a key',
+    operation: null,
+    guide: 'guides/community-connector-first-success.md',
+  },
+  {
     slug: 'options',
     title: 'Price options and inspect Greeks',
     operation: 'totalfinance.option.price',
@@ -90,7 +96,7 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
     '',
     '- [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.',
     '',
-    '## Six task journeys',
+    '## Task journeys',
     '',
   ];
   for (const journey of AGENT_JOURNEYS)
@@ -252,6 +258,21 @@ export function buildLlmsFullTxt(reference: PublicReference = buildPublicReferen
     '',
   ];
   for (const journey of AGENT_JOURNEYS) {
+    if (journey.slug === 'community-connectors') {
+      lines.push(
+        `## Journey ${journey.slug}`,
+        '',
+        `[Runnable no-key SDK and author guide](${journey.guide})`,
+        '',
+        readFileSync(resolve(ROOT, 'docs', journey.guide), 'utf8')
+          .trim()
+          .replace(/^(#+) /gm, '$1## ')
+          .replaceAll('](../../examples/', '](../examples/')
+          .replace('](./community-connectors.md)', '](guides/community-connectors.md)'),
+        '',
+      );
+      continue;
+    }
     if (!journey.operation) continue;
     const operation = reference.operations.find((candidate) => candidate.id === journey.operation);
     if (!operation) throw new Error(`Journey operation missing: ${journey.operation}`);

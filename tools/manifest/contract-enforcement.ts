@@ -36,7 +36,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { allFixtures } from '../first-touch/fixtures.js';
-import { probeContract, type ProbeResult } from './contract-probe.js';
+import { probeContract, probeContractAsync, type ProbeResult } from './contract-probe.js';
 import { mcpToolContracts, type McpToolContract } from './mcp-contracts.js';
 import {
   alternativeOf,
@@ -1346,7 +1346,7 @@ function describeCall(args: readonly unknown[], seen: Set<unknown> = new Set()):
  *
  * Now the two are separate: `variants` fixes WHICH alternative, `attempt` retries values WITHIN it.
  */
-function measureWithAlternatives(
+async function measureWithAlternatives(
   record: ContractRecord,
   target: (...args: unknown[]) => unknown,
   fixtureFor: (attempt: number, variant: MeasuredAlternative) => Fixture | null,
@@ -1356,20 +1356,21 @@ function measureWithAlternatives(
     { id: CANONICAL_VARIANT, selection: new Map(), hand: false },
   ],
   truncated = false,
-): EnforcementRecord {
-  const measured = variants.map((variant) => ({
-    variant,
-    // A HAND-written variant is not synthesized, whatever the boundary's default is: the retry
-    // ladder and the baseline check both key off how the call was PRODUCED, not off the record.
-    result: measureVariant(
-      record,
-      target,
-      fixtureFor,
-      isConstructor,
-      variant.hand ? false : synthesized,
+): Promise<EnforcementRecord> {
+  const measured: { variant: MeasuredAlternative; result: EnforcementRecord }[] = [];
+  for (const variant of variants) {
+    measured.push({
       variant,
-    ),
-  }));
+      result: await measureVariant(
+        record,
+        target,
+        fixtureFor,
+        isConstructor,
+        variant.hand ? false : synthesized,
+        variant,
+      ),
+    });
+  }
   const canonical = measured[0]!.result;
   /**
    * WHEN IS A REFUSED BRANCH A DEFECT RATHER THAN A GAP? Only when the call is KNOWN valid.
@@ -1479,14 +1480,14 @@ function measureWithAlternatives(
 }
 
 /** One alternative, measured across the value-retry ladder. `attempt` no longer chooses a branch. */
-function measureVariant(
+async function measureVariant(
   record: ContractRecord,
   target: (...args: unknown[]) => unknown,
   fixtureFor: (attempt: number, variant: MeasuredAlternative) => Fixture | null,
   isConstructor: boolean,
   synthesized: boolean,
   variant: MeasuredAlternative,
-): EnforcementRecord {
+): Promise<EnforcementRecord> {
   /**
    * A call that does not select its own branch is not evidence about that branch.
    *
@@ -1508,7 +1509,7 @@ function measureVariant(
   for (let attempt = 0; attempt < (synthesized ? ATTEMPTS : 1); attempt++) {
     const fixture = fixtureFor(attempt, variant);
     if (!fixture) break;
-    const result = measureBoundary(
+    const result = await measureBoundary(
       record,
       target,
       fixture.call,
@@ -1560,7 +1561,7 @@ function measureVariant(
   );
 }
 
-function measureBoundary(
+async function measureBoundary(
   record: ContractRecord,
   target: (...args: unknown[]) => unknown,
   fixture: () => unknown[],
@@ -1568,7 +1569,7 @@ function measureBoundary(
   synthesized: boolean,
   /** One entry per ARGUMENT passed, in order — see `Fixture`. */
   coordinates: SynthesisParameter[] = [],
-): EnforcementRecord {
+): Promise<EnforcementRecord> {
   /**
    * VALIDATE THE BASELINE BEFORE CALLING. See `incomplete-baseline`: a request the declaration itself
    * says is malformed tells us nothing about the contract, and calling with it produces a rejection
@@ -1624,8 +1625,9 @@ function measureBoundary(
     ...(rejection ? { rejection } : {}),
     guardReachability: record.guardReachability,
   });
+  let asynchronous = false;
   try {
-    const produced = isConstructor
+    let produced = isConstructor
       ? new (target as unknown as new (...a: unknown[]) => unknown)(...fixture())
       : target(...fixture());
     /**
@@ -1633,9 +1635,14 @@ function measureBoundary(
      * against a promise nobody awaited would record passes for evidence never collected.
      */
     if (typeof (produced as { then?: unknown })?.then === 'function') {
-      // Settle it so the process does not carry an unhandled rejection out of a measurement.
-      void Promise.resolve(produced).catch(() => undefined);
-      return unmeasured('async-result-unobserved');
+      if (synthesized || isConstructor || !(fixture as { boundedAsync?: true }).boundedAsync) {
+        // Await only authored fixtures that explicitly bound async work. Legacy streams and
+        // synthesized async sources retain their existing honest measurement gap.
+        void Promise.resolve(produced).catch(() => undefined);
+        return unmeasured('async-result-unobserved');
+      }
+      asynchronous = true;
+      produced = await produced;
     }
     /**
      * A GENERATOR IS NOT A THENABLE, and the guard written for `streamAsync` missed `streamAsync`.
@@ -1720,7 +1727,7 @@ function measureBoundary(
      * behaves exactly as it did before rather than losing the contract altogether.
      */
     const probed = fixture();
-    results = probeContract(target, fixture, {
+    results = await (asynchronous ? probeContractAsync : probeContract)(target, fixture, {
       construct: isConstructor,
       acceptsOmittedArguments: (args) =>
         provesArgumentConformance(
@@ -1915,6 +1922,17 @@ function measureBoundary(
   return entry;
 }
 
+/** A Promise is not a synchronous artifact instance. Observe rejection without claiming that
+ * awaiting or measuring its resolved contract occurred; normal async measurement stays separate. */
+export function isSynchronousProducerSample(sample: unknown): sample is object {
+  if (sample === null || typeof sample !== 'object') return false;
+  if (typeof (sample as { then?: unknown }).then === 'function') {
+    void Promise.resolve(sample).catch(() => undefined);
+    return false;
+  }
+  return true;
+}
+
 export async function buildEnforcementRecord(): Promise<{
   version: number;
   summary: Record<string, unknown>;
@@ -2030,7 +2048,7 @@ export async function buildEnforcementRecord(): Promise<{
         target(...(synthesizeArguments(parameters, candidate.fields ?? []) ?? []));
       try {
         const sample = make();
-        if (sample === null || typeof sample !== 'object') continue;
+        if (!isSynchronousProducerSample(sample)) continue;
         // It must actually BE one: every required member the contract declares must be present.
         if (required?.some((name) => !(name in (sample as object)))) continue;
       } catch {
@@ -2496,7 +2514,7 @@ export async function buildEnforcementRecord(): Promise<{
           // declaration that throws when called is not a receiver.
           try {
             const sample = produceOne();
-            if (sample === null || typeof sample !== 'object') continue;
+            if (!isSynchronousProducerSample(sample)) continue;
           } catch {
             continue;
           }
@@ -2554,7 +2572,7 @@ export async function buildEnforcementRecord(): Promise<{
             },
           )
         ) {
-          const measuredMember = measureWithAlternatives(
+          const measuredMember = await measureWithAlternatives(
             record,
             receiverTarget,
             memberPlan.fixtureFor,
@@ -2787,7 +2805,7 @@ export async function buildEnforcementRecord(): Promise<{
      * the state leaking — a fresh module realm per boundary, which needs the process isolation R11
      * already owes for the hang budget. Recorded there rather than papered over here.
      */
-    const verdict = measureWithAlternatives(
+    const verdict = await measureWithAlternatives(
       record,
       target,
       fixtureFor,

@@ -67,7 +67,10 @@ export const PREMIUM_MARKET = (): Record<string, unknown> => ({
   expiry: '2026-06-19',
 });
 
-export type FixtureThunk = () => unknown[];
+export type FixtureThunk = (() => unknown[]) & {
+  /** Opt into awaited enforcement only when the authored fixture bounds its async work. */
+  boundedAsync?: true;
+};
 
 /**
  * ONE flat implied-volatility surface, shared by every fixture that wants one.

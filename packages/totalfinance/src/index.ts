@@ -127,3 +127,6 @@ export * as structure from '@totalfinance/structure';
 export * as technicalAnalysis from '@totalfinance/technical-analysis';
 export * as strategy from '@totalfinance/strategy';
 export * as fixedIncome from '@totalfinance/fixed-income';
+
+export * as data from './data.js';
+export type * from './data.js';

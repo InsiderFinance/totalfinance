@@ -44,6 +44,10 @@
       "@insiderfinance/totalfinance/core/schema": ["./packages/core/src/schema/index.ts"],
       "@insiderfinance/totalfinance/core/pricing": ["./packages/core/src/pricing.ts"],
       "@insiderfinance/totalfinance/core/artifacts": ["./packages/core/src/artifacts/index.ts"],
+      "@insiderfinance/totalfinance/core/data": ["./packages/core/src/data.ts"],
+      "@insiderfinance/totalfinance/core/data-conformance": [
+        "./packages/core/src/data-conformance.ts"
+      ],
       "@insiderfinance/totalfinance/crypto": ["./packages/crypto/src/index.ts"],
       "@insiderfinance/totalfinance/crypto/carry": ["./packages/crypto/src/carry.ts"],
       "@insiderfinance/totalfinance/crypto/curve": ["./packages/crypto/src/curve.ts"],
@@ -291,6 +295,7 @@
         "./packages/technical-analysis/src/framework.ts"
       ],
       "@insiderfinance/totalfinance": ["./packages/totalfinance/src/index.ts"],
+      "@insiderfinance/totalfinance/data": ["./packages/totalfinance/src/data.ts"],
       "@insiderfinance/totalfinance/valuation": ["./packages/valuation/src/index.ts"],
       "@insiderfinance/totalfinance/valuation/cash-flows": [
         "./packages/valuation/src/cash-flows.ts"

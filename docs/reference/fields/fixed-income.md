@@ -398,7 +398,7 @@ Each named object type is expanded once; a `→ Type` domain above refers here. 
 | `AmortizingBondSpecification` | `issueDate` | string |  |  |  | calendar date (YYYY-MM-DD) |
 | `AmortizingBondSpecification` | `maturityDate` | string |  |  |  | calendar date (YYYY-MM-DD) |
 | `ArtifactInputs` | `inputsHash` | string |  |  |  | unitless by name |
-| `ArtifactInputs` | `parameters` | other |  | yes |  |  |
+| `ArtifactInputs` | `parameters` | other |  | yes | yes |  |
 | `ArtifactInputs` | `snapshotHash` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `libraryVersion` | string |  | yes |  | unitless by name |
 | `ArtifactProducedBy` | `operation` | string |  |  |  | unitless by name |

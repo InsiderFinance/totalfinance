@@ -1,0 +1,762 @@
+{
+  "status": "budget_review_requested_not_accepted",
+  "node": "v22.23.2",
+  "sourceCheckpoint": "e0a6f381a2145c763a05e7bf8e0d227d886c006a",
+  "mergeHead": "23fbf06bfe6d63387e8b45473fd064ff74d1d084",
+  "candidateSourceSha256": "ee0784bc8d9cbaa038298657f77e76e85beddb12cfb8f4953f50f7121b1a1913",
+  "baselines": {
+    "main": {
+      "bytesMin": 2650952,
+      "bytesGzip": 718019,
+      "repositoryCapBytes": 718336,
+      "candidateEnforcedCapBytes": 723200,
+      "retainedModules": 378,
+      "sourceSha256": "0987104e4d54395f6c67c0f82f7ca4a471b35ede4be9b65535ef5888ca716ffd"
+    },
+    "c4": {
+      "bytesMin": 2669729,
+      "bytesGzip": 722908,
+      "repositoryCapBytes": 723200,
+      "candidateEnforcedCapBytes": 723200,
+      "retainedModules": 385,
+      "sourceSha256": "8598de25a90444de80145b1de068c18f2878b6d01ed805856ee3c1b1d579de3e"
+    },
+    "integratedPreC5": {
+      "bytesMin": 2679813,
+      "bytesGzip": 726548,
+      "repositoryCapBytes": 723200,
+      "candidateEnforcedCapBytes": 723200,
+      "retainedModules": 386,
+      "sourceSha256": "abe19185cdb65b56a07605add6e27b5cd0608599e1e70b2730812fd0c4d8fbbc"
+    },
+    "c5": {
+      "bytesMin": 2699577,
+      "bytesGzip": 732244,
+      "repositoryCapBytes": 723200,
+      "candidateEnforcedCapBytes": 723200,
+      "retainedModules": 392,
+      "sourceSha256": "ee0784bc8d9cbaa038298657f77e76e85beddb12cfb8f4953f50f7121b1a1913"
+    }
+  },
+  "whole": [
+    {
+      "entry": "packages/math/src/montecarlo.ts",
+      "bytesMin": 21007,
+      "bytesGzip": 7603,
+      "candidateEnforcedCapBytes": 7584,
+      "proposedCapBytes": 7616,
+      "headroomBytes": 13,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/calendars/src/crypto.ts",
+      "bytesMin": 14547,
+      "bytesGzip": 5040,
+      "candidateEnforcedCapBytes": 5024,
+      "proposedCapBytes": 5056,
+      "headroomBytes": 16,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/performance/src/sector-performance.ts",
+      "bytesMin": 34735,
+      "bytesGzip": 10770,
+      "candidateEnforcedCapBytes": 10752,
+      "proposedCapBytes": 10784,
+      "headroomBytes": 14,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/fixed-income/src/lattice.ts",
+      "bytesMin": 39938,
+      "bytesGzip": 13195,
+      "candidateEnforcedCapBytes": 13184,
+      "proposedCapBytes": 13216,
+      "headroomBytes": 21,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/fixed-income/src/convertible.ts",
+      "bytesMin": 26443,
+      "bytesGzip": 9012,
+      "candidateEnforcedCapBytes": 8992,
+      "proposedCapBytes": 9024,
+      "headroomBytes": 12,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/portfolio/src/trade/index.ts",
+      "bytesMin": 287649,
+      "bytesGzip": 79389,
+      "candidateEnforcedCapBytes": 79360,
+      "proposedCapBytes": 79424,
+      "headroomBytes": 35,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/backtest/src/paper/index.ts",
+      "bytesMin": 138244,
+      "bytesGzip": 38035,
+      "candidateEnforcedCapBytes": 38016,
+      "proposedCapBytes": 38048,
+      "headroomBytes": 13,
+      "addedModules": [],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/errors.ts": 96
+      }
+    },
+    {
+      "entry": "packages/totalfinance/src/data.ts",
+      "bytesMin": 68229,
+      "bytesGzip": 21338,
+      "candidateEnforcedCapBytes": 15872,
+      "proposedCapBytes": 21504,
+      "headroomBytes": 166,
+      "addedModules": [
+        "packages/core/src/assumptions.ts",
+        "packages/core/src/data-legacy-window.ts",
+        "packages/core/src/data-protocol.ts",
+        "packages/core/src/data-provider-error.ts",
+        "packages/core/src/data-provider.ts",
+        "packages/core/src/data-selection.ts",
+        "packages/core/src/data-window-view.ts"
+      ],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/artifacts/canonical-scan.ts": 6,
+        "packages/core/src/data-call.ts": -124,
+        "packages/core/src/data-connection.ts": 4046,
+        "packages/core/src/data-response-issue.ts": 1108,
+        "packages/core/src/data-sequence-validation.ts": 266,
+        "packages/core/src/data-validation.ts": -1256,
+        "packages/core/src/data-view-validation.ts": -1812,
+        "packages/core/src/data-view.ts": -777,
+        "packages/core/src/errors.ts": 97,
+        "packages/core/src/invariants.ts": 4,
+        "packages/core/src/provenance.ts": 5,
+        "packages/core/src/validation-codes.ts": 1
+      }
+    },
+    {
+      "entry": "packages/totalfinance/src/index.ts",
+      "bytesMin": 2699577,
+      "bytesGzip": 732244,
+      "candidateEnforcedCapBytes": 723200,
+      "proposedCapBytes": 732672,
+      "headroomBytes": 428,
+      "addedModules": [
+        "packages/core/src/data-legacy-window.ts",
+        "packages/core/src/data-protocol.ts",
+        "packages/core/src/data-provider-error.ts",
+        "packages/core/src/data-provider.ts",
+        "packages/core/src/data-selection.ts",
+        "packages/core/src/data-window-view.ts"
+      ],
+      "removedModules": [],
+      "changedRetainedModuleBytes": {
+        "packages/core/src/data-call.ts": -120,
+        "packages/core/src/data-connection.ts": 4100,
+        "packages/core/src/data-response-issue.ts": 1113,
+        "packages/core/src/data-sequence-validation.ts": 270,
+        "packages/core/src/data-validation.ts": -1293,
+        "packages/core/src/data-view-validation.ts": -1831,
+        "packages/core/src/data-view.ts": -788,
+        "packages/core/src/errors.ts": 96,
+        "packages/scenarios/src/internal/failures.ts": 17,
+        "packages/scenarios/src/run.ts": 6,
+        "packages/scenarios/src/targets.ts": 17,
+        "packages/scenarios/src/work.ts": 10,
+        "packages/totalfinance/src/data.ts": 27
+      }
+    }
+  ],
+  "installed": [
+    {
+      "fixture": "data-named",
+      "bundler": "esbuild",
+      "bytesMin": 65576,
+      "bytesGzip": 20676,
+      "enforcedCapBytes": 15360,
+      "proposedCapBytes": 20992,
+      "headroomBytes": 316,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 5768
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 110
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/assumptions.js",
+          "bytes": 15
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 3746
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 496
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 7436
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 10226
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider-error.js",
+          "bytes": 2740
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider.js",
+          "bytes": 765
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 5922
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 3060
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 1366
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 11546
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view.js",
+          "bytes": 418
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 192
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 609
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 8180
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 1132
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 1728
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 79
+        }
+      ]
+    },
+    {
+      "fixture": "data-named",
+      "bundler": "rollup",
+      "bytesMin": 59287,
+      "bytesGzip": 18631,
+      "enforcedCapBytes": 13312,
+      "proposedCapBytes": 18944,
+      "headroomBytes": 313,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 12832
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 613
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/assumptions.js",
+          "bytes": 218
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 10197
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 1530
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 16568
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 19457
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider-error.js",
+          "bytes": 5130
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider.js",
+          "bytes": 1949
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 10134
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 6362
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 3277
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 21598
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view.js",
+          "bytes": 792
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 469
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 1865
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 3086
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 3580
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 4418
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 614
+        }
+      ]
+    },
+    {
+      "fixture": "data-root",
+      "bundler": "esbuild",
+      "bytesMin": 68385,
+      "bytesGzip": 21395,
+      "enforcedCapBytes": 15872,
+      "proposedCapBytes": 21760,
+      "headroomBytes": 365,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 5767
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 110
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/assumptions.js",
+          "bytes": 15
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 3746
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 827
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 8581
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-legacy-window.js",
+          "bytes": 952
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 10225
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider-error.js",
+          "bytes": 2739
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider.js",
+          "bytes": 765
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 5996
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 3060
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 1366
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 11545
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view-validation.js",
+          "bytes": 116
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view.js",
+          "bytes": 418
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 192
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 609
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 8180
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 1132
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 1728
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 79
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/totalfinance/dist/data.js",
+          "bytes": 94
+        }
+      ]
+    },
+    {
+      "fixture": "data-root",
+      "bundler": "rollup",
+      "bytesMin": 59299,
+      "bytesGzip": 18596,
+      "enforcedCapBytes": 13312,
+      "proposedCapBytes": 18944,
+      "headroomBytes": 348,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 12832
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 613
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/assumptions.js",
+          "bytes": 218
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 10197
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 1530
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 16568
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 19457
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider-error.js",
+          "bytes": 5130
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-provider.js",
+          "bytes": 1949
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 10134
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 6362
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 3277
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 21598
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view.js",
+          "bytes": 792
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 469
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 1865
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 3086
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 3580
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 4418
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 614
+        }
+      ]
+    },
+    {
+      "fixture": "data-restore",
+      "bundler": "esbuild",
+      "bytesMin": 49591,
+      "bytesGzip": 15985,
+      "enforcedCapBytes": 14080,
+      "proposedCapBytes": 16128,
+      "headroomBytes": 143,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 5760
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 110
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 3745
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 331
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 1546
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-legacy-window.js",
+          "bytes": 945
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 3394
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 5996
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 3063
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 1366
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 11262
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view-validation.js",
+          "bytes": 115
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 192
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 609
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 8180
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 1131
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 1725
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 79
+        }
+      ]
+    },
+    {
+      "fixture": "data-restore",
+      "bundler": "rollup",
+      "bytesMin": 42486,
+      "bytesGzip": 13754,
+      "enforcedCapBytes": 14080,
+      "proposedCapBytes": 14080,
+      "headroomBytes": 326,
+      "retainedModules": [
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/canonical-scan.js",
+          "bytes": 12832
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/artifacts/deep-freeze.js",
+          "bytes": 613
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/canonical-json.js",
+          "bytes": 10197
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-call.js",
+          "bytes": 579
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-connection.js",
+          "bytes": 3095
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-legacy-window.js",
+          "bytes": 2504
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-protocol.js",
+          "bytes": 6442
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-response-issue.js",
+          "bytes": 10277
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-selection.js",
+          "bytes": 6362
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-sequence-validation.js",
+          "bytes": 3277
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-validation.js",
+          "bytes": 21116
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-view-validation.js",
+          "bytes": 301
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/data-window-view.js",
+          "bytes": 469
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/dates.js",
+          "bytes": 1865
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/errors.js",
+          "bytes": 2501
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/invariants.js",
+          "bytes": 3580
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/provenance.js",
+          "bytes": 4418
+        },
+        {
+          "id": "@insiderfinance/totalfinance/modules/core/dist/validation-codes.js",
+          "bytes": 614
+        }
+      ]
+    }
+  ],
+  "artifacts": {
+    "sdk": {
+      "path": "/tmp/tf-c5-packs/insiderfinance-totalfinance-0.1.4.tgz",
+      "sha256": "a3144664aaa3b01ffa350c2b9dafc6e6c186709f24674590b7bc73d63b6bcda1"
+    },
+    "starter": {
+      "path": "/tmp/tf-c5-packs/totalfinance-example-cents-connector-0.0.0.tgz",
+      "sha256": "e56b775e0eaf7944a2c11418da6238e1775426c3947438e9bf457df192e18abb"
+    },
+    "author": {
+      "path": "/tmp/tf-c5-packs/tf-connector-acme-0.1.0.tgz",
+      "sha256": "8a8e43e767beb6a990654531130f958b3f6a0362431fb90aae05381ffedd1b12"
+    }
+  },
+  "provider": {
+    "path": "/tmp/tf-c5-packs/insiderfinance-totalfinance-connector-insiderfinance-0.0.0.tgz",
+    "sha256": "71bfad932410ed6d22e5eaebf98e827d754f9508cfe1d2ec2bae2af9fdee1c55"
+  },
+  "ordinaryInstalledCases": 48,
+  "structuralFailures": 0
+}

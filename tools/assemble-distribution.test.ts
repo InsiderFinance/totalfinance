@@ -108,6 +108,8 @@ describe('the two-artifact distribution', () => {
       './packages/workflows/src/local/index.ts',
     ]);
     expect(paths[PUBLIC_PACKAGE_NAME]).toEqual(['./packages/totalfinance/src/index.ts']);
+    expect(paths[`${PUBLIC_PACKAGE_NAME}/data`]).toEqual(['./packages/totalfinance/src/data.ts']);
+    expect(paths[`${PUBLIC_PACKAGE_NAME}/options`]).toEqual(['./packages/options/src/index.ts']);
   });
 
   it('rewrites only module syntax, including declarations and dynamic imports', () => {

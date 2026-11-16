@@ -1,10 +1,12 @@
 import { spawnSync } from 'node:child_process';
+import { runInContext } from 'node:vm';
 import { deserialize } from 'node:v8';
 import { describe, expect, it } from 'vitest';
 import {
   allowedConsumerModule,
   CONSUMER_BUNDLERS,
   CONSUMER_FIXTURES,
+  DATA_CONSUMER_FIXTURES,
   CONSUMER_EXPECTED_PRICES,
   CONSUMER_IMPORT_TOLERANCE_BYTES,
   CONSUMER_VALID_INPUTS,
@@ -168,6 +170,27 @@ export function registerInstalledConsumerTests(consumer: () => string): void {
 
     for (const bundler of CONSUMER_BUNDLERS) {
       describe(bundler, () => {
+        for (const fixture of DATA_CONSUMER_FIXTURES) {
+          it(`${fixture.id}: approved acquisition bytes and browser module boundary`, async () => {
+            const result = await measure(fixture, bundler);
+            expect(result.bytesGzip, `${fixture.id} ${bundler}: ${result.bytesGzip}B`).toBeLessThan(
+              fixture.budgetKiB[bundler] * 1024,
+            );
+            for (const module of result.retainedModules) {
+              expect(module.id).toMatch(/\/modules\/(core|totalfinance)\//);
+              expect(module.id).not.toMatch(/data-conformance/);
+            }
+            expect(result.code).not.toContain('INSIDERFINANCE_API_KEY');
+            expect(result.code).not.toContain('api-staging.insiderfinance');
+            const realm = consumerBrowser(result);
+            expect(
+              runInContext(
+                fixture.id === 'data-restore' ? 'typeof consumerRestore' : 'typeof consumerConnect',
+                realm,
+              ),
+            ).toBe('function');
+          });
+        }
         for (const fixture of CONSUMER_FIXTURES) {
           it(`${fixture.id}: bytes, retained boundaries and browser result`, async () => {
             const result = await measure(fixture, bundler);

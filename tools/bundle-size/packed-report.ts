@@ -7,7 +7,11 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packGroup } from '../release/dry-run.js';
 import { publicPackageDirectories } from '../public-packages.js';
-import { CONSUMER_FIXTURES, type ConsumerFixture } from './consumer-fixtures.js';
+import {
+  CONSUMER_FIXTURES,
+  DATA_CONSUMER_FIXTURES,
+  type ConsumerFixture,
+} from './consumer-fixtures.js';
 import { measureConsumer, type ConsumerMeasurement } from './consumer-measure.js';
 import {
   assertPublicPackageDependencies,
@@ -18,10 +22,13 @@ const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 /** Representative rows only; every portable spelling is separately enforced in packed CI. */
 export function reportedConsumerFixtures(): readonly ConsumerFixture[] {
-  return CONSUMER_FIXTURES.filter(
-    (fixture) =>
-      fixture.style === 'feature' || fixture.style === 'root-hoist' || fixture.rootNamespace,
-  );
+  return [
+    ...DATA_CONSUMER_FIXTURES,
+    ...CONSUMER_FIXTURES.filter(
+      (fixture) =>
+        fixture.style === 'feature' || fixture.style === 'root-hoist' || fixture.rootNamespace,
+    ),
+  ];
 }
 
 export interface ConsumerReportRow {

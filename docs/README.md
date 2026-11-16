@@ -1,5 +1,7 @@
 # TotalFinance Docs
 
+[No-key first success and connector author journey](./guides/community-connector-first-success.md).
+
 TotalFinance `0.1.0` is pre-1.0 software, not a 1.0 stability guarantee. Its two public packages are
 `@insiderfinance/totalfinance` (all domains, workflows, CLI and HTTP) and the optional
 `@insiderfinance/totalfinance-mcp`. The 25 source workspaces are private implementation details.

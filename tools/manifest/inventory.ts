@@ -11,6 +11,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { ExportEntry, ExportKind } from './schema.js';
+import { toPublicSpecifier } from '../public-packages.js';
 
 const PKG_DIR = fileURLToPath(new URL('../../packages', import.meta.url));
 
@@ -146,7 +147,7 @@ export async function inventoryPackage(
     // Vitest callers retain normal specifier imports so its source aliases check the live surface.
     const target = options.built
       ? pathToFileURL(createRequire(`${PKG_DIR}/${pkg.dir}/package.json`).resolve(specifier)).href
-      : specifier;
+      : toPublicSpecifier(specifier);
     const mod = (await import(/* @vite-ignore */ target)) as Record<string, unknown>;
     for (const [name, value] of Object.entries(mod)) {
       if (name === 'default') continue;

@@ -1262,7 +1262,8 @@ function checkerFingerprint(
   }
   const below = new Set([...seen, type]);
   const parts = type.isUnion() ? type.types : [type];
-  const nullable = parts.some((part) => Boolean(part.flags & ts.TypeFlags.Null));
+  // Ask the independent compiler: unknown/any admit null without an explicit union arm.
+  const nullable = checker.isTypeAssignableTo(checker.getNullType(), type);
   const meaningful = parts.filter(
     (part) => !(part.flags & (ts.TypeFlags.Undefined | ts.TypeFlags.Null | ts.TypeFlags.Void)),
   );

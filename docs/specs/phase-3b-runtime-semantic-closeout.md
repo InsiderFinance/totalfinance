@@ -5,7 +5,7 @@
 > the permanent gates—including declaration-derived branch/resource coverage—without reopening the
 > phase. Stage 4 APIs must enter these ratchets in their first commit. The body below is the historical
 > execution and evidence record, not an active queue. Live counters were refreshed for the
-> [disclosed-holdings comparison](./disclosed-holdings.md) on 2026-09-25; this does not reopen 3B.
+> [C3 data connection](./community-connector-c3-connection.md) on 2026-11-02; this does not reopen 3B.
 >
 > Review rounds RV14 and RV17-RV31 raised findings against measurement validity. Each was
 > independently reproduced before being fixed, and each fix carries the reproduction in its own
@@ -51,14 +51,14 @@
 > measured (R7/R12), and MCP contracts are canonical JSON Schema rather than field names (R8)) — but
 > those were different conditions, and clearing them is not this claim.
 >
-> Measured, from `public-enforcement.json`: **enforced 2,573 · partial 2,704 · defective 0 · unmeasured 186** of 5,463 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
+> Measured, from `public-enforcement.json`: **enforced 2,578 · partial 2,705 · defective 0 · unmeasured 186** of 5,469 candidates. Every unmeasured path carries a reason — `baseline-rejected` 56
 > `no-input` 48 `external-callback-contract` 52 `callback-input-required` 4
 > `async-result-unobserved` 6 `incomplete-baseline` 20
 > — and each reason is documented with what it
 > would take to close it. `branch-not-realized` is the newest and the most load-bearing: a call WAS
 > built for that alternative and does not select it, which is different work from `no-input` and used
 > to be reported as neither. It is an ALTERNATIVE-level reason and appears in no row: ZERO records
-> carry it, 628 alternatives do, and the two populations are published separately
+> carry it, 615 alternatives do, and the two populations are published separately
 > (`summary.unmeasuredByReason` and `summary.alternativeUnmeasuredByReason`) precisely so a figure
 > from one cannot be quoted as a figure from the other. This header said "one row" while the artifact
 > recorded none, and the gate permitted it because it only checked that every ARTIFACT reason appears
@@ -69,7 +69,7 @@
 > (`contract-conformance.test.ts`); the September 9 source revision is checked locally on Node 26.5.0.
 > Earlier Node 22.13/24/26 evidence does not certify this revision's still-required hosted matrix.
 >
-> The current artifact has 13,239 alternatives (6,706 unmeasured) and 75 receiver-grouping gaps.
+> The current artifact has 13,283 alternatives (6,744 unmeasured) and 75 receiver-grouping gaps.
 > PL6's sixteen named price-level helpers add 80 fully enforced public call/explain paths;
 > they do not increase the partial, defective or unmeasured populations.
 > September R08 adds one genuine external-callback interface, `ExecutionJournalStore#transact`.
@@ -190,8 +190,8 @@ method bag. An unconstrained callback result such as `Array<any>` gets the one u
 structural baseline, `[]`; this restored direct measurement of `register` instead of hiding a
 process-global defective boundary behind `callback-input-required`.
 
-The generated surface is now **7,954 public paths / 2,719 implementations / 1,610 input contracts /
-1,962 result contracts / 387 validator identities**. The measured population is **5,463** records.
+The generated surface is now **7,979 public paths / 2,735 implementations / 1,620 input contracts /
+1,978 result contracts / 386 validator identities**. The measured population is **5,469** records.
 The exact residual branch list shrank by four: three recursive `register` mismatches disappeared and
 the MCP safe-parse projection stopped masquerading as a caller-selectable branch. Every remaining
 entry is still an exact built-versus-named identity and fails both when a new mismatch appears and
@@ -1148,21 +1148,21 @@ resolved it. `summary.mutationsExecuted` now reports what the harness actually R
 
 | mutation                | executed | covered |
 | ----------------------- | -------: | ------: |
-| `omit-required`         |   13,664 |  34,858 |
-| `wrong-type`            |   17,325 |  44,297 |
-| `non-finite`            |    9,581 |  24,971 |
-| `invalid-literal`       |    2,006 |   5,142 |
-| `unknown-key`           |    2,800 |   6,666 |
-| `null-when-nonnullable` |   27,122 |  68,185 |
+| `omit-required`         |   13,687 |  34,893 |
+| `wrong-type`            |   17,344 |  44,324 |
+| `non-finite`            |    9,589 |  24,981 |
+| `invalid-literal`       |    2,011 |   5,151 |
+| `unknown-key`           |    2,804 |   6,672 |
+| `null-when-nonnullable` |   27,014 |  68,020 |
 
 **EXECUTED and COVERED are different facts, and the table this replaces mixed them.** `executed` is
 what physically ran; `covered` is what a path may claim, directly or attributed from an alias twin.
-They diverge by alias fan-out — `unknown-key` ran 2,800 times and is attributed to 6,666
+They diverge by alias fan-out — `unknown-key` ran 2,779 times and is credited across 6,611
 route-level mutation checks — so reporting the second as though it were the first would overstate
 execution more than twofold. Failures are split the same way (0 direct, 0 attributed) so a finding count is never read against the wrong denominator, and the ratchets guard
 EXECUTION: alias fan-out must not hold a total up while a probe quietly stops running.
 
-Execution also FELL where it should — `non-finite` 3,357 -> 9,581 — because undeclared sample keys are
+Execution also FELL where it should — `non-finite` 3,357 -> 9,587 — because undeclared sample keys are
 no longer probed. Those runs mutated fields no contract declares, and losing them is the point.
 
 Two probes were missing entirely. A numeric SCALAR coordinate never received NaN, though `wrong-type`
@@ -1367,14 +1367,14 @@ or a rationale for an API decision.
 
 ### 3B.0 — Post-Wave-6 baseline and inventory design
 
-- [x] Verify Phase 3B.N is closed: 43,372 naming identities, 0 unresolved, gated in CI; the packed
+- [x] Verify Phase 3B.N is closed: 44,592 naming identities, 0 unresolved, gated in CI; the packed
       consumer proves the final package/MCP names and every removed alias has executable evidence.
 - [x] Build every public declaration and regenerate runtime/signature manifests after all Wave 6
       and naming-normalization checkboxes are closed.
 - [x] Generate the initial contract-identity graph and report path, implementation, input-contract,
       result-contract, and validator counts separately — `tools/manifest/contract-inventory.ts` →
-      `public-contracts.json`: 7,954 paths / 2,719 implementations / 1,610 input
-      contracts / 1,962 result contracts / 387 validator identities (refreshed for PL6's named
+      `public-contracts.json`: 7,979 paths / 2,735 implementations / 1,620 input
+      contracts / 1,978 result contracts / 386 validator identities (refreshed for PL6's named
       price-level helpers, after the 2026-08-02
       defect-fix wave, which added validators and two fixed-income deep entrypoints, again after
       3B.1a's snapshot reader, and again when intersections were recognized as objects — 996 → 1,034
@@ -2559,3 +2559,5 @@ One owner integrates generator/policy changes. Alias paths never become separate
 After this phase, TypeScript helps before execution and the JavaScript runtime teaches the same
 contract during execution. Every new platform-core API must satisfy these ratchets in its first
 commit, and the complete gate reruns against the final platform surface before core freeze.
+
+C5 integration note (2026-11-12): quoted inventory counts above are HISTORICAL C4 evidence at3bc356f. Combined current-main/C5 generation and truthful live-count synchronization are pending; no combined acceptance is claimed by retaining this history.

@@ -702,7 +702,8 @@ export function walkField(
     // A union including `undefined` is optional even without a `?`, which is how several request types
     // express "you may leave this out".
     optional: optional || hasFlag(declaredType, ts.TypeFlags.Undefined),
-    nullable: hasFlag(declaredType, ts.TypeFlags.Null),
+    // unknown/any admit null in TypeScript too; a private diagnostic cause may be null.
+    nullable: hasFlag(declaredType, ts.TypeFlags.Null | ts.TypeFlags.Unknown | ts.TypeFlags.Any),
   };
 
   const literals = literalDomain(type);

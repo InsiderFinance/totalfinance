@@ -11,8 +11,9 @@ For portable browser tree shaking, use named imports from `@insiderfinance/total
 
 - [Imports and bundles](guides/imports-and-bundles.md) — namespace tradeoffs, facade services, type-only imports, and measured budgets.
 
-## Six task journeys
+## Task journeys
 
+- [Connect data and author a provider without a key](llms-full.txt#journey-community-connectors)
 - [Price options and inspect Greeks](llms-full.txt#journey-options)
 - [Build and analyze option strategies](llms-full.txt#journey-strategies)
 - [Explain portfolio P&L](llms-full.txt#journey-portfolio-pnl)
@@ -33,6 +34,6 @@ Explicit packs are an exact selection, not additions to defaults. Check doctor a
 
 ## Packages
 
-- @insiderfinance/totalfinance @ 0.1.4 — pre-1.0; component maturity varies (see stability policy); 196 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
+- @insiderfinance/totalfinance @ 0.1.4 — pre-1.0; component maturity varies (see stability policy); 199 entrypoints. Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.
 - @insiderfinance/totalfinance-mcp @ 0.1.4 — pre-1.0; component maturity varies (see stability policy); 1 entrypoints. TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.
 

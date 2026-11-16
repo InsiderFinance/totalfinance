@@ -40,6 +40,12 @@
       ],
       "package.json": [
         "./package.json"
+      ],
+      "data": [
+        "./dist/data.d.ts"
+      ],
+      "data-conformance": [
+        "./dist/data-conformance.d.ts"
       ]
     }
   },
@@ -64,7 +70,17 @@
       "import": "./dist/artifacts/index.js",
       "default": "./dist/artifacts/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "import": "./dist/data.js",
+      "default": "./dist/data.js"
+    },
+    "./data-conformance": {
+      "types": "./dist/data-conformance.d.ts",
+      "import": "./dist/data-conformance.js",
+      "default": "./dist/data-conformance.js"
+    }
   },
   "files": [
     "dist",

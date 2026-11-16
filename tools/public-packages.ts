@@ -60,7 +60,7 @@ export function publicSourcePaths(root: string): Record<string, string[]> {
   for (const pkg of sourcePackages(root)) {
     for (const [key, target] of Object.entries(pkg.exports)) {
       if (typeof target === 'string') continue;
-      if (pkg.dir === 'totalfinance' && key !== '.') continue;
+      if (pkg.dir === 'totalfinance' && key !== '.' && key !== './data') continue;
       const name = toPublicSpecifier(pkg.name + (key === '.' ? '' : key.slice(1)));
       result[name] = [
         `./packages/${pkg.dir}/${target.types.replace(/^\.\/dist\//, 'src/').replace(/\.d\.ts$/, '.ts')}`,
