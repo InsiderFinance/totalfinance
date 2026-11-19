@@ -391,20 +391,27 @@ class BetaStream implements IndicatorStream<Pair, number> {
       this.value = null;
       return null;
     }
+    // Centered two-pass moments (see CorrelStream): the 1/n factors cancel in the ratio.
     const n = this.period;
+    const anchorX = this.rx[0]!;
+    const anchorY = this.ry[0]!;
     let sx = 0;
     let sy = 0;
+    for (let i = 0; i < n; i++) {
+      sx += this.rx[i]! - anchorX;
+      sy += this.ry[i]! - anchorY;
+    }
+    const meanX = sx / n;
+    const meanY = sy / n;
     let sxy = 0;
     let syy = 0;
     for (let i = 0; i < n; i++) {
-      sx += this.rx[i]!;
-      sy += this.ry[i]!;
-      sxy += this.rx[i]! * this.ry[i]!;
-      syy += this.ry[i]! * this.ry[i]!;
+      const dx = this.rx[i]! - anchorX - meanX;
+      const dy = this.ry[i]! - anchorY - meanY;
+      sxy += dx * dy;
+      syy += dy * dy;
     }
-    const covariance = sxy / n - (sx / n) * (sy / n);
-    const varY = syy / n - (sy / n) * (sy / n);
-    this.value = varY === 0 ? 0 : covariance / varY;
+    this.value = syy === 0 ? 0 : sxy / syy;
     return this.value;
   }
   toJSON(): TechnicalAnalysisSnapshot {
@@ -454,21 +461,32 @@ class CorrelStream implements IndicatorStream<Pair, number> {
       this.value = null;
       return null;
     }
+    // Two passes around the first pair, then the mean: the one-pass n·Σx² − (Σx)² cancelled to
+    // noise on price-level inputs (a flat window correlated at ±1e-7, or NaN). Constant ⇒ exactly 0.
     const n = this.period;
+    const anchorX = this.xs[0]!;
+    const anchorY = this.ys[0]!;
     let sx = 0;
     let sy = 0;
+    for (let i = 0; i < n; i++) {
+      sx += this.xs[i]! - anchorX;
+      sy += this.ys[i]! - anchorY;
+    }
+    const meanX = sx / n;
+    const meanY = sy / n;
     let sxx = 0;
     let syy = 0;
     let sxy = 0;
     for (let i = 0; i < n; i++) {
-      sx += this.xs[i]!;
-      sy += this.ys[i]!;
-      sxx += this.xs[i]! * this.xs[i]!;
-      syy += this.ys[i]! * this.ys[i]!;
-      sxy += this.xs[i]! * this.ys[i]!;
+      const dx = this.xs[i]! - anchorX - meanX;
+      const dy = this.ys[i]! - anchorY - meanY;
+      sxx += dx * dx;
+      syy += dy * dy;
+      sxy += dx * dy;
     }
-    const denom = Math.sqrt((n * sxx - sx * sx) * (n * syy - sy * sy));
-    this.value = denom === 0 ? 0 : (n * sxy - sx * sy) / denom;
+    const denom = Math.sqrt(sxx) * Math.sqrt(syy);
+    // Rounding can land a perfect correlation one ULP outside [−1, 1]; Math.acos(r) would be NaN.
+    this.value = denom === 0 ? 0 : Math.min(1, Math.max(-1, sxy / denom));
     return this.value;
   }
   toJSON(): TechnicalAnalysisSnapshot {

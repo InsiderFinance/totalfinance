@@ -32,6 +32,13 @@ describe('series momentum (closed-form checks)', () => {
     expect(ta.cti(up, { period: 12 }).at(-1)!).toBeCloseTo(1, 9);
     expect(ta.cti(down, { period: 12 }).at(-1)!).toBeCloseTo(-1, 9);
   });
+  it('CTI is exactly 0 on a flat price window and exact on a price-level ramp', () => {
+    // The one-pass n·Σy² − (Σy)² read a flat 4321.37 window as ±1e-8, not 0.
+    expect(ta.cti(Array(20).fill(4321.37), { period: 20 }).at(-1)).toBe(0);
+    expect(ta.cti(Array(20).fill(0.1), { period: 20 }).at(-1)).toBe(0);
+    const ramp = Array.from({ length: 20 }, (_, i) => 98_765.43 + 0.01 * i);
+    expect(ta.cti(ramp, { period: 20 }).at(-1)!).toBeCloseTo(1, 9);
+  });
   it('efficiency ratio is 1 on a monotonic ramp and ∈ [0, 1]', () => {
     const ramp = Array.from({ length: 30 }, (_, i) => i);
     expect(ta.efficiencyRatio(ramp, { period: 10 }).at(-1)!).toBeCloseTo(1, 12);

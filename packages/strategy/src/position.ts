@@ -1625,7 +1625,13 @@ export class Position {
 
     let wins = 0;
     let evSum = 0;
-    let evSumSq = 0;
+    // Spread via Welford on each P&L's deviation from the first path's P&L. The one-pass
+    // Σx² − n·x̄² cancelled to noise when every path shared a large constant offset (a deep-ITM
+    // leg), inflating the standard error by orders of magnitude. The anchor keeps the running mean
+    // small and the deviations exact.
+    let anchor = 0;
+    let deviationMean = 0;
+    let centeredSumSq = 0;
     const touchSum = new Array<number>(bes.length).fill(0);
 
     for (let p = 0; p < paths; p++) {
@@ -1661,13 +1667,17 @@ export class Position {
       const pnl = this.pnlAtExpiry(prevS);
       if (pnl > 0) wins++;
       evSum += pnl;
-      evSumSq += pnl * pnl;
+      if (p === 0) anchor = pnl;
+      const deviation = pnl - anchor;
+      const delta = deviation - deviationMean;
+      deviationMean += delta / (p + 1);
+      centeredSumSq += delta * (deviation - deviationMean);
       if (pnls) pnls[p] = pnl;
       for (let b = 0; b < bes.length; b++) touchSum[b]! += 1 - survive[b]!;
     }
 
     const ev = evSum / paths;
-    const variance = Math.max(0, (evSumSq - paths * ev * ev) / (paths - 1));
+    const variance = centeredSumSq / (paths - 1);
     const result: ProbabilityMonteCarloMetrics = {
       probabilityOfProfit: wins / paths,
       expectedValue: ev,

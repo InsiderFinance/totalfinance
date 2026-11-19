@@ -1,5 +1,37 @@
 # @insiderfinance/totalfinance-mcp
 
+## 0.1.6
+
+### Patch Changes
+
+- 1b690aa: Variances, covariances and correlations that were computed as `Σx² − n·mean²` now use centered
+  moments, so values that share a large constant offset no longer cancel to rounding noise.
+
+  - `Position.monteCarloProbability()` reports an accurate `expectedValueStandardError` when every
+    path pays nearly the same large amount. A deep in-the-money put (strike 1,000,000, spot 1,
+    1,000 paths) reported about 300 times the true sample standard error; it now matches an
+    exact-arithmetic reference to about 1e-15 relative.
+  - The technical-analysis `covariance`, `rSquared`, `rollingRegression`, `correl`, `beta` and `cti`
+    indicators are numerically stable on price-level inputs. A flat window of `0.1` regressed to
+    slope `-1024` instead of `0`, flat windows correlated at about `±1e-7` or `NaN` instead of `0`,
+    and BTC-sized prices moving by ticks gave a slope of `1.042` against a true `0.987`. Correlations
+    stay within `[-1, 1]` and `rSquared` at most `1`; rounding put a perfect relationship one unit
+    in the last place outside, so `Math.acos(correl)` could return `NaN`.
+  - `probabilityOfBacktestOverfitting` ranks configurations exactly. It sums each block's returns
+    and squared returns as exact integers and compares Sharpe ratios by cross-multiplication, so
+    rounding can no longer change a ranking. A constant-return (cash-like) configuration scores the
+    zero-variance Sharpe of `0` at every return level; at `0.0007` per period, rounding noise had
+    scored it at about `1e7`, winning every split and reporting PBO `0`. Configurations with the
+    same returns in a different order within blocks now tie, where rounding could report PBO `1`;
+    returns a few representable steps apart rank as exact arithmetic does. On 12,870 splits of
+    2,520 rows × 200 configurations, PBO takes about 0.6 s, up from 0.2 s.
+
+  Seeded draws, probabilities, quantiles and `monteCarloProbability()` expected values are
+  unchanged. On ordinary inputs the corrected statistics move only by floating-point rounding.
+
+- Updated dependencies [1b690aa]
+  - @insiderfinance/totalfinance@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

@@ -28,6 +28,67 @@ describe('paired rolling regression', () => {
   });
 });
 
+describe('pair statistics on price-level inputs (centered moments)', () => {
+  // The one-pass Σx²/n − x̄² cancelled to rounding noise on price levels.
+  const ramp = Array.from({ length: 20 }, (_, i) => 100 + i);
+  const flat = Array<number>(20).fill(0.1);
+
+  it('a flat window is degenerate: zero slope, rSquared, covariance and correlation', () => {
+    // A flat x regressed to slope −1024 before.
+    expect(ta.rollingRegression(pairs(flat, ramp), { period: 20 }).at(-1)!.slope).toBe(0);
+    expect(ta.rSquared(pairs(ramp, flat), { period: 20 }).at(-1)).toBe(0);
+    expect(ta.covariance(pairs(flat, ramp), { period: 20 }).at(-1)).toBe(0);
+    expect(ta.correl(pairs(Array(20).fill(4321.37), ramp), { period: 20 }).at(-1)).toBe(0);
+    // …and a flat 0.07 window correlated to NaN.
+    expect(ta.correl(pairs(Array(20).fill(0.07), ramp), { period: 20 }).at(-1)).toBe(0);
+  });
+
+  it('perfect relationships stay inside the correlation and r-squared bounds', () => {
+    expect(ta.correl(pairs([100, 103], [100, 103]), { period: 2 }).at(-1)).toBe(1);
+    expect(ta.correl(pairs([100, 103], [-100, -103]), { period: 2 }).at(-1)).toBe(-1);
+    // Rounding put ≈26% of these one ULP outside the bounds (Math.acos(r) → NaN).
+    for (let k = 0; k < 400; k++) {
+      const n = 2 + (k % 6);
+      const x = Array.from({ length: n }, (_, i) => 100 + ((i * 37 + k * 11) % 97) / 7);
+      for (const scale of [1, 2, -1, 0.5, 3]) {
+        const p = pairs(
+          x,
+          x.map((v) => v * scale),
+        );
+        expect(Math.abs(ta.correl(p, { period: n }).at(-1)!)).toBeLessThanOrEqual(1);
+        expect(ta.rSquared(p, { period: n }).at(-1)!).toBeLessThanOrEqual(1);
+        expect(ta.rollingRegression(p, { period: n }).at(-1)!.rSquared).toBeLessThanOrEqual(1);
+      }
+      expect(Math.abs(ta.cti(x, { period: n }).at(-1)!)).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('matches a centered reference on a large offset with tick-size moves', () => {
+    const x = Array.from({ length: 30 }, (_, i) => 98_765.43 + 0.01 * Math.sin(i * 1.7));
+    const y = x.map((v, i) => v + 0.003 * Math.cos(i * 2.3));
+    // Deviations from the leading price are exact, then centered by the mean.
+    const dx = x.map((v) => v - x[0]!);
+    const dy = y.map((v) => v - y[0]!);
+    const mx = dx.reduce((a, b) => a + b) / 30;
+    const my = dy.reduce((a, b) => a + b) / 30;
+    let sxx = 0;
+    let syy = 0;
+    let sxy = 0;
+    for (let i = 0; i < 30; i++) {
+      sxx += (dx[i]! - mx) ** 2;
+      syy += (dy[i]! - my) ** 2;
+      sxy += (dx[i]! - mx) * (dy[i]! - my);
+    }
+    const p = pairs(x, y);
+    const regression = ta.rollingRegression(p, { period: 30 }).at(-1)!;
+    // Before: slope 1.0417 vs 0.9873, correl 0.9823 vs 0.9562, covariance off by 2%.
+    expect(regression.slope).toBeCloseTo(sxy / sxx, 9);
+    expect(regression.rSquared).toBeCloseTo((sxy * sxy) / (sxx * syy), 9);
+    expect(ta.correl(p, { period: 30 }).at(-1)!).toBeCloseTo(sxy / Math.sqrt(sxx * syy), 9);
+    expect(ta.covariance(p, { period: 30, sample: false }).at(-1)! / (sxy / 30)).toBeCloseTo(1, 9);
+  });
+});
+
 describe('barSince / valueWhen', () => {
   it('barSince counts bars since the last true condition (closed form)', () => {
     expect(ta.barSince([0, 1, 0, 0, 1, 0], {})).toEqual([NaN, 0, 1, 2, 0, 1]);

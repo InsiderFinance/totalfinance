@@ -1903,7 +1903,7 @@ console.log('CLI_STRUCTURED ' + canonicalJsonOf(jsonSafe(JSON.parse(readFileSync
   }, 120_000);
 
   it.each(['nodenext', 'bundler'] as const)(
-    'numerical repairs 16–24 compile and execute from installed artifacts: %s',
+    'numerical repairs 16–24 and LIB-04 compile and execute from installed artifacts: %s',
     (resolution) => {
       const dir = join(consumer, `numerical-repairs-${resolution}`);
       sh('mkdir', ['-p', dir], consumer);

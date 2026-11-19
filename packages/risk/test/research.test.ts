@@ -279,6 +279,131 @@ describe('probabilityOfBacktestOverfitting (CSCV)', () => {
     expect(res.assumptions.conventionsVersion).toBeTruthy();
   });
 
+  it('a constant (cash-like) configuration ranks the same whatever its return level', () => {
+    // A zero-variance column takes the Sharpe-0 convention. Unshifted Σx²/rows − x̄² left rounding
+    // noise for some levels, scoring 0.0007/period at Sharpe ≈ 1e7, so it won every split (PBO 0).
+    const pbo = (cash: number) => {
+      const randomNumberGenerator = mulberry32(7);
+      const M = matrix(160, 4, (_, c) =>
+        c === 0 ? cash : 0.01 * normalSample(randomNumberGenerator),
+      );
+      return probabilityOfBacktestOverfitting(M, { splits: 8 }).backtestOverfittingProbability;
+    };
+    const flat = pbo(0);
+    for (const cash of [0.0001, 0.0007, 0.003, 0.01]) expect(pbo(cash)).toBe(flat);
+  });
+
+  it('a flat stretch after a spike has zero variance in every split that excludes the spike', () => {
+    // Config 0 returns −3% once, then 0.07% forever; config 1 alternates 0.15%/0.05% and wins
+    // every split. Anchoring union sums on the dataset's first row left rounding noise in the
+    // spike-free unions (Sharpe ≈ 1.5e6), flipping PBO from 0 to 1.
+    const M = matrix(12, 2, (r, c) =>
+      c === 0 ? (r === 0 ? -0.03 : 0.0007) : r % 2 ? 0.0005 : 0.0015,
+    );
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+  });
+
+  it('equal return distributions tie exactly, whatever their order within a block', () => {
+    // Config 1 reverses config 0 inside every block, so each split holds the same returns for both.
+    // Rounded block moments broke the tie and reported PBO 1; exact sums report 0.
+    const blocks = [
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 2, 3],
+    ];
+    const forward = blocks.flat().map((x) => x / 1024);
+    const reversed = blocks.flatMap((block) => [...block].reverse()).map((x) => x / 1024);
+    const M = forward.map((x, r) => [x, reversed[r]!]);
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+    // Ordinary noisy returns: swapping a column with its in-block reversal leaves PBO unchanged.
+    const randomNumberGenerator = mulberry32(5);
+    for (let trial = 0; trial < 40; trial++) {
+      const noise = Array.from({ length: 40 }, () => 0.01 * normalSample(randomNumberGenerator));
+      const flipped = [0, 1, 2, 3].flatMap((b) => noise.slice(b * 10, b * 10 + 10).reverse());
+      const other = noise.map(() => 0.01 * normalSample(randomNumberGenerator));
+      const pbo = (a: number[], b: number[]) =>
+        probabilityOfBacktestOverfitting(
+          a.map((x, r) => [x, b[r]!, other[r]!]),
+          { splits: 4 },
+        ).backtestOverfittingProbability;
+      expect(pbo(noise, flipped)).toBe(pbo(flipped, noise));
+    }
+  });
+
+  it('reads each return once, so a changing accessor cannot desynchronize validation', () => {
+    // The exact rewrite validated a cell, then read it again to convert it: a getter returning 0
+    // then 1 left its column without a binary unit and threw an untyped RangeError.
+    let reads = 0;
+    const row = [0, 0];
+    Object.defineProperty(row, 0, { get: () => reads++ });
+    const M = [[0, 0], row, [0, 0], [0, 0]];
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+    expect(reads).toBe(1);
+  });
+
+  it('ranks returns a few representable steps apart exactly', () => {
+    // Returns (2^52 + k)·2^-55 ≈ 0.125: compare against exact integer arithmetic on k.
+    const exactPbo = (K: number[][]): number => {
+      const N = K[0]!.length;
+      const score = (rows: number[][], n: number) => {
+        let sum = 0n;
+        let sumSq = 0n;
+        for (const row of rows) {
+          const m = BigInt(2 ** 52 + row[n]!);
+          sum += m;
+          sumSq += m * m;
+        }
+        const spread = BigInt(rows.length) * sumSq - sum * sum;
+        return { sum, spread };
+      };
+      // Sharpe a > b ⇔ a.sum²·b.spread > b.sum²·a.spread (all sums positive; zero spread scores 0).
+      const above = (a: ReturnType<typeof score>, b: ReturnType<typeof score>) =>
+        a.spread === 0n
+          ? false
+          : b.spread === 0n || a.sum * a.sum * b.spread > b.sum * b.sum * a.spread;
+      let overfit = 0;
+      const splits = [
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 2],
+        [1, 3],
+        [2, 3],
+      ];
+      for (const inSample of splits) {
+        const rows = (picks: number[]) => picks.flatMap((b) => K.slice(b * 2, b * 2 + 2));
+        const outSample = [0, 1, 2, 3].filter((b) => !inSample.includes(b));
+        let best = 0;
+        for (let n = 1; n < N; n++) {
+          if (above(score(rows(inSample), n), score(rows(inSample), best))) best = n;
+        }
+        const winner = score(rows(outSample), best);
+        let le = 0;
+        for (let n = 0; n < N; n++) if (!above(score(rows(outSample), n), winner)) le++;
+        if (le / (N + 1) < 0.5) overfit++;
+      }
+      return overfit / splits.length;
+    };
+    const randomNumberGenerator = mulberry32(9);
+    for (let trial = 0; trial < 120; trial++) {
+      const N = 2 + (trial % 3);
+      const K = Array.from({ length: 8 }, () =>
+        Array.from({ length: N }, () => Math.floor(randomNumberGenerator.next() * 6)),
+      );
+      const M = K.map((row) => row.map((k) => (2 ** 52 + k) * 2 ** -55));
+      expect(
+        probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability,
+      ).toBe(exactPbo(K));
+    }
+  });
+
   it('pure noise gives a non-degenerate PBO (the selection is worthless out of sample)', () => {
     // No config has an edge ⇒ the IS winner's OOS rank is ~uniform ⇒ PBO well away from 0 and 1.
     const randomNumberGenerator = mulberry32(42);

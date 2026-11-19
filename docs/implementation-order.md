@@ -5,6 +5,41 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active: LIB-04 centered-moment repairs and SDK 0.1.6 release (2026-11-19)
+
+The maintainer authorized fixing LIB-04 (an overstated Monte Carlo standard error, reproduced in
+published 0.1.3–0.1.5) and other statistics using the same one-pass `Σx² − n·mean²` formula, then
+instructed "get this release ready and release", then "with all the fixes that we have found
+and then ship": the third PBO review's tie and sub-resolution findings are fixed before release.
+The options Monte Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
+Release scope follows the 0.1.5 path: version the SDK/MCP pair once to unused 0.1.6, publish only
+the SDK through the GitHub Release workflow, and deploy no site.
+
+- [x] LIB-04: `Position.monteCarloProbability()` accumulates the P&L spread as Welford centered
+      moments around the first path. Both failing seeds match the exact reference within 1e-7
+      (observed ≈1e-15); the cash-offset, ordinary-put and true-zero controls hold.
+- [x] Technical-analysis `covariance`, `rSquared`, `rollingRegression`, `correl`, `beta` and `cti`
+      use two-pass centered moments around the first window value; flat windows are exactly
+      degenerate.
+- [x] Correlations (`correl`, `cti`) stay within [−1, 1] and `rSquared` at most 1 under rounding.
+- [x] `probabilityOfBacktestOverfitting` ranks exactly: exact integer block sums of x and x² and
+      cross-multiplied Sharpe comparisons. Constant stretches score 0 at every return level, equal
+      return distributions tie in any within-block order, and returns a few representable steps
+      apart match an exact-arithmetic oracle. About 0.6 s (from 0.2 s) for 12,870 splits × 200
+      configurations × 2,520 rows; the umbrella cap rises 715.5 → 716 KiB from measurement.
+- [x] Review repairs: a flat stretch after a spike no longer flips PBO from 0 to 1, a perfect
+      two-point correlation no longer returns 1.0000000000000002, equal-distribution ties no longer
+      report PBO 1, sub-resolution returns no longer misrank, and PBO reads each return once (a
+      changing accessor threw an untyped RangeError between validation and conversion).
+- [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
+      repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
+- [x] Recheck the registry, tags and releases (latest 0.1.5; 0.1.6 unused), version the pair to
+      0.1.6 once, synchronize publication metadata and the lockfile, and regenerate artifacts.
+- R4 (post-commit): exact-head PR fast and full gates, authorized merge, exact full main PUSH gate.
+- R5 (publication): normal `totalfinance-v0.1.6` GitHub Release at the verified merge commit;
+  the workflow's independent verification, SDK-only OIDC publication and public smoke; then
+  independent registry, integrity and provenance checks. PR and Release own the receipts.
+
 ### Active: SDK 0.1.5 and npm README publication (2026-11-16)
 
 The maintainer authorized completing 0.1.5 through the established GitHub Actions trusted-publishing workflow, including the necessary release PR/merge and SDK npm publication. Follow [R1–R5](./specs/release-0.1.5-readme.md). The release starts at fetched main 3e56ad6, after PR #26 merged; the source-only/unpublished SDK connector wording is updated for this cut while the InsiderFinance provider/API remains private. Preserve the polished README and use verified public documentation targets. Keep optional MCP/source metadata coherent but publish only the SDK. No unmerged PR #12, site deployment, API/staging reads or paper-store actions.
