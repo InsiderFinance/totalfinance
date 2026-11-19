@@ -87942,7 +87942,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "fixtureSource": "@totalfinance/technical-analysis:correl"
@@ -88565,7 +88565,7 @@
           "mutation": "non-finite-element",
           "argumentIndex": 0,
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465354,-0.731351206649,-0.877"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465355,-0.731351206649,-0.877"
         }
       ],
       "fixtureSource": "@totalfinance/technical-analysis:cti"
@@ -88605,7 +88605,7 @@
           "mutation": "non-finite-element",
           "argumentIndex": 0,
           "verdict": "accepted",
-          "returned": "{\"value\":[null,null,null,null,null,null,null,null,null,null,null,0.519422782291,-0.00947741190257,-0.536016309431,-0.803"
+          "returned": "{\"value\":[null,null,null,null,null,null,null,null,null,null,null,0.519422782291,-0.00947741190259,-0.536016309431,-0.803"
         }
       ]
     },
@@ -101416,7 +101416,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826808,0.835493434165,0.8976156"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826807,0.835493434165,0.8976156"
         }
       ],
       "fixtureSource": "@totalfinance/technical-analysis:rSquared"
@@ -103354,7 +103354,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -124433,7 +124433,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -142955,7 +142955,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -148396,7 +148396,7 @@
           "mutation": "non-finite-element",
           "argumentIndex": 0,
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465354,-0.731351206649,-0.877"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465355,-0.731351206649,-0.877"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -211569,7 +211569,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826808,0.835493434165,0.8976156"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826807,0.835493434165,0.8976156"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -239962,7 +239962,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -240508,7 +240508,7 @@
           "mutation": "non-finite-element",
           "argumentIndex": 0,
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465354,-0.731351206649,-0.877"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.0715324611776,-0.405753465355,-0.731351206649,-0.877"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -240542,7 +240542,7 @@
           "mutation": "non-finite-element",
           "argumentIndex": 0,
           "verdict": "accepted",
-          "returned": "{\"value\":[null,null,null,null,null,null,null,null,null,null,null,0.519422782291,-0.00947741190257,-0.536016309431,-0.803"
+          "returned": "{\"value\":[null,null,null,null,null,null,null,null,null,null,null,0.519422782291,-0.00947741190259,-0.536016309431,-0.803"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -251510,7 +251510,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826808,0.835493434165,0.8976156"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.623580141104,0.705751826807,0.835493434165,0.8976156"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
@@ -253181,7 +253181,7 @@
           "argumentIndex": 0,
           "field": "x",
           "verdict": "accepted",
-          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368239,0.914053299412,0.9474257"
+          "returned": "[null,null,null,null,null,null,null,null,null,null,null,null,null,0.789670906837,0.840090368238,0.914053299411,0.9474257"
         }
       ],
       "undecided": ["empty-series", "non-finite-element"],
