@@ -881,7 +881,12 @@ export interface BacktestOverfittingProbabilityResult {
   diagnostics: { warnings: QuantWarning[] };
 }
 
-/** Per-block sufficient statistics (Σx, Σx²) → the Sharpe of any block union without touching raw rows. */
+/**
+ * Per-block sufficient statistics (Σd, Σd²) of `d = x − anchors[n]`, each column measured from
+ * its first used row → the Sharpe of any block union without touching raw rows. Unanchored
+ * Σx²/rows − x̄² cancelled to rounding noise on a constant (cash-like) column, ranking it at
+ * Sharpe ≈ 1e7 or 0 depending on the constant; anchored, a constant column has zero variance.
+ */
 interface BlockStatistics {
   sum: number[];
   sumSq: number[];
@@ -889,7 +894,12 @@ interface BlockStatistics {
 }
 
 /** Sharpe of a union of blocks (mean/σ, population σ — ranking is invariant to the ddof). */
-function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): number {
+function unionSharpe(
+  blocks: BlockStatistics[],
+  anchors: number[],
+  picks: number[],
+  n: number,
+): number {
   let s = 0;
   let ss = 0;
   let rows = 0;
@@ -898,9 +908,9 @@ function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): num
     ss += blocks[b]!.sumSq[n]!;
     rows += blocks[b]!.rows;
   }
-  const m = s / rows;
-  const variance = ss / rows - m * m;
-  return variance > 0 ? m / Math.sqrt(variance) : 0;
+  const deviationMean = s / rows;
+  const variance = ss / rows - deviationMean * deviationMean;
+  return variance > 0 ? (anchors[n]! + deviationMean) / Math.sqrt(variance) : 0;
 }
 
 /**
@@ -963,6 +973,7 @@ export function probabilityOfBacktestOverfitting(
 
   // Per-block sufficient statistics (validating the matrix is rectangular + finite as we go).
   const blocks: BlockStatistics[] = [];
+  const anchors = new Array<number>(N).fill(0);
   for (let s = 0; s < S; s++) {
     const sum = new Array<number>(N).fill(0);
     const sumSq = new Array<number>(N).fill(0);
@@ -980,8 +991,10 @@ export function probabilityOfBacktestOverfitting(
       for (let n = 0; n < N; n++) {
         const x = row[n]!;
         ensureFinite(x, `returns[${offset + s * block + r}][${n}]`, functionName);
-        sum[n]! += x;
-        sumSq[n]! += x * x;
+        if (s === 0 && r === 0) anchors[n] = x;
+        const d = x - anchors[n]!;
+        sum[n]! += d;
+        sumSq[n]! += d * d;
       }
     }
     blocks.push({ sum, sumSq, rows: block });
@@ -998,16 +1011,16 @@ export function probabilityOfBacktestOverfitting(
     let best = 0;
     let bestSharpe = -Infinity;
     for (let n = 0; n < N; n++) {
-      const sh = unionSharpe(blocks, isPicks, n);
+      const sh = unionSharpe(blocks, anchors, isPicks, n);
       if (sh > bestSharpe) {
         bestSharpe = sh;
         best = n;
       }
     }
     // Its OOS relative rank r̄ = (#configs with OOS Sharpe ≤ the winner's) / (N+1).
-    const winnerOos = unionSharpe(blocks, oosPicks, best);
+    const winnerOos = unionSharpe(blocks, anchors, oosPicks, best);
     let le = 0;
-    for (let n = 0; n < N; n++) if (unionSharpe(blocks, oosPicks, n) <= winnerOos) le++;
+    for (let n = 0; n < N; n++) if (unionSharpe(blocks, anchors, oosPicks, n) <= winnerOos) le++;
     const rBar = le / (N + 1); // ∈ (0, 1); logit is always finite
     const lambda = Math.log(rBar / (1 - rBar));
     logits.push(lambda);

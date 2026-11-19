@@ -5,6 +5,25 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active: LIB-04 centered-moment repairs (2026-11-19)
+
+The maintainer authorized fixing LIB-04 (an overstated Monte Carlo standard error, reproduced in
+published 0.1.3–0.1.5) and other statistics using the same one-pass `Σx² − n·mean²` formula.
+This is a patch changeset only: no version change, publication or deployment. The options Monte
+Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
+
+- [x] LIB-04: `Position.monteCarloProbability()` accumulates the P&L spread as Welford centered
+      moments around the first path. Both failing seeds match the exact reference within 1e-7
+      (observed ≈1e-15); the cash-offset, ordinary-put and true-zero controls hold.
+- [x] Technical-analysis `covariance`, `rSquared`, `rollingRegression`, `correl`, `beta` and `cti`
+      use two-pass centered moments around the first window value; flat windows are exactly
+      degenerate.
+- [x] `probabilityOfBacktestOverfitting` anchors each column's block sums, so a constant-return
+      column ranks the same at every return level.
+- [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
+      repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
+- [ ] Current-head hosted checks and maintainer review in the PR.
+
 ### Active: SDK 0.1.5 and npm README publication (2026-11-16)
 
 The maintainer authorized completing 0.1.5 through the established GitHub Actions trusted-publishing workflow, including the necessary release PR/merge and SDK npm publication. Follow [R1–R5](./specs/release-0.1.5-readme.md). The release starts at fetched main 3e56ad6, after PR #26 merged; the source-only/unpublished SDK connector wording is updated for this cut while the InsiderFinance provider/API remains private. Preserve the polished README and use verified public documentation targets. Keep optional MCP/source metadata coherent but publish only the SDK. No unmerged PR #12, site deployment, API/staging reads or paper-store actions.

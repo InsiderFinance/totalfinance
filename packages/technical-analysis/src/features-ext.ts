@@ -482,30 +482,36 @@ interface PairMoments {
 }
 
 function pairMoments(xs: readonly number[], ys: readonly number[]): PairMoments {
+  // Two passes around the first pair, then the mean: the one-pass Σx²/n − x̄² cancelled to noise on
+  // price-level inputs (a flat window regressed to slope −1024). A constant window is exactly zero.
   const n = xs.length;
+  const anchorX = xs[0]!;
+  const anchorY = ys[0]!;
   let sx = 0;
   let sy = 0;
+  for (let i = 0; i < n; i++) {
+    sx += xs[i]! - anchorX;
+    sy += ys[i]! - anchorY;
+  }
+  const deviationMeanX = sx / n;
+  const deviationMeanY = sy / n;
   let sxy = 0;
   let sxx = 0;
   let syy = 0;
   for (let i = 0; i < n; i++) {
-    const x = xs[i]!;
-    const y = ys[i]!;
-    sx += x;
-    sy += y;
-    sxy += x * y;
-    sxx += x * x;
-    syy += y * y;
+    const dx = xs[i]! - anchorX - deviationMeanX;
+    const dy = ys[i]! - anchorY - deviationMeanY;
+    sxy += dx * dy;
+    sxx += dx * dx;
+    syy += dy * dy;
   }
-  const meanX = sx / n;
-  const meanY = sy / n;
   return {
     n,
-    meanX,
-    meanY,
-    covPop: sxy / n - meanX * meanY,
-    varX: sxx / n - meanX * meanX,
-    varY: syy / n - meanY * meanY,
+    meanX: anchorX + deviationMeanX,
+    meanY: anchorY + deviationMeanY,
+    covPop: sxy / n,
+    varX: sxx / n,
+    varY: syy / n,
   };
 }
 

@@ -215,14 +215,13 @@ export const coppock = withBuiltinMetadata(
 
 class CtiStream implements IndicatorStream<number, number> {
   private buf: number[] = [];
-  private readonly sumX: number;
-  private readonly sumX2: number;
+  /** Σ(i − ī)² over bar indexes 0…n−1: n(n² − 1)/12. */
+  private readonly centeredIndexSumSq: number;
   value: number | null = null;
   constructor(private readonly period: number) {
     requirePeriod(period, 'CtiStream');
     const n = period;
-    this.sumX = (n * (n - 1)) / 2;
-    this.sumX2 = ((n - 1) * n * (2 * n - 1)) / 6;
+    this.centeredIndexSumSq = (n * (n * n - 1)) / 12;
   }
   next(value: number): number | null {
     this.buf.push(value);
@@ -231,18 +230,23 @@ class CtiStream implements IndicatorStream<number, number> {
       this.value = null;
       return null;
     }
+    // Centered two-pass correlation of price with bar index: the one-pass n·Σy² − (Σy)² cancelled
+    // to noise on price levels, so a flat window read ±1e-8 instead of 0.
     const n = this.period;
+    const anchor = this.buf[0]!;
     let sumY = 0;
-    let sumXY = 0;
-    let sumY2 = 0;
+    for (let i = 0; i < n; i++) sumY += this.buf[i]! - anchor;
+    const meanY = sumY / n;
+    const meanIndex = (n - 1) / 2;
+    let sxy = 0;
+    let syy = 0;
     for (let i = 0; i < n; i++) {
-      const y = this.buf[i]!;
-      sumY += y;
-      sumXY += i * y;
-      sumY2 += y * y;
+      const dy = this.buf[i]! - anchor - meanY;
+      sxy += (i - meanIndex) * dy;
+      syy += dy * dy;
     }
-    const denom = Math.sqrt((n * this.sumX2 - this.sumX * this.sumX) * (n * sumY2 - sumY * sumY));
-    this.value = denom === 0 ? 0 : (n * sumXY - this.sumX * sumY) / denom;
+    const denom = Math.sqrt(this.centeredIndexSumSq) * Math.sqrt(syy);
+    this.value = denom === 0 ? 0 : sxy / denom;
     return this.value;
   }
   toJSON(): TechnicalAnalysisSnapshot {

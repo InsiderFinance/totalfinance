@@ -203,6 +203,51 @@ describe('Monte-Carlo probabilities (cross-validate the analytic metrics)', () =
       /must be explicitly seeded — call monteCarloProbability\(\{ seed: 42 \}\)/,
     );
   });
+
+  it('expectedValueStandardError stays exact when payoffs carry a large constant offset (LIB-04)', () => {
+    // A deep-ITM put (K = 1e6, S ≈ 1, σ = 1e-4) pays ≈ 999,999 on every path with ~1e-4 spread.
+    // The one-pass Σx² − n·x̄² variance cancelled to noise here (≈300× the true SE).
+    const highOffsetPut = (premium: number) =>
+      strategy(
+        [legs.put({ strike: 1_000_000, premium, quantity: 1, expiry: '2027-01-01T00:00:00Z' })],
+        { multiplier: 1 },
+      );
+    const run = (premium: number, seed: number) =>
+      highOffsetPut(premium).monteCarloProbability({
+        spot: 1,
+        volatility: 0.0001,
+        riskFreeRate: 0,
+        dividendYield: 0,
+        measure: 'riskNeutral',
+        asOf: '2026-01-01T00:00:00Z',
+        paths: 1000,
+        steps: 1,
+        seed,
+      });
+    const withinRelative = (actual: number, expected: number) =>
+      expect(Math.abs(actual / expected - 1)).toBeLessThan(1e-7);
+    // Exact-arithmetic sample references for these seeded draws.
+    for (const [seed, exactStandardError] of [
+      [42, 3.1448105410341159e-6],
+      [7, 3.1472528365089507e-6],
+    ] as const) {
+      const offset = run(0, seed);
+      withinRelative(offset.expectedValueStandardError, exactStandardError);
+      // A constant cash shift moves the mean, never the spread.
+      withinRelative(run(999_999, seed).expectedValueStandardError, exactStandardError);
+      expect(offset.expectedValue).toBeGreaterThan(999_998);
+    }
+    // Exactly offsetting legs pay 0 on every path ⇒ zero sampling error.
+    const flat = strategy(
+      [
+        legs.put({ strike: 100, premium: 3, quantity: 1 }),
+        legs.put({ strike: 100, premium: 3, quantity: -1 }),
+      ],
+      { multiplier: 1 },
+    ).monteCarloProbability({ ...mkt, seed: 42, paths: 1000, steps: 1 });
+    expect(flat.expectedValue).toBe(0);
+    expect(flat.expectedValueStandardError).toBe(0);
+  });
 });
 
 describe('smile-aware Monte-Carlo probabilities (local-volatility paths)', () => {

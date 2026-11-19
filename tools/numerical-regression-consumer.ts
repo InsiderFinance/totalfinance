@@ -4,7 +4,7 @@ import {
   amortizationSchedule,
   internalRateOfReturn,
 } from '@insiderfinance/totalfinance/valuation';
-import { minVariance } from '@insiderfinance/totalfinance/risk';
+import { minVariance, probabilityOfBacktestOverfitting } from '@insiderfinance/totalfinance/risk';
 import { strategy, legs } from '@insiderfinance/totalfinance/strategy';
 import {
   blackScholesImpliedVolatility,
@@ -19,6 +19,12 @@ import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carl
 import { option as optionContracts, asian, spread } from '@insiderfinance/totalfinance/options';
 import { fitGarch } from '@insiderfinance/totalfinance/volatility/forecast';
 import { ols } from '@insiderfinance/totalfinance/math';
+import {
+  correl,
+  cti,
+  pairs,
+  rollingRegression,
+} from '@insiderfinance/totalfinance/technical-analysis';
 
 function check(condition: boolean, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -293,6 +299,51 @@ export function assertNumericalRepairs(): void {
     correlation: 1,
   });
   check(Math.abs(carryFree.value / 1.0833154930733507e-10 - 1) < 1e-12, 'Kirk carry cancellation');
+  // LIB-04 and siblings: centered moments where Σx² − n·mean² cancelled to rounding noise.
+  const deepPut = (premium: number, seed: number) =>
+    strategy(
+      [legs.put({ strike: 1_000_000, premium, quantity: 1, expiry: '2027-01-01T00:00:00Z' })],
+      { multiplier: 1 },
+    ).monteCarloProbability({
+      spot: 1,
+      volatility: 0.0001,
+      riskFreeRate: 0,
+      dividendYield: 0,
+      measure: 'riskNeutral',
+      asOf: '2026-01-01T00:00:00Z',
+      paths: 1000,
+      steps: 1,
+      seed,
+    }).expectedValueStandardError;
+  check(
+    Math.abs(deepPut(0, 42) / 3.1448105410341159e-6 - 1) < 1e-7 &&
+      Math.abs(deepPut(999_999, 7) / 3.1472528365089507e-6 - 1) < 1e-7,
+    'LIB-04 Monte Carlo standard error',
+  );
+  const ramp = Array.from({ length: 20 }, (_, i) => 100 + i);
+  const flat = Array.from({ length: 20 }, () => 0.1);
+  check(
+    rollingRegression(pairs(flat, ramp), { period: 20 }).at(-1)!.slope === 0 &&
+      correl(
+        pairs(
+          flat.map(() => 0.07),
+          ramp,
+        ),
+        { period: 20 },
+      ).at(-1) === 0 &&
+      cti(
+        flat.map(() => 4321.37),
+        { period: 20 },
+      ).at(-1) === 0,
+    'flat-window pair statistics',
+  );
+  const cashPbo = (cash: number) => {
+    let state = 7;
+    const noise = () => ((state = (state * 16807) % 2147483647) / 2147483647 - 0.5) * 0.02;
+    const returns = Array.from({ length: 160 }, () => [cash, noise(), noise(), noise()]);
+    return probabilityOfBacktestOverfitting(returns, { splits: 8 }).backtestOverfittingProbability;
+  };
+  check(cashPbo(0.0007) === cashPbo(0), 'constant-return PBO ranking');
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

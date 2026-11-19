@@ -279,6 +279,20 @@ describe('probabilityOfBacktestOverfitting (CSCV)', () => {
     expect(res.assumptions.conventionsVersion).toBeTruthy();
   });
 
+  it('a constant (cash-like) configuration ranks the same whatever its return level', () => {
+    // A zero-variance column takes the Sharpe-0 convention. Unshifted Σx²/rows − x̄² left rounding
+    // noise for some levels, scoring 0.0007/period at Sharpe ≈ 1e7, so it won every split (PBO 0).
+    const pbo = (cash: number) => {
+      const randomNumberGenerator = mulberry32(7);
+      const M = matrix(160, 4, (_, c) =>
+        c === 0 ? cash : 0.01 * normalSample(randomNumberGenerator),
+      );
+      return probabilityOfBacktestOverfitting(M, { splits: 8 }).backtestOverfittingProbability;
+    };
+    const flat = pbo(0);
+    for (const cash of [0.0001, 0.0007, 0.003, 0.01]) expect(pbo(cash)).toBe(flat);
+  });
+
   it('pure noise gives a non-degenerate PBO (the selection is worthless out of sample)', () => {
     // No config has an edge ⇒ the IS winner's OOS rank is ~uniform ⇒ PBO well away from 0 and 1.
     const randomNumberGenerator = mulberry32(42);
