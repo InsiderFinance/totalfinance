@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { runInNewContext } from 'node:vm';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { readSiteVersion } from '../version.js';
@@ -240,6 +241,10 @@ describe('built public documentation', () => {
       expect(policy, route).toBeTruthy();
       expect(policy).not.toContain("script-src 'self' 'unsafe-inline'");
       expect(policy).toContain("object-src 'none'");
+      if (route !== '/') {
+        expect(page, route).not.toContain('totalfinance-google-analytics');
+        expect(policy, route).not.toMatch(/googletagmanager|google-analytics|analytics\.google/);
+      }
       for (const script of inlineScripts(page))
         expect(policy, route).toContain(
           `'sha256-${createHash('sha256').update(script, 'utf8').digest('base64')}'`,
@@ -248,6 +253,64 @@ describe('built public documentation', () => {
         page.indexOf('<script'),
       );
     }
+  });
+
+  it('loads Google Analytics once on the public homepage and strips URL query strings and fragments', () => {
+    const home = html('/');
+    const scripts = [
+      ...home.matchAll(/<script id="totalfinance-google-analytics">([\s\S]*?)<\/script>/g),
+    ];
+    expect(scripts).toHaveLength(1);
+    const script = scripts[0]![1]!;
+    const policy = /<meta http-equiv="Content-Security-Policy" content="([^"]+)"/.exec(home)![1]!;
+    expect(policy).toMatch(/(?:^|; )script-src [^;]*https:\/\/www\.googletagmanager\.com/);
+    expect(policy).toMatch(/(?:^|; )connect-src [^;]*https:\/\/\*\.google-analytics\.com/);
+    expect(policy).toMatch(/(?:^|; )img-src [^;]*https:\/\/\*\.google-analytics\.com/);
+
+    for (const origin of [
+      'https://www.totalfinance.io',
+      'https://totalfinance.io',
+      'https://www.insiderfinance.io',
+      'https://totalfinance-preview.vercel.app',
+      'http://localhost:4173',
+    ]) {
+      for (const path of ['/', '/docs/totalfinance']) {
+        const window: { location: URL; dataLayer?: ArrayLike<unknown>[] } = {
+          location: new URL(`${origin}${path}?private=value#fragment`),
+        };
+        const loadedScripts: { async: boolean; src: string }[] = [];
+        const document = {
+          referrer: 'https://example.com/source?private=referrer#fragment',
+          createElement: () => ({}),
+          head: { appendChild: (tag: (typeof loadedScripts)[number]) => loadedScripts.push(tag) },
+        };
+        runInNewContext(script, { window, document, Date });
+
+        if (origin.endsWith('totalfinance.io') && path === '/') {
+          expect(loadedScripts).toEqual([
+            { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-CEW2R2KTZQ' },
+          ]);
+          expect(window.dataLayer?.map((command) => Array.from(command))).toEqual([
+            [
+              'set',
+              {
+                page_location: `${origin}/`,
+                page_referrer: 'https://example.com/source',
+                allow_google_signals: false,
+                allow_ad_personalization_signals: false,
+              },
+            ],
+            ['js', expect.any(Date)],
+            ['config', 'G-CEW2R2KTZQ'],
+          ]);
+        } else {
+          expect(loadedScripts).toHaveLength(0);
+          expect(window.dataLayer).toBeUndefined();
+        }
+      }
+    }
+
+    expect(html('/', SNAPSHOT)).not.toMatch(/totalfinance-google-analytics|googletagmanager/);
   });
 
   it('follows the explicit indexing policy', () => {

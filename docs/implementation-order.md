@@ -107,6 +107,12 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
+### Active site follow-up: Google Analytics on the marketing homepage (2026-11-19)
+
+Follow [A1–A3](./specs/homepage-and-docs-routing.md#google-analytics-on-the-marketing-homepage-2026-11-19)
+for the GA4 tag on the standalone TotalFinance homepage. A1–A2 passed locally. Maintainer approval
+is required for deployment, followed by the live GA4 Realtime check in A3.
+
 ### Completed bounded site work: recover the original homepage and branding (2026-11-12)
 
 Public-link follow-up locally complete: [P1–P2](./specs/homepage-and-docs-routing.md) point the homepage's
