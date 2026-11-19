@@ -6,7 +6,7 @@ Part of **[TotalFinance](https://github.com/InsiderFinance/totalfinance#readme)*
 
 ## Install
 
-Source version 0.1.5: the optional MCP package is not published on npm; this is not a verified npm installation.
+Source version 0.1.6: the optional MCP package is not published on npm; this is not a verified npm installation.
 Use a [source checkout](https://github.com/InsiderFinance/totalfinance#contributing). SDK publication does not publish this separate server package.
 
 ```sh
