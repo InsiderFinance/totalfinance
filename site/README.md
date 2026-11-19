@@ -7,8 +7,9 @@ Next.js export. The marketing homepage is served at `https://www.totalfinance.io
 `/docs/totalfinance`, ready for InsiderFinance’s separate rewrite. The controlling contract is
 [`docs/specs/developer-docs-v2.md`](../docs/specs/developer-docs-v2.md).
 
-No API keys, accounts, analytics beacon, remote compute, market feeds or brokerage access. Every
-calculation runs on the reader's machine; a reader's own data never leaves the page.
+The standalone marketing homepage loads Google Analytics 4 on `totalfinance.io` and
+`www.totalfinance.io`. It supplies page and referrer URLs without query strings or fragments.
+The docs and calculators run on the reader's machine. Calculator inputs are processed locally.
 
 ## Build and preview
 
@@ -45,10 +46,10 @@ the generated inputs exist).
    framework-free modules (`src/`, `scripts/`, `mcp/`, `api/`, tests) under the repository's strict
    settings.
 3. **Post-export** (`scripts/postexport.ts`): a Markdown twin for every page, `llms.txt`,
-   `llms/<domain>.txt` (each must fit 400 KB or the build fails), `llms-full.txt`, a per-page
-   Content-Security-Policy `<meta>` whose `script-src` lists only `'self'` and the SHA-256 hashes of
-   that page's inline scripts, robots/sitemap per the indexing policy, the route inventory and the
-   calculator catalogue.
+   `llms/<domain>.txt` (each must fit 400 KB or the build fails), `llms-full.txt`, and a per-page
+   Content-Security-Policy `<meta>` that hashes inline scripts. The marketing homepage's policy
+   also permits the Google tag and GA4 measurement requests. This step also writes robots/sitemap
+   per the indexing policy, the route inventory and the calculator catalogue.
 4. **Snapshot**: a second export under `/docs/totalfinance/versions/<version>` (canonicals point at
    the current docs; never indexed). Verified earlier releases are restored byte-for-byte from
    `TOTALFINANCE_DOCS_ARCHIVES`. `TOTALFINANCE_DOCS_SNAPSHOT=0` skips the snapshot for quick local

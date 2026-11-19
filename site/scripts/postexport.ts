@@ -2,8 +2,8 @@
  * Post-export steps over a Next.js static export:
  *
  * 1. Markdown twins for every page, `llms.txt`, per-domain bundles and `llms-full.txt`.
- * 2. A per-page Content-Security-Policy `<meta>` whose script-src lists only `'self'` and the
- *    SHA-256 hashes of that page's own inline scripts (no `'unsafe-inline'` for scripts).
+ * 2. A per-page Content-Security-Policy `<meta>` with hashes for inline scripts and Google
+ *    Analytics sources on the marketing homepage.
  * 3. Sitemap and robots policy, route inventory, calculator catalogue and version manifests.
  */
 import { createHash } from 'node:crypto';
@@ -27,20 +27,32 @@ export interface PostExportOptions {
   root?: string;
 }
 
-export const CSP_DIRECTIVES = [
-  "default-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
-  "font-src 'self'",
-  "connect-src 'self'",
-  "worker-src 'self' blob:",
-  "object-src 'none'",
-  "base-uri 'none'",
-  "form-action 'self'",
-  // Only the docs' own sandboxed example runner (`runtime/runner`) may be framed.
-  "frame-src 'self'",
-  "manifest-src 'self'",
-];
+const GA_MEASUREMENT_ID = 'G-CEW2R2KTZQ';
+const GOOGLE_TAG_ORIGIN = 'https://www.googletagmanager.com';
+const GA_REQUEST_SOURCES = `${GOOGLE_TAG_ORIGIN} https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com`;
+
+const GA_TAG = `<script id="totalfinance-google-analytics">
+(() => {
+  const { origin, pathname } = window.location;
+  if (pathname !== '/' || (origin !== 'https://www.totalfinance.io' && origin !== 'https://totalfinance.io')) return;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('set', {
+    page_location: origin + pathname,
+    page_referrer: document.referrer.split(/[?#]/, 1)[0],
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+  gtag('js', new Date());
+  gtag('config', '${GA_MEASUREMENT_ID}');
+
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = '${GOOGLE_TAG_ORIGIN}/gtag/js?id=${GA_MEASUREMENT_ID}';
+  document.head.appendChild(tag);
+})();
+</script>`;
 
 function walk(directory: string, files: string[] = []): string[] {
   for (const name of readdirSync(directory)) {
@@ -64,17 +76,34 @@ export function inlineScripts(html: string): string[] {
   return scripts;
 }
 
-export function contentSecurityPolicy(html: string): string {
+export function contentSecurityPolicy(html: string, analytics = false): string {
   const hashes = [...new Set(inlineScripts(html).map((script) => `'sha256-${sha256(script)}'`))];
-  return [`script-src 'self' ${hashes.join(' ')}`.trim(), ...CSP_DIRECTIVES].join('; ');
+  const scriptSources = analytics ? [GOOGLE_TAG_ORIGIN, ...hashes] : hashes;
+  const measurementSources = analytics ? ` ${GA_REQUEST_SOURCES}` : '';
+  return [
+    [`script-src 'self'`, ...scriptSources].join(' '),
+    "default-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    `img-src 'self' data:${measurementSources}`,
+    "font-src 'self'",
+    `connect-src 'self'${measurementSources}`,
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "form-action 'self'",
+    // Only the docs' own sandboxed example runner (`runtime/runner`) may be framed.
+    "frame-src 'self'",
+    "manifest-src 'self'",
+  ].join('; ');
 }
 
-export function withSecurityMeta(html: string, robots: string | null): string {
+export function withSecurityMeta(html: string, robots: string | null, analytics = false): string {
   if (html.includes('http-equiv="Content-Security-Policy"')) return html;
-  const policy = contentSecurityPolicy(html);
+  const page = analytics ? html.replace('<head>', `<head>${GA_TAG}`) : html;
+  const policy = contentSecurityPolicy(page, analytics);
   const extra =
     robots && !html.includes('name="robots"') ? `<meta name="robots" content="${robots}"/>` : '';
-  return html.replace(
+  return page.replace(
     /<head>/,
     `<head><meta http-equiv="Content-Security-Policy" content="${policy}"/>${extra}`,
   );
@@ -146,8 +175,15 @@ export async function postExport(
   for (const file of walk(out)) {
     if (!file.endsWith('.html')) continue;
     const html = readFileSync(file, 'utf8');
-    writeFileSync(file, withSecurityMeta(html, options.snapshot ? 'noindex, follow' : null));
     const path = relative(out, file).replaceAll('\\', '/');
+    writeFileSync(
+      file,
+      withSecurityMeta(
+        html,
+        options.snapshot ? 'noindex, follow' : null,
+        !options.snapshot && path === 'index.html',
+      ),
+    );
     if (
       path === '404.html' ||
       path.startsWith('_not-found') ||

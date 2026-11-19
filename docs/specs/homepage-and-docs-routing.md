@@ -1,5 +1,27 @@
 # TotalFinance homepage and documentation routing
 
+## Google Analytics on the marketing homepage (2026-11-19)
+
+Use GA4 measurement ID `G-CEW2R2KTZQ` on the marketing homepage at `https://www.totalfinance.io/`
+and `https://totalfinance.io/`. Enable the Google tag only on these HTTPS origins at `/`. Send the
+homepage and referrer URLs without query strings or fragments, with Google signals and ad
+personalization disabled. Documentation, calculators, version snapshots, and previews are outside
+this measurement scope. Only the current homepage's generated CSP permits the Google tag and GA4
+measurement endpoints. The inline initialization must pass the existing script-hash policy.
+Update the site's Next.js pin from 16.4.1 to 16.4.6 because the security advisory interrupted the
+static build under 16.4.1.
+
+- [x] A1: The static export contains one GA4 initialization on the current homepage. Verify the
+      host and path restrictions, tag configuration, and matching homepage CSP.
+- [x] A2: Verify that docs and version snapshots keep their existing CSP and that the site tests pass.
+- [ ] A3: After maintainer-approved deployment, verify a homepage `page_view` in GA4 Realtime.
+
+Local verification on Node 22.23.2 and pnpm 10.32.0 passed the full static export with its version
+snapshot, site typecheck, and all 203 site tests. Chromium ran Google's tag against the local
+export at both production hostnames and generated one `page_view` for each homepage visit.
+Intercepted requests contained the expected measurement ID and clean page and referrer URLs.
+The sampled docs, calculator, snapshot, and preview generated zero analytics requests.
+
 ## Current follow-up: link to InsiderFinance docs (2026-11-12)
 
 The maintainer requested that View Docs on TotalFinance send visitors to InsiderFinance.
