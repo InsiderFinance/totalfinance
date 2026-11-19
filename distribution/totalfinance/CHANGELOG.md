@@ -12,9 +12,9 @@
     1,000 paths) reported about 300 times the true sample standard error; it now matches an
     exact-arithmetic reference to about 1e-15 relative.
   - The technical-analysis `covariance`, `rSquared`, `rollingRegression`, `correl`, `beta` and `cti`
-    indicators are exact on price-level inputs. A flat window of `0.1` regressed to slope `-1024`
-    instead of `0`, flat windows correlated at about `±1e-7` or `NaN` instead of `0`, and
-    BTC-sized prices moving by ticks gave a slope of `1.042` against a true `0.987`. Correlations
+    indicators are numerically stable on price-level inputs. A flat window of `0.1` regressed to
+    slope `-1024` instead of `0`, flat windows correlated at about `±1e-7` or `NaN` instead of `0`,
+    and BTC-sized prices moving by ticks gave a slope of `1.042` against a true `0.987`. Correlations
     stay within `[-1, 1]` and `rSquared` at most `1`; rounding put a perfect relationship one unit
     in the last place outside, so `Math.acos(correl)` could return `NaN`.
   - `probabilityOfBacktestOverfitting` ranks configurations exactly. It sums each block's returns

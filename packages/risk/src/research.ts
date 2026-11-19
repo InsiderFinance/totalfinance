@@ -991,8 +991,9 @@ export function probabilityOfBacktestOverfitting(
     });
   }
 
-  // Validate the used rows (rectangular + finite) and find each column's finest binary unit, so
-  // every return is an exact integer in that unit.
+  // Validate the used rows (rectangular + finite), reading each value once into `values` (row-major),
+  // and find each column's finest binary unit, so every return is an exact integer in that unit.
+  const values: number[] = [];
   const unitExponent = new Array<number>(N).fill(Infinity);
   for (let t = offset; t < T; t++) {
     const row = returns[t];
@@ -1005,6 +1006,7 @@ export function probabilityOfBacktestOverfitting(
     for (let n = 0; n < N; n++) {
       const x = row[n]!;
       ensureFinite(x, `returns[${t}][${n}]`, functionName);
+      values.push(x);
       if (x !== 0) unitExponent[n] = Math.min(unitExponent[n]!, binaryExponent(x));
     }
   }
@@ -1013,13 +1015,13 @@ export function probabilityOfBacktestOverfitting(
   const blockSumSqs: bigint[][] = [];
   const totalSum = new Array<bigint>(N).fill(0n);
   const totalSumSq = new Array<bigint>(N).fill(0n);
+  let next = 0; // the blocks consume `values` in the order it was filled
   for (let s = 0; s < S; s++) {
     const sum = new Array<bigint>(N).fill(0n);
     const sumSq = new Array<bigint>(N).fill(0n);
     for (let r = 0; r < block; r++) {
-      const row = returns[offset + s * block + r]!;
       for (let n = 0; n < N; n++) {
-        const units = exactUnits(row[n]!, unitExponent[n]!);
+        const units = exactUnits(values[next++]!, unitExponent[n]!);
         sum[n]! += units;
         sumSq[n]! += units * units;
       }

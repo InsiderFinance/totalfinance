@@ -335,6 +335,19 @@ describe('probabilityOfBacktestOverfitting (CSCV)', () => {
     }
   });
 
+  it('reads each return once, so a changing accessor cannot desynchronize validation', () => {
+    // The exact rewrite validated a cell, then read it again to convert it: a getter returning 0
+    // then 1 left its column without a binary unit and threw an untyped RangeError.
+    let reads = 0;
+    const row = [0, 0];
+    Object.defineProperty(row, 0, { get: () => reads++ });
+    const M = [[0, 0], row, [0, 0], [0, 0]];
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+    expect(reads).toBe(1);
+  });
+
   it('ranks returns a few representable steps apart exactly', () => {
     // Returns (2^52 + k)·2^-55 ≈ 0.125: compare against exact integer arithmetic on k.
     const exactPbo = (K: number[][]): number => {

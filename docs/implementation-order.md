@@ -29,7 +29,8 @@ the SDK through the GitHub Release workflow, and deploy no site.
       configurations × 2,520 rows; the umbrella cap rises 715.5 → 716 KiB from measurement.
 - [x] Review repairs: a flat stretch after a spike no longer flips PBO from 0 to 1, a perfect
       two-point correlation no longer returns 1.0000000000000002, equal-distribution ties no longer
-      report PBO 1, and sub-resolution returns no longer misrank.
+      report PBO 1, sub-resolution returns no longer misrank, and PBO reads each return once (a
+      changing accessor threw an untyped RangeError between validation and conversion).
 - [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
       repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
 - [x] Recheck the registry, tags and releases (latest 0.1.5; 0.1.6 unused), version the pair to
