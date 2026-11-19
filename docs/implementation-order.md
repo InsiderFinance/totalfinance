@@ -5,12 +5,15 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
-### Active: LIB-04 centered-moment repairs (2026-11-19)
+### Active: LIB-04 centered-moment repairs and SDK 0.1.6 release (2026-11-19)
 
 The maintainer authorized fixing LIB-04 (an overstated Monte Carlo standard error, reproduced in
-published 0.1.3–0.1.5) and other statistics using the same one-pass `Σx² − n·mean²` formula.
-This is a patch changeset only: no version change, publication or deployment. The options Monte
-Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
+published 0.1.3–0.1.5) and other statistics using the same one-pass `Σx² − n·mean²` formula, then
+instructed "get this release ready and release" after the third PBO review. The PBO change ships
+as reviewed; its remaining tie and sub-resolution findings are follow-up work, not release blockers.
+The options Monte Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
+Release scope follows the 0.1.5 path: version the SDK/MCP pair once to unused 0.1.6, publish only
+the SDK through the GitHub Release workflow, and deploy no site.
 
 - [x] LIB-04: `Position.monteCarloProbability()` accumulates the P&L spread as Welford centered
       moments around the first path. Both failing seeds match the exact reference within 1e-7
@@ -26,7 +29,12 @@ Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
       two-point correlation no longer returns 1.0000000000000002.
 - [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
       repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
-- [ ] Current-head hosted checks and maintainer review in the PR.
+- [x] Recheck the registry, tags and releases (latest 0.1.5; 0.1.6 unused), version the pair to
+      0.1.6 once, synchronize publication metadata and the lockfile, and regenerate artifacts.
+- R4 (post-commit): exact-head PR fast and full gates, authorized merge, exact full main PUSH gate.
+- R5 (publication): normal `totalfinance-v0.1.6` GitHub Release at the verified merge commit;
+  the workflow's independent verification, SDK-only OIDC publication and public smoke; then
+  independent registry, integrity and provenance checks. PR and Release own the receipts.
 
 ### Active: SDK 0.1.5 and npm README publication (2026-11-16)
 
