@@ -344,6 +344,16 @@ export function assertNumericalRepairs(): void {
     return probabilityOfBacktestOverfitting(returns, { splits: 8 }).backtestOverfittingProbability;
   };
   check(cashPbo(0.0007) === cashPbo(0), 'constant-return PBO ranking');
+  const spikeThenFlat = Array.from({ length: 12 }, (_, r) => [
+    r === 0 ? -0.03 : 0.0007,
+    r % 2 ? 0.0005 : 0.0015,
+  ]);
+  check(
+    probabilityOfBacktestOverfitting(spikeThenFlat, { splits: 4 })
+      .backtestOverfittingProbability === 0,
+    'spike-then-flat PBO ranking',
+  );
+  check(correl(pairs([100, 103], [100, 103]), { period: 2 }).at(-1) === 1, 'bounded correlation');
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

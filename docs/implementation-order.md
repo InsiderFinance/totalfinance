@@ -18,8 +18,12 @@ Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
 - [x] Technical-analysis `covariance`, `rSquared`, `rollingRegression`, `correl`, `beta` and `cti`
       use two-pass centered moments around the first window value; flat windows are exactly
       degenerate.
-- [x] `probabilityOfBacktestOverfitting` anchors each column's block sums, so a constant-return
-      column ranks the same at every return level.
+- [x] Correlations (`correl`, `cti`) stay within [−1, 1] and `rSquared` at most 1 under rounding.
+- [x] `probabilityOfBacktestOverfitting` merges per-block means and centered sums of squares for
+      each split, so a constant-return stretch has zero variance in every split and ranks the same
+      at every return level; it matches a raw-row per-split oracle on 300 randomized matrices.
+- [x] Review repairs: a flat stretch after a spike no longer flips PBO from 0 to 1, and a perfect
+      two-point correlation no longer returns 1.0000000000000002.
 - [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
       repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
 - [ ] Current-head hosted checks and maintainer review in the PR.

@@ -596,7 +596,7 @@ export const covariance = withBuiltinMetadata(
 class RSquaredStream extends PairWindowStream<number> {
   protected derive(m: PairMoments): number {
     const denom = m.varX * m.varY;
-    return denom <= 0 ? 0 : (m.covPop * m.covPop) / denom;
+    return denom <= 0 ? 0 : Math.min(1, (m.covPop * m.covPop) / denom); // a perfect fit can round above 1
   }
   protected kind(): string {
     return 'rSquared';
@@ -636,7 +636,7 @@ class RegressionStream extends PairWindowStream<RegressionPoint> {
     return {
       slope,
       intercept: m.meanY - slope * m.meanX,
-      rSquared: denom <= 0 ? 0 : (m.covPop * m.covPop) / denom,
+      rSquared: denom <= 0 ? 0 : Math.min(1, (m.covPop * m.covPop) / denom),
     };
   }
   protected kind(): string {

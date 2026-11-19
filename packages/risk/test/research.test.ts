@@ -293,6 +293,18 @@ describe('probabilityOfBacktestOverfitting (CSCV)', () => {
     for (const cash of [0.0001, 0.0007, 0.003, 0.01]) expect(pbo(cash)).toBe(flat);
   });
 
+  it('a flat stretch after a spike has zero variance in every split that excludes the spike', () => {
+    // Config 0 returns −3% once, then 0.07% forever; config 1 alternates 0.15%/0.05% and wins
+    // every split. Anchoring union sums on the dataset's first row left rounding noise in the
+    // spike-free unions (Sharpe ≈ 1.5e6), flipping PBO from 0 to 1.
+    const M = matrix(12, 2, (r, c) =>
+      c === 0 ? (r === 0 ? -0.03 : 0.0007) : r % 2 ? 0.0005 : 0.0015,
+    );
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+  });
+
   it('pure noise gives a non-degenerate PBO (the selection is worthless out of sample)', () => {
     // No config has an edge ⇒ the IS winner's OOS rank is ~uniform ⇒ PBO well away from 0 and 1.
     const randomNumberGenerator = mulberry32(42);

@@ -485,7 +485,8 @@ class CorrelStream implements IndicatorStream<Pair, number> {
       sxy += dx * dy;
     }
     const denom = Math.sqrt(sxx) * Math.sqrt(syy);
-    this.value = denom === 0 ? 0 : sxy / denom;
+    // Rounding can land a perfect correlation one ULP outside [−1, 1]; Math.acos(r) would be NaN.
+    this.value = denom === 0 ? 0 : Math.min(1, Math.max(-1, sxy / denom));
     return this.value;
   }
   toJSON(): TechnicalAnalysisSnapshot {

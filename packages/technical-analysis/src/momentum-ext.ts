@@ -246,7 +246,7 @@ class CtiStream implements IndicatorStream<number, number> {
       syy += dy * dy;
     }
     const denom = Math.sqrt(this.centeredIndexSumSq) * Math.sqrt(syy);
-    this.value = denom === 0 ? 0 : sxy / denom;
+    this.value = denom === 0 ? 0 : Math.min(1, Math.max(-1, sxy / denom)); // rounding stays in [−1, 1]
     return this.value;
   }
   toJSON(): TechnicalAnalysisSnapshot {

@@ -882,35 +882,43 @@ export interface BacktestOverfittingProbabilityResult {
 }
 
 /**
- * Per-block sufficient statistics (Σd, Σd²) of `d = x − anchors[n]`, each column measured from
- * its first used row → the Sharpe of any block union without touching raw rows. Unanchored
- * Σx²/rows − x̄² cancelled to rounding noise on a constant (cash-like) column, ranking it at
- * Sharpe ≈ 1e7 or 0 depending on the constant; anchored, a constant column has zero variance.
+ * Per-block, per-column mean and centered sum of squares → the Sharpe of any block union without
+ * touching raw rows. Σx²/rows − x̄² over a union cancelled to rounding noise on constant
+ * (cash-like) stretches, ranking them at Sharpe ≈ 1e6 or 0 by accident of the constant.
  */
 interface BlockStatistics {
-  sum: number[];
-  sumSq: number[];
+  mean: number[];
+  centeredSumSq: number[];
   rows: number;
 }
 
-/** Sharpe of a union of blocks (mean/σ, population σ — ranking is invariant to the ddof). */
-function unionSharpe(
-  blocks: BlockStatistics[],
-  anchors: number[],
-  picks: number[],
-  n: number,
-): number {
-  let s = 0;
-  let ss = 0;
+/**
+ * Sharpe of a union of blocks (mean/σ, population σ — ranking is invariant to the ddof). Block
+ * moments merge pairwise (Chan, Golub & LeVeque): equal block means add no spread, so a union of
+ * constant blocks keeps exactly zero variance.
+ */
+function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): number {
   let rows = 0;
+  let mean = 0;
+  let centeredSumSq = 0;
   for (const b of picks) {
-    s += blocks[b]!.sum[n]!;
-    ss += blocks[b]!.sumSq[n]!;
-    rows += blocks[b]!.rows;
+    const blockRows = blocks[b]!.rows;
+    const blockMean = blocks[b]!.mean[n]!;
+    const blockCenteredSumSq = blocks[b]!.centeredSumSq[n]!;
+    if (rows === 0) {
+      rows = blockRows;
+      mean = blockMean;
+      centeredSumSq = blockCenteredSumSq;
+      continue;
+    }
+    const total = rows + blockRows;
+    const delta = blockMean - mean;
+    mean += (delta * blockRows) / total;
+    centeredSumSq += blockCenteredSumSq + (delta * delta * rows * blockRows) / total;
+    rows = total;
   }
-  const deviationMean = s / rows;
-  const variance = ss / rows - deviationMean * deviationMean;
-  return variance > 0 ? (anchors[n]! + deviationMean) / Math.sqrt(variance) : 0;
+  const variance = centeredSumSq / rows;
+  return variance > 0 ? mean / Math.sqrt(variance) : 0;
 }
 
 /**
@@ -972,11 +980,13 @@ export function probabilityOfBacktestOverfitting(
   }
 
   // Per-block sufficient statistics (validating the matrix is rectangular + finite as we go).
+  // Welford within each block, measured from the block's first row: a constant block has a mean
+  // equal to that row and exactly zero centered sum of squares.
   const blocks: BlockStatistics[] = [];
-  const anchors = new Array<number>(N).fill(0);
   for (let s = 0; s < S; s++) {
-    const sum = new Array<number>(N).fill(0);
-    const sumSq = new Array<number>(N).fill(0);
+    const anchors = new Array<number>(N).fill(0);
+    const deviationMean = new Array<number>(N).fill(0);
+    const centeredSumSq = new Array<number>(N).fill(0);
     for (let r = 0; r < block; r++) {
       const row = returns[offset + s * block + r];
       if (!Array.isArray(row) || row.length !== N) {
@@ -991,13 +1001,18 @@ export function probabilityOfBacktestOverfitting(
       for (let n = 0; n < N; n++) {
         const x = row[n]!;
         ensureFinite(x, `returns[${offset + s * block + r}][${n}]`, functionName);
-        if (s === 0 && r === 0) anchors[n] = x;
-        const d = x - anchors[n]!;
-        sum[n]! += d;
-        sumSq[n]! += d * d;
+        if (r === 0) anchors[n] = x;
+        const deviation = x - anchors[n]!;
+        const delta = deviation - deviationMean[n]!;
+        deviationMean[n]! += delta / (r + 1);
+        centeredSumSq[n]! += delta * (deviation - deviationMean[n]!);
       }
     }
-    blocks.push({ sum, sumSq, rows: block });
+    blocks.push({
+      mean: anchors.map((anchor, n) => anchor + deviationMean[n]!),
+      centeredSumSq,
+      rows: block,
+    });
   }
 
   const combos = choose(range(0, S), S / 2);
@@ -1011,16 +1026,16 @@ export function probabilityOfBacktestOverfitting(
     let best = 0;
     let bestSharpe = -Infinity;
     for (let n = 0; n < N; n++) {
-      const sh = unionSharpe(blocks, anchors, isPicks, n);
+      const sh = unionSharpe(blocks, isPicks, n);
       if (sh > bestSharpe) {
         bestSharpe = sh;
         best = n;
       }
     }
     // Its OOS relative rank r̄ = (#configs with OOS Sharpe ≤ the winner's) / (N+1).
-    const winnerOos = unionSharpe(blocks, anchors, oosPicks, best);
+    const winnerOos = unionSharpe(blocks, oosPicks, best);
     let le = 0;
-    for (let n = 0; n < N; n++) if (unionSharpe(blocks, anchors, oosPicks, n) <= winnerOos) le++;
+    for (let n = 0; n < N; n++) if (unionSharpe(blocks, oosPicks, n) <= winnerOos) le++;
     const rBar = le / (N + 1); // ∈ (0, 1); logit is always finite
     const lambda = Math.log(rBar / (1 - rBar));
     logits.push(lambda);

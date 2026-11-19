@@ -43,6 +43,26 @@ describe('pair statistics on price-level inputs (centered moments)', () => {
     expect(ta.correl(pairs(Array(20).fill(0.07), ramp), { period: 20 }).at(-1)).toBe(0);
   });
 
+  it('perfect relationships stay inside the correlation and r-squared bounds', () => {
+    expect(ta.correl(pairs([100, 103], [100, 103]), { period: 2 }).at(-1)).toBe(1);
+    expect(ta.correl(pairs([100, 103], [-100, -103]), { period: 2 }).at(-1)).toBe(-1);
+    // Rounding put ≈26% of these one ULP outside the bounds (Math.acos(r) → NaN).
+    for (let k = 0; k < 400; k++) {
+      const n = 2 + (k % 6);
+      const x = Array.from({ length: n }, (_, i) => 100 + ((i * 37 + k * 11) % 97) / 7);
+      for (const scale of [1, 2, -1, 0.5, 3]) {
+        const p = pairs(
+          x,
+          x.map((v) => v * scale),
+        );
+        expect(Math.abs(ta.correl(p, { period: n }).at(-1)!)).toBeLessThanOrEqual(1);
+        expect(ta.rSquared(p, { period: n }).at(-1)!).toBeLessThanOrEqual(1);
+        expect(ta.rollingRegression(p, { period: n }).at(-1)!.rSquared).toBeLessThanOrEqual(1);
+      }
+      expect(Math.abs(ta.cti(x, { period: n }).at(-1)!)).toBeLessThanOrEqual(1);
+    }
+  });
+
   it('matches a centered reference on a large offset with tick-size moves', () => {
     const x = Array.from({ length: 30 }, (_, i) => 98_765.43 + 0.01 * Math.sin(i * 1.7));
     const y = x.map((v, i) => v + 0.003 * Math.cos(i * 2.3));
