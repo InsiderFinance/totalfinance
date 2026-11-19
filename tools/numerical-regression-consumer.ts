@@ -354,6 +354,18 @@ export function assertNumericalRepairs(): void {
     'spike-then-flat PBO ranking',
   );
   check(correl(pairs([100, 103], [100, 103]), { period: 2 }).at(-1) === 1, 'bounded correlation');
+  const tieBlocks = [
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 2, 3],
+  ];
+  const reversedWithinBlocks = tieBlocks.flatMap((block) => [...block].reverse());
+  const tied = tieBlocks.flat().map((x, r) => [x / 1024, reversedWithinBlocks[r]! / 1024]);
+  check(
+    probabilityOfBacktestOverfitting(tied, { splits: 4 }).backtestOverfittingProbability === 0,
+    'exact PBO ties',
+  );
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

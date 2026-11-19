@@ -9,8 +9,8 @@
 
 The maintainer authorized fixing LIB-04 (an overstated Monte Carlo standard error, reproduced in
 published 0.1.3–0.1.5) and other statistics using the same one-pass `Σx² − n·mean²` formula, then
-instructed "get this release ready and release" after the third PBO review. The PBO change ships
-as reviewed; its remaining tie and sub-resolution findings are follow-up work, not release blockers.
+instructed "get this release ready and release", then "with all the fixes that we have found
+and then ship": the third PBO review's tie and sub-resolution findings are fixed before release.
 The options Monte Carlo estimator was already repaired on main by `e6f088c` and `2744716`.
 Release scope follows the 0.1.5 path: version the SDK/MCP pair once to unused 0.1.6, publish only
 the SDK through the GitHub Release workflow, and deploy no site.
@@ -22,11 +22,14 @@ the SDK through the GitHub Release workflow, and deploy no site.
       use two-pass centered moments around the first window value; flat windows are exactly
       degenerate.
 - [x] Correlations (`correl`, `cti`) stay within [−1, 1] and `rSquared` at most 1 under rounding.
-- [x] `probabilityOfBacktestOverfitting` merges per-block means and centered sums of squares for
-      each split, so a constant-return stretch has zero variance in every split and ranks the same
-      at every return level; it matches a raw-row per-split oracle on 300 randomized matrices.
-- [x] Review repairs: a flat stretch after a spike no longer flips PBO from 0 to 1, and a perfect
-      two-point correlation no longer returns 1.0000000000000002.
+- [x] `probabilityOfBacktestOverfitting` ranks exactly: exact integer block sums of x and x² and
+      cross-multiplied Sharpe comparisons. Constant stretches score 0 at every return level, equal
+      return distributions tie in any within-block order, and returns a few representable steps
+      apart match an exact-arithmetic oracle. About 0.6 s (from 0.2 s) for 12,870 splits × 200
+      configurations × 2,520 rows; the umbrella cap rises 715.5 → 716 KiB from measurement.
+- [x] Review repairs: a flat stretch after a spike no longer flips PBO from 0 to 1, a perfect
+      two-point correlation no longer returns 1.0000000000000002, equal-distribution ties no longer
+      report PBO 1, and sub-resolution returns no longer misrank.
 - [x] Package regressions, the first-touch and packed-consumer numerical journeys, the original
       repro with `--assert` against a freshly packed SDK, and byte-stable clean regeneration.
 - [x] Recheck the registry, tags and releases (latest 0.1.5; 0.1.6 unused), version the pair to

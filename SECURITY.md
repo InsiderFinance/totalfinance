@@ -13,11 +13,11 @@ should not. Those are exactly the reports we want.
 
 | Version                                  | Supported                                                                |
 | ---------------------------------------- | ------------------------------------------------------------------------ |
-| `0.1.5`                                  | yes — SDK fixes ship in patch releases; optional MCP remains source-only |
+| `0.1.6`                                  | yes — SDK fixes ship in patch releases; optional MCP remains source-only |
 | earlier development or preview artifacts | no — use the current supported release                                   |
 
 This policy covers `@insiderfinance/totalfinance` and `@insiderfinance/totalfinance-mcp`.
-Version 0.1.5 remains pre-1.0 software, with preview workflow and transport components.
+Version 0.1.6 remains pre-1.0 software, with preview workflow and transport components.
 Optional MCP metadata follows the SDK for local builds; this SDK-only release does not publish it.
 The version in a source checkout does not establish that a public npm release exists.
 

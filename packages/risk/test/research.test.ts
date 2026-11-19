@@ -305,6 +305,92 @@ describe('probabilityOfBacktestOverfitting (CSCV)', () => {
     );
   });
 
+  it('equal return distributions tie exactly, whatever their order within a block', () => {
+    // Config 1 reverses config 0 inside every block, so each split holds the same returns for both.
+    // Rounded block moments broke the tie and reported PBO 1; exact sums report 0.
+    const blocks = [
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 2, 3],
+    ];
+    const forward = blocks.flat().map((x) => x / 1024);
+    const reversed = blocks.flatMap((block) => [...block].reverse()).map((x) => x / 1024);
+    const M = forward.map((x, r) => [x, reversed[r]!]);
+    expect(probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability).toBe(
+      0,
+    );
+    // Ordinary noisy returns: swapping a column with its in-block reversal leaves PBO unchanged.
+    const randomNumberGenerator = mulberry32(5);
+    for (let trial = 0; trial < 40; trial++) {
+      const noise = Array.from({ length: 40 }, () => 0.01 * normalSample(randomNumberGenerator));
+      const flipped = [0, 1, 2, 3].flatMap((b) => noise.slice(b * 10, b * 10 + 10).reverse());
+      const other = noise.map(() => 0.01 * normalSample(randomNumberGenerator));
+      const pbo = (a: number[], b: number[]) =>
+        probabilityOfBacktestOverfitting(
+          a.map((x, r) => [x, b[r]!, other[r]!]),
+          { splits: 4 },
+        ).backtestOverfittingProbability;
+      expect(pbo(noise, flipped)).toBe(pbo(flipped, noise));
+    }
+  });
+
+  it('ranks returns a few representable steps apart exactly', () => {
+    // Returns (2^52 + k)·2^-55 ≈ 0.125: compare against exact integer arithmetic on k.
+    const exactPbo = (K: number[][]): number => {
+      const N = K[0]!.length;
+      const score = (rows: number[][], n: number) => {
+        let sum = 0n;
+        let sumSq = 0n;
+        for (const row of rows) {
+          const m = BigInt(2 ** 52 + row[n]!);
+          sum += m;
+          sumSq += m * m;
+        }
+        const spread = BigInt(rows.length) * sumSq - sum * sum;
+        return { sum, spread };
+      };
+      // Sharpe a > b ⇔ a.sum²·b.spread > b.sum²·a.spread (all sums positive; zero spread scores 0).
+      const above = (a: ReturnType<typeof score>, b: ReturnType<typeof score>) =>
+        a.spread === 0n
+          ? false
+          : b.spread === 0n || a.sum * a.sum * b.spread > b.sum * b.sum * a.spread;
+      let overfit = 0;
+      const splits = [
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 2],
+        [1, 3],
+        [2, 3],
+      ];
+      for (const inSample of splits) {
+        const rows = (picks: number[]) => picks.flatMap((b) => K.slice(b * 2, b * 2 + 2));
+        const outSample = [0, 1, 2, 3].filter((b) => !inSample.includes(b));
+        let best = 0;
+        for (let n = 1; n < N; n++) {
+          if (above(score(rows(inSample), n), score(rows(inSample), best))) best = n;
+        }
+        const winner = score(rows(outSample), best);
+        let le = 0;
+        for (let n = 0; n < N; n++) if (!above(score(rows(outSample), n), winner)) le++;
+        if (le / (N + 1) < 0.5) overfit++;
+      }
+      return overfit / splits.length;
+    };
+    const randomNumberGenerator = mulberry32(9);
+    for (let trial = 0; trial < 120; trial++) {
+      const N = 2 + (trial % 3);
+      const K = Array.from({ length: 8 }, () =>
+        Array.from({ length: N }, () => Math.floor(randomNumberGenerator.next() * 6)),
+      );
+      const M = K.map((row) => row.map((k) => (2 ** 52 + k) * 2 ** -55));
+      expect(
+        probabilityOfBacktestOverfitting(M, { splits: 4 }).backtestOverfittingProbability,
+      ).toBe(exactPbo(K));
+    }
+  });
+
   it('pure noise gives a non-degenerate PBO (the selection is worthless out of sample)', () => {
     // No config has an edge ⇒ the IS winner's OOS rank is ~uniform ⇒ PBO well away from 0 and 1.
     const randomNumberGenerator = mulberry32(42);

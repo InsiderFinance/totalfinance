@@ -17,10 +17,14 @@
     BTC-sized prices moving by ticks gave a slope of `1.042` against a true `0.987`. Correlations
     stay within `[-1, 1]` and `rSquared` at most `1`; rounding put a perfect relationship one unit
     in the last place outside, so `Math.acos(correl)` could return `NaN`.
-  - `probabilityOfBacktestOverfitting` ranks a constant-return (cash-like) configuration by its
-    zero-variance Sharpe of `0` at every return level. At some levels, such as `0.0007` per period,
-    rounding noise scored it at a Sharpe of about `1e7`, so it won every split and the result
-    reported PBO `0`. Each split now merges per-block means and centered sums of squares.
+  - `probabilityOfBacktestOverfitting` ranks configurations exactly. It sums each block's returns
+    and squared returns as exact integers and compares Sharpe ratios by cross-multiplication, so
+    rounding can no longer change a ranking. A constant-return (cash-like) configuration scores the
+    zero-variance Sharpe of `0` at every return level; at `0.0007` per period, rounding noise had
+    scored it at about `1e7`, winning every split and reporting PBO `0`. Configurations with the
+    same returns in a different order within blocks now tie, where rounding could report PBO `1`;
+    returns a few representable steps apart rank as exact arithmetic does. On 12,870 splits of
+    2,520 rows × 200 configurations, PBO takes about 0.6 s, up from 0.2 s.
 
   Seeded draws, probabilities, quantiles and `monteCarloProbability()` expected values are
   unchanged. On ordinary inputs the corrected statistics move only by floating-point rounding.

@@ -881,44 +881,52 @@ export interface BacktestOverfittingProbabilityResult {
   diagnostics: { warnings: QuantWarning[] };
 }
 
-/**
- * Per-block, per-column mean and centered sum of squares → the Sharpe of any block union without
- * touching raw rows. Σx²/rows − x̄² over a union cancelled to rounding noise on constant
- * (cash-like) stretches, ranking them at Sharpe ≈ 1e6 or 0 by accident of the constant.
- */
-interface BlockStatistics {
-  mean: number[];
-  centeredSumSq: number[];
-  rows: number;
+/** Scratch storage for reading a double's bits without allocating per value. */
+const DOUBLE_BITS = new DataView(new ArrayBuffer(8));
+
+/** Binary exponent of a finite double's integer significand (`x = significand · 2^exponent`). */
+function binaryExponent(value: number): number {
+  DOUBLE_BITS.setFloat64(0, value);
+  return Math.max((DOUBLE_BITS.getUint32(0) >>> 20) & 0x7ff, 1) - 1075;
+}
+
+/** A finite double as an exact integer in units of `2^unitExponent` (≤ its own exponent). */
+function exactUnits(value: number, unitExponent: number): bigint {
+  if (value === 0) return 0n;
+  DOUBLE_BITS.setFloat64(0, value);
+  const bits = DOUBLE_BITS.getBigUint64(0);
+  const fraction = bits & 0xf_ffff_ffff_ffffn;
+  const significand = (bits >> 52n) & 0x7ffn ? fraction | (1n << 52n) : fraction;
+  const units = significand << BigInt(binaryExponent(value) - unitExponent);
+  return bits >> 63n ? -units : units;
 }
 
 /**
- * Sharpe of a union of blocks (mean/σ, population σ — ranking is invariant to the ddof). Block
- * moments merge pairwise (Chan, Golub & LeVeque): equal block means add no spread, so a union of
- * constant blocks keeps exactly zero variance.
+ * Exact Sharpe score of a union of blocks: Sharpe = Σx / √spread with `spread = rows·Σx² − (Σx)²`
+ * (population σ; the column's unit scale cancels). Zero spread scores 0 by convention. Floating
+ * sums invented spread in constant stretches (Sharpe ≈ 1e6–1e7), broke true ties between equal
+ * return distributions and misranked returns a few representable steps apart; exact integer sums
+ * and cross-multiplied comparisons do none of these.
  */
-function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): number {
-  let rows = 0;
-  let mean = 0;
-  let centeredSumSq = 0;
-  for (const b of picks) {
-    const blockRows = blocks[b]!.rows;
-    const blockMean = blocks[b]!.mean[n]!;
-    const blockCenteredSumSq = blocks[b]!.centeredSumSq[n]!;
-    if (rows === 0) {
-      rows = blockRows;
-      mean = blockMean;
-      centeredSumSq = blockCenteredSumSq;
-      continue;
-    }
-    const total = rows + blockRows;
-    const delta = blockMean - mean;
-    mean += (delta * blockRows) / total;
-    centeredSumSq += blockCenteredSumSq + (delta * delta * rows * blockRows) / total;
-    rows = total;
-  }
-  const variance = centeredSumSq / rows;
-  return variance > 0 ? mean / Math.sqrt(variance) : 0;
+interface SharpeScore {
+  sign: number;
+  sumSquared: bigint;
+  spread: bigint;
+}
+
+function sharpeScore(sum: bigint, sumSq: bigint, rows: bigint): SharpeScore {
+  const sumSquared = sum * sum;
+  const spread = rows * sumSq - sumSquared;
+  return { sign: spread === 0n || sum === 0n ? 0 : sum > 0n ? 1 : -1, sumSquared, spread };
+}
+
+/** Exact Sharpe order: negative, zero or positive as `a` ranks below, level with or above `b`. */
+function compareSharpe(a: SharpeScore, b: SharpeScore): number {
+  if (a.sign !== b.sign) return a.sign - b.sign;
+  if (a.sign === 0) return 0;
+  const left = a.sumSquared * b.spread;
+  const right = b.sumSquared * a.spread;
+  return left === right ? 0 : left > right === a.sign > 0 ? 1 : -1;
 }
 
 /**
@@ -929,6 +937,10 @@ function unionSharpe(blocks: BlockStatistics[], picks: number[], n: number): num
  * the fraction of splits where the IS winner lands **below the OOS median** — the probability that
  * picking the best backtest buys you a below-average live result. `≈ 0.5` means the selection is worthless
  * out of sample; `≈ 0` means a genuinely persistent edge. Depends only on `@insiderfinance/totalfinance/core`/`math`.
+ *
+ * Rankings use Sharpe ratios (mean / population σ) compared in exact integer arithmetic over the
+ * returns' binary values: equal return distributions tie (the first configuration wins in sample;
+ * ties count as "≤" out of sample), and a zero-variance configuration scores 0 at any return level.
  */
 export function probabilityOfBacktestOverfitting(
   returns: number[][],
@@ -979,72 +991,91 @@ export function probabilityOfBacktestOverfitting(
     });
   }
 
-  // Per-block sufficient statistics (validating the matrix is rectangular + finite as we go).
-  // Welford within each block, measured from the block's first row: a constant block has a mean
-  // equal to that row and exactly zero centered sum of squares.
-  const blocks: BlockStatistics[] = [];
+  // Validate the used rows (rectangular + finite) and find each column's finest binary unit, so
+  // every return is an exact integer in that unit.
+  const unitExponent = new Array<number>(N).fill(Infinity);
+  for (let t = offset; t < T; t++) {
+    const row = returns[t];
+    if (!Array.isArray(row) || row.length !== N) {
+      throw new InputError(
+        `${functionName}: returns must be a rectangular T×N matrix (row ${t} has a different width).`,
+        { code: ErrorCode.InputWrongShape, context: { expectedWidth: N, row: t } },
+      );
+    }
+    for (let n = 0; n < N; n++) {
+      const x = row[n]!;
+      ensureFinite(x, `returns[${t}][${n}]`, functionName);
+      if (x !== 0) unitExponent[n] = Math.min(unitExponent[n]!, binaryExponent(x));
+    }
+  }
+  // Exact per-block sums of x and x², and their totals.
+  const blockSums: bigint[][] = [];
+  const blockSumSqs: bigint[][] = [];
+  const totalSum = new Array<bigint>(N).fill(0n);
+  const totalSumSq = new Array<bigint>(N).fill(0n);
   for (let s = 0; s < S; s++) {
-    const anchors = new Array<number>(N).fill(0);
-    const deviationMean = new Array<number>(N).fill(0);
-    const centeredSumSq = new Array<number>(N).fill(0);
+    const sum = new Array<bigint>(N).fill(0n);
+    const sumSq = new Array<bigint>(N).fill(0n);
     for (let r = 0; r < block; r++) {
-      const row = returns[offset + s * block + r];
-      if (!Array.isArray(row) || row.length !== N) {
-        throw new InputError(
-          `${functionName}: returns must be a rectangular T×N matrix (row ${offset + s * block + r} has a different width).`,
-          {
-            code: ErrorCode.InputWrongShape,
-            context: { expectedWidth: N, row: offset + s * block + r },
-          },
-        );
-      }
+      const row = returns[offset + s * block + r]!;
       for (let n = 0; n < N; n++) {
-        const x = row[n]!;
-        ensureFinite(x, `returns[${offset + s * block + r}][${n}]`, functionName);
-        if (r === 0) anchors[n] = x;
-        const deviation = x - anchors[n]!;
-        const delta = deviation - deviationMean[n]!;
-        deviationMean[n]! += delta / (r + 1);
-        centeredSumSq[n]! += delta * (deviation - deviationMean[n]!);
+        const units = exactUnits(row[n]!, unitExponent[n]!);
+        sum[n]! += units;
+        sumSq[n]! += units * units;
       }
     }
-    blocks.push({
-      mean: anchors.map((anchor, n) => anchor + deviationMean[n]!),
-      centeredSumSq,
-      rows: block,
-    });
+    for (let n = 0; n < N; n++) {
+      totalSum[n]! += sum[n]!;
+      totalSumSq[n]! += sumSq[n]!;
+    }
+    blockSums.push(sum);
+    blockSumSqs.push(sumSq);
   }
 
-  const combos = choose(range(0, S), S / 2);
-  const all = new Set(range(0, S));
+  const halfRows = BigInt((S / 2) * block); // IS and OOS each hold S/2 blocks
   const logits: number[] = [];
   let overfit = 0;
-  for (const isPicks of combos) {
-    const isSet = new Set(isPicks);
-    const oosPicks = [...all].filter((b) => !isSet.has(b));
-    // IS-best configuration.
-    let best = 0;
-    let bestSharpe = -Infinity;
+  const isScores = new Array<SharpeScore>(N);
+  const oosScores = new Array<SharpeScore>(N);
+  const rankSplit = (isSum: bigint[], isSumSq: bigint[]): void => {
     for (let n = 0; n < N; n++) {
-      const sh = unionSharpe(blocks, isPicks, n);
-      if (sh > bestSharpe) {
-        bestSharpe = sh;
-        best = n;
-      }
+      isScores[n] = sharpeScore(isSum[n]!, isSumSq[n]!, halfRows);
+      oosScores[n] = sharpeScore(totalSum[n]! - isSum[n]!, totalSumSq[n]! - isSumSq[n]!, halfRows);
     }
+    // IS-best configuration (the first, on an exact tie).
+    let best = 0;
+    for (let n = 1; n < N; n++) if (compareSharpe(isScores[n]!, isScores[best]!) > 0) best = n;
     // Its OOS relative rank r̄ = (#configs with OOS Sharpe ≤ the winner's) / (N+1).
-    const winnerOos = unionSharpe(blocks, oosPicks, best);
     let le = 0;
-    for (let n = 0; n < N; n++) if (unionSharpe(blocks, oosPicks, n) <= winnerOos) le++;
+    for (let n = 0; n < N; n++) if (compareSharpe(oosScores[n]!, oosScores[best]!) <= 0) le++;
     const rBar = le / (N + 1); // ∈ (0, 1); logit is always finite
     const lambda = Math.log(rBar / (1 - rBar));
     logits.push(lambda);
     if (lambda < 0) overfit++;
-  }
+  };
+  // Every C(S, S/2) in-sample block set, depth-first: each level extends its parent's exact sums
+  // by one block, about 2 block additions per split instead of S/2.
+  const half = S / 2;
+  const prefixSum = Array.from({ length: half + 1 }, () => new Array<bigint>(N).fill(0n));
+  const prefixSumSq = Array.from({ length: half + 1 }, () => new Array<bigint>(N).fill(0n));
+  const visit = (depth: number, first: number): void => {
+    if (depth === half) {
+      rankSplit(prefixSum[half]!, prefixSumSq[half]!);
+      return;
+    }
+    for (let b = first; b <= S - half + depth; b++) {
+      for (let n = 0; n < N; n++) {
+        prefixSum[depth + 1]![n] = prefixSum[depth]![n]! + blockSums[b]![n]!;
+        prefixSumSq[depth + 1]![n] = prefixSumSq[depth]![n]! + blockSumSqs[b]![n]!;
+      }
+      visit(depth + 1, b + 1);
+    }
+  };
+  visit(0, 0);
 
   return {
-    backtestOverfittingProbability: overfit / combos.length,
-    combinations: combos.length,
+    backtestOverfittingProbability: overfit / logits.length,
+    combinations: logits.length,
     splits: S,
     observations: used,
     trials: N,
@@ -1058,22 +1089,6 @@ export function probabilityOfBacktestOverfitting(
 const PBO_OPTIONS_KEYS = ['splits'] as const;
 
 // ───────────────────────── helpers ─────────────────────────
-
-/** All `C(items.length, k)` combinations of `k` items, as index arrays (lexicographic). */
-function choose<T>(items: readonly T[], k: number): T[][] {
-  const S = items.length;
-  const out: T[][] = [];
-  const idx = range(0, k);
-  for (;;) {
-    out.push(idx.map((i) => items[i]!));
-    let i = k - 1;
-    while (i >= 0 && idx[i] === S - k + i) i--;
-    if (i < 0) break;
-    idx[i]!++;
-    for (let j = i + 1; j < k; j++) idx[j] = idx[j - 1]! + 1;
-  }
-  return out;
-}
 
 /** Median of a numeric array (does not mutate the input). */
 function median(xs: readonly number[]): number {
