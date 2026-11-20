@@ -142,6 +142,13 @@ The maintainer authorized the nine numerical repairs, reviewed PR #32 through th
 
 The original repair baseline is main ca122ab; published SDK 0.1.3 reproduces the symptoms. Current local numerical evidence includes 3,208 affected tests plus the expanded 70-case matrix, 229 packed consumers and 258 integration/contract checks. Main-relative batch/IRR performance costs and measured bundle growth are accepted for this correctness patch and disclosed in the release notes. Fix the no_bracket documentation overclaim during preparation. SDK/MCP distribution metadata remains coherent at 0.1.4, while only the SDK is published. Draft #26, performance #12, provider work, site deployment and app/paper-store actions remain separate.
 
+### Completed site follow-up: homepage npm link (2026-11-19)
+
+The [homepage npm link](./specs/homepage-and-docs-routing.md#homepage-npm-link-2026-11-19) appears
+beneath the install command, reusing the shared public package URL. Library/static site builds,
+the exported anchor check and all 15 existing built-site tests pass locally, along with
+changed-source lint/format checks.
+
 ### Active site follow-up: Google Analytics on the marketing homepage (2026-11-19)
 
 Follow [A1–A3](./specs/homepage-and-docs-routing.md#google-analytics-on-the-marketing-homepage-2026-11-19)

@@ -1,5 +1,16 @@
 # TotalFinance homepage and documentation routing
 
+## Homepage npm link (2026-11-19)
+
+Add a visible “View on npm” link beneath the marketing homepage's install command, using the
+existing shared package URL for `@insiderfinance/totalfinance`.
+
+- [x] Verify the link in the static export and run the existing homepage build checks.
+
+Local verification on Node 22.23.2/pnpm 10.32.0: library and static site builds pass, the exported
+homepage contains the npm anchor and visible label after the install command, and all 15 existing
+built-site tests pass. Changed-source ESLint and formatting pass.
+
 ## Google Analytics on the marketing homepage (2026-11-19)
 
 Use GA4 measurement ID `G-CEW2R2KTZQ` on the marketing homepage at `https://www.totalfinance.io/`
