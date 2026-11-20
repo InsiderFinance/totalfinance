@@ -22,6 +22,7 @@ import {
   BASE_PATH,
   FAMILY,
   PACKAGE_NAME,
+  PACKAGE_URL,
   PUBLIC_DOCS_URL,
   REPOSITORY_URL,
   SITE_ORIGIN,
@@ -196,6 +197,12 @@ export default function HomePage() {
               </span>
               <CopyButton text={`pnpm add ${PACKAGE_NAME}`} tone="light" />
             </div>
+            <a
+              href={PACKAGE_URL}
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-fd-muted-foreground transition-colors hover:text-fd-primary"
+            >
+              <Package className="size-4" aria-hidden /> View on npm ↗
+            </a>
           </div>
           <div className="min-w-0 space-y-3">
             <CodePanel
