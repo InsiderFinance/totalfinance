@@ -12,7 +12,15 @@
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALIAS_TABLE } from '../packages/technical-analysis/src/aliases.js';
-import { REGISTRY_PROFILES, packsForProfile } from '../packages/workflows/src/local/profiles.js';
+import { REGISTRY_PROFILES } from '../packages/workflows/src/local/profiles.js';
+import {
+  MCP_PUBLISHED_ON_NPM,
+  SOURCE_BINARY,
+  clientSetup,
+  computeServer,
+  type ClientId,
+} from '../site/src/agents.js';
+import { configureMcpServer } from '../packages/mcp/src/server.js';
 import { PUBLIC_PACKAGE_NAME, toPublicSpecifier } from './public-packages.js';
 import { publicDocumentationText } from './public-reference.js';
 
@@ -161,78 +169,154 @@ function subpathSnippetsOf(
     .map(([specifier, snippet]) => ({ specifier, snippet }));
 }
 
-/** Public MCP setup belongs to this source template, never to a hand-edited generated README. */
-function mcpSetupSection(): string {
-  const profileNames = REGISTRY_PROFILES.map((name) => `\`${name}\``).join(', ');
-  const defaultCount = packsForProfile('default').reduce(
-    (count, pack) => count + pack.operations.length,
-    0,
-  );
-  return [
-    '## Local discovery and jobs',
+/** Tools a profile lists with default options, counted by the server's own configuration. */
+function profileToolCount(profile: (typeof REGISTRY_PROFILES)[number]): number {
+  return configureMcpServer({ profile }).capabilities.tools.length;
+}
+
+/** One client's setup steps from the site's generator, so the README and /agents never disagree. */
+function clientSection(client: ClientId, version: string, published: boolean): string[] {
+  const setup = clientSetup(client, computeServer({ published, version }));
+  if (!setup) throw new Error(`No MCP setup for ${client}`);
+  const lines = [`### ${setup.label}`, ''];
+  for (const step of setup.steps) {
+    if (step.kind === 'note') lines.push(step.text, '');
+    else if (step.kind === 'command')
+      lines.push(`${step.label}:`, '', '```sh', step.code, '```', '');
+    else
+      lines.push(
+        `${step.label} (\`${step.path}\`):`,
+        '',
+        `\`\`\`${step.lang}`,
+        step.code,
+        '```',
+        '',
+      );
+  }
+  return lines;
+}
+
+/**
+ * The MCP package's README is its npm page, so it describes using the server. While the package
+ * is not on npm (`MCP_PUBLISHED_ON_NPM` in site/src/agents.ts) it says so and gives the source
+ * build; flipping that flag switches this README, the site and llms.txt to `npx` together.
+ */
+function mcpReadme(pkg: PkgInfo, snippet: string | undefined, published: boolean): string {
+  const run = published ? `npx -y ${pkg.name}@${pkg.version}` : `node ${SOURCE_BINARY}`;
+  const lines: string[] = [
+    `# ${pkg.name}`,
     '',
-    `The default server still exposes exactly **${defaultCount} compute tools**. Profiles select operations, not`,
-    `permissions: ${profileNames}. Names and descriptions are discoverable at \`totalfinance://profiles\`, derived`,
-    'from the shared workflows registry. Explicit `tools`/`packs` replace implicit profile selection;',
-    '`packs: []` is empty. Binary `--packs` narrows the selected profile exactly.',
+    `> ${pkg.description}`,
     '',
-    '`totalfinance://capabilities` and `totalfinance-mcp doctor` report the effective tool set, excluded tools and',
-    'filter reasons, held/required capabilities, actual read/write stores, budgets, and job attachment.',
-    '`readOnly` filters financial writes, including approval; an attached writable artifact store may',
-    'still store reports. Neither a profile nor a store mints authorization grants. A capability option',
-    'is a server-owned ceiling, never a tool argument. Paper trading is not live order routing.',
+    `The [TotalFinance](${REPO_URL}#readme) calculations as tools for AI agents: option pricing and Greeks, ` +
+      'strategies, volatility, technical indicators, portfolio P&L, risk, bonds and backtests. The server runs ' +
+      'on your machine over stdio and is read-only by default. Your agent supplies the market inputs; every ' +
+      'result carries its `assumptions` and `diagnostics`, and any warning (such as a volatility of 22 that ' +
+      'was probably meant as 0.22) is repeated in the text the model reads.',
     '',
-    'Tools include operation-derived effect, cost, handle, cancellation, and schema metadata. Read',
-    '`totalfinance://operations/<operation-id>` for the full operation description. Both tools and resources',
-    'lists return at most `pageSize` entries (default/max 100; minimum 1). Follow `nextCursor` until absent.',
-    'Cursors are opaque and specific to this server, catalog, and snapshot. Malformed, modified,',
-    'cross-catalog, cross-server, and stale cursors return JSON-RPC `InvalidParams`; restart without a',
-    'cursor. Prompts are listed and callable only when their required tools exist; they ask for missing',
-    'inputs, never invent live data, and report only supported results.',
+    '## Install',
+    '',
+    ...(published
+      ? [
+          'Requires Node 22.13 or later. There is nothing to install globally; check that it runs:',
+          '',
+          '```sh',
+          `${run} doctor`,
+          '```',
+        ]
+      : [
+          `Version ${pkg.version} is not on npm yet. Build it from a source checkout (Node 22.13 or later):`,
+          '',
+          '```sh',
+          `git clone ${REPO_URL}.git`,
+          'cd totalfinance',
+          'pnpm install --frozen-lockfile',
+          'pnpm build',
+          'node distribution/mcp/dist/bin.js doctor',
+          '```',
+          '',
+          `In the client setups below, replace \`${SOURCE_BINARY}\` with the absolute path to`,
+          '`distribution/mcp/dist/bin.js` in your checkout.',
+        ]),
+    '',
+    '## Connect your agent',
+    '',
+    `The [agents page](https://www.totalfinance.io/docs/totalfinance/agents) has the same setups, plus one-click installs where a client supports them.`,
+    '',
+    ...(['claude-code', 'claude-desktop', 'cursor', 'vscode', 'codex'] as const).flatMap((client) =>
+      clientSection(client, pkg.version, published),
+    ),
+    '## Choose the tools',
+    '',
+    `Without options the server lists the **${profileToolCount('default')} default tools**. A profile picks a ` +
+      'focused set; profiles never grant permissions:',
+    '',
+    '| Profile | Tools |',
+    '| ------- | ----: |',
+    ...REGISTRY_PROFILES.map((profile) => `| \`${profile}\` | ${profileToolCount(profile)} |`),
     '',
     '```sh',
-    'totalfinance-mcp --profile backtesting --store /absolute/path/to/totalfinance-store --jobs',
-    'totalfinance-mcp doctor --profile full --page-size 25',
-    'totalfinance-mcp --profile portfolio --store /absolute/path/to/totalfinance-store --store-read-only',
+    `${run} --profile options`,
+    `${run} doctor --profile full`,
     '```',
     '',
-    '`--jobs` is explicit and requires a writable `--store`; `--store` alone does not enable jobs.',
-    '`--store-read-only` attaches only a reader and cannot be combined with `--jobs`. Embedders pass',
-    '`jobs: createLocalJobRunner({ registry, directory, profile, packs?, clock })` from',
-    "`@totalfinance/workflows/local` plus the same directory's `artifacts` reader to",
-    '`createTotalFinanceMcpServer`. The runner must reconstruct the same registered operations and versions.',
-    'There is no process-wide job runner and no experimental MCP task dependency.',
+    'Some clients limit how many tools they load at once, so prefer a focused profile to `full`. `doctor` ' +
+      'reports the Node version check, the tools a configuration exposes and why any are excluded, the attached ' +
+      'store and the input budgets. Tool lists and resource lists are paged: follow `nextCursor`.',
     '',
-    'With jobs attached, existing **job-class** tools await worker completion asynchronously and retain',
-    'their original input/output financial schemas. Other cost classes remain inline (including the',
-    'currently inline `vectorized_run`); their deadlines remain post-hoc. For fetch-later work, use:',
+    '## Saved reports, background jobs and paper trading',
     '',
-    '1. `totalfinance.job.submit` with `{ id, input }`. Its discriminated schema enumerates only enabled,',
-    "   unprivileged job-class operations and embeds each operation's input schema. No arbitrary code,",
-    '   capability, store, or per-call budget override is accepted.',
-    '2. `totalfinance.job.status` with `{ jobId }`, or read the returned `statusUri`. Progress is the actual',
-    '   runner stage when provided, otherwise lifecycle state with an unknown fraction—not invented',
-    '   calculation percentages. Awaited heavy calls also send standard MCP progress notifications.',
-    '3. `totalfinance.job.result` with `{ jobId }` returns `{ result: OperationResult }`; `resultUri` reads the',
-    '   unchanged result directly. Assumptions, diagnostics, identity, and report handles are preserved.',
-    '4. `totalfinance.job.cancel` with `{ jobId }` cancels unfinished work through the existing worker runner.',
-    '   Terminal cancellation is idempotent. Failed jobs return their original `OperationError`;',
-    '   early result reads return `input.wrong_shape` with the actual state; only cancelled work returns `operation.cancelled`.',
-    '   Cancellation stops outstanding work; it is not rollback or deletion of reports already persisted.',
-    '   Those reports retain their normal ownership/profile visibility, but are not a successful job result.',
+    'These are off unless you turn them on:',
     '',
-    'Job controls are absent without attachment. Reads/cancellation and job result resources are limited',
-    'to the effective eligible operation set even if the supplied runner has a broader registry. The',
-    'current runner submission contract has no grants context, so privileged job operations are excluded,',
-    'not silently run inline. Use a dedicated store directory when results must be isolated between hosts.',
-    'With jobs attached, report resources require attribution to an enabled operation/allowed job or',
-    'their transitive `OperationResult.artifacts` report descendants. A handle’s `provenance.requestId`',
-    'matches its owner’s job id even before the outer result exists (unfinished/failed/cancelled too).',
-    'Disallowed ownership/ancestry wins; unattributed spills with missing parents stay hidden.',
-    'Input datasets/URI strings are not',
-    'ownership edges. Explicit input readers remain usable; profiles are not multi-tenant ACLs.',
-    'Only listed operations are wire-supported; callback APIs and unlisted model families remain SDK-only.',
-  ].join('\n');
+    '- `--store /absolute/path/to/folder` saves large results as reports the agent can read back as resources. ' +
+      '`--store-read-only` only reads an existing folder.',
+    '- `--jobs` (with a writable `--store`) runs long calculations such as backtests in a background worker. ' +
+      'The agent starts one with `totalfinance_job_submit`, then checks `totalfinance_job_status`, reads ' +
+      '`totalfinance_job_result` or stops it with `totalfinance_job_cancel`.',
+    '- `--capability <name>` (repeatable) allows write tools. `--capability trade:paper` adds paper-trading ' +
+      'tools, which simulate orders locally and never reach a broker. The capabilities you pass replace the ' +
+      'defaults (`portfolio:read`, `analytics:run`, `trade:propose`), so list every one you need.',
+    '',
+    '```sh',
+    `${run} --profile backtesting --store /absolute/path/to/folder --jobs`,
+    `${run} --profile full --store /absolute/path/to/folder --capability portfolio:read --capability analytics:run --capability trade:propose --capability trade:paper`,
+    '```',
+    '',
+    `The [MCP guide](${REPO_URL}/blob/main/docs/guides/mcp.md) is the full reference: every tool, resource ` +
+      'and prompt, the result envelope, errors, budgets and the job lifecycle.',
+    '',
+  ];
+  if (snippet) {
+    lines.push(
+      '## Use it as a library',
+      '',
+      'Embed the server or its tool definitions in your own host:',
+      '',
+      '```ts',
+      snippet,
+      '```',
+      '',
+      '_This example runs in CI (`docs/examples/readme-snippets.test.ts`) — it cannot rot._',
+      '',
+    );
+  }
+  lines.push(
+    '## API',
+    '',
+    `\`${pkg.name}\` exposes **${pkg.runtimeExportCount}** runtime exports (**${pkg.exportCount}** including ` +
+      'types). See the generated ' +
+      `[\`etc/${pkg.dir}.api.md\`](${REPO_URL}/blob/main/packages/${pkg.dir}/etc/${pkg.dir}.api.md) ` +
+      'for the full surface.',
+    '',
+    '## License',
+    '',
+    `Apache-2.0. Part of the [TotalFinance](${REPO_URL}#readme) monorepo. Analytics only — not ` +
+      'investment advice.',
+    '',
+    '<!-- Generated by tools/readme-gen.ts from package.json + etc/*.api.md + site/src/agents.ts + ' +
+      'docs/examples/readme-snippets.test.ts. Do not edit by hand; run `pnpm tsx tools/readme-gen.ts`. -->',
+  );
+  return `${publicDocumentationText(lines.join('\n'))}\n`;
 }
 
 function buildReadme(
@@ -241,6 +325,7 @@ function buildReadme(
   aliasSection: string,
   subpathSnippets: { specifier: string; snippet: string }[] = [],
 ): string {
+  if (pkg.dir === 'mcp') return mcpReadme(pkg, snippet, MCP_PUBLISHED_ON_NPM);
   const entry =
     pkg.entrypoints.length === 1
       ? '1 entrypoint'
@@ -257,26 +342,12 @@ function buildReadme(
     '',
     '## Install',
     '',
-    ...(pkg.dir === 'mcp'
-      ? [
-          `Source version ${pkg.version}: the optional MCP package is not published on npm; this is not a verified npm installation.`,
-          `Use a [source checkout](${REPO_URL}#contributing). SDK publication does not publish this separate server package.`,
-          '',
-          '```sh',
-          'pnpm install --frozen-lockfile',
-          'pnpm build',
-          'node distribution/mcp/dist/bin.js doctor',
-          'node distribution/mcp/dist/bin.js',
-          '```',
-        ]
-      : [
-          `Source version ${pkg.version}: this command describes the planned published experience, not a verified npm installation. ` +
-            `Until publication, use a [source checkout](${REPO_URL}#contributing).`,
-          '',
-          '```sh',
-          `pnpm add ${PUBLIC_PACKAGE_NAME}@${pkg.version}`,
-          '```',
-        ]),
+    `Source version ${pkg.version}: this command describes the planned published experience, not a verified npm installation. ` +
+      `Until publication, use a [source checkout](${REPO_URL}#contributing).`,
+    '',
+    '```sh',
+    `pnpm add ${PUBLIC_PACKAGE_NAME}@${pkg.version}`,
+    '```',
     '',
   ];
   if (snippet) {
@@ -334,7 +405,6 @@ function buildReadme(
     );
   }
   if (aliasSection) lines.push(aliasSection, '');
-  if (pkg.name === '@totalfinance/mcp') lines.push(mcpSetupSection(), '');
   if (pkg.name === '@totalfinance/http') {
     lines.push(readFileSync(new URL('packages/http/README-auth.md', ROOT), 'utf8').trim(), '');
   }
@@ -373,6 +443,12 @@ export function buildReadmes(): { dir: string; content: string }[] {
       subpathSnippetsOf(snippets, pkg),
     ),
   }));
+}
+
+/** The MCP README in either publication state, so tests cover the one not yet committed. */
+export function buildMcpReadme(published: boolean): string {
+  const pkg = gatherPackages().find((candidate) => candidate.dir === 'mcp')!;
+  return mcpReadme(pkg, extractSnippets().get(toPublicSpecifier(pkg.name)), published);
 }
 
 // Direct-run entry: write each README. `import.meta.url` ends with this file when run via tsx.

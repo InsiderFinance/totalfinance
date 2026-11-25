@@ -1117,6 +1117,41 @@ describe('MCP protocol polish', () => {
     expect(envelope.usage.inputBytes).toBeGreaterThan(0);
   });
 
+  it('repeats diagnostics warnings after the summary in the one text block', async () => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'totalfinance_option_price',
+      arguments: {
+        spot: 100,
+        strike: 100,
+        timeToExpiryYears: 0.5,
+        riskFreeRate: 4.5,
+        volatility: 22,
+        type: 'call',
+      },
+    });
+    const content = res.content as Array<{ type: string; text: string }>;
+    const envelope = res.structuredContent as {
+      summary: string;
+      diagnostics: { warnings: { code: string; message: string }[] };
+    };
+    expect(res.isError).toBeFalsy();
+    expect(content).toHaveLength(1);
+    const codes = envelope.diagnostics.warnings.map((entry) => entry.code);
+    expect(codes).toEqual(
+      expect.arrayContaining(['input.suspicious_volatility', 'input.suspicious_risk_free_rate']),
+    );
+    expect(content[0]!.text).toBe(
+      [
+        envelope.summary,
+        ...envelope.diagnostics.warnings.map(
+          (entry) => `Warning (${entry.code}): ${entry.message}`,
+        ),
+      ].join('\n'),
+    );
+    expect(content[0]!.text).toContain('did you mean 0.2200?');
+  });
+
   it('read-only mode filters mutating tools structurally', async () => {
     const mutating = tool({
       name: 'totalfinance_test_mutate',

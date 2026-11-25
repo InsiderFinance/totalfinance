@@ -116,9 +116,16 @@ describe('agent setup', () => {
         'totalfinance-docs': { httpUrl: 'https://www.insiderfinance.io/docs/totalfinance/mcp' },
       },
     });
+    expect(steps('vscode', published)).toHaveLength(2);
+    expect(steps('vscode', published)[0]).toMatchObject({ kind: 'file', path: '.mcp.json' });
     expect(JSON.parse((steps('vscode', published)[0] as { code: string }).code)).toEqual({
-      servers: {
-        totalfinance: { type: 'stdio', command: 'npx', args: ['-y', `${MCP_PACKAGE}@0.1.2`] },
+      mcpServers: {
+        totalfinance: {
+          type: 'stdio',
+          command: 'npx',
+          args: ['-y', `${MCP_PACKAGE}@0.1.2`],
+          tools: ['*'],
+        },
       },
     });
   });

@@ -333,7 +333,9 @@ A successful call returns the `OperationResult` envelope as `structuredContent` 
 `library`, `summary`, `structured` (or `{ spilled: true, handle, preview }` when the result was
 stored as a report), `assumptions`, `diagnostics` (warnings, `status`, `incomplete`), `identity`,
 `artifacts`, `usage`, `trace` — byte-for-byte the document the JSON HTTP route sends and the CLI
-prints, with the one-line `summary` as the only text content block. Every tool's `outputSchema`
+prints. The only text content block is the one-line `summary`, followed by one `Warning (<code>):
+<message>` line per diagnostics warning (at most five), so a host that shows the model only text still
+sees a caution such as `volatility=22 implies 2200%`. Every tool's `outputSchema`
 describes that envelope around its own structured schema.
 
 Unknown tools/resources/prompts, invalid prompt arguments, and invalid cursors return JSON-RPC

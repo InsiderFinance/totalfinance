@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import { gzipSync } from 'node:zlib';
-import { MCP_PACKAGE_NAME, PUBLIC_PACKAGE_NAME } from '../public-packages.js';
+import { MCP_PACKAGE_NAME, MCP_REGISTRY_NAME, PUBLIC_PACKAGE_NAME } from '../public-packages.js';
 import { tarballName, type ReleaseArtifact, type ReleaseManifest } from './artifact-policy.js';
 
 export function fixtureMetadata(name = PUBLIC_PACKAGE_NAME): Record<string, unknown> {
@@ -17,6 +17,7 @@ export function fixtureMetadata(name = PUBLIC_PACKAGE_NAME): Record<string, unkn
   return {
     name,
     version: '0.1.0',
+    ...(main ? {} : { mcpName: MCP_REGISTRY_NAME }),
     type: 'module',
     license: 'Apache-2.0',
     sideEffects: false,

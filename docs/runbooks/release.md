@@ -102,3 +102,31 @@ The existing `tools/release/publish-npm.sh` remains a separately authorized SDK-
 It builds/packs from clean current main and publishes directly to npm latest without CI provenance,
 using interactive npm authentication. It skips CI itself, so the same exact-commit release gates
 must have passed first. Prefer the hosted path above; do not race local and hosted publication.
+
+## MCP Registry listing
+
+The official [MCP Registry](https://registry.modelcontextprotocol.io) lists servers by metadata
+only, so list a version after its `@insiderfinance/totalfinance-mcp` package is on npm. The listing is
+`distribution/mcp/server.json`, named `io.github.InsiderFinance/totalfinance`. `pnpm publication:update`
+keeps its version equal to the distributions', and the package's `mcpName` field (required by the
+release artifact policy) is how the registry verifies the npm package belongs to that name.
+
+Publishing under the organization namespace needs proof that you are an **Owner** of the
+`InsiderFinance` GitHub organization. The interactive `mcp-publisher login github` device flow cannot
+read organization roles and grants only a personal namespace
+([registry issue #1468](https://github.com/modelcontextprotocol/registry/issues/1468)). Use a classic
+personal access token with the `read:org` scope from an organization Owner, or GitHub Actions OIDC
+(`mcp-publisher login github-oidc` in a job with `id-token: write`). At the release tag:
+
+```sh
+cd distribution/mcp
+mcp-publisher validate
+mcp-publisher login github --token "$GITHUB_OWNER_TOKEN_WITH_READ_ORG"
+mcp-publisher publish
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.InsiderFinance/totalfinance"
+```
+
+Install `mcp-publisher` from the registry's
+[releases](https://github.com/modelcontextprotocol/registry/releases) or `brew install mcp-publisher`.
+A registry listing never replaces npm publication or its smoke; publish it only for a version whose
+npm bytes passed the release workflow.

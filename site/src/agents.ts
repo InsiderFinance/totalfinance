@@ -233,18 +233,19 @@ export function clientSetup(client: ClientId, server: McpServerSpec): ClientSetu
       return {
         client,
         label,
+        // VS Code's Copilot reads the portable `mcpServers` format; `.vscode/mcp.json` and
+        // `code --add-mcp` write its deprecated editor-managed `servers` format.
         steps: [
           {
             kind: 'file',
-            label: 'Add to your workspace',
-            path: '.vscode/mcp.json',
+            label: 'Add to your workspace root',
+            path: '.mcp.json',
             lang: 'json',
-            code: json({ servers: { [name]: entry } }),
+            code: json({ mcpServers: { [name]: { ...entry, tools: ['*'] } } }),
           },
           {
-            kind: 'command',
-            label: 'Or add it to your user profile',
-            code: shell(['code', '--add-mcp', JSON.stringify({ name, ...entry })]),
+            kind: 'note',
+            text: 'To use it in every workspace, put the same entry in ~/.copilot/mcp-config.json.',
           },
         ],
         ...(server.installable
