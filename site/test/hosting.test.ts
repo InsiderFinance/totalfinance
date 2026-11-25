@@ -24,6 +24,12 @@ describe('host configuration (vercel.json)', () => {
     expect(vercel.trailingSlash).toBe(false);
     expect(vercel.redirects).toEqual([
       { source: '/docs/totalfinance', destination: '/docs/totalfinance/start', permanent: false },
+      // Version-pinned snapshots are no longer built; old links land on the current docs.
+      {
+        source: '/docs/totalfinance/versions/:version(\\d[^/]*)/:path*',
+        destination: '/docs/totalfinance/:path*',
+        permanent: false,
+      },
     ]);
     expect(vercel.cleanUrls).toBe(true);
     expect(vercel.rewrites[0]).toEqual({
@@ -40,16 +46,13 @@ describe('host configuration (vercel.json)', () => {
     });
   });
 
-  it('sends the security headers the per-page CSP cannot carry, and never indexes archives', () => {
+  it('sends the security headers the per-page CSP cannot carry', () => {
     const global = vercel.headers.find((rule) => rule.source.startsWith('/((?!'))!;
     const all = global.headers;
     const csp = all.find((header) => header.key === 'Content-Security-Policy')!.value;
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).not.toContain('script-src');
     expect(all.find((header) => header.key === 'Vary')?.value).toBe('Accept');
-    expect(
-      vercel.headers.find((rule) => rule.source === '/docs/totalfinance/versions/(.*)')?.headers,
-    ).toContainEqual({ key: 'X-Robots-Tag', value: 'noindex' });
     for (const rule of vercel.headers)
       expect(rule === global || rule.source.startsWith('/docs/totalfinance/'), rule.source).toBe(
         true,
@@ -66,11 +69,7 @@ describe('host configuration (vercel.json)', () => {
       'x/runtime/runner',
     ])
       expect(pattern.test(path), path).toBe(true);
-    for (const path of [
-      'docs/totalfinance/runtime/runner',
-      'docs/totalfinance/versions/0.1.2/runtime/runner',
-    ])
-      expect(pattern.test(path), path).toBe(false);
+    expect(pattern.test('docs/totalfinance/runtime/runner')).toBe(false);
     const runner = vercel.headers.find((rule) => rule.source.endsWith('runtime/runner'))!;
     const csp = runner.headers.find((header) => header.key === 'Content-Security-Policy')!.value;
     expect(csp).toContain("frame-ancestors 'self'");

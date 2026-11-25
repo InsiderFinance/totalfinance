@@ -18,7 +18,7 @@ import { createSearchController, type SearchState } from '@/src/search-controlle
 import type { SearchRecord } from '@/src/search';
 import { BASE_PATH } from '@/lib/site';
 
-/** The version-pinned index lives beside the page's own base (a snapshot searches itself). */
+/** The search index lives under the page's own base path. */
 export function searchBase(): string {
   if (typeof document === 'undefined') return BASE_PATH;
   return document.documentElement.dataset['tfBase'] ?? BASE_PATH;
@@ -133,7 +133,7 @@ export function TfSearchDialog({ open, onOpenChange }: SharedProps) {
       return;
     }
     onOpenChange(false);
-    // Version snapshots link within their own base; the current site uses the router.
+    // A page under another base links with a full navigation; the current site uses the router.
     if (searchBase() !== BASE_PATH) window.location.assign(`${searchBase()}${url}`);
     else router.push(url);
   };

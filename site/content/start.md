@@ -2,9 +2,6 @@
 
 You do not need to construct a portfolio, register an operation, start a server, or connect a data provider to calculate an option price. Install one domain package and call the function that answers your question.
 
-TotalFinance is an unpublished preview. The examples describe its supported imports; they do not
-claim that an npm installation has been verified. Use the version page to check release availability.
-
 ## Small input, direct answer
 
 ```ts

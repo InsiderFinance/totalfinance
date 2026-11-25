@@ -1,15 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { createDocsMcp, SUPPORTED_PROTOCOL_VERSIONS } from '../mcp/docs-mcp.js';
 import { handle } from '../serve.js';
-import { readSiteVersion } from '../version.js';
 
 const BASE = '/docs/totalfinance';
-const { version } = readSiteVersion(fileURLToPath(new URL('../..', import.meta.url)));
 
 describe('docs MCP core (fake assets)', () => {
   const assets: Record<string, string> = {
@@ -209,7 +206,7 @@ describe('the built site through the preview server', () => {
     const page = await get(`${BASE}/learn/price-an-option`);
     expect(page.status).toBe(200);
     expect(page.headers.get('content-type')).toContain('text/html');
-    expect((await get(`${BASE}/versions/${version}`)).status).toBe(200);
+    expect((await get(`${BASE}/versions`)).status).toBe(200);
     const markdown = await get(`${BASE}/learn/price-an-option`, { Accept: 'text/markdown' });
     expect(markdown.headers.get('content-type')).toContain('text/markdown');
     expect(markdown.headers.get('vary')).toContain('Accept');

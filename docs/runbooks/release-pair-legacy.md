@@ -215,16 +215,9 @@ sizes/hashes, bootstrap versus OIDC authentication, reviewer, public-smoke recei
 and tag readback. State which external gates were actually verified. Never label local tests as a
 public release or hosted-matrix result.
 
-The separately approved site release imports **only** the real public-registry receipt:
-
-```sh
-pnpm site:record-release /absolute/path/to/SMOKE_RECEIPT-0.1.0.json preview
-pnpm site:build
-pnpm site:test
-```
-
-`preview` here is the site's pre-1.0 stability classification, not the obsolete npm dist-tag. Follow
-[the site guide](../../site/README.md) for ledger review, immutable version archives, host/security
-settings and real browser/keyboard/mobile checks. Deploy only `site/dist/` after separate authority.
-Keep development labeling when public evidence is missing. Announce only after package promotion,
-public smoke and the matching separately approved hosted site acceptance are complete.
+The docs site needs no release step: it reads the package version and its install commands resolve
+to the latest npm release (the receipt import and version archives were removed on 2026-11-25).
+Follow [the site guide](../../site/README.md) for host/security settings and real
+browser/keyboard/mobile checks. Deploy only `site/dist/` after separate authority. Announce only
+after package promotion, public smoke and the matching separately approved hosted site acceptance
+are complete.

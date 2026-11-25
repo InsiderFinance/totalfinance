@@ -4,7 +4,7 @@
  * 1. Markdown twins for every page, `llms.txt`, per-domain bundles and `llms-full.txt`.
  * 2. A per-page Content-Security-Policy `<meta>` with hashes for inline scripts and Google
  *    Analytics sources on the marketing homepage.
- * 3. Sitemap and robots policy, route inventory, calculator catalogue and version manifests.
+ * 3. Sitemap and robots policy, route inventory and calculator catalogue.
  */
 import { createHash } from 'node:crypto';
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -22,9 +22,6 @@ export interface PostExportOptions {
   generated: GenerateResult;
   /** Absolute origin for links in agent files and the sitemap. */
   origin?: string;
-  /** Pages of a version snapshot are never indexed. */
-  snapshot?: boolean;
-  root?: string;
 }
 
 const GA_MEASUREMENT_ID = 'G-CEW2R2KTZQ';
@@ -97,15 +94,13 @@ export function contentSecurityPolicy(html: string, analytics = false): string {
   ].join('; ');
 }
 
-export function withSecurityMeta(html: string, robots: string | null, analytics = false): string {
+export function withSecurityMeta(html: string, analytics = false): string {
   if (html.includes('http-equiv="Content-Security-Policy"')) return html;
   const page = analytics ? html.replace('<head>', `<head>${GA_TAG}`) : html;
   const policy = contentSecurityPolicy(page, analytics);
-  const extra =
-    robots && !html.includes('name="robots"') ? `<meta name="robots" content="${robots}"/>` : '';
   return page.replace(
     /<head>/,
-    `<head><meta http-equiv="Content-Security-Policy" content="${policy}"/>${extra}`,
+    `<head><meta http-equiv="Content-Security-Policy" content="${policy}"/>`,
   );
 }
 
@@ -121,7 +116,7 @@ export async function postExport(
     'https://www.totalfinance.io'
   ).replace(/\/$/, '');
   const site = `${origin}${basePath}`;
-  const root = options.root ?? join(out, '../..');
+  const root = join(out, '../..');
 
   // 1. Agent files.
   const pages: MarkdownPage[] = buildMarkdownPages(generated, site);
@@ -167,28 +162,17 @@ export async function postExport(
     }
 
   // 2. Security headers in each page, and the route inventory.
-  const indexable =
-    !options.snapshot &&
-    (process.env['TOTALFINANCE_DOCS_INDEXING'] ??
-      (generated.version.published ? 'index' : 'noindex')) === 'index';
+  const indexable = (process.env['TOTALFINANCE_DOCS_INDEXING'] ?? 'index') === 'index';
   const routes: string[] = [];
   for (const file of walk(out)) {
     if (!file.endsWith('.html')) continue;
     const html = readFileSync(file, 'utf8');
     const path = relative(out, file).replaceAll('\\', '/');
-    writeFileSync(
-      file,
-      withSecurityMeta(
-        html,
-        options.snapshot ? 'noindex, follow' : null,
-        !options.snapshot && path === 'index.html',
-      ),
-    );
+    writeFileSync(file, withSecurityMeta(html, path === 'index.html'));
     if (
       path === '404.html' ||
       path.startsWith('_not-found') ||
       path.startsWith('404/') ||
-      path.startsWith('versions/') ||
       path.startsWith('runtime/')
     )
       continue;

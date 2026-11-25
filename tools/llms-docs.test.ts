@@ -96,7 +96,6 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     expect(full).toContain("import { math } from '@insiderfinance/totalfinance'");
     expect(full).toContain('https://github.com/evanw/esbuild/issues/1420');
     expect(full).toContain('Rollup shakes this static use');
-    expect(full).toContain('unpublished preview');
   });
 
   it('contains all full-profile operations with exact complete input/output schemas and notes', () => {

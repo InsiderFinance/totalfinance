@@ -48,7 +48,7 @@ Open the returned URL in a browser. On both desktop and a phone-sized viewport:
 2. Open `/docs/totalfinance/`: check navigation, the logo and favicon.
 3. Open `/docs/totalfinance/learn/price-an-option/`: change an input and run the calculation.
 4. Open `/docs/totalfinance/search/?q=black+scholes`: open a result and check its URL stays in the docs.
-5. Open `/docs/totalfinance/versions/` and follow the current snapshot's task/reference links.
+5. Open `/docs/totalfinance/versions`: check the version label and the install command.
 6. Open `/assets/brand/og.png`: check the complete social card. Its public metadata URL uses
    `totalfinance.io`, so shared-link previews become usable once that domain is connected.
 7. Request `/docs/totalfinance/reference/does-not-exist`: verify an actual HTTP 404, not the homepage.
@@ -128,7 +128,7 @@ nested pages and assets on the wildcard rewrite. Check both the entry and a nest
 
 The source URL on `www.totalfinance.io` must continue serving docs files directly. Redirecting that
 source back to InsiderFinance creates a proxy loop. Keep the asset paths under the same docs mount;
-the wildcard forwards scripts, icons, styles, search and version snapshots as well as HTML.
+the wildcard forwards scripts, icons, styles and search as well as HTML.
 
 The public docs address will be `https://www.insiderfinance.io/docs/totalfinance/`, while Vercel
 fetches the files from TotalFinance's deployment. Visitors retain the InsiderFinance address.
@@ -136,7 +136,7 @@ fetches the files from TotalFinance's deployment. Visitors retain the InsiderFin
 ## 7. Verify staging, then finish public docs links and indexing
 
 Follow the app repo's review/check/deployment process to verify the changes on staging first. Check
-the landing page, docs index, calculator, search, assets, version snapshots, HTTP 404s and slash
+the landing page, docs index, calculator, search, assets, the Versions page, HTTP 404s and slash
 normalization through the rewrite. A successful source-site check does not prove the proxy works.
 
 When the public InsiderFinance route is ready, update TotalFinance's homepage documentation

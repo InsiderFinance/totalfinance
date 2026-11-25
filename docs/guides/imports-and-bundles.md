@@ -2,8 +2,7 @@
 
 Use named imports from `@insiderfinance/totalfinance/<domain>` as the portable browser
 default. The main package includes every domain and feature subpath with no runtime dependencies;
-only `@insiderfinance/totalfinance-mcp` is a separate optional install. TotalFinance is an unpublished preview: these are supported import
-shapes for a built checkout, not evidence of a completed npm installation.
+only `@insiderfinance/totalfinance-mcp` is a separate optional install.
 
 ## Start with a domain
 

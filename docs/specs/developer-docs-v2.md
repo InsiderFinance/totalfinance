@@ -4,6 +4,12 @@ Recovery note (2026-11-12): this is the original design worktree’s contract an
 verification record. The current recovery and fresh acceptance checks are tracked in
 [homepage and docs routing](./homepage-and-docs-routing.md), M1–M5.
 
+Superseded in part (2026-11-25): the site's release-evidence ledger (`releases.json`,
+`site:record-release`), version-pinned snapshots and archive restoration were removed. The docs
+read the version from the public package manifests, SDK install commands resolve to the latest npm
+release, and the docs are indexed. `MCP_PUBLISHED_ON_NPM` in `site/src/agents.ts` keeps MCP setup on
+the source build until that package is published. See [the site guide](../../site/README.md).
+
 **Status: LOCALLY COMPLETE (2026-10-15) — authorized by the maintainer the same day.** W1–W12 are
 implemented and verified locally (see [Completion record](#completion-record)); a full hosted CI run
 (the workflow changed), deployment and the main app's zone switch remain. This contract supersedes the

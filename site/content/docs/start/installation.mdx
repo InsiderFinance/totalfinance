@@ -1,10 +1,9 @@
 ---
 title: Installation
 description: Add one package, import from domain subpaths, and keep bundles small.
-installs: true
 ---
 
-TotalFinance publishes two packages:
+TotalFinance has two packages:
 
 | Package                            | What it is                                                                              |
 | ---------------------------------- | --------------------------------------------------------------------------------------- |
@@ -18,9 +17,8 @@ pnpm add @insiderfinance/totalfinance
 # or: npm install @insiderfinance/totalfinance
 ```
 
-Node.js 22.13 or newer is supported. The package is ESM-first and also loads from CommonJS. Check
-the [Versions page](/versions) for the release this documentation describes; until a release is
-verified there, build the [source checkout](https://github.com/InsiderFinance/totalfinance).
+Node.js 22.13 or newer is supported. The package is ESM-first and also loads from CommonJS. The
+[Versions page](/versions) shows the release this documentation describes.
 
 ## Import from a domain
 
@@ -55,8 +53,13 @@ whether a bundler can drop unused namespace members depends on the bundler. The
 
 ## The MCP server (optional)
 
+The MCP server is not on npm yet. Build it from a
+[source checkout](https://github.com/InsiderFinance/totalfinance), then run `doctor`:
+
 ```sh
-npx -y @insiderfinance/totalfinance-mcp doctor
+pnpm install --frozen-lockfile
+pnpm build
+node distribution/mcp/dist/bin.js doctor
 ```
 
 `doctor` reports the effective tool set, budgets and store configuration. See

@@ -28,9 +28,10 @@ describe('public imports and bundles guidance', () => {
       'streaming and serialization',
       'not the cost of a bare formula',
       'Whole-entrypoint budgets and used-function consumer budgets',
-      'unpublished preview',
     ])
       expect(text).toContain(advice);
+    // The SDK is on npm; the guide must not call it unpublished.
+    expect(text).not.toContain('unpublished preview');
     expect(guide).toContain('https://github.com/evanw/esbuild/issues/1420');
     expect(guide).toContain('](../bundle-size.md)');
     expect(existsSync(new URL('../bundle-size.md', guideUrl))).toBe(true);
@@ -101,7 +102,7 @@ describe('public imports and bundles guidance', () => {
     const startUrl = new URL('../../site/content/start.md', guideUrl);
     const start = readFileSync(startUrl, 'utf8');
     expect(start).toContain('](../../docs/guides/imports-and-bundles.md)');
-    expect(start).toContain('unpublished preview');
+    expect(start).not.toContain('unpublished preview');
     expect(normalized(start)).toContain('Type-only imports add no runtime code');
     for (const match of start.matchAll(/\]\(([^)]+)\)/g)) {
       const target = match[1]!;

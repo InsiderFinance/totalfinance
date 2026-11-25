@@ -34,7 +34,7 @@ DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib uv run --with cairosvg==2.8.2 --wit
 
 Inspect the exported icons and card after regeneration. The site build copies these reviewed assets;
 it does not install Python tools or regenerate images on Vercel. Do not hand-edit exported PNG/ICO
-files. The documentation assets, including icons, are copied into self-contained version snapshots.
+files.
 
 The homepage canonical and absolute social-image origin are `https://totalfinance.io`. Docs currently
 have page-specific sharing titles/descriptions and the same card, without claiming the pending

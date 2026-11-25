@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Callout } from 'fumadocs-ui/components/callout';
-import Link from 'next/link';
 import { PageHeader, type Crumb } from './layout/page-header';
 import { TableOfContents } from './layout/toc';
 import { mdxComponents } from './mdx/mdx-components';
 import { PlaygroundSection } from './playground/playground-section';
-import { siteVersion } from '@/lib/data';
 import { pageMetadata } from '@/lib/metadata';
 import { REPOSITORY_URL } from '@/lib/site';
 import { source } from '@/lib/source';
@@ -36,16 +33,8 @@ export function DocsPage({ slug }: { slug: string[] }) {
   const editUrl = generatedSource
     ? `${REPOSITORY_URL}/blob/main/${generatedSource}`
     : `${REPOSITORY_URL}/blob/main/site/content/docs/${page.path}`;
-  const unpublished = !siteVersion().published && page.data.installs;
   const body = (
     <div className="tf-prose">
-      {unpublished ? (
-        <Callout type="warn" title="Unpublished preview">
-          Registry install commands on this page apply after publication. Until then, build the
-          source checkout; see <Link href="/start/installation">Installation</Link> and{' '}
-          <Link href="/versions">Versions</Link>.
-        </Callout>
-      ) : null}
       <MDX components={mdxComponents()} />
     </div>
   );

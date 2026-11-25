@@ -50,24 +50,24 @@ the generated inputs exist).
    Content-Security-Policy `<meta>` that hashes inline scripts. The marketing homepage's policy
    also permits the Google tag and GA4 measurement requests. This step also writes robots/sitemap
    per the indexing policy, the route inventory and the calculator catalogue.
-4. **Snapshot**: a second export under `/docs/totalfinance/versions/<version>` (canonicals point at
-   the current docs; never indexed). Verified earlier releases are restored byte-for-byte from
-   `TOTALFINANCE_DOCS_ARCHIVES`. `TOTALFINANCE_DOCS_SNAPSHOT=0` skips the snapshot for quick local
-   iteration only; tests require it.
+
+The docs describe the version in the public package manifests (`distribution/*/package.json`).
+SDK install commands are unpinned, so they install the latest npm release. The MCP package is not
+on npm yet: `MCP_PUBLISHED_ON_NPM` in `src/agents.ts` keeps every MCP setup on the source build
+until it is set to true.
 
 ### Environment
 
-| Variable                               | Default                             | Meaning                                                                                                                                             |
-| -------------------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TOTALFINANCE_DOCS_BASE_PATH`          | `/docs/totalfinance`                | Where the docs live on their host.                                                                                                                  |
-| `TOTALFINANCE_DOCS_ORIGIN`             | `https://www.totalfinance.io`       | Origin for canonical URLs, the sitemap and agent files.                                                                                             |
-| `TOTALFINANCE_DOCS_INDEXING`           | `index` only for a verified release | `index` or `noindex`, explicitly.                                                                                                                   |
-| `TOTALFINANCE_DOCS_FAMILY_API`         | unset                               | `1` shows the InsiderFinance API and MCP docs in the header (only when they are public).                                                            |
-| `TOTALFINANCE_DOCS_FAMILY_ORIGIN`      | `https://www.insiderfinance.io`     | Where the family links point.                                                                                                                       |
-| `TOTALFINANCE_DOCS_ARCHIVES`           | unset                               | Directory of preserved `versions/<version>/` snapshots of verified releases.                                                                        |
-| `TOTALFINANCE_DOCS_PREVIEW_ORIGINS`    | unset                               | Extra hosts (comma-separated) that serve a preview, e.g. a tunnel; the example runner's CSP must name its host.                                     |
-| `TOTALFINANCE_DOCS_HOSTED_MCP_URL`     | unset                               | An https MCP endpoint for hosted calculations. Set ⇒ every "Connect an AI agent" surface offers it first. Never set it before that endpoint exists. |
-| `TOTALFINANCE_DOCS_HOSTED_MCP_KEY_URL` | unset                               | Where readers get an API key for that endpoint; set ⇒ setup includes an `Authorization: Bearer YOUR_API_KEY` header.                                |
+| Variable                               | Default                         | Meaning                                                                                                                                             |
+| -------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TOTALFINANCE_DOCS_BASE_PATH`          | `/docs/totalfinance`            | Where the docs live on their host.                                                                                                                  |
+| `TOTALFINANCE_DOCS_ORIGIN`             | `https://www.totalfinance.io`   | Origin for canonical URLs, the sitemap and agent files.                                                                                             |
+| `TOTALFINANCE_DOCS_INDEXING`           | `index`                         | `noindex` keeps a build out of search indexes (robots, sitemap and page meta).                                                                      |
+| `TOTALFINANCE_DOCS_FAMILY_API`         | unset                           | `1` shows the InsiderFinance API and MCP docs in the header (only when they are public).                                                            |
+| `TOTALFINANCE_DOCS_FAMILY_ORIGIN`      | `https://www.insiderfinance.io` | Where the family links point.                                                                                                                       |
+| `TOTALFINANCE_DOCS_PREVIEW_ORIGINS`    | unset                           | Extra hosts (comma-separated) that serve a preview, e.g. a tunnel; the example runner's CSP must name its host.                                     |
+| `TOTALFINANCE_DOCS_HOSTED_MCP_URL`     | unset                           | An https MCP endpoint for hosted calculations. Set ⇒ every "Connect an AI agent" surface offers it first. Never set it before that endpoint exists. |
+| `TOTALFINANCE_DOCS_HOSTED_MCP_KEY_URL` | unset                           | Where readers get an API key for that endpoint; set ⇒ setup includes an `Authorization: Bearer YOUR_API_KEY` header.                                |
 
 ## Content and ownership
 
@@ -100,8 +100,8 @@ data`) drives the form, boundary validation (`src/playgrounds/inputs.ts`), share
 - `src/agents.ts`, `lib/agents.ts`, `components/agents/`: **Connect an AI agent**. One model produces
   the exact setup (command, config file, one-click install link) for Claude Code, Claude Desktop,
   Cursor, VS Code, Codex, Windsurf, Gemini CLI and ChatGPT, for each server this build offers: the
-  calculations MCP (local; a pinned `npx` command once a release is verified, a source build
-  until then), the hosted docs MCP, and hosted calculations only when
+  calculations MCP (local; a source build until `MCP_PUBLISHED_ON_NPM` is true, then a pinned
+  `npx` command), the hosted docs MCP, and hosted calculations only when
   `TOTALFINANCE_DOCS_HOSTED_MCP_URL` names an endpoint. The same model renders the home page
   section, `/agents`, the page twins and the MCP section of `llms.txt`. `src/playgrounds/agent.ts`
   maps each calculator to its MCP tool and builds the **Ask your AI agent** prompt from the
@@ -126,8 +126,8 @@ redirects to `/x`) or in `/index`. `vercel.json` is the reference configuration 
 project rooted at `site/` (`cleanUrls: true`, `trailingSlash: false`): static output from `dist/`,
 the read-only docs MCP adapter (`api/mcp.ts` at the repository root) at `/docs/totalfinance/mcp`, `Accept: text/markdown`
 negotiation (with `Vary: Accept`), immutable caching for hashed assets and runtime bundles, CORS
-for the runtime bundles (the runner's origin is opaque), `noindex` for archived versions, and the
-security headers a `<meta>` CSP cannot carry: `frame-ancestors 'none'` everywhere except the
+for the runtime bundles (the runner's origin is opaque), a redirect from the retired
+`/versions/<version>/` snapshots to the current docs, and the security headers a `<meta>` CSP cannot carry: `frame-ancestors 'none'` everywhere except the
 runner, which only these docs may frame. HTML, manifests and indexes revalidate.
 
 **Inside insiderfinance.io (multi-zone).** The main app redirects `/docs/totalfinance` to
@@ -142,25 +142,14 @@ docs run on the signed-in InsiderFinance origin: deploy only from the protected 
 and keep project membership to maintainers. `TOTALFINANCE_DOCS_FAMILY_API=1` should be set only
 once the InsiderFinance API and MCP docs are public in production.
 
-Static size is about 0.65 GB with the version snapshot (Vercel's static upload limit is 1 GB);
-the largest page is under 600 KB of HTML and any page loads under 240 KB of gzipped JavaScript.
+Static size is about 0.35 GB (Vercel's static upload limit is 1 GB); the largest page is under
+600 KB of HTML and any page loads under 240 KB of gzipped JavaScript.
 `test/build.test.ts` enforces those budgets.
 
 ## Verification and releases
 
-`pnpm run ci` includes the site typecheck, build and tests. The release fingerprint and the
-version ledger work as before: `releases.json` starts empty, and a package version is never
-evidence of publication. After an authorized public npm release passes the registry smoke, import
-its receipt and rebuild:
-
-```sh
-pnpm site:record-release /absolute/path/to/smoke-receipt.json stable
-pnpm site:build
-pnpm site:test
-```
-
-Preserve `site/dist/versions/<version>/` as an immutable artifact for each actual release and set
-`TOTALFINANCE_DOCS_ARCHIVES` for later builds. Published builds refuse missing earlier snapshots.
+`pnpm run ci` includes the site typecheck, build and tests. A release needs no site step: the
+docs read the package version, and their install commands resolve to the latest npm release.
 
 ## Maintainer handoff
 

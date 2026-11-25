@@ -3,14 +3,19 @@
  * for each client. Framework-free, so pages, `llms.txt` and tests share one source of truth.
  *
  * - **compute**: `@insiderfinance/totalfinance-mcp`, the library's own MCP server. It runs on the
- *   reader's machine over stdio. Until a release is verified (`published`), it is not on npm, so
- *   setup points at a source build and offers no one-click install.
+ *   reader's machine over stdio. While it is not on npm (`MCP_PUBLISHED_ON_NPM`), setup points at
+ *   a source build and offers no one-click install.
  * - **docs**: the stateless docs MCP these docs host at `<site>/mcp` (search, read, reference).
  * - **hosted**: a hosted calculations endpoint, shown only when the build names one
  *   (`TOTALFINANCE_DOCS_HOSTED_MCP_URL`). Nothing here promises that it exists.
  */
 
 export const MCP_PACKAGE = '@insiderfinance/totalfinance-mcp';
+/**
+ * Whether `@insiderfinance/totalfinance-mcp` is on npm. Releases publish only the SDK today; set
+ * this to true once the MCP package is published, and every setup switches to the npm command.
+ */
+export const MCP_PUBLISHED_ON_NPM: boolean = false;
 /** Where a reader's source checkout puts the built server (placeholder path). */
 export const SOURCE_BINARY = '/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js';
 
