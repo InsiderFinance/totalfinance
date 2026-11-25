@@ -39,8 +39,9 @@ live docs match what npm serves:
   `main`, so wait for the next release when those exist.
 
 It never moves `docs-live` backwards or rewrites it, and the repository's "No Force Purch" ruleset
-blocks force-pushes and deletion of `main` and `docs-live`. GitHub can't limit ordinary pushes to the
-workflow (a repository ruleset can't name GitHub Actions as its only bypass), so keep write access to
+blocks force-pushes and deletion of `main` and `docs-live`. The workflow pushes with the built-in
+`GITHUB_TOKEN`, which can't be a ruleset bypass actor; limiting pushes to the workflow would need a
+deploy key or GitHub App credential, which this repository doesn't use. Keep write access to
 maintainers. Pushes to `main` and pull requests still build
 Vercel previews, which `site/vercel.sh` keeps out of search indexes. To set this up on an existing
 project, run the workflow once to create `docs-live`, then set it as the production branch.
