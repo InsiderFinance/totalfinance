@@ -11,12 +11,12 @@ import { playgrounds } from '../src/playgrounds/index.js';
 import { inlineScripts } from '../scripts/postexport.js';
 import { DOMAIN_BUNDLE_BUDGET_BYTES } from '../scripts/llms.js';
 import { markdownRoute, routeHtmlFile } from '../src/routes.js';
+import { MCP_PUBLISHED_ON_NPM } from '../src/agents.js';
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = join(ROOT, 'site/dist');
 const BASE = '/docs/totalfinance';
 const version = readSiteVersion(ROOT);
-const SNAPSHOT = join(OUT, 'versions', version.version);
 
 /** Budgets: every page stays light enough to read on a phone. */
 const HTML_BUDGET_BYTES = 600_000;
@@ -36,7 +36,7 @@ function walk(directory: string, files: string[] = []): string[] {
   return files;
 }
 
-/** A base-path URL resolves to a file of the export: a page (`x.html`), a file, or a snapshot root. */
+/** A base-path URL resolves to a file of the export: a page (`x.html`), a file, or a directory index. */
 function resolves(out: string, base: string, href: string): boolean {
   const path = decodeURIComponent(href.slice(base.length).split(/[?#]/)[0]!) || '/';
   const target = resolve(out, `.${path}`);
@@ -65,18 +65,10 @@ describe('built public documentation', () => {
     expect(home).toContain('href="https://www.totalfinance.io/"');
     expect(home).toContain('src="/docs/totalfinance/assets/brand/favicon.svg"');
     expect(home).toContain('https://www.totalfinance.io/assets/brand/og.png');
-    for (const out of [OUT, SNAPSHOT]) {
-      for (const name of [
-        'favicon.svg',
-        'logo.svg',
-        'favicon.ico',
-        'og.png',
-        'apple-touch-icon.png',
-      ])
-        expect(readFileSync(join(out, 'assets/brand', name))).toEqual(
-          readFileSync(join(ROOT, 'site/brand/assets', name)),
-        );
-    }
+    for (const name of ['favicon.svg', 'logo.svg', 'favicon.ico', 'og.png', 'apple-touch-icon.png'])
+      expect(readFileSync(join(OUT, 'assets/brand', name))).toEqual(
+        readFileSync(join(ROOT, 'site/brand/assets', name)),
+      );
     const png = readFileSync(join(OUT, 'assets/brand/og.png'));
     expect(png.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
     expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
@@ -107,12 +99,6 @@ describe('built public documentation', () => {
     expect(search(records, 'connect an agent')[0]!.url).toBe('/agents');
     // #336 is integrated: missing sector exports must fail, not silently skip this gate.
     expect(search(records, 'sector performance')[0]!.title).toBe('sectorPerformance');
-    const pinned = JSON.parse(
-      readFileSync(join(SNAPSHOT, 'search-index.json'), 'utf8'),
-    ) as SearchRecord[];
-    expect(search(pinned, 'black scholes').map((record) => record.url)).toEqual(
-      blackScholes.map((record) => record.url),
-    );
   });
 
   it('finds every explicit package import before an incidental keyword match', () => {
@@ -309,45 +295,25 @@ describe('built public documentation', () => {
         }
       }
     }
-
-    expect(html('/', SNAPSHOT)).not.toMatch(/totalfinance-google-analytics|googletagmanager/);
   });
 
-  it('follows the explicit indexing policy', () => {
+  it('indexes the docs: robots allow crawling, a sitemap lists the pages, canonicals are absolute', () => {
     const robots = readFileSync(join(OUT, 'robots.txt'), 'utf8');
-    if (version.published) {
-      expect(robots).toContain('Allow: /');
-      expect(existsSync(join(OUT, 'sitemap.xml'))).toBe(true);
-    } else {
+    if (process.env['TOTALFINANCE_DOCS_INDEXING'] === 'noindex') {
       expect(robots).toContain('Disallow: /');
-      expect(existsSync(join(OUT, 'sitemap.xml'))).toBe(false);
       expect(html('learn/price-an-option')).toMatch(/<meta name="robots" content="noindex/);
+    } else {
+      expect(robots).toContain('Allow: /');
+      expect(readFileSync(join(OUT, 'sitemap.xml'), 'utf8')).toContain(
+        '<loc>https://www.totalfinance.io/docs/totalfinance/learn/price-an-option</loc>',
+      );
+      expect(html('learn/price-an-option')).not.toMatch(/<meta name="robots" content="noindex/);
     }
     expect(html('learn/price-an-option')).toContain(
       'rel="canonical" href="https://www.totalfinance.io/docs/totalfinance/learn/price-an-option"',
     );
-  });
-
-  it('ships a self-contained version-pinned snapshot that is never indexed and points canonicals at the current docs', () => {
-    const snapshotBase = `${BASE}/versions/${version.version}`;
-    const pinned = html('learn/price-an-option', SNAPSHOT);
-    expect(pinned).toContain(`data-tf-base="${snapshotBase}"`);
-    expect(pinned).toMatch(/<meta name="robots" content="noindex/);
-    expect(pinned).toContain(
-      'rel="canonical" href="https://www.totalfinance.io/docs/totalfinance/learn/price-an-option"',
-    );
-    for (const match of pinned.matchAll(/(?:href|src)="(\/docs\/totalfinance[^"]*)"/g)) {
-      const href = match[1]!;
-      if (href.startsWith(`${BASE}/versions/`) || href === BASE) continue;
-      throw new Error(`Snapshot links outside itself: ${href}`);
-    }
-    expect(readFileSync(join(SNAPSHOT, 'llms.txt'), 'utf8')).toContain(
-      `${snapshotBase}/learn/price-an-option.md`,
-    );
-    expect(existsSync(join(SNAPSHOT, 'learn/price-an-option.md'))).toBe(true);
-    expect(JSON.parse(readFileSync(join(OUT, 'available-versions.json'), 'utf8'))).toMatchObject({
-      current: version.version,
-    });
+    // Version-pinned snapshots are retired; only the Versions page lives under /versions.
+    expect(existsSync(join(OUT, 'versions', version.version))).toBe(false);
   });
 
   it('puts AI agents up front: the home page, /agents, every calculator, twins and llms.txt', () => {
@@ -392,12 +358,25 @@ describe('built public documentation', () => {
     const slashed = new Set<string>();
     const site = 'https://www.totalfinance.io/docs/totalfinance';
     for (const file of walk(OUT)) {
-      if (!/\.(md|txt)$/.test(file) || file.includes(`${join(OUT, 'versions')}`)) continue;
+      if (!/\.(md|txt)$/.test(file)) continue;
       for (const match of readFileSync(file, 'utf8').matchAll(/\]\((https:\/\/[^)\s]+)\)/g))
         if (match[1]!.startsWith(site) && /\/(?:#[^)]*)?$/.test(match[1]!))
           slashed.add(`${file.slice(OUT.length)} → ${match[1]}`);
     }
     expect([...slashed].slice(0, 10)).toEqual([]);
+  });
+
+  it('never offers an npm install of the MCP server while it is not on npm', () => {
+    if (MCP_PUBLISHED_ON_NPM) return;
+    const offers: string[] = [];
+    for (const file of walk(OUT)) {
+      if (!/\.(html|md|txt)$/.test(file)) continue;
+      let text = readFileSync(file, 'utf8');
+      if (file.endsWith('.html')) text = text.replace(/<[^>]+>/g, '');
+      if (/totalfinance-mcp@\d|npx\s+(?:-y\s+)?@insiderfinance\/totalfinance-mcp/.test(text))
+        offers.push(file.slice(OUT.length));
+    }
+    expect(offers.slice(0, 10)).toEqual([]);
   });
 
   it('ships the example runner: every browser-safe entry point, a no-network sandbox page, no route', () => {
@@ -430,7 +409,6 @@ describe('built public documentation', () => {
     expect(inlineScripts(runner)).toEqual([]);
     expect(runner).toContain('<meta name="robots" content="noindex">');
     expect(routes.some((route) => route.startsWith('/runtime'))).toBe(false);
-    expect(existsSync(join(SNAPSHOT, 'runtime/runner.html'))).toBe(true);
     // Pages may frame only their own origin (the runner), nothing else.
     expect(html('learn/price-an-option')).toContain("frame-src 'self'");
   });

@@ -53,7 +53,6 @@ export const generatedGuides = () =>
       description: string;
       group: string;
       source: string;
-      installs: boolean;
     }[]
   >('guides.json');
 

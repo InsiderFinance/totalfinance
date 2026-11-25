@@ -40,7 +40,7 @@
   ],
   "headers": [
     {
-      "source": "/((?!docs/totalfinance/(?:versions/[^/]+/)?runtime/runner$).*)",
+      "source": "/((?!docs/totalfinance/runtime/runner$).*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -99,15 +99,6 @@
       ]
     },
     {
-      "source": "/docs/totalfinance/versions/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
-    },
-    {
       "source": "/docs/totalfinance/(.*)\\.md",
       "headers": [
         {
@@ -134,6 +125,11 @@
     {
       "source": "/docs/totalfinance",
       "destination": "/docs/totalfinance/start",
+      "permanent": false
+    },
+    {
+      "source": "/docs/totalfinance/versions/:version(\\d[^/]*)/:path*",
+      "destination": "/docs/totalfinance/:path*",
       "permanent": false
     }
   ]

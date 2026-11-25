@@ -6,6 +6,7 @@ import { aliasesOf } from '../packages/technical-analysis/src/aliases.js';
 import { indicatorWarmups } from '../packages/technical-analysis/src/warmup.js';
 import { packsForProfile, REGISTRY_PROFILES } from '../packages/workflows/src/local/profiles.js';
 import { OPERATION_BUDGETS } from '../packages/workflows/src/runtime.js';
+import { MCP_PUBLISHED_ON_NPM } from '../site/src/agents.js';
 import {
   buildPublicReference,
   type PublicReference,
@@ -138,11 +139,11 @@ function setup(reference: PublicReference): string[] {
     'node distribution/mcp/dist/bin.js doctor',
     '```',
     '',
-    `This checkout declares @insiderfinance/totalfinance-mcp ${mcp.version} (${mcp.stability}). After independently confirming availability of that exact release, ` +
-      `a client may use command \`npx\` with args \`["-y", "@insiderfinance/totalfinance-mcp@${mcp.version}", "--profile", "default"]\`. ` +
-      'Do not assume the workspace version has been published. Stdout in server mode is JSON-RPC only.',
-    '',
-    'Published-package smoke: pending release. This build-time reference does not claim execution against published packages.',
+    `This checkout declares @insiderfinance/totalfinance-mcp ${mcp.version} (${mcp.stability}). ` +
+      (MCP_PUBLISHED_ON_NPM
+        ? `A client may use command \`npx\` with args \`["-y", "@insiderfinance/totalfinance-mcp@${mcp.version}", "--profile", "default"]\`. `
+        : 'It is not on npm yet: build a source checkout and launch the server as above. ') +
+      'Stdout in server mode is JSON-RPC only.',
     '',
     '### Selection and permissions',
     '',

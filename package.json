@@ -29,7 +29,6 @@
     "site:dev": "tsx site/serve.ts",
     "site:typecheck": "pnpm site:install && tsc --noEmit -p site/tsconfig.tools.json",
     "site:test": "vitest run --config site/vitest.config.ts",
-    "site:record-release": "tsx site/record-release.ts",
     "agents:score": "tsx tools/agent-experience/cli.ts tools/agent-experience/corpus.json",
     "api:check": "tsx tools/api-report/run.ts --check",
     "api:update": "tsx tools/api-report/run.ts --write",

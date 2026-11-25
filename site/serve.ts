@@ -31,13 +31,13 @@ const MIME: Record<string, string> = {
 
 /**
  * Resolve a request path inside the export, or null. Never escapes the output directory. A page
- * route `/learn/x` is `learn/x.html`; a directory (the export root, a version snapshot root) serves
- * its `index.html`.
+ * route `/learn/x` is `learn/x.html`; a directory (such as the export root) serves its
+ * `index.html`.
  */
 export function resolveFile(root: string, pathname: string): string | null {
   const path = resolve(root, `.${pathname}`);
   if (path !== root && !path.startsWith(root + sep)) return null;
-  // `extname` alone cannot tell a page from a file: `/versions/0.1.2` is a snapshot directory.
+  // `extname` alone cannot tell a page from a file, so try the file, the page, then the directory.
   const candidates =
     path === root ? [join(root, 'index.html')] : [path, `${path}.html`, join(path, 'index.html')];
   return (

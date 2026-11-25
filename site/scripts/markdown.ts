@@ -8,7 +8,14 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { formatValue } from '../src/format';
 import { displayValue } from '../src/display';
-import { computeServer, docsServer, hostedServer, setupMarkdown } from '../src/agents';
+import {
+  MCP_PACKAGE,
+  MCP_PUBLISHED_ON_NPM,
+  computeServer,
+  docsServer,
+  hostedServer,
+  setupMarkdown,
+} from '../src/agents';
 import { firstCallCode } from '../src/examples';
 import { CALCULATOR_AGENTS } from '../src/playgrounds/agent';
 import { defaultInput } from '../src/playgrounds/inputs';
@@ -126,7 +133,7 @@ function agentSection(id: string, input: ReturnType<typeof defaultInput>): strin
   ];
 }
 
-/** Servers the twins describe, matching `lib/agents.ts`; the docs MCP is always the current docs'. */
+/** Servers the twins describe, matching `lib/agents.ts`. */
 export function twinServers(generated: GenerateResult, base: string) {
   const hosted = hostedServer({
     url: process.env['TOTALFINANCE_DOCS_HOSTED_MCP_URL'] || undefined,
@@ -134,8 +141,8 @@ export function twinServers(generated: GenerateResult, base: string) {
   });
   return [
     ...(hosted ? [hosted] : []),
-    computeServer({ published: generated.version.published, version: generated.version.version }),
-    docsServer(base.replace(/\/versions\/[^/]+$/, '')),
+    computeServer({ published: MCP_PUBLISHED_ON_NPM, version: generated.version.version }),
+    docsServer(base),
   ];
 }
 
@@ -398,7 +405,7 @@ export function buildMarkdownPages(generated: GenerateResult, base: string): Mar
     title: 'Versions & stability',
     description: 'Release status of this documentation build.',
     section: 'project',
-    markdown: `# Versions & stability\n\nThis build: **${generated.version.label}**.\n\n${generated.version.published ? `Install: \`pnpm add @insiderfinance/totalfinance@${generated.version.version}\`` : 'This build is not verified as matching a public npm release. Build the source checkout; registry install commands describe the planned published experience.'}\n\nTotalFinance is pre-1.0; breaking changes may occur.\n\n${Object.entries(
+    markdown: `# Versions & stability\n\nThis build: **${generated.version.label}**.\n\nInstall the latest release: \`pnpm add @insiderfinance/totalfinance\`\n\n${MCP_PUBLISHED_ON_NPM ? `MCP server: \`npx -y ${MCP_PACKAGE}@${generated.version.version}\`` : `The optional MCP server (\`${MCP_PACKAGE}\`) is not on npm yet; build it from a source checkout ([setup](/agents)).`}\n\nTotalFinance is pre-1.0; breaking changes may occur.\n\n${Object.entries(
       generated.version.packageVersions,
     )
       .map(([name, version]) => `- ${name}: ${version}`)

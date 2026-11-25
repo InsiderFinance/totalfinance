@@ -4,9 +4,8 @@
 
 ## Quickstart
 
-The optional MCP package remains an **unpublished preview**. SDK 0.1.5 publication does not publish
-this separate server package. From a built source checkout (Node ≥22.13), run the local binary;
-this does not require an MCP registry release:
+The optional MCP package is not on npm yet; releases publish only `@insiderfinance/totalfinance`.
+From a built source checkout (Node ≥22.13), run the local binary:
 
 ```sh
 pnpm build

@@ -8,8 +8,7 @@ Generated from package export maps, TypeScript source/checker/JSDoc, public guid
 
 Use named imports from `@insiderfinance/totalfinance/<domain>` as the portable browser
 default. The main package includes every domain and feature subpath with no runtime dependencies;
-only `@insiderfinance/totalfinance-mcp` is a separate optional install. TotalFinance is an unpublished preview: these are supported import
-shapes for a built checkout, not evidence of a completed npm installation.
+only `@insiderfinance/totalfinance-mcp` is a separate optional install.
 
 ### Start with a domain
 
@@ -238,9 +237,7 @@ node distribution/mcp/dist/bin.js --profile default
 node distribution/mcp/dist/bin.js doctor
 ```
 
-This checkout declares @insiderfinance/totalfinance-mcp 0.1.7 (pre-1.0; component maturity varies (see stability policy)). After independently confirming availability of that exact release, a client may use command `npx` with args `["-y", "@insiderfinance/totalfinance-mcp@0.1.7", "--profile", "default"]`. Do not assume the workspace version has been published. Stdout in server mode is JSON-RPC only.
-
-Published-package smoke: pending release. This build-time reference does not claim execution against published packages.
+This checkout declares @insiderfinance/totalfinance-mcp 0.1.7 (pre-1.0; component maturity varies (see stability policy)). It is not on npm yet: build a source checkout and launch the server as above. Stdout in server mode is JSON-RPC only.
 
 ### Selection and permissions
 

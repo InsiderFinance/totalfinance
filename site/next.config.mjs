@@ -20,7 +20,6 @@ const config = {
   // `/x/` to `/x` before rewrites run, so a trailing-slash zone would redirect forever.
   trailingSlash: false,
   reactStrictMode: true,
-  distDir: process.env.TOTALFINANCE_NEXT_DIST_DIR ?? '.next',
   images: { unoptimized: true },
   poweredByHeader: false,
   productionBrowserSourceMaps: false,

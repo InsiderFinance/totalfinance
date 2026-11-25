@@ -1,14 +1,10 @@
 # Getting Started
 
-TotalFinance is an unpublished preview. Until npm publication, use a
-[source checkout](https://github.com/InsiderFinance/totalfinance#develop); the install commands below describe the planned published
-experience, not a completed registry installation.
-
 The `@insiderfinance/totalfinance` umbrella provides one install for the whole toolkit. For portable browser tree
 shaking, use named imports from its domain subpaths:
 
 ```sh
-pnpm add @insiderfinance/totalfinance@0.1.0
+pnpm add @insiderfinance/totalfinance
 ```
 
 ```ts
@@ -38,10 +34,13 @@ esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup sh
 Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes.
 
 All domains and feature subpaths come in the main package with no runtime dependencies.
-MCP is the only optional separate package (after publication):
+MCP is the only optional separate package. It is not on npm yet; in a
+[source checkout](https://github.com/InsiderFinance/totalfinance#develop), build and check it:
 
 ```sh
-pnpm add @insiderfinance/totalfinance-mcp@0.1.0
+pnpm install --frozen-lockfile
+pnpm build
+node distribution/mcp/dist/bin.js doctor
 ```
 
 Installation size and final bundle size are different: installing the umbrella does not require

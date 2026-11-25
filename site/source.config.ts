@@ -7,8 +7,6 @@ const schema = pageSchema.extend({
   source: z.string().optional(),
   /** Calculator rendered by the page. */
   playground: z.string().optional(),
-  /** The page shows install or run commands whose availability depends on publication. */
-  installs: z.boolean().optional(),
 });
 
 /** Authored pages (MDX). */

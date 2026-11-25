@@ -96,7 +96,6 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     expect(full).toContain("import { math } from '@insiderfinance/totalfinance'");
     expect(full).toContain('https://github.com/evanw/esbuild/issues/1420');
     expect(full).toContain('Rollup shakes this static use');
-    expect(full).toContain('unpublished preview');
   });
 
   it('contains all full-profile operations with exact complete input/output schemas and notes', () => {
@@ -157,7 +156,10 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     expect(full).toContain('totalfinance.job.result');
     expect(full).toContain('custom engines are not universally exposed by MCP');
     expect(full).toContain('not evidence of npm publication');
-    expect(full).toContain('Published-package smoke: pending release');
+    expect(full).not.toContain('pending release');
+    // The MCP package is not on npm (MCP_PUBLISHED_ON_NPM); agents must not be steered to npx.
+    expect(full).toContain('It is not on npm yet: build a source checkout');
+    expect(full).not.toContain('@insiderfinance/totalfinance-mcp@');
     expect(full).toContain('follow nextCursor until absent');
     expect(full).toContain('not declared; optional never implies zero');
     expect(full).not.toContain('Every result is deterministic');

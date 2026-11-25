@@ -46,7 +46,6 @@ export default tseslint.config(
       'coverage/**',
       'distribution/**',
       'site/.next/**',
-      'site/.next-snapshot/**',
       'site/.source/**',
       'site/.generated/**',
       'site/.probe/**',

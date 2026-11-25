@@ -5,6 +5,12 @@ This pre-publication experience slice does not reopen the completed core stages.
 `implementation-order.md` remains the global queue.
 Browser/host verification and actual publication remain explicitly separate below.
 
+Superseded in part (2026-11-25): the site's release-evidence ledger (`releases.json`,
+`site:record-release`), version-pinned snapshots and archive restoration were removed. The docs
+read the version from the public package manifests, SDK install commands resolve to the latest npm
+release, and the docs are indexed. `MCP_PUBLISHED_ON_NPM` in `site/src/agents.ts` keeps MCP setup on
+the source build until that package is published. See [the site guide](../../site/README.md).
+
 ## Outcome
 
 A cold developer or agent can discover the right capability, run a real calculation, understand its

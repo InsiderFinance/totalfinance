@@ -32,7 +32,6 @@ distribution/*/STABILITY.md
 
 # Documentation site: build outputs and generated inputs (see site/README.md).
 site/.next
-site/.next-snapshot
 site/.source
 site/.generated
 site/.probe

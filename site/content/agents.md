@@ -4,7 +4,7 @@ TotalFinance gives an agent financial calculations, not permission to invent mar
 
 ## 1. Build the local server
 
-Until a public release is verified on the Versions page, use a source checkout. In the `@insiderfinance/totalfinance` directory, install with the pinned pnpm version and build:
+The MCP package is not on npm yet, so build it from a source checkout. In the repository directory, install with the pinned pnpm version and build:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -40,7 +40,7 @@ Use your client's local/stdio MCP configuration. Replace the two absolute paths 
 
 Run the same command with `doctor` appended to diagnose the selected packs, effective tool count, budgets, and store configuration. Restart the client connection after changing configuration.
 
-After publication, use the exact versioned package command displayed on the Versions page. Pin that version in shared agent configuration; an unpinned `npx -y` invocation can change behavior on the next launch.
+Once the MCP package is on npm, the Versions page shows its exact versioned command. Pin that version in shared agent configuration; an unpinned `npx -y` invocation can change behavior on the next launch.
 
 ## 3. Choose the smallest useful tool set
 
