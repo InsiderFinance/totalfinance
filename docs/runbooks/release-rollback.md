@@ -13,7 +13,10 @@ For [release.md](./release.md), the SDK is uploaded first, then the MCP server (
 earlier). Read both packages' current registry bytes and `latest`. The publication receipt records
 each package's prior `latest`; use an actual previously verified version, never a guessed
 predecessor. The MCP server depends on the SDK's exact version, so a rollback moves both packages'
-`latest` to the same earlier version, or neither.
+`latest` to the same earlier version, or neither. The first published MCP version has no earlier
+MCP version to return to: if it is bad, deprecate it with `npm deprecate` and a message naming the
+fix, ship a fixed patch release of both packages, and leave the SDK's `latest` where it is unless the
+SDK itself is affected.
 
 Rerun failed jobs from the original run for transient/authentication failures. Existing bytes must
 match before resume skips an upload. If the SDK published and the MCP upload failed, rerunning the

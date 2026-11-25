@@ -101,11 +101,12 @@ SDK, then stops the publish job with "First MCP publication" before any MCP uplo
    grep -A3 insiderfinance-totalfinance-mcp-<version>.tgz RELEASE_HASHES.json
    ```
 
-2. Upload exactly that tarball once with your npm login. Local uploads cannot carry provenance:
+2. Upload exactly that tarball once with your npm login. Name the registry, so a scoped registry in
+   your npm config cannot redirect the upload. Local uploads cannot carry provenance:
 
    ```sh
-   npm whoami || npm login
-   npm publish ./insiderfinance-totalfinance-mcp-<version>.tgz --access public --tag latest --provenance=false --ignore-scripts
+   npm whoami --registry https://registry.npmjs.org/ || npm login --registry https://registry.npmjs.org/
+   npm publish ./insiderfinance-totalfinance-mcp-<version>.tgz --registry https://registry.npmjs.org/ --access public --tag latest --provenance=false --ignore-scripts
    ```
 
 3. In the same run, choose **Re-run failed jobs**. The publish job byte-verifies both packages
