@@ -1,6 +1,6 @@
 {
   "name": "@insiderfinance/totalfinance",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Complete, tree-shakeable TypeScript finance: options, portfolios, risk, valuation, technical analysis, backtesting, and agent workflows.",
   "license": "Apache-2.0",
   "type": "module",

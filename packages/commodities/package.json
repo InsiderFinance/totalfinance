@@ -1,6 +1,6 @@
 {
   "name": "@totalfinance/commodities",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Commodity carry and term structure: cost-of-carry forwards, implied carry inputs, roll yield, and curve analytics",
   "license": "Apache-2.0",
   "keywords": [
