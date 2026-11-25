@@ -140,7 +140,7 @@ const INSTRUCTIONS = [
   'Units are decimals (a 22% volatility is 0.22; a 4.5% rate is 0.045) and time to expiry is in years (30 days is 30/365).',
   'Every calculation result carries `assumptions` (the conventions applied) and `diagnostics.warnings`; read both before quoting a number.',
   'A stochastic tool that omits its seed receives the server default and echoes it under `assumptions.seed`, so a call is reproducible.',
-  'A successful call returns the `OperationResult` envelope as structuredContent ({ operation, library, summary, structured, assumptions, diagnostics, identity, artifacts, usage, trace }) — byte-for-byte the document the CLI and the HTTP server return — and its one-line summary as text.',
+  'A successful call returns the `OperationResult` envelope as structuredContent ({ operation, library, summary, structured, assumptions, diagnostics, identity, artifacts, usage, trace }) — byte-for-byte the document the CLI and the HTTP server return — and its one-line summary, followed by any diagnostics warnings (at most five), as text.',
   'A refusal is a JSON `OperationError` ({ code, message, context, operation }) in the error content — the same document the CLI and the HTTP server return.',
   'Tool names are operation ids with dots replaced by underscores (totalfinance.option.price is the tool totalfinance_option_price); the dotted id stays in _meta["totalfinance/operation"].id and totalfinance://operations/<id>.',
   'Large inputs and results travel as `totalfinance://…` handles when a store is attached; read them as resources instead of pasting bulk data.',

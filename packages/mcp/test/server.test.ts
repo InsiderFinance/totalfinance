@@ -1152,6 +1152,31 @@ describe('MCP protocol polish', () => {
     expect(content[0]!.text).toContain('did you mean 0.2200?');
   });
 
+  it('repeats at most five warnings in the text block and counts the rest', async () => {
+    const warnings = Array.from({ length: 7 }, (_, i) => ({
+      code: `test.warning_${i + 1}`,
+      message: `warning ${i + 1}`,
+      severity: 'warn' as const,
+    }));
+    const noisy = tool({
+      name: 'totalfinance_test_noisy',
+      run: () => ({ summary: 'noisy result', structured: { diagnostics: { warnings } } }),
+    });
+    const client = await connect({ tools: [noisy] });
+    const res = await client.callTool({ name: 'totalfinance_test_noisy', arguments: {} });
+    const content = res.content as Array<{ type: string; text: string }>;
+    const envelope = res.structuredContent as { diagnostics: { warnings: unknown[] } };
+    expect(res.isError).toBeFalsy();
+    expect(envelope.diagnostics.warnings).toHaveLength(7);
+    expect(content[0]!.text).toBe(
+      [
+        'noisy result',
+        ...warnings.slice(0, 5).map((entry) => `Warning (${entry.code}): ${entry.message}`),
+        '2 more in diagnostics.warnings.',
+      ].join('\n'),
+    );
+  });
+
   it('read-only mode filters mutating tools structurally', async () => {
     const mutating = tool({
       name: 'totalfinance_test_mutate',
