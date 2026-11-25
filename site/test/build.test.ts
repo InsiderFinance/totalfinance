@@ -366,6 +366,16 @@ describe('built public documentation', () => {
     expect([...slashed].slice(0, 10)).toEqual([]);
   });
 
+  it('points every page Markdown alternate link at its real twin', () => {
+    for (const route of ['/', '/start/installation', '/versions']) {
+      const href = /<link rel="alternate" type="text\/markdown" href="([^"]+)"/.exec(
+        html(route),
+      )?.[1];
+      expect(href, route).toBe(`https://www.totalfinance.io${BASE}${markdownRoute(route)}`);
+      expect(existsSync(join(OUT, markdownRoute(route).slice(1))), route).toBe(true);
+    }
+  });
+
   it('never offers an npm install of the MCP server while it is not on npm', () => {
     if (MCP_PUBLISHED_ON_NPM) return;
     const offers: string[] = [];
