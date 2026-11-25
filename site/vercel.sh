@@ -6,6 +6,10 @@ cd "$(dirname "$0")/.."
 # npm exec supplies the exact existing build tools without changing package or lockfile versions.
 node_version="$(tr -d '[:space:]' < .nvmrc)"
 package_manager="$(node --input-type=commonjs -p 'require("./package.json").packageManager')"
+# Only Vercel production deployments may be indexed; previews and other builds default to noindex.
+if [ "${VERCEL_ENV:-}" != production ]; then
+  export TOTALFINANCE_DOCS_INDEXING="${TOTALFINANCE_DOCS_INDEXING:-noindex}"
+fi
 case "${1:-}" in
   install) task='pnpm install --frozen-lockfile' ;;
   build) task='pnpm build && pnpm site:build' ;;

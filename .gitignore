@@ -26,7 +26,6 @@ docs/api/
 /site/.generated/
 /site/.source/
 /site/.next/
-/site/.next-snapshot/
 /site/out/
 /site/next-env.d.ts
 /site/content/generated/

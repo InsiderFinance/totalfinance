@@ -58,16 +58,16 @@ until it is set to true.
 
 ### Environment
 
-| Variable                               | Default                         | Meaning                                                                                                                                             |
-| -------------------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TOTALFINANCE_DOCS_BASE_PATH`          | `/docs/totalfinance`            | Where the docs live on their host.                                                                                                                  |
-| `TOTALFINANCE_DOCS_ORIGIN`             | `https://www.totalfinance.io`   | Origin for canonical URLs, the sitemap and agent files.                                                                                             |
-| `TOTALFINANCE_DOCS_INDEXING`           | `index`                         | `noindex` keeps a build out of search indexes (robots, sitemap and page meta).                                                                      |
-| `TOTALFINANCE_DOCS_FAMILY_API`         | unset                           | `1` shows the InsiderFinance API and MCP docs in the header (only when they are public).                                                            |
-| `TOTALFINANCE_DOCS_FAMILY_ORIGIN`      | `https://www.insiderfinance.io` | Where the family links point.                                                                                                                       |
-| `TOTALFINANCE_DOCS_PREVIEW_ORIGINS`    | unset                           | Extra hosts (comma-separated) that serve a preview, e.g. a tunnel; the example runner's CSP must name its host.                                     |
-| `TOTALFINANCE_DOCS_HOSTED_MCP_URL`     | unset                           | An https MCP endpoint for hosted calculations. Set ⇒ every "Connect an AI agent" surface offers it first. Never set it before that endpoint exists. |
-| `TOTALFINANCE_DOCS_HOSTED_MCP_KEY_URL` | unset                           | Where readers get an API key for that endpoint; set ⇒ setup includes an `Authorization: Bearer YOUR_API_KEY` header.                                |
+| Variable                               | Default                         | Meaning                                                                                                                                                  |
+| -------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TOTALFINANCE_DOCS_BASE_PATH`          | `/docs/totalfinance`            | Where the docs live on their host.                                                                                                                       |
+| `TOTALFINANCE_DOCS_ORIGIN`             | `https://www.totalfinance.io`   | Origin for canonical URLs, the sitemap and agent files.                                                                                                  |
+| `TOTALFINANCE_DOCS_INDEXING`           | `index`                         | `noindex` keeps a build out of search indexes (robots, sitemap and page meta). `site/vercel.sh` defaults it to `noindex` unless `VERCEL_ENV=production`. |
+| `TOTALFINANCE_DOCS_FAMILY_API`         | unset                           | `1` shows the InsiderFinance API and MCP docs in the header (only when they are public).                                                                 |
+| `TOTALFINANCE_DOCS_FAMILY_ORIGIN`      | `https://www.insiderfinance.io` | Where the family links point.                                                                                                                            |
+| `TOTALFINANCE_DOCS_PREVIEW_ORIGINS`    | unset                           | Extra hosts (comma-separated) that serve a preview, e.g. a tunnel; the example runner's CSP must name its host.                                          |
+| `TOTALFINANCE_DOCS_HOSTED_MCP_URL`     | unset                           | An https MCP endpoint for hosted calculations. Set ⇒ every "Connect an AI agent" surface offers it first. Never set it before that endpoint exists.      |
+| `TOTALFINANCE_DOCS_HOSTED_MCP_KEY_URL` | unset                           | Where readers get an API key for that endpoint; set ⇒ setup includes an `Authorization: Bearer YOUR_API_KEY` header.                                     |
 
 ## Content and ownership
 

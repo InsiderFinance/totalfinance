@@ -11,6 +11,7 @@ import { playgrounds } from '../src/playgrounds/index.js';
 import { inlineScripts } from '../scripts/postexport.js';
 import { DOMAIN_BUNDLE_BUDGET_BYTES } from '../scripts/llms.js';
 import { markdownRoute, routeHtmlFile } from '../src/routes.js';
+import { MCP_PUBLISHED_ON_NPM } from '../src/agents.js';
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = join(ROOT, 'site/dist');
@@ -363,6 +364,19 @@ describe('built public documentation', () => {
           slashed.add(`${file.slice(OUT.length)} → ${match[1]}`);
     }
     expect([...slashed].slice(0, 10)).toEqual([]);
+  });
+
+  it('never offers an npm install of the MCP server while it is not on npm', () => {
+    if (MCP_PUBLISHED_ON_NPM) return;
+    const offers: string[] = [];
+    for (const file of walk(OUT)) {
+      if (!/\.(html|md|txt)$/.test(file)) continue;
+      let text = readFileSync(file, 'utf8');
+      if (file.endsWith('.html')) text = text.replace(/<[^>]+>/g, '');
+      if (/totalfinance-mcp@\d|npx\s+(?:-y\s+)?@insiderfinance\/totalfinance-mcp/.test(text))
+        offers.push(file.slice(OUT.length));
+    }
+    expect(offers.slice(0, 10)).toEqual([]);
   });
 
   it('ships the example runner: every browser-safe entry point, a no-network sandbox page, no route', () => {
