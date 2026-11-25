@@ -132,7 +132,7 @@ describe('the standalone TotalFinance repository', () => {
     expect(ci).toContain('git diff --no-ext-diff -- tools/manifest/public-enforcement.json');
   });
 
-  it('keeps SDK release publication explicit, enabled and tag/source verified', () => {
+  it('keeps SDK and MCP release publication explicit, enabled and tag/source verified', () => {
     const release = read('.github/workflows/totalfinance-release.yml');
     const tool = read('tools/release/github-sdk-release.ts');
     expect(release).toContain('types: [published]');
@@ -155,6 +155,9 @@ describe('the standalone TotalFinance repository', () => {
     expect(release).not.toContain('NPM_BOOTSTRAP_TOKEN');
     expect(release).not.toContain('secrets.NPM_TOKEN');
     expect(release).not.toContain('npm dist-tag add');
+    // The MCP server is published after the SDK it depends on, from the same approved bytes.
+    expect(tool).toContain('for (const artifact of [sdk, mcp])');
+    expect(tool).toContain('requireMcpPublishable(');
     expect(read('.github/workflows/totalfinance-ci.yml')).toContain(
       "require('./distribution/totalfinance/package.json').version",
     );

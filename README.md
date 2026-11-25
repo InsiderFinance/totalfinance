@@ -162,30 +162,29 @@ the Model Context Protocol. Its default profile provides **23 read-only tools** 
 strategies, volatility, indicators, risk, portfolios, calendars, and more. Profiles let you select
 the tools your agent needs.
 
-The optional MCP package is not published on npm. Run the server from a source checkout:
+Run it with `npx` (Node 22.13 or later); `doctor` checks the setup:
 
 ```sh
-pnpm install --frozen-lockfile
-pnpm build
-node distribution/mcp/dist/bin.js doctor
-node distribution/mcp/dist/bin.js
+npx -y @insiderfinance/totalfinance-mcp doctor
 ```
 
-Add it to your MCP client's configuration:
+Add it to your MCP client's configuration, or in Claude Code run
+`claude mcp add totalfinance -- npx -y @insiderfinance/totalfinance-mcp`:
 
 ```json
 {
   "mcpServers": {
     "totalfinance": {
-      "command": "node",
-      "args": ["/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js"]
+      "command": "npx",
+      "args": ["-y", "@insiderfinance/totalfinance-mcp"]
     }
   }
 }
 ```
 
 The server computes from supplied data. It does not fetch market prices. The
-[MCP source-setup guide](./docs/guides/mcp.md) covers client setup, profiles, permissions, and background jobs.
+[agents page](https://www.totalfinance.io/docs/totalfinance/agents) has the setup for each client, and the
+[MCP guide](./docs/guides/mcp.md) covers profiles, permissions, and background jobs.
 Agents can also use the [agent handbook](https://www.totalfinance.io/docs/totalfinance/agents/handbook),
 [llms.txt](https://www.totalfinance.io/docs/totalfinance/llms.txt), and [full library reference](https://www.totalfinance.io/docs/totalfinance/llms-full.txt).
 

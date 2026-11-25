@@ -6,6 +6,12 @@ embedded self-referential commit receipt. This changes release automation only.
 The maintainer wants publishing a GitHub Release to replace local npm commands. No current npm
 upload, version bump, MCP publication, site deployment or change to draft PR #26 is authorized.
 
+**Superseded in part (2026-11-25).** The maintainer approved publishing the MCP server. The release
+workflow now uploads the SDK, then `@insiderfinance/totalfinance-mcp` from the same approved bytes,
+and smoke installs both from the registry. Decisions 2 and 6 below no longer hold for the MCP
+server; the MCP server's first version is a one-time manual upload of the run's approved tarball
+(npm trusted publishing needs an existing package). See [the release runbook](../runbooks/release.md).
+
 ## Decisions and review
 
 1. A normal `release.published` event for `totalfinance-v<major>.<minor>.<patch>` is the release

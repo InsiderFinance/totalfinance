@@ -2,30 +2,29 @@
 
 TotalFinance gives an agent financial calculations, not permission to invent market observations or place live orders. The same operation definition drives the SDK runtime, CLI, local HTTP/OpenAPI, and MCP. Begin with a narrow, read-only profile.
 
-## 1. Build the local server
+## 1. Run the local server
 
-The MCP package is not on npm yet, so build it from a source checkout. In the repository directory, install with the pinned pnpm version and build:
+The server is the `@insiderfinance/totalfinance-mcp` package. Run it with `npx`; `--help` and `doctor` check it without starting the server:
 
 ```sh
-pnpm install --frozen-lockfile
-pnpm build
-node distribution/mcp/dist/bin.js --help
-node distribution/mcp/dist/bin.js doctor
+npx -y @insiderfinance/totalfinance-mcp --help
+npx -y @insiderfinance/totalfinance-mcp doctor
 ```
 
 Node 22.13.0 or newer is required. Help and doctor exit normally. Once protocol mode begins, stdout is reserved for JSON-RPC; application logging belongs on stderr.
 
 ## 2. Add the server to your MCP client
 
-Use your client's local/stdio MCP configuration. Replace the two absolute paths below with your checkout and a directory you control. This example exposes portfolio analysis and artifact tools, not the full catalog:
+Use your client's local/stdio MCP configuration. Replace the absolute path below with a directory you control. This example exposes portfolio analysis and artifact tools, not the full catalog:
 
 ```json
 {
   "mcpServers": {
-    "@insiderfinance/totalfinance": {
-      "command": "node",
+    "totalfinance": {
+      "command": "npx",
       "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
+        "-y",
+        "@insiderfinance/totalfinance-mcp",
         "--profile",
         "full",
         "--packs",
@@ -40,7 +39,7 @@ Use your client's local/stdio MCP configuration. Replace the two absolute paths 
 
 Run the same command with `doctor` appended to diagnose the selected packs, effective tool count, budgets, and store configuration. Restart the client connection after changing configuration.
 
-Once the MCP package is on npm, the Versions page shows its exact versioned command. Pin that version in shared agent configuration; an unpinned `npx -y` invocation can change behavior on the next launch.
+The Versions page shows the exact versioned command. Pin that version in shared agent configuration; an unpinned `npx -y` invocation can change behavior on the next launch.
 
 ## 3. Choose the smallest useful tool set
 

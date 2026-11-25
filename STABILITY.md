@@ -24,5 +24,5 @@ stability promise begins at 1.0, not at this first release.
 
 SDK 0.1.5 includes the provider-neutral preview research protocol. Independent providers supply
 their own availability and access; the InsiderFinance provider/API integration remains private and
-not publicly launched. This SDK-only release does not publish the optional MCP package; its server
-can be run from a source checkout.
+not publicly launched. The optional MCP server is published alongside the SDK at the same version
+(`npx -y @insiderfinance/totalfinance-mcp`).

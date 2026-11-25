@@ -1,5 +1,6 @@
-# SDK-only publication. Enable only after npm trusted publishing and tag protection are configured.
-# Publishing a normal GitHub Release authorizes this exact SDK version to npm latest.
+# Publishes the SDK, then the MCP server that depends on its exact version. Enable only after npm
+# trusted publishing and tag protection are configured. Publishing a normal GitHub Release
+# authorizes this exact version of both packages to npm latest.
 name: TotalFinance release
 
 on:
@@ -15,7 +16,7 @@ concurrency:
 
 jobs:
   verify:
-    name: verify released SDK
+    name: verify release source
     if: ${{ github.event.release.prerelease == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -60,7 +61,7 @@ jobs:
           retention-days: 30
 
   publish:
-    name: publish approved SDK bytes
+    name: publish approved SDK and MCP bytes
     needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -85,24 +86,24 @@ jobs:
           name: totalfinance-release-${{ needs.verify.outputs.version }}
           path: release/approved/
       - run: pnpm install --frozen-lockfile
-      - name: publish SDK to latest with OIDC and provenance; never upload MCP
+      - name: publish the SDK, then the MCP server, to latest with OIDC and provenance
         env:
           TOTALFINANCE_RELEASE_ENABLED: ${{ vars.TOTALFINANCE_RELEASE_ENABLED }}
         run: pnpm exec tsx tools/release/github-sdk-release.ts publish --dir release/approved
       - uses: actions/upload-artifact@v4
         with:
-          name: totalfinance-sdk-publication-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
-          path: release/approved/SDK_PUBLISH_RECEIPT.json
+          name: totalfinance-publication-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
+          path: release/approved/RELEASE_PUBLISH_RECEIPT.json
           if-no-files-found: error
           retention-days: 30
 
   smoke:
-    name: verify public SDK consumers
+    name: verify public SDK and MCP consumers
     needs: [verify, publish]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      receipt-artifact: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
+      receipt-artifact: totalfinance-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -118,7 +119,7 @@ jobs:
         with:
           name: totalfinance-release-${{ needs.verify.outputs.version }}
           path: release/approved/
-      - name: match SDK registry bytes and run existing installed-consumer journeys
+      - name: match SDK and MCP registry bytes and run existing installed-consumer journeys
         run: |
           for attempt in 1 2 3 4 5; do
             if pnpm exec tsx tools/release/github-sdk-release.ts smoke --dir release/approved; then exit 0; fi
@@ -127,8 +128,8 @@ jobs:
           exit 1
       - uses: actions/upload-artifact@v4
         with:
-          name: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
-          path: release/approved/SDK_SMOKE_RECEIPT-*.json
+          name: totalfinance-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}
+          path: release/approved/RELEASE_SMOKE_RECEIPT-*.json
           if-no-files-found: error
           retention-days: 30
 
@@ -142,7 +143,7 @@ jobs:
       ref: ${{ github.sha }}
 
   evidence:
-    name: attach SDK evidence to existing GitHub Release
+    name: attach release evidence to existing GitHub Release
     needs: [verify, smoke]
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -157,7 +158,7 @@ jobs:
         with:
           name: ${{ needs.smoke.outputs.receipt-artifact }}
           path: release/approved/
-      - name: retain approved SDK bytes and honest SDK-only smoke evidence
+      - name: retain approved SDK and MCP bytes and their registry smoke evidence
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: InsiderFinance/totalfinance
@@ -167,6 +168,7 @@ jobs:
         run: |
           gh release upload "$RELEASE_TAG" \
             "release/approved/insiderfinance-totalfinance-$RELEASE_VERSION.tgz" \
+            "release/approved/insiderfinance-totalfinance-mcp-$RELEASE_VERSION.tgz" \
             release/approved/RELEASE_HASHES.json \
-            release/approved/SDK_RELEASE_SOURCE.json \
-            "release/approved/SDK_SMOKE_RECEIPT-$RELEASE_VERSION.json"
+            release/approved/RELEASE_SOURCE.json \
+            "release/approved/RELEASE_SMOKE_RECEIPT-$RELEASE_VERSION.json"

@@ -4,13 +4,11 @@
 
 ## Quickstart
 
-The optional MCP package is not on npm yet; releases publish only `@insiderfinance/totalfinance`.
-From a built source checkout (Node ≥22.13), run the local binary:
+Run the server with `npx` (Node ≥22.13); `doctor` checks the configuration without starting it:
 
 ```sh
-pnpm build
-node distribution/mcp/dist/bin.js doctor --profile options
-node distribution/mcp/dist/bin.js --profile options
+npx -y @insiderfinance/totalfinance-mcp doctor --profile options
+npx -y @insiderfinance/totalfinance-mcp --profile options
 ```
 
 **Claude Desktop** — add to `claude_desktop_config.json`:
@@ -18,13 +16,9 @@ node distribution/mcp/dist/bin.js --profile options
 ```json
 {
   "mcpServers": {
-    "@insiderfinance/totalfinance": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
-        "--profile",
-        "options"
-      ]
+    "totalfinance": {
+      "command": "npx",
+      "args": ["-y", "@insiderfinance/totalfinance-mcp", "--profile", "options"]
     }
   }
 }
@@ -33,7 +27,7 @@ node distribution/mcp/dist/bin.js --profile options
 **Claude Code**:
 
 ```sh
-claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js --profile options
+claude mcp add totalfinance -- npx -y @insiderfinance/totalfinance-mcp --profile options
 ```
 
 **Cursor** — add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
@@ -41,21 +35,20 @@ claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/
 ```json
 {
   "mcpServers": {
-    "@insiderfinance/totalfinance": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js",
-        "--profile",
-        "options"
-      ]
+    "totalfinance": {
+      "command": "npx",
+      "args": ["-y", "@insiderfinance/totalfinance-mcp", "--profile", "options"]
     }
   }
 }
 ```
 
+The [agents page](https://www.totalfinance.io/docs/totalfinance/agents) has VS Code, Codex and other
+clients. Pin a version (`@insiderfinance/totalfinance-mcp@<version>`) when you need repeatable results.
+
 ## Source installation
 
-Use the source checkout rather than an npm install of the unpublished MCP package:
+To run unreleased changes, build a source checkout and point the client at the local binary:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -63,8 +56,8 @@ pnpm build
 node distribution/mcp/dist/bin.js
 ```
 
-Installing the SDK alone does not install or start an MCP server. Optional MCP metadata moves with
-the SDK for local builds and verified tarball tests; that is not evidence of an MCP npm release.
+Installing the SDK alone does not install or start an MCP server; the MCP package depends on the
+SDK version released with it.
 
 Omitting `--profile` keeps the 23-tool default. The examples above deliberately select only the
 options task. The server supplies no quotes or other live data: ask it to list tools, inspect

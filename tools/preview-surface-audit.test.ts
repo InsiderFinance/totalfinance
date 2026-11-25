@@ -413,7 +413,7 @@ describe('FC9 row 6 — release plumbing (Decisions 6 and 9): the every-public-p
     expect(readFileSync(join(ROOT, '.gitignore'), 'utf8').split('\n')).toContain('/release/');
   });
 
-  it('the release workflow verifies and publishes only the SDK after a normal published release', () => {
+  it('the release workflow verifies, then publishes the SDK and MCP server after a normal published release', () => {
     const workflow = readFileSync(join(ROOT, '.github/workflows/totalfinance-release.yml'), 'utf8');
     expect(workflow).toContain('types: [published]');
     expect(workflow).not.toContain('workflow_dispatch:');
@@ -430,6 +430,8 @@ describe('FC9 row 6 — release plumbing (Decisions 6 and 9): the every-public-p
     expect(workflow).toContain('pnpm test:coverage');
     expect(workflow).toContain('github-sdk-release.ts smoke --dir release/approved');
     expect(workflow).toContain('gh release upload "$RELEASE_TAG"');
+    expect(workflow).toContain('insiderfinance-totalfinance-mcp-$RELEASE_VERSION.tgz');
+    expect(workflow).not.toContain('never upload MCP');
     expect(workflow).not.toContain('tools/release/finalize-github-release.ts');
     expect(workflow).not.toContain('--clobber');
   });

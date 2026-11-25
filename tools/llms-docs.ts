@@ -130,18 +130,23 @@ export function buildLlmsTxt(reference: PublicReference = buildPublicReference()
 function setup(reference: PublicReference): string[] {
   const mcp = reference.packages.find((p) => p.name === '@insiderfinance/totalfinance-mcp');
   if (!mcp) throw new Error('Agent documentation requires the MCP package metadata');
+  const run = MCP_PUBLISHED_ON_NPM
+    ? `npx -y @insiderfinance/totalfinance-mcp@${mcp.version}`
+    : 'node distribution/mcp/dist/bin.js';
   return [
     '## Journey connect-agent',
     '',
-    'Use Node at the floor declared by the installed package. In a built checkout (`pnpm build`), launch the stdio server:',
+    MCP_PUBLISHED_ON_NPM
+      ? 'Use Node at the floor declared by the package. Launch the stdio server with npx:'
+      : 'Use Node at the floor declared by the installed package. In a built checkout (`pnpm build`), launch the stdio server:',
     '```sh',
-    'node distribution/mcp/dist/bin.js --profile default',
-    'node distribution/mcp/dist/bin.js doctor',
+    `${run} --profile default`,
+    `${run} doctor`,
     '```',
     '',
-    `This checkout declares @insiderfinance/totalfinance-mcp ${mcp.version} (${mcp.stability}). ` +
+    `This reference describes @insiderfinance/totalfinance-mcp ${mcp.version} (${mcp.stability}). ` +
       (MCP_PUBLISHED_ON_NPM
-        ? `A client may use command \`npx\` with args \`["-y", "@insiderfinance/totalfinance-mcp@${mcp.version}", "--profile", "default"]\`. `
+        ? `A client uses command \`npx\` with args \`["-y", "@insiderfinance/totalfinance-mcp@${mcp.version}", "--profile", "default"]\`. `
         : 'It is not on npm yet: build a source checkout and launch the server as above. ') +
       'Stdout in server mode is JSON-RPC only.',
     '',

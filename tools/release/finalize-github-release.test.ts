@@ -358,15 +358,15 @@ describe('fail-closed GitHub candidate finalization', () => {
     },
   );
 
-  it('the SDK release workflow attaches evidence without recreating or replacing a published release', () => {
+  it('the release workflow attaches evidence without recreating or replacing a published release', () => {
     const workflow = readFileSync(
       new URL('../../.github/workflows/totalfinance-release.yml', import.meta.url),
       'utf8',
     );
     expect(workflow).toContain('gh release upload "$RELEASE_TAG"');
-    expect(workflow).toContain('SDK_SMOKE_RECEIPT-$RELEASE_VERSION.json');
+    expect(workflow).toContain('RELEASE_SMOKE_RECEIPT-$RELEASE_VERSION.json');
     expect(workflow).toContain(
-      'name: totalfinance-sdk-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}',
+      'name: totalfinance-smoke-${{ needs.verify.outputs.version }}-attempt-${{ github.run_attempt }}',
     );
     expect(workflow).not.toContain('overwrite: true');
     expect(workflow).not.toContain('--clobber');

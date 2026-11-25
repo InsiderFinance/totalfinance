@@ -6,6 +6,7 @@ import {
   publishedSdkRelease,
   requireForwardLatest,
   requireFullMainCi,
+  requireMcpPublishable,
   requireReleaseCheckout,
 } from './github-sdk-policy.js';
 
@@ -33,7 +34,7 @@ function jobs() {
   };
 }
 
-describe('a GitHub Release is explicit SDK-only publication authority', () => {
+describe('a GitHub Release is explicit publication authority for the SDK and MCP server', () => {
   it.each(['verify', 'publish'])(
     'the actual %s command refuses disabled publication before reading artifacts or contacting a registry',
     (command) => {
@@ -190,5 +191,25 @@ describe('release reruns preserve later latest versions', () => {
   it('compares minor/patch components numerically and does not treat prereleases as stable', () => {
     expect(() => requireForwardLatest('0.1.10', '0.1.9')).not.toThrow();
     expect(() => requireForwardLatest('0.1.3', '0.1.3-rc.1')).toThrow();
+  });
+});
+
+describe('the first MCP version is a one-time manual upload', () => {
+  it('refuses an OIDC upload of an MCP package npm has never seen, pointing at the runbook', () => {
+    expect(() =>
+      requireMcpPublishable({ loopback: false, packageExists: false, version: '0.1.8' }),
+    ).toThrow(/First MCP publication.*0\.1\.8.*rerun this failed job.*docs\/runbooks\/release\.md/);
+  });
+
+  it('publishes or byte-verifies once the package exists, and always in a loopback rehearsal', () => {
+    expect(() =>
+      requireMcpPublishable({ loopback: false, packageExists: true, version: '0.1.8' }),
+    ).not.toThrow();
+    expect(() =>
+      requireMcpPublishable({ loopback: true, packageExists: false, version: '0.1.8' }),
+    ).not.toThrow();
+    expect(() =>
+      requireMcpPublishable({ loopback: true, packageExists: false, version: 'latest' }),
+    ).toThrow();
   });
 });
