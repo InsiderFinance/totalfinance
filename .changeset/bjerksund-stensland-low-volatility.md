@@ -9,4 +9,5 @@ refused, or a NaN Greek. The cause was a reflection power `(I/S)^κ` that overfl
 normal tail underflowed. The published formulas are now evaluated in the log domain with
 cancellation-free boundary algebra. Every previously failing case now prices to the exact model value,
 and ordinary results are unchanged to rounding. Model, floor, Greek units and bumps, and result shapes
-are unchanged.
+are unchanged. The finite-difference American engines also refuse a non-finite Greek with
+`postcondition.non_finite_result`, instead of returning it silently.

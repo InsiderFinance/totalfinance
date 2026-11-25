@@ -1,6 +1,6 @@
 # Bjerksund–Stensland low-volatility stability
 
-Status: C–F verified locally; G (hosted checks, full CI, review) pending. Tracked in [issue #37](https://github.com/InsiderFinance/totalfinance/issues/37).
+Status: A–F verified locally. G (full local CI, packed consumer, hosted checks, review) is pending on the PR. Tracked in [issue #37](https://github.com/InsiderFinance/totalfinance/issues/37).
 Base: `main` at `90fd7f9`. No options, math or core source has changed there since
 `totalfinance-v0.1.6`. This bounded correctness contract was written before the regression fixtures
 were committed. It was checked against alignment laws 7, 13, 14 and 15 and against `CONTRIBUTING.md`.
@@ -11,9 +11,13 @@ were committed. It was checked against alignment laws 7, 13, 14 and 15 and again
 return finite, accurate prices and finite-difference Greeks for every valid input whose model value
 is representable. This includes the low-volatility, far-boundary and near-`b = r` regimes that
 currently fail. The published model, its terms, the put–call transformation, the
-`max(approximation, intrinsic, European)` floor, the `b ≥ r` European branch, the no-arbitrage
-postcondition, Greek units and finite-difference bumps, result shapes, names and metadata are all
-unchanged. Ordinary inputs agree with the previous implementation to rounding.
+`max(approximation, intrinsic, European)` floor, the `b ≥ r` European branch, the existing
+no-arbitrage postcondition, Greek units and finite-difference bumps, result shapes, names and
+metadata are all unchanged. Ordinary inputs agree with the previous implementation to rounding.
+There are two kinds of change. The numerical source change (decisions 1–3) is confined to
+`packages/options/src/engines/american-approx.ts`. The one additive failure check (decision 7) is
+in the shared engine factory, `packages/options/src/engines/engine-factory.ts`, and refuses a
+non-finite Greek that was previously returned silently.
 
 Non-goals: no new public export, parameter normalization, clamp, European or lattice substitution,
 relaxed postcondition, or change to the bump policy. No dependency is added and no transport
@@ -55,9 +59,10 @@ propagates the NaN correctly, and the postcondition refuses it.
    `B0 − K = max(b, 0)·K/(r − b)`. `B∞ − B0` is `K/u` for b ≤ 0 and `Kσ²(1 + u)/(2(r − b))` for b > 0,
    which follows from the quadratic. `Iⱼ − K = (B0 − K) + (B∞ − B0)·(−expm1(h))`. These are exact
    identities, not limits.
-3. **Exact regimes stay exact; nothing else changes.** The `b ≥ r` European branch, the early-exercise
-   branch `S ≥ I → S − K`, the floor and every postcondition are untouched. A genuinely unrepresentable
-   result still fails the existing postcondition, with no clamp.
+3. **Exact regimes stay exact.** The `b ≥ r` European branch, the early-exercise branch
+   `S ≥ I → S − K`, the floor and every existing postcondition are untouched; decision 7 adds one
+   check separately. A genuinely unrepresentable result still fails the existing postcondition,
+   with no clamp.
 4. **Greek semantics unchanged.** Bumps (S·1e-3, min(1e-3, σ/4), min(1e-4, T/4), 1e-4) and units
    (theta per calendar day, vega per vol point, rho per 1%) are preserved. Where the coarse default
    bump does not resolve a very low σ√T, the stencil's truncation error is reported rather than
@@ -96,10 +101,13 @@ propagates the NaN correctly, and the postcondition refuses it.
       numerical journey.
 - [x] E. Evidence: full-grid reference comparison, a dense raw low-volatility stress grid, the lattice
       model-error table and residual limits, recorded below.
-- [ ] F. Format and lint changed files. Typecheck, API reports, clean ordered regeneration (expected
-      no-op), measured bundle budgets, build, and a packed consumer journey on a fresh tarball.
-- G (post-commit, owned by the PR): exact-head fast PR checks, `pnpm run ci` with the independent
-  repeat, and an independent adversarial review. No merge, version or publication.
+- [x] F. Changed files are formatted and linted, and the repository typecheck passes. The ordered
+      regeneration chain produces no contract churn (`summary.defective` 0), and the measured bundle
+      budgets pass.
+- G (post-commit, owned by the PR): full local `pnpm run ci`, the build and the packed
+  installed-consumer journey (with exit codes), a private packed SDK artifact for downstream
+  validation, exact-head hosted PR checks, and an independent adversarial review. No merge, version
+  bump or publication.
 
 ## Evidence
 
@@ -118,7 +126,10 @@ vol point, rho per 1%.
 - **Grids.** The 972-case boundary grid and the 12,000-case grid fail 66 and 746 cases on the base
   and 0 and 0 after the fix.
 - **Against the reference.**
-  - All 12,972 grid prices: worst error 5.6e-16·(S + K).
+  - All 12,972 grid prices, measured at source commit `6329802` (later commits change only
+    documentation): worst error 5.6e-16·(S + K). The engine was re-dumped at that commit and
+    compared with the stored 30-digit references. An earlier revision, which still took `ln Φ` from
+    `normalCdf`, measured 5.7e-15·(S + K) against the same references.
   - A dense raw (unfloored) stress grid of 10,944 evaluations (σ 0.2–2%, spot every 2% of strike,
     six rate/carry pairs, three maturities): all finite, worst error 4.9e-15·(S + K).
   - Committed goldens (7 published anchors, 196 raw and floored cases in both forms, 1,932 grid rows)
@@ -139,8 +150,12 @@ vol point, rho per 1%.
   2002 is 0.3–1.8% below the lattice and closer than 1993.
 - **Surface and gates.** The ordered regeneration chain changes only `docs/bundle-size.md` and the
   docs inventory entry for this spec, with `summary.defective` 0. The umbrella bundle measures
-  732,903 → 733,746 B gzip, so its ceiling rises 716 → 716.875 KiB from that measurement; every
-  other budget is unchanged.
+  732,903 → 733,746 B gzip (+843 B) on the canonical Node 22.23.2 / esbuild 0.25.12. Measured one
+  change at a time against base, the numerical kernel accounts for +825 B and the finite-Greek
+  check for +21 B. Following CONTRIBUTING's rule (raise a bound only from a measurement, and say
+  where it came from), the umbrella ceiling rises 716 → 716.875 KiB with 334 B of headroom. Every
+  other budget, including the 21 B-headroom workflows entrypoint (measured unchanged at 521,707 B),
+  and every structural exclusion are unchanged.
 - **Cost.** Indicatively, one scalar price takes about 1.4–1.9× as long (interleaved A/B, roughly
   5 → 9 µs). The machine carried a background backup, so this is not a gate.
 
