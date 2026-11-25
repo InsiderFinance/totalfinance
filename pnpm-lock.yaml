@@ -18,7 +18,7 @@ importers:
         specifier: 1.5.5
         version: 1.5.5
       '@modelcontextprotocol/sdk':
-        specifier: ^1.12.0
+        specifier: ^1.29.0
         version: 1.29.0(zod@4.4.3)
       '@rollup/plugin-node-resolve':
         specifier: 16.0.3
@@ -72,7 +72,7 @@ importers:
         specifier: 0.1.7
         version: link:../totalfinance
       '@modelcontextprotocol/sdk':
-        specifier: ^1.12.0
+        specifier: ^1.29.0
         version: 1.29.0(zod@4.4.3)
 
   distribution/totalfinance: {}
@@ -193,7 +193,7 @@ importers:
   packages/mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.12.0
+        specifier: ^1.29.0
         version: 1.29.0(zod@4.4.3)
       '@totalfinance/backtest':
         specifier: workspace:*

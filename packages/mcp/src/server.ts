@@ -140,7 +140,7 @@ const INSTRUCTIONS = [
   'Units are decimals (a 22% volatility is 0.22; a 4.5% rate is 0.045) and time to expiry is in years (30 days is 30/365).',
   'Every calculation result carries `assumptions` (the conventions applied) and `diagnostics.warnings`; read both before quoting a number.',
   'A stochastic tool that omits its seed receives the server default and echoes it under `assumptions.seed`, so a call is reproducible.',
-  'A successful call returns the `OperationResult` envelope as structuredContent ({ operation, library, summary, structured, assumptions, diagnostics, identity, artifacts, usage, trace }) — byte-for-byte the document the CLI and the HTTP server return — and its one-line summary as text.',
+  'A successful call returns the `OperationResult` envelope as structuredContent ({ operation, library, summary, structured, assumptions, diagnostics, identity, artifacts, usage, trace }) — byte-for-byte the document the CLI and the HTTP server return — and its one-line summary, followed by any diagnostics warnings (at most five), as text.',
   'A refusal is a JSON `OperationError` ({ code, message, context, operation }) in the error content — the same document the CLI and the HTTP server return.',
   'Tool names are operation ids with dots replaced by underscores (totalfinance.option.price is the tool totalfinance_option_price); the dotted id stays in _meta["totalfinance/operation"].id and totalfinance://operations/<id>.',
   'Large inputs and results travel as `totalfinance://…` handles when a store is attached; read them as resources instead of pasting bulk data.',
@@ -223,15 +223,35 @@ function errorResult(error: OperationError): CallToolResult {
   return { isError: true, content: [{ type: 'text', text: JSON.stringify(error) }] };
 }
 
+/** At most this many diagnostics warnings are repeated in the text block; all stay in structuredContent. */
+const TEXT_WARNING_LIMIT = 5;
+
 /**
- * A successful call (B2): the summary as the one text block and the whole `OperationResult` as
- * structuredContent — the same document the JSON HTTP route sends and the CLI prints, so a client
- * reading any transport sees one envelope (structured, assumptions, diagnostics with status,
- * identity, artifacts, usage). No duplicate JSON text block: the structured content IS the JSON.
+ * The one text block: the summary, then the result's diagnostics warnings. Some hosts show the
+ * model only text content, and a warning such as "volatility=22 implies 2200%; did you mean 0.22?"
+ * must reach it there too, not only in structuredContent.
+ */
+function resultText(result: OperationResult): string {
+  const warnings = result.diagnostics.warnings;
+  if (warnings.length === 0) return result.summary;
+  const lines = warnings
+    .slice(0, TEXT_WARNING_LIMIT)
+    .map((entry) => `Warning (${entry.code}): ${entry.message}`);
+  if (warnings.length > TEXT_WARNING_LIMIT)
+    lines.push(`${warnings.length - TEXT_WARNING_LIMIT} more in diagnostics.warnings.`);
+  return [result.summary, ...lines].join('\n');
+}
+
+/**
+ * A successful call (B2): one text block (the summary plus any diagnostics warnings) and the whole
+ * `OperationResult` as structuredContent — the same document the JSON HTTP route sends and the CLI
+ * prints, so a client reading any transport sees one envelope (structured, assumptions, diagnostics
+ * with status, identity, artifacts, usage). No duplicate JSON text block: the structured content
+ * IS the JSON.
  */
 function envelopeResult(result: OperationResult): CallToolResult {
   return {
-    content: [{ type: 'text', text: result.summary }],
+    content: [{ type: 'text', text: resultText(result) }],
     structuredContent: jsonSafe(result) as Record<string, unknown>,
   };
 }

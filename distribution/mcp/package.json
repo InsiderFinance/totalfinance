@@ -1,6 +1,7 @@
 {
   "name": "@insiderfinance/totalfinance-mcp",
   "version": "0.1.7",
+  "mcpName": "io.github.InsiderFinance/totalfinance",
   "description": "TotalFinance MCP server for AI agents. Read-only by default; explicit capabilities for paper-trading workflows.",
   "license": "Apache-2.0",
   "type": "module",
@@ -50,6 +51,6 @@
   },
   "dependencies": {
     "@insiderfinance/totalfinance": "0.1.7",
-    "@modelcontextprotocol/sdk": "^1.12.0"
+    "@modelcontextprotocol/sdk": "^1.29.0"
   }
 }

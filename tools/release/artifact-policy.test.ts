@@ -112,6 +112,16 @@ describe('approved two-artifact policy', () => {
     expect(() => inspectTarball(join(dir, artifact.tarball), artifact)).toThrow();
   });
 
+  it('requires the MCP Registry name on the MCP package and nowhere else', () => {
+    const mcp = fixtureMetadata(MCP_PACKAGE_NAME);
+    expect(() => validatePackageMetadata(mcp, MCP_PACKAGE_NAME, '0.1.0')).not.toThrow();
+    delete mcp['mcpName'];
+    expect(() => validatePackageMetadata(mcp, MCP_PACKAGE_NAME, '0.1.0')).toThrow(/mcpName/);
+    const main = fixtureMetadata(PUBLIC_PACKAGE_NAME);
+    main['mcpName'] = 'io.github.InsiderFinance/totalfinance';
+    expect(() => validatePackageMetadata(main, PUBLIC_PACKAGE_NAME, '0.1.0')).toThrow(/mcpName/);
+  });
+
   it.each(['^0.1.0', 'workspace:*', 'file:../totalfinance', '0.1.1'])(
     'rejects non-exact/wrong MCP main dependency %s',
     (version) => {

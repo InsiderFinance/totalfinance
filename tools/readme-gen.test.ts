@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { buildReadmes } from './readme-gen.js';
+import { MCP_PUBLISHED_ON_NPM } from '../site/src/agents.js';
+import { buildMcpReadme, buildReadmes } from './readme-gen.js';
 
 // Drift guard (DX4.2): the committed per-package READMEs must match what the generator produces from
 // the live manifests, API reports, and CI-run example snippets. Regenerate with
@@ -29,7 +30,8 @@ describe('package README import guidance', () => {
   });
 
   it('generates portable import guidance and a public guide link for every package', () => {
-    for (const { dir, content } of readmes) {
+    // The MCP README is the server's npm page: it covers running the server, not SDK imports.
+    for (const { dir, content } of readmes.filter((readme) => readme.dir !== 'mcp')) {
       expect(content, dir).toContain('## Imports and bundles');
       expect(content, dir).toContain('named imports from `@insiderfinance/totalfinance/<domain>`');
       expect(content, dir).toContain('`@insiderfinance/totalfinance/<domain>`');
@@ -46,14 +48,44 @@ describe('package README import guidance', () => {
         readFileSync(new URL(`../packages/${dir}/package.json`, import.meta.url), 'utf8'),
       ) as { version: string };
       expect(content, dir).toContain(`Source version ${manifest.version}`);
-      if (dir === 'mcp') {
-        expect(content).toContain('not published on npm');
-        expect(content).toContain('node distribution/mcp/dist/bin.js doctor');
-        expect(content).not.toContain('pnpm add @insiderfinance/totalfinance-mcp');
-      } else expect(content, dir).toContain(`@${manifest.version}`);
+      expect(content, dir).toContain(`@${manifest.version}`);
       expect(content, dir).not.toContain('@totalfinance/');
       expect(content, dir).toContain('not a verified npm installation');
     }
+  });
+
+  it('commits the MCP README for the current publication state', () => {
+    expect(readmes.find(({ dir }) => dir === 'mcp')!.content).toBe(
+      buildMcpReadme(MCP_PUBLISHED_ON_NPM),
+    );
+  });
+
+  it('describes the MCP source build, and no npm install, while the server is not on npm', () => {
+    const content = buildMcpReadme(false);
+    expect(content).toContain('is not on npm yet');
+    expect(content).toContain('node distribution/mcp/dist/bin.js doctor');
+    expect(content).not.toContain('npx');
+    expect(content).not.toContain('@insiderfinance/totalfinance-mcp@');
+    expect(content).toContain(
+      'claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js',
+    );
+  });
+
+  it('gives the npx setup for every client once the server is on npm', () => {
+    const content = buildMcpReadme(true);
+    const manifest = JSON.parse(
+      readFileSync(new URL('../packages/mcp/package.json', import.meta.url), 'utf8'),
+    ) as { version: string };
+    const run = `npx -y @insiderfinance/totalfinance-mcp@${manifest.version}`;
+    expect(content).not.toContain('not on npm');
+    expect(content).toContain(`${run} doctor`);
+    expect(content).toContain(`claude mcp add totalfinance -- ${run}`);
+    expect(content).toContain(`codex mcp add totalfinance -- ${run}`);
+    for (const client of ['Claude Code', 'Claude Desktop', 'Cursor', 'VS Code', 'Codex'])
+      expect(content).toContain(`### ${client}`);
+    expect(content).toContain('"command": "npx"');
+    expect(content).toContain('| `full` | 42 |');
+    expect(content).not.toContain('@totalfinance/');
   });
 
   it('starts the umbrella example with domain imports while preserving namespace convenience', () => {

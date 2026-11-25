@@ -5,7 +5,7 @@ import { lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:
 import { tmpdir } from 'node:os';
 import { join, posix, resolve } from 'node:path';
 import ts from 'typescript';
-import { MCP_PACKAGE_NAME, PUBLIC_PACKAGE_NAME } from '../public-packages.js';
+import { MCP_PACKAGE_NAME, MCP_REGISTRY_NAME, PUBLIC_PACKAGE_NAME } from '../public-packages.js';
 
 export const PUBLIC_ROSTER = [PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME] as const;
 export const NPMJS = 'https://registry.npmjs.org';
@@ -97,6 +97,9 @@ export function validatePackageMetadata(value: unknown, name: string, version: s
       (name === PUBLIC_PACKAGE_NAME ? 'distribution/totalfinance' : 'distribution/mcp')
   )
     throw new Error(`Invalid canonical repository metadata: ${name}`);
+  // The MCP Registry verifies ownership from the published package; a version without it can't be listed.
+  if ((name === MCP_PACKAGE_NAME) !== (pkg['mcpName'] === MCP_REGISTRY_NAME))
+    throw new Error(`Invalid MCP Registry name (mcpName): ${name}`);
   const publish = object(pkg['publishConfig'], 'publishConfig');
   if (
     Object.keys(publish).some((key) => !['access', 'provenance', 'registry'].includes(key)) ||

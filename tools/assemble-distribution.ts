@@ -14,7 +14,9 @@ import ts from 'typescript';
 import { decode, encode } from '@jridgewell/sourcemap-codec';
 import {
   MCP_PACKAGE_NAME,
+  MCP_REGISTRY_NAME,
   PUBLIC_PACKAGE_NAME,
+  mcpRegistryServer,
   publicPackageDirectories,
   publicSourcePaths,
   sourcePackages,
@@ -124,6 +126,8 @@ function expectedMetadata(root: string, pkg: Manifest, sources: SourcePackage[])
   return {
     ...pkg,
     version: mainVersion,
+    // The MCP Registry verifies ownership from this field; it must ship in every published version.
+    ...(mcp ? { mcpName: MCP_REGISTRY_NAME } : {}),
     main: `${entry}.js`,
     module: `${entry}.js`,
     types: `${entry}.d.ts`,
@@ -167,6 +171,7 @@ export function updatePublicationMetadata(root = ROOT): void {
       `${JSON.stringify(expectedMetadata(root, json(path), sources), null, 2)}\n`,
     );
   }
+  writeFileSync(join(root, MCP_SERVER_JSON), mcpServerJsonText(version));
   // Preserve the handwritten config's comments; replace only its paths object.
   const configPath = join(root, 'tsconfig.json');
   const configText = readFileSync(configPath, 'utf8');
@@ -189,6 +194,13 @@ export function updatePublicationMetadata(root = ROOT): void {
     ts.forEachChild(node, updatePaths);
   }
   updatePaths(config);
+}
+
+/** The MCP Registry metadata, versioned with the distributions; not part of the npm tarball. */
+export const MCP_SERVER_JSON = 'distribution/mcp/server.json';
+
+export function mcpServerJsonText(version: string): string {
+  return `${JSON.stringify(mcpRegistryServer(version), null, 2)}\n`;
 }
 
 export function assembleDistribution(root = ROOT): void {
@@ -216,6 +228,14 @@ export function assembleDistribution(root = ROOT): void {
   const literal = readFileSync(join(root, 'packages/workflows/src/version.ts'), 'utf8');
   if (!literal.includes(`WORKFLOWS_VERSION = '${version}'`))
     throw new Error('Runtime version drift');
+  const serverJsonPath = join(root, MCP_SERVER_JSON);
+  if (
+    !existsSync(serverJsonPath) ||
+    readFileSync(serverJsonPath, 'utf8') !== mcpServerJsonText(version)
+  )
+    throw new Error(
+      `${MCP_SERVER_JSON}: run pnpm publication:update (MCP Registry metadata drift)`,
+    );
   for (const pkg of publicPackageDirectories(root)) {
     const manifest = json(join(pkg.path, 'package.json'));
     if (manifest.name !== pkg.name || manifest['private'] === true)

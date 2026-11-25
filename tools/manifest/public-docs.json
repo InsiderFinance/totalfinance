@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 275,
+    "surfaces": 276,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 87,
+      "future-target": 88,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4708,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 87,
+    "checkedUnderVocabulary": 88,
     "shippedNamesWatched": 10110,
     "documentedExceptions": 9,
     "findings": 0
@@ -748,6 +748,13 @@
     },
     {
       "path": "docs/reviews/dogfood-repair-2026-11-02.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
+    },
+    {
+      "path": "docs/reviews/mcp-client-verification-2026-11-25.md",
       "class": "future-target",
       "owner": "human",
       "rule": "vocabulary",
