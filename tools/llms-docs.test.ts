@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { AGENT_JOURNEYS, buildLlmsTxt, buildLlmsFullTxt, sdkOnlyNotes } from './llms-docs.js';
 import { buildPublicReference, type PublicReference } from './public-reference.js';
 import { packsForProfile, REGISTRY_PROFILES } from '../packages/workflows/src/local/profiles.js';
+import { MCP_PUBLISHED_ON_NPM } from '../site/src/agents.js';
 
 // Drift guard (WS9.7): the committed agent-facing docs must match what the generator produces from
 // the live registries, export maps, checker/JSDoc, and operation schemas. Regenerate with
@@ -157,9 +158,14 @@ describe('WS9.7 agent-facing docs are up to date', () => {
     expect(full).toContain('custom engines are not universally exposed by MCP');
     expect(full).toContain('not evidence of npm publication');
     expect(full).not.toContain('pending release');
-    // The MCP package is not on npm (MCP_PUBLISHED_ON_NPM); agents must not be steered to npx.
-    expect(full).toContain('It is not on npm yet: build a source checkout');
-    expect(full).not.toContain('@insiderfinance/totalfinance-mcp@');
+    // Agents are steered to npx exactly when the MCP package is on npm (MCP_PUBLISHED_ON_NPM).
+    if (MCP_PUBLISHED_ON_NPM) {
+      expect(full).toContain('npx -y @insiderfinance/totalfinance-mcp@');
+      expect(full).not.toContain('not on npm yet');
+    } else {
+      expect(full).toContain('It is not on npm yet: build a source checkout');
+      expect(full).not.toContain('@insiderfinance/totalfinance-mcp@');
+    }
     expect(full).toContain('follow nextCursor until absent');
     expect(full).toContain('not declared; optional never implies zero');
     expect(full).not.toContain('Every result is deterministic');

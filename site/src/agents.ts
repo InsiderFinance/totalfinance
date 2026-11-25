@@ -12,10 +12,11 @@
 
 export const MCP_PACKAGE = '@insiderfinance/totalfinance-mcp';
 /**
- * Whether `@insiderfinance/totalfinance-mcp` is on npm. Releases publish only the SDK today; set
- * this to true once the MCP package is published, and every setup switches to the npm command.
+ * Whether `@insiderfinance/totalfinance-mcp` is on npm. Releases publish the SDK and then the MCP
+ * server, so every setup (this site, llms.txt and the package README) uses the npm command. The
+ * docs deploy only after a release's npm smoke passes, so they never get ahead of the registry.
  */
-export const MCP_PUBLISHED_ON_NPM: boolean = false;
+export const MCP_PUBLISHED_ON_NPM: boolean = true;
 /** Where a reader's source checkout puts the built server (placeholder path). */
 export const SOURCE_BINARY = '/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js';
 

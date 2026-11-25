@@ -4,28 +4,32 @@
 If unavailable, the repository owner explicitly takes over in the release thread before acting.
 All commands below require separate maintainer authorization; they are not automatic remediation.
 
-## Current SDK-only GitHub Release path
+## Current GitHub Release path
 
-For [release.md](./release.md), only the SDK was uploaded. Stop announcement and site work; retain
-that run's `SDK_PUBLISH_RECEIPT.json`, original tarballs/hash manifest, tag/commit, source/full-CI
-receipt and `SDK_SMOKE_RECEIPT-<version>.json`. Read the SDK's current registry bytes and `latest`.
-The publication receipt records its prior `latest`; use an actual previously verified version,
-never a guessed predecessor. Optional MCP was a local smoke witness and must not be rolled back,
-published or retagged to resolve an SDK-only incident.
+For [release.md](./release.md), the SDK is uploaded first, then the MCP server (releases through
+0.1.7 uploaded only the SDK). Stop announcement and site work; retain that run's
+`RELEASE_PUBLISH_RECEIPT.json`, original tarballs/hash manifest, tag/commit, source/full-CI receipt
+(`RELEASE_SOURCE.json`) and `RELEASE_SMOKE_RECEIPT-<version>.json` (`SDK_*` names for 0.1.7 and
+earlier). Read both packages' current registry bytes and `latest`. The publication receipt records
+each package's prior `latest`; use an actual previously verified version, never a guessed
+predecessor. The MCP server depends on the SDK's exact version, so a rollback moves both packages'
+`latest` to the same earlier version, or neither.
 
-Rerun failed jobs from the original run for transient/authentication failures. Existing SDK bytes
-must match before resume skips upload. A newer latest is an explicit stop, not permission to roll
-it back. If code/metadata or published bytes differ, preserve the evidence and prepare a new version.
-For a bad SDK already on latest, the release owner separately approves restoring the SDK's prior
-verified latest and/or deprecating the affected version. Hosted release jobs never automatically
-perform that rollback. Preserve the GitHub release/tag and mark its notes withdrawn if appropriate.
-Existing receipt assets remain immutable; recover attachment by comparing original bytes and
-uploading only missing original files. No clobber, deletion, re-tag or repack is authorized.
+Rerun failed jobs from the original run for transient/authentication failures. Existing bytes must
+match before resume skips an upload. If the SDK published and the MCP upload failed, rerunning the
+publish job byte-verifies the SDK and retries only the MCP server. A newer latest is an explicit
+stop, not permission to roll it back. If code/metadata or published bytes differ, preserve the
+evidence and prepare a new version. For a bad version already on latest, the release owner
+separately approves restoring the prior verified latest and/or deprecating the affected version.
+Hosted release jobs never automatically perform that rollback. Preserve the GitHub release/tag and
+mark its notes withdrawn if appropriate. Existing receipt assets remain immutable; recover attachment
+by comparing original bytes and uploading only missing original files. No clobber, deletion, re-tag
+or repack is authorized.
 
 ## Historical candidate-pair path
 
 The remaining sections apply only to an explicitly authorized two-package candidate/promotion
-incident, not the SDK-only release workflow.
+incident, not the GitHub Release workflow.
 
 The complete public roster is `@insiderfinance/totalfinance` and
 `@insiderfinance/totalfinance-mcp`, at one exact version. Main has no runtime dependencies; MCP

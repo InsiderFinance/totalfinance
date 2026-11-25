@@ -1,12 +1,14 @@
-# Runbook — publish the SDK from a GitHub Release
+# Runbook — publish the SDK and MCP server from a GitHub Release
 
 Publishing a normal GitHub Release tagged `totalfinance-v<version>` authorizes that exact prepared
-SDK version to npm `latest`. Actions verifies the release commit, builds and publishes on
-GitHub-hosted runners, and checks public consumers. Local npm commands are unnecessary.
+version of `@insiderfinance/totalfinance` and `@insiderfinance/totalfinance-mcp` to npm `latest`.
+Actions verifies the release commit, builds and publishes on GitHub-hosted runners, and checks
+public consumers. Local npm commands are unnecessary, except once for the MCP server's first version
+(see [First MCP publication](#first-mcp-publication)).
 
-Only `@insiderfinance/totalfinance` is uploaded. Optional MCP metadata/tarballs remain coherent and
-are validated/tested locally, but `@insiderfinance/totalfinance-mcp` is not published by this path.
-The [scoped contract](../specs/github-release-npm.md) controls this automation. It does not authorize
+The SDK is uploaded first, then the MCP server, which depends on the SDK's exact version. Until
+0.1.7 only the SDK was published; the MCP server joined the release path in 2026-11. The
+[scoped contract](../specs/github-release-npm.md) controls this automation, as amended there. It does not authorize
 creating a release, publishing a version, changing npm settings or deploying the website during PR
 preparation. Older [candidate-pair instructions](./release-pair-legacy.md) are historical, not the
 current workflow.
@@ -15,7 +17,8 @@ current workflow.
 
 Complete this after reviewing/merging the automation PR, before creating the first release:
 
-1. In npm's `@insiderfinance/totalfinance` package settings, add a GitHub Actions trusted publisher:
+1. In npm's package settings for `@insiderfinance/totalfinance`, and for `@insiderfinance/totalfinance-mcp`
+   once it exists, add a GitHub Actions trusted publisher:
 
    | Field             | Exact value                |
    | ----------------- | -------------------------- |
@@ -25,9 +28,11 @@ Complete this after reviewing/merging the automation PR, before creating the fir
    | Environment       | `npm-publish`              |
    | Allowed action    | Direct `npm publish`       |
 
-   No npm token, OTP, dist-tag permission or MCP publisher is needed. npm does not verify these
-   settings on save; the first explicitly authorized release proves the actual OIDC handshake.
-   See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
+   No npm token, OTP or dist-tag permission is needed. npm does not verify these settings on save;
+   the first explicitly authorized release proves the actual OIDC handshake. A new trusted
+   publisher expires if it is not used to publish within 2 days, so add the MCP server's shortly
+   before the release that first publishes it through Actions. See
+   [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
 2. Create the GitHub `npm-publish` environment. Its selected deployment tag rule allows
    `totalfinance-v*`; a main-only branch rule would reject release events because they use tag refs.
@@ -58,36 +63,68 @@ Node 22.13.0. This preserves the supported consumer runtime while meeting npm's 
    full-CI evidence, then runs `pnpm run ci`, standalone `pnpm api:check`, and a second
    `pnpm test:coverage`. It packs the validated distribution pair once and retains clean-source hashes.
 5. The environment-protected publish job downloads those bytes, checks all hashes/metadata and
-   source identity again, and uploads **only the SDK** with provenance, public access and `latest`.
-   It neither rebuilds approved bytes nor uses an npm-token fallback. SDK publication is immediately
-   accepted; npm can report asynchronous processing before the version and latest tag become public.
+   source identity again, and uploads **the SDK, then the MCP server** with provenance, public access
+   and `latest`. Each package is byte-verified and skipped when npm already serves its approved
+   bytes. It neither rebuilds approved bytes nor uses an npm-token fallback. A publication is
+   immediately accepted; npm can report asynchronous processing before the version and latest tag
+   become public.
    Readback polls every 15 seconds up to a 15-minute polling deadline, retaining the existing HTTP
    request timeouts, until exact approved bytes and latest match. It never repeats the upload.
    Integrity/metadata/HTTP errors and a newer latest fail immediately. A later smoke failure does
    not automatically unpublish or roll back discovery.
-6. Registry smoke matches the SDK's downloaded tarball to approval and installs its exact version.
-   Existing numerical SDK/CLI/HTTP journeys and all strict site examples must match committed
-   expectations. Optional MCP is installed from its approved local tarball solely as a test witness.
-   `SDK_SMOKE_RECEIPT-<version>.json` explicitly distinguishes the registry SDK from that witness.
+6. Registry smoke matches both packages' downloaded tarballs to approval and installs their exact
+   versions from npm. Existing numerical SDK/CLI/HTTP/MCP journeys and all strict site examples must
+   match committed expectations. `RELEASE_SMOKE_RECEIPT-<version>.json` records both registry
+   packages.
 7. Actions retains the source/pack/publication/smoke artifacts for 30 days. After smoke passes, it
-   attaches the SDK tarball, pair hash manifest, source/full-CI receipt and SDK smoke receipt to the
-   existing GitHub Release. It never creates another release, moves the tag or overwrites assets.
+   attaches the SDK and MCP tarballs, pair hash manifest, source/full-CI receipt
+   (`RELEASE_SOURCE.json`) and smoke receipt to the existing GitHub Release. It never creates another release, moves the tag or overwrites assets.
    Preserve a durable copy before Actions artifacts expire.
 8. After smoke passes, the docs job fast-forwards `docs-live` to the release commit, and Vercel
    deploys it to production, so the live docs match the version now on npm. It never moves
    `docs-live` backwards; rerunning an older release leaves newer docs in place. See the
    [deployment guide](./deploy-totalfinance-site.md) for publishing docs-only fixes by hand.
 
+## First MCP publication
+
+npm trusted publishing can be configured only for a package that already exists, so the MCP server's
+first version cannot be uploaded through Actions. The first release that includes it publishes the
+SDK, then stops the publish job with "First MCP publication" before any MCP upload. Then:
+
+1. Download that run's approved bytes and check the MCP tarball against the approved hash manifest
+   (replace `<run-id>` and `<version>`):
+
+   ```sh
+   gh run download <run-id> -R InsiderFinance/totalfinance -n totalfinance-release-<version> -D /tmp/totalfinance-release-<version>
+   cd /tmp/totalfinance-release-<version>
+   shasum -a 256 insiderfinance-totalfinance-mcp-<version>.tgz
+   grep -A3 insiderfinance-totalfinance-mcp-<version>.tgz RELEASE_HASHES.json
+   ```
+
+2. Upload exactly that tarball once with your npm login. Local uploads cannot carry provenance:
+
+   ```sh
+   npm whoami || npm login
+   npm publish ./insiderfinance-totalfinance-mcp-<version>.tgz --access public --tag latest --provenance=false --ignore-scripts
+   ```
+
+3. In the same run, choose **Re-run failed jobs**. The publish job byte-verifies both packages
+   instead of uploading, then smoke, evidence and docs run as usual.
+4. Before the next release, within its 2-day window, add the MCP server's trusted publisher
+   (one-time setup, step 1). From then on every release publishes both packages through Actions.
+
+Never upload a tarball you built yourself: a version's bytes must be the run's approved bytes.
+
 ## Rehearsal and recovery
 
-Ordinary CI rehearses SDK-only publishing into a disposable Verdaccio registry, proves optional MCP
-is still absent, and runs the same consumer smoke. It then completes the existing pair rehearsal
-using verified resume. The scoped registry has no public fallback. No test upload reaches npmjs.org.
+Ordinary CI rehearses publishing the SDK, then the MCP server, into a disposable Verdaccio registry,
+byte-verifies both on a resumed run, and runs the same consumer smoke against both registry
+packages. It then completes the existing pair rehearsal using verified resume. The scoped registry has no public fallback. No test upload reaches npmjs.org.
 
 If a publish response is ambiguous or smoke fails, retain the original Actions run and artifacts.
 Rerun **failed jobs in that same run**; do not start another release, rebuild under a used version,
-move/delete a tag, overwrite evidence or silently relax a check. An existing SDK version is skipped
-only after its downloaded bytes match approval. A newer npm `latest` makes an old release rerun
+move/delete a tag, overwrite evidence or silently relax a check. An existing SDK or MCP version is
+skipped only after its downloaded bytes match approval. A newer npm `latest` makes an old release rerun
 refuse instead of moving discovery backwards. A metadata/byte mismatch requires owner-led recovery.
 
 Evidence attachment refuses conflicting existing assets. If an upload partly succeeded, retain the
@@ -98,7 +135,8 @@ pair recovery; an SDK incident never authorizes changing optional MCP's tags or 
 
 ## Local fallback
 
-The existing `tools/release/publish-npm.sh` remains a separately authorized SDK-only operator path.
+The existing `tools/release/publish-npm.sh` remains a separately authorized SDK-only operator path
+(it never uploads the MCP server).
 It builds/packs from clean current main and publishes directly to npm latest without CI provenance,
 using interactive npm authentication. It skips CI itself, so the same exact-commit release gates
 must have passed first. Prefer the hosted path above; do not race local and hosted publication.

@@ -34,13 +34,11 @@ esbuild ([issue #1420](https://github.com/evanw/esbuild/issues/1420)); Rollup sh
 Direct `import * as math from '@insiderfinance/totalfinance/math'` with static member use also shakes.
 
 All domains and feature subpaths come in the main package with no runtime dependencies.
-MCP is the only optional separate package. It is not on npm yet; in a
-[source checkout](https://github.com/InsiderFinance/totalfinance#develop), build and check it:
+MCP is the only optional separate package, `@insiderfinance/totalfinance-mcp`. Run it with `npx`
+and check it:
 
 ```sh
-pnpm install --frozen-lockfile
-pnpm build
-node distribution/mcp/dist/bin.js doctor
+npx -y @insiderfinance/totalfinance-mcp doctor
 ```
 
 Installation size and final bundle size are different: installing the umbrella does not require

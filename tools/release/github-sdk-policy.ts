@@ -1,4 +1,5 @@
-/** Policy for the SDK-only GitHub Release path; the older candidate-pair policy is unchanged. */
+/** Policy for the GitHub Release path (SDK, then MCP server); the older candidate-pair policy is unchanged. */
+import { MCP_PACKAGE_NAME } from '../public-packages.js';
 import { object, releaseVersion } from './artifact-policy.js';
 
 export function publishedSdkRelease(value: unknown): { version: string; tag: string; id: number } {
@@ -100,4 +101,24 @@ export function requireForwardLatest(version: string, latest: string | undefined
     if (target[index]! < current[index]!)
       throw new Error(`Refusing to replace newer npm latest ${latest} with ${version}`);
   }
+}
+
+/**
+ * npm trusted publishing can be configured only for a package that already exists, so the MCP
+ * server's first public version is a one-time manual upload of this run's approved tarball. Refuse
+ * before an OIDC upload that cannot succeed; a rerun then verifies those bytes instead of uploading.
+ */
+export function requireMcpPublishable(state: {
+  loopback: boolean;
+  packageExists: boolean;
+  version: string;
+}): void {
+  releaseVersion(state.version);
+  if (state.loopback || state.packageExists) return;
+  throw new Error(
+    `First MCP publication: npm has no ${MCP_PACKAGE_NAME} yet, and trusted publishing needs an existing package. ` +
+      `The SDK is published. Upload this run's approved ${MCP_PACKAGE_NAME}@${state.version} tarball once with your npm login, ` +
+      'then rerun this failed job, which verifies those bytes instead of uploading again. ' +
+      'See "First MCP publication" in docs/runbooks/release.md.',
+  );
 }

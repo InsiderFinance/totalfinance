@@ -53,13 +53,11 @@ whether a bundler can drop unused namespace members depends on the bundler. The
 
 ## The MCP server (optional)
 
-The MCP server is not on npm yet. Build it from a
-[source checkout](https://github.com/InsiderFinance/totalfinance), then run `doctor`:
+The MCP server is the separate `@insiderfinance/totalfinance-mcp` package. Run it with `npx`
+(Node 22.13 or later), starting with `doctor`:
 
 ```sh
-pnpm install --frozen-lockfile
-pnpm build
-node distribution/mcp/dist/bin.js doctor
+npx -y @insiderfinance/totalfinance-mcp doctor
 ```
 
 `doctor` reports the effective tool set, budgets and store configuration. See

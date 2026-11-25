@@ -1,4 +1,7 @@
-/** GitHub-release SDK publisher. Reuses pair inspection and consumer journeys; uploads only SDK. */
+/**
+ * GitHub-release publisher for the SDK and its MCP server. Reuses pair inspection and consumer
+ * journeys; uploads the SDK first, then the MCP server that depends on its exact version.
+ */
 import { execFileSync } from 'node:child_process';
 import {
   appendFileSync,
@@ -13,14 +16,22 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { PUBLIC_PACKAGE_NAME, MCP_PACKAGE_NAME } from '../public-packages.js';
-import { NPMJS, PUBLIC_ROSTER, object, sha256Of, verifyApproved } from './artifact-policy.js';
+import {
+  NPMJS,
+  PUBLIC_ROSTER,
+  object,
+  sha256Of,
+  verifyApproved,
+  type ReleaseArtifact,
+} from './artifact-policy.js';
 import {
   publishedSdkRelease,
   requireForwardLatest,
   requireFullMainCi,
+  requireMcpPublishable,
   requireReleaseCheckout,
 } from './github-sdk-policy.js';
-import { waitForSdkReadback } from './github-sdk-readback.js';
+import { waitForReadback } from './github-sdk-readback.js';
 import { assertPublishToolchain, assertReleaseSource, rehearsalToken } from './publish-tarballs.js';
 import { registryTags, releaseRegistry, verifyRegistryArtifact } from './registry-policy.js';
 import {
@@ -54,7 +65,7 @@ function releaseContext() {
     process.env['GITHUB_REPOSITORY'] !== 'InsiderFinance/totalfinance' ||
     !process.env['GITHUB_EVENT_PATH']
   )
-    throw new Error('Public SDK publication requires the GitHub release workflow');
+    throw new Error('Public publication requires the GitHub release workflow');
   const release = publishedSdkRelease(json(process.env['GITHUB_EVENT_PATH']));
   const commit = git(['rev-parse', 'HEAD']);
   let onMain = false;
@@ -118,16 +129,66 @@ function verify(): void {
     run('gh', ['api', `${REPO}/actions/runs/${id}/jobs?per_page=100`]),
   );
   const fullCi = requireFullMainCi(candidate, jobs, release.commit);
-  retain(join(ROOT, 'release', 'SDK_RELEASE_SOURCE.json'), { ...release, fullCi });
+  retain(join(ROOT, 'release', 'RELEASE_SOURCE.json'), { ...release, fullCi });
   if (process.env['GITHUB_OUTPUT'])
     appendFileSync(
       process.env['GITHUB_OUTPUT'],
       `version=${release.version}\ntag=${release.tag}\n`,
     );
-  console.log(`SDK release source verified: ${release.commit}; full CI ${fullCi}`);
+  console.log(`Release source verified: ${release.commit}; full CI ${fullCi}`);
 }
 
-export async function publishSdk(dir: string, registryValue = NPMJS): Promise<void> {
+/** The approved SDK then MCP server, in dependency order. */
+function approvedPair(dir: string) {
+  const manifest = verifyApproved(dir);
+  assertReleaseSource(manifest);
+  const [sdk, mcp] = manifest.packages;
+  if (!sdk || !mcp || sdk.package !== PUBLIC_PACKAGE_NAME || mcp.package !== MCP_PACKAGE_NAME)
+    throw new Error('Approved artifacts must be the SDK, then the MCP server');
+  return { manifest, sdk, mcp };
+}
+
+/** Uploads one approved tarball unless npm already serves its exact bytes; true when it existed. */
+async function publishArtifact(
+  artifact: ReleaseArtifact,
+  dir: string,
+  registry: string,
+  loopback: boolean,
+): Promise<boolean> {
+  if (await verifyRegistryArtifact(artifact, registry)) return true;
+  const home = mkdtempSync(join(tmpdir(), 'totalfinance-publish-'));
+  try {
+    const userconfig = join(home, '.npmrc');
+    const token = loopback ? await rehearsalToken(registry) : undefined;
+    writeFileSync(
+      userconfig,
+      `registry=${registry}/\n@insiderfinance:registry=${registry}/\n${token ? `//${new URL(registry).host}/:_authToken=${token}\n` : ''}`,
+    );
+    execFileSync(
+      'npm',
+      [
+        'publish',
+        join(dir, artifact.tarball),
+        '--registry',
+        `${registry}/`,
+        '--tag',
+        'latest',
+        '--access',
+        'public',
+        loopback ? '--provenance=false' : '--provenance',
+        '--ignore-scripts',
+        '--userconfig',
+        userconfig,
+      ],
+      { cwd: home, stdio: 'inherit' },
+    );
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
+  return false;
+}
+
+export async function publishRelease(dir: string, registryValue = NPMJS): Promise<void> {
   const { registry, loopback } = releaseRegistry(registryValue);
   let release: ReturnType<typeof releaseContext> | undefined;
   if (!loopback) {
@@ -138,88 +199,66 @@ export async function publishSdk(dir: string, registryValue = NPMJS): Promise<vo
       !process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'] ||
       process.env['NODE_AUTH_TOKEN']
     )
-      throw new Error('SDK publication requires OIDC with no npm-token fallback');
+      throw new Error('Publication requires OIDC with no npm-token fallback');
     assertPublishToolchain(process.versions.node, run('npm', ['--version']));
   }
-  const manifest = verifyApproved(dir);
-  assertReleaseSource(manifest);
-  const sdk = manifest.packages[0]!;
-  if (sdk.package !== PUBLIC_PACKAGE_NAME) throw new Error('First artifact must be the public SDK');
+  const { manifest, sdk, mcp } = approvedPair(dir);
   if (release && (release.version !== manifest.version || release.commit !== manifest.commit))
     throw new Error('Approved bytes do not match the published GitHub Release');
-  const before = await registryTags(sdk.package, registry);
-  requireForwardLatest(manifest.version, before['latest']);
-  const exists = await verifyRegistryArtifact(sdk, registry);
-  if (!exists) {
-    const home = mkdtempSync(join(tmpdir(), 'totalfinance-sdk-publish-'));
-    try {
-      const userconfig = join(home, '.npmrc');
-      const token = loopback ? await rehearsalToken(registry) : undefined;
-      writeFileSync(
-        userconfig,
-        `registry=${registry}/\n@insiderfinance:registry=${registry}/\n${token ? `//${new URL(registry).host}/:_authToken=${token}\n` : ''}`,
-      );
-      execFileSync(
-        'npm',
-        [
-          'publish',
-          join(dir, sdk.tarball),
-          '--registry',
-          `${registry}/`,
-          '--tag',
-          'latest',
-          '--access',
-          'public',
-          loopback ? '--provenance=false' : '--provenance',
-          '--ignore-scripts',
-          '--userconfig',
-          userconfig,
-        ],
-        { cwd: home, stdio: 'inherit' },
-      );
-    } finally {
-      rmSync(home, { recursive: true, force: true });
-    }
+  const before = {
+    sdk: await registryTags(sdk.package, registry),
+    mcp: await registryTags(mcp.package, registry),
+  };
+  requireForwardLatest(manifest.version, before.sdk['latest']);
+  requireForwardLatest(manifest.version, before.mcp['latest']);
+  const packages = [];
+  for (const artifact of [sdk, mcp]) {
+    // The MCP server depends on the SDK's exact version, so it is uploaded only once the SDK reads back.
+    if (artifact === mcp)
+      requireMcpPublishable({
+        loopback,
+        packageExists: Object.keys(before.mcp).length > 0,
+        version: mcp.version,
+      });
+    const resumed = await publishArtifact(artifact, dir, registry, loopback);
+    const after = await waitForReadback(artifact, registry);
+    packages.push({
+      artifact,
+      resumed,
+      before: artifact === sdk ? before.sdk : before.mcp,
+      after,
+    });
+    console.log(
+      `${resumed ? 'Byte-verified existing version' : 'Published'}: ${artifact.package}@${artifact.version}`,
+    );
   }
-  const after = await waitForSdkReadback(sdk, registry);
-  retain(join(dir, 'SDK_PUBLISH_RECEIPT.json'), {
-    kind: loopback ? 'loopback-rehearsal' : 'sdk-publication',
+  retain(join(dir, 'RELEASE_PUBLISH_RECEIPT.json'), {
+    kind: loopback ? 'loopback-rehearsal' : 'release-publication',
     commit: manifest.commit,
-    sdk,
     registry,
-    resumed: exists,
-    before,
-    after,
+    packages,
   });
-  console.log(
-    `SDK ${exists ? 'byte-verified existing version' : 'published'}: ${sdk.package}@${sdk.version}; MCP not uploaded`,
-  );
 }
 
-export async function smokeSdk(
+export async function smokeRelease(
   dir: string,
   registryValue = NPMJS,
   receipt?: string,
 ): Promise<void> {
   const { registry, loopback } = releaseRegistry(registryValue);
-  const manifest = verifyApproved(dir);
-  assertReleaseSource(manifest);
-  const [sdk, mcp] = manifest.packages;
-  if (!sdk || !mcp || sdk.package !== PUBLIC_PACKAGE_NAME || mcp.package !== MCP_PACKAGE_NAME)
-    throw new Error('SDK smoke needs the approved SDK and local optional MCP witness');
-  if (!(await verifyRegistryArtifact(sdk, registry))) throw new Error('Registry SDK is missing');
-  const consumer = mkdtempSync(join(tmpdir(), 'totalfinance-sdk-smoke-'));
+  const { manifest, sdk, mcp } = approvedPair(dir);
+  for (const artifact of [sdk, mcp])
+    if (!(await verifyRegistryArtifact(artifact, registry)))
+      throw new Error(`Registry is missing ${artifact.package}@${artifact.version}`);
+  const consumer = mkdtempSync(join(tmpdir(), 'totalfinance-release-smoke-'));
   try {
     writeFileSync(
       join(consumer, 'package.json'),
       JSON.stringify({
-        name: 'totalfinance-sdk-smoke',
+        name: 'totalfinance-release-smoke',
         private: true,
         type: 'module',
-        dependencies: {
-          [sdk.package]: sdk.version,
-          [mcp.package]: `file:${join(dir, mcp.tarball)}`,
-        },
+        dependencies: { [sdk.package]: sdk.version, [mcp.package]: mcp.version },
       }),
     );
     writeFileSync(
@@ -244,26 +283,25 @@ export async function smokeSdk(
     const differences = compare(evidence.observation, json(expected) as SmokeObservation);
     if (differences.length)
       throw new Error(
-        `SDK consumer differs from approved expectations:\n${differences.join('\n')}`,
+        `Release consumer differs from approved expectations:\n${differences.join('\n')}`,
       );
     const source = captureSmokeSource();
     if (source.sourceDirty || source.sourceCommit !== manifest.commit)
       throw new Error('Smoke source changed');
-    retain(receipt ?? join(dir, `SDK_SMOKE_RECEIPT-${manifest.version}.json`), {
+    retain(receipt ?? join(dir, `RELEASE_SMOKE_RECEIPT-${manifest.version}.json`), {
       schemaVersion: 1,
-      kind: loopback ? 'sdk-loopback-rehearsal' : 'sdk-registry-verification',
+      kind: loopback ? 'release-loopback-rehearsal' : 'release-registry-verification',
       version: manifest.version,
       ...source,
       verifiedAt: new Date().toISOString(),
       registry,
-      publicPackages: [sdk],
-      localWitness: mcp,
+      publicPackages: [sdk, mcp],
       manifestSha256: sha256Of(join(dir, 'RELEASE_HASHES.json')),
       expectations: { matched: true, sha256: sha256Of(expected) },
       ...evidence,
     });
     console.log(
-      `SDK registry smoke passed: ${evidence.siteExamples.cases} strict site examples; MCP tested from approved local tarball only`,
+      `Release registry smoke passed: SDK and MCP server installed from the registry; ${evidence.siteExamples.cases} strict site examples`,
     );
   } finally {
     rmSync(consumer, { recursive: true, force: true });
@@ -283,9 +321,9 @@ async function main(): Promise<void> {
   const dir = resolve(ROOT, values.dir!);
   if (positionals.length !== 1) throw new Error('Choose verify, publish or smoke');
   if (positionals[0] === 'verify') verify();
-  else if (positionals[0] === 'publish') await publishSdk(dir, values.registry!);
+  else if (positionals[0] === 'publish') await publishRelease(dir, values.registry!);
   else if (positionals[0] === 'smoke')
-    await smokeSdk(
+    await smokeRelease(
       dir,
       values.registry!,
       values.receipt ? resolve(ROOT, values.receipt) : undefined,

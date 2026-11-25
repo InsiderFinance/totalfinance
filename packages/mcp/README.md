@@ -6,18 +6,11 @@ The [TotalFinance](https://github.com/InsiderFinance/totalfinance#readme) calcul
 
 ## Install
 
-Version 0.1.7 is not on npm yet. Build it from a source checkout (Node 22.13 or later):
+Requires Node 22.13 or later. There is nothing to install globally; check that it runs:
 
 ```sh
-git clone https://github.com/InsiderFinance/totalfinance.git
-cd totalfinance
-pnpm install --frozen-lockfile
-pnpm build
-node distribution/mcp/dist/bin.js doctor
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 doctor
 ```
-
-In the client setups below, replace `/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js` with the absolute path to
-`distribution/mcp/dist/bin.js` in your checkout.
 
 ## Connect your agent
 
@@ -28,7 +21,7 @@ The [agents page](https://www.totalfinance.io/docs/totalfinance/agents) has the 
 Run in your terminal:
 
 ```sh
-claude mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js
+claude mcp add totalfinance -- npx -y @insiderfinance/totalfinance-mcp@0.1.7
 ```
 
 ### Claude Desktop
@@ -39,9 +32,10 @@ Add to Settings → Developer → Edit Config (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "totalfinance": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js"
+        "-y",
+        "@insiderfinance/totalfinance-mcp@0.1.7"
       ]
     }
   }
@@ -58,9 +52,10 @@ Add to your Cursor MCP settings (`~/.cursor/mcp.json`):
 {
   "mcpServers": {
     "totalfinance": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js"
+        "-y",
+        "@insiderfinance/totalfinance-mcp@0.1.7"
       ]
     }
   }
@@ -76,9 +71,10 @@ Add to your workspace root (`.mcp.json`):
   "mcpServers": {
     "totalfinance": {
       "type": "stdio",
-      "command": "node",
+      "command": "npx",
       "args": [
-        "/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js"
+        "-y",
+        "@insiderfinance/totalfinance-mcp@0.1.7"
       ],
       "tools": [
         "*"
@@ -95,15 +91,15 @@ To use it in every workspace, put the same entry in ~/.copilot/mcp-config.json.
 Run in your terminal:
 
 ```sh
-codex mcp add totalfinance -- node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js
+codex mcp add totalfinance -- npx -y @insiderfinance/totalfinance-mcp@0.1.7
 ```
 
 Or add to your Codex config (`~/.codex/config.toml`):
 
 ```toml
 [mcp_servers.totalfinance]
-command = "node"
-args = ["/absolute/path/to/totalfinance/distribution/mcp/dist/bin.js"]
+command = "npx"
+args = ["-y", "@insiderfinance/totalfinance-mcp@0.1.7"]
 ```
 
 ## Choose the tools
@@ -123,8 +119,8 @@ Without options the server lists the **23 default tools**. A profile picks a foc
 | `full` | 42 |
 
 ```sh
-node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js --profile options
-node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js doctor --profile full
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 --profile options
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 doctor --profile full
 ```
 
 Some clients limit how many tools they load at once, so prefer a focused profile to `full`. `doctor` reports the Node version check, the tools a configuration exposes and why any are excluded, the attached store and the input budgets. Tool lists and resource lists are paged: follow `nextCursor`.
@@ -138,8 +134,8 @@ These are off unless you turn them on:
 - `--capability <name>` (repeatable) allows write tools. `--capability trade:paper` adds paper-trading tools, which simulate orders locally and never reach a broker. The capabilities you pass replace the defaults (`portfolio:read`, `analytics:run`, `trade:propose`), so list every one you need.
 
 ```sh
-node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js --profile backtesting --store /absolute/path/to/folder --jobs
-node /absolute/path/to/totalfinance/distribution/mcp/dist/bin.js --profile full --store /absolute/path/to/folder --capability portfolio:read --capability analytics:run --capability trade:propose --capability trade:paper
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 --profile backtesting --store /absolute/path/to/folder --jobs
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 --profile full --store /absolute/path/to/folder --capability portfolio:read --capability analytics:run --capability trade:propose --capability trade:paper
 ```
 
 The [MCP guide](https://github.com/InsiderFinance/totalfinance/blob/main/docs/guides/mcp.md) is the full reference: every tool, resource and prompt, the result envelope, errors, budgets and the job lifecycle.

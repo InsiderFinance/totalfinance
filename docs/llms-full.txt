@@ -231,13 +231,13 @@ Read its complete input schema and permissions in the operation catalog before c
 
 ## Journey connect-agent
 
-Use Node at the floor declared by the installed package. In a built checkout (`pnpm build`), launch the stdio server:
+Use Node at the floor declared by the package. Launch the stdio server with npx:
 ```sh
-node distribution/mcp/dist/bin.js --profile default
-node distribution/mcp/dist/bin.js doctor
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 --profile default
+npx -y @insiderfinance/totalfinance-mcp@0.1.7 doctor
 ```
 
-This checkout declares @insiderfinance/totalfinance-mcp 0.1.7 (pre-1.0; component maturity varies (see stability policy)). It is not on npm yet: build a source checkout and launch the server as above. Stdout in server mode is JSON-RPC only.
+This reference describes @insiderfinance/totalfinance-mcp 0.1.7 (pre-1.0; component maturity varies (see stability policy)). A client uses command `npx` with args `["-y", "@insiderfinance/totalfinance-mcp@0.1.7", "--profile", "default"]`. Stdout in server mode is JSON-RPC only.
 
 ### Selection and permissions
 
