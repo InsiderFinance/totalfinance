@@ -139,8 +139,9 @@ app's Next.js redirects `/x/` to `/x` before rewrites run, so a trailing-slash z
 redirect forever. Readers and search engines see one site; the main domain's `/robots.txt`
 governs crawling, and every page also carries its own robots meta tag. Under the zone, these
 docs run on the signed-in InsiderFinance origin: production deploys only from `docs-live`, which
-only the docs workflow moves (after a release, or by hand from `main`), and keep project membership
-to maintainers. `TOTALFINANCE_DOCS_FAMILY_API=1` should be set only
+the docs workflow moves (after a release, or by hand from `main`). Anyone with write access could
+still push to it, as they could to `main`; a ruleset blocks only force-pushes and deletion. Keep
+repository write access and Vercel project membership to maintainers. `TOTALFINANCE_DOCS_FAMILY_API=1` should be set only
 once the InsiderFinance API and MCP docs are public in production.
 
 Static size is about 0.35 GB (Vercel's static upload limit is 1 GB); the largest page is under
