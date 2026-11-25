@@ -37,7 +37,8 @@ export function pageMetadata({
     alternates: {
       canonical: url,
       types: {
-        'text/markdown': `${BASE_PATH}${markdownRoute(route)}`,
+        // Absolute: Next joins a relative path onto metadataBase, which already ends in the base path.
+        'text/markdown': `${CANONICAL_URL}${markdownRoute(route)}`,
       },
     },
     openGraph: {

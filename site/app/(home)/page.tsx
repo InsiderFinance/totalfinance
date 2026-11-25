@@ -39,7 +39,10 @@ const homeMetadata = pageMetadata({
 
 export const metadata = {
   ...homeMetadata,
-  alternates: { canonical: `${SITE_ORIGIN}/`, types: { 'text/markdown': `${BASE_PATH}/index.md` } },
+  alternates: {
+    canonical: `${SITE_ORIGIN}/`,
+    types: { 'text/markdown': `${SITE_ORIGIN}${BASE_PATH}/index.md` },
+  },
   openGraph: { ...homeMetadata.openGraph, url: `${SITE_ORIGIN}/`, type: 'website' as const },
   title: { absolute: 'TotalFinance — the complete finance library for TypeScript and AI agents' },
 };

@@ -159,4 +159,22 @@ describe('the standalone TotalFinance repository', () => {
       "require('./distribution/totalfinance/package.json').version",
     );
   });
+
+  it('publishes the docs after a verified release, or by hand, only by fast-forwarding docs-live from main', () => {
+    const release = read('.github/workflows/totalfinance-release.yml');
+    const docsJob = release.slice(
+      release.indexOf('\n  docs:\n'),
+      release.indexOf('\n  evidence:\n'),
+    );
+    expect(docsJob).toContain('needs: smoke');
+    expect(docsJob).toContain('uses: ./.github/workflows/totalfinance-docs.yml');
+    expect(docsJob).toContain('ref: ${{ github.sha }}');
+    const docs = read('.github/workflows/totalfinance-docs.yml');
+    expect(docs).toContain('workflow_call:');
+    expect(docs).toContain('workflow_dispatch:');
+    expect(docs).toContain('git merge-base --is-ancestor "$sha" origin/main');
+    expect(docs).toContain('git merge-base --is-ancestor origin/docs-live "$sha"');
+    expect(docs).toContain('git push origin "$sha:refs/heads/docs-live"');
+    expect(docs).not.toMatch(/--force|\+refs\/|"\+\$sha/);
+  });
 });

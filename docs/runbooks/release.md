@@ -69,12 +69,14 @@ Node 22.13.0. This preserves the supported consumer runtime while meeting npm's 
    Existing numerical SDK/CLI/HTTP journeys and all strict site examples must match committed
    expectations. Optional MCP is installed from its approved local tarball solely as a test witness.
    `SDK_SMOKE_RECEIPT-<version>.json` explicitly distinguishes the registry SDK from that witness.
-   It is not a two-package public-registry receipt and must not be imported as a site-release receipt.
 7. Actions retains the source/pack/publication/smoke artifacts for 30 days. After smoke passes, it
    attaches the SDK tarball, pair hash manifest, source/full-CI receipt and SDK smoke receipt to the
    existing GitHub Release. It never creates another release, moves the tag or overwrites assets.
-   Preserve a durable copy before Actions artifacts expire. Site publication remains separately
-   authorized and is not performed here.
+   Preserve a durable copy before Actions artifacts expire.
+8. After smoke passes, the docs job fast-forwards `docs-live` to the release commit, and Vercel
+   deploys it to production, so the live docs match the version now on npm. It never moves
+   `docs-live` backwards; rerunning an older release leaves newer docs in place. See the
+   [deployment guide](./deploy-totalfinance-site.md) for publishing docs-only fixes by hand.
 
 ## Rehearsal and recovery
 
