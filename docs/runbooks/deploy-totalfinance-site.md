@@ -29,7 +29,7 @@ select the root directory and production branch in Vercel's project settings:
 | Output Directory  | `site/dist`                   |
 | Production Branch | `docs-live`                   |
 
-`docs-live` is the only production branch. Nobody pushes to it by hand: the **TotalFinance docs**
+`docs-live` is the only production branch. Don't push to it by hand: the **TotalFinance docs**
 workflow (`.github/workflows/totalfinance-docs.yml`) fast-forwards it to a commit on `main`, so the
 live docs match what npm serves:
 
@@ -38,7 +38,11 @@ live docs match what npm serves:
   commit on it). Use this for docs-only fixes; it also publishes any unreleased library changes on
   `main`, so wait for the next release when those exist.
 
-It never moves `docs-live` backwards or rewrites it. Pushes to `main` and pull requests still build
+It never moves `docs-live` backwards or rewrites it, and the repository's "No Force Purch" ruleset
+blocks force-pushes and deletion of `main` and `docs-live`. The workflow pushes with the built-in
+`GITHUB_TOKEN`, which can't be a ruleset bypass actor; limiting pushes to the workflow would need a
+deploy key or GitHub App credential, which this repository doesn't use. Keep write access to
+maintainers. Pushes to `main` and pull requests still build
 Vercel previews, which `site/vercel.sh` keeps out of search indexes. To set this up on an existing
 project, run the workflow once to create `docs-live`, then set it as the production branch.
 
