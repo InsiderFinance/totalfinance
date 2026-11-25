@@ -16,7 +16,12 @@ import {
   black76,
 } from '@insiderfinance/totalfinance/options/black76';
 import { monteCarloPrice } from '@insiderfinance/totalfinance/options/monte-carlo';
-import { option as optionContracts, asian, spread } from '@insiderfinance/totalfinance/options';
+import {
+  option as optionContracts,
+  asian,
+  engines,
+  spread,
+} from '@insiderfinance/totalfinance/options';
 import { fitGarch } from '@insiderfinance/totalfinance/volatility/forecast';
 import { ols } from '@insiderfinance/totalfinance/math';
 import {
@@ -365,6 +370,70 @@ export function assertNumericalRepairs(): void {
   check(
     probabilityOfBacktestOverfitting(tied, { splits: 4 }).backtestOverfittingProbability === 0,
     'exact PBO ties',
+  );
+  // #37 Bjerksund–Stensland at low volatility: finite prices and Greeks at the exact model values
+  // (independent mpmath references), including a rho whose rate bump crosses zero.
+  const bsAsOf = Date.parse('2026-11-24T15:00:00Z');
+  const bjerksundStensland = (input: {
+    type: 'call' | 'put';
+    spot: number;
+    years: number;
+    riskFreeRate: number;
+    dividendYield: number;
+    volatility: number;
+  }) => {
+    const expiry = new Date(bsAsOf + input.years * 365 * 86_400_000).toISOString();
+    const spec = { underlying: 'X', strike: 100, expiry, style: 'american' as const };
+    const result = engines.bjerksundStensland2002().price({
+      contract: input.type === 'call' ? optionContracts.call(spec) : optionContracts.put(spec),
+      market: {
+        asOf: bsAsOf,
+        spot: input.spot,
+        riskFreeRate: input.riskFreeRate,
+        dividendYield: input.dividendYield,
+        volatility: input.volatility,
+      },
+      options: { greeks: true },
+    });
+    const greeks = Object.values(result.greeks ?? {});
+    check(
+      Number.isFinite(result.value) && greeks.length === 5 && greeks.every(Number.isFinite),
+      `#37 finite ${input.type} price and Greeks`,
+    );
+    return result;
+  };
+  const lowVolatility = {
+    years: 1 / 365,
+    riskFreeRate: 0.05,
+    dividendYield: 0.01,
+    volatility: 0.01,
+  };
+  check(
+    Math.abs(
+      bjerksundStensland({ type: 'call', spot: 100, ...lowVolatility }).value - 0.02681485528546396,
+    ) < 1e-11,
+    '#37 low-volatility call reference',
+  );
+  check(
+    Math.abs(
+      bjerksundStensland({ type: 'put', spot: 100, ...lowVolatility }).value - 0.016546824893642747,
+    ) < 1e-11,
+    '#37 low-volatility put reference',
+  );
+  const zeroRatePut = bjerksundStensland({
+    type: 'put',
+    spot: 140,
+    years: 0.5,
+    riskFreeRate: 0,
+    dividendYield: 0.12,
+    volatility: 0.05,
+  });
+  // r = 0 is the exact European branch (early exercise never pays); its rate bump crosses into the
+  // two-boundary formula. Values are absolute (far below binary64 resolution at S + K = 240).
+  check(
+    Math.abs(zeroRatePut.value - 1.3313454849679599e-15) < 1e-21 &&
+      Math.abs(zeroRatePut.greeks!.rho + 1.5217e-15) < 1e-18,
+    '#37 rho across a zero-rate bump',
   );
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(

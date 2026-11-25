@@ -697,10 +697,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 716,
+    budgetKB: 716.875,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
+      'Bjerksund–Stensland low-volatility stability (issue #37, 2026-11-24): measured 732,903 → 733,746 B gzip (+843 B) on Node 22.23.2/esbuild 0.25.12. The stable φ/Ψ kernel adds bytes to existing owners: log-domain reflection products, the relatively accurate Mills-ratio ln Φ, the weighted 20-point Genz rule and the cancellation-free boundary algebra. So does the shared finite-Greek postcondition. There are no new entrypoint exports or dependencies. The 716.875 KiB ceiling leaves 334 B; every other cap is unchanged (workflows keeps 21 B). ' +
       'LIB-04 centered moments and exact PBO ranking (PR #34, 2026-11-19): measured 732,627 → 732,903 B gzip (+276 B) on Node 22.23.2/esbuild 0.25.12. probabilityOfBacktestOverfitting replaces rounded block moments with exact integer sums and cross-multiplied Sharpe comparisons, reading each validated return once; no new exports or dependencies. The 716 KiB ceiling leaves 281 B; every other cap is unchanged (workflows keeps 21 B). ' +
       'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       'C4 ae690e3f approved (2026-11-11) root723200B: main714320 -> integrated720687 -> scoped721811 -> controlled known-schema correction722908B;292B headroom. Opt-in guard/schema cost, unchanged retained module sets. Only the eight reviewed whole/data installed caps change. ' +

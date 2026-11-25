@@ -5,6 +5,16 @@
 > If another document calls a different phase "current," this sequence wins until that document is
 > synchronized.
 
+### Active: Bjerksund–Stensland low-volatility stability (2026-11-24)
+
+The maintainer authorized a bounded source fix for [issue #37](https://github.com/InsiderFinance/totalfinance/issues/37).
+For valid low-volatility inputs, both Bjerksund–Stensland forms return NaN prices (refused by the
+postcondition) or NaN Greeks, because a reflection power overflows while its normal tail underflows.
+Follow the [stability contract](./specs/bjerksund-stensland-stability.md): stable evaluation of the
+published formulas at the source, with independent high-precision evidence. Model, floor,
+postconditions, Greek semantics and public surface stay unchanged. One PR for review. No merge,
+version bump, publication or deployment is authorized.
+
 ### Active: LIB-04 centered-moment repairs and SDK 0.1.6 release (2026-11-19)
 
 The maintainer authorized fixing LIB-04 (an overstated Monte Carlo standard error, reproduced in

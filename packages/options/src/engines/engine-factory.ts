@@ -27,6 +27,7 @@ import {
   type QuantWarning,
   UnsupportedError,
   WarningCode,
+  assertFiniteValue,
   ensureFinite,
   ensurePositive,
   resolveValuationAsOf,
@@ -484,6 +485,11 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
         spot: S,
         strike: K,
       });
+      // Law 7: a successful result never carries a non-finite Greek. A NaN at one bumped state (a rate
+      // bump crossing zero, say) used to surface silently as `rho: NaN`. It is refused here like the
+      // value above, as a typed library defect. The documented `lambda: null` is not a number and
+      // passes.
+      if (greeks !== undefined) assertFiniteValue(`${functionName}.greeks`, greeks);
       const base = {
         value,
         assumptions: assumptions({
