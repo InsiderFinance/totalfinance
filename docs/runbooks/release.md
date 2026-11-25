@@ -106,7 +106,7 @@ SDK, then stops the publish job with "First MCP publication" before any MCP uplo
 
    ```sh
    npm whoami --registry https://registry.npmjs.org/ || npm login --registry https://registry.npmjs.org/
-   npm publish ./insiderfinance-totalfinance-mcp-<version>.tgz --registry https://registry.npmjs.org/ --access public --tag latest --provenance=false --ignore-scripts
+   npm publish ./insiderfinance-totalfinance-mcp-<version>.tgz --registry https://registry.npmjs.org/ --@insiderfinance:registry=https://registry.npmjs.org/ --access public --tag latest --provenance=false --ignore-scripts
    ```
 
 3. In the same run, choose **Re-run failed jobs**. The publish job byte-verifies both packages
