@@ -498,10 +498,11 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance/workflows',
     entry: 'packages/workflows/src/index.ts',
-    budgetKB: 509.5,
+    budgetKB: 509.625,
     intent:
       'Stage 7A: the protocol-neutral operation registry and the curated operations every transport adapts — bundles the compute it composes; a transport imports it, an application imports the domain packages directly',
     rationale:
+      'Scale-aware finite-difference Greek steps (issue #37, 2026-11-24): measured 521,707 → 521,762 B gzip (+55 B) on Node 22.23.2/esbuild 0.25.12. All of it is the shared bump resolver (resolveFdSteps) that Monte-Carlo Greeks use; the Bjerksund–Stensland kernel is not in this graph (it measured unchanged at 521,707 B). The 509.625 KiB ceiling leaves 94 B; structural exclusions are unchanged. ' +
       'PR32 second review: 521,207 → 521,450 B gzip on Node 22.23.2/esbuild 0.25.12. Cheaper validation-only Cholesky, guarded Kirk moneyness and compatible IV explanations add 243 B across existing owners. The 509.5 KiB ceiling leaves 278 B; no new registry operation, dependency or exclusion. ' +
       'PR32 review corrections (2026-11-11): measured 519,793 → 521,207 B gzip, canonical Node 22.23.2/esbuild 0.25.12. Propagated loan error bounds, term-relative IRR, PSD checks and stable option tails add 1,414 B through existing operation owners; 509.25 KiB leaves 265 B. No registry or domain exclusion is removed. ' +
       'Numerical precision repairs #16–24 (2026-11-11): measured 519,313 → 519,793 B gzip on Node 22.23.2/esbuild 0.25.12. Existing registry delegates to repaired calculation owners; +480 B, 508 KiB leaves 399 B. No transport computation or new dependency. ' +
@@ -697,11 +698,12 @@ export const BUNDLE_BUDGETS: readonly BundleBudget[] = [
   {
     specifier: '@insiderfinance/totalfinance',
     entry: 'packages/totalfinance/src/index.ts',
-    budgetKB: 716.875,
+    budgetKB: 717,
     intent: 'the deliberately-everything umbrella import; tree-shakes or use totalfinance/<domain>',
     timeoutMs: 120_000,
     rationale:
-      'Bjerksund–Stensland low-volatility stability (issue #37, 2026-11-24): measured 732,903 → 733,746 B gzip (+843 B) on Node 22.23.2/esbuild 0.25.12. Measured one change at a time against base: +825 B is the stable φ/Ψ kernel in existing owners (log-domain reflection products, the relatively accurate Mills-ratio ln Φ, the weighted 20-point Genz rule and the cancellation-free boundary algebra), and +21 B is the shared finite-Greek postcondition. There are no new entrypoint exports or dependencies. The 716.875 KiB ceiling leaves 334 B; every other cap is unchanged (workflows keeps 21 B). ' +
+      'Scale-aware finite-difference Greek steps and review repairs (issue #37, 2026-11-24): measured 733,746 → 734,105 B gzip (+359 B) on Node 22.23.2/esbuild 0.25.12, one change at a time: +7 B for scale-free boundary ratios in the price kernel, +113 B for the shared bump resolver with the reference policy Monte Carlo keeps and the branch-aware differencing helper, +238 B for exercise-branch differencing in the shared American engine factory, +1 B for price-only internal calls. Together with the stability kernel below, 732,903 → 734,105 B (+1,202 B). The 717 KiB ceiling leaves 103 B; every other cap except workflows is unchanged. ' +
+      'Bjerksund–Stensland low-volatility stability (issue #37, 2026-11-24): measured 732,903 → 733,746 B gzip (+843 B) on Node 22.23.2/esbuild 0.25.12. Measured one change at a time against base: +825 B is the stable φ/Ψ kernel in existing owners (log-domain reflection products, the relatively accurate Mills-ratio ln Φ, the weighted 20-point Genz rule and the cancellation-free boundary algebra), and +21 B is the shared finite-Greek postcondition. There are no new entrypoint exports or dependencies. The 716.875 KiB ceiling left 334 B; no other cap changed for the kernel (workflows measured unchanged at 521,707 B). ' +
       'LIB-04 centered moments and exact PBO ranking (PR #34, 2026-11-19): measured 732,627 → 732,903 B gzip (+276 B) on Node 22.23.2/esbuild 0.25.12. probabilityOfBacktestOverfitting replaces rounded block moments with exact integer sums and cross-multiplied Sharpe comparisons, reading each validated return once; no new exports or dependencies. The 716 KiB ceiling leaves 281 B; every other cap is unchanged (workflows keeps 21 B). ' +
       'C5 measured review45c974dc (2026-11-12): exact scoped allowance; main718019/C4722908/integrated726548/C5732244B root. Narrow graphs change only errors.ts +96 minified bytes for two registered codes. Source2/resume/quality cost stays opt-in; all unrelated caps/settings/exclusions unchanged. See docs/reviews/community-connectors-c5-budget-2026-11-12.md. ' +
       'C4 ae690e3f approved (2026-11-11) root723200B: main714320 -> integrated720687 -> scoped721811 -> controlled known-schema correction722908B;292B headroom. Opt-in guard/schema cost, unchanged retained module sets. Only the eight reviewed whole/data installed caps change. ' +

@@ -1761,7 +1761,12 @@ export function compareEngines(input: CompareEnginesInput): EngineComparison {
   const referenceEngine =
     options.reference ?? engines.binomial({ variant: 'leisen-reimer', steps: 1001 });
   requireEngine('compareEngines', referenceEngine);
-  const referenceValue = referenceEngine.price({ contract, market }).value;
+  // The reference contributes only its value; its Greeks are neither reported nor needed.
+  const referenceValue = referenceEngine.price({
+    contract,
+    market,
+    options: { greeks: false },
+  }).value;
   const now = options.now;
 
   const rows: EngineComparisonRow[] = list.map((engine) => {

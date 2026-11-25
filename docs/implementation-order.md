@@ -11,9 +11,12 @@ The maintainer authorized a bounded source fix for [issue #37](https://github.co
 For valid low-volatility inputs, both Bjerksund–Stensland forms return NaN prices (refused by the
 postcondition) or NaN Greeks, because a reflection power overflows while its normal tail underflows.
 Follow the [stability contract](./specs/bjerksund-stensland-stability.md): stable evaluation of the
-published formulas at the source, with independent high-precision evidence. Model, floor,
-postconditions, Greek semantics and public surface stay unchanged. One PR for review. No merge,
-version bump, publication or deployment is authorized.
+published formulas at the source, with independent high-precision evidence. A later maintainer task
+widened the same PR. The shared finite-difference Greek step becomes scale-aware (spot, volatility,
+time and rate bumps capped at a hundredth of their natural scale), with exercise-branch differencing,
+because the fixed spot bump was wider than short-expiry distributions. Model, floor, existing
+postconditions, units, explicit step controls and the public surface stay unchanged. One PR for
+review. No merge, version bump, publication or deployment is authorized.
 
 ### Active: LIB-04 centered-moment repairs and SDK 0.1.6 release (2026-11-19)
 

@@ -39,7 +39,12 @@ import { escrowedSpot, hasDiscreteDividends } from '../dividends.js';
 import { contractTimeToExpiryYears } from '../time.js';
 import type { ExtendedGreeks, Greeks, PriceResult } from '../types.js';
 import { assertNoArbitrageBounds } from './bounds.js';
-import { finiteDifferenceExtendedGreeks, resolveFdSteps } from './fd-greeks.js';
+import {
+  type BranchedValue,
+  branchAwareDifference,
+  finiteDifferenceExtendedGreeks,
+  resolveFdSteps,
+} from './fd-greeks.js';
 import type { ScalarAmericanPricer, ScalarAmericanPricingInput } from './scalar-pricing.js';
 import type { OptionStyle } from '@totalfinance/core';
 
@@ -305,103 +310,106 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
       const extendedRequested = options?.extendedGreeks ?? false;
       const wantExtended = extendedRequested && supportsExtended;
       const wantGreeks = extendedRequested || (options?.greeks ?? true);
-      // Resolve the FD bumps ONCE (adaptive near the vol/time boundaries, spec P2.3) so the same
-      // sizes are used for differencing AND disclosed in diagnostics.finiteDifferenceBumps below.
+      // Resolve the FD bumps ONCE so the same sizes are used for differencing AND disclosed in
+      // diagnostics.finiteDifferenceBumps below. They are scale-aware (resolveFdSteps): the reference
+      // bumps, capped at a hundredth of each coordinate's natural scale.
       const fdState = { spot: S, T, r, q, sigma };
       // A rate bump below the engine's own grid resolution differences its discretization, not the
       // price (see `rateStepFloor`); the floor is disclosed like every other actually-used step.
       const rateFloor = config.rateStepFloor?.({ volatility: sigma, timeToExpiryYears: T }) ?? 0;
-      const rateStepOverride = rateFloor > 1e-4 ? { rateStep: rateFloor } : {};
-      const fd = wantGreeks
-        ? resolveFdSteps(fdState, {
-            ...(wantExtended ? {} : { timeStepYears: Math.min(1e-4, T / 4) }),
-            ...rateStepOverride,
-          })
+      const resolvedSteps = wantGreeks
+        ? resolveFdSteps(fdState, {}, wantExtended ? {} : { maximumTimeStepYears: 1e-4 })
         : undefined;
+      const fd =
+        resolvedSteps !== undefined && rateFloor > resolvedSteps.rateStep
+          ? { ...resolvedSteps, rateStep: rateFloor }
+          : resolvedSteps;
       let greeks: Greeks | ExtendedGreeks | undefined;
       if (wantExtended) {
         greeks = finiteDifferenceExtendedGreeks({ price, spotAt, state: fdState, steps: fd! });
       } else if (wantGreeks) {
         // Finite-difference Greeks (default units: theta/day, vega/1%, rho/1%). Spot Greeks come
         // from the engine's own discretization when it exposes them (see the module docstring);
-        // only σ/r — coordinates the price is smooth in — are bump-and-repriced.
+        // only σ/r — coordinates the price is smooth in — are bump-and-repriced. Each coordinate is
+        // differenced on the price branch that holds the base point (branchAwareDifference): a
+        // stencil straddling the exercise switch would otherwise report a secant and a spurious
+        // curvature.
         const { spotStep, volatilityStep, timeStepYears, rateStep } = fd!;
-        const pUp = native
-          ? 0
-          : price({
-              spot: S + spotStep,
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
+        const american = style === 'american';
+        const exercised = (spotHere: number, valueHere: number): boolean => {
+          if (!american) return false;
+          const exerciseValue = type === 'call' ? spotHere - K : K - spotHere;
+          return exerciseValue > 0 && valueHere === exerciseValue;
+        };
+        const branched = (spotHere: number, valueHere: number): BranchedValue => ({
+          value: valueHere,
+          exercised: exercised(spotHere, valueHere),
+        });
+        const base = branched(S, value);
+        const atState = (state: {
+          spot: number;
+          volatility: number;
+          timeToExpiryYears: number;
+          riskFreeRate: number;
+        }): BranchedValue => branched(state.spot, price({ ...state, dividendYield: q }));
+        const spotDerivatives = native
+          ? undefined
+          : branchAwareDifference({
+              base,
+              step: spotStep,
+              evaluate: (k) =>
+                atState({
+                  spot: S + k * spotStep,
+                  volatility: sigma,
+                  timeToExpiryYears: T,
+                  riskFreeRate: r,
+                }),
             });
-        const pDn = native
-          ? 0
-          : price({
-              spot: S - spotStep,
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
-            });
-        const delta = native ? native.delta : (pUp - pDn) / (2 * spotStep);
-        const gamma = native ? native.gamma : (pUp - 2 * value + pDn) / (spotStep * spotStep);
+        const delta = native ? native.delta : spotDerivatives!.first;
+        const gamma = native ? native.gamma : spotDerivatives!.second;
         const vega =
-          (price({
-            spot: S,
-            volatility: sigma + volatilityStep,
-            timeToExpiryYears: T,
-            riskFreeRate: r,
-            dividendYield: q,
-          }) -
-            price({
-              spot: S,
-              volatility: sigma - volatilityStep,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
-            })) /
-          (2 * volatilityStep) /
-          100;
+          branchAwareDifference({
+            base,
+            step: volatilityStep,
+            evaluate: (k) =>
+              atState({
+                spot: S,
+                volatility: sigma + k * volatilityStep,
+                timeToExpiryYears: T,
+                riskFreeRate: r,
+              }),
+          }).first / 100;
         // Re-escrow at the bumped time / rate so the dividend PV moves with the bump. A native theta
         // is already ∂V/∂t per year on the engine's own time grid — no maturity bump involved.
         const theta = native
           ? native.thetaPerYear / 365
-          : -(
-              price({
-                spot: spotAt({ riskFreeRate: r, timeToExpiryYears: T + timeStepYears }),
-                volatility: sigma,
-                timeToExpiryYears: T + timeStepYears,
-                riskFreeRate: r,
-                dividendYield: q,
-              }) -
-              price({
-                spot: spotAt({ riskFreeRate: r, timeToExpiryYears: T - timeStepYears }),
-                volatility: sigma,
-                timeToExpiryYears: T - timeStepYears,
-                riskFreeRate: r,
-                dividendYield: q,
-              })
-            ) /
-            (2 * timeStepYears) /
-            365;
+          : -branchAwareDifference({
+              base,
+              step: timeStepYears,
+              evaluate: (k) => {
+                const timeToExpiryYears = T + k * timeStepYears;
+                return atState({
+                  spot: spotAt({ riskFreeRate: r, timeToExpiryYears }),
+                  volatility: sigma,
+                  timeToExpiryYears,
+                  riskFreeRate: r,
+                });
+              },
+            }).first / 365;
         const rho =
-          (price({
-            spot: spotAt({ riskFreeRate: r + rateStep, timeToExpiryYears: T }),
-            volatility: sigma,
-            timeToExpiryYears: T,
-            riskFreeRate: r + rateStep,
-            dividendYield: q,
-          }) -
-            price({
-              spot: spotAt({ riskFreeRate: r - rateStep, timeToExpiryYears: T }),
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r - rateStep,
-              dividendYield: q,
-            })) /
-          (2 * rateStep) /
-          100;
+          branchAwareDifference({
+            base,
+            step: rateStep,
+            evaluate: (k) => {
+              const riskFreeRate = r + k * rateStep;
+              return atState({
+                spot: spotAt({ riskFreeRate, timeToExpiryYears: T }),
+                volatility: sigma,
+                timeToExpiryYears: T,
+                riskFreeRate,
+              });
+            },
+          }).first / 100;
         greeks = { delta, gamma, theta, vega, rho };
       }
 

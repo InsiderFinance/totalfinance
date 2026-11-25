@@ -26,8 +26,13 @@ import golden from './golden/bjerksund-stensland-mpmath.json';
  *   The measured worst case is reported in the spec.
  * - Greeks against the engine's OWN stencil evaluated exactly: that price bound divided by the bump
  *   (twice for gamma), in the Greek's documented unit. Truncation is identical on both sides, so this
- *   isolates floating-point error. Truncation against the true derivative is asserted separately,
- *   only where the bump resolves the price.
+ *   isolates floating-point error.
+ * - Greeks against the TRUE derivative: 1e-4 of the Greek's at-the-money magnitude (delta 1, gamma
+ *   φ(0)/(Sσ√T), theta Sσφ(0)/(2√T)/365, vega S√Tφ(0)/100, rho KT/100). Each bump is a hundredth of
+ *   its coordinate's natural scale, so central-difference truncation is about (1/100)²/6 to /12 of the
+ *   Greek, i.e. 1–2e-5. That is multiplied by a higher-derivative ratio of O(1–5) within ±3 standard
+ *   deviations of the money (measured worst 2e-5). A lattice adds its own discretization error and
+ *   gets 1e-3.
  */
 
 const AS_OF = golden.meta.asOfMs;
@@ -88,7 +93,8 @@ interface GoldenPrice extends GoldenInput {
 interface GoldenGreek extends GoldenInput {
   price: number;
   bumps: { spotStep: number; volatilityStep: number; timeStepYears: number; rateStep: number };
-  finiteDifference: Record<GreekName, number>;
+  /** The engine's central stencil evaluated exactly; null where it straddles the exercise switch. */
+  finiteDifference: Record<GreekName, number | null>;
   derivative: Record<GreekName, number>;
 }
 interface GoldenAnchor extends GoldenInput {
@@ -101,6 +107,34 @@ interface GoldenAnchor extends GoldenInput {
 const PRICES = golden.prices as unknown as GoldenPrice[];
 const GREEKS = golden.greeks as unknown as GoldenGreek[];
 const ANCHORS = golden.anchors as unknown as GoldenAnchor[];
+interface GoldenEuropean extends GoldenInput {
+  price: number;
+  bumps: GoldenGreek['bumps'];
+  derivative: Record<GreekName, number>;
+}
+interface GoldenKink extends GoldenEuropean {
+  boundary: number;
+  exercised: boolean;
+}
+const GREEK_NAMES = ['delta', 'gamma', 'theta', 'vega', 'rho'] as const;
+const TRUE_DERIVATIVE_TOLERANCE = 1e-4;
+const PHI_ZERO = 1 / Math.sqrt(2 * Math.PI);
+/** A Greek's at-the-money magnitude, in its documented unit: the yardstick for its error. */
+const greekScale = (c: GoldenInput, greek: GreekName): number => {
+  const rootT = Math.sqrt(c.timeToExpiryYears);
+  switch (greek) {
+    case 'delta':
+      return 1;
+    case 'gamma':
+      return PHI_ZERO / (c.spot * c.volatility * rootT);
+    case 'theta':
+      return (c.spot * c.volatility * PHI_ZERO) / (2 * rootT) / 365;
+    case 'vega':
+      return (c.spot * rootT * PHI_ZERO) / 100;
+    case 'rho':
+      return (c.strike * c.timeToExpiryYears) / 100;
+  }
+};
 
 const label = (c: Omit<GoldenInput, 'timeToExpiryYears'>): string =>
   `${c.type} S=${c.spot} K=${c.strike} T=${c.years} r=${c.riskFreeRate} q=${c.dividendYield} σ=${c.volatility}`;
@@ -210,6 +244,7 @@ describe('Greeks against the independent reference (documented units)', () => {
   const units = { delta: 1, gamma: 1, theta: 365, vega: 100, rho: 100 } as const;
 
   it('every first-order Greek equals the exact evaluation of the engine’s own stencil', () => {
+    let compared = 0;
     for (const c of GREEKS) {
       const result = priceWith(bs2002, c);
       expect(result.diagnostics.finiteDifferenceBumps).toEqual(c.bumps);
@@ -223,31 +258,144 @@ describe('Greeks against the independent reference (documented units)', () => {
         rho: priceError / rateStep / units.rho,
       };
       for (const greek of Object.keys(units) as (keyof typeof units)[]) {
-        const actual = result.greeks![greek];
         const expected = c.finiteDifference[greek];
-        expect(Math.abs(actual - expected), `${label(c)} ${greek}`).toBeLessThanOrEqual(
-          tolerance[greek],
-        );
+        // Null: the central stencil straddles the exercise switch, so the engine differences one-sided
+        // (branchAwareDifference); the true-derivative test below covers that coordinate.
+        if (expected === null) continue;
+        compared++;
+        expect(
+          Math.abs(result.greeks![greek] - expected),
+          `${label(c)} ${greek}`,
+        ).toBeLessThanOrEqual(tolerance[greek]);
+      }
+    }
+    expect(compared).toBeGreaterThanOrEqual(60);
+  });
+
+  it('every first-order Greek is close to the true model derivative, short expiries included', () => {
+    let checked = 0;
+    for (const c of GREEKS) {
+      // A put at r = 0 sits exactly on the model's own regime switch: there the put is European
+      // (early exercise never pays), and for r > 0 it uses the two-boundary formula. Rho has no
+      // derivative at that point, so only the other Greeks are compared.
+      const onRegimeSwitch = c.type === 'put' && c.riskFreeRate === 0;
+      const result = priceWith(bs2002, c);
+      for (const greek of GREEK_NAMES) {
+        if (onRegimeSwitch && greek === 'rho') continue;
+        checked++;
+        expect(
+          Math.abs(result.greeks![greek] - c.derivative[greek]) / greekScale(c, greek),
+          `${label(c)} ${greek}`,
+        ).toBeLessThanOrEqual(TRUE_DERIVATIVE_TOLERANCE);
+      }
+    }
+    expect(checked).toBeGreaterThanOrEqual(65);
+  });
+});
+
+describe('scale-aware finite-difference steps (exact European-equivalent references)', () => {
+  // A no-dividend call with r ≥ 0, and a put with r ≤ 0 and q ≥ 0, are never exercised early. Every
+  // American engine must therefore report the Black–Scholes–Merton derivatives, which mpmath takes
+  // from the BSM price alone.
+  const EUROPEAN = golden.europeanEquivalent as unknown as GoldenEuropean[];
+
+  it('the one-day, 1%-vol at-the-money call reports the analytic delta and gamma (was −6.4% and −21%)', () => {
+    const receipt = EUROPEAN.find(
+      (c) => c.type === 'call' && c.spot === 100 && c.volatility === 0.01 && c.years < 0.01,
+    )!;
+    expect(receipt.derivative.delta).toBeCloseTo(0.60332913, 8);
+    expect(receipt.derivative.gamma).toBeCloseTo(7.36467588, 7);
+    for (const engine of [
+      engines.bjerksundStensland2002(),
+      engines.bjerksundStensland1993(),
+      engines.baroneAdesiWhaley(),
+    ]) {
+      const result = priceWith(engine, receipt);
+      // The bump resolves the distribution: a hundredth of S·σ√T ≈ 0.0523, not 0.1.
+      expect(result.diagnostics.finiteDifferenceBumps).toEqual(receipt.bumps);
+      for (const greek of GREEK_NAMES) {
+        const exact = receipt.derivative[greek];
+        expect(
+          Math.abs(result.greeks![greek] - exact) / Math.abs(exact),
+          `${engine.name} ${greek}`,
+        ).toBeLessThanOrEqual(2e-5);
       }
     }
   });
 
-  it('where the bumps resolve the price, the Greeks are close to the true model derivatives', () => {
-    // The default bumps (S·1e-3, …) are coarse against a one-day 1%-vol distribution (σ√T·S ≈ 0.05);
-    // there the stencil itself, not the evaluation, sets the error, which the spec reports.
-    let checked = 0;
-    for (const c of GREEKS) {
-      if (c.volatility * Math.sqrt(c.timeToExpiryYears) < 0.02) continue;
-      checked++;
-      const result = priceWith(bs2002, c);
-      for (const greek of ['delta', 'vega', 'rho', 'theta'] as const) {
-        const exact = c.derivative[greek];
-        expect(Math.abs(result.greeks![greek] - exact), `${label(c)} ${greek}`).toBeLessThanOrEqual(
-          2e-3 * Math.abs(exact) + 1e-9 * (c.spot + c.strike),
-        );
+  it('BS2002, BS1993 and BAW match the exact derivatives across expiry, volatility, moneyness and scale', () => {
+    expect(EUROPEAN.length).toBe(66);
+    for (const engine of [
+      engines.bjerksundStensland2002(),
+      engines.bjerksundStensland1993(),
+      engines.baroneAdesiWhaley(),
+    ]) {
+      for (const c of EUROPEAN) {
+        const result = priceWith(engine, c);
+        expect(result.diagnostics.finiteDifferenceBumps).toEqual(c.bumps);
+        for (const greek of GREEK_NAMES) {
+          expect(
+            Math.abs(result.greeks![greek] - c.derivative[greek]) / greekScale(c, greek),
+            `${engine.name} ${label(c)} ${greek}`,
+          ).toBeLessThanOrEqual(TRUE_DERIVATIVE_TOLERANCE);
+        }
       }
     }
-    expect(checked).toBeGreaterThanOrEqual(6);
+  });
+
+  it('the Leisen–Reimer lattice (bump-differenced in spot) also resolves them, within its discretization', () => {
+    const lattice = engines.binomial({ variant: 'leisen-reimer', steps: 801 });
+    for (const c of EUROPEAN) {
+      const result = priceWith(lattice, c);
+      for (const greek of GREEK_NAMES) {
+        expect(
+          Math.abs(result.greeks![greek] - c.derivative[greek]) / greekScale(c, greek),
+          `${label(c)} ${greek}`,
+        ).toBeLessThanOrEqual(1e-3);
+      }
+    }
+  });
+});
+
+describe('exercise-boundary handling of the difference stencils', () => {
+  // Spots 0.3 of one spot bump either side of BS2002's second boundary I2, so a central stencil
+  // straddles the exercise switch. The exact derivatives belong to the branch holding the base point.
+  const KINKS = golden.kinks as unknown as GoldenKink[];
+  const bs2002 = engines.bjerksundStensland2002();
+
+  it('a holding spot next to the boundary reports its continuation branch, not a secant', () => {
+    const holding = KINKS.filter((c) => !c.exercised);
+    expect(holding.length).toBeGreaterThan(0);
+    for (const c of holding) {
+      const result = priceWith(bs2002, c);
+      const step = result.diagnostics.finiteDifferenceBumps!['spotStep']!;
+      for (const greek of GREEK_NAMES) {
+        expect(
+          Math.abs(result.greeks![greek] - c.derivative[greek]) / greekScale(c, greek),
+          `${label(c)} ${greek}`,
+        ).toBeLessThanOrEqual(TRUE_DERIVATIVE_TOLERANCE);
+      }
+      // The central stencil there is a secant across the switch: its curvature is an artifact.
+      const at = (spot: number) => priceWith(bs2002, { ...c, spot }, false).value;
+      const centralGamma = (at(c.spot + step) - 2 * at(c.spot) + at(c.spot - step)) / step ** 2;
+      expect(Math.abs(centralGamma - c.derivative.gamma)).toBeGreaterThan(
+        100 * Math.abs(result.greeks!.gamma - c.derivative.gamma),
+      );
+    }
+  });
+
+  it('an exercised spot reports the exercise value’s own Greeks: delta 1 and nothing else', () => {
+    const exercised = KINKS.filter((c) => c.exercised);
+    expect(exercised.length).toBeGreaterThan(0);
+    for (const c of exercised) {
+      const result = priceWith(bs2002, c);
+      expect(result.value).toBe(c.spot - c.strike);
+      expect(result.greeks!.delta).toBeCloseTo(1, 9);
+      expect(Math.abs(result.greeks!.gamma)).toBeLessThanOrEqual(1e-6 * greekScale(c, 'gamma'));
+      expect(Math.abs(result.greeks!.theta)).toBe(0);
+      expect(Math.abs(result.greeks!.vega)).toBe(0);
+      expect(Math.abs(result.greeks!.rho)).toBe(0);
+    }
   });
 });
 
@@ -332,21 +480,50 @@ describe('the original probe grids re-run through the public engine', () => {
 describe('metamorphic properties of the stable evaluation', () => {
   const lowVol = PRICES.filter((c) => c.volatility <= 0.05 && c.spot === 100 && c.strike === 100);
 
+  // The exercise boundary at expiry in the call form: B0 = K·max(1, r/(r − b)), where a put uses its
+  // transformed strike S, rate q and carry q − r. Everything else is formed scale-free, so this is
+  // the one magnitude that must be representable.
+  const expiryBoundary = (c: GoldenInput, scale: number): number => {
+    const call = c.type === 'call';
+    const strikeLike = (call ? c.strike : c.spot) * scale;
+    const rate = call ? c.riskFreeRate : c.dividendYield;
+    const carry = call ? c.riskFreeRate - c.dividendYield : c.dividendYield - c.riskFreeRate;
+    return carry >= rate ? strikeLike : strikeLike * Math.max(1, rate / (rate - carry));
+  };
+
   it('is homogeneous of degree one in (spot, strike) across monetary scales', () => {
     expect(lowVol.length).toBeGreaterThan(5);
-    for (const c of lowVol) {
+    const ordinary = PRICES.filter(
+      (c) => c.volatility === 0.2 && c.spot === 100 && c.strike === 100,
+    );
+    let compared = 0;
+    let unrepresentable = 0;
+    for (const c of [...lowVol, ...ordinary]) {
       const base = bjerksundStensland2002Approximation(rawInput(c));
-      for (const scale of [1e-6, 1e-3, 1e3, 1e6]) {
+      // Down to 1e-300 and up to 1e300. The paper's products of boundaries (I2²/(S·I1), K²/…) used to
+      // overflow above a spot near 1e103 and underflow below 1e-148; they are now products of
+      // scale-free ratios.
+      for (const scale of [1e-300, 1e-148, 1e-6, 1e-3, 1e3, 1e6, 1e103, 1e162, 1e300]) {
         const scaled = bjerksundStensland2002Approximation({
           ...rawInput(c),
           spot: c.spot * scale,
           strike: c.strike * scale,
         });
+        if (expiryBoundary(c, scale) > 1e307) {
+          // The documented range limit: B0 itself exceeds binary64. The value is non-finite, so the
+          // public engine's postcondition refuses it, and no wrong number is returned.
+          unrepresentable++;
+          expect(Number.isFinite(scaled), `${label(c)} ×${scale}`).toBe(false);
+          continue;
+        }
+        compared++;
         expect(Math.abs(scaled / scale - base), `${label(c)} ×${scale}`).toBeLessThanOrEqual(
           2 * PRICE_TOLERANCE * (c.spot + c.strike),
         );
       }
     }
+    expect(compared).toBeGreaterThan(100);
+    expect(unrepresentable).toBeLessThan(10);
   });
 
   it('honors the put–call transformation P(S, K, r, q) = C(K, S, q, r) through the public engine', () => {

@@ -435,6 +435,22 @@ export function assertNumericalRepairs(): void {
       Math.abs(zeroRatePut.greeks!.rho + 1.5217e-15) < 1e-18,
     '#37 rho across a zero-rate bump',
   );
+  // #37 scale-aware Greek steps: a one-day, 1%-vol no-dividend American call is exactly European, so
+  // its Greeks are the analytic BSM ones (mpmath). The old fixed 0.1 spot bump, twice the 0.052
+  // distribution width, gave delta −6.4% and gamma −21%.
+  const shortExpiryCall = bjerksundStensland({
+    type: 'call',
+    spot: 100,
+    years: 1 / 365,
+    riskFreeRate: 0.05,
+    dividendYield: 0,
+    volatility: 0.01,
+  });
+  check(
+    Math.abs(shortExpiryCall.greeks!.delta / 0.6033291303822308 - 1) < 2e-5 &&
+      Math.abs(shortExpiryCall.greeks!.gamma / 7.364675880346115 - 1) < 2e-5,
+    '#37 scale-aware short-expiry delta and gamma',
+  );
   // Ordinary supported calls remain useful alongside the precision-boundary cases.
   check(
     Math.abs(blackScholes.price({ ...option, volatility: 0.2 }) - 7.965567455405804) < 1e-12,

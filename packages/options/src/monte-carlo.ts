@@ -46,7 +46,7 @@ import {
 } from './mc/core.js';
 import { contractTimeToExpiryYears } from './time.js';
 import { assertNoArbitrageBounds } from './engines/bounds.js';
-import { finiteDifferenceExtendedGreeks, resolveFdSteps } from './engines/fd-greeks.js';
+import { finiteDifferenceExtendedGreeks, referenceFdSteps } from './engines/fd-greeks.js';
 import type { ExtendedGreeks, Greeks, OptionMarket, PriceResult } from './types.js';
 
 export type {
@@ -239,6 +239,8 @@ function crnGreeks(input: {
       price: priceAt,
       spotAt: () => S,
       state: { spot: S, T, r, q, sigma },
+      // Variance-limited differencing keeps the reference bumps (see referenceFdSteps).
+      steps: referenceFdSteps({ spot: S, T, r, q, sigma }),
     });
   }
 
@@ -249,10 +251,11 @@ function crnGreeks(input: {
     riskFreeRate: r,
     dividendYield: q,
   });
-  // Adaptive near the vol/time boundaries (P2.3) — same rule as every other FD path.
-  const { spotStep, volatilityStep, timeStepYears, rateStep } = resolveFdSteps(
+  // Common-random-number differences are variance-limited, so Monte Carlo keeps the reference bumps
+  // (referenceFdSteps), with the first-order time ceiling.
+  const { spotStep, volatilityStep, timeStepYears, rateStep } = referenceFdSteps(
     { spot: S, T, r, q, sigma },
-    { timeStepYears: Math.min(1e-4, T / 4) },
+    { maximumTimeStepYears: 1e-4 },
   );
 
   const pSup = priceAt({
@@ -488,9 +491,9 @@ export function monteCarloPrice(input: MonteCarloPriceInput): MonteCarloPriceRes
     : undefined;
 
   const fd = wantGreeks
-    ? resolveFdSteps(
+    ? referenceFdSteps(
         { spot: S, T, r, q, sigma },
-        options.extendedGreeks ? {} : { timeStepYears: Math.min(1e-4, T / 4) },
+        options.extendedGreeks ? {} : { maximumTimeStepYears: 1e-4 },
       )
     : undefined;
   const diagnostics: Diagnostics = {

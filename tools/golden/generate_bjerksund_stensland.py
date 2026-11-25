@@ -18,9 +18,11 @@ calendar day = −∂V/∂T / 365, vega per vol point = ∂V/∂σ / 100, rho pe
     digits, so truncation and rounding are both below 1e-20). Compared with `finiteDifference`, it
     gives the bump policy's truncation error, which is reported separately.
 
-Reproduce with mpmath installed (about 10 minutes on 10 cores):
+Reproduce with mpmath installed (about 25 minutes with GOLDEN_WORKERS=4):
 
-    python3 tools/golden/generate_bjerksund_stensland.py
+    GOLDEN_WORKERS=4 python3 tools/golden/generate_bjerksund_stensland.py
+
+`GOLDEN_SECTIONS=greeks,europeanEquivalent,kinks` recomputes only those sections.
 
 Output (committed, so CI needs no Python):
   packages/options/test/golden/bjerksund-stensland-mpmath.json
@@ -193,12 +195,21 @@ def price_job(c):
 
 
 def engine_bumps(c):
+    """The engine's documented first-order bump policy (resolveFdSteps), in binary64 arithmetic.
+
+    Each bump is the previous reference, capped at a hundredth of its coordinate's natural scale:
+    spot S·σ√T, volatility σ, time T (first-order ceiling 1e-4), rate σ/√T. Mirroring the documented
+    policy lets the test assert the engine DISCLOSES exactly these bumps, and lets the exact stencil
+    below isolate floating-point error. Truncation is judged separately, against the true derivative.
+    """
+    import math
+
     S, T, sigma = c["spot"], c["timeToExpiryYears"], c["volatility"]
     return {
-        "spotStep": S * 1e-3,
-        "volatilityStep": min(1e-3, sigma / 4),
-        "timeStepYears": min(1e-4, T / 4),
-        "rateStep": 1e-4,
+        "spotStep": S * min(1e-3, max(1e-8, 1e-2 * (sigma * math.sqrt(T)))),
+        "volatilityStep": min(1e-3, 1e-2 * sigma),
+        "timeStepYears": min(1e-4, 1e-2 * T),
+        "rateStep": min(1e-4, 1e-2 * (sigma / math.sqrt(T))),
     }
 
 
@@ -210,13 +221,28 @@ def greek_job(c):
     h_s, h_v, h_t, h_r = (bumps[k] for k in ("spotStep", "volatilityStep", "timeStepYears", "rateStep"))
     p = lambda **o: price_of(form, c, floor=True, **o)  # noqa: E731
     base = p()
-    # The engine's own stencil: bumped coordinates are binary64 sums, exactly as in JavaScript.
+
+    def exercised(value, spot=S):
+        exercise_value = (mp.mpf(spot) - c["strike"]) if c["type"] == "call" else (c["strike"] - mp.mpf(spot))
+        return exercise_value > 0 and value == exercise_value
+
+    # The engine's own central stencil: bumped coordinates are binary64 sums, exactly as in JavaScript.
+    # Where a stencil straddles the exercise switch (a neighbour on the other branch), the engine
+    # differences one-sided instead (branchAwareDifference); that coordinate is reported as null here
+    # and judged against the true derivative only.
+    s_up, s_dn = p(spot=S + h_s), p(spot=S - h_s)
+    t_up, t_dn = p(timeToExpiryYears=T + h_t), p(timeToExpiryYears=T - h_t)
+    v_up, v_dn = p(volatility=sigma + h_v), p(volatility=sigma - h_v)
+    r_up, r_dn = p(riskFreeRate=r + h_r), p(riskFreeRate=r - h_r)
+    e0 = exercised(base)
+    same = lambda up, dn, up_spot=S, dn_spot=S: exercised(up, up_spot) == e0 and exercised(dn, dn_spot) == e0  # noqa: E731
+    spot_ok = same(s_up, s_dn, S + h_s, S - h_s)
     fd = {
-        "delta": (p(spot=S + h_s) - p(spot=S - h_s)) / (2 * mp.mpf(h_s)),
-        "gamma": (p(spot=S + h_s) - 2 * base + p(spot=S - h_s)) / (mp.mpf(h_s) ** 2),
-        "theta": -(p(timeToExpiryYears=T + h_t) - p(timeToExpiryYears=T - h_t)) / (2 * mp.mpf(h_t)) / 365,
-        "vega": (p(volatility=sigma + h_v) - p(volatility=sigma - h_v)) / (2 * mp.mpf(h_v)) / 100,
-        "rho": (p(riskFreeRate=r + h_r) - p(riskFreeRate=r - h_r)) / (2 * mp.mpf(h_r)) / 100,
+        "delta": (s_up - s_dn) / (2 * mp.mpf(h_s)) if spot_ok else None,
+        "gamma": (s_up - 2 * base + s_dn) / (mp.mpf(h_s) ** 2) if spot_ok else None,
+        "theta": -(t_up - t_dn) / (2 * mp.mpf(h_t)) / 365 if same(t_up, t_dn) else None,
+        "vega": (v_up - v_dn) / (2 * mp.mpf(h_v)) / 100 if same(v_up, v_dn) else None,
+        "rho": (r_up - r_dn) / (2 * mp.mpf(h_r)) / 100 if same(r_up, r_dn) else None,
     }
     # True derivatives: tiny exact-arithmetic steps (the inputs are mpf, never rounded to binary64).
     e = mp.mpf(10) ** -12
@@ -236,7 +262,7 @@ def greek_job(c):
         **c,
         "price": nstr(base),
         "bumps": bumps,
-        "finiteDifference": {k: nstr(v) for k, v in fd.items()},
+        "finiteDifference": {k: (None if v is None else nstr(v)) for k, v in fd.items()},
         "derivative": {k: nstr(v) for k, v in exact.items()},
     }
 
@@ -305,25 +331,144 @@ def kernel_weighted_bivariate(c):
     return {**c, "value": nstr(value)}
 
 
+# American contracts whose value IS the European value exactly, for every engine: a call with no
+# dividend and r ≥ 0 (never exercised early), and a put with r ≤ 0 and q ≥ 0. Their true Greeks are
+# the Black–Scholes–Merton derivatives, here differentiated in mpmath from the BSM price alone. That
+# reference is independent of every engine and of the bump policy, and it covers short-expiry,
+# ordinary, moneyness and monetary-scale cases across BS2002, BS1993, BAW and Leisen–Reimer.
+EUROPEAN_EQUIVALENT_CASES = []
+for spot in (95, 100, 105):
+    for years in (1 / 365, 7 / 365, 30 / 365, 1.0):
+        for sigma in (0.01, 0.05, 0.2, 1.0):
+            EUROPEAN_EQUIVALENT_CASES.append(case("call", spot, 100, years, 0.05, 0.0, sigma))
+for spot in (95, 100):
+    for years in (1 / 365, 30 / 365):
+        for sigma in (0.01, 0.2):
+            for r in (0.0, -0.01):
+                EUROPEAN_EQUIVALENT_CASES.append(case("put", spot, 100, years, r, 0.02, sigma))
+for scale in (1e-3, 1e6):
+    EUROPEAN_EQUIVALENT_CASES.append(case("call", 100 * scale, 100 * scale, 1 / 365, 0.05, 0.0, 0.01))
+
+
+def _exact_derivatives(price_at, base, S, T, r, sigma):
+    """True derivatives in the library's units, by central differences at 1e-12 relative and 50 digits."""
+    e = mp.mpf(10) ** -12
+    S_, T_, r_, v_ = (mp.mpf(x) for x in (S, T, r, sigma))
+    ds, dt, dv, dr = S_ * e, T_ * e, v_ * e, e
+    dsg = S_ * mp.mpf(10) ** -9
+    return {
+        "delta": (price_at(spot=S_ + ds) - price_at(spot=S_ - ds)) / (2 * ds),
+        "gamma": (price_at(spot=S_ + dsg) - 2 * base + price_at(spot=S_ - dsg)) / (dsg * dsg),
+        "theta": -(price_at(timeToExpiryYears=T_ + dt) - price_at(timeToExpiryYears=T_ - dt)) / (2 * dt) / 365,
+        "vega": (price_at(volatility=v_ + dv) - price_at(volatility=v_ - dv)) / (2 * dv) / 100,
+        "rho": (price_at(riskFreeRate=r_ + dr) - price_at(riskFreeRate=r_ - dr)) / (2 * dr) / 100,
+    }
+
+
+def european_job(c):
+    R.set_digits(50)
+
+    def price_at(**o):
+        v = {**c, **o}
+        return R.european(v["type"] == "call", v["spot"], v["strike"], v["timeToExpiryYears"],
+                          v["riskFreeRate"], mp.mpf(v["riskFreeRate"]) - mp.mpf(v["dividendYield"]),
+                          v["volatility"])
+
+    base = price_at()
+    exact = _exact_derivatives(price_at, base, c["spot"], c["timeToExpiryYears"], c["riskFreeRate"],
+                               c["volatility"])
+    return {**c, "price": nstr(base), "bumps": engine_bumps(c),
+            "derivative": {k: nstr(v) for k, v in exact.items()}}
+
+
+# Spots a fraction of one engine spot bump either side of BS2002's second exercise boundary I2.
+# The central stencil there straddles the exercise switch. The expected Greeks are the exact
+# derivatives of the branch that holds the base point.
+KINK_CONFIGS = [
+    # (K, years, r, q, sigma, fraction of the spot bump from I2: negative = holding, positive = exercised)
+    (100, 0.5, 0.05, 0.1, 0.2, -0.3),
+    (100, 0.5, 0.05, 0.1, 0.2, 0.3),
+    (100, 1 / 365, 0.05, 0.1, 0.01, -0.3),
+    (100, 1 / 365, 0.05, 0.1, 0.01, 0.3),
+]
+
+
+def _kink_case(config):
+    import math
+
+    K, years, r, q, sigma, fraction = config
+    R.set_digits(50)
+    c = case("call", 100, K, years, r, q, sigma)
+    Km, T, rm, b, sm = (mp.mpf(x) for x in (K, c["timeToExpiryYears"], r, r - q, sigma))
+    beta, t1, I1, I2 = _boundaries(Km, T, rm, b, sm)
+    relative = min(1e-3, max(1e-8, 1e-2 * (sigma * math.sqrt(c["timeToExpiryYears"]))))
+    spot = float(I2 * (1 + fraction * relative))
+    return {**c, "spot": spot, "boundary": float(I2), "fractionOfSpotStep": fraction}
+
+
+KINK_CASES = [_kink_case(k) for k in KINK_CONFIGS]
+
+
+def kink_job(c):
+    R.set_digits(50)
+
+    def price_at(**o):
+        v = {**c, **o}
+        return R.american_price("2002", v["type"], v["spot"], v["strike"], v["timeToExpiryYears"],
+                                v["riskFreeRate"], v["dividendYield"], v["volatility"], floor=True)
+
+    base = price_at()
+    S = mp.mpf(c["spot"])
+    exercise_value = S - c["strike"]
+    exercised = base == exercise_value and exercise_value > 0
+    exact = _exact_derivatives(price_at, base, c["spot"], c["timeToExpiryYears"], c["riskFreeRate"],
+                               c["volatility"])
+    return {**c, "price": nstr(base), "exercised": bool(exercised), "bumps": engine_bumps(c),
+            "derivative": {k: nstr(v) for k, v in exact.items()}}
+
+
 def matrix_job(c):
     R.set_digits(40)
     return [c[k] for k in MATRIX_COLUMNS] + [c["timeToExpiryYears"], nstr(price_of("2002", c, floor=True))]
 
 
+SECTIONS = ("anchors", "prices", "greeks", "matrix", "kernels", "europeanEquivalent", "kinks")
+
+
 if __name__ == "__main__":
+    # `GOLDEN_SECTIONS=greeks,kinks` recomputes only those sections and keeps the others from the
+    # committed file, byte for byte. Every section is deterministic, so a full run reproduces it.
     R.set_digits(50)
     R.self_check()
     workers = int(os.environ.get("GOLDEN_WORKERS", os.cpu_count() or 1))
+    wanted = set(filter(None, os.environ.get("GOLDEN_SECTIONS", ",".join(SECTIONS)).split(",")))
+    unknown = wanted - set(SECTIONS)
+    if unknown:
+        raise SystemExit(f"unknown GOLDEN_SECTIONS: {sorted(unknown)}")
+    path = os.path.join(OUT, "bjerksund-stensland-mpmath.json")
+    previous = json.load(open(path)) if wanted != set(SECTIONS) else {}
+    out = {k: v for k, v in previous.items() if k != "meta"}
     with Pool(workers) as pool:
-        anchors = pool.map(anchor_job, ANCHORS, chunksize=1)
-        prices = pool.map(price_job, PRICE_CASES, chunksize=1)
-        greeks = pool.map(greek_job, GREEK_CASES, chunksize=1)
-        matrix = pool.map(matrix_job, MATRIX_CASES, chunksize=4)
-        log_normal_cdf = pool.map(kernel_log_normal_cdf, LOG_NORMAL_CDF_POINTS)
-        weighted_bivariate = pool.map(kernel_weighted_bivariate, WEIGHTED_BIVARIATE_CASES)
-    for a in anchors:
-        if abs(a["reference"] - a["printed"]) > 0.5 * 10 ** -a["decimals"]:
-            raise AssertionError(f"reference does not reproduce the published anchor {a}")
+        if "anchors" in wanted:
+            out["anchors"] = pool.map(anchor_job, ANCHORS, chunksize=1)
+            for a in out["anchors"]:
+                if abs(a["reference"] - a["printed"]) > 0.5 * 10 ** -a["decimals"]:
+                    raise AssertionError(f"reference does not reproduce the published anchor {a}")
+        if "prices" in wanted:
+            out["prices"] = pool.map(price_job, PRICE_CASES, chunksize=1)
+        if "greeks" in wanted:
+            out["greeks"] = pool.map(greek_job, GREEK_CASES, chunksize=1)
+        if "matrix" in wanted:
+            out["matrix"] = {"columns": MATRIX_COLUMNS + ["timeToExpiryYears", "price2002"],
+                             "rows": pool.map(matrix_job, MATRIX_CASES, chunksize=4)}
+        if "kernels" in wanted:
+            out["kernels"] = {"logNormalCdf": pool.map(kernel_log_normal_cdf, LOG_NORMAL_CDF_POINTS),
+                              "weightedBivariateNormalCdf": pool.map(kernel_weighted_bivariate,
+                                                                     WEIGHTED_BIVARIATE_CASES)}
+        if "europeanEquivalent" in wanted:
+            out["europeanEquivalent"] = pool.map(european_job, EUROPEAN_EQUIVALENT_CASES, chunksize=1)
+        if "kinks" in wanted:
+            out["kinks"] = pool.map(kink_job, KINK_CASES, chunksize=1)
     meta = {
         "generator": "tools/golden/generate_bjerksund_stensland.py",
         "reference": "tools/golden/bjerksund_stensland_reference.py — published Bjerksund–Stensland 1993/2002 "
@@ -332,17 +477,16 @@ if __name__ == "__main__":
         "greekUnits": {"delta": "per unit spot", "gamma": "per unit spot squared",
                        "theta": "per calendar day (−∂V/∂T / 365)", "vega": "per vol point (∂V/∂σ / 100)",
                        "rho": "per 1% rate (∂V/∂r / 100)"},
+        "bumpPolicy": "first-order: spot S·min(1e-3, max(1e-8, σ√T/100)), volatility min(1e-3, σ/100), "
+                      "time min(1e-4, T/100), rate min(1e-4, (σ/√T)/100)",
         "asOfMs": AS_OF_MS,
         "mpmath": mp.__version__,
         "precision": "50 significant digits (matrix: 40)",
         "python": platform.python_version(),
     }
-    os.makedirs(OUT, exist_ok=True)
-    with open(os.path.join(OUT, "bjerksund-stensland-mpmath.json"), "w") as f:
-        json.dump({"meta": meta, "anchors": anchors, "prices": prices, "greeks": greeks,
-                   "matrix": {"columns": MATRIX_COLUMNS + ["timeToExpiryYears", "price2002"], "rows": matrix},
-                   "kernels": {"logNormalCdf": log_normal_cdf, "weightedBivariateNormalCdf": weighted_bivariate}},
-                  f, indent=None, separators=(",", ":"))
+    ordered = {"meta": meta, **{k: out[k] for k in SECTIONS if k in out}}
+    with open(path, "w") as f:
+        json.dump(ordered, f, indent=None, separators=(",", ":"))
         f.write("\n")
-    print(f"wrote bjerksund-stensland-mpmath.json ({len(anchors)} anchors, {len(prices)} prices, "
-          f"{len(greeks)} greek cases, {len(matrix)} matrix rows)")
+    print("wrote bjerksund-stensland-mpmath.json: " + ", ".join(
+        f"{k}={len(v) if isinstance(v, list) else len(v.get('rows', v))}" for k, v in ordered.items() if k != "meta"))

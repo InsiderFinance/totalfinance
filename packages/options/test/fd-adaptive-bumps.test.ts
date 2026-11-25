@@ -17,19 +17,51 @@ const mkt = (volatility: number) =>
 describe('resolveFdSteps (the one source of truth)', () => {
   const base = { spot: 100, T: 0.5, r: 0.04, q: 0 };
 
-  it('shrinks the vol bump to σ/4 below the 4e-3 boundary, keeps 1e-3 above it', () => {
+  it('caps the vol bump at σ/100 below σ = 0.1 and keeps 1e-3 above it', () => {
     expect(resolveFdSteps({ ...base, sigma: 0.2 }).volatilityStep).toBe(1e-3);
-    expect(resolveFdSteps({ ...base, sigma: 2e-3 }).volatilityStep).toBeCloseTo(5e-4, 15);
+    expect(resolveFdSteps({ ...base, sigma: 0.05 }).volatilityStep).toBeCloseTo(5e-4, 18);
+    expect(resolveFdSteps({ ...base, sigma: 2e-3 }).volatilityStep).toBeCloseTo(2e-5, 18);
     // σ − volatilityStep stays strictly positive at any positive level.
     const tiny = resolveFdSteps({ ...base, sigma: 1e-6 });
     expect(1e-6 - tiny.volatilityStep).toBeGreaterThan(0);
   });
 
-  it('shrinks the time bump to T/4 near expiry; explicit steps always win', () => {
-    expect(resolveFdSteps({ ...base, T: 1e-3, sigma: 0.2 }).timeStepYears).toBeCloseTo(2.5e-4, 15);
+  it('caps the spot bump at a hundredth of the terminal standard deviation S·σ√T', () => {
+    // Ordinary contracts keep the S·1e-3 reference (σ√T/100 = 1.4e-3 > 1e-3 here).
+    expect(resolveFdSteps({ ...base, sigma: 0.2 }).spotStep).toBeCloseTo(0.1, 15);
+    // One day at 1% vol: S·σ√T ≈ 0.0523, so the bump is 5.23e-4 instead of 0.1 (twice the width).
+    const oneDay = resolveFdSteps({ ...base, T: 1 / 365, sigma: 0.01 });
+    expect(oneDay.spotStep).toBeCloseTo((100 * 0.01 * Math.sqrt(1 / 365)) / 100, 15);
+    // Scale invariance: the relative bump depends on σ√T only (equal to rounding).
+    const millionSpot = resolveFdSteps({ ...base, spot: 1e6, T: 1 / 365, sigma: 0.01 });
+    expect(millionSpot.spotStep / 1e6).toBeCloseTo(oneDay.spotStep / 100, 18);
+    // The roundoff floor (1e-8 of the spot) binds only at an essentially deterministic σ√T.
+    expect(resolveFdSteps({ ...base, T: 1e-6, sigma: 1e-4 }).spotStep).toBeCloseTo(1e-6, 18);
+    // Shift mode (σ = 0) carries no width: the reference bump stays.
+    expect(resolveFdSteps({ ...base, sigma: 0 }).spotStep).toBeCloseTo(0.1, 15);
+  });
+
+  it('caps the rate and carry bumps at a hundredth of σ/√T, the one-standard-deviation drift', () => {
+    expect(resolveFdSteps({ ...base, sigma: 0.2 }).rateStep).toBe(1e-4);
+    expect(resolveFdSteps({ ...base, sigma: 0.2 }).dividendYieldStep).toBe(1e-5);
+    const longLowVol = resolveFdSteps({ ...base, T: 10, sigma: 0.01 });
+    expect(longLowVol.rateStep).toBeCloseTo(0.01 / Math.sqrt(10) / 100, 18);
+    expect(longLowVol.dividendYieldStep).toBe(1e-5);
+    expect(resolveFdSteps({ ...base, sigma: 0 }).rateStep).toBe(1e-4);
+  });
+
+  it('caps the time bump at T/100 under its ceiling; explicit steps always win', () => {
+    expect(resolveFdSteps({ ...base, T: 1e-3, sigma: 0.2 }).timeStepYears).toBeCloseTo(1e-5, 18);
+    expect(resolveFdSteps({ ...base, sigma: 0.2 }).timeStepYears).toBe(1e-3);
+    expect(
+      resolveFdSteps({ ...base, sigma: 0.2 }, {}, { maximumTimeStepYears: 1e-4 }).timeStepYears,
+    ).toBe(1e-4);
     expect(resolveFdSteps({ ...base, sigma: 0.2 }, { volatilityStep: 7e-4 }).volatilityStep).toBe(
       7e-4,
     );
+    expect(
+      resolveFdSteps({ ...base, T: 1e-3, sigma: 0.2 }, { timeStepYears: 2e-4 }).timeStepYears,
+    ).toBe(2e-4);
   });
 });
 
@@ -72,7 +104,7 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
     });
     const bumps = r.diagnostics.finiteDifferenceBumps!;
     expect(bumps).toBeDefined();
-    expect(bumps['volatilityStep']).toBeCloseTo(vol / 4, 15);
+    expect(bumps['volatilityStep']).toBeCloseTo(vol / 100, 18);
     expect(bumps['spotStep']).toBeGreaterThan(0);
     expect(bumps['timeStepYears']).toBeGreaterThan(0);
     expect(bumps['dividendYieldStep']).toBeDefined(); // extended set bumps the carry too
@@ -93,7 +125,7 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
     expect(r.diagnostics.finiteDifferenceBumps).toBeUndefined();
   });
 
-  it('vega is continuous through the adaptive-bump boundary (no regime jump at σ = 4e-3)', () => {
+  it('vega is continuous through the adaptive-bump boundary (no regime jump at σ = 0.1)', () => {
     // At-the-FORWARD strike: as σ → 0, d₁ → σ√T/2 ≈ 0, so vega ≈ S√T·φ(0)/100 stays at a stable,
     // meaningful scale — away from the forward, tiny-vol vega underflows toward 0 and a relative
     // jump metric measures numeric noise, not the bump-size regime.
@@ -114,8 +146,9 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
           .price({ contract: atFwd, market: mkt(volatility), options: { greeks: true } })
           .greeks as { vega: number }
       ).vega;
-    // Sample across the volatilityStep switch point (σ/4 below 4e-3, fixed 1e-3 above it).
-    const volatilities = [3.6e-3, 3.8e-3, 4.0e-3, 4.2e-3, 4.4e-3];
+    // Sample across the volatilityStep switch point (σ/100 below 0.1, fixed 1e-3 above it), and
+    // through the tiny-vol range where the bump is a hundredth of the level.
+    const volatilities = [3.6e-3, 4.0e-3, 4.4e-3, 0.09, 0.095, 0.1, 0.105, 0.11];
     const vegas = volatilities.map(vega);
     for (const v of vegas) expect(Number.isFinite(v)).toBe(true);
     for (let i = 1; i < vegas.length; i++) {
@@ -125,6 +158,23 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
         step / scale,
         `jump between σ=${volatilities[i - 1]} and σ=${volatilities[i]}`,
       ).toBeLessThan(0.1);
+    }
+  });
+});
+
+describe('engine-specific rate floors still override the scale-aware rate bump', () => {
+  it('Jarrow–Rudd differences rho across at least one node spacing: σ/√(steps·T)', () => {
+    const steps = 501;
+    const contract = option.usEquityPut({ underlying: 'X', strike: 100, expiry: '2026-12-18' });
+    for (const volatility of [0.2, 0.002]) {
+      const result = engines
+        .binomial({ variant: 'jarrow-rudd', steps })
+        .price({ contract, market: mkt(volatility), options: { greeks: true } });
+      const T = result.assumptions.timeToExpiryYears!;
+      const floor = volatility / Math.sqrt(steps * T);
+      const scaleAware = Math.min(1e-4, volatility / Math.sqrt(T) / 100);
+      expect(floor).toBeGreaterThan(scaleAware);
+      expect(result.diagnostics.finiteDifferenceBumps!['rateStep']).toBe(floor);
     }
   });
 });
@@ -179,7 +229,8 @@ describe('shift-mode models scale the vol bump to their own level', () => {
       options: { extendedGreeks: true },
     });
     expect(sr.diagnostics.finiteDifferenceBumps).toBeDefined();
-    expect(sr.diagnostics.finiteDifferenceBumps!['volatilityStep']).toBeCloseTo(2e-3 / 4, 15); // α-scaled
+    // SABR keeps its own α-scaled rule (α/4); it does not use the shared resolver.
+    expect(sr.diagnostics.finiteDifferenceBumps!['volatilityStep']).toBeCloseTo(2e-3 / 4, 15);
 
     const euroContract = option.european({
       convention: 'us-equity-close',
@@ -192,9 +243,10 @@ describe('shift-mode models scale the vol bump to their own level', () => {
       .monteCarlo({ paths: 2_000, seed: 7, greeks: true })
       .price({ contract: euroContract, market: mkt(2e-3), options: { greeks: true } });
     expect(monteCarlo.diagnostics.finiteDifferenceBumps).toBeDefined();
+    // Monte Carlo keeps the variance-limited reference policy (referenceFdSteps): σ/4 here.
     expect(monteCarlo.diagnostics.finiteDifferenceBumps!['volatilityStep']).toBeCloseTo(
       2e-3 / 4,
       15,
-    ); // σ-scaled
+    );
   });
 });

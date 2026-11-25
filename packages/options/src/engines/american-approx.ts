@@ -509,35 +509,44 @@ function weightedPsiBracket(input: WeightedPsiInput): number {
   const sigmaRoot1 = sigma * Math.sqrt(t1);
   const sigmaRoot2 = sigma * Math.sqrt(T2);
 
+  // The paper's ratios of products (I2²/(S·I1), S·I1²/(H·I2²), …) are formed as products of ratios,
+  // each O(1): the products themselves overflow above a spot near 1e103 and underflow below 1e-148,
+  // while the ratios are scale-free (homogeneity of degree zero).
   const e1 = (Math.log(S / I1) + drift * t1) / sigmaRoot1;
-  const e2 = (Math.log((I2 * I2) / (S * I1)) + drift * t1) / sigmaRoot1;
+  const e2 = (Math.log((I2 / S) * (I2 / I1)) + drift * t1) / sigmaRoot1;
   const e3 = (Math.log(S / I1) - drift * t1) / sigmaRoot1;
-  const e4 = (Math.log((I2 * I2) / (S * I1)) - drift * t1) / sigmaRoot1;
+  const e4 = (Math.log((I2 / S) * (I2 / I1)) - drift * t1) / sigmaRoot1;
 
   const f1 = (Math.log(S / H) + drift * T2) / sigmaRoot2;
-  const f2 = (Math.log((I2 * I2) / (S * H)) + drift * T2) / sigmaRoot2;
-  const f3 = (Math.log((I1 * I1) / (S * H)) + drift * T2) / sigmaRoot2;
-  const f4 = (Math.log((S * I1 * I1) / (H * I2 * I2)) + drift * T2) / sigmaRoot2;
+  const f2 = (Math.log((I2 / S) * (I2 / H)) + drift * T2) / sigmaRoot2;
+  const f3 = (Math.log((I1 / S) * (I1 / H)) + drift * T2) / sigmaRoot2;
+  const f4 = (Math.log((S / H) * (I1 / I2) * (I1 / I2)) + drift * T2) / sigmaRoot2;
 
   const rho = Math.sqrt(t1 / T2);
-  const term = (
-    firstLimit: number,
-    secondLimit: number,
-    correlation: number,
-    logPower: number,
-  ): number =>
-    weightedBivariateNormalCdf({
-      firstLimit,
-      secondLimit,
-      correlation,
-      logWeight: logWeight + logPower,
-    });
+  // Each term's own reflection power multiplies the bracket's weight: fold its log into the weight.
+  const term = (input: WeightedBivariateInput): number =>
+    weightedBivariateNormalCdf({ ...input, logWeight: logWeight + input.logWeight });
 
   return (
-    term(-e1, -f1, rho, 0) -
-    term(-e2, -f2, rho, kappa * Math.log(I2 / S)) -
-    term(-e3, -f3, -rho, kappa * Math.log(I1 / S)) +
-    term(-e4, -f4, -rho, kappa * Math.log(I1 / I2))
+    term({ firstLimit: -e1, secondLimit: -f1, correlation: rho, logWeight: 0 }) -
+    term({
+      firstLimit: -e2,
+      secondLimit: -f2,
+      correlation: rho,
+      logWeight: kappa * Math.log(I2 / S),
+    }) -
+    term({
+      firstLimit: -e3,
+      secondLimit: -f3,
+      correlation: -rho,
+      logWeight: kappa * Math.log(I1 / S),
+    }) +
+    term({
+      firstLimit: -e4,
+      secondLimit: -f4,
+      correlation: -rho,
+      logWeight: kappa * Math.log(I1 / I2),
+    })
   );
 }
 
@@ -741,7 +750,8 @@ function bs2002Call(input: CarryCallInput): number {
   const b0 = K + expiryExcess;
   const t1 = 0.5 * (Math.sqrt(5) - 1) * T;
   // h(t) = −(bt + 2σ√t)·K²/((B∞ − B0)·B0);  I(t) − K = (B0 − K) + (B∞ − B0)(1 − e^{h(t)}).
-  const boundaryScale = (K * K) / (boundaryGap * b0);
+  // K²/((B∞ − B0)·B0), formed as a product of ratios so it neither overflows nor underflows with scale.
+  const boundaryScale = (K / boundaryGap) * (K / b0);
   const excessAt = (t: number): number =>
     expiryExcess + boundaryGap * -Math.expm1(-(b * t + 2 * sigma * Math.sqrt(t)) * boundaryScale);
   const excess1 = excessAt(t1);
