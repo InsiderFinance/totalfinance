@@ -27,7 +27,20 @@ select the root directory and production branch in Vercel's project settings:
 | Install Command   | `bash site/vercel.sh install` |
 | Build Command     | `bash site/vercel.sh build`   |
 | Output Directory  | `site/dist`                   |
-| Production Branch | `main`                        |
+| Production Branch | `docs-live`                   |
+
+`docs-live` is the only production branch. Nobody pushes to it by hand: the **TotalFinance docs**
+workflow (`.github/workflows/totalfinance-docs.yml`) fast-forwards it to a commit on `main`, so the
+live docs match what npm serves:
+
+- **On release:** the release workflow runs it at the release commit once the public npm smoke passes.
+- **By hand:** Actions → **TotalFinance docs** → **Run workflow** publishes the current `main` (or a
+  commit on it). Use this for docs-only fixes; it also publishes any unreleased library changes on
+  `main`, so wait for the next release when those exist.
+
+It never moves `docs-live` backwards or rewrites it. Pushes to `main` and pull requests still build
+Vercel previews, which `site/vercel.sh` keeps out of search indexes. To set this up on an existing
+project, run the workflow once to create `docs-live`, then set it as the production branch.
 
 Keep those commands and the output directory consistent with the file. No app credentials, API
 keys, database or market-data service is needed for this static site.

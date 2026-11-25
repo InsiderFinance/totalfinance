@@ -1,0 +1,60 @@
+# Publishes the docs by moving `docs-live`, the Vercel production branch for www.totalfinance.io.
+# The release workflow calls this after the public npm smoke passes, so the live docs describe what
+# npm serves. Run it by hand to publish docs-only fixes from main; that also publishes any
+# unreleased library changes on main, so prefer waiting for the next release when they exist.
+name: TotalFinance docs
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit on main to publish.
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit on main to publish (defaults to the current main).
+        required: false
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: totalfinance-docs
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: fast-forward docs-live
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: move docs-live forward to a commit on main, never backwards
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          sha="$(git rev-parse --verify --quiet "origin/$REF^{commit}" || git rev-parse --verify "$REF^{commit}")"
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "::error::$sha is not on main; only commits on main are published."
+            exit 1
+          fi
+          if git rev-parse --verify --quiet origin/docs-live >/dev/null; then
+            if git merge-base --is-ancestor "$sha" origin/docs-live; then
+              echo "docs-live already includes $sha; nothing to publish." | tee -a "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if ! git merge-base --is-ancestor origin/docs-live "$sha"; then
+              echo "::error::docs-live has commits that are not on main; fix it by hand, this job never rewrites it."
+              exit 1
+            fi
+          fi
+          git push origin "$sha:refs/heads/docs-live"
+          echo "docs-live now points at $sha; Vercel deploys it to production." | tee -a "$GITHUB_STEP_SUMMARY"

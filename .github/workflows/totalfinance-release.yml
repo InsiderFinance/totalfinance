@@ -132,6 +132,15 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  docs:
+    name: publish the released docs
+    needs: smoke
+    permissions:
+      contents: write
+    uses: ./.github/workflows/totalfinance-docs.yml
+    with:
+      ref: ${{ github.sha }}
+
   evidence:
     name: attach SDK evidence to existing GitHub Release
     needs: [verify, smoke]
