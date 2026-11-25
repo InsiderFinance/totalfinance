@@ -27,6 +27,7 @@ import {
   type QuantWarning,
   UnsupportedError,
   WarningCode,
+  assertFiniteValue,
   ensureFinite,
   ensurePositive,
   resolveValuationAsOf,
@@ -38,7 +39,13 @@ import { escrowedSpot, hasDiscreteDividends } from '../dividends.js';
 import { contractTimeToExpiryYears } from '../time.js';
 import type { ExtendedGreeks, Greeks, PriceResult } from '../types.js';
 import { assertNoArbitrageBounds } from './bounds.js';
-import { finiteDifferenceExtendedGreeks, resolveFdSteps } from './fd-greeks.js';
+import {
+  type BranchedValue,
+  branchAwareDifference,
+  finiteDifferenceExtendedGreeks,
+  referenceFdSteps,
+  resolveFdSteps,
+} from './fd-greeks.js';
 import type { ScalarAmericanPricer, ScalarAmericanPricingInput } from './scalar-pricing.js';
 import type { OptionStyle } from '@totalfinance/core';
 
@@ -94,6 +101,22 @@ export interface AmericanEngineConfig {
    * a disclosed refusal beats a fabricated number.
    */
   extendedGreeks?: boolean;
+  /**
+   * Which default finite-difference bumps this engine's Greeks use (default `'reference'`).
+   *
+   * `'scale-aware'` ({@link resolveFdSteps}) caps each bump at a hundredth of its coordinate's natural
+   * scale. That is truncation-optimal, but only for a price that is a SMOOTH closed form in every bumped
+   * coordinate (the American approximations). `'reference'` ({@link referenceFdSteps}) keeps the fixed
+   * reference bumps for discretized prices. A lattice or PDE value has interior kinks at its own node
+   * and early-exercise structure: a spot bump of S·σ√T/100 is about √N/100 of a node (0.2 at 401
+   * steps), so it differences those kinks. A 401-step Leisen–Reimer put gamma came out about 21% off
+   * where the reference bump stays within 0.2%.
+   *
+   * The policy also selects the stencil. A scale-aware engine differences each first-order coordinate
+   * on the exercise branch that holds the base point (one-sided where a central stencil would straddle
+   * the switch). A reference-policy engine keeps the plain central stencils, exactly as before.
+   */
+  bumpPolicy?: 'scale-aware' | 'reference';
   /** Config-time warnings echoed on every result (e.g. a rounded step count). */
   warnings?: QuantWarning[];
 }
@@ -304,103 +327,116 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
       const extendedRequested = options?.extendedGreeks ?? false;
       const wantExtended = extendedRequested && supportsExtended;
       const wantGreeks = extendedRequested || (options?.greeks ?? true);
-      // Resolve the FD bumps ONCE (adaptive near the vol/time boundaries, spec P2.3) so the same
-      // sizes are used for differencing AND disclosed in diagnostics.finiteDifferenceBumps below.
+      // Resolve the FD bumps ONCE so the same sizes are used for differencing AND disclosed in
+      // diagnostics.finiteDifferenceBumps below. Smooth closed forms use the scale-aware bumps; every
+      // discretized engine keeps the reference bumps (see `bumpPolicy`).
       const fdState = { spot: S, T, r, q, sigma };
       // A rate bump below the engine's own grid resolution differences its discretization, not the
       // price (see `rateStepFloor`); the floor is disclosed like every other actually-used step.
       const rateFloor = config.rateStepFloor?.({ volatility: sigma, timeToExpiryYears: T }) ?? 0;
-      const rateStepOverride = rateFloor > 1e-4 ? { rateStep: rateFloor } : {};
-      const fd = wantGreeks
-        ? resolveFdSteps(fdState, {
-            ...(wantExtended ? {} : { timeStepYears: Math.min(1e-4, T / 4) }),
-            ...rateStepOverride,
-          })
-        : undefined;
+      const stepLimits = wantExtended ? {} : { maximumTimeStepYears: 1e-4 };
+      const resolvedSteps = !wantGreeks
+        ? undefined
+        : config.bumpPolicy === 'scale-aware'
+          ? resolveFdSteps(fdState, {}, stepLimits)
+          : referenceFdSteps(fdState, stepLimits);
+      const fd =
+        resolvedSteps !== undefined && rateFloor > resolvedSteps.rateStep
+          ? { ...resolvedSteps, rateStep: rateFloor }
+          : resolvedSteps;
       let greeks: Greeks | ExtendedGreeks | undefined;
       if (wantExtended) {
         greeks = finiteDifferenceExtendedGreeks({ price, spotAt, state: fdState, steps: fd! });
       } else if (wantGreeks) {
         // Finite-difference Greeks (default units: theta/day, vega/1%, rho/1%). Spot Greeks come
         // from the engine's own discretization when it exposes them (see the module docstring);
-        // only σ/r — coordinates the price is smooth in — are bump-and-repriced.
+        // only σ/r — coordinates the price is smooth in — are bump-and-repriced. A scale-aware
+        // (smooth closed-form) engine differences each coordinate on the price branch that holds the
+        // base point (branchAwareDifference): its small stencil straddling the exercise switch would
+        // otherwise report a secant and a spurious curvature. A reference-policy (discretized)
+        // engine keeps the plain central stencils: a one-sided stencil would reach two and three
+        // bumps into its own node structure.
         const { spotStep, volatilityStep, timeStepYears, rateStep } = fd!;
-        const pUp = native
-          ? 0
-          : price({
-              spot: S + spotStep,
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
+        const oneSided = config.bumpPolicy === 'scale-aware';
+        const american = style === 'american';
+        const exercised = (spotHere: number, valueHere: number): boolean => {
+          if (!american) return false;
+          const exerciseValue = type === 'call' ? spotHere - K : K - spotHere;
+          return exerciseValue > 0 && valueHere === exerciseValue;
+        };
+        const branched = (spotHere: number, valueHere: number): BranchedValue => ({
+          value: valueHere,
+          exercised: exercised(spotHere, valueHere),
+        });
+        const base = branched(S, value);
+        const atState = (state: {
+          spot: number;
+          volatility: number;
+          timeToExpiryYears: number;
+          riskFreeRate: number;
+        }): BranchedValue => branched(state.spot, price({ ...state, dividendYield: q }));
+        const spotDerivatives = native
+          ? undefined
+          : branchAwareDifference({
+              oneSided,
+              base,
+              step: spotStep,
+              evaluate: (k) =>
+                atState({
+                  spot: S + k * spotStep,
+                  volatility: sigma,
+                  timeToExpiryYears: T,
+                  riskFreeRate: r,
+                }),
             });
-        const pDn = native
-          ? 0
-          : price({
-              spot: S - spotStep,
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
-            });
-        const delta = native ? native.delta : (pUp - pDn) / (2 * spotStep);
-        const gamma = native ? native.gamma : (pUp - 2 * value + pDn) / (spotStep * spotStep);
+        const delta = native ? native.delta : spotDerivatives!.first;
+        const gamma = native ? native.gamma : spotDerivatives!.second;
         const vega =
-          (price({
-            spot: S,
-            volatility: sigma + volatilityStep,
-            timeToExpiryYears: T,
-            riskFreeRate: r,
-            dividendYield: q,
-          }) -
-            price({
-              spot: S,
-              volatility: sigma - volatilityStep,
-              timeToExpiryYears: T,
-              riskFreeRate: r,
-              dividendYield: q,
-            })) /
-          (2 * volatilityStep) /
-          100;
+          branchAwareDifference({
+            oneSided,
+            base,
+            step: volatilityStep,
+            evaluate: (k) =>
+              atState({
+                spot: S,
+                volatility: sigma + k * volatilityStep,
+                timeToExpiryYears: T,
+                riskFreeRate: r,
+              }),
+          }).first / 100;
         // Re-escrow at the bumped time / rate so the dividend PV moves with the bump. A native theta
         // is already ∂V/∂t per year on the engine's own time grid — no maturity bump involved.
         const theta = native
           ? native.thetaPerYear / 365
-          : -(
-              price({
-                spot: spotAt({ riskFreeRate: r, timeToExpiryYears: T + timeStepYears }),
-                volatility: sigma,
-                timeToExpiryYears: T + timeStepYears,
-                riskFreeRate: r,
-                dividendYield: q,
-              }) -
-              price({
-                spot: spotAt({ riskFreeRate: r, timeToExpiryYears: T - timeStepYears }),
-                volatility: sigma,
-                timeToExpiryYears: T - timeStepYears,
-                riskFreeRate: r,
-                dividendYield: q,
-              })
-            ) /
-            (2 * timeStepYears) /
-            365;
+          : -branchAwareDifference({
+              oneSided,
+              base,
+              step: timeStepYears,
+              evaluate: (k) => {
+                const timeToExpiryYears = T + k * timeStepYears;
+                return atState({
+                  spot: spotAt({ riskFreeRate: r, timeToExpiryYears }),
+                  volatility: sigma,
+                  timeToExpiryYears,
+                  riskFreeRate: r,
+                });
+              },
+            }).first / 365;
         const rho =
-          (price({
-            spot: spotAt({ riskFreeRate: r + rateStep, timeToExpiryYears: T }),
-            volatility: sigma,
-            timeToExpiryYears: T,
-            riskFreeRate: r + rateStep,
-            dividendYield: q,
-          }) -
-            price({
-              spot: spotAt({ riskFreeRate: r - rateStep, timeToExpiryYears: T }),
-              volatility: sigma,
-              timeToExpiryYears: T,
-              riskFreeRate: r - rateStep,
-              dividendYield: q,
-            })) /
-          (2 * rateStep) /
-          100;
+          branchAwareDifference({
+            oneSided,
+            base,
+            step: rateStep,
+            evaluate: (k) => {
+              const riskFreeRate = r + k * rateStep;
+              return atState({
+                spot: spotAt({ riskFreeRate, timeToExpiryYears: T }),
+                volatility: sigma,
+                timeToExpiryYears: T,
+                riskFreeRate,
+              });
+            },
+          }).first / 100;
         greeks = { delta, gamma, theta, vega, rho };
       }
 
@@ -484,6 +520,11 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
         spot: S,
         strike: K,
       });
+      // Law 7: a successful result never carries a non-finite Greek. A NaN at one bumped state (a rate
+      // bump crossing zero, say) used to surface silently as `rho: NaN`. It is refused here like the
+      // value above, as a typed library defect. The documented `lambda: null` is not a number and
+      // passes.
+      if (greeks !== undefined) assertFiniteValue(`${functionName}.greeks`, greeks);
       const base = {
         value,
         assumptions: assumptions({

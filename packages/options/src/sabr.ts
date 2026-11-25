@@ -39,7 +39,11 @@ import {
   type MonteCarloSamplingOptions,
   monteCarloEstimate,
 } from './mc/core.js';
-import { finiteDifferenceExtendedGreeks } from './engines/fd-greeks.js';
+import {
+  type FdGreekSteps,
+  finiteDifferenceExtendedGreeks,
+  referenceFdSteps,
+} from './engines/fd-greeks.js';
 import type { ExtendedGreeks, Greeks, PriceResult } from './types.js';
 
 /** SABR parameters. */
@@ -450,13 +454,11 @@ export function sabrPrice(request: SabrPriceRequest): PriceResult {
         timeToExpiryYears,
         riskFreeRate,
       });
-    // Shift-mode: scale the vol bump to α so `α + shift` never crosses zero (spec P2.3).
-    const volatilityStep = parameters.alpha > 0 ? Math.min(1e-3, parameters.alpha / 4) : 1e-3;
     greeks = finiteDifferenceExtendedGreeks({
       price: priceVL,
       spotAt: () => F,
       state: { spot: F, T, r, q: 0, sigma: 0 },
-      steps: { volatilityStep },
+      steps: sabrExtendedSteps({ forward: F, timeToExpiryYears: T, alpha: parameters.alpha }),
     });
   } else if (wantGreeks) {
     // Adaptive near boundaries (P2.3): the α bump shrinks to α/4 for tiny vol levels so
@@ -502,25 +504,36 @@ export function sabrPrice(request: SabrPriceRequest): PriceResult {
     };
   }
 
-  // The ACTUAL bump sizes differenced (P2.3): α-scaled vol bump, forward-relative spot bump.
+  // The ACTUAL bump sizes differenced (P2.3): α-scaled vol bump, forward-relative spot bump. The
+  // extended set reads them from the same helper its differencing uses, so the report cannot drift.
   const sabrHSig =
     parameters.alpha > 0
       ? Math.min(wantExtended ? 1e-3 : 1e-4, parameters.alpha / 4)
       : wantExtended
         ? 1e-3
         : 1e-4;
+  const extendedSteps = wantExtended
+    ? sabrExtendedSteps({ forward: F, timeToExpiryYears: T, alpha: parameters.alpha })
+    : undefined;
   const diagnostics: Diagnostics = {
     engine: volatilityType === 'normal' ? 'sabr-bachelier' : 'sabr-black76',
     method: 'hagan-2002',
     converged: Number.isFinite(value),
     ...(wantGreeks
       ? {
-          finiteDifferenceBumps: {
-            spotStep: wantExtended ? F * 1e-3 : F * 1e-4,
-            volatilityStep: sabrHSig,
-            timeStepYears: wantExtended ? Math.min(1e-3, T / 4) : Math.min(1e-4, T / 4),
-            rateStep: wantExtended ? 1e-4 : 1e-4,
-          },
+          finiteDifferenceBumps: extendedSteps
+            ? {
+                spotStep: extendedSteps.spotStep,
+                volatilityStep: extendedSteps.volatilityStep,
+                timeStepYears: extendedSteps.timeStepYears,
+                rateStep: extendedSteps.rateStep,
+              }
+            : {
+                spotStep: F * 1e-4,
+                volatilityStep: sabrHSig,
+                timeStepYears: Math.min(1e-4, T / 4),
+                rateStep: 1e-4,
+              },
         }
       : {}),
     warnings: wantGreeks
@@ -714,3 +727,22 @@ export const sabr = {
   monteCarloPrice: sabrMonteCarloPrice,
   monteCarloEstimate: sabrMonteCarloEstimate,
 } as const;
+
+/**
+ * SABR's own extended-Greek bumps. These are the fixed reference bumps (`referenceFdSteps`: forward
+ * `F·1e-3`, time `min(1e-3, T/4)`, rate 1e-4, carry 1e-5) with the vol shift scaled to α
+ * (`min(1e-3, α/4)`), so `α − h` never crosses zero. SABR is a shift-mode model whose `sigma` carries
+ * no distribution width, so it keeps this owner policy rather than the shared scale-aware default.
+ * Both the differencing and `diagnostics.finiteDifferenceBumps` read this one function.
+ */
+function sabrExtendedSteps(input: {
+  forward: number;
+  timeToExpiryYears: number;
+  alpha: number;
+}): Required<FdGreekSteps> {
+  const { forward, timeToExpiryYears, alpha } = input;
+  return {
+    ...referenceFdSteps({ spot: forward, T: timeToExpiryYears, r: 0, q: 0, sigma: 0 }),
+    volatilityStep: alpha > 0 ? Math.min(1e-3, alpha / 4) : 1e-3,
+  };
+}

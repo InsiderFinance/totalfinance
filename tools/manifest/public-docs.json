@@ -1,10 +1,10 @@
 {
   "version": 1,
   "summary": {
-    "surfaces": 274,
+    "surfaces": 275,
     "byClass": {
       "current-runnable": 95,
-      "future-target": 86,
+      "future-target": 87,
       "generated": 82,
       "formula-notation": 1,
       "historical": 8,
@@ -12,7 +12,7 @@
     },
     "executableFences": 4708,
     "checkedUnderTruthfulness": 177,
-    "checkedUnderVocabulary": 86,
+    "checkedUnderVocabulary": 87,
     "shippedNamesWatched": 10110,
     "documentedExceptions": 9,
     "findings": 0
@@ -822,6 +822,13 @@
       "owner": "human",
       "rule": "truthfulness",
       "codeFences": 1
+    },
+    {
+      "path": "docs/specs/bjerksund-stensland-stability.md",
+      "class": "future-target",
+      "owner": "human",
+      "rule": "vocabulary",
+      "codeFences": 0
     },
     {
       "path": "docs/specs/bond-future-ctd.md",

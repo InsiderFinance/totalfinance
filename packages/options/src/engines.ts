@@ -366,10 +366,10 @@ function americanFrom(
   pricer: AmericanEngineConfig['pricer'],
   extras: Pick<
     AmericanEngineConfig,
-    'solve' | 'extendedGreeks' | 'rateStepFloor' | 'warnings'
+    'solve' | 'extendedGreeks' | 'rateStepFloor' | 'warnings' | 'bumpPolicy'
   > = {},
 ): OptionPricingEngine {
-  const { solve, extendedGreeks, rateStepFloor, warnings } = extras;
+  const { solve, extendedGreeks, rateStepFloor, warnings, bumpPolicy } = extras;
   return makeAmericanEngine({
     name,
     method,
@@ -378,6 +378,7 @@ function americanFrom(
     ...(solve !== undefined ? { solve } : {}),
     ...(extendedGreeks !== undefined ? { extendedGreeks } : {}),
     ...(rateStepFloor !== undefined ? { rateStepFloor } : {}),
+    ...(bumpPolicy !== undefined ? { bumpPolicy } : {}),
     ...(warnings && warnings.length > 0 ? { warnings } : {}),
   });
 }
@@ -703,6 +704,8 @@ export const engines = {
    */
   baroneAdesiWhaley: (): OptionPricingEngine =>
     americanFrom('barone-adesi-whaley', 'barone-adesi-whaley', americanApproximation(bawPrice), {
+      // A smooth closed form in every bumped coordinate: truncation-optimal scale-aware bumps.
+      bumpPolicy: 'scale-aware',
       solve: ({
         type,
         style,
@@ -769,6 +772,7 @@ export const engines = {
       'bjerksund-stensland',
       'bjerksund-stensland-2002',
       americanApproximation(bjerksundStensland2002Price),
+      { bumpPolicy: 'scale-aware' },
     ),
 
   /** Bjerksund–Stensland (2002) two-boundary American approximation (European falls through to BSM). */
@@ -777,6 +781,7 @@ export const engines = {
       'bjerksund-stensland-2002',
       'bjerksund-stensland-2002',
       americanApproximation(bjerksundStensland2002Price),
+      { bumpPolicy: 'scale-aware' },
     ),
 
   /** Bjerksund–Stensland (1993) single-boundary American approximation (European falls through to BSM). */
@@ -785,6 +790,7 @@ export const engines = {
       'bjerksund-stensland-1993',
       'bjerksund-stensland-1993',
       americanApproximation(bjerksundStenslandPrice),
+      { bumpPolicy: 'scale-aware' },
     ),
 
   /** Crank–Nicolson finite-difference engine (American or European). */
@@ -1761,7 +1767,12 @@ export function compareEngines(input: CompareEnginesInput): EngineComparison {
   const referenceEngine =
     options.reference ?? engines.binomial({ variant: 'leisen-reimer', steps: 1001 });
   requireEngine('compareEngines', referenceEngine);
-  const referenceValue = referenceEngine.price({ contract, market }).value;
+  // The reference contributes only its value; its Greeks are neither reported nor needed.
+  const referenceValue = referenceEngine.price({
+    contract,
+    market,
+    options: { greeks: false },
+  }).value;
   const now = options.now;
 
   const rows: EngineComparisonRow[] = list.map((engine) => {

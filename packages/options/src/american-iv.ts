@@ -282,8 +282,14 @@ export function invertEngine(request: EngineInversionRequest): EngineInversion {
   // Reject rather than let Brent lock onto a bracket endpoint and report a fabricated σ.
   if (price <= bounds.lower + tolerance) return { ...base, status: 'no-time-value' };
 
+  // Price only: the inversion reads `.value`, so Greeks are not requested. That avoids their extra
+  // repricings, and the price no longer depends on their success.
   const priceAt = (sigma: number): number =>
-    engine.price({ contract, market: { ...market, volatility: sigma } }).value;
+    engine.price({
+      contract,
+      market: { ...market, volatility: sigma },
+      options: { greeks: false },
+    }).value;
   const residual = (sigma: number): number => priceAt(sigma) - price;
   const tolOpts = {
     stepTolerance: 1e-8,

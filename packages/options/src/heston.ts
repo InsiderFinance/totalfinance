@@ -53,7 +53,11 @@ import {
   type MonteCarloSamplingOptions,
   monteCarloEstimate,
 } from './mc/core.js';
-import { finiteDifferenceExtendedGreeks, resolveFdSteps } from './engines/fd-greeks.js';
+import {
+  type FdGreekSteps,
+  finiteDifferenceExtendedGreeks,
+  referenceFdSteps,
+} from './engines/fd-greeks.js';
 import {
   MAX_HESTON_COSINE_TERMS,
   requireHestonCosineTermCount,
@@ -742,12 +746,11 @@ function cosGreeks(
       });
     // Shift-mode (sigma is a shift around 0): scale the vol bump to the model's OWN level so
     // √v₀ + shift / √θ + shift never cross zero for tiny-vol calibrations (spec P2.3).
-    const volatilityStep = hestonVolatilityShiftBump(p);
     return finiteDifferenceExtendedGreeks({
       price: priceVL,
       spotAt: () => S,
       state: { spot: S, T, r, q, sigma: 0 },
-      steps: { volatilityStep },
+      steps: hestonExtendedSteps({ spot: S, timeToExpiryYears: T, parameters: p }),
     });
   }
 
@@ -801,6 +804,26 @@ function cosGreeks(
     100;
 
   return { delta, gamma, theta, vega, rho };
+}
+
+/**
+ * Heston's extended-Greek bumps: the fixed reference bumps (`referenceFdSteps`: spot `S·1e-3`, time
+ * `min(1e-3, T/4)`, rate 1e-4, carry 1e-5) with the vol shift scaled to the model's own level
+ * ({@link hestonVolatilityShiftBump}). Heston is a shift-mode model priced by a COS expansion, so it
+ * keeps this owner policy rather than the shared scale-aware default. A smaller time bump would
+ * difference the expansion's own error more finely. Both the differencing and
+ * `diagnostics.finiteDifferenceBumps` read this one function.
+ */
+function hestonExtendedSteps(input: {
+  spot: number;
+  timeToExpiryYears: number;
+  parameters: HestonParameters;
+}): Required<FdGreekSteps> {
+  const { spot, timeToExpiryYears, parameters } = input;
+  return {
+    ...referenceFdSteps({ spot, T: timeToExpiryYears, r: 0, q: 0, sigma: 0 }),
+    volatilityStep: hestonVolatilityShiftBump(parameters),
+  };
 }
 
 /** Heston vol-level shift bump, scaled to the model's own level (P2.3). */
@@ -1013,16 +1036,17 @@ export function hestonPrice(request: HestonPriceRequest): PriceResult {
       })
     : undefined;
 
-  // The ACTUAL bump sizes the Greeks path differences with (D6): extended = the shared
-  // resolveFdSteps sizes with the level-scaled vol shift; first-order = cosGreeks' own sizes.
-  // Both come from the SAME functions the differencing uses — disclosure can't drift.
+  // The ACTUAL bump sizes the Greeks path differences with (D6): extended = Heston's own reference
+  // bumps with the level-scaled vol shift; first-order = cosGreeks' own sizes. Both come from the
+  // SAME functions the differencing uses — disclosure can't drift.
   const hestonFd = !wantGreeks
     ? undefined
     : wantExtended
-      ? resolveFdSteps(
-          { spot: input.spot, T: input.timeToExpiryYears, r: input.riskFreeRate, q, sigma: 0 },
-          { volatilityStep: hestonVolatilityShiftBump(parameters) },
-        )
+      ? hestonExtendedSteps({
+          spot: input.spot,
+          timeToExpiryYears: input.timeToExpiryYears,
+          parameters,
+        })
       : hestonFirstOrderSteps({
           spot: input.spot,
           timeToExpiryYears: input.timeToExpiryYears,
