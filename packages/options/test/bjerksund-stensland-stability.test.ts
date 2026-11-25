@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { engines, option, type OptionPricingEngine } from '@totalfinance/options';
-import { blackScholesPrice } from '@totalfinance/options/black-scholes';
+import { blackScholesExtendedGreeks, blackScholesPrice } from '@totalfinance/options/black-scholes';
+import { digital } from '@totalfinance/options/exotics';
 import {
   bjerksundStensland1993Approximation,
   bjerksundStensland2002Approximation,
@@ -342,16 +343,126 @@ describe('scale-aware finite-difference steps (exact European-equivalent referen
       }
     }
   });
+});
 
-  it('the Leisen–Reimer lattice (bump-differenced in spot) also resolves them, within its discretization', () => {
-    const lattice = engines.binomial({ variant: 'leisen-reimer', steps: 801 });
-    for (const c of EUROPEAN) {
-      const result = priceWith(lattice, c);
-      for (const greek of GREEK_NAMES) {
+describe('discretized engines keep the reference bumps (lattice node resolution)', () => {
+  // A lattice price has interior kinks at its own nodes and early-exercise structure. A scale-aware
+  // spot bump (S·σ√T/100 ≈ √N/100 of a node) would difference them: a 401-step Leisen–Reimer American
+  // put next to its exercise boundary had a gamma about 21% off, with N-dependent noise. The reference
+  // bump (S·1e-3, several nodes wide) is the engine's policy; this checks it against a converged
+  // 4001-step reference (second differences of prices at d = 0.1, about nine nodes).
+  it('a 401-step Leisen–Reimer put near its exercise boundary matches the converged gamma', () => {
+    const contract = option.put({
+      underlying: 'X',
+      strike: 100,
+      expiry: new Date(AS_OF + 7 * 86_400_000).toISOString(),
+      style: 'american',
+    });
+    const market = (spot: number) => ({
+      asOf: AS_OF,
+      spot,
+      riskFreeRate: 0.05,
+      dividendYield: 0,
+      volatility: 0.05,
+    });
+    const converged = engines.binomial({ variant: 'leisen-reimer', steps: 4001 });
+    const at = (spot: number) =>
+      converged.price({ contract, market: market(spot), options: { greeks: false } }).value;
+    for (const spot of [99.5, 99.6, 99.75]) {
+      const result = engines
+        .binomial({ variant: 'leisen-reimer' })
+        .price({ contract, market: market(spot), options: { greeks: true } });
+      expect(result.diagnostics.finiteDifferenceBumps!['spotStep']).toBeCloseTo(spot * 1e-3, 15);
+      const d = 0.1;
+      const reference = (at(spot + d) - 2 * at(spot) + at(spot - d)) / (d * d);
+      // Measured within 0.24%; 1% leaves room for the 401-step discretization.
+      expect(
+        Math.abs(result.greeks!.gamma - reference) / reference,
+        `S=${spot}`,
+      ).toBeLessThanOrEqual(1e-2);
+    }
+  });
+});
+
+describe('the shared bumps also reach the extended (higher-order) Greeks', () => {
+  const HIGHER = ['vanna', 'charm', 'speed', 'color', 'zomma', 'veta'] as const;
+
+  it('American extended Greeks of exactly-European contracts match the analytic BSM set', () => {
+    // A no-dividend call with r ≥ 0 is never exercised early, so the BS2002 extended set must equal
+    // the closed-form BSM extended Greeks (validated against mpmath elsewhere). 1e-3 of each Greek's
+    // at-the-money magnitude covers a second or third difference at bumps one hundredth of the scale.
+    // With the old fixed bumps the one-day case was off by up to 84% (speed).
+    for (const c of (golden.europeanEquivalent as unknown as GoldenEuropean[]).filter(
+      (e) => e.type === 'call' && e.spot === 100 && e.volatility >= 0.05,
+    )) {
+      const result = engines.bjerksundStensland2002().price({
+        contract: contractOf(c),
+        market: {
+          asOf: AS_OF,
+          spot: c.spot,
+          riskFreeRate: c.riskFreeRate,
+          dividendYield: c.dividendYield,
+          volatility: c.volatility,
+        },
+        options: { extendedGreeks: true },
+      });
+      const analytic = blackScholesExtendedGreeks(rawInput(c)) as unknown as Record<string, number>;
+      const greeks = result.greeks as unknown as Record<string, number>;
+      // Each higher Greek's at-the-money magnitude, from the gamma and vega yardsticks: errors are
+      // judged against it, not against a value that can cross zero (zomma at σ = 5%, one year).
+      const gamma = greekScale(c, 'gamma');
+      const vegaRaw = greekScale(c, 'vega') * 100;
+      const T = c.timeToExpiryYears;
+      const rootT = Math.sqrt(T);
+      const scale: Record<(typeof HIGHER)[number], number> = {
+        vanna: PHI_ZERO / c.volatility,
+        charm: PHI_ZERO / T,
+        speed: gamma / (c.spot * c.volatility * rootT),
+        color: gamma / T,
+        zomma: gamma / c.volatility,
+        veta: vegaRaw / T,
+      };
+      for (const greek of HIGHER) {
         expect(
-          Math.abs(result.greeks![greek] - c.derivative[greek]) / greekScale(c, greek),
+          Math.abs(greeks[greek]! - analytic[greek]!) / scale[greek],
           `${label(c)} ${greek}`,
         ).toBeLessThanOrEqual(1e-3);
+      }
+    }
+  });
+
+  it('digital extended Greeks match exact mpmath derivatives, including one day to expiry', () => {
+    // The binary's closed form is differenced by the shared helper. The old fixed bumps were 0.6–2.7%
+    // off at one day; the scale-aware bumps are within 3e-4 (measured).
+    const cases = golden.digitalExtended as unknown as {
+      kind: 'cash-or-nothing' | 'asset-or-nothing';
+      type: 'call' | 'put';
+      spot: number;
+      strike: number;
+      timeToExpiryYears: number;
+      riskFreeRate: number;
+      dividendYield: number;
+      volatility: number;
+      derivative: Record<(typeof HIGHER)[number] | 'vomma', number>;
+    }[];
+    expect(cases.length).toBe(13);
+    for (const c of cases) {
+      const value = digital.extendedGreeks({
+        type: c.type,
+        kind: c.kind,
+        spot: c.spot,
+        strike: c.strike,
+        timeToExpiryYears: c.timeToExpiryYears,
+        riskFreeRate: c.riskFreeRate,
+        dividendYield: c.dividendYield,
+        volatility: c.volatility,
+      }).value as unknown as Record<string, number>;
+      for (const greek of [...HIGHER, 'vomma'] as const) {
+        const exact = c.derivative[greek];
+        expect(
+          Math.abs(value[greek]! - exact),
+          `${c.kind} ${c.type} S=${c.spot} T=${c.timeToExpiryYears} ${greek}`,
+        ).toBeLessThanOrEqual(1e-3 * Math.abs(exact) + 1e-9);
       }
     }
   });

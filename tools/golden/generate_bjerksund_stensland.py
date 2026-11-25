@@ -152,6 +152,9 @@ GREEK_CASES = [
     case("call", 100, 100, 1.0, 0.05, 0.06, 0.2),
     case("put", 90, 100, 0.25, 0.25, 0.0, 0.25),
     case("call", 100, 100, 1.0, 0.05, 0.01, 2.0),
+    # Just below the second exercise boundary for the published NAG S30QCF example's parameters
+    # (I2 ≈ 114.6): the volatility stencil there is the most curved of the ordinary cases.
+    case("call", 114.4, 100, 0.25, 0.08, 0.12, 0.2),
 ]
 
 MATRIX_COLUMNS = ["type", "spot", "strike", "years", "riskFreeRate", "dividendYield", "volatility"]
@@ -427,12 +430,54 @@ def kink_job(c):
             "derivative": {k: nstr(v) for k, v in exact.items()}}
 
 
+# European digitals: the shared extended-Greek helper differences their exact closed form, so the
+# scale-aware bumps reach them too. Exact higher-order Greeks by mpmath differentiation of the closed
+# forms (cash-or-nothing e^{−rT}·N(±d2)·cash, asset-or-nothing S·e^{−qT}·N(±d1)), in the library's
+# units: raw partial derivatives, with charm, color and veta taken per ADDED year of expiry.
+DIGITAL_CASES = []
+for kind in ("cash-or-nothing", "asset-or-nothing"):
+    for option_type in ("call", "put"):
+        for years in (1 / 365, 30 / 365, 1.0):
+            DIGITAL_CASES.append({"kind": kind, "type": option_type, "spot": 100.0, "strike": 100.0,
+                                  "timeToExpiryYears": years, "riskFreeRate": 0.05, "dividendYield": 0.0,
+                                  "volatility": 0.1})
+DIGITAL_CASES.append({"kind": "cash-or-nothing", "type": "call", "spot": 102.0, "strike": 100.0,
+                      "timeToExpiryYears": 7 / 365, "riskFreeRate": 0.03, "dividendYield": 0.01,
+                      "volatility": 0.3})
+
+
+def digital_job(c):
+    R.set_digits(40)
+    K, r, q = (mp.mpf(c[k]) for k in ("strike", "riskFreeRate", "dividendYield"))
+    sign = 1 if c["type"] == "call" else -1
+
+    def V(S, T, s):
+        S, T, s = mp.mpf(S), mp.mpf(T), mp.mpf(s)
+        d1 = (mp.log(S / K) + (r - q + s * s / 2) * T) / (s * mp.sqrt(T))
+        d2 = d1 - s * mp.sqrt(T)
+        if c["kind"] == "cash-or-nothing":
+            return mp.exp(-r * T) * mp.ncdf(sign * d2)
+        return S * mp.exp(-q * T) * mp.ncdf(sign * d1)
+
+    S0, T0, s0 = (mp.mpf(c[k]) for k in ("spot", "timeToExpiryYears", "volatility"))
+    exact = {
+        "vanna": mp.diff(lambda S, s: V(S, T0, s), (S0, s0), (1, 1)),
+        "charm": mp.diff(lambda S, T: V(S, T, s0), (S0, T0), (1, 1)),
+        "vomma": mp.diff(lambda s: V(S0, T0, s), s0, 2),
+        "speed": mp.diff(lambda S: V(S, T0, s0), S0, 3),
+        "color": mp.diff(lambda S, T: V(S, T, s0), (S0, T0), (2, 1)),
+        "zomma": mp.diff(lambda S, s: V(S, T0, s), (S0, s0), (2, 1)),
+        "veta": mp.diff(lambda s, T: V(S0, T, s), (s0, T0), (1, 1)),
+    }
+    return {**c, "derivative": {k: nstr(v) for k, v in exact.items()}}
+
+
 def matrix_job(c):
     R.set_digits(40)
     return [c[k] for k in MATRIX_COLUMNS] + [c["timeToExpiryYears"], nstr(price_of("2002", c, floor=True))]
 
 
-SECTIONS = ("anchors", "prices", "greeks", "matrix", "kernels", "europeanEquivalent", "kinks")
+SECTIONS = ("anchors", "prices", "greeks", "matrix", "kernels", "europeanEquivalent", "kinks", "digitalExtended")
 
 
 if __name__ == "__main__":
@@ -469,6 +514,8 @@ if __name__ == "__main__":
             out["europeanEquivalent"] = pool.map(european_job, EUROPEAN_EQUIVALENT_CASES, chunksize=1)
         if "kinks" in wanted:
             out["kinks"] = pool.map(kink_job, KINK_CASES, chunksize=1)
+        if "digitalExtended" in wanted:
+            out["digitalExtended"] = pool.map(digital_job, DIGITAL_CASES, chunksize=1)
     meta = {
         "generator": "tools/golden/generate_bjerksund_stensland.py",
         "reference": "tools/golden/bjerksund_stensland_reference.py — published Bjerksund–Stensland 1993/2002 "

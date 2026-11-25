@@ -104,7 +104,8 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
     });
     const bumps = r.diagnostics.finiteDifferenceBumps!;
     expect(bumps).toBeDefined();
-    expect(bumps['volatilityStep']).toBeCloseTo(vol / 100, 18);
+    // Lattices keep the reference policy (referenceFdSteps): σ/4 below the 4e-3 level.
+    expect(bumps['volatilityStep']).toBeCloseTo(vol / 4, 15);
     expect(bumps['spotStep']).toBeGreaterThan(0);
     expect(bumps['timeStepYears']).toBeGreaterThan(0);
     expect(bumps['dividendYieldStep']).toBeDefined(); // extended set bumps the carry too
@@ -175,6 +176,60 @@ describe('engine-specific rate floors still override the scale-aware rate bump',
       const scaleAware = Math.min(1e-4, volatility / Math.sqrt(T) / 100);
       expect(floor).toBeGreaterThan(scaleAware);
       expect(result.diagnostics.finiteDifferenceBumps!['rateStep']).toBe(floor);
+    }
+  });
+});
+
+describe('owners that keep their reference bumps report exactly the bumps they use (T < 0.1)', () => {
+  // SABR and Heston are shift-mode models (σ = 0 to the shared resolver). They keep their own
+  // reference policy, read by ONE helper for both differencing and disclosure.
+  it('SABR extended theta is the central difference at its DISCLOSED time bump', () => {
+    const request = {
+      type: 'call' as const,
+      input: { forward: 100, strike: 100, timeToExpiryYears: 0.05, riskFreeRate: 0.04 },
+      parameters: { alpha: 0.2, beta: 1, rho: -0.2, nu: 0.4 },
+    };
+    const result = sabrPrice({ ...request, options: { extendedGreeks: true } });
+    const step = result.diagnostics.finiteDifferenceBumps!['timeStepYears']!;
+    expect(step).toBe(Math.min(1e-3, 0.05 / 4));
+    const at = (timeToExpiryYears: number) =>
+      sabrPrice({
+        ...request,
+        input: { ...request.input, timeToExpiryYears },
+        options: { greeks: false },
+      }).value;
+    const theta = -(at(0.05 + step) - at(0.05 - step)) / (2 * step) / 365;
+    const reported = (result.greeks as { theta: number }).theta;
+    expect(Math.abs(reported - theta)).toBeLessThanOrEqual(1e-12 * Math.abs(theta));
+    // The shared scale-aware time bump (T/100) would give a measurably different theta here.
+    const scaleAware = 0.05 / 100;
+    const other = -(at(0.05 + scaleAware) - at(0.05 - scaleAware)) / (2 * scaleAware) / 365;
+    expect(Math.abs(reported - other)).toBeGreaterThan(1e3 * Math.abs(reported - theta));
+  });
+
+  it('Heston extended keeps min(1e-3, T/4) and discloses it at a short expiry', () => {
+    const result = hestonPrice({
+      type: 'call',
+      input: {
+        spot: 100,
+        strike: 100,
+        timeToExpiryYears: 0.05,
+        riskFreeRate: 0.03,
+        dividendYield: 0.01,
+      },
+      parameters: { v0: 0.04, kappa: 1.5, theta: 0.04, sigma: 0.5, rho: -0.6 },
+      options: { extendedGreeks: true },
+    } as never) as unknown as {
+      diagnostics: { finiteDifferenceBumps: Record<string, number> };
+      greeks: Record<string, number | null>;
+    };
+    expect(result.diagnostics.finiteDifferenceBumps['timeStepYears']).toBe(
+      Math.min(1e-3, 0.05 / 4),
+    );
+    expect(result.diagnostics.finiteDifferenceBumps['spotStep']).toBeCloseTo(0.1, 15);
+    for (const [name, v] of Object.entries(result.greeks)) {
+      if (v === null) continue;
+      expect(Number.isFinite(v), name).toBe(true);
     }
   });
 });

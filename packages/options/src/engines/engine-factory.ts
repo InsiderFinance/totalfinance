@@ -43,6 +43,7 @@ import {
   type BranchedValue,
   branchAwareDifference,
   finiteDifferenceExtendedGreeks,
+  referenceFdSteps,
   resolveFdSteps,
 } from './fd-greeks.js';
 import type { ScalarAmericanPricer, ScalarAmericanPricingInput } from './scalar-pricing.js';
@@ -100,6 +101,18 @@ export interface AmericanEngineConfig {
    * a disclosed refusal beats a fabricated number.
    */
   extendedGreeks?: boolean;
+  /**
+   * Which default finite-difference bumps this engine's Greeks use (default `'reference'`).
+   *
+   * `'scale-aware'` ({@link resolveFdSteps}) caps each bump at a hundredth of its coordinate's natural
+   * scale. That is truncation-optimal, but only for a price that is a SMOOTH closed form in every bumped
+   * coordinate (the American approximations). `'reference'` ({@link referenceFdSteps}) keeps the fixed
+   * reference bumps for discretized prices. A lattice or PDE value has interior kinks at its own node
+   * and early-exercise structure: a spot bump of S·σ√T/100 is about √N/100 of a node (0.2 at 401
+   * steps), so it differences those kinks. A 401-step Leisen–Reimer put gamma came out about 21% off
+   * where the reference bump stays within 0.2%.
+   */
+  bumpPolicy?: 'scale-aware' | 'reference';
   /** Config-time warnings echoed on every result (e.g. a rounded step count). */
   warnings?: QuantWarning[];
 }
@@ -311,15 +324,18 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
       const wantExtended = extendedRequested && supportsExtended;
       const wantGreeks = extendedRequested || (options?.greeks ?? true);
       // Resolve the FD bumps ONCE so the same sizes are used for differencing AND disclosed in
-      // diagnostics.finiteDifferenceBumps below. They are scale-aware (resolveFdSteps): the reference
-      // bumps, capped at a hundredth of each coordinate's natural scale.
+      // diagnostics.finiteDifferenceBumps below. Smooth closed forms use the scale-aware bumps; every
+      // discretized engine keeps the reference bumps (see `bumpPolicy`).
       const fdState = { spot: S, T, r, q, sigma };
       // A rate bump below the engine's own grid resolution differences its discretization, not the
       // price (see `rateStepFloor`); the floor is disclosed like every other actually-used step.
       const rateFloor = config.rateStepFloor?.({ volatility: sigma, timeToExpiryYears: T }) ?? 0;
-      const resolvedSteps = wantGreeks
-        ? resolveFdSteps(fdState, {}, wantExtended ? {} : { maximumTimeStepYears: 1e-4 })
-        : undefined;
+      const stepLimits = wantExtended ? {} : { maximumTimeStepYears: 1e-4 };
+      const resolvedSteps = !wantGreeks
+        ? undefined
+        : config.bumpPolicy === 'scale-aware'
+          ? resolveFdSteps(fdState, {}, stepLimits)
+          : referenceFdSteps(fdState, stepLimits);
       const fd =
         resolvedSteps !== undefined && rateFloor > resolvedSteps.rateStep
           ? { ...resolvedSteps, rateStep: rateFloor }

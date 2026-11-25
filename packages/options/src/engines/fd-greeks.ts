@@ -93,8 +93,10 @@ export interface FdStepLimits {
 }
 
 /**
- * Resolve the ACTUAL bump sizes for a state. This is the one source of truth shared by the FD helpers
- * and by the engine adapters that disclose the bumps in `diagnostics.finiteDifferenceBumps`.
+ * Resolve the ACTUAL scale-aware bump sizes for a state. Use this for a price that is a SMOOTH closed
+ * form in every bumped coordinate (the American approximations, the digital closed form). Discretized,
+ * sampled and shift-mode owners use {@link referenceFdSteps} instead. Callers disclose the returned
+ * object in `diagnostics.finiteDifferenceBumps`.
  *
  * Every default is the previous fixed reference bump, capped at {@link FD_RELATIVE_RESOLUTION} of the
  * coordinate's natural scale. Ordinary contracts therefore keep the reference bumps exactly. A
@@ -145,8 +147,11 @@ export function resolveFdSteps(
 }
 
 /**
- * The previous fixed bump policy, kept for VARIANCE-limited callers: spot `S·1e-3`, volatility
- * `min(1e-3, σ/4)`, time `min(ceiling, T/4)`, rate 1e-4 and carry 1e-5.
+ * The previous fixed bump policy: spot `S·1e-3`, volatility `min(1e-3, σ/4)`, time
+ * `min(ceiling, T/4)`, rate 1e-4 and carry 1e-5. Lattice and PDE engines keep it because their values
+ * have node-level kinks that a finer spot bump would difference: S·σ√T/100 is about √N/100 of a node.
+ * Shift-mode owners (SABR, Heston) keep it with their own vol shift. Monte Carlo keeps it because its
+ * differences are variance-limited (below).
  *
  * Monte-Carlo Greeks difference common-random-number estimates. There, a second difference across
  * the payoff kink has variance proportional to 1/h, so the truncation-optimal
@@ -230,8 +235,9 @@ export function branchAwareDifference(input: BranchAwareDifferenceInput): {
 
 /**
  * Full extended Greek set by central finite differences of `price`, re-escrowing the spot via `spotAt`
- * on every rate/time bump. Bump sizes come from {@link resolveFdSteps} (adaptive near the vol/time
- * boundaries); pass the same resolved steps to disclose them in diagnostics.
+ * on every rate/time bump. A step not given in `steps` defaults to its {@link resolveFdSteps} value;
+ * owners that keep the reference bumps pass {@link referenceFdSteps}. Disclose the same steps in
+ * diagnostics.
  */
 export function finiteDifferenceExtendedGreeks(
   input: FiniteDifferenceExtendedGreeksInput,
