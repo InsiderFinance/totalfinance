@@ -227,10 +227,10 @@ vol point, rho per 1%.
 - **Grids.** The 972-case boundary grid and the 12,000-case grid fail 66 and 746 cases on the base
   and 0 and 0 after the fix.
 - **Against the reference.**
-  - All 12,972 grid prices, measured at source commit `6329802` (later commits change only
-    documentation): worst error 5.6e-16·(S + K). The engine was re-dumped at that commit and
-    compared with the stored 30-digit references. An earlier revision, which still took `ln Φ` from
-    `normalCdf`, measured 5.7e-15·(S + K) against the same references.
+  - All 12,972 grid prices: worst error 5.6e-16·(S + K). The engine was re-dumped at the final
+    source and compared with the stored 30-digit references; the review repairs after it reproduce
+    the same values, Greeks and bumps byte for byte. An earlier revision, which still took `ln Φ`
+    from `normalCdf`, measured 5.7e-15·(S + K) against the same references.
   - A dense raw (unfloored) stress grid of 10,944 evaluations (σ 0.2–2%, spot every 2% of strike,
     six rate/carry pairs, three maturities): all finite, worst error 4.9e-15·(S + K).
   - Committed goldens (7 published anchors, 196 raw and floored cases in both forms, 1,932 grid rows)
@@ -282,15 +282,16 @@ vol point, rho per 1%.
   inventory entry for this spec, and `docs/llms-full.txt`, which carries the updated
   `finiteDifferenceBumps` field description. `summary.defective` is 0. All bundle figures are gzip,
   measured on the canonical Node 22.23.2 / esbuild 0.25.12, one change at a time against base.
-  - Umbrella: 732,903 → 734,105 B (+1,202 B). The price kernel accounts for +832 B (including the
+  - Umbrella: 732,903 → 734,275 B (+1,372 B). The price kernel accounts for +832 B (including the
     scale-free boundary ratios) and the finite-Greek check for +21 B. The shared step resolver, with
-    Monte Carlo's reference policy and the branch-aware helper, adds +113 B. Exercise-branch
-    differencing in the factory adds +238 B, and the price-only internal calls +1 B.
-  - Workflows: 521,707 → 521,762 B (+55 B), all of it the shared resolver that Monte-Carlo Greeks
-    use.
+    the reference policy and the branch-aware helper, adds +113 B. Exercise-branch differencing in
+    the factory adds +238 B, and the price-only internal calls +1 B. The SABR and Heston bump helpers
+    that difference and disclose the same steps add +104 B, and the per-engine bump policy +66 B.
+  - Workflows: 521,707 → 521,814 B (+107 B): +55 B for the shared resolver that Monte-Carlo Greeks
+    use, and +52 B for the SABR and Heston bump helpers.
   - Following CONTRIBUTING's rule (raise a bound only from a measurement, and say where it came
-    from), the umbrella ceiling rises 716 → 717 KiB (103 B headroom). The workflows ceiling rises
-    509.5 → 509.625 KiB (94 B headroom). Every other budget and every structural exclusion is
+    from), the umbrella ceiling rises 716 → 717.125 KiB (61 B headroom). The workflows ceiling rises
+    509.5 → 509.625 KiB (42 B headroom). Every other budget and every structural exclusion is
     unchanged.
 - **Cost.** Indicatively, one scalar price takes about 1.4–1.9× as long (interleaved A/B, roughly
   5 → 9 µs). The machine carried a background backup, so this is not a gate.
