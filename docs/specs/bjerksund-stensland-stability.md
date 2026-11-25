@@ -1,6 +1,6 @@
 # Bjerksund–Stensland low-volatility stability
 
-Status: A–F and H–I verified locally. G (full local CI, packed consumer, hosted checks, review) is pending on the PR. Tracked in [issue #37](https://github.com/InsiderFinance/totalfinance/issues/37).
+Status: A–F and H–I verified locally. G's gates (full local CI with its independent repeat, the packed consumer and the hosted checks) are recorded on the PR; its independent review is pending. Tracked in [issue #37](https://github.com/InsiderFinance/totalfinance/issues/37).
 Base: `main` at `90fd7f9`. No options, math or core source has changed there since
 `totalfinance-v0.1.6`. This bounded correctness contract was written before the regression fixtures
 were committed. It was checked against alignment laws 7, 13, 14 and 15 and against `CONTRIBUTING.md`.
@@ -89,8 +89,9 @@ propagates the NaN correctly, and the postcondition refuses it.
    `S ≥ I → S − K`, the floor and every existing postcondition are untouched; decision 7 adds one
    check separately. A genuinely unrepresentable result still fails the existing postcondition,
    with no clamp.
-4. **Scale-aware default bumps (supersedes P2.3's σ/4 and T/4 rules).** Every default bump is its
-   previous reference value, capped at a hundredth of the coordinate's natural scale:
+4. **Scale-aware default bumps for smooth closed forms (supersedes P2.3's σ/4 and T/4 rules for
+   them).** For the engines named under Scope below, every default bump is its previous reference
+   value, capped at a hundredth of the coordinate's natural scale:
    - spot `S·min(1e-3, max(1e-8, σ√T/100))`, on the scale of the terminal standard deviation S·σ√T;
    - volatility `min(1e-3, σ/100)`;
    - time `min(ceiling, T/100)`, with ceiling 1e-4 for first-order theta and 1e-3 for the extended
@@ -218,10 +219,13 @@ vol point, rho per 1%.
 
 - **Reproductions** (public engine, explicit expiry instants, `greeks: true`):
   - Call S = K = 100, T = 1/365, r = 5%, q = 1%, σ = 1%: 0.02681485528545835 (exact
-    0.026814855285463960). Delta 0.5516243, gamma 5.859880, theta −0.01660074, vega 0.02042276,
+    0.026814855285463960). Delta 0.5830049, gamma 7.455874, theta −0.01659917, vega 0.02042717,
     rho 0.001596543.
-  - Put, same inputs: 0.016546824893630685 (exact 0.016546824893642747). Delta −0.4983820, gamma
-    6.722996, theta −0.006519924, vega 0.02005017, rho −0.0008774014.
+  - Put, same inputs: 0.016546824893616474 (exact 0.016546824893642747). Delta −0.4464689, gamma
+    8.542101, theta −0.0065184, vega 0.02005611, rho −0.0008774014.
+  - These Greeks use decision 4's bumps. With the old 0.1 spot bump, which is wider than this
+    one-day distribution (S·σ√T ≈ 0.052), the call reported delta 0.5516 and gamma 5.860, and the put
+    −0.4984 and 6.723.
   - Put S = 140, K = 100, T = 0.5, r = 0, q = 12%, σ = 5%: 1.3313e-15. Rho is −1.5217e-15 and
     matches the exact stencil to 3e-24.
 - **Grids.** The 972-case boundary grid and the 12,000-case grid fail 66 and 746 cases on the base
