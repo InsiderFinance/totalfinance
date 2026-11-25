@@ -382,6 +382,89 @@ describe('discretized engines keep the reference bumps (lattice node resolution)
       ).toBeLessThanOrEqual(1e-2);
     }
   });
+
+  it('lattices keep the plain central stencils next to the exercise boundary', () => {
+    // A one-sided stencil reaches two and three bumps from the base, into the lattice's own node
+    // structure. On these 401-step Leisen–Reimer puts (K = 100, r = 5%, q = 0) it gave delta −0.385
+    // against a converged −0.632 at one day and 1% vol, and a NEGATIVE gamma at 30 days and 20% vol.
+    // Reference-policy engines therefore keep exactly the central stencils of their public prices.
+    const cases = [
+      { days: 1, volatility: 0.01, spots: [99.98, 99.9947], oracleStep: 0.005 },
+      { days: 30, volatility: 0.2, spots: [90.95, 90.92], oracleStep: 0.1 },
+    ];
+    for (const { days, volatility, spots, oracleStep } of cases) {
+      const contract = option.put({
+        underlying: 'X',
+        strike: 100,
+        expiry: new Date(AS_OF + days * 86_400_000).toISOString(),
+        style: 'american',
+      });
+      const market = (spot: number, sigma = volatility, riskFreeRate = 0.05) => ({
+        asOf: AS_OF,
+        spot,
+        riskFreeRate,
+        dividendYield: 0,
+        volatility: sigma,
+      });
+      const lattice = engines.binomial({ variant: 'leisen-reimer' });
+      const converged = engines.binomial({ variant: 'leisen-reimer', steps: 4001 });
+      const at = (engine: OptionPricingEngine, m: ReturnType<typeof market>) =>
+        engine.price({ contract, market: m, options: { greeks: false } }).value;
+      for (const spot of spots) {
+        const result = lattice.price({ contract, market: market(spot), options: { greeks: true } });
+        const g = result.greeks!;
+        const {
+          spotStep: h,
+          volatilityStep: hv,
+          rateStep: hr,
+        } = result.diagnostics.finiteDifferenceBumps!;
+        const up = at(lattice, market(spot + h!));
+        const down = at(lattice, market(spot - h!));
+        // Exactly the central stencils of the engine's own public prices (its pre-existing method).
+        expect(g.delta, `S=${spot}`).toBe((up - down) / (2 * h!));
+        expect(g.gamma, `S=${spot}`).toBe((up - 2 * result.value + down) / (h! * h!));
+        const vegaUp = at(lattice, market(spot, volatility + hv!));
+        const vegaDown = at(lattice, market(spot, volatility - hv!));
+        expect(g.vega, `S=${spot}`).toBe((vegaUp - vegaDown) / (2 * hv!) / 100);
+        const rhoUp = at(lattice, market(spot, volatility, 0.05 + hr!));
+        const rhoDown = at(lattice, market(spot, volatility, 0.05 - hr!));
+        expect(g.rho, `S=${spot}`).toBe((rhoUp - rhoDown) / (2 * hr!) / 100);
+        // Against the converged 4001-step lattice: a put's gamma stays positive, and delta is within
+        // the 401-step resolution (measured 5.7–6.8% at one day, 4e-4 absolute at 30 days).
+        const d = oracleStep;
+        const [fineUp, fine, fineDown] = [spot + d, spot, spot - d].map((s) =>
+          at(converged, market(s)),
+        );
+        const oracleDelta = (fineUp! - fineDown!) / (2 * d);
+        const oracleGamma = (fineUp! - 2 * fine! + fineDown!) / (d * d);
+        expect(g.gamma, `S=${spot}`).toBeGreaterThan(0);
+        if (days === 1) {
+          expect(Math.abs(g.delta - oracleDelta) / Math.abs(oracleDelta)).toBeLessThanOrEqual(0.1);
+          // 401 steps resolve this one-day, 1%-vol curvature only to 25–32% (spec residual 2).
+          expect(Math.abs(g.gamma - oracleGamma) / oracleGamma).toBeLessThanOrEqual(0.35);
+        } else {
+          expect(Math.abs(g.delta - oracleDelta)).toBeLessThanOrEqual(1e-3);
+        }
+      }
+      // Engines with native spot Greeks keep the central stencil on the bumped coordinates too.
+      for (const engine of [engines.binomial({ variant: 'crr' }), engines.trinomial()]) {
+        for (const spot of spots) {
+          const result = engine.price({
+            contract,
+            market: market(spot),
+            options: { greeks: true },
+          });
+          const hv = result.diagnostics.finiteDifferenceBumps!['volatilityStep']!;
+          const central =
+            (at(engine, market(spot, volatility + hv)) -
+              at(engine, market(spot, volatility - hv))) /
+            (2 * hv) /
+            100;
+          expect(result.greeks!.vega, `${engine.name} S=${spot}`).toBe(central);
+        }
+      }
+    }
+  });
 });
 
 describe('the shared bumps also reach the extended (higher-order) Greeks', () => {

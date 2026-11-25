@@ -15,8 +15,8 @@ published formulas at the source, with independent high-precision evidence. A la
 widened the same PR. The closed-form American approximations (and the digital closed form) get
 scale-aware finite-difference bumps, capped at a hundredth of each coordinate's natural scale, because
 the fixed spot bump was wider than short-expiry distributions. Lattice, PDE, Monte-Carlo and
-shift-mode engines keep their reference bumps. Every American engine differences on the exercise
-branch that holds the base point. Model, floor, existing
+shift-mode engines keep their reference bumps, and the lattice and PDE engines their central
+stencils. The closed forms difference on the exercise branch that holds the base point. Model, floor, existing
 postconditions, units, explicit step controls and the public surface stay unchanged. One PR for
 review. No merge, version bump, publication or deployment is authorized.
 

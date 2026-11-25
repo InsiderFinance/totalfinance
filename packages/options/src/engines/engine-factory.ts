@@ -111,6 +111,10 @@ export interface AmericanEngineConfig {
    * and early-exercise structure: a spot bump of S·σ√T/100 is about √N/100 of a node (0.2 at 401
    * steps), so it differences those kinks. A 401-step Leisen–Reimer put gamma came out about 21% off
    * where the reference bump stays within 0.2%.
+   *
+   * The policy also selects the stencil. A scale-aware engine differences each first-order coordinate
+   * on the exercise branch that holds the base point (one-sided where a central stencil would straddle
+   * the switch). A reference-policy engine keeps the plain central stencils, exactly as before.
    */
   bumpPolicy?: 'scale-aware' | 'reference';
   /** Config-time warnings echoed on every result (e.g. a rounded step count). */
@@ -346,11 +350,14 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
       } else if (wantGreeks) {
         // Finite-difference Greeks (default units: theta/day, vega/1%, rho/1%). Spot Greeks come
         // from the engine's own discretization when it exposes them (see the module docstring);
-        // only σ/r — coordinates the price is smooth in — are bump-and-repriced. Each coordinate is
-        // differenced on the price branch that holds the base point (branchAwareDifference): a
-        // stencil straddling the exercise switch would otherwise report a secant and a spurious
-        // curvature.
+        // only σ/r — coordinates the price is smooth in — are bump-and-repriced. A scale-aware
+        // (smooth closed-form) engine differences each coordinate on the price branch that holds the
+        // base point (branchAwareDifference): its small stencil straddling the exercise switch would
+        // otherwise report a secant and a spurious curvature. A reference-policy (discretized)
+        // engine keeps the plain central stencils: a one-sided stencil would reach two and three
+        // bumps into its own node structure.
         const { spotStep, volatilityStep, timeStepYears, rateStep } = fd!;
+        const oneSided = config.bumpPolicy === 'scale-aware';
         const american = style === 'american';
         const exercised = (spotHere: number, valueHere: number): boolean => {
           if (!american) return false;
@@ -371,6 +378,7 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
         const spotDerivatives = native
           ? undefined
           : branchAwareDifference({
+              oneSided,
               base,
               step: spotStep,
               evaluate: (k) =>
@@ -385,6 +393,7 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
         const gamma = native ? native.gamma : spotDerivatives!.second;
         const vega =
           branchAwareDifference({
+            oneSided,
             base,
             step: volatilityStep,
             evaluate: (k) =>
@@ -400,6 +409,7 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
         const theta = native
           ? native.thetaPerYear / 365
           : -branchAwareDifference({
+              oneSided,
               base,
               step: timeStepYears,
               evaluate: (k) => {
@@ -414,6 +424,7 @@ export function makeAmericanEngine(config: AmericanEngineConfig) {
             }).first / 365;
         const rho =
           branchAwareDifference({
+            oneSided,
             base,
             step: rateStep,
             evaluate: (k) => {

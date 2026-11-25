@@ -56,8 +56,9 @@ export interface Diagnostics {
    * Finite-difference engines: the ACTUAL bump sizes used for FD Greeks, so the caller can see
    * exactly what was differenced. The closed-form American approximations use the reference bump
    * capped at a hundredth of its coordinate's natural scale (S·σ√T, σ, T, σ/√T). Lattice, PDE,
-   * Monte-Carlo and shift-mode engines keep the reference bumps. Near an American exercise switch, a
-   * coordinate whose central stencil would straddle it is differenced one-sided, with the same step.
+   * Monte-Carlo and shift-mode engines keep the reference bumps. For the closed forms only, a
+   * coordinate whose central stencil would straddle an American exercise switch is differenced
+   * one-sided, with the same step; lattice and PDE engines keep central stencils.
    * Keys: `spotStep`, `volatilityStep`, `timeStepYears`, `rateStep`, and — extended Greeks only —
    * `dividendYieldStep`. Each is the actual step differenced, in the unit of the coordinate it
    * bumps. (This doc named the retired `hS`/`hSig`/`hT`/`hR`/`hQ` keys for one release after the

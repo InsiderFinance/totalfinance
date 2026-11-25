@@ -36,8 +36,9 @@ There are three kinds of change:
      named `referenceFdSteps`: the lattices and Crank–Nicolson (the factory default), Monte Carlo,
      and the shift-mode SABR and Heston extended sets. Each owner discloses from the same object it
      differences with.
-   - The American factory differences each coordinate on the exercise branch that holds the base
-     point.
+   - For the scale-aware closed forms only, the American factory differences each coordinate on the
+     exercise branch that holds the base point. Reference-policy engines keep their plain central
+     stencils.
    - Two price-only internal calls request no Greeks: the American IV inversion's repricing
      (`american-iv.ts`) and the `compareEngines` reference value (`engines.ts`).
 3. One additive failure check (decision 7), in `engine-factory.ts`, refuses a non-finite Greek that
@@ -121,7 +122,7 @@ propagates the NaN correctly, and the postcondition refuses it.
      independent review measured a 401-step Leisen–Reimer American put next to its exercise boundary
      (K = 100, 7 days, r = 5%, σ = 5%, S = 99.6) at gamma 0.731 with scale-aware bumps, against a
      converged 0.605; it also varied with N (0.731/0.537/0.552/0.628). The reference bump gives 0.6062,
-     within 0.24% of the converged value. Their bumps and Greeks are unchanged, apart from decision 8.
+     within 0.24% of the converged value. Their bumps, stencils and Greeks are unchanged.
    - **Monte Carlo.** Common-random-number differences are variance-limited: a second difference
      across the payoff kink has variance ∝ 1/h. Measured over 12 seeds × 20,000 paths, the scale-aware
      bump doubled the gamma error at 30 days and 10% vol (2.2% → 4.7% RMS), though it removed the
@@ -163,16 +164,26 @@ propagates the NaN correctly, and the postcondition refuses it.
    branch, with second-order stencils `(−3V₀ + 4V₁ − V₂)/(2h)` and `(2V₀ − 5V₁ + 4V₂ − V₃)/h²`. That
    costs two extra evaluations, only in that band. It applies to every bumped coordinate (spot,
    volatility, time, rate) of the first-order set. The branch is read from exact equality with a
-   positive exercise value, which every American engine returns verbatim. An exercised base thus
-   reports the exercise value's own derivatives (spot slope ±1, zero curvature, zero vega, theta and
-   rho). Stencils within one branch are exactly the central difference. This applies to every American
-   engine through the factory, including the lattices. Where it changes a lattice result, it is the
-   Jarrow–Rudd and Tian rho, whose rate floor of about σ/√(N·T) often straddles a switch. For example,
-   a deep-ITM no-dividend call's rho moves from a secant 0.01488 to 0.01916 (the European K·T·e^{−rT}/100
-   is 0.019159), and an exercised contract's rho becomes 0. Two cases are not handled.
-   First, the extended (higher-order) set keeps plain central stencils. Second, a kink that is not an
-   exercise switch, such as the floor's European branch in the degenerate regime of residual 1, is
-   not detectable this way and stays a secant within one bump.
+   positive exercise value, which the closed forms return verbatim. An exercised base thus reports
+   the exercise value's own derivatives (spot slope ±1, zero curvature, zero vega, theta and rho).
+   Stencils within one branch are exactly the central difference.
+
+   Scope: only the scale-aware closed forms (`bumpPolicy: 'scale-aware'`) difference this way.
+   Reference-policy engines (the lattices and Crank–Nicolson) keep the plain central stencils, exactly
+   as before. Their reference spot bump already spans several nodes, and a one-sided stencil reaches
+   two and three bumps from the base, into the lattice's own node structure. An independent review
+   measured that on a 401-step Leisen–Reimer American put (K = 100, r = 5%, q = 0):
+   - at one day, σ = 1%, S = 99.98, one-sided differencing gave delta −0.385 and gamma 4.95, where the
+     central stencils give −0.596 and 6.74 and a converged 4001-step lattice −0.632 and 9.88;
+   - at 30 days, σ = 20%, S = 90.95, one-sided differencing gave a negative gamma (−0.024), where the
+     central stencil gives +0.043.
+
+   Their Greeks are byte-identical to before on 384 sampled lattice and Crank–Nicolson results, and a
+   regression test pins the central stencils of the public prices at these points.
+
+   Two cases are not handled. First, the extended (higher-order) set keeps plain central stencils.
+   Second, a kink that is not an exercise switch, such as the floor's European branch in the
+   degenerate regime of residual 1, is not detectable this way and stays a secant within one bump.
 
 ## Ordered checklist
 
@@ -195,7 +206,12 @@ propagates the NaN correctly, and the postcondition refuses it.
 - [x] H. Scale-aware default bumps (decision 4) for the closed-form American approximations and the
       digital extended set. Everything else keeps `referenceFdSteps`.
   - Lattices, Crank–Nicolson, Monte Carlo and the SABR and Heston extended sets keep their old
-    bumps. Their Greeks are byte-identical, apart from decision 8's lattice rho.
+    bumps, and the lattices and Crank–Nicolson keep their central stencils. Their Greeks are
+    byte-identical to before (384 sampled lattice and Crank–Nicolson results; SABR, Heston and Monte
+    Carlo probes).
+  - A regression test pins the lattices' central stencils next to the exercise boundary: 401-step
+    Leisen–Reimer puts at one day / 1% vol and 30 days / 20% vol, against their own public prices and
+    a converged 4001-step lattice, plus CRR and trinomial vega.
   - SABR and Heston disclose exactly what they difference; a T = 0.05 SABR theta is rebuilt from
     its disclosed bump.
   - The policy tests follow the new rule, and a Jarrow–Rudd test shows the rate floor still
@@ -204,8 +220,9 @@ propagates the NaN correctly, and the postcondition refuses it.
     BS1993 and BAW; the analytic BSM extended set; 13 exact digital extended cases; and a converged
     4001-step reference for a 401-step Leisen–Reimer put next to its exercise boundary.
   - The one-day 1%-vol call moves from −6.4%/−21% to 2.8e-6/7.7e-6.
-- [x] I. Exercise-branch differencing (decision 8), with exact branch references on both sides of
-      BS2002's boundary and a demonstration that the central secant is the artifact.
+- [x] I. Exercise-branch differencing for the scale-aware closed forms (decision 8), with exact branch
+      references on both sides of BS2002's boundary and a demonstration that the central secant is
+      the artifact.
 - G (post-commit, owned by the PR): full local `pnpm run ci`, the build and the packed
   installed-consumer journey (with exit codes), a private packed SDK artifact for downstream
   validation, exact-head hosted PR checks, and an independent adversarial review. No merge, version
@@ -286,15 +303,16 @@ vol point, rho per 1%.
   inventory entry for this spec, and `docs/llms-full.txt`, which carries the updated
   `finiteDifferenceBumps` field description. `summary.defective` is 0. All bundle figures are gzip,
   measured on the canonical Node 22.23.2 / esbuild 0.25.12, one change at a time against base.
-  - Umbrella: 732,903 → 734,275 B (+1,372 B). The price kernel accounts for +832 B (including the
+  - Umbrella: 732,903 → 734,314 B (+1,411 B). The price kernel accounts for +832 B (including the
     scale-free boundary ratios) and the finite-Greek check for +21 B. The shared step resolver, with
     the reference policy and the branch-aware helper, adds +113 B. Exercise-branch differencing in
     the factory adds +238 B, and the price-only internal calls +1 B. The SABR and Heston bump helpers
-    that difference and disclose the same steps add +104 B, and the per-engine bump policy +66 B.
+    that difference and disclose the same steps add +104 B, the per-engine bump policy +66 B, and
+    keeping the reference engines' central stencils +39 B.
   - Workflows: 521,707 → 521,814 B (+107 B): +55 B for the shared resolver that Monte-Carlo Greeks
     use, and +52 B for the SABR and Heston bump helpers.
   - Following CONTRIBUTING's rule (raise a bound only from a measurement, and say where it came
-    from), the umbrella ceiling rises 716 → 717.125 KiB (61 B headroom). The workflows ceiling rises
+    from), the umbrella ceiling rises 716 → 717.125 KiB (22 B headroom). The workflows ceiling rises
     509.5 → 509.625 KiB (42 B headroom). Every other budget and every structural exclusion is
     unchanged.
 - **Cost.** Indicatively, one scalar price takes about 1.4–1.9× as long (interleaved A/B, roughly
@@ -310,9 +328,11 @@ vol point, rho per 1%.
    model exactly; it does not change the model. Callers needing American accuracy there should use a
    lattice.
 2. **Finite-difference limits.** Not every short-expiry Greek is resolved:
-   - Lattice, Crank–Nicolson and Monte Carlo Greeks keep the reference bumps, so at very short
-     expiry and low volatility they stay resolution- or variance-limited as before. A one-day,
-     1%-vol Leisen–Reimer gamma depends on N.
+   - Lattice, Crank–Nicolson and Monte Carlo Greeks keep the reference bumps, and the lattices and
+     Crank–Nicolson their central stencils, so at very short expiry and low volatility they stay
+     resolution- or variance-limited as before. A one-day, 1%-vol Leisen–Reimer gamma depends on N;
+     at 401 steps it is 25–32% below a converged lattice in the regression cases. Next to the
+     exercise boundary a lattice's central stencil can still be a secant across its own switch.
    - Next to the exercise boundary, the closed forms' one-sided stencils are less accurate than
      central ones. The review measured up to 3.7e-4 (vega) and 2.6e-4 (gamma) normalized at one day
      and 1% vol.

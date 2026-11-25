@@ -163,7 +163,7 @@ describe('FD engines at a tiny vol (the σ − h > 0 law)', () => {
   });
 });
 
-describe('engine-specific rate floors still override the scale-aware rate bump', () => {
+describe('engine-specific rate floors still override the default rate bump', () => {
   it('Jarrow–Rudd differences rho across at least one node spacing: σ/√(steps·T)', () => {
     const steps = 501;
     const contract = option.usEquityPut({ underlying: 'X', strike: 100, expiry: '2026-12-18' });
@@ -173,8 +173,8 @@ describe('engine-specific rate floors still override the scale-aware rate bump',
         .price({ contract, market: mkt(volatility), options: { greeks: true } });
       const T = result.assumptions.timeToExpiryYears!;
       const floor = volatility / Math.sqrt(steps * T);
-      const scaleAware = Math.min(1e-4, volatility / Math.sqrt(T) / 100);
-      expect(floor).toBeGreaterThan(scaleAware);
+      // Jarrow–Rudd keeps the reference rate bump (1e-4); its node-spacing floor is wider.
+      expect(floor).toBeGreaterThan(1e-4);
       expect(result.diagnostics.finiteDifferenceBumps!['rateStep']).toBe(floor);
     }
   });

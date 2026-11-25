@@ -188,11 +188,18 @@ export interface BranchAwareDifferenceInput {
   /** The evaluation at `offset × step` from the base along the differenced coordinate (offset ±1…±3). */
   evaluate: (offset: number) => BranchedValue;
   step: number;
+  /**
+   * Difference one-sided where a central stencil would straddle the exercise switch (scale-aware
+   * closed forms). `false` keeps the plain central stencils of the discretized engines.
+   */
+  oneSided: boolean;
 }
 
 /**
- * First and second derivative along one coordinate, taken on the price branch that contains the base
- * point.
+ * First and second derivative along one coordinate. With `oneSided`, they are taken on the price
+ * branch that contains the base point. Without it, they are the plain central stencils: discretized
+ * (reference-policy) engines keep those, because a one-sided stencil reaches two and three bumps from
+ * the base, into a lattice's own node structure.
  *
  * An American value has two branches: continuation, and the exercise region, where it equals the
  * immediate-exercise value exactly. The price is not twice differentiable where they meet, and the
@@ -219,6 +226,7 @@ export function branchAwareDifference(input: BranchAwareDifferenceInput): {
     first: (up.value - down.value) / (2 * h),
     second: (up.value - 2 * base.value + down.value) / (h * h),
   };
+  if (!input.oneSided) return central;
   const upSame = up.exercised === base.exercised;
   const downSame = down.exercised === base.exercised;
   if (upSame === downSame) return central;
